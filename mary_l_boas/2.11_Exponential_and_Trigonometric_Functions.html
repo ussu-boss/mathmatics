@@ -311,6 +311,44 @@ $$\frac{d}{dz}\frac{e^{iz}-e^{-iz}}{2i}=\frac{1}{2i}\left(ie^{iz}+ie^{-iz}\right
 <div class="readout" id="mp-out"></div>
 </div>
 
+<!-- dass:start 20__same -->
+<h2 id="dass-21-4" class="dass"><span class="dtag">H.K. Dass §21.4</span>Approximation with the sine and cosine series</h2>
+<p>For small $x$ (in radians), cut the series after the first terms that matter:</p>
+$$\sin x=x-\frac{x^3}{6}+\frac{x^5}{120}-\cdots,\qquad\cos x=1-\frac{x^2}{2}+\frac{x^4}{24}-\cdots,\qquad\tan x=x+\frac{x^3}{3}+\frac{2x^5}{15}+\cdots$$
+<p>Three kinds of question use this:</p>
+<div class="dcase"><p><b>(i) Solve for a small angle:</b> replace the function by its first two terms and solve the resulting simple equation.</p></div>
+<div class="dcase"><p><b>(ii) Solve near a known angle:</b> for $\cos\left(\frac\pi3+\theta\right)=0.49$, expand with the addition formula. Keep terms up to first order in $\theta$ and solve the linear equation.</p></div>
+<div class="dcase"><p><b>(iii) Limits:</b> substitute the series into a $\frac00$ form and keep the lowest surviving power.</p></div>
+
+<div class="widget" id="w-dass-approx">
+<div class="wt">Interactive — how good is the truncated series?</div>
+<div class="wd">Move $x$. The curves are $\frac{\sin x}{x}$ (blue) and its approximations $1-\frac{x^2}6$ (orange) and $1-\frac{x^2}6+\frac{x^4}{120}$ (green). The readout shows the error of each. The first approximation is good to about 0.1% up to $x\approx0.6$ ($34^\circ$), and to 1% up to $x\approx1$ rad.</div>
+<div class="ctrls"><label>$x$ <input type="range" id="dap-x" min="0.01" max="3" step="0.01" value="0.4"><output></output></label></div>
+<canvas id="cv-dass-approx"></canvas>
+<div class="readout" id="dap-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.4) — if $\dfrac{\sin x}{x}=\dfrac{2399}{2400}$, find $x$</div><div class="bd"><ol class="steps">
+<li>$\frac{\sin x}{x}\approx1-\frac{x^2}6$, so $\frac{x^2}6=\frac1{2400}$.</li>
+<li>$x^2=\frac1{400}$, so $x=\frac1{20}$ rad $\approx2.86^\circ$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the same move gives the small-amplitude pendulum, the paraxial approximation in optics, and first-order corrections, so the series must be at your fingertips.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.4) — if $\cos x=\dfrac{1681}{1682}$, find $x$</div><div class="bd"><ol class="steps">
+<li>$1-\cos x=2\sin^2\frac x2=\frac1{1682}$, so $\sin\frac x2=\frac1{58}$.</li>
+<li>For a small angle $\sin\frac x2\approx\frac x2$, so $x\approx\frac1{29}$ rad $\approx1^\circ58.5'$.</li>
+<li>(Directly, $1-\frac{x^2}2=1-\frac1{1682}$ gives $x^2=\frac1{841}$, the same answer.)</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $1682=2\cdot29^2$ is chosen so the answer is clean. Look for such squares before reaching for a calculator.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.4) — solve $\cos\left(\frac\pi3+\theta\right)=0.49$</div><div class="bd"><ol class="steps">
+<li>$\frac12\cos\theta-\frac{\sqrt3}2\sin\theta=0.49$. To first order, $\frac12-\frac{\sqrt3}2\theta=0.49$.</li>
+<li>$\theta=\frac{0.02}{\sqrt3}=0.011547$ rad $\approx39.7'$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> linearising about a known point is the same idea as the error-propagation and perturbation estimates asked in experimental-methods questions.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.4) — $\displaystyle\lim_{\theta\to0}\frac{\tan\theta-\sin\theta}{\theta^3}$</div><div class="bd"><ol class="steps">
+<li>$\tan\theta-\sin\theta=\left(\theta+\frac{\theta^3}3\right)-\left(\theta-\frac{\theta^3}6\right)+O(\theta^5)=\frac{\theta^3}2+O(\theta^5)$.</li>
+<li>So the limit is $\frac12$. (Similarly, $\lim\frac{\sin x-x\cos x}{x^3}=\frac16+\frac12=\frac13$.)</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> series substitution settles $\frac00$ limits faster than repeated L'Hôpital, and with fewer chances for error.</p></div></div>
+<!-- dass:end -->
 <h2 id="integrals">5. Integrals made easy with exponentials (Boas Problems 11–18)</h2>
 <p><b>Method:</b> replace each $\sin$ and $\cos$ by (11.3), multiply out (exponents add), integrate each $e^{ikx}$ term, and convert back. The key fact is</p>
 $$\int_{-\pi}^{\pi}e^{ikx}\,dx=\begin{cases}2\pi,&k=0\\[2pt] \dfrac{e^{ik\pi}-e^{-ik\pi}}{ik}=\dfrac{2\sin k\pi}{k}=0,&k=\pm1,\pm2,\dots\end{cases}$$
@@ -1052,6 +1090,22 @@ onReady(() => {
     sec: [z => Cx.div([1, 0], Cx.cos(z)), (x, y) => { const D = c(2 * x) + ch(2 * y); return [2 * c(x) * ch(y) / D, 2 * s(x) * sh(y) / D]; }, '\\frac{2(\\cos x\\cosh y+i\\sin x\\sinh y)}{\\cos2x+\\cosh2y}'],
     cosec: [z => Cx.div([1, 0], Cx.sin(z)), (x, y) => { const D = ch(2 * y) - c(2 * x); return [2 * s(x) * ch(y) / D, -2 * c(x) * sh(y) / D]; }, '\\frac{2(\\sin x\\cosh y-i\\cos x\\sinh y)}{\\cosh2y-\\cos2x}']
   }, [0.9, 0.5]);
+});
+
+onReady(() => {
+  /* H.K. Dass §21.4 — truncated series */
+  const G = new Graph('#cv-dass-approx', { span: 1.8, cx: 1.6, cy: 0.6, aspect: 0.55, draw: p => {
+    const x = val('dap-x');
+    p.fn(t => Math.abs(t) < 1e-9 ? 1 : Math.sin(t) / t, { color: '--accent', width: 2.6 });
+    p.fn(t => 1 - t * t / 6, { color: '--accent2', width: 1.8, dash: [6, 4] });
+    p.fn(t => 1 - t * t / 6 + t ** 4 / 120, { color: '--accent3', width: 1.8, dash: [2, 3] });
+    p.line([x, -1], [x, 2], { color: '--muted', dash: [3, 4], width: 1 }); p.dot([x, Math.sin(x) / x], { r: 6, color: '--accent' });
+  }});
+  const out = () => {
+    const x = val('dap-x'), t = Math.sin(x) / x, a1 = 1 - x * x / 6, a2 = a1 + x ** 4 / 120;
+    texMix('#dap-out', `$x=${fnum(x, 2)}$ rad $=${fnum(x * 180 / PI, 1)}^\\circ$: &nbsp; $\\frac{\\sin x}{x}=${fnum(t, 6)}$<br>$1-\\frac{x^2}6=${fnum(a1, 6)}$ (relative error $${fnum(100 * Math.abs(a1 - t) / t, 3)}\\%$), &nbsp; $1-\\frac{x^2}6+\\frac{x^4}{120}=${fnum(a2, 6)}$ ($${fnum(100 * Math.abs(a2 - t) / t, 4)}\\%$)`);
+  };
+  watch(['dap-x'], () => { G.redraw(); out(); }); out();
 });
 
 /* dass:end */</script>

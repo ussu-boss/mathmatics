@@ -278,6 +278,91 @@ $$\cos n\theta=\sum_{k\ \text{even}}(-1)^{k/2}\binom nk c^{\,n-k}s^k,\qquad\sin 
 <div class="readout" id="ch-out" style="font-size:16px"></div>
 </div>
 
+<!-- dass:start 15__multi -->
+<h2 id="dass-21-1" class="dass"><span class="dtag">H.K. Dass §21.1</span>Expanding $\sin n\theta$, $\cos n\theta$, $\tan n\theta$ in powers of $\sin\theta$, $\cos\theta$</h2>
+<p>Write $c=\cos\theta$ and $s=\sin\theta$. By De Moivre and the binomial theorem,</p>
+$$\cos n\theta+i\sin n\theta=(c+is)^n=\sum_{k=0}^n\binom nk c^{n-k}(is)^k .$$
+<p>The powers $i^k$ cycle $1,i,-1,-i$. So the <b>even</b> $k$ terms are real with alternating signs, and the <b>odd</b> $k$ terms are imaginary with alternating signs. Equating real and imaginary parts:</p>
+$$\cos n\theta=c^n-\binom n2c^{n-2}s^2+\binom n4c^{n-4}s^4-\cdots\tag{1}$$
+$$\sin n\theta=\binom n1c^{n-1}s-\binom n3c^{n-3}s^3+\binom n5c^{n-5}s^5-\cdots\tag{2}$$
+<p>Dividing (2) by (1), then the top and bottom by $c^n$, gives</p>
+$$\tan n\theta=\frac{\binom n1t-\binom n3t^3+\binom n5t^5-\cdots}{1-\binom n2t^2+\binom n4t^4-\cdots},\qquad t=\tan\theta .\tag{3}$$
+<p><b>To get a single function:</b> in (1) replace every $s^2$ by $1-c^2$ to get $\cos n\theta$ as a polynomial in $\cos\theta$. In (2) replace every $c^2$ by $1-s^2$. All the cases of what comes out:</p>
+<table class="t dt">
+<tr><th>Expansion</th><th>Result</th></tr>
+<tr><td>$\cos n\theta$ in powers of $\cos\theta$</td><td>always a polynomial of degree $n$ (the Chebyshev polynomial $T_n$)</td></tr>
+<tr><td>$\sin n\theta$, $n$ odd</td><td>a polynomial in $\sin\theta$ only</td></tr>
+<tr><td>$\sin n\theta$, $n$ even</td><td>$\cos\theta\times$ (a polynomial in $\sin\theta$), so expand $\frac{\sin n\theta}{\cos\theta}$ instead</td></tr>
+<tr><td>$\tan n\theta$</td><td>a ratio of polynomials in $\tan\theta$, eq. (3)</td></tr>
+</table>
+
+<div class="widget" id="w-dass-mult">
+<div class="wt">Interactive — expansion generator for any $n$</div>
+<div class="wd">Choose $n$. The readout writes out (1), (2) and (3) with the binomial coefficients, then the single-function forms from the table. The graph plots $\cos n\theta$ as the polynomial $T_n(\cos\theta)$ against $\cos\theta$. Drag $\theta$ to see the two sides agree.</div>
+<div class="ctrls"><label>$n$ <input type="range" id="dml-n" min="2" max="10" step="1" value="5"><output></output></label><label>$\theta$ <input type="range" id="dml-t" min="0" max="3.1416" step="0.01" value="0.5"><output></output></label></div>
+<canvas id="cv-dass-mult"></canvas>
+<div class="readout" id="dml-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.1) — $\sin7\theta=7\sin\theta-56\sin^3\theta+112\sin^5\theta-64\sin^7\theta$</div><div class="bd"><ol class="steps">
+<li>From (2) with $n=7$: $\sin7\theta=7c^6s-35c^4s^3+21c^2s^5-s^7$.</li>
+<li>Substitute $c^2=1-s^2$: $7(1-s^2)^3s-35(1-s^2)^2s^3+21(1-s^2)s^5-s^7$.</li>
+<li>Collect the powers: $s$: $7$; $\ s^3$: $-21-35=-56$; $\ s^5$: $21+70+21=112$; $\ s^7$: $-7-35-21-1=-64$. $\blacksquare$</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the sum of the coefficients ($7-56+112-64=-1=\sin\frac{7\pi}2$) is a 2-second check for any such expansion.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.1) — $\tan5\theta$ in powers of $\tan\theta$</div><div class="bd"><ol class="steps">
+<li>From (3) with $\binom51=5$, $\binom52=10$, $\binom53=10$, $\binom54=5$, $\binom55=1$:</li>
+<li>$\tan5\theta=\dfrac{5t-10t^3+t^5}{1-10t^2+5t^4}$.</li>
+<li>Check at $\theta=\frac\pi4$ ($t=1$): $\frac{5-10+1}{1-10+5}=1=\tan\frac{5\pi}4$. ✓</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> setting $\tan5\theta=0$ shows $5t-10t^3+t^5=0$ has roots $\tan\frac{k\pi}5$. That turns a trig question into a polynomial-roots (Vieta) question.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Exercise 21.1) — $1+\cos10\theta=2\left(16\cos^5\theta-20\cos^3\theta+5\cos\theta\right)^2$</div><div class="bd"><ol class="steps">
+<li>$1+\cos10\theta=2\cos^25\theta$ (double angle).</li>
+<li>From (1) with $s^2=1-c^2$: $\cos5\theta=16c^5-20c^3+5c$.</li>
+<li>Square and double. $\blacksquare$</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> combining a double-angle identity with one $T_n$ expansion avoids expanding a degree-10 polynomial.</p></div></div>
+
+<h2 id="dass-21-2" class="dass"><span class="dtag">H.K. Dass §21.2</span>Expanding $\cos^p\theta\,\sin^q\theta$ in sines and cosines of multiples of $\theta$</h2>
+<p><b>Method.</b> Let $x=\cos\theta+i\sin\theta$. Then $\frac1x=\cos\theta-i\sin\theta$, and by De Moivre:</p>
+$$x+\frac1x=2\cos\theta,\qquad x-\frac1x=2i\sin\theta,\qquad x^n+\frac1{x^n}=2\cos n\theta,\qquad x^n-\frac1{x^n}=2i\sin n\theta .$$
+<ul>
+<li>For $\cos^p\theta$: start from $(2\cos\theta)^p=\left(x+\frac1x\right)^p$, expand, and pair $x^k$ with $x^{-k}$.</li>
+<li>For $\sin^q\theta$: start from $(2i\sin\theta)^q=\left(x-\frac1x\right)^q$.</li>
+<li>For a product: start from $(2\cos\theta)^p(2i\sin\theta)^q$.</li>
+</ul>
+<p>The cases for the answer:</p>
+<table class="t dt">
+<tr><th>Power $q$ of $\sin\theta$</th><th>Answer contains</th><th>Factor on the left</th></tr>
+<tr><td>even</td><td>cosines only (and possibly a constant)</td><td>$i^q=\pm1$</td></tr>
+<tr><td>odd</td><td>sines only</td><td>$i^q=\pm i$, cancelled by the $2i$ in $x^n-x^{-n}$</td></tr>
+</table>
+
+<div class="widget" id="w-dass-pq">
+<div class="wt">Interactive — the "spectrum" of $\cos^p\theta\sin^q\theta$</div>
+<div class="wd">Choose the powers. The bars show the coefficient of $\cos k\theta$ (blue) or $\sin k\theta$ (green) in the expansion. The top frequency is $p+q$, and only frequencies of the same parity as $p+q$ appear.</div>
+<div class="ctrls"><label>$p$ <input type="range" id="dpq-p" min="0" max="8" step="1" value="3"><output></output></label><label>$q$ <input type="range" id="dpq-q" min="0" max="8" step="1" value="4"><output></output></label></div>
+<canvas id="cv-dass-pq"></canvas>
+<div class="readout" id="dpq-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.2) — $\sin^5\theta$ in sines of multiples of $\theta$</div><div class="bd"><ol class="steps">
+<li>$(2i\sin\theta)^5=32i\sin^5\theta=\left(x-\frac1x\right)^5=\left(x^5-\frac1{x^5}\right)-5\left(x^3-\frac1{x^3}\right)+10\left(x-\frac1x\right)$.</li>
+<li>$=2i\sin5\theta-10i\sin3\theta+20i\sin\theta$.</li>
+<li>So $\sin^5\theta=\frac1{16}\left(\sin5\theta-5\sin3\theta+10\sin\theta\right)$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $\int_0^{\pi}\sin^5\theta\,d\theta$, and Fourier components of $\sin^n$ signals (harmonic generation), are read off immediately from this.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.2 style) — $\cos^3\theta\sin^4\theta$</div><div class="bd"><ol class="steps">
+<li>$(2\cos\theta)^3(2i\sin\theta)^4=128\cos^3\theta\sin^4\theta$, since $i^4=1$.</li>
+<li>$\left(x+\frac1x\right)^3\left(x-\frac1x\right)^4=\left(x-\frac1x\right)\left(x^2-\frac1{x^2}\right)^3$, and $\left(x^2-x^{-2}\right)^3=x^6-3x^2+3x^{-2}-x^{-6}$.</li>
+<li>Multiplying out and pairing: $(x^7+x^{-7})-(x^5+x^{-5})-3(x^3+x^{-3})+3(x+x^{-1})$.</li>
+<li>$=2\cos7\theta-2\cos5\theta-6\cos3\theta+6\cos\theta$, so $\cos^3\theta\sin^4\theta=\frac{1}{64}\left(\cos7\theta-\cos5\theta-3\cos3\theta+3\cos\theta\right)$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $q=4$ is even, so the answer has cosines only, as the table predicts. Checking this before expanding catches sign errors.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Exercise 21.2) — $32\cos^6\theta=\cos6\theta+6\cos4\theta+15\cos2\theta+10$</div><div class="bd"><ol class="steps">
+<li>$(2\cos\theta)^6=\left(x+\frac1x\right)^6=(x^6+x^{-6})+6(x^4+x^{-4})+15(x^2+x^{-2})+20$.</li>
+<li>$=2\cos6\theta+12\cos4\theta+30\cos2\theta+20$. Divide by 2. $\blacksquare$</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the constant term gives averages immediately: $\langle\cos^6\theta\rangle=\frac{10}{32}=\frac5{16}$. This is the value needed in thermal and quantum averages.</p></div></div>
+<!-- dass:end -->
 <h2 id="roots">3. $n$-th roots: exactly $n$ of them, on a circle</h2>
 <p>$\sqrt[n]{w}$ means any complex number $z$ with $z^n=w$. Write $w=re^{i\theta}$ and remember that $\theta$ is only defined up to $2\pi k$. Then $z=\rho e^{i\phi}$ satisfies $z^n=w$ iff $\rho^n=r$ and $n\phi=\theta+2\pi k$:</p>
 $$\boxed{\sqrt[n]{w}=\sqrt[n]{r}\;e^{i(\theta+2\pi k)/n},\qquad k=0,1,2,\dots,n-1}\qquad(10.3)$$
@@ -1174,6 +1259,53 @@ onReady(() => {
   R.onchange = rout; watch(['drt-n', 'drt-m'], () => { R.redraw(); rout(); });
   $('#drt-play').onclick = () => { const el = $('#drt-m'); el.value = (+el.value + 1) % 18; el.dispatchEvent(new Event('input')); };
   rout();
+});
+
+onReady(() => {
+  /* H.K. Dass §21.1 — expansion generator */
+  const binom = (n, k) => { if (k < 0 || k > n) return 0; let r = 1; for (let j = 1; j <= k; j++) r = r * (n - k + j) / j; return Math.round(r); };
+  const pmul = (a, b) => { const r = new Array(a.length + b.length - 1).fill(0); a.forEach((x, i) => b.forEach((y, j) => r[i + j] += x * y)); return r; };
+  const padd = (a, b) => { const r = new Array(Math.max(a.length, b.length)).fill(0); a.forEach((x, i) => r[i] += x); b.forEach((x, i) => r[i] += x); return r; };
+  const ppow = (a, m) => { let r = [1]; for (let j = 0; j < m; j++) r = pmul(r, a); return r; };
+  const mono = (k, c = 1) => { const r = new Array(k + 1).fill(0); r[k] = c; return r; };
+  const ptex = (P, v) => { let s = ''; for (let k = P.length - 1; k >= 0; k--) { const c = P[k]; if (!c) continue; const a = Math.abs(c), sg = c < 0 ? '-' : (s ? '+' : ''); s += sg + (a === 1 && k ? '' : a) + (k ? v + (k > 1 ? '^{' + k + '}' : '') : ''); } return s || '0'; };
+  const cosPoly = n => { let P = [0]; for (let k = 0; 2 * k <= n; k++) P = padd(P, pmul(mono(n - 2 * k, (k % 2 ? -1 : 1) * binom(n, 2 * k)), ppow([1, 0, -1], k))); return P; };
+  const sinPoly = n => { let P = [0]; const ev = n % 2 === 0; for (let k = 0; 2 * k + 1 <= n; k++) P = padd(P, pmul(mono(2 * k + 1, (k % 2 ? -1 : 1) * binom(n, 2 * k + 1)), ppow([1, 0, -1], (n - 2 * k - 1 - (ev ? 1 : 0)) / 2))); return P; };
+  const ev = (P, x) => P.reduce((s, c, k) => s + c * x ** k, 0);
+  const G = new Graph('#cv-dass-mult', { span: 1.3, aspect: 0.9, axisLabels: ['cos θ', ''], draw: p => {
+    const n = val('dml-n'), t = val('dml-t'), P = cosPoly(n);
+    p.fn(x => (x >= -1 && x <= 1) ? ev(P, x) : NaN, { color: '--accent', width: 2.5 });
+    p.dot([Math.cos(t), Math.cos(n * t)], { r: 7, color: '--accent2', label: `cos ${n}θ` });
+  }});
+  const out = () => {
+    const n = val('dml-n'), t = val('dml-t'), c = Math.cos(t), s = Math.sin(t);
+    const re = [], im = [], num = [], den = [];
+    for (let k = 0; k <= n; k++) { const b = binom(n, k), sg = (Math.floor(k / 2) % 2) ? '-' : '+';
+      const term = `${b === 1 ? '' : b}c^{${n - k}}s^{${k}}`.replace('c^{0}', '').replace('s^{0}', '').replace('^{1}', '');
+      if (k % 2 === 0) { re.push(sg + term); den.push(sg + (b === 1 && k ? '' : b) + (k ? 't^{' + k + '}' : '')); } else { im.push(sg + term); num.push(sg + (b === 1 ? '' : b) + 't^{' + k + '}'); } }
+    const clean = a => a.join('').replace(/^\+/, '').replace(/\^\{1\}/g, '');
+    const SP = sinPoly(n);
+    texMix('#dml-out', `(1) $\\cos${n}\\theta=${clean(re)}$<br>(2) $\\sin${n}\\theta=${clean(im)}$<br>(3) $\\tan${n}\\theta=\\dfrac{${clean(num)}}{${clean(den)}}$` +
+      `<br>$\\cos${n}\\theta=${ptex(cosPoly(n), 'c')}$ &nbsp; (check at $\\theta=${fnum(t, 2)}$: $${fnum(ev(cosPoly(n), c), 5)}$ vs $${fnum(Math.cos(n * t), 5)}$)` +
+      (n % 2 ? `<br>$\\sin${n}\\theta=${ptex(SP, 's')}$ &nbsp; (check: $${fnum(ev(SP, s), 5)}$ vs $${fnum(Math.sin(n * t), 5)}$)` : `<br>$\\dfrac{\\sin${n}\\theta}{\\cos\\theta}=${ptex(SP, 's')}$ &nbsp; (check: $${fnum(ev(SP, s), 5)}$ vs $${fnum(Math.sin(n * t) / c, 5)}$)`));
+  };
+  watch(['dml-n', 'dml-t'], () => { G.redraw(); out(); }); out();
+
+  /* H.K. Dass §21.2 — spectrum of cos^p sin^q */
+  const coeffs = (p, q) => { let P = [1]; for (let j = 0; j < p; j++) P = pmul(P, [1, 0, 1]); for (let j = 0; j < q; j++) P = pmul(P, [-1, 0, 1]); return P; }; // poly in x shifted by x^(p+q)
+  const spec = (p, q) => { const P = coeffs(p, q), N = p + q, D = 2 ** N, out = []; for (let k = 0; k <= N; k++) { const a = P[N + k] || 0; if (!a) continue; let num, kind = q % 2 ? 'sin' : 'cos'; const iq = [1, 1, -1, -1][q % 4]; num = (k === 0 ? a : 2 * a) * iq; out.push({ k, kind, num, den: D }); } return out; };
+  const B = new Plane('#cv-dass-pq', { span: 9, cx: 8, cy: 0, aspect: 0.4, snap: 0, grid: false, draw: p => {
+    p.line([-2, 0], [18, 0], { color: '--axis', width: 1.2 }); for (let k = 0; k <= 16; k++) p.label([k, 0], String(k), { color: '--muted', dx: -3, dy: 14, font: '10px system-ui', bg: false });
+    const S = spec(val('dpq-p'), val('dpq-q')), m = Math.max(...S.map(o => Math.abs(o.num / o.den)), 1e-9);
+    S.forEach(o => { const h = 2.8 * (o.num / o.den) / m; p.line([o.k, 0], [o.k, h], { color: o.kind === 'cos' ? '--accent' : '--accent3', width: 10 }); p.label([o.k, h], (o.k === 0 ? 'const' : (o.kind === 'cos' ? 'cos ' : 'sin ') + (o.k === 1 ? 'θ' : o.k + 'θ')), { color: '--muted', dx: -14, dy: h >= 0 ? -6 : 16, font: '11px system-ui' }); });
+  }});
+  const frac = (a, b) => { const g = gcd(Math.abs(a), b); a /= g; b /= g; return b === 1 ? `${a}` : `${a < 0 ? '-' : ''}\\frac{${Math.abs(a)}}{${b}}`; };
+  const pqout = () => {
+    const p = val('dpq-p'), q = val('dpq-q'), S = spec(p, q);
+    const terms = S.map((o, j) => { const f = frac(o.num, o.den), fs = j && !f.startsWith('-') ? '+' + f : f; return o.k === 0 ? fs : `${fs}\\${o.kind}${o.k === 1 ? '' : o.k}\\theta`; }).join('');
+    texMix('#dpq-out', `$\\cos^{${p}}\\theta\\,\\sin^{${q}}\\theta=${terms || '0'}$ &nbsp; (${q % 2 ? 'odd $q$: sines only' : 'even $q$: cosines only'})`);
+  };
+  watch(['dpq-p', 'dpq-q'], () => { B.redraw(); pqout(); }); pqout();
 });
 
 /* dass:end */</script>
