@@ -117,6 +117,14 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -199,6 +207,60 @@ $$z^2=(x+iy)^2=x^2-y^2+2ixy\quad\Rightarrow\quad u=x^2-y^2,\qquad v=2xy .$$</div
 <div class="readout" id="uv-out"></div>
 </div>
 
+<!-- dass:start 10__uv -->
+<h2 id="dass-22-1" class="dass"><span class="dtag">H.K. Dass §22.1–22.7</span>Neighbourhoods, limits and continuity of $f(z)$</h2>
+<p><b>Complex variable and function (§22.2–22.3).</b> The complex variable $z$ can be written in three forms: $x+iy$ (Cartesian), $r(\cos\theta+i\sin\theta)$ (polar) or $re^{i\theta}$ (exponential). A function $w=f(z)=u+iv$ assigns to each $z$ a value $w$, and $u$, $v$ are its real and imaginary parts.</p>
+
+<h3>Neighbourhood and point-set words (§22.4)</h3>
+<table class="t dt">
+<tr><th>Term</th><th>Meaning</th></tr>
+<tr><td>$\epsilon$-neighbourhood of $z_0$</td><td>all $z$ with $|z-z_0|\lt\epsilon$: an open disk of radius $\epsilon$</td></tr>
+<tr><td>Deleted neighbourhood</td><td>$0\lt|z-z_0|\lt\epsilon$: the disk without its centre (used in limits)</td></tr>
+<tr><td>Interior point of $S$</td><td>some neighbourhood of it lies wholly inside $S$</td></tr>
+<tr><td>Limit point of $S$</td><td>every neighbourhood of it contains points of $S$ other than itself</td></tr>
+<tr><td>Closed set</td><td>contains all of its limit points</td></tr>
+</table>
+
+<h3>Limit (§22.5)</h3>
+<p>$\displaystyle\lim_{z\to z_0}f(z)=l$ means: for every $\epsilon\gt0$ there is a $\delta\gt0$ such that $|f(z)-l|\lt\epsilon$ whenever $0\lt|z-z_0|\lt\delta$. In pictures, every point of the deleted $\delta$-disk in the $z$-plane is sent into the $\epsilon$-disk around $l$ in the $w$-plane.</p>
+<div class="box warn"><span class="tag">The key difference from real limits</span><p>In the plane, $z$ can approach $z_0$ along <b>infinitely many paths</b>: straight lines from every direction, spirals, parabolas, and so on. The limit exists only if <b>every</b> path gives the same value. To show that a limit does <b>not</b> exist, find two paths that disagree.</p></div>
+
+<h3>Continuity (§22.6–22.7)</h3>
+<p>$f$ is continuous at $z_0$ if $\lim_{z\to z_0}f(z)=f(z_0)$. That requires three things: $f(z_0)$ is defined, the limit exists, and the two are equal. Because $|f-l|$ is small exactly when both $|u-\operatorname{Re}l|$ and $|v-\operatorname{Im}l|$ are small:</p>
+<div class="box thm"><span class="tag">§22.7</span><p>$f=u+iv$ is continuous at $z_0=x_0+iy_0$ <b>if and only if</b> $u(x,y)$ and $v(x,y)$ are both continuous at $(x_0,y_0)$.</p></div>
+
+<div class="widget" id="w-dass-lim">
+<div class="wt">Interactive — approach $0$ along different paths</div>
+<div class="wd">Pick a function and a family of paths ($y=mx$, or the curves $y=kx^2$ and $y=kx^3$). Change the slider to change the path. The point slides in towards $0$, and the readout shows the value $f$ approaches along that path. If the value changes as you change the path, the limit does not exist.</div>
+<div class="ctrls"><label>$f$ <select id="dlm-f"><option value="zabs">z / |z|</option><option value="zbar">z / z̄</option><option value="rez">Re z / z</option><option value="x2y">x²y / (x⁴ + y²)</option><option value="good">(z² + 4z + 3)/(z + 1) at −1</option></select></label>
+<label>path <select id="dlm-p"><option value="line">y = m x</option><option value="par">y = k x²</option><option value="cub">y = k x³</option></select></label>
+<label>$m$ or $k$ <input type="range" id="dlm-m" min="-3" max="3" step="0.05" value="1"><output></output></label><button class="pri" id="dlm-play">▶ Approach</button></div>
+<canvas id="cv-dass-lim"></canvas>
+<div class="readout" id="dlm-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.5) — $\displaystyle\lim_{z\to1-i}\frac{z^2+4z+3}{z+1}$</div><div class="bd"><ol class="steps">
+<li>Factor: $\frac{(z+1)(z+3)}{z+1}=z+3$ for $z\ne-1$.</li>
+<li>The limit is $(1-i)+3=4-i$. The function is a polynomial after cancelling, so every path gives the same answer.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> removable "$\frac00$" forms are the first step in classifying singularities. If the factor cancels, the singularity is removable.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.5) — $\displaystyle\lim_{z\to0}\frac{z}{|z|}$ and $\displaystyle\lim_{z\to0}\frac{z}{\bar z}$ do not exist</div><div class="bd"><ol class="steps">
+<li>Along $y=mx$ ($x\gt0$): $\frac{x+imx}{|x|\sqrt{1+m^2}}=\frac{1+im}{\sqrt{1+m^2}}$, which depends on $m$. So $\frac{z}{|z|}$ has no limit.</li>
+<li>For $\frac{z}{\bar z}$: along the real axis ($y=0$ first) it is $\frac xx=1$, and along the imaginary axis ($x=0$ first) it is $\frac{iy}{-iy}=-1$. The two values differ, so there is no limit.</li>
+<li>In polar form, $\frac z{\bar z}=e^{2i\theta}$: it depends only on the direction of approach.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> any function that depends only on the direction $\theta$ (and not on $r$) has no limit at $0$ unless it is constant. This one-line test settles most "does the limit exist?" MCQs.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.6–22.7) — continuity of $f(z)=\dfrac{z^3-iz^2+z-i}{z-i}$ ($z\ne i$), $f(i)=0$</div><div class="bd"><ol class="steps">
+<li>$z^3-iz^2+z-i=z^2(z-i)+(z-i)=(z-i)(z^2+1)$.</li>
+<li>For $z\ne i$, $f(z)=z^2+1\to i^2+1=0=f(i)$. So $f$ is continuous at $i$.</li>
+<li>In contrast, $f=\frac{\operatorname{Re}z}{z}$ ($f(0)=0$) is <b>not</b> continuous at $0$: along $y=0$ it equals $1$, and along $x=0$ it equals $0$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> continuity is necessary for differentiability (§22.8), so a discontinuous function can be eliminated immediately in an "analytic at $z_0$?" question.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.5) — a limit at infinity: $\displaystyle\lim_{z\to\infty}\frac{iz^3+iz-1}{(2z+3i)(z-i)^2}$</div><div class="bd"><ol class="steps">
+<li>Divide the top and bottom by $z^3$: $\frac{i+i/z^2-1/z^3}{(2+3i/z)(1-i/z)^2}$.</li>
+<li>As $z\to\infty$, the result is $\frac{i}{2}$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> leading-coefficient ratios at $\infty$ give the residue at infinity and the behaviour of big contour arcs in Ch. 14.7–14.8.</p></div></div>
+<!-- dass:end -->
 <h2 id="see">3. Seeing a complex function (four pictures)</h2>
 <p>A real function $y=f(x)$ needs 2 dimensions to graph. A complex function $w=f(z)$ needs 4 ($x,y$ in, $u,v$ out), so we use one of these pictures instead:</p>
 <table class="t">
@@ -903,5 +965,34 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* H.K. Dass §22.5 — path-dependent limits */
+  const F = {
+    zabs: { f: z => Cx.scale(z, 1 / Cx.abs(z)), z0: [0, 0], tex: '\\frac{z}{|z|}' },
+    zbar: { f: z => Cx.div(z, Cx.conj(z)), z0: [0, 0], tex: '\\frac{z}{\\bar z}' },
+    rez: { f: z => Cx.div([z[0], 0], z), z0: [0, 0], tex: '\\frac{\\operatorname{Re}z}{z}' },
+    x2y: { f: z => [z[0] * z[0] * z[1] / (z[0] ** 4 + z[1] ** 2), 0], z0: [0, 0], tex: '\\frac{x^2y}{x^4+y^2}' },
+    good: { f: z => Cx.div(Cx.add(Cx.mul(z, z), Cx.add(Cx.scale(z, 4), [3, 0])), Cx.add(z, [1, 0])), z0: [-1, 0], tex: '\\frac{z^2+4z+3}{z+1}' }
+  };
+  let t = 1; // parameter along the path: x = t * x0scale
+  const pathPt = (s) => { const m = val('dlm-m'), p = val('dlm-p'), x = s; const y = p === 'line' ? m * x : p === 'par' ? m * x * x : m * x ** 3; const z0 = F[val('dlm-f')].z0; return [z0[0] + x, z0[1] + y]; };
+  const P = new Plane('#cv-dass-lim', { span: 1.6, aspect: 0.62, snap: 0, draw: p => {
+    const z0 = F[val('dlm-f')].z0;
+    const pts = []; for (let s = -1.4; s <= 1.4; s += 0.01) pts.push(pathPt(s)); p.path(pts, { color: '--accent3', width: 2, alpha: 0.7 });
+    p.dot(z0, { r: 6, color: '--warn', hollow: true, label: 'z₀' });
+    p.dot(pathPt(t), { r: 7, color: '--accent2', label: 'z' });
+  }});
+  const out = () => {
+    const k = val('dlm-f'), f = F[k], z = pathPt(t), v = f.f(z), vs = f.f(pathPt(1e-6));
+    texMix('#dlm-out', `$z=${Cx.tex(z, 3)}$: &nbsp; $${f.tex}=${Cx.tex(v, 4)}$<br>value as $z\\to z_0$ along this path: $\\approx${Cx.tex(vs, 4)}$` + (k === 'good' ? ' (the same for every path: the limit exists and is $2$)' : ' — change the path and compare'));
+  };
+  watch(['dlm-m'], () => { P.redraw(); out(); }); ['dlm-f', 'dlm-p'].forEach(id => $('#' + id).addEventListener('change', () => { t = 1; const z0 = F[val('dlm-f')].z0; P.cx = z0[0]; P.cy = z0[1]; P.redraw(); out(); }));
+  const an = animator(dt => { t *= Math.pow(0.35, dt); if (t < 1e-3) t = 1; P.redraw(); out(); });
+  $('#dlm-play').onclick = e => { e.currentTarget.textContent = an.toggle() ? '❚❚ Pause' : '▶ Approach'; };
+  out();
+});
+
+/* dass:end */</script>
 </body>
 </html>

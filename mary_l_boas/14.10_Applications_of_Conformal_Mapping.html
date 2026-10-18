@@ -117,6 +117,14 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -219,6 +227,42 @@ $$V=\frac{100}{\pi}\theta=\frac{100}{\pi}\arctan\frac yx .$$
 <div class="readout" id="lb-out"></div>
 </div>
 
+<!-- dass:start 10__flow -->
+<h2 id="dass-22-16" class="dass"><span class="dtag">H.K. Dass §22.16–22.17</span>Flow problems: velocity potential, stream function, complex potential</h2>
+<p><b>Setting (§22.17).</b> Consider a two-dimensional, <b>irrotational</b> flow of an <b>incompressible</b> fluid, with velocity $\vec V=v_x\hat i+v_y\hat j$.</p>
+<ol class="steps">
+<li><b>Irrotational</b> ⇒ there is a scalar <b>velocity potential</b> $\phi(x,y)$ with $\vec V=\nabla\phi$, i.e. $v_x=\phi_x$ and $v_y=\phi_y$.</li>
+<li><b>Incompressible</b> ⇒ $\nabla\cdot\vec V=0$, i.e. $\partial_xv_x+\partial_yv_y=0$, so $\phi_{xx}+\phi_{yy}=0$: <b>$\phi$ is harmonic</b> (§22.16).</li>
+<li>So $\phi$ is the real part of an analytic <b>complex potential</b> $w=f(z)=\phi+i\psi$. Here $\psi$ is the <b>stream function</b>.</li>
+<li>By Cauchy–Riemann, $\frac{dw}{dz}=\phi_x+i\psi_x=\phi_x-i\phi_y=v_x-iv_y$. So the speed is $|\vec V|=\left|\frac{dw}{dz}\right|=\sqrt{v_x^2+v_y^2}$.</li>
+</ol>
+<table class="t dt">
+<tr><th>Curves</th><th>Fluid flow</th><th>Electrostatics</th><th>Heat flow</th></tr>
+<tr><td>$\phi=c_1$</td><td>equipotential lines</td><td>equipotentials</td><td>isothermals</td></tr>
+<tr><td>$\psi=c_2$</td><td>streamlines</td><td>lines of force</td><td>heat-flow lines</td></tr>
+</table>
+<p>By §22.14 the two families are orthogonal: the flow always crosses the equipotentials at right angles.</p>
+
+<div class="widget" id="w-dass-flow">
+<div class="wt">Interactive — equipotentials, streamlines and velocity from $w(z)$</div>
+<div class="wd">Choose a complex potential. Blue curves are $\phi=$ const, green curves are $\psi=$ const (the streamlines). Drag the probe: the arrow is the velocity $\overline{w'(z)}=v_x+iv_y$, and it always runs along a streamline.</div>
+<div class="ctrls"><label>$w(z)$ <select id="dfl-w"><option value="cube">−i z³</option><option value="mix">i(z² + 1/z)</option><option value="cyl">z + 1/z (cylinder)</option><option value="src">log z (source)</option></select></label></div>
+<canvas id="cv-dass-flow"></canvas>
+<div class="readout" id="dfl-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.18) — the electrostatic potential $\phi=3x^2y-y^3$: find the stream function</div><div class="bd"><ol class="steps">
+<li>$d\psi=\psi_x\,dx+\psi_y\,dy=-\phi_y\,dx+\phi_x\,dy=-(3x^2-3y^2)\,dx+6xy\,dy$.</li>
+<li>$=-d(x^3)+3\,d(xy^2)$, so $\psi=-x^3+3xy^2+c$.</li>
+<li>Together, $w=\phi+i\psi=-iz^3$. Check: $-iz^3=-i(x^3+3ix^2y-3xy^2-iy^3)=(3x^2y-y^3)+i(-x^3+3xy^2)$. ✓</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> given a potential, the field lines are the level curves of the harmonic conjugate. That is one integration of an exact differential.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.18) — $\psi=x^2-y^2+\dfrac{x}{x^2+y^2}$: find $\phi$</div><div class="bd"><ol class="steps">
+<li>$\psi_x=2x+\frac{y^2-x^2}{(x^2+y^2)^2}$ and $\psi_y=-2y-\frac{2xy}{(x^2+y^2)^2}$.</li>
+<li>$d\phi=\phi_x\,dx+\phi_y\,dy=\psi_y\,dx-\psi_x\,dy$. Integrating: $\phi=-2xy+\frac{y}{x^2+y^2}+C$.</li>
+<li>Equivalently $w=\phi+i\psi=i\left(z^2+\frac1z\right)$: $\operatorname{Im}(iz^2)=x^2-y^2$ and $\operatorname{Im}\frac iz=\frac{x}{x^2+y^2}$. ✓</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> recognising pieces like $\frac{x}{x^2+y^2}=\operatorname{Re}\frac1z$ and $x^2-y^2=\operatorname{Re}z^2$ lets you write $w$ down without integrating.</p></div></div>
+<!-- dass:end -->
 <h2 id="fringe">5. Example 5 — water leaving a channel / fringing of a capacitor</h2>
 <p>Use the map $z=w+e^w$ (10.3): $x=u+e^u\cos v$, $y=v+e^u\sin v$.</p>
 <ul>
@@ -896,5 +940,49 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* cached level curves of Re F and Im F: evaluates F once per grid point, reuses the grid while dragging */
+  function dassContours(p, F, key, levels, cache, res = 3) {
+    const nx = Math.ceil(p.W / res) + 1, ny = Math.ceil(p.H / res) + 1, k = key + '|' + p.W + 'x' + p.H + '|' + p.span + '|' + p.cx + '|' + p.cy;
+    if (cache.k !== k) {
+      const U = new Float64Array(nx * ny), V = new Float64Array(nx * ny);
+      for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const w = F([p.wx(i * res), p.wy(j * res)]); U[j * nx + i] = w[0]; V[j * nx + i] = w[1]; }
+      Object.assign(cache, { k, U, V });
+    }
+    const c = p.ctx;
+    [[cache.U, cssv('--accent'), 1.3], [cache.V, cssv('--accent3'), 1.6]].forEach(([A, col, wd]) => {
+      c.save(); c.fillStyle = col;
+      for (let j = 0; j < ny - 1; j++) for (let i = 0; i < nx - 1; i++) {
+        const a = A[j * nx + i], b = A[j * nx + i + 1], d = A[(j + 1) * nx + i];
+        if (!isFinite(a) || !isFinite(b) || !isFinite(d) || Math.abs(a - b) > 1.5 || Math.abs(a - d) > 1.5) continue;
+        for (const L of levels) if ((a > L) !== (b > L) || (a > L) !== (d > L)) { c.fillRect(i * res - wd / 2 + res / 2, j * res - wd / 2 + res / 2, wd + 0.8, wd + 0.8); break; }
+      }
+      c.restore();
+    });
+  }
+  /* H.K. Dass §22.16–22.17 — complex potential */
+  const WF = {
+    cube: z => Cx.mul([0, -1], Cx.mul(z, Cx.mul(z, z))),
+    mix: z => Cx.mul([0, 1], Cx.add(Cx.mul(z, z), Cx.div([1, 0], z))),
+    cyl: z => Cx.add(z, Cx.div([1, 0], z)),
+    src: z => Cx.log(z)
+  };
+  let p0 = [1.2, 0.6]; const cacheF = {};
+  const dW = (f, z, h = 1e-5) => Cx.scale(Cx.sub(f([z[0] + h, z[1]]), f([z[0] - h, z[1]])), 1 / (2 * h));
+  const P = new Plane('#cv-dass-flow', { span: 2.4, aspect: 0.62, snap: 0.02, draw: p => {
+    const k = val('dfl-w'), f = WF[k], st = k === 'src' ? 0.4 : 0.35;
+    if (k === 'cyl') p.circle([0, 0], 1, { color: '--fg', width: 2, fill: '--muted', fillAlpha: 0.25 });
+    const lev = []; for (let c = -4; c <= 4.001; c += st) lev.push(c);
+    dassContours(p, f, k, lev, cacheF);
+    const v = Cx.conj(dW(f, p0)), sc = 0.6 / Math.max(0.5, Cx.abs(v));
+    p.arrow(p0, Cx.add(p0, Cx.scale(v, sc)), { color: '--accent2', width: 3 }); p.dot(p0, { r: 6, color: '--accent2', ring: true });
+  }});
+  P.addDrag(() => p0, v => { if (Math.hypot(v[0], v[1]) > 0.05) p0 = v; });
+  const out = () => { const f = WF[val('dfl-w')], w = f(p0), v = Cx.conj(dW(f, p0)); texMix('#dfl-out', `At $z=${Cx.tex(p0, 2)}$: $\\phi=${fnum(w[0], 3)}$, $\\psi=${fnum(w[1], 3)}$; &nbsp; $v_x+iv_y=\\overline{w'(z)}=${Cx.tex(v, 3)}$, speed $|w'|=${fnum(Cx.abs(v), 3)}$`); };
+  P.onchange = out; $('#dfl-w').addEventListener('change', () => { P.redraw(); out(); }); out();
+});
+
+/* dass:end */</script>
 </body>
 </html>
