@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -135,6 +144,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="14.9_Mapping.html">14.9 Mapping</option>
 <option value="14.10_Applications_of_Conformal_Mapping.html">14.10 Some Applications of Conformal Mapping</option>
 <option value="14.11_Miscellaneous_Problems.html">14.11 Miscellaneous Problems</option></select>
+  <a class="btn" href="2.0_Complex_Numbers_Index.html" title="Chapter 2 index">Ch. 2 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -298,7 +308,70 @@ $$\frac{1}{z-a}=-\frac1a\cdot\frac{1}{1-z/a}=-\sum_{n=0}^\infty\frac{z^n}{a^{n+1
 <div class="mcq" data-ans="0" data-ok="Infinitely many negative powers." data-no="Look at the Laurent series of $e^{1/z}$."><p>2. $z=0$ for $e^{1/z}$ is</p><div class="opts"><button>an essential singularity</button><button>a simple pole</button><button>a pole of infinite order</button><button>removable</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="3" data-ok="$\sin^2 z\sim z^2$, so $5-2=3$." data-no="Subtract the zero order of the numerator."><p>3. $\frac{\sin^2z}{z^5}$ at $0$ has a pole of order</p><div class="opts"><button>5</button><button>1</button><button>2</button><button>3</button></div><div class="fb"></div></div>
 
-<h2 id="summary">7. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">7. Going deeper: order arithmetic, uniqueness, and how wild essential singularities are</h2>
+<h3>Uniqueness: any method gives the same series</h3>
+<p>In a given annulus the Laurent coefficients are fixed by $a_n=\frac1{2\pi i}\oint\frac{f(z)}{(z-z_0)^{n+1}}dz$. So <b>any</b> legitimate way of getting a series, whether partial fractions, geometric series, or multiplying known series, produces <i>the</i> Laurent series of that annulus. Different annuli give different series. The number of annuli about $z_0$ equals the number of distinct distances from $z_0$ to the singularities, counting the outer region (and the inner punctured disk if $z_0$ is itself singular).</p>
+<h3>Order arithmetic (no series needed)</h3>
+<p>Write $\operatorname{ord}_{z_0}f=m$ if $f=(z-z_0)^mg$ with $g$ analytic and $g(z_0)\ne0$. A zero of order $m$ has $m\gt0$, and a pole of order $k$ has $m=-k$. Then</p>
+$$\operatorname{ord}(fg)=\operatorname{ord}f+\operatorname{ord}g,\qquad\operatorname{ord}(f/g)=\operatorname{ord}f-\operatorname{ord}g,\qquad\operatorname{ord}(f^n)=n\operatorname{ord}f .$$
+<p>Standard orders at $0$: $\sin z$, $\tan z$, $e^z-1$ and $\ln(1+z)$ have order $1$; $1-\cos z$ has order $2$; $z-\sin z$ has order $3$. Example: $\frac{1}{z\sin^2z}$ has order $-1-2=-3$, a pole of order 3.</p>
+<h3>Essential singularities: Casorati–Weierstrass and Picard</h3>
+<table class="t">
+<tr><th>Type</th><th>Principal part</th><th>Behaviour as $z\to z_0$</th></tr>
+<tr><td>Removable</td><td>none</td><td>$f$ has a finite limit</td></tr>
+<tr><td>Pole of order $k$</td><td>finitely many terms, ending at $(z-z_0)^{-k}$</td><td>$|f|\to\infty$</td></tr>
+<tr><td>Essential</td><td>infinitely many terms</td><td>no limit, finite or infinite</td></tr>
+</table>
+<p>Near an essential singularity, $f$ comes arbitrarily close to <b>every</b> complex value (Casorati–Weierstrass). Picard's theorem goes further: $f$ actually takes every value, with at most one exception, infinitely often. Example: $e^{1/z}$ near $0$ takes every value except $0$.</p>
+
+<h2 id="exampat">8. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Classify the singularity</td><td>Removable, pole of what order, or essential (often multiple correct)</td><td>Order arithmetic; look for $e^{1/z}$, $\sin\frac1z$</td></tr>
+<tr><td>A specific coefficient</td><td>Coefficient of $z^{-1}$ or $z^{k}$ in a given annulus</td><td>Multiply the series and collect; often a known sum like $e-1$</td></tr>
+<tr><td>Region of validity</td><td>Which annulus a given series belongs to; how many expansions exist</td><td>Distances to the singularities</td></tr>
+<tr><td>Principal part</td><td>The negative-power terms</td><td>Expand only up to $(z-z_0)^{-1}$</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$\frac{\sin z}{z^4}$ has a pole of order <b>3</b>, not 4, because $\sin z$ has a zero of order 1.</li>
+<li>A Laurent series about $z_0$ in an annulus <i>not</i> touching $z_0$ can have infinitely many negative powers even though $z_0$ is a regular point. This does <b>not</b> make $z_0$ an essential singularity. Only the innermost punctured-disk series classifies $z_0$.</li>
+<li>$e^{1/z^2}$ has an essential singularity, not a pole of order 2.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$\frac{1}{e^z-1}=\frac1z-\frac12+\frac z{12}-\dots$ and $\cot z=\frac1z-\frac z3-\frac{z^3}{45}-\dots$</li>
+<li>For $|z|\gt R$ expansions, factor out the largest power: $\frac{1}{z-a}=\frac1z\sum\left(\frac az\right)^n$.</li>
+</ul></div>
+
+<h2 id="xprob">9. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> In the region $|z|\gt1$, the coefficient of $z^{-1}$ in the Laurent series of $\dfrac{1}{z(z-1)}$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $1$</span><span>(b) $-1$</span><span>(c) $0$</span><span>(d) $2$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac1{z^2}\cdot\frac{1}{1-1/z}=\frac1{z^2}+\frac1{z^3}+\dots$ There is no $z^{-1}$ term. Option <b>(c)</b>. (So $\oint_{|z|=2}$ of this function is $0$, consistent with the residues $-1$ at $0$ and $+1$ at $1$ cancelling.)</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> Find the order of the pole of $\dfrac{1}{(1-\cos z)^2}$ at $z=0$. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$1-\cos z$ has order 2, so $(1-\cos z)^2$ has order 4 and the pole has order $\mathbf4$.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> Find the coefficient of $z^{-1}$ in the Laurent series of $\dfrac{e^{1/z}}{1-z}$ valid in $0\lt|z|\lt1$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>$e^{1/z}=\sum_{m\ge0}\frac{z^{-m}}{m!}$ and $\frac{1}{1-z}=\sum_{k\ge0}z^k$. The $z^{-1}$ terms have $m-k=1$, giving $\sum_{m\ge1}\frac1{m!}=e-1=\mathbf{1.718}$. This is the residue at the essential singularity $0$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> How many different Laurent series about $z_0=1$ does $\dfrac{1}{(z-1)(z-2)(z+3)}$ have? <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) 2</span><span>(b) 3</span><span>(c) 4</span><span>(d) 1</span></div>
+<details class="sol"><summary>Show solution</summary><p>The other singularities are at distances $1$ (from $2$) and $4$ (from $-3$). The regions are $0\lt|z-1|\lt1$, $1\lt|z-1|\lt4$ and $|z-1|\gt4$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> (Multiple correct) At $z=0$: <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\frac{z}{e^z-1}$ has a removable singularity</span><span>(b) $\cot z-\frac1z$ has a removable singularity</span><span>(c) $\frac{\sin z}{z^4}$ has a pole of order 4</span><span>(d) $e^{1/z^2}$ has a pole of order 2</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b).</b> (a) tends to $1$. (b): $\cot z-\frac1z=-\frac z3-\dots\to0$. (c) has order $1-4=-3$. (d) is essential.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Find the principal part of $f(z)=\dfrac{1}{z^2\sin z}$ at $z=0$, and its residue there. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{1}{\sin z}=\frac1z\left(1-\frac{z^2}6+\dots\right)^{-1}=\frac1z+\frac z6+\frac{7z^3}{360}+\dots$ Dividing by $z^2$: $f=\frac1{z^3}+\frac1{6z}+\frac{7z}{360}+\dots$ The principal part is $\frac1{z^3}+\frac{1}{6z}$, and the residue is $\frac16$.</p></details></div>
+<div class="mcq" data-ans="0" data-ok="$\frac{e^z}{z^2}=\frac1{z^2}+\frac1z+\frac12+\dots$" data-no="Expand $e^z=1+z+\dots$ and divide by $z^2$."><p>Rapid fire: the principal part of $\dfrac{e^z}{z^2}$ at $0$ is</p><div class="opts"><button>$\frac1{z^2}+\frac1z$</button><button>$\frac1{z^2}$</button><button>$\frac1z$</button><button>$\frac1{z^2}+\frac1z+\frac12$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">10. Connections</h2>
+<div class="xlinks">
+<a href="14.3_Contour_Integrals.html"><b>Builds on</b>14.3 Cauchy's formula<small>The coefficient formulas</small></a>
+<a href="14.5_The_Residue_Theorem.html"><b>Next</b>14.5 Residue theorem<small>Only $a_{-1}$ survives integration</small></a>
+<a href="14.6_Methods_of_Finding_Residues.html"><b>Uses</b>14.6 Residue methods<small>Shortcuts that avoid the full series</small></a>
+<a href="2.6_Complex_Infinite_Series.html"><b>Recall</b>2.6 Geometric series<small>The engine of every Laurent expansion</small></a>
+<a href="2.7_Complex_Power_Series_Disk_of_Convergence.html"><b>Recall</b>2.7 Disks of convergence<small>Annuli generalise disks</small></a>
+<a href="14.8_Point_at_Infinity_Residues_at_Infinity.html"><b>Later</b>14.8 Behaviour at ∞<small>Laurent series in $1/z$</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="7. Summary">11. Summary</h2>
 <div class="card"><ul class="summary">
 <li>Laurent series $\sum a_n(z-z_0)^n+\sum b_n(z-z_0)^{-n}$ converge in rings. There is one series per ring, and each is unique.</li>
 <li>Method: partial fractions, then expand $\frac1{z-a}$ in $z/a$ (pole outside the ring) or in $a/z$ (pole inside the inner circle).</li>

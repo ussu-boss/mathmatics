@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +150,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -302,7 +312,70 @@ $$\frac{1}{1+x^2}=1-x^2+x^4-x^6+\dots$$
 <div class="mcq" data-ans="0" data-ok="Nearest zero of $\cos z$ is $\pm\pi/2$." data-no="Where is $\cos z=0$?"><p>2. $R$ for the Maclaurin series of $\sec z$:</p><div class="opts"><button>$\pi/2$</button><button>$\pi$</button><button>$1$</button><button>$\infty$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="1" data-ok="$|z^n/n^2|=1/n^2$ on $|z|=1$: absolutely convergent." data-no="Look at $|z^n/n^2|$ when $|z|=1$."><p>3. $\sum\frac{z^n}{n^2}$ on the circle $|z|=1$:</p><div class="opts"><button>diverges everywhere</button><button>converges everywhere</button><button>diverges only at $z=1$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">10. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">10. Going deeper: the radius from the coefficients alone, and the rules that save time</h2>
+<h3>Cauchy–Hadamard, the general formula</h3>
+$$\frac1R=\limsup_{n\to\infty}|a_n|^{1/n}.$$
+<p><b>Why:</b> apply the root test to $\sum a_nz^n$. The terms behave like $\left(|a_n|^{1/n}|z|\right)^n$, so the series converges when $|z|\limsup|a_n|^{1/n}\lt1$ and diverges when it is $\gt1$. The $\limsup$ (the largest limit point) is needed when $|a_n|^{1/n}$ oscillates. An example is $a_n=(2+(-1)^n)^n$, where $|a_n|^{1/n}$ alternates between $1$ and $3$, giving $R=\frac13$. The ratio test cannot handle this case.</p>
+<h3>Rules you can apply without recomputing</h3>
+<table class="t">
+<tr><th>Change to the series</th><th>Effect on $R$</th><th>Reason</th></tr>
+<tr><td>Multiply $a_n$ by $n^p$ (any $p$), or differentiate/integrate term by term</td><td>unchanged</td><td>$n^{p/n}\to1$</td></tr>
+<tr><td>$\sum a_nz^{kn}$ (only every $k$-th power)</td><td>$R^{1/k}$</td><td>substitute $w=z^k$</td></tr>
+<tr><td>$\sum a_n(cz)^n$</td><td>$R/|c|$</td><td>scaling</td></tr>
+<tr><td>Sum of two series with radii $R_1\ne R_2$</td><td>$\min(R_1,R_2)$</td><td>the smaller disk limits it</td></tr>
+<tr><td>Taylor series of $f$ about $z_0$</td><td>distance from $z_0$ to the nearest non-removable singularity</td><td>proved with Cauchy's formula in 14.3</td></tr>
+</table>
+<h3>Removable singularities do not count</h3>
+<p>$\frac{\sin z}{z}$ and $\frac{z}{e^z-1}$ look singular at $0$, but the limits exist. So these are <i>removable</i> singularities. For $\frac{z}{e^z-1}$ the true singularities are $z=2\pi ik$, $k\ne0$. The Maclaurin radius is therefore $2\pi$, not $0$. This is a favourite trap.</p>
+
+<h2 id="exampat">11. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Explicit coefficients</td><td>$R$ for $\sum\frac{n^k}{c^n}z^n$, $\sum\frac{n!}{n^n}z^n$</td><td>Ratio test, or root test for $n$-th powers</td></tr>
+<tr><td>Hidden coefficients</td><td>$R$ of the Taylor series of $\frac{1}{z^2+2z+5}$, $\sec z$, $\frac{z}{e^z-1}$ about some $z_0$</td><td>Distance to the nearest singularity</td></tr>
+<tr><td>Lacunary series</td><td>$\sum z^{3n}/8^n$, $\sum z^{n!}$</td><td>Substitute, or use Cauchy–Hadamard</td></tr>
+<tr><td>Boundary behaviour</td><td>Which boundary points converge (often multiple correct)</td><td>Compare $|a_n|R^n$ with $\frac1n$ and $\frac1{n^2}$; alternating at specific points</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>Removable singularities do not limit $R$.</li>
+<li>For a series in $(z-z_0)$, the disk is centred at $z_0$, not at $0$.</li>
+<li>$R$ never depends on behaviour on the boundary. The boundary has to be checked separately, point by point.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$\left(1+\frac1n\right)^{n^2}$ has $n$-th root $\to e$, so $R=\frac1e$.</li>
+<li>$\frac{n!}{n^n}$: ratio $\to\frac1e$, so $R=e$. $\ \frac{n^n}{n!}$: $R=\frac1e$.</li>
+</ul></div>
+
+<h2 id="xprob">12. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> Find the radius of convergence of $\sum_{n\ge1}\left(1+\frac1n\right)^{n^2}z^n$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$|a_n|^{1/n}=\left(1+\frac1n\right)^n\to e$, so $R=\frac1e=\mathbf{0.368}$.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> The radius of convergence of $\sum n^5\dfrac{z^n}{3^n}$ is <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $1/3$</span><span>(b) $3$</span><span>(c) $3^5$</span><span>(d) $1$</span></div>
+<details class="sol"><summary>Show solution</summary><p>The factor $n^5$ does not change $R$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> Find the radius of convergence of the Maclaurin series of $\dfrac{1}{z^2+2z+5}$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>The poles are at $-1\pm2i$, at distance $\sqrt5$ from the origin. $R=\mathbf{2.236}$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> The radius of convergence of $\sum_{n\ge1}z^{n!}$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $0$</span><span>(b) $1$</span><span>(c) $e$</span><span>(d) $\infty$</span></div>
+<details class="sol"><summary>Show solution</summary><p>The coefficients are $0$ or $1$, with infinitely many $1$s, so $\limsup|a_n|^{1/n}=1$ and $R=1$. Option <b>(b)</b>. (The unit circle is a natural boundary for this series. It cannot be continued beyond it at all.)</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> (Multiple correct) For $\displaystyle\sum_{n\ge1}\frac{(z-2)^n}{n\,3^n}$: <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) it converges at $z=-1$</span><span>(b) it converges at $z=5$</span><span>(c) $R=3$</span><span>(d) it converges absolutely everywhere on $|z-2|=3$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (c).</b> At $z=-1$ the series is $\sum\frac{(-1)^n}{n}$, which converges. At $z=5$ it is $\sum\frac1n$, which diverges. On the boundary $|a_n|R^n=\frac1n$, so absolute convergence fails everywhere there.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Find the radius of convergence of the Taylor series of $\dfrac{z}{e^z-1}$ about $z_0=i\pi$. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>The singularities are at $2\pi ik$. The one at $k=0$ is removable and does not count. The nearest true singularity to $i\pi$ is $2\pi i$, at distance $\pi$ (the next one, $-2\pi i$, is at $3\pi$). So $R=\pi\approx3.14$. If you count $z=0$ you still get $\pi$ here, but about $z_0=1$ you would get $1$ instead of the correct $\sqrt{1+4\pi^2}$.</p></details></div>
+<div class="mcq" data-ans="3" data-ok="$\frac{1/(n+1)!}{1/n!}=\frac{1}{n+1}\to0$, so $R=\infty$." data-no="Ratio of successive coefficients goes to $0$."><p>Rapid fire: $R$ for $\sum\frac{z^n}{n!}$ is</p><div class="opts"><button>$0$</button><button>$1$</button><button>$e$</button><button>$\infty$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">13. Connections</h2>
+<div class="xlinks">
+<a href="2.6_Complex_Infinite_Series.html"><b>Builds on</b>2.6 Complex series<small>Tests for convergence</small></a>
+<a href="2.8_Elementary_Functions_of_Complex_Numbers.html"><b>Next</b>2.8 Elementary functions<small>$e^z$, $\sin z$ defined by series with $R=\infty$</small></a>
+<a href="14.3_Contour_Integrals.html"><b>Proof</b>14.3 Cauchy's formula<small>Why $R$ = distance to the nearest singularity</small></a>
+<a href="14.4_Laurent_Series.html"><b>Later</b>14.4 Laurent series<small>Annuli replace disks when there is a singularity inside</small></a>
+<a href="14.6_Methods_of_Finding_Residues.html"><b>Later</b>14.6 Singularities<small>Removable, poles, essential</small></a>
+<a href="2.17_Miscellaneous_Problems.html"><b>Review</b>2.17 Mixed problems<small>Radius-of-convergence questions in exam form</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="10. Summary">14. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$\sum a_n(z-z_0)^n$ converges absolutely in the disk $|z-z_0|\lt R$ and diverges outside it.</li>
 <li>$R=\lim|a_n/a_{n+1}|$ (ratio), or in general $1/R=\limsup|a_n|^{1/n}$ (root).</li>

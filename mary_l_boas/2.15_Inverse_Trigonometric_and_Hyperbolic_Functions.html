@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +150,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html" selected>2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -297,7 +307,78 @@ $$z=\arccos w\quad\Longleftrightarrow\quad w=\cos z,$$
 <div class="mcq" data-ans="2" data-ok="$\tan z=i$ leads to $e^{iz}=0$, which is impossible." data-no="Try to solve $\tan z=i$ with exponentials."><p>2. Which value does $\tan z$ never take?</p><div class="opts"><button>$0$</button><button>$1$</button><button>$i$</button><button>$1+i$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="0" data-ok="$\tan$ has period $\pi$, so the solutions are $z_0+n\pi$." data-no="Use the period of $\tan$."><p>3. If $z_0$ solves $\tan z=w$, all solutions are</p><div class="opts"><button>$z_0+n\pi$</button><button>$\pm z_0+2n\pi$</button><button>$z_0+n\pi i$</button><button>$z_0$ only</button></div><div class="fb"></div></div>
 
-<h2 id="summary">10. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">10. Going deeper: branch points, derivatives, and the integral table</h2>
+<h3>Where the inverses are singular</h3>
+<p>Every inverse function here is a logarithm of an algebraic expression. It becomes multivalued, or blows up, where the log's argument is $0$ or $\infty$, or where a square root inside it vanishes:</p>
+<table class="t">
+<tr><th>Function</th><th>Log form</th><th>Finite branch points</th></tr>
+<tr><td>$\arcsin z$</td><td>$-i\ln\!\left(iz+\sqrt{1-z^2}\right)$</td><td>$z=\pm1$</td></tr>
+<tr><td>$\arctan z$</td><td>$\frac1{2i}\ln\frac{1+iz}{1-iz}$</td><td>$z=\pm i$ (undefined there: $\tan z\ne\pm i$)</td></tr>
+<tr><td>$\sinh^{-1}z$</td><td>$\ln\!\left(z+\sqrt{z^2+1}\right)$</td><td>$z=\pm i$</td></tr>
+<tr><td>$\cosh^{-1}z$</td><td>$\ln\!\left(z+\sqrt{z^2-1}\right)$</td><td>$z=\pm1$</td></tr>
+<tr><td>$\tanh^{-1}z$</td><td>$\frac12\ln\frac{1+z}{1-z}$</td><td>$z=\pm1$ (undefined there)</td></tr>
+</table>
+<h3>Derivatives straight from the log forms</h3>
+<p>Example: $\frac{d}{dz}\ln\!\left(z+\sqrt{z^2+1}\right)=\frac{1+\frac{z}{\sqrt{z^2+1}}}{z+\sqrt{z^2+1}}=\frac{1}{\sqrt{z^2+1}}$. In the same way:</p>
+$$\frac{d}{dz}\arcsin z=\frac1{\sqrt{1-z^2}},\quad\frac{d}{dz}\arccos z=-\frac1{\sqrt{1-z^2}},\quad\frac{d}{dz}\arctan z=\frac1{1+z^2},\quad\frac{d}{dz}\tanh^{-1}z=\frac1{1-z^2}.$$
+<h3>The integral table you actually use</h3>
+<table class="t">
+<tr><th>Integral</th><th>Inverse-function form</th><th>Log form</th></tr>
+<tr><td>$\int\frac{dx}{\sqrt{x^2+a^2}}$</td><td>$\sinh^{-1}\frac xa$</td><td>$\ln\left(x+\sqrt{x^2+a^2}\right)+C$</td></tr>
+<tr><td>$\int\frac{dx}{\sqrt{x^2-a^2}}$ ($x\gt a$)</td><td>$\cosh^{-1}\frac xa$</td><td>$\ln\left(x+\sqrt{x^2-a^2}\right)+C$</td></tr>
+<tr><td>$\int\frac{dx}{a^2-x^2}$ ($|x|\lt a$)</td><td>$\frac1a\tanh^{-1}\frac xa$</td><td>$\frac1{2a}\ln\frac{a+x}{a-x}+C$</td></tr>
+<tr><td>$\int\frac{dx}{a^2+x^2}$</td><td>$\frac1a\arctan\frac xa$</td><td>$\frac{1}{2ia}\ln\frac{a+ix}{a-ix}+C$</td></tr>
+</table>
+<p>The inverse-function form and the log form differ only by a constant (for example $\ln a$), which is absorbed into $C$. This is Boas Example 2 again.</p>
+
+<h2 id="exampat">11. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Solve trig equations</td><td>$\cos z=2$, $\sin z=i$, $\cosh z=-1$</td><td>Put $u=e^{iz}$ (or $e^z$) and solve the quadratic</td></tr>
+<tr><td>Special values</td><td>$\cosh^{-1}2$, $\arctan(2i)$, $\tanh^{-1}i$</td><td>Log formula, then simplify the log</td></tr>
+<tr><td>Integrals</td><td>$\int_0^1\frac{dx}{\sqrt{1+x^2}}$ and similar</td><td>Integral table</td></tr>
+<tr><td>Domain questions</td><td>Where is $\arctan z$ undefined?</td><td>The branch-point table</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$\cos z=2$ <b>does</b> have solutions. Only for real $z$ is $|\cos z|\le1$.</li>
+<li>Each inverse has two families of values, from the $\pm$ of the square root, plus the $2\pi k$ (or $\pi k$) from the log.</li>
+<li>$\arctan(\pm i)$ does not exist.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$\cos z=a$ with $a\gt1$ real: $z=2k\pi\pm i\cosh^{-1}a=2k\pi\pm i\ln\left(a+\sqrt{a^2-1}\right)$.</li>
+<li>$\cosh^{-1}2=\ln(2+\sqrt3)\approx1.317$ and $\sinh^{-1}1=\ln(1+\sqrt2)\approx0.881$.</li>
+</ul></div>
+
+<h2 id="xprob">12. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> Find the principal value of $\cosh^{-1}2$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\ln(2+\sqrt3)=\mathbf{1.317}$.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> All values of $\arctan(2i)$ are <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\frac\pi2+k\pi+\frac i2\ln3$</span><span>(b) $k\pi+i\ln3$</span><span>(c) $\frac i2\ln3$</span><span>(d) none</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{1+iz}{1-iz}=\frac{1-2}{1+2}=-\frac13$. Then $\frac1{2i}\ln\left(-\frac13\right)=\frac1{2i}\left(-\ln3+i(2k+1)\pi\right)=\frac{(2k+1)\pi}{2}+\frac i2\ln3$. Option <b>(a)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> Evaluate $\displaystyle\int_0^1\frac{dx}{\sqrt{1+x^2}}$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\sinh^{-1}1=\ln(1+\sqrt2)=\mathbf{0.881}$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> (Multiple correct) <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\arcsin z$ has values for every complex $z$</span><span>(b) $\arctan z$ has values for every complex $z$</span><span>(c) $\frac{d}{dz}\arccos z=-\frac1{\sqrt{1-z^2}}$</span><span>(d) for real $x\in(-1,1)$, every value of $\cosh^{-1}x$ is purely imaginary</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (c), (d).</b> (b) fails at $\pm i$. For (d): $\cosh(iy)=\cos y=x$ has real solutions $y$, and $\cosh(u+iy)$ is real and in $(-1,1)$ only when $u=0$.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> All solutions of $\cos z=2$ are <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) none</span><span>(b) $2k\pi\pm i\ln(2+\sqrt3)$</span><span>(c) $k\pi\pm i\ln2$</span><span>(d) $\frac\pi2+2k\pi\pm i\ln(2+\sqrt3)$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\cos x\cosh y=2$ and $\sin x\sinh y=0$. So $\sin x=0$ with $\cos x=1$, and $\cosh y=2$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Find the principal value of $\tanh^{-1}i$. <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac12\operatorname{Ln}\frac{1+i}{1-i}=\frac12\operatorname{Ln}i=\frac{i\pi}{4}$. Check: $\tanh\frac{i\pi}4=i\tan\frac\pi4=i$. ✓</p></details></div>
+<div class="mcq" data-ans="0" data-ok="$\sin z=0$ only for $z=k\pi$." data-no="The zeros of $\sin z$ are all real (2.11)."><p>Rapid fire: all values of $\arcsin0$ are</p><div class="opts"><button>$k\pi$</button><button>$2k\pi$</button><button>$0$ only</button><button>$k\pi+i\ln2$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">13. Connections</h2>
+<div class="xlinks">
+<a href="2.13_Logarithms.html"><b>Builds on</b>2.13 Logarithms<small>Every inverse is a log</small></a>
+<a href="2.16_Some_Applications.html"><b>Next</b>2.16 Applications<small>Circuits, optics, oscillations</small></a>
+<a href="2.11_Exponential_and_Trigonometric_Functions.html"><b>Inverts</b>2.11 $\sin z$, $\cos z$<small>Why $\cos z=5$ has solutions</small></a>
+<a href="2.12_Hyperbolic_Functions.html"><b>Inverts</b>2.12 Hyperbolic<small>Rapidity $=\tanh^{-1}(v/c)$</small></a>
+<a href="14.1_Introduction.html"><b>Later</b>14.1 Branch points<small>Where these functions are multivalued</small></a>
+<a href="14.9_Mapping.html"><b>Later</b>14.9 $w=\sin z$<small>Strips mapped onto the half-plane</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="10. Summary">14. Summary</h2>
 <div class="card"><ul class="summary">
 <li>Method: $u=e^{iz}$ (or $e^z$) gives a quadratic in $u$; then $z$ comes from the logs of its roots.</li>
 <li>$\arccos z=i\ln(z\pm\sqrt{z^2-1})$, $\arcsin z=-i\ln(iz\pm\sqrt{1-z^2})$, $\arctan z=\frac1{2i}\ln\frac{1+iz}{1-iz}$, and the hyperbolic ones are similar.</li>

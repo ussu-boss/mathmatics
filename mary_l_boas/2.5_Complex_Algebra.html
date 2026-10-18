@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +150,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -496,7 +506,77 @@ $$\frac{dz}{dt}=\frac{dx}{dt}+i\frac{dy}{dt},\qquad\frac{d^2z}{dt^2}=\frac{d^2x}
 <div class="mcq" data-ans="3" data-ok="$|w|=5$: $x^2=4$, $y^2=1$, $xy>0$." data-no="Use $x^2=(|w|+a)/2$, $y^2=(|w|-a)/2$, with $\operatorname{sign}(xy)=\operatorname{sign}(b)$."><p>3. The square roots of $3+4i$ are</p><div class="opts"><button>$\pm(1+2i)$</button><button>$\pm(2-i)$</button><button>$\pm(1-2i)$</button><button>$\pm(2+i)$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="1" data-ok="If $a$ is complex, $\overline{a+ib}=\bar a-i\bar b$." data-no="Watch for hidden $i$'s inside $a$ and $b$."><p>4. If $a=1+i$ and $b=2$, then $\overline{a+ib}=$</p><div class="opts"><button>$a-ib=1-i$</button><button>$1-3i$</button><button>$1+3i$</button><button>$-1+3i$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">Going deeper: lines, Apollonius circles and conics in complex form</h2>
+<h3>Lines</h3>
+<p>The perpendicular bisector of $a$ and $b$ is $|z-a|=|z-b|$. Squaring and cancelling $z\bar z$ gives</p>
+$$(\bar b-\bar a)z+(b-a)\bar z+|a|^2-|b|^2=0 .$$
+<p>Every line has the form $\bar\beta z+\beta\bar z+c=0$ with $c$ real. The vector $\beta$ is normal to the line.</p>
+<h3>Apollonius circles: $|z-a|=k|z-b|$, $k\ne1$</h3>
+<p>Square both sides: $(z-a)(\bar z-\bar a)=k^2(z-b)(\bar z-\bar b)$. Collect terms and divide by $1-k^2$:</p>
+$$z\bar z-\frac{\bar a-k^2\bar b}{1-k^2}z-\frac{a-k^2b}{1-k^2}\bar z+\frac{|a|^2-k^2|b|^2}{1-k^2}=0 .$$
+<p>Completing the square $|z-c|^2=\rho^2$ gives</p>
+$$\boxed{c=\frac{a-k^2b}{1-k^2},\qquad\rho=\frac{k\,|a-b|}{|1-k^2|}}$$
+<p>Check with the worked example $|z-1|=2|z+1|$: $c=\frac{1+4}{-3}=-\frac53$ and $\rho=\frac{2\cdot2}{3}=\frac43$. ✓ Physically, these circles are the equipotentials of two opposite line charges in 2-D. That is why they reappear in the electrostatics of 14.10.</p>
+<h3>Conics from distances</h3>
+<table class="t">
+<tr><th>Equation</th><th>Locus</th><th>Condition</th></tr>
+<tr><td>$|z-a|+|z-b|=2A$</td><td>ellipse with foci $a,b$ and semi-major axis $A$</td><td>$2A\gt|a-b|$. If $2A=|a-b|$ it is the segment, and if $2A\lt|a-b|$ there are no points.</td></tr>
+<tr><td>$|z-a|-|z-b|=2A$</td><td>one branch of a hyperbola (the branch nearer $b$)</td><td>$0\lt2A\lt|a-b|$. If $2A=|a-b|$ it is a ray.</td></tr>
+<tr><td>$|z-a|=\operatorname{Re}(\dots)$ (distance to a line)</td><td>parabola</td><td>focus $a$, directrix the line</td></tr>
+</table>
+<p>For the ellipse: if the foci are $2C$ apart, the semi-minor axis is $B=\sqrt{A^2-C^2}$.</p>
+
+<h2 id="exampat">How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Identify a locus</td><td>$|z-a|=k|z-b|$, $|z-a|\pm|z-b|=$ const</td><td>Use the boxed formulas and table above. Check the degenerate cases.</td></tr>
+<tr><td>Square roots</td><td>$\sqrt{a+ib}$ with integer answer</td><td>Solve $x^2-y^2=a$, $2xy=b$, $x^2+y^2=\sqrt{a^2+b^2}$</td></tr>
+<tr><td>Quadratics with complex coefficients</td><td>Find the roots</td><td>Try Vieta guesses first: integer and Gaussian-integer roots are common</td></tr>
+<tr><td>Regions</td><td>$\operatorname{Re}(1/z)\gt c$, $|z-a|\lt|z-b|$</td><td>Turn into circles or half-planes</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$|z-3|-|z+3|=6$ is not a hyperbola: $6=|a-b|$, so it is the <b>ray</b> $x\le-3$.</li>
+<li>$\operatorname{Re}(1/z)\ge c$ excludes $z=0$ even when the circle passes through the origin.</li>
+<li>A quadratic with complex coefficients need not have conjugate roots. Do not "use the conjugate root".</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$\operatorname{Re}\frac1z=c$ is the circle $|z-\frac1{2c}|=\frac1{2|c|}$ through $0$. Similarly $\operatorname{Im}\frac1z=c$ is the circle $|z+\frac{i}{2c}|=\frac1{2|c|}$.</li>
+<li>$\left|\frac{z-a}{z-\bar a}\right|=1$ (with $a$ not real) is the real axis. If it is $\lt1$ and $\operatorname{Im}a\gt0$, it is the upper half-plane.</li>
+</ul></div>
+
+<h2 id="xprob">Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> The locus $|z-2|=2|z+1|$ is a circle with <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) centre $-2$, radius $2$</span><span>(b) centre $2$, radius $2$</span><span>(c) centre $-1$, radius $3$</span><span>(d) centre $-2$, radius $4$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$c=\frac{2-4(-1)}{1-4}=-2$ and $\rho=\frac{2\cdot3}{3}=2$. Option <b>(a)</b>. Check: $z=0$ gives $2=2\cdot1$. ✓</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> Find the area enclosed by $|z-1|+|z+1|=4$, to two decimal places. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>An ellipse with $A=2$, $C=1$, so $B=\sqrt3$. The area is $\pi AB=2\sqrt3\pi=\mathbf{10.88}$.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> The square roots of $-8-6i$ are <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $\pm(3-i)$</span><span>(b) $\pm(1-3i)$</span><span>(c) $\pm(1+3i)$</span><span>(d) $\pm(3+i)$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$x^2-y^2=-8$ and $x^2+y^2=10$ give $x^2=1$, $y^2=9$. Since $2xy=-6\lt0$, $x$ and $y$ have opposite signs: $\pm(1-3i)$, option <b>(b)</b>. Check: $(1-3i)^2=1-6i-9=-8-6i$. ✓</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> Solve $z^2-(3+i)z+(2+2i)=0$. <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>Look for roots with sum $3+i$ and product $2+2i$. Trying $2$ and $1+i$: the sum is $3+i$ and the product $2+2i$. ✓ The roots are $z=2$ and $z=1+i$, which are not conjugates (the coefficients are complex). The formula gives the same: the discriminant $(3+i)^2-4(2+2i)=-2i=(1-i)^2$.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> The region $\operatorname{Re}(1/z)\ge\frac14$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $|z-2|\le2$, $z\ne0$</span><span>(b) $|z-4|\le4$</span><span>(c) $|z|\le4$</span><span>(d) $\operatorname{Re}z\le4$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{x}{x^2+y^2}\ge\frac14\iff x^2+y^2\le4x\iff(x-2)^2+y^2\le4$, with $z\ne0$. Option <b>(a)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> The set $|z-3|-|z+3|=6$ is <span class="src">CSIR Part B</span><span class="lvl h">Hard</span></div>
+<div class="ch"><span>(a) a hyperbola</span><span>(b) one branch of a hyperbola</span><span>(c) the ray $y=0$, $x\le-3$</span><span>(d) empty</span></div>
+<details class="sol"><summary>Show solution</summary><p>The difference of distances equals the distance between the foci. That only happens on the real axis beyond the nearer focus $-3$. Option <b>(c)</b>. Check: $z=-5$ gives $8-2=6$. ✓</p></details></div>
+<div class="prob"><div class="q"><b>X7.</b> A particle moves as $z(t)=2e^{it}+e^{2it}$. Find its maximum speed, and the times in $[0,2\pi)$ when it is momentarily at rest. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\dot z=2ie^{it}+2ie^{2it}=2ie^{it}(1+e^{it})$. Using $1+e^{it}=2\cos\frac t2\,e^{it/2}$, the speed is $|\dot z|=4|\cos\frac t2|$. The maximum speed is $4$ (at $t=0$). The particle is at rest at $t=\pi$, where $z=-2+1=-1$ is the cusp of the curve.</p></details></div>
+<div class="mcq" data-ans="1" data-ok="$\frac{|3+4i|}{|5-12i|}=\frac5{13}$." data-no="Modulus of a quotient = quotient of moduli."><p>Rapid fire: $\left|\dfrac{3+4i}{5-12i}\right|=$</p><div class="opts"><button>$\frac{25}{169}$</button><button>$\frac{5}{13}$</button><button>$\frac{7}{17}$</button><button>$1$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">Connections</h2>
+<div class="xlinks">
+<a href="2.4_Terminology_and_Notation.html"><b>Builds on</b>2.4 Modulus and conjugate<small>The tools that make division and loci work</small></a>
+<a href="2.6_Complex_Infinite_Series.html"><b>Next</b>2.6 Complex series<small>Sums of complex terms</small></a>
+<a href="2.10_Powers_and_Roots_of_Complex_Numbers.html"><b>Extends</b>2.10 Roots<small>$n$-th roots generalise the square root</small></a>
+<a href="14.9_Mapping.html"><b>Later</b>14.9 Mapping<small>Möbius maps send circles and lines to circles and lines</small></a>
+<a href="14.10_Applications_of_Conformal_Mapping.html"><b>Physics</b>14.10 Electrostatics<small>Apollonius circles as equipotentials</small></a>
+<a href="2.16_Some_Applications.html"><b>Physics</b>2.16 Motion<small>Velocity and acceleration as complex derivatives</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="Summary">Summary</h2>
 <div class="card"><ul class="summary">
 <li><b>Divide:</b> multiply by the conjugate of the denominator. <b>Multiply or power:</b> polar is often faster.</li>
 <li><b>Conjugate</b> of an expression: change every $i$ (including hidden ones).</li>

@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -135,6 +144,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="14.9_Mapping.html">14.9 Mapping</option>
 <option value="14.10_Applications_of_Conformal_Mapping.html">14.10 Some Applications of Conformal Mapping</option>
 <option value="14.11_Miscellaneous_Problems.html">14.11 Miscellaneous Problems</option></select>
+  <a class="btn" href="2.0_Complex_Numbers_Index.html" title="Chapter 2 index">Ch. 2 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -306,7 +316,69 @@ $$\boxed{f^{(n)}(a)=\frac{n!}{2\pi i}\oint_C\frac{f(z)\,dz}{(z-a)^{n+1}}}$$
 <div class="mcq" data-ans="3" data-ok="$z=3$ is outside $|z|=2$, so Cauchy's theorem gives $0$." data-no="Is the singular point inside the contour?"><p>2. $\oint_{|z|=2}\frac{e^z}{z-3}dz=$</p><div class="opts"><button>$2\pi ie^3$</button><button>$e^3$</button><button>$\pi ie^3$</button><button>$0$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="0" data-ok="$\bar z$ is not analytic: the value depends on the path." data-no="Is the integrand analytic?"><p>3. $\int_0^{1+i}\bar z\,dz$ is</p><div class="opts"><button>path dependent</button><button>always $1$</button><button>always $0$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">9. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">9. Going deeper: from Cauchy's formula to Liouville, the fundamental theorem of algebra, and maximum modulus</h2>
+<h3>1. Cauchy's estimates</h3>
+<p>Take the derivative formula $f^{(n)}(z_0)=\frac{n!}{2\pi i}\oint_{|z-z_0|=R}\frac{f(z)}{(z-z_0)^{n+1}}dz$. Suppose $|f|\le M$ on the circle. The ML estimate (length $2\pi R$, integrand at most $M/R^{n+1}$) gives</p>
+$$\boxed{|f^{(n)}(z_0)|\le\frac{n!\,M}{R^n}}$$
+<h3>2. Liouville's theorem</h3>
+<p>If $f$ is entire and $|f|\le M$ everywhere, the estimate with $n=1$ holds for every $R$: $|f'(z_0)|\le M/R\to0$. So $f'\equiv0$ and $f$ is constant. More generally, if $|f(z)|\le C|z|^k$ for large $|z|$, then $f^{(n)}(z_0)=0$ for $n\gt k$, so $f$ is a polynomial of degree at most $k$.</p>
+<h3>3. Fundamental theorem of algebra</h3>
+<p>Let $p$ be a non-constant polynomial with no zero. Then $1/p$ is entire, and $1/p\to0$ as $|z|\to\infty$, so it is bounded. By Liouville $1/p$ would be constant, a contradiction. So every non-constant polynomial has a root in $\mathbb C$. This is the result quoted in 2.1.</p>
+<h3>4. Mean-value property and maximum modulus</h3>
+<p>Put $z=z_0+re^{i\theta}$ in Cauchy's formula:</p>
+$$f(z_0)=\frac1{2\pi}\int_0^{2\pi}f(z_0+re^{i\theta})\,d\theta .$$
+<p>The value at the centre is the average over any circle. An average cannot exceed every value it averages unless they are all equal. So <b>$|f|$ has no interior maximum</b> unless $f$ is constant. On a closed bounded region, $\max|f|$ is attained on the boundary. The real part $u$ inherits the same property: harmonic functions have their extrema on the boundary, which is the basis of uniqueness for Laplace's equation.</p>
+
+<h2 id="exampat">10. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Cauchy's integral formula</td><td>$\oint\frac{g(z)}{(z-a)^{n+1}}dz$ around a circle</td><td>$\frac{2\pi i}{n!}g^{(n)}(a)$ if $a$ is inside, $0$ if outside</td></tr>
+<tr><td>Non-analytic integrands</td><td>$\oint\bar z\,dz$, $\oint|z|dz$, $\oint\operatorname{Re}z\,dz$</td><td>On $|z|=r$: $\bar z=r^2/z$, or parametrise</td></tr>
+<tr><td>Path independence</td><td>$\int_a^bz^n\,dz$ along a given path</td><td>Antiderivative: the path does not matter</td></tr>
+<tr><td>Theorems</td><td>Liouville, maximum modulus, Cauchy's estimate (often multiple correct)</td><td>Section above</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$\oint_{|z|=1}\bar z\,dz=2\pi i$, not $0$. $\bar z$ is not analytic, so Cauchy's theorem does not apply. Use $\bar z=1/z$ on the unit circle.</li>
+<li>In $\oint\frac{g(z)}{(z-a)^{3}}dz$ the factor is $\frac{2\pi i}{2!}$, not $2\pi i$.</li>
+<li>Check that the singular point is <b>inside</b> the contour. Points outside contribute nothing.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$\oint_{|z-a|=r}(z-a)^n\,dz=2\pi i$ if $n=-1$, and $0$ for every other integer $n$.</li>
+<li>For a polynomial $p$ and $|z|=R$ enclosing all its roots: $\oint\frac{p'}{p}dz=2\pi i\cdot\deg p$.</li>
+</ul></div>
+
+<h2 id="xprob">11. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> $\displaystyle\oint_{|z|=2}\frac{e^{2z}}{(z-1)^3}dz=$ <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $4\pi ie^2$</span><span>(b) $2\pi ie^2$</span><span>(c) $8\pi ie^2$</span><span>(d) $0$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{2\pi i}{2!}\frac{d^2}{dz^2}e^{2z}\big|_{z=1}=\pi i\cdot4e^2$. Option <b>(a)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> $\displaystyle\oint_{|z|=1}\bar z\,dz=$ <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $0$</span><span>(b) $2\pi i$</span><span>(c) $-2\pi i$</span><span>(d) $\pi i$</span></div>
+<details class="sol"><summary>Show solution</summary><p>On $|z|=1$, $\bar z=1/z$, so the integral is $\oint\frac{dz}{z}=2\pi i$. Option <b>(b)</b>. Option (a) is the trap from applying Cauchy's theorem.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> Find the maximum of $|z^2+2z|$ on the closed disk $|z|\le1$. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>By maximum modulus the maximum is on $|z|=1$. There, $|z||z+2|=|z+2|\le3$, with equality at $z=1$. The maximum is $\mathbf3$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> $f$ is entire and $|f(z)|\le10$ on $|z|=2$. Find the best bound that Cauchy's estimate gives for $|f''(0)|$. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{2!\cdot10}{2^2}=\mathbf5$.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> Find $\operatorname{Re}\displaystyle\int_0^{1+i}z^2\,dz$ along any path, to three decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{(1+i)^3}{3}=\frac{-2+2i}{3}$, so the real part is $\mathbf{-0.667}$.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> (Multiple correct) <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) a bounded entire function is constant</span><span>(b) if $f$ is entire and $|f(z)|\le|z|^2$ for all $z$, then $f(z)=cz^2$ with $|c|\le1$</span><span>(c) if $f$ is analytic in $|z|\lt1$, continuous on $|z|\le1$ and non-constant, then $\max|f|$ is attained only on $|z|=1$</span><span>(d) $\oint_{|z|=1}\frac{dz}{\bar z}=2\pi i$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b), (c).</b> For (b): $f$ is a polynomial of degree $\le2$, and $|f(z)|\le|z|^2$ near $0$ forces $f(0)=f'(0)=0$. For (d): on the circle $1/\bar z=z$, and $\oint z\,dz=0$.</p></details></div>
+<div class="prob"><div class="q"><b>X7.</b> Use the mean-value property to evaluate $\displaystyle\int_0^{2\pi}\cos(\cos\theta)\cosh(\sin\theta)\,d\theta$. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\cos(e^{i\theta})=\cos(\cos\theta+i\sin\theta)=\cos(\cos\theta)\cosh(\sin\theta)-i\sin(\cos\theta)\sinh(\sin\theta)$. The mean value of $\cos z$ over $|z|=1$ is $\cos0=1$. Taking real parts, the integral is $2\pi$.</p></details></div>
+<div class="mcq" data-ans="3" data-ok="Only $n=-1$ survives; here $n=-2$." data-no="$\oint(z-a)^n dz$ is non-zero only for $n=-1$."><p>Rapid fire: $\oint_{|z|=1}\frac{dz}{z^2}=$</p><div class="opts"><button>$2\pi i$</button><button>$-2\pi i$</button><button>$\pi i$</button><button>$0$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">12. Connections</h2>
+<div class="xlinks">
+<a href="14.2_Analytic_Functions.html"><b>Builds on</b>14.2 Analyticity<small>The hypothesis of Cauchy's theorem</small></a>
+<a href="14.4_Laurent_Series.html"><b>Next</b>14.4 Laurent series<small>Expanding around a singularity</small></a>
+<a href="14.5_The_Residue_Theorem.html"><b>Generalises to</b>14.5 Residue theorem<small>Cauchy's formula is the one-pole case</small></a>
+<a href="2.7_Complex_Power_Series_Disk_of_Convergence.html"><b>Explains</b>2.7 Radius of convergence<small>$R$ = distance to the nearest singularity</small></a>
+<a href="2.1_Introduction.html"><b>Proves</b>2.1 Fundamental theorem of algebra<small>Via Liouville</small></a>
+<a href="14.10_Applications_of_Conformal_Mapping.html"><b>Physics</b>14.10 Laplace's equation<small>Mean value and maximum principle for potentials</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="9. Summary">13. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$\int_Cf\,dz=\int f(z(t))z'(t)\,dt$. With an analytic $f$ in a simply connected region, use an antiderivative (the result is path-independent).</li>
 <li>$\oint(z-a)^ndz=2\pi i$ for $n=-1$, and $0$ otherwise.</li>

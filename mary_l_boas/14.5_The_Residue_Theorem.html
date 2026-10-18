@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -135,6 +144,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="14.9_Mapping.html">14.9 Mapping</option>
 <option value="14.10_Applications_of_Conformal_Mapping.html">14.10 Some Applications of Conformal Mapping</option>
 <option value="14.11_Miscellaneous_Problems.html">14.11 Miscellaneous Problems</option></select>
+  <a class="btn" href="2.0_Complex_Numbers_Index.html" title="Chapter 2 index">Ch. 2 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -236,7 +246,70 @@ $$\oint_C\frac{f(z)}{z-a}dz=2\pi if(a),$$
 <div class="mcq" data-ans="1" data-ok="Both $\pm1$ are inside; the residues $\frac12$ and $-\frac12$ cancel." data-no="Find both residues."><p>1. $\oint_{|z|=2}\frac{dz}{z^2-1}=$</p><div class="opts"><button>$2\pi i$</button><button>$0$</button><button>$\pi i$</button><button>$4\pi i$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="2" data-ok="Winding number 2 doubles the contribution." data-no="Count how many times the curve goes around the pole."><p>2. A curve goes twice counter-clockwise around $0$. $\oint\frac{dz}{z}=$</p><div class="opts"><button>$2\pi i$</button><button>$0$</button><button>$4\pi i$</button><button>$\pi i$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">9. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">9. Going deeper: counting zeros with residues — $\oint f'/f$ and Rouché</h2>
+<h3>The logarithmic derivative</h3>
+<p>Suppose $f$ has a zero of order $m$ at $a$: $f=(z-a)^mg$ with $g(a)\ne0$. Then</p>
+$$\frac{f'}{f}=\frac{m}{z-a}+\frac{g'}{g},$$
+<p>so $\frac{f'}{f}$ has a simple pole at $a$ with residue $m$. A pole of order $k$ gives residue $-k$ in the same way. Summing over everything inside $C$:</p>
+$$\boxed{\frac1{2\pi i}\oint_C\frac{f'(z)}{f(z)}dz=Z-P}\qquad\text{(zeros minus poles, counted with multiplicity).}$$
+<p>Weighting with an analytic $h$ gives more: $\frac1{2\pi i}\oint_Ch\frac{f'}{f}dz=\sum_{\text{zeros}}h(a_j)-\sum_{\text{poles}}h(b_j)$. With $h=z$ this is the sum of the zeros inside $C$.</p>
+<h3>Rouché's theorem: count zeros without computing anything</h3>
+<div class="box thm"><span class="tag">Rouché</span><p>If $f$ and $g$ are analytic inside and on a simple closed curve $C$, and $|g|\lt|f|$ on $C$, then $f$ and $f+g$ have the same number of zeros inside $C$.</p></div>
+<p><b>Why:</b> on $C$, $\frac{f+g}{f}=1+\frac gf$ stays inside the disk $|w-1|\lt1$, so it never winds around $0$. Its winding number is $0$. Hence $\oint\frac{(f+g)'}{f+g}=\oint\frac{f'}{f}$.</p>
+<p><b>Recipe:</b> on the circle, pick the term of the polynomial with the largest modulus as $f$. Everything else is $g$. Then the zero count is the power of that dominant term.</p>
+<div class="ex"><div class="hd">Example — zeros of $z^6-5z^2+1$ in $|z|\lt1$</div><div class="bd"><ol class="steps">
+<li>On $|z|=1$: $|{-5z^2}|=5$ and $|z^6+1|\le2$.</li>
+<li>$f=-5z^2$ dominates and has 2 zeros (both at $0$).</li>
+<li>So $z^6-5z^2+1$ has <b>2</b> zeros in the unit disk. On $|z|=2$, $z^6$ dominates ($64\gt21$), so all 6 zeros lie in $|z|\lt2$, and 4 of them are in the ring $1\lt|z|\lt2$.</li></ol></div></div>
+
+<h2 id="exampat">10. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Circle integrals</td><td>$\oint_{|z|=R}$ of a rational or trigonometric function</td><td>List the poles, keep those inside, sum the residues</td></tr>
+<tr><td>Essential singularities</td><td>$\oint z^ke^{1/z}dz$, $\oint\sin\frac1z\,dz$</td><td>Read off $a_{-1}$ from the series</td></tr>
+<tr><td>Logarithmic derivative</td><td>$\oint\frac{p'(z)}{p(z)}dz$, $\oint z\frac{p'}{p}dz$</td><td>$2\pi i\times$(number of zeros), or $2\pi i\times$(their sum)</td></tr>
+<tr><td>Counting zeros</td><td>Number of zeros of a polynomial in a disk or ring</td><td>Rouché with the dominant term</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>A contour traversed twice, or clockwise, multiplies the result by its winding number ($2$ or $-1$).</li>
+<li>Poles <i>on</i> the contour make the integral undefined as an ordinary integral (see principal values in 14.7).</li>
+<li>For Rouché the inequality must be <b>strict</b> on the whole of $C$.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>If $C$ encloses all the poles, compute $-\operatorname{Res}_\infty$ instead (14.8). It is often a single term.</li>
+<li>$\oint_{|z|=1}\frac{g(z)}{z^{n+1}}dz=2\pi i\times$(coefficient of $z^n$ in $g$).</li>
+</ul></div>
+
+<h2 id="xprob">11. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> $\displaystyle\oint_{|z|=2}\frac{3z^2+1}{z^3+z}\,dz=$ <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $2\pi i$</span><span>(b) $4\pi i$</span><span>(c) $6\pi i$</span><span>(d) $0$</span></div>
+<details class="sol"><summary>Show solution</summary><p>The integrand is $\frac{p'}{p}$ with $p=z^3+z$, whose zeros $0,\pm i$ are all inside. So the integral is $2\pi i\cdot3$, option <b>(c)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> How many zeros does $z^6-5z^2+1$ have in $|z|\lt1$? <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>By Rouché with $f=-5z^2$ (worked above): $\mathbf2$.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> $\displaystyle\oint_{|z|=1}z^2e^{1/z}\,dz=$ <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $2\pi i$</span><span>(b) $\frac{\pi i}{3}$</span><span>(c) $\pi i$</span><span>(d) $0$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$z^2\sum\frac{z^{-m}}{m!}$. The $z^{-1}$ term comes from $m=3$, with coefficient $\frac16$. The integral is $\frac{2\pi i}6=\frac{\pi i}3$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> Let $I=\displaystyle\oint_{|z|=3}\frac{dz}{(z-1)(z-2)(z-4)}$. Find $I/(\pi i)$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>The residues inside are $\frac13$ (at 1) and $-\frac12$ (at 2), which sum to $-\frac16$. So $I=-\frac{\pi i}3$ and $I/(\pi i)=\mathbf{-0.333}$. Check: the residue at the outside pole $4$ is $\frac16$, and all residues (including $\infty$, which is $0$ here) sum to $0$. ✓</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> (Multiple correct) Which equal $2\pi i$? <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\oint_{|z|=1}\frac{e^z}{z}dz$</span><span>(b) $\oint_{|z|=1}\frac{\sin z}{z^2}dz$</span><span>(c) $\oint_{|z|=1}\frac{\cos z}{z^2}dz$</span><span>(d) $\oint_{|z|=1}\frac{dz}{z-2}$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b).</b> The residues are $1$, $1$, $0$, and $0$ (the pole is outside).</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Evaluate $\displaystyle\frac{1}{2\pi i}\oint_{|z|=3}\frac{z(2z-2)}{z^2-2z+5}\,dz$. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>This is $\frac1{2\pi i}\oint z\frac{p'}{p}$ with $p=z^2-2z+5$, whose zeros $1\pm2i$ have modulus $\sqrt5\lt3$ and so are inside. The value is their sum, $\mathbf2$. (Direct check: residues $\frac{z(2z-2)}{2z-2}=z$ at each root.)</p></details></div>
+<div class="mcq" data-ans="2" data-ok="Winding number 2 doubles the result." data-no="Each loop around $0$ contributes $2\pi i$."><p>Rapid fire: $\oint\frac{dz}{z}$ around the unit circle traversed twice counter-clockwise is</p><div class="opts"><button>$0$</button><button>$2\pi i$</button><button>$4\pi i$</button><button>$\pi i$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">12. Connections</h2>
+<div class="xlinks">
+<a href="14.4_Laurent_Series.html"><b>Builds on</b>14.4 Laurent series<small>The residue is $a_{-1}$</small></a>
+<a href="14.6_Methods_of_Finding_Residues.html"><b>Next</b>14.6 Finding residues<small>Fast formulas for simple and multiple poles</small></a>
+<a href="14.7_Evaluation_of_Definite_Integrals_by_Residues.html"><b>Applies</b>14.7 Real integrals<small>Including the argument principle</small></a>
+<a href="14.8_Point_at_Infinity_Residues_at_Infinity.html"><b>Shortcut</b>14.8 Residue at ∞<small>Many poles inside → one residue outside</small></a>
+<a href="2.1_Introduction.html"><b>Recall</b>2.1 Polynomial roots<small>Rouché locates them without solving</small></a>
+<a href="2.13_Logarithms.html"><b>Recall</b>2.13 $\ln f$<small>$f'/f=(\ln f)'$; winding of the argument</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="9. Summary">13. Summary</h2>
 <div class="card"><ul class="summary">
 <li>Only $\frac{b_1}{z-z_0}$ survives a closed integral around $z_0$: $\oint f\,dz=2\pi ib_1$.</li>
 <li>Residue theorem: $\oint_Cf\,dz=2\pi i\sum$ (residues inside $C$), counter-clockwise. More generally, weight each residue by its winding number.</li>

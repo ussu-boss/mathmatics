@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +150,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -327,7 +337,71 @@ $$1+e^{i\theta}=e^{i\theta/2}\left(e^{-i\theta/2}+e^{i\theta/2}\right)=2\cos\tfr
 <div class="mcq" data-ans="0" data-ok="$|e^{2i-1}|=e^{-1}$." data-no="Only the real part of the exponent matters."><p>2. $|4e^{2i-1}|=$</p><div class="opts"><button>$4/e$</button><button>$4e^2$</button><button>$4$</button><button>$4e$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="3" data-ok="Multiply moduli ($2\cdot3=6$), add angles ($\pi/2$)." data-no="Multiply moduli, add angles."><p>3. $2e^{i\pi/6}\cdot3e^{i\pi/3}=$</p><div class="opts"><button>$5e^{i\pi/2}$</button><button>$6e^{i\pi/18}$</button><button>$6$</button><button>$6i$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">8. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">8. Going deeper: Euler's formula beyond numbers — phasors and matrices</h2>
+<h3>Phasor addition (waves of the same frequency)</h3>
+<p>$A\cos(\omega t+\alpha)=\operatorname{Re}\left[Ae^{i\alpha}e^{i\omega t}\right]$. The time factor $e^{i\omega t}$ is common to all the waves, so adding them is just adding the complex amplitudes:</p>
+$$\sum_kA_k\cos(\omega t+\alpha_k)=\operatorname{Re}\Big[\underbrace{\Big(\sum_kA_ke^{i\alpha_k}\Big)}_{Ce^{i\gamma}}e^{i\omega t}\Big]=C\cos(\omega t+\gamma).$$
+<p>So $3\cos\omega t+4\sin\omega t$ has phasor $3-4i$ (since $\sin\omega t=\cos(\omega t-\pi/2)$). Its amplitude is $5$, and its phase is $-\arctan\frac43$. Three equal waves $120^\circ$ apart (three-phase power) add to zero, because $1+\omega+\omega^2=0$.</p>
+<h3>Euler's formula for matrices (used in quantum mechanics)</h3>
+<p>The series proof of $e^{i\theta}=\cos\theta+i\sin\theta$ used only one fact: $i^2=-1$. Any square matrix $A$ with $A^2=-I$ gives, by the same rearrangement,</p>
+$$e^{\theta A}=I\cos\theta+A\sin\theta .$$
+<p>For a Pauli matrix $\sigma$ (with $\sigma^2=I$), take $A=i\sigma$. Then $A^2=-I$, and</p>
+$$\boxed{e^{i\theta\sigma}=I\cos\theta+i\sigma\sin\theta}\qquad\text{e.g. }e^{i\theta\sigma_y}=\begin{pmatrix}\cos\theta&\sin\theta\\-\sin\theta&\cos\theta\end{pmatrix}.$$
+<p>This is the spin-rotation operator $e^{-i\theta\,\hat n\cdot\vec\sigma/2}$ that appears in CSIR Quantum Mechanics questions. A rotation by $2\pi$ gives $-I$, the famous sign change of spinors.</p>
+<h3>Sums of cosines in arithmetic progression</h3>
+<p>Let $S=\sum_{k=0}^{n-1}e^{i(a+kd)}$. This is a geometric series, and the half-angle factoring from section 3 simplifies it:</p>
+$$S=e^{ia}\frac{e^{ind}-1}{e^{id}-1}=e^{i\left(a+\frac{(n-1)d}{2}\right)}\frac{\sin(nd/2)}{\sin(d/2)}.$$
+<p>Taking real and imaginary parts gives $\sum\cos(a+kd)$ and $\sum\sin(a+kd)$. This is the formula behind the $N$-slit pattern in 2.16.</p>
+
+<h2 id="exampat">9. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Large powers</td><td>$\left(\frac{1+i}{\sqrt2}\right)^N$, $(1+i\sqrt3)^N$</td><td>Polar form, then reduce the angle mod $2\pi$</td></tr>
+<tr><td>Superposition</td><td>Amplitude or phase of a sum of sinusoids</td><td>Add the phasors $A_ke^{i\alpha_k}$</td></tr>
+<tr><td>Matrix exponentials</td><td>$e^{i\theta\sigma_x}$, $e^{\theta J}$ with $J^2=-I$</td><td>Matrix Euler formula</td></tr>
+<tr><td>Trig integrals and sums</td><td>$\int_0^{2\pi}\cos^n\theta\,d\theta$, $\sum\cos(kd)$</td><td>Expand in $e^{ik\theta}$; only the constant term survives the integral</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$e^{i\theta}$ needs $\theta$ in radians.</li>
+<li>$e^{A+B}=e^Ae^B$ for matrices only when $AB=BA$. The matrix Euler formula is safe because only one matrix appears.</li>
+<li>The phasor of $\sin\omega t$ is $-i$, not $+i$, if you use $\operatorname{Re}$ and $e^{+i\omega t}$.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$(1+i)^n+(1-i)^n=2^{n/2+1}\cos\frac{n\pi}4$.</li>
+<li>$\frac1{2\pi}\int_0^{2\pi}e^{ik\theta}d\theta=\delta_{k0}$, so $\int_0^{2\pi}\cos^{2m}\theta\,d\theta=\frac{2\pi}{4^m}\binom{2m}{m}$.</li>
+</ul></div>
+
+<h2 id="xprob">10. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> Find the amplitude of $\cos\omega t+\cos(\omega t+\pi/3)$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$|1+e^{i\pi/3}|=2\cos\frac\pi6=\sqrt3=\mathbf{1.732}$.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> With $\sigma_y=\begin{pmatrix}0&-i\\i&0\end{pmatrix}$, the matrix $e^{i\pi\sigma_y/2}$ equals <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\begin{pmatrix}0&1\\-1&0\end{pmatrix}$</span><span>(b) $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$</span><span>(c) $iI$</span><span>(d) $-I$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$e^{i\theta\sigma_y}=I\cos\theta+i\sigma_y\sin\theta$ with $\theta=\frac\pi2$ gives $i\sigma_y=\begin{pmatrix}0&1\\-1&0\end{pmatrix}$. Option <b>(a)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> Evaluate $\displaystyle\sum_{k=1}^{4}\cos\frac{2\pi k}{5}$. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>The real parts of the five fifth roots of unity add to $0$, and the $k=0$ term is $1$. So the sum is $\mathbf{-1}$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> Evaluate $\displaystyle\int_0^{2\pi}\cos^4\theta\,d\theta$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\cos^4\theta=\frac{1}{16}(e^{i\theta}+e^{-i\theta})^4$, and the constant term is $\frac{6}{16}=\frac38$. The integral is $2\pi\cdot\frac38=\frac{3\pi}4=\mathbf{2.356}$.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> $(1+i)^{10}+(1-i)^{10}=$ <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $64$</span><span>(b) $0$</span><span>(c) $-64$</span><span>(d) $64i$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$2\cdot2^5\cos\frac{10\pi}{4}=64\cos\frac{5\pi}2=0$. Option <b>(b)</b>. Directly: $(1+i)^{10}=(2i)^5=32i$ and $(1-i)^{10}=-32i$.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Show that $\displaystyle\sum_{k=0}^n\binom nk\sin k\theta=2^n\cos^n\frac\theta2\,\sin\frac{n\theta}2$. <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\sum\binom nke^{ik\theta}=(1+e^{i\theta})^n=\left(2\cos\frac\theta2\right)^ne^{in\theta/2}$. Take the imaginary part.</p></details></div>
+<div class="prob"><div class="q"><b>X7.</b> The matrix $J=\begin{pmatrix}0&-1\\1&0\end{pmatrix}$ satisfies $J^2=-I$. Find $e^{\theta J}$ and say what it does to vectors. <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$e^{\theta J}=I\cos\theta+J\sin\theta=\begin{pmatrix}\cos\theta&-\sin\theta\\\sin\theta&\cos\theta\end{pmatrix}$. It rotates vectors by $\theta$ counter-clockwise, the matrix form of multiplying by $e^{i\theta}$.</p></details></div>
+<div class="mcq" data-ans="1" data-ok="$|1-e^{i\theta}|=2|\sin\frac\theta2|=2\sin30^\circ=1$." data-no="Use $|1-e^{i\theta}|=2|\sin(\theta/2)|$."><p>Rapid fire: $|1-e^{i\pi/3}|=$</p><div class="opts"><button>$\sqrt3$</button><button>$1$</button><button>$\frac12$</button><button>$2$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">11. Connections</h2>
+<div class="xlinks">
+<a href="2.8_Elementary_Functions_of_Complex_Numbers.html"><b>Builds on</b>2.8 $e^z$<small>The series definition</small></a>
+<a href="2.10_Powers_and_Roots_of_Complex_Numbers.html"><b>Next</b>2.10 De Moivre<small>Powers and roots in polar form</small></a>
+<a href="2.11_Exponential_and_Trigonometric_Functions.html"><b>Extends</b>2.11 $\sin z$, $\cos z$<small>Inverting Euler's formula</small></a>
+<a href="2.16_Some_Applications.html"><b>Physics</b>2.16 Applications<small>A.c. circuits, $N$-slit interference, SHM</small></a>
+<a href="14.7_Evaluation_of_Definite_Integrals_by_Residues.html"><b>Later</b>14.7 Type I integrals<small>$z=e^{i\theta}$ turns $\int_0^{2\pi}$ into a contour integral</small></a>
+<a href="2.3_The_Complex_Plane.html"><b>Geometry</b>2.3 Rotations<small>$e^{i\alpha}$ as the rotation matrix</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="8. Summary">12. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$e^{i\theta}=\cos\theta+i\sin\theta$ (series, calculus, or a limit), and $z=re^{i\theta}$.</li>
 <li>$e^{i\pi}=-1$, $e^{i\pi/2}=i$, $e^{2n\pi i}=1$, $|e^{i\theta}|=1$, $|e^z|=e^{\operatorname{Re}z}$.</li>

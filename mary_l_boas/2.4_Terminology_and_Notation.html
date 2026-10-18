@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +150,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -380,7 +390,73 @@ $$\arg(z_1z_2)=\arg z_1+\arg z_2,\quad \arg\frac{z_1}{z_2}=\arg z_1-\arg z_2,\qu
 <div class="mcq" data-ans="3" data-ok="$\cos\alpha-i\sin\alpha=e^{-i\alpha}$, so the angle is $-110^\circ$." data-no="Rewrite $\cos\alpha-i\sin\alpha$ as $\cos(-\alpha)+i\sin(-\alpha)$."><p>2. The angle of $7(\cos110^\circ-i\sin110^\circ)$ is</p><div class="opts"><button>$110^\circ$</button><button>$70^\circ$</button><button>$-70^\circ$</button><button>$-110^\circ$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="0" data-ok="$|z|^2=z\bar z$ always." data-no="Try $z=1+i$: $z\bar z=2$, $|z|^2=2$, $z^2=2i$."><p>3. Which is always true?</p><div class="opts"><button>$|z|^2=z\bar z$</button><button>$|z|^2=z^2$</button><button>$|z_1+z_2|=|z_1|+|z_2|$</button><button>$\operatorname{Arg}(z^2)=2\operatorname{Arg}z$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">9. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">9. Going deeper: the triangle inequality from one identity</h2>
+<p>Almost every modulus inequality follows from</p>
+$$|z_1+z_2|^2=(z_1+z_2)(\bar z_1+\bar z_2)=|z_1|^2+|z_2|^2+2\operatorname{Re}(z_1\bar z_2).\tag{$\ast$}$$
+<ol class="steps">
+<li><b>Triangle inequality.</b> Since $\operatorname{Re}w\le|w|$, we have $\operatorname{Re}(z_1\bar z_2)\le|z_1||z_2|$. So $|z_1+z_2|^2\le(|z_1|+|z_2|)^2$. Equality holds only when $z_1\bar z_2$ is real and $\ge0$, i.e. the two arrows point the same way.</li>
+<li><b>Reverse triangle inequality.</b> Apply the same bound to $z_1=(z_1+z_2)+(-z_2)$ to get $\big||z_1|-|z_2|\big|\le|z_1+z_2|$.</li>
+<li><b>Parallelogram law.</b> Add $(\ast)$ to the same identity with $z_2\to-z_2$. The cross terms cancel and you get $|z_1+z_2|^2+|z_1-z_2|^2=2|z_1|^2+2|z_2|^2$.</li>
+<li><b>Perpendicularity.</b> $|z_1+z_2|=|z_1-z_2|\iff\operatorname{Re}(z_1\bar z_2)=0\iff z_1\perp z_2$. A parallelogram has equal diagonals exactly when it is a rectangle.</li>
+</ol>
+<h3>Extreme distances: the "line through the centre" rule</h3>
+<p>If $z$ moves on the circle $|z-c|=r$, its distance to a fixed point $a$ satisfies</p>
+$$\big||a-c|-r\big|\le|z-a|\le|a-c|+r .$$
+<p>Both bounds are reached on the line through $a$ and $c$. This one fact answers most max/min questions about the modulus.</p>
+<h3>Why $\arg$ rules hold only "mod $2\pi$"</h3>
+<p>$\arg(z_1z_2)=\arg z_1+\arg z_2$ is an identity between <i>sets</i> of angles, because each $\arg$ is defined up to $2\pi k$. For <i>principal</i> values the sum can leave $(-\pi,\pi]$. Then $\operatorname{Arg}(z_1z_2)=\operatorname{Arg}z_1+\operatorname{Arg}z_2-2\pi k$, with $k\in\{-1,0,1\}$ chosen to bring the result back into range.</p>
+
+<h2 id="exampat">10. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Max/min of $|z-a|$</td><td>$z$ on a circle or a segment</td><td>Distance to the centre $\pm$ radius</td></tr>
+<tr><td>Principal arg of products</td><td>$\operatorname{Arg}(z_1z_2)$ when the sum overflows $\pi$</td><td>Add the angles, then subtract $2\pi$</td></tr>
+<tr><td>Unit-modulus tricks</td><td>Show an expression is real, or find its modulus</td><td>Replace $\bar z$ by $1/z$</td></tr>
+<tr><td>Counting solutions</td><td>Equations with both $z$ and $\bar z$</td><td>Take moduli first, then solve for the angle</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$|z_1+z_2|=|z_1|+|z_2|$ means parallel and same direction, not just "parallel".</li>
+<li>An equation in $z$ and $\bar z$ can have infinitely many solutions. $\bar z=iz$ holds on the whole line $y=-x$.</li>
+<li>$\operatorname{Arg}\bar z=-\operatorname{Arg}z$ fails for negative reals: $\operatorname{Arg}(-1)=\pi=\operatorname{Arg}\overline{(-1)}$.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$|z_1|=|z_2|=1\Rightarrow\dfrac{z_1+z_2}{1+z_1z_2}$ is real, and $\dfrac{z_1-z_2}{z_1+z_2}$ is purely imaginary.</li>
+<li>The minimum of $|z-a|+|z-b|$ is $|a-b|$, attained on the segment from $a$ to $b$.</li>
+</ul></div>
+
+<h2 id="xprob">11. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> If $|z-3i|=2$, find the greatest value of $|z+1|$, to two decimal places. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>The distance from the centre $3i$ to the point $-1$ is $\sqrt{10}$. The greatest value is $\sqrt{10}+2=\mathbf{5.16}$, and the least is $\sqrt{10}-2\approx1.16$.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> If $|z_1|=|z_2|=1$ and $z_1z_2\ne-1$, then $\dfrac{z_1+z_2}{1+z_1z_2}$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) always real</span><span>(b) always purely imaginary</span><span>(c) of modulus 1</span><span>(d) zero</span></div>
+<details class="sol"><summary>Show solution</summary><p>Conjugate it and use $\bar z_k=1/z_k$: $\frac{1/z_1+1/z_2}{1+1/(z_1z_2)}=\frac{z_2+z_1}{z_1z_2+1}$, which is the same number. So it is <b>(a) real</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> With principal values in $(-\pi,\pi]$, $\operatorname{Arg}\big[(-1+i)(-1+i\sqrt3)\big]=$ <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $17\pi/12$</span><span>(b) $-7\pi/12$</span><span>(c) $7\pi/12$</span><span>(d) $-5\pi/12$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{3\pi}4+\frac{2\pi}3=\frac{17\pi}{12}\gt\pi$. Subtract $2\pi$ to get $-\frac{7\pi}{12}$, option <b>(b)</b>. Check: the product is $(1-\sqrt3)-i(1+\sqrt3)$, which is in quadrant III. ✓</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> $|z_1|=3$, $|z_2|=4$ and $|z_1+z_2|=5$. Find $|z_1-z_2|$. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>Parallelogram law: $25+|z_1-z_2|^2=2(9+16)=50$, so $|z_1-z_2|=\mathbf5$. The arrows are perpendicular, since $3,4,5$ is a right triangle.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> The number of solutions of $\bar z=iz$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) 0</span><span>(b) 1</span><span>(c) 2</span><span>(d) infinitely many</span></div>
+<details class="sol"><summary>Show solution</summary><p>$x-iy=i(x+iy)=-y+ix$, so $x=-y$ (both equations say the same thing). The whole line $y=-x$ works: option <b>(d)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Find the minimum of $|z-2|+|z-4i|$ over all complex $z$, to two decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>By the triangle inequality the sum is at least $|2-4i|=2\sqrt5=\mathbf{4.47}$. Equality holds on the segment between the two points.</p></details></div>
+<div class="prob"><div class="q"><b>X7.</b> (Multiple correct) For $z=re^{i\theta}\ne0$: <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $|z/\bar z|=1$</span><span>(b) $\arg(z/\bar z)=2\theta$</span><span>(c) $z\bar z=r^2$</span><span>(d) $z+\bar z=2r\sin\theta$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b), (c).</b> $z/\bar z=e^{2i\theta}$. (d) is wrong: $z+\bar z=2r\cos\theta$.</p></details></div>
+<div class="mcq" data-ans="0" data-ok="Equal moduli and real $z_1\bar z_2\gt0$ mean $z_1=z_2$." data-no="Use $(\ast)$: equality in the triangle inequality forces the same direction."><p>Rapid fire: $|z_1|=|z_2|=1$ and $|z_1+z_2|=2$. Then</p><div class="opts"><button>$z_1=z_2$</button><button>$z_1=-z_2$</button><button>$z_1=\bar z_2$</button><button>$z_1\perp z_2$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">12. Connections</h2>
+<div class="xlinks">
+<a href="2.3_The_Complex_Plane.html"><b>Builds on</b>2.3 The complex plane<small>Polar form and the quadrant check</small></a>
+<a href="2.5_Complex_Algebra.html"><b>Next</b>2.5 Complex algebra<small>Conjugates in division, and loci</small></a>
+<a href="2.13_Logarithms.html"><b>Later</b>2.13 Logarithms<small>$\ln z=\ln|z|+i\arg z$, and the multivaluedness comes from arg</small></a>
+<a href="14.3_Contour_Integrals.html"><b>Later</b>14.3 ML estimate<small>Triangle inequality for integrals: $\left|\int f\right|\le ML$</small></a>
+<a href="14.9_Mapping.html"><b>Later</b>14.9 Mapping<small>$|z|=1\Rightarrow\bar z=1/z$ drives the disk maps</small></a>
+<a href="2.17_Miscellaneous_Problems.html"><b>Review</b>2.17 Mixed problems<small>Modulus/argument questions in exam form</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="9. Summary">13. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$z=x+iy=re^{i\theta}$, $\ |z|=r=\sqrt{x^2+y^2}=\sqrt{z\bar z}$, $\ \arg z=\theta+2n\pi$.</li>
 <li>Principal value: $[0,2\pi)$ (Boas) or $(-\pi,\pi]$ (most texts). The point's quadrant decides $\theta$.</li>

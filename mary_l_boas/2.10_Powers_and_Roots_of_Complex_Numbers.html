@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +150,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -350,7 +360,76 @@ $$1,\ \omega,\ \omega^2,\ \dots,\ \omega^{n-1},\qquad\omega=e^{2\pi i/n}.$$
 <div class="mcq" data-ans="2" data-ok="$\rho=\sqrt[3]{8}=2$, spacing $120^\circ$." data-no="Radius $\sqrt[n]{r}$, spacing $2\pi/n$."><p>2. The cube roots of $8i$ lie on a circle of radius</p><div class="opts"><button>$8$</button><button>$\sqrt8$</button><button>$2$</button><button>$1$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="0" data-ok="$\omega^{100}=\omega^{1}$, since $100=3\cdot33+1$, and $\omega+\omega^2=-1$." data-no="Reduce the exponents mod 3."><p>3. $\omega^{100}+\omega^{200}+1$ ($\omega=e^{2\pi i/3}$) $=$</p><div class="opts"><button>$0$</button><button>$3$</button><button>$1$</button><button>$-1$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">9. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">9. Going deeper: identities hidden in $z^n-1=\prod(z-\omega^k)$</h2>
+<p>Let $\omega=e^{2\pi i/n}$. The $n$-th roots of unity are $1,\omega,\dots,\omega^{n-1}$, so</p>
+$$z^n-1=\prod_{k=0}^{n-1}(z-\omega^k),\qquad\frac{z^n-1}{z-1}=1+z+\dots+z^{n-1}=\prod_{k=1}^{n-1}(z-\omega^k).$$
+<p>Four results follow almost immediately, and each is a standard exam question.</p>
+<ol class="steps">
+<li><b>Product of distances.</b> Put $z=1$ in the second form: $\prod_{k=1}^{n-1}(1-\omega^k)=n$. Taking moduli: the product of the distances from $1$ to the other $n-1$ vertices of the regular $n$-gon on the unit circle is $n$. With $|1-\omega^k|=2\sin\frac{k\pi}n$ this gives $\prod\sin\frac{k\pi}{n}=\frac{n}{2^{n-1}}$.</li>
+<li><b>Logarithmic derivative.</b> Differentiate $\ln\prod(z-\omega^k)$: $\sum_{k=1}^{n-1}\frac{1}{z-\omega^k}=\frac{d}{dz}\ln\frac{z^n-1}{z-1}$. At $z=1$ this gives $\sum_{k=1}^{n-1}\frac1{1-\omega^k}=\frac{n-1}{2}$.</li>
+<li><b>Power sums (the filter).</b> $\displaystyle\sum_{k=0}^{n-1}\omega^{km}=\begin{cases}n&n\mid m\\0&\text{otherwise}\end{cases}$. This is a finite geometric series.</li>
+<li><b>Roots-of-unity filter for binomial sums.</b> Average $(1+\omega^k)^N$ over $k$. Only the terms whose power is divisible by $n$ survive:
+$$\sum_{j\equiv0\ (\mathrm{mod}\ n)}\binom Nj=\frac1n\sum_{k=0}^{n-1}(1+\omega^k)^N .$$</li>
+</ol>
+<div class="ex"><div class="hd">Example — $\binom{9}{0}+\binom93+\binom96+\binom99$</div><div class="bd"><ol class="steps">
+<li>$n=3$: the sum is $\frac13\left[2^9+(1+\omega)^9+(1+\omega^2)^9\right]$.</li>
+<li>$1+\omega=-\omega^2=e^{i\pi/3}$, so $(1+\omega)^9=e^{3\pi i}=-1$. Likewise $(1+\omega^2)^9=-1$.</li>
+<li>The sum is $\frac{512-2}{3}=170$. Check: $1+84+84+1=170$. ✓</li></ol></div></div>
+<h3>Product and sum of the roots of $z^n=w$</h3>
+<p>The roots of $z^n-w=0$ have sum $0$ (for $n\ge2$) and product $(-1)^{n+1}w$, by Vieta.</p>
+
+<h2 id="exampat">10. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Roots of unity</td><td>Sum, product, or power sums of the roots</td><td>Vieta and the filter</td></tr>
+<tr><td>Polygon geometry</td><td>Area, side or perimeter of the polygon of roots</td><td>Regular $n$-gon of radius $r$: area $\frac n2r^2\sin\frac{2\pi}n$</td></tr>
+<tr><td>Counting roots in a region</td><td>How many roots of $z^n=w$ in a quadrant or half-plane</td><td>List the angles $\frac{\theta+2\pi k}{n}$</td></tr>
+<tr><td>De Moivre</td><td>$\cos n\theta$ in powers of $\cos\theta$, and $\cos^n\theta$ in multiple angles</td><td>Binomial expansion, then real/imag parts</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$z^n=w$ has exactly $n$ distinct roots (for $w\ne0$). "Principal root" means $k=0$ only.</li>
+<li>Roots on an axis are in no quadrant. Count carefully.</li>
+<li>$(z^{1/n})^m$ and $(z^m)^{1/n}$ can have different numbers of values when $\gcd(m,n)\gt1$. For example, $(z^2)^{1/2}$ has 2 values but $(z^{1/2})^2=z$ has 1.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$\omega$ (cube root): $1+\omega+\omega^2=0$, $\omega^3=1$, $\bar\omega=\omega^2$, $1+\omega=-\omega^2$.</li>
+<li>Regular hexagon of circumradius $r$: area $\frac{3\sqrt3}2r^2$. Square: $2r^2$. Equilateral triangle: $\frac{3\sqrt3}4r^2$.</li>
+</ul></div>
+
+<h2 id="xprob">11. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> If $\omega=e^{2\pi i/7}$, then $\prod_{k=1}^{6}(1-\omega^k)=$ <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $0$</span><span>(b) $1$</span><span>(c) $7$</span><span>(d) $-7$</span></div>
+<details class="sol"><summary>Show solution</summary><p>Put $z=1$ in $1+z+\dots+z^6=\prod(z-\omega^k)$: the product is $7$. Option <b>(c)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> With $\omega=e^{2\pi i/9}$, evaluate $\displaystyle\sum_{k=1}^{8}\frac{1}{1-\omega^k}$. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{n-1}2=\mathbf4$. Check: the terms pair as $\frac{1}{1-\omega^k}+\frac{1}{1-\bar\omega^k}=1$, and there are 4 pairs.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> Evaluate $\binom{12}{0}+\binom{12}{4}+\binom{12}{8}+\binom{12}{12}$. <span class="src">GATE NAT</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>Filter with $n=4$ (roots $1,i,-1,-i$): $\frac14\left[2^{12}+(1+i)^{12}+0+(1-i)^{12}\right]$. $(1+i)^{12}=(2i)^6=-64$ and $(1-i)^{12}=-64$. The sum is $\frac{4096-128}{4}=\mathbf{992}$. Check: $1+495+495+1=992$. ✓</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> Find the area of the polygon whose vertices are the roots of $z^6=64$, to two decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>A regular hexagon with $r=2$: area $\frac{3\sqrt3}{2}\cdot4=6\sqrt3=\mathbf{10.39}$.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> How many roots of $z^5=1$ lie strictly inside the first quadrant? <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) 0</span><span>(b) 1</span><span>(c) 2</span><span>(d) 3</span></div>
+<details class="sol"><summary>Show solution</summary><p>The angles are $0^\circ,72^\circ,144^\circ,216^\circ,288^\circ$. Only $72^\circ$ qualifies ($0^\circ$ is on the axis). Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> The product of the three cube roots of $1+i$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $1+i$</span><span>(b) $-(1+i)$</span><span>(c) $1$</span><span>(d) $0$</span></div>
+<details class="sol"><summary>Show solution</summary><p>The roots of $z^3-(1+i)=0$ have product $(-1)^{4}(1+i)=1+i$. Option <b>(a)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X7.</b> Express $\cos5\theta$ as a polynomial in $c=\cos\theta$. <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>Take the real part of $(c+is)^5$: $c^5-10c^3s^2+5cs^4$. Put $s^2=1-c^2$:</p>
+$$\cos5\theta=16c^5-20c^3+5c .$$
+<p>This is the Chebyshev polynomial $T_5(c)$. Check: $\theta=0$ gives $16-20+5=1$. ✓</p></details></div>
+<div class="mcq" data-ans="2" data-ok="Each $\omega^{100k}=(\omega^{5})^{20k}=1$, so the sum is $5$." data-no="$5\mid100$, so the filter gives $n$."><p>Rapid fire: the sum of the 100th powers of the five fifth roots of unity is</p><div class="opts"><button>$0$</button><button>$1$</button><button>$5$</button><button>$100$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">12. Connections</h2>
+<div class="xlinks">
+<a href="2.9_Eulers_Formula.html"><b>Builds on</b>2.9 Euler's formula<small>Polar multiplication</small></a>
+<a href="2.11_Exponential_and_Trigonometric_Functions.html"><b>Next</b>2.11 $\sin z$, $\cos z$<small>Trig functions of complex arguments</small></a>
+<a href="2.14_Complex_Roots_and_Powers.html"><b>Extends</b>2.14 $a^b$<small>Non-integer and complex exponents</small></a>
+<a href="2.1_Introduction.html"><b>Uses</b>2.1 Vieta<small>Sum and product of roots</small></a>
+<a href="14.8_Point_at_Infinity_Residues_at_Infinity.html"><b>Later</b>14.8 Residues at ∞<small>$\oint\frac{dz}{z^n-1}$ with all roots inside</small></a>
+<a href="2.16_Some_Applications.html"><b>Physics</b>2.16 $N$-slit pattern<small>Sums over roots of unity give the zeros</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="9. Summary">13. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$z^n=r^ne^{in\theta}$, and $(\cos\theta+i\sin\theta)^n=\cos n\theta+i\sin n\theta$.</li>
 <li>$\sqrt[n]{re^{i\theta}}=\sqrt[n]re^{i(\theta+2\pi k)/n}$, $k=0..n-1$: $n$ points forming a regular $n$-gon.</li>

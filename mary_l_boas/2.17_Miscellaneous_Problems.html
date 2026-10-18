@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +150,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html" selected>2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -325,6 +335,76 @@ $$\frac{4A^2\sinh^2b+4B^2\cosh^2b}{16a^2b^2}=\frac{(a^2-b^2)^2\sinh^2b+4a^2b^2(1
 <div class="mcq" data-ans="2" data-ok="Quotient of conjugate-type moduli: $|w|^2=5-4\sin\theta$ for both." data-no="Compute $|{\rm num}|^2$ and $|{\rm den}|^2$ using $w\bar w$."><p>4. $\left|\dfrac{2e^{i\theta}-i}{ie^{i\theta}+2}\right|=$</p><div class="opts"><button>$2$</button><button>depends on $\theta$</button><button>$1$</button><button>$\frac12$</button></div><div class="fb"></div></div>
 
 
+<!-- enrich:start -->
+<h2 id="deeper">8. Going deeper: five ideas that tie Chapter 2 together</h2>
+<ol class="steps">
+<li><b>Multiplication is rotation plus scaling.</b> Polar form $re^{i\theta}$ turns products, powers and roots into "multiply moduli, add angles" (2.3, 2.9, 2.10).</li>
+<li><b>Conjugation is a symmetry.</b> $\bar z$ gives Re and Im, the modulus, real-polynomial root pairing, and $|z|=1\Leftrightarrow\bar z=1/z$ (2.2, 2.4, 2.5).</li>
+<li><b>Everything elementary is $e^z$.</b> $\sin$, $\cos$, $\sinh$ and $\cosh$ are combinations of $e^{\pm z}$ or $e^{\pm iz}$, and $\ln$ and the inverses are its inverse (2.8, 2.11–2.15).</li>
+<li><b>Multivaluedness comes from $\arg$.</b> The $2\pi k$ in the argument produces infinitely many logs, $n$ roots, and the classification of values of $a^b$ (2.13, 2.14).</li>
+<li><b>Geometric series everywhere.</b> Convergence, trigonometric sums, $N$-slit interference and roots-of-unity identities are all $\sum w^n$ (2.6, 2.10, 2.16).</li>
+</ol>
+
+<h2 id="exampat">9. How CSIR-NET &amp; GATE test Chapter 2: the blueprint</h2>
+<table class="t pat">
+<tr><th>Skill</th><th>Typical question</th><th>Must-know result</th><th>Page</th></tr>
+<tr><td>Polar powers</td><td>$\left(\frac{1+i\sqrt3}{1-i}\right)^{N}$</td><td>$(re^{i\theta})^N=r^Ne^{iN\theta}$</td><td><a href="2.9_Eulers_Formula.html">2.9</a></td></tr>
+<tr><td>Roots</td><td>Count or locate roots of $z^n=w$; products and sums</td><td>$n$ roots on a circle; Vieta</td><td><a href="2.10_Powers_and_Roots_of_Complex_Numbers.html">2.10</a></td></tr>
+<tr><td>Loci</td><td>Identify $|z-a|=k|z-b|$, ellipses, rays</td><td>Apollonius formula; degenerate cases</td><td><a href="2.5_Complex_Algebra.html">2.5</a></td></tr>
+<tr><td>Multivalued functions</td><td>Principal value of $i^i$, number of values of $a^{p/q}$</td><td>$a^b=e^{b\ln a}$</td><td><a href="2.14_Complex_Roots_and_Powers.html">2.14</a></td></tr>
+<tr><td>Transcendental equations</td><td>$\cos z=3$, $e^z=-2$, $\tan z=i$</td><td>$u=e^{iz}$ quadratic; $\tan z\ne\pm i$</td><td><a href="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15</a></td></tr>
+<tr><td>Series</td><td>$R$ of a power series; sums of trig series</td><td>Cauchy–Hadamard; geometric series</td><td><a href="2.7_Complex_Power_Series_Disk_of_Convergence.html">2.7</a></td></tr>
+</table>
+<div class="box warn"><span class="tag">The ten traps of Chapter 2</span><ol>
+<li>$\sqrt a\sqrt b\ne\sqrt{ab}$ for negative $a,b$.</li>
+<li>$\arctan(y/x)$ ignores the quadrant.</li>
+<li>$\operatorname{Arg}(z_1z_2)$ can overflow $(-\pi,\pi]$.</li>
+<li>$e^z$ has period $2\pi i$, not $2\pi$.</li>
+<li>$|\sin z|$ and $|\cos z|$ are unbounded.</li>
+<li>$\tan z=\pm i$ has no solution.</li>
+<li>$\operatorname{Ln}(e^z)\ne z$ when $|\operatorname{Im}z|\gt\pi$.</li>
+<li>Reduce $p/q$ before counting the values of $a^{p/q}$.</li>
+<li>Removable singularities do not limit the radius of convergence.</li>
+<li>$|z-a|-|z-b|=|a-b|$ is a ray, not a hyperbola.</li>
+</ol></div>
+
+<h2 id="xprob">10. Timed mock test (10 questions, about 25 minutes)</h2>
+<p class="small">Original questions in CSIR/GATE format. Time yourself, mark your answers, then open the solutions. Scoring as in CSIR Part B: $+3.5$ for correct, $-0.875$ for wrong.</p>
+<div class="prob"><div class="q"><b>T1.</b> Evaluate $\dfrac{(\sqrt3+i)^6}{(1-i)^4}$. <span class="src">NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$(2e^{i\pi/6})^6=64e^{i\pi}=-64$ and $(1-i)^4=(-2i)^2=-4$. The answer is $\mathbf{16}$.</p></details></div>
+<div class="prob"><div class="q"><b>T2.</b> The number of solutions of $z^4=\bar z$ is <span class="src">MCQ</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) 4</span><span>(b) 5</span><span>(c) 6</span><span>(d) infinitely many</span></div>
+<details class="sol"><summary>Show solution</summary><p>Moduli: $|z|^4=|z|$, so $|z|=0$ or $1$. On $|z|=1$, $\bar z=1/z$ and the equation becomes $z^5=1$, giving 5 roots. With $z=0$ that makes 6. Option <b>(c)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>T3.</b> Find the principal value of $(-i)^{-i}$, to three decimal places. <span class="src">NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\operatorname{Ln}(-i)=-\frac{i\pi}2$, and $-i\cdot\left(-\frac{i\pi}2\right)=-\frac\pi2$. The value is $e^{-\pi/2}=\mathbf{0.208}$.</p></details></div>
+<div class="prob"><div class="q"><b>T4.</b> Evaluate $\displaystyle\sum_{n=0}^\infty\frac{\cos(2n\pi/3)}{2^n}$, to three decimal places. <span class="src">NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\operatorname{Re}\frac{1}{1-\omega/2}$ with $\omega=e^{2\pi i/3}$. $1-\frac\omega2=\frac54-\frac{\sqrt3}4i$, so the real part of the reciprocal is $\frac{5/4}{25/16+3/16}=\frac57=\mathbf{0.714}$.</p></details></div>
+<div class="prob"><div class="q"><b>T5.</b> The number of $z$ with $|z-1|=|z+1|=|z-i|$ is <span class="src">MCQ</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) 0</span><span>(b) 1</span><span>(c) 2</span><span>(d) infinitely many</span></div>
+<details class="sol"><summary>Show solution</summary><p>The first equality gives $x=0$ and the second gives $y=x$. So $z=0$ only, the circumcentre of the triangle $1,-1,i$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>T6.</b> The set where $|e^{iz}|\lt1$ is <span class="src">MCQ</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $\operatorname{Re}z\gt0$</span><span>(b) $\operatorname{Im}z\gt0$</span><span>(c) $\operatorname{Im}z\lt0$</span><span>(d) $|z|\lt1$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$|e^{iz}|=e^{-y}\lt1\iff y\gt0$. Option <b>(b)</b>. This is why $e^{imz}$ ($m\gt0$) is used with upper semicircles in 14.7.</p></details></div>
+<div class="prob"><div class="q"><b>T7.</b> $\sinh\dfrac{i\pi}{6}=$ <span class="src">MCQ</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $\frac12$</span><span>(b) $\frac i2$</span><span>(c) $\frac{\sqrt3}2$</span><span>(d) $i\frac{\sqrt3}2$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\sinh(iy)=i\sin y=\frac i2$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>T8.</b> The radius of convergence of $\sum_{n\ge0}\left[n^3\left(\frac z2\right)^n+(3z)^n\right]$ is <span class="src">MCQ</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $2$</span><span>(b) $\frac13$</span><span>(c) $3$</span><span>(d) $\frac12$</span></div>
+<details class="sol"><summary>Show solution</summary><p>The two parts have $R=2$ and $R=\frac13$. The sum has $R=\min=\frac13$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>T9.</b> (Multiple correct) Which are real numbers (principal values)? <span class="src">MSQ</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $i^i$</span><span>(b) $e^{i\pi}+e^{-i\pi}$</span><span>(c) $\cos i$</span><span>(d) $\operatorname{Ln}(-1)$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b), (c)</b>: $e^{-\pi/2}$, $-2$ and $\cosh1$. (d) is $i\pi$.</p></details></div>
+<div class="prob"><div class="q"><b>T10.</b> Show that every root of $(z+1)^6=z^6$ lies on the line $\operatorname{Re}z=-\frac12$, and find how many roots there are. <span class="src">Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>Taking moduli: $|z+1|=|z|$. That is the perpendicular bisector of $0$ and $-1$, the line $\operatorname{Re}z=-\frac12$. The equation is actually of degree 5, because the $z^6$ terms cancel: $6z^5+\dots+1=0$. So there are <b>5</b> roots. Explicitly, $\frac{z+1}{z}=e^{2\pi ik/6}$ for $k=1,\dots,5$ gives $z=\frac{1}{e^{i\pi k/3}-1}=-\frac12-\frac i2\cot\frac{\pi k}{6}$.</p></details></div>
+
+<h2 id="xlinks">11. Connections</h2>
+<div class="xlinks">
+<a href="2.0_Complex_Numbers_Index.html"><b>Index</b>Chapter 2 index<small>All sections and the study path</small></a>
+<a href="14.0_Functions_of_a_Complex_Variable_Index.html"><b>Next chapter</b>Ch. 14 Functions of a complex variable<small>Analyticity, contour integrals, residues</small></a>
+<a href="14.1_Introduction.html"><b>Next</b>14.1 Introduction<small>$f(z)=u+iv$ and branches</small></a>
+<a href="14.11_Miscellaneous_Problems.html"><b>Compare</b>14.11 Chapter 14 review<small>Formula sheet and exam problems</small></a>
+</div>
+<!-- enrich:end -->
 <div class="pagenav"><a href="2.16_Some_Applications.html"><small>← Previous</small>2.16 Some Applications</a><span></span></div>
 </main>
 </div>

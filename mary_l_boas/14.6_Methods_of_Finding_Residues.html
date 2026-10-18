@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -135,6 +144,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="14.9_Mapping.html">14.9 Mapping</option>
 <option value="14.10_Applications_of_Conformal_Mapping.html">14.10 Some Applications of Conformal Mapping</option>
 <option value="14.11_Miscellaneous_Problems.html">14.11 Miscellaneous Problems</option></select>
+  <a class="btn" href="2.0_Complex_Numbers_Index.html" title="Chapter 2 index">Ch. 2 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -283,7 +293,76 @@ $$\boxed{R(z_0)=\frac{1}{(m-1)!}\left.\frac{d^{\,m-1}}{dz^{m-1}}\Big[(z-z_0)^mf(
 <div class="mcq" data-ans="0" data-ok="Multiply by $(z+\frac12)$: $\frac{1}{2(z-1)}\to-\frac13$." data-no="Multiply by $(z+\frac12)$, not by $(2z+1)$."><p>2. Residue of $\frac{1}{(2z+1)(z-1)}$ at $z=-\frac12$:</p><div class="opts"><button>$-\frac13$</button><button>$-\frac23$</button><button>$\frac23$</button><button>$-1$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="3" data-ok="$\frac{\cos z}{z^2}$ is even: no $1/z$ term." data-no="Is the function even?"><p>3. Residue of $\frac{\cos z}{z^2}$ at $0$:</p><div class="opts"><button>$1$</button><button>$-\frac12$</button><button>$\frac12$</button><button>$0$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">H. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">H. Going deeper: where the formulas come from, plus two you will not find in most books</h2>
+<h3>Simple pole: $g/h'$</h3>
+<p>If $h(a)=0$, $h'(a)\ne0$ and $g(a)\ne0$, then near $a$, $h(z)=h'(a)(z-a)+\dots$. So $(z-a)\frac{g}{h}\to\frac{g(a)}{h'(a)}$. That limit is the residue.</p>
+<h3>Pole of order $m$: the derivative formula</h3>
+<p>Write $f=\frac{\phi(z)}{(z-a)^m}$ with $\phi$ analytic. The residue is the coefficient of $(z-a)^{m-1}$ in the Taylor series of $\phi$:</p>
+$$\operatorname{Res}_af=\frac{1}{(m-1)!}\lim_{z\to a}\frac{d^{m-1}}{dz^{m-1}}\left[(z-a)^mf(z)\right].$$
+<p>Using a larger $m$ than the true order still gives the right answer, just with more work. Using a smaller $m$ gives a wrong answer.</p>
+<h3>Denominator with a double zero</h3>
+<p>Let $h(a)=h'(a)=0$ and $h''(a)\ne0$. Expanding $h=\frac{h''}{2}(z-a)^2+\frac{h'''}{6}(z-a)^3+\dots$ and dividing the series gives:</p>
+<table class="t">
+<tr><th>Numerator $g$</th><th>Type of pole</th><th>Residue of $g/h$ at $a$</th></tr>
+<tr><td>$g(a)=0$, $g'(a)\ne0$</td><td>simple</td><td>$\dfrac{2g'(a)}{h''(a)}$</td></tr>
+<tr><td>$g(a)\ne0$</td><td>double</td><td>$\dfrac{6g'(a)h''(a)-2g(a)h'''(a)}{3\,h''(a)^2}$</td></tr>
+</table>
+<p>Check on $\frac{1}{(z-a)^2}$: $g=1$, $h''=2$, $h'''=0$, so the residue is $0$. ✓</p>
+<h3>Symmetry shortcuts</h3>
+<ul>
+<li>If $f$ is <b>even</b> about $0$, its Laurent series has only even powers, so $\operatorname{Res}_0f=0$. Examples: $\cot^2z$, $\frac{1}{z^2\sin^2z}$, $\frac{\cos z}{z^4}$.</li>
+<li>If $f(z)=\frac{1}{z^nQ(z)}$, the residue at $0$ is the coefficient of $z^{n-1}$ in $\frac1{Q(z)}$.</li>
+<li>For a simple zero of $h$ at a root of $z^n=c$: $\frac{1}{nz^{n-1}}=\frac{z}{nz^n}=\frac{z}{nc}$. This avoids computing a power.</li>
+</ul>
+
+<h2 id="exampat">I. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Rational functions</td><td>Residue at a given pole</td><td>$g/h'$, or factor and substitute</td></tr>
+<tr><td>Roots of $z^n=c$</td><td>Residue of $\frac1{z^n-c}$ at one root</td><td>$\frac{z_k}{nc}$</td></tr>
+<tr><td>Trig/hyperbolic at 0</td><td>$\operatorname{Res}_0\frac{1}{z^2\sin z}$, $\operatorname{Res}_0\cot z$</td><td>Short Laurent expansion; parity check</td></tr>
+<tr><td>Multiple poles</td><td>$\operatorname{Res}\frac{e^{az}}{(z-b)^m}$</td><td>$\frac{a^{m-1}e^{ab}}{(m-1)!}$</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$g/h'$ needs a <b>simple</b> zero of $h$. Check $h'(a)\ne0$ first.</li>
+<li>$\frac{\sin z}{z^4}$: the pole is of order 3. If you use $m=4$ the formula still works; if you use $m=2$ it does not.</li>
+<li>A zero of the numerator can cancel the pole entirely. The residue is then $0$, as with $\frac{\sin z}{z}$.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$\operatorname{Res}_{k\pi}\cot z=1$, $\operatorname{Res}_{k\pi}\frac1{\sin z}=(-1)^k$ and $\operatorname{Res}_{(k+\frac12)\pi}\tan z=-1$.</li>
+<li>$\operatorname{Res}_0\frac{1}{z^n}e^{z}=\frac{1}{(n-1)!}$ and $\operatorname{Res}_0z^ne^{1/z}=\frac1{(n+1)!}$.</li>
+</ul></div>
+
+<h2 id="xprob">J. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> The residue of $\dfrac{z}{z^2+4}$ at $z=2i$ is <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $\frac12$</span><span>(b) $\frac i2$</span><span>(c) $-\frac12$</span><span>(d) $\frac{1}{4i}$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{g}{h'}=\frac{2i}{4i}=\frac12$. Option <b>(a)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> Find the residue of $\dfrac{e^z}{(z-1)^3}$ at $z=1$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{1}{2!}\frac{d^2}{dz^2}e^z\big|_1=\frac e2=\mathbf{1.359}$.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> The residue of $\dfrac{1}{z^4+1}$ at $z=e^{i\pi/4}$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\frac14e^{-3i\pi/4}$</span><span>(b) $-\frac14e^{i\pi/4}$</span><span>(c) both (a) and (b)</span><span>(d) $\frac14e^{i\pi/4}$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac1{4z^3}=\frac{z}{4z^4}=\frac{z}{4(-1)}=-\frac14e^{i\pi/4}$. And $-e^{i\pi/4}=e^{i\pi/4}e^{-i\pi}=e^{-3i\pi/4}$, so (a) and (b) are the same number. Option <b>(c)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> (Multiple correct) <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\operatorname{Res}_0\cot^2z=0$</span><span>(b) $\operatorname{Res}_0\frac{\sin z}{z^4}=-\frac16$</span><span>(c) $\operatorname{Res}_\pi\cot z=1$</span><span>(d) $\operatorname{Res}_0\frac{e^z}{z^3}=1$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b), (c).</b> (a) is an even function. (b): $\frac{z-z^3/6+\dots}{z^4}$. (d) equals $\frac1{2!}=\frac12$.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> Find $\operatorname{Res}_0\dfrac{1}{z^2\sinh z}$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{1}{\sinh z}=\frac1z-\frac z6+\dots$ Divided by $z^2$, the $z^{-1}$ coefficient is $-\frac16=\mathbf{-0.167}$.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Find $\operatorname{Res}_0\dfrac{e^z}{1-\cos z}$ by two methods. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>Formula:</b> $h=1-\cos z$ has $h''(0)=1$ and $h'''(0)=0$, and $g=e^z$ has $g=g'=1$. The residue is $\frac{6\cdot1\cdot1-0}{3}=2$.</p><p><b>Series:</b> $\frac1{1-\cos z}=\frac{2}{z^2}\left(1-\frac{z^2}{12}+\dots\right)^{-1}=\frac2{z^2}+\frac16+\dots$ Multiply by $1+z+\dots$: the $z^{-1}$ coefficient is $2$. ✓</p></details></div>
+<div class="mcq" data-ans="1" data-ok="$\frac{1}{z}\big|_{z=-1}=-1$." data-no="Cover the factor $(z+1)$ and substitute $z=-1$."><p>Rapid fire: $\operatorname{Res}_{-1}\dfrac{1}{z(z+1)}=$</p><div class="opts"><button>$1$</button><button>$-1$</button><button>$0$</button><button>$\frac12$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">K. Connections</h2>
+<div class="xlinks">
+<a href="14.5_The_Residue_Theorem.html"><b>Builds on</b>14.5 Residue theorem<small>Why residues matter</small></a>
+<a href="14.7_Evaluation_of_Definite_Integrals_by_Residues.html"><b>Next</b>14.7 Real integrals<small>Where these residues get used</small></a>
+<a href="14.4_Laurent_Series.html"><b>Recall</b>14.4 Order arithmetic<small>Deciding the order of a pole</small></a>
+<a href="2.10_Powers_and_Roots_of_Complex_Numbers.html"><b>Recall</b>2.10 Roots of $z^n=c$<small>Where the poles of $\frac{1}{z^n-c}$ sit</small></a>
+<a href="14.8_Point_at_Infinity_Residues_at_Infinity.html"><b>Shortcut</b>14.8 Residue at ∞<small>Avoid computing many residues</small></a>
+<a href="14.11_Miscellaneous_Problems.html"><b>Practice</b>14.11 Residue calculator<small>Check your answers</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="H. Summary">L. Summary</h2>
 <div class="card"><ul class="summary">
 <li>Simple pole: $R=\lim(z-z_0)f=\dfrac{g(z_0)}{h'(z_0)}$.</li>
 <li>Pole of order $\le m$: $R=\frac1{(m-1)!}\frac{d^{m-1}}{dz^{m-1}}[(z-z_0)^mf]_{z_0}$.</li>

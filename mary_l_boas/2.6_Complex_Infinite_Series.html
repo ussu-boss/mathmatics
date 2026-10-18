@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +150,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -311,7 +321,67 @@ $$\boxed{\sum_{n=0}^\infty r^n\cos n\theta=\frac{1-r\cos\theta}{1-2r\cos\theta+r
 <div class="mcq" data-ans="0" data-ok="$\rho=|1+i|/2=1/\sqrt2\lt1$." data-no="Compute $\rho=|z_{n+1}/z_n|$."><p>2. $\sum\frac{(1+i)^n}{2^n}$:</p><div class="opts"><button>converges absolutely</button><button>diverges</button><button>test fails</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="2" data-ok="Geometric: $1/(1-z)$ with $z=-1/2$." data-no="$\sum z^n=1/(1-z)$."><p>3. $\sum_{n=0}^\infty(-\tfrac12)^n=$</p><div class="opts"><button>$2$</button><button>$\tfrac12$</button><button>$\tfrac23$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">11. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">11. Going deeper: Dirichlet's test, and summing trigonometric series in one line</h2>
+<h3>When the terms are not absolutely summable</h3>
+<p>$\sum\frac{i^n}{n}$ and $\sum\frac{e^{in\theta}}{n}$ converge, but not absolutely. The ratio test gives $1$ and fails. The tool that settles them is <b>Dirichlet's test</b>:</p>
+<div class="box thm"><span class="tag">Dirichlet's test</span><p>If the partial sums $B_N=\sum_{n=1}^Nb_n$ of the complex numbers $b_n$ stay bounded, $|B_N|\le M$, and the real numbers $a_n$ decrease monotonically to $0$, then $\sum a_nb_n$ converges.</p></div>
+<p><b>Why (summation by parts):</b> $\sum_{n=1}^Na_nb_n=a_NB_N+\sum_{n=1}^{N-1}(a_n-a_{n+1})B_n$. The first term is at most $a_NM\to0$. The second series converges absolutely, because $\sum|a_n-a_{n+1}||B_n|\le M\sum(a_n-a_{n+1})=M(a_1-\lim a_n)$.</p>
+<p>For $b_n=e^{in\theta}$ with $\theta\ne2\pi k$, the geometric sum gives $|B_N|=\left|\frac{e^{i\theta}(1-e^{iN\theta})}{1-e^{i\theta}}\right|\le\frac{2}{|1-e^{i\theta}|}=\frac1{|\sin(\theta/2)|}$, which is bounded. So $\sum\frac{e^{in\theta}}{n^p}$ converges for every $p\gt0$ and $\theta\ne2\pi k$. It converges absolutely only for $p\gt1$.</p>
+<h3>Trigonometric sums from the geometric series</h3>
+<p>For $0\le r\lt1$, take real and imaginary parts of $\sum_{n=0}^\infty(re^{i\theta})^n=\frac1{1-re^{i\theta}}$. Multiply top and bottom by $1-re^{-i\theta}$:</p>
+$$\sum_{n=0}^\infty r^n\cos n\theta=\frac{1-r\cos\theta}{1-2r\cos\theta+r^2},\qquad\sum_{n=1}^\infty r^n\sin n\theta=\frac{r\sin\theta}{1-2r\cos\theta+r^2}.$$
+<p>Twice the first sum minus 1 is the <b>Poisson kernel</b> $\frac{1-r^2}{1-2r\cos\theta+r^2}$. It solves Laplace's equation in a disk, which you meet again in 14.10. Differentiating $\sum z^n$ gives $\sum nz^n=\frac{z}{(1-z)^2}$. This handles sums weighted by $n$.</p>
+
+<h2 id="exampat">12. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Geometric series</td><td>Sum of $\sum w^n$, or whether it converges</td><td>Converges iff $|w|\lt1$, with sum $\frac{1}{1-w}$</td></tr>
+<tr><td>Trig series</td><td>$\sum r^n\cos n\theta$, $\sum\frac{\sin n\theta}{2^n}$</td><td>Real or imaginary part of a geometric sum</td></tr>
+<tr><td>Classification</td><td>Absolutely / conditionally convergent / divergent (often multiple correct)</td><td>Compare $|z_n|$ with $p$-series; Dirichlet for oscillating terms</td></tr>
+<tr><td>Weighted sums</td><td>$\sum nz^n$, $\sum n^2z^n$</td><td>Differentiate the geometric series</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$\sum e^{in\theta}$ never converges for real $\theta$: $|e^{in\theta}|=1$, so the terms do not go to $0$.</li>
+<li>"Converges" is not "converges absolutely". $\sum\frac{i^n}{n}$ converges, but $\sum\frac1n$ diverges.</li>
+<li>The ratio test with limit $1$ tells you nothing. It is not "divergent".</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$|w|$ decides geometric series: $\left|\frac{3+4i}{6}\right|=\frac56\lt1$ converges, and $\left|\frac{2}{1+i}\right|=\sqrt2\gt1$ diverges.</li>
+<li>$\sum\frac{i^n}{n}=-\ln(1-i)=-\tfrac12\ln2+\tfrac{i\pi}4$. That is $\sum\frac{(-1)^k}{2k+1}=\frac\pi4$ (Leibniz) and $\sum\frac{(-1)^{k+1}}{2k}=\frac12\ln2$ together.</li>
+</ul></div>
+
+<h2 id="xprob">13. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> $\displaystyle\sum_{n=0}^\infty\left(\frac i3\right)^n=$ <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $0.9+0.3i$</span><span>(b) $0.9-0.3i$</span><span>(c) $1.5$</span><span>(d) diverges</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{1}{1-i/3}=\frac{3}{3-i}=\frac{3(3+i)}{10}=0.9+0.3i$. Option <b>(a)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> Evaluate $\displaystyle\sum_{n=0}^\infty\frac{\cos(n\pi/2)}{2^n}$. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>This is $\operatorname{Re}\sum(i/2)^n=\operatorname{Re}\frac{2}{2-i}=\operatorname{Re}\frac{2(2+i)}{5}=\mathbf{0.8}$. Check: $1-\frac14+\frac1{16}-\dots=\frac{1}{1+1/4}=0.8$. ✓</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> Evaluate $\displaystyle\sum_{n=1}^\infty\frac{n\cos(n\pi/2)}{2^n}$. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\sum nz^n=\frac{z}{(1-z)^2}$ with $z=\frac i2$: $(1-\frac i2)^2=\frac{3-4i}{4}$, so the sum is $\frac{2i}{3-4i}=\frac{-8+6i}{25}$. The real part is $\mathbf{-0.32}$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> (Multiple correct) Which series converge <i>absolutely</i>? <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\sum\frac{i^n}{n}$</span><span>(b) $\sum\frac{i^n}{n^2}$</span><span>(c) $\sum\left(\frac{1+i}{2}\right)^n$</span><span>(d) $\sum\left(\frac{2}{1+i}\right)^n$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(b), (c).</b> (a) converges only conditionally. (c) is geometric with $|w|=\frac{1}{\sqrt2}\lt1$. (d) has $|w|=\sqrt2$ and diverges.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> For real $\theta$, the series $\sum_{n=0}^\infty e^{in\theta}$ converges <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) for all $\theta$</span><span>(b) only for $\theta=0$</span><span>(c) for no $\theta$</span><span>(d) for $\theta\ne2\pi k$</span></div>
+<details class="sol"><summary>Show solution</summary><p>The terms have modulus 1 and do not tend to 0, so the series diverges for every $\theta$. Option <b>(c)</b>. Option (d) is the answer for $\sum e^{in\theta}/n$.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Evaluate $\displaystyle\sum_{n=1}^\infty\frac{\sin(n\pi/3)}{2^n}$ to three decimal places, using the formula above. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>With $r=\frac12$ and $\theta=\frac\pi3$: $\frac{\frac12\cdot\frac{\sqrt3}2}{1-\frac12+\frac14}=\frac{\sqrt3/4}{3/4}=\frac1{\sqrt3}=\mathbf{0.577}$.</p></details></div>
+<div class="prob"><div class="q"><b>X7.</b> Show that $\displaystyle\sum_{n=1}^\infty\frac{\cos n\theta}{n}=-\ln\left|2\sin\frac\theta2\right|$ for $0\lt\theta\lt2\pi$. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>By Dirichlet's test the series converges, and Abel's theorem lets us use $\sum\frac{z^n}{n}=-\ln(1-z)$ at $z=e^{i\theta}$. The real part is $-\ln|1-e^{i\theta}|$. Since $|1-e^{i\theta}|=2|\sin\frac\theta2|$, the result follows. (The imaginary part gives $\sum\frac{\sin n\theta}{n}=\frac{\pi-\theta}{2}$, the sawtooth Fourier series.)</p></details></div>
+<div class="mcq" data-ans="2" data-ok="Divergence test: if $z_n\not\to0$ the series diverges." data-no="This is necessary for convergence but not sufficient ($\sum\frac1n$)."><p>Rapid fire: if $\sum z_n$ converges, which must hold?</p><div class="opts"><button>$\sum|z_n|$ converges</button><button>$|z_{n+1}/z_n|\to L\lt1$</button><button>$z_n\to0$</button><button>$\operatorname{Re}z_n\gt0$ eventually</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">14. Connections</h2>
+<div class="xlinks">
+<a href="2.5_Complex_Algebra.html"><b>Builds on</b>2.5 Complex algebra<small>Division and modulus</small></a>
+<a href="2.7_Complex_Power_Series_Disk_of_Convergence.html"><b>Next</b>2.7 Power series<small>Series in $z$ and the disk of convergence</small></a>
+<a href="2.16_Some_Applications.html"><b>Physics</b>2.16 Optics<small>Adding $N$ waves is a finite geometric sum</small></a>
+<a href="2.13_Logarithms.html"><b>Uses</b>2.13 Logarithms<small>$-\ln(1-z)=\sum z^n/n$</small></a>
+<a href="14.4_Laurent_Series.html"><b>Later</b>14.4 Laurent series<small>Built from geometric series in annuli</small></a>
+<a href="14.10_Applications_of_Conformal_Mapping.html"><b>Later</b>14.10 Laplace's equation<small>The Poisson kernel for a disk</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="11. Summary">15. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$\sum z_n$ converges ⇔ $\sum\operatorname{Re}z_n$ and $\sum\operatorname{Im}z_n$ converge.</li>
 <li>Absolute convergence ($\sum|z_n|$, which can be tested with all the positive-term tests) implies convergence.</li>

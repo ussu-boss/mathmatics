@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -135,6 +144,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="14.9_Mapping.html">14.9 Mapping</option>
 <option value="14.10_Applications_of_Conformal_Mapping.html">14.10 Some Applications of Conformal Mapping</option>
 <option value="14.11_Miscellaneous_Problems.html">14.11 Miscellaneous Problems</option></select>
+  <a class="btn" href="2.0_Complex_Numbers_Index.html" title="Chapter 2 index">Ch. 2 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -357,7 +367,79 @@ $$\boxed{\frac{\partial u}{\partial r}=\frac1r\frac{\partial v}{\partial\theta},
 <div class="mcq" data-ans="0" data-ok="$u=x^2-y^2=\operatorname{Re}z^2$, so $v=2xy$." data-no="Use $v_y=u_x$, $v_x=-u_y$."><p>2. The harmonic conjugate of $u=x^2-y^2$ is</p><div class="opts"><button>$2xy$</button><button>$-2xy$</button><button>$x^2+y^2$</button><button>$xy$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="3" data-ok="The nearest singularity is $\pm i\pi/2$ (zeros of $\cosh z$)." data-no="Where is $\cosh z=0$?"><p>3. The radius of convergence of the Maclaurin series of $\tanh z$ is</p><div class="opts"><button>$1$</button><button>$\pi$</button><button>$\infty$</button><button>$\pi/2$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">9. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">9. Going deeper: Milne-Thomson's shortcut, and "differentiable" vs "analytic"</h2>
+<h3>Finding $f$ from $u$ in two lines (Milne-Thomson)</h3>
+<p>If $f=u+iv$ is analytic, then $f'(z)=u_x+iv_x=u_x-iu_y$ by Cauchy–Riemann. The right side is a function of $z$ alone, so we may evaluate it on the real axis ($x=z$, $y=0$). The identity theorem then guarantees the result holds everywhere:</p>
+$$\boxed{f'(z)=u_x(z,0)-i\,u_y(z,0)}\qquad\text{and similarly}\qquad f'(z)=v_y(z,0)+i\,v_x(z,0).$$
+<p>Integrate once and you have $f$, up to an imaginary constant (or a real one, if you started from $v$). No partial integrations and no "$+g(y)$" bookkeeping.</p>
+<div class="ex"><div class="hd">Example — $u=x^3-3xy^2+3x^2-3y^2$</div><div class="bd"><ol class="steps">
+<li>$u_x=3x^2-3y^2+6x$ and $u_y=-6xy-6y$.</li>
+<li>On the real axis: $u_x(z,0)=3z^2+6z$ and $u_y(z,0)=0$.</li>
+<li>$f'(z)=3z^2+6z$, so $f=z^3+3z^2+iC$.</li></ol></div></div>
+<h3>The trick for $u-v$ or $u+v$</h3>
+<p>If you are given $U=u-v$, look at $F=(1+i)f=(u-v)+i(u+v)$. $F$ is analytic with real part $U$. Find $F$ by Milne-Thomson, then $f=F/(1+i)$.</p>
+<h3>Differentiable at a point ≠ analytic</h3>
+<p><b>Analytic at $z_0$</b> means differentiable at every point of some disk around $z_0$. Cauchy–Riemann can hold on a curve but on no open set:</p>
+<table class="t">
+<tr><th>$f$</th><th>Where CR holds</th><th>Analytic where?</th></tr>
+<tr><td>$|z|^2=x^2+y^2$</td><td>only at $z=0$</td><td>nowhere</td></tr>
+<tr><td>$x^2+iy^2$</td><td>on the line $y=x$</td><td>nowhere (a line contains no disk)</td></tr>
+<tr><td>$\bar z$</td><td>nowhere</td><td>nowhere</td></tr>
+<tr><td>$z\bar z^2$</td><td>only at $z=0$</td><td>nowhere</td></tr>
+</table>
+<p>(For these polynomial examples the partial derivatives are continuous, so CR at a point really does give differentiability there.)</p>
+<h3>The conjugate of the conjugate</h3>
+<p>If $v$ is a harmonic conjugate of $u$ (i.e. $u+iv$ is analytic), then $-u$ is a harmonic conjugate of $v$, because $v-iu=-i(u+iv)$ is analytic. And $u^2-v^2$ and $uv$ are harmonic too, as the real and imaginary parts of $\frac12f^2$.</p>
+
+<h2 id="exampat">10. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Construct $f$</td><td>Given $u$, $v$, or $u\pm v$, find $f$ (MCQ with four $f$'s)</td><td>Milne-Thomson; for $u-v$ use $(1+i)f$</td></tr>
+<tr><td>Harmonic?</td><td>Which of four functions is harmonic, or find the constant that makes $u$ harmonic</td><td>$u_{xx}+u_{yy}=0$</td></tr>
+<tr><td>Where differentiable</td><td>Set where $f$ is differentiable or analytic</td><td>Solve the CR equations; analytic needs an open set</td></tr>
+<tr><td>Rigidity</td><td>Analytic with $\operatorname{Re}f$ constant, or $|f|$ constant, $\Rightarrow f$ constant</td><td>CR forces $f'=0$</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>CR alone is not quite enough. You also need the partial derivatives to be continuous (or $f$ to be real-differentiable).</li>
+<li>Differentiable on a line does not mean analytic anywhere.</li>
+<li>$\ln(x^2+y^2)$ is harmonic only away from the origin.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>Spotting $f$: write $u$ in terms of $r,\theta$. For example $r^n\cos n\theta\to z^n$, and $\ln r\to\operatorname{Ln}z$.</li>
+<li>$u=e^{ax}\cos ay\to e^{az}$, and $u=\frac{x}{x^2+y^2}\to\frac1z$.</li>
+</ul></div>
+
+<h2 id="xprob">11. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> If $u=x^3-3xy^2+3x^2-3y^2$ is the real part of an analytic $f$ with $f(0)=0$, then $f=$ <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $z^3+3z^2$</span><span>(b) $z^3-3z^2$</span><span>(c) $z^3+3iz^2$</span><span>(d) $z^3+3\bar z^2$</span></div>
+<details class="sol"><summary>Show solution</summary><p>By Milne-Thomson (worked above), $f'=3z^2+6z$. Option <b>(a)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> $f(z)=x^2+iy^2$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) analytic everywhere</span><span>(b) differentiable only on $y=x$, analytic nowhere</span><span>(c) analytic on $y=x$</span><span>(d) differentiable nowhere</span></div>
+<details class="sol"><summary>Show solution</summary><p>$u_x=2x$ and $v_y=2y$, so CR needs $x=y$. The other equation, $u_y=0=-v_x$, holds everywhere. A line has no interior, so $f$ is analytic nowhere. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> Find the real constant $a$ for which $u=ax^2-y^2+xy$ is harmonic. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$u_{xx}+u_{yy}=2a-2=0$, so $a=\mathbf1$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> (Multiple correct) Let $f=u+iv$ be analytic in a domain $D$. Then <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $-u$ is a harmonic conjugate of $v$</span><span>(b) $uv$ is harmonic</span><span>(c) $u^2+v^2$ is harmonic</span><span>(d) if $u$ is constant in $D$, then $f$ is constant</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b), (d).</b> $uv=\frac12\operatorname{Im}f^2$. But $\nabla^2|f|^2=4|f'|^2\ne0$ in general, so (c) is false.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> $f=u+iv$ is analytic, $f(0)=0$, and $u-v=(x-y)(x^2+4xy+y^2)$. Find $f$. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><ol class="steps"><li>$F=(1+i)f$ has $\operatorname{Re}F=U=x^3+3x^2y-3xy^2-y^3$.</li><li>$U_x=3x^2+6xy-3y^2$ and $U_y=3x^2-6xy-3y^2$. On the real axis: $U_x=3z^2$ and $U_y=3z^2$.</li><li>$F'=3z^2-3iz^2=3(1-i)z^2$, so $F=(1-i)z^3$.</li><li>$f=\frac{(1-i)}{1+i}z^3=-iz^3$.</li></ol><p>Check: $\operatorname{Re}(-iz^3)=3x^2y-y^3$ and $\operatorname{Im}=3xy^2-x^3$. Their difference expands to $(x-y)(x^2+4xy+y^2)$. ✓</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Which function is <b>not</b> harmonic on $\mathbb R^2\setminus\{0\}$? <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $\ln(x^2+y^2)$</span><span>(b) $e^x\cos y$</span><span>(c) $x^2+y^2$</span><span>(d) $\frac{y}{x^2+y^2}$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\nabla^2(x^2+y^2)=4$. Option <b>(c)</b>. The others are $2\operatorname{Re}\operatorname{Ln}z$, $\operatorname{Re}e^z$ and $-\operatorname{Im}\frac1z$.</p></details></div>
+<div class="mcq" data-ans="1" data-ok="$f'=u_x+iv_x$; for $e^z$ this is $e^z$ again." data-no="On the real axis $f'(x)=u_x(x,0)+iv_x(x,0)$."><p>Rapid fire: if $u=e^x\cos y$ and $v=e^x\sin y$, then $f'(z)=$</p><div class="opts"><button>$e^{\bar z}$</button><button>$e^z$</button><button>$ie^z$</button><button>$0$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">12. Connections</h2>
+<div class="xlinks">
+<a href="14.1_Introduction.html"><b>Builds on</b>14.1 $u+iv$<small>Splitting $f$ into two real functions</small></a>
+<a href="14.3_Contour_Integrals.html"><b>Next</b>14.3 Contour integrals<small>Cauchy's theorem needs analyticity</small></a>
+<a href="2.2_Real_and_Imaginary_Parts.html"><b>Recall</b>2.2 $z$ and $\bar z$<small>CR $\Leftrightarrow\partial f/\partial\bar z=0$</small></a>
+<a href="14.10_Applications_of_Conformal_Mapping.html"><b>Physics</b>14.10 Potentials<small>Harmonic $u$ = temperature or potential; $v$ = stream or flux function</small></a>
+<a href="14.9_Mapping.html"><b>Later</b>14.9 Conformality<small>$f'\ne0$ means angles are preserved</small></a>
+<a href="14.11_Miscellaneous_Problems.html"><b>Review</b>14.11 Problem E7<small>Another harmonic-conjugate problem</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="9. Summary">13. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$f'(z)=\lim\frac{\Delta f}{\Delta z}$ must be the same from every direction. Analytic means differentiable throughout a 2-D region.</li>
 <li>CR: $u_x=v_y$, $u_y=-v_x$ (necessary; with continuity, sufficient). Then $f'=u_x+iv_x$.</li>

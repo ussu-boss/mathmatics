@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -135,6 +144,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="14.9_Mapping.html">14.9 Mapping</option>
 <option value="14.10_Applications_of_Conformal_Mapping.html">14.10 Some Applications of Conformal Mapping</option>
 <option value="14.11_Miscellaneous_Problems.html">14.11 Miscellaneous Problems</option></select>
+  <a class="btn" href="2.0_Complex_Numbers_Index.html" title="Chapter 2 index">Ch. 2 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -384,7 +394,75 @@ $$u(a)=\frac2\pi\,\mathrm{PV}\int_0^\infty\frac{x\,v(x)}{x^2-a^2}dx,\qquad v(a)=
 <div class="mcq" data-ans="2" data-ok="Half-residue rule: $\pi i\cdot1$; the imaginary part is $\pi$." data-no="A pole on a straight boundary counts half."><p>2. $\int_{-\infty}^\infty\frac{\sin x}{x}dx=$</p><div class="opts"><button>$\pi/2$</button><button>$2\pi$</button><button>$\pi$</button><button>$0$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="0" data-ok="$2\pi/\sqrt{a^2-b^2}=2\pi/4$." data-no="Use $2\pi/\sqrt{a^2-b^2}$."><p>3. $\int_0^{2\pi}\frac{d\theta}{5-3\cos\theta}=$</p><div class="opts"><button>$\pi/2$</button><button>$\pi$</button><button>$2\pi/5$</button><button>$\pi/4$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">12. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">12. Going deeper: the three lemmas behind every contour, and the rectangle trick</h2>
+<h3>1. The big-arc estimate (for Type II)</h3>
+<p>If $|f(z)|\le\frac{M}{R^{k}}$ on the arc $|z|=R$ with $k\gt1$, then $\left|\int_{\text{arc}}f\,dz\right|\le\pi R\cdot\frac{M}{R^k}\to0$. For $\frac{P}{Q}$ this needs $\deg Q\ge\deg P+2$.</p>
+<h3>2. Jordan's lemma (for Type III)</h3>
+<p>For $m\gt0$ and $|g|\le M_R$ on the upper semicircle $C_R$:</p>
+$$\left|\int_{C_R}e^{imz}g(z)\,dz\right|\le\frac{\pi}{m}M_R .$$
+<p><b>Why:</b> $|e^{imz}|=e^{-mR\sin\theta}$, and $\sin\theta\ge\frac{2\theta}\pi$ on $[0,\frac\pi2]$ (Jordan's inequality). This gives $\int_0^\pi e^{-mR\sin\theta}R\,d\theta\le\frac\pi m$. So it is enough that $g\to0$, i.e. $\deg Q\ge\deg P+1$. That is one degree less than the crude estimate needs, and it is why $\int\frac{x\sin x}{x^2+1}dx$ works.</p>
+<p><b>Which half-plane?</b> $e^{imz}$ decays in the upper half-plane when $m\gt0$, and in the lower half-plane when $m\lt0$. Closing in the lower half-plane traverses the contour clockwise, so a minus sign appears.</p>
+<h3>3. The small-arc lemma (for Type IV)</h3>
+<p>If $f$ has a <b>simple</b> pole at $a$, a small arc of angle $\alpha$ around $a$, traversed counter-clockwise, contributes</p>
+$$\lim_{\epsilon\to0}\int_{\text{arc}}f\,dz=i\alpha\operatorname{Res}_af .$$
+<p>A clockwise semicircle indentation gives $-i\pi\operatorname{Res}$. Hence the principal-value rule:</p>
+$$\mathrm{PV}\!\int_{-\infty}^\infty f\,dx=2\pi i\sum_{\text{upper}}\operatorname{Res}+\pi i\sum_{\text{real axis}}\operatorname{Res}.$$
+<h3>The rectangle trick for $\displaystyle\int_{-\infty}^\infty\frac{e^{ax}}{1+e^x}dx$, $0\lt a\lt1$</h3>
+<ol class="steps">
+<li>The integrand $f(z)=\frac{e^{az}}{1+e^z}$ has period-like behaviour: $f(z+2\pi i)=e^{2\pi ia}f(z)$.</li>
+<li>Integrate around the rectangle $-R\to R\to R+2\pi i\to-R+2\pi i\to-R$. The vertical sides vanish as $R\to\infty$ because $0\lt a\lt1$.</li>
+<li>The top side gives $-e^{2\pi ia}I$. The only pole inside is $z=i\pi$, with residue $\frac{e^{ia\pi}}{e^{i\pi}}=-e^{ia\pi}$.</li>
+<li>$(1-e^{2\pi ia})I=-2\pi ie^{ia\pi}$, so $I=\frac{2\pi i}{e^{ia\pi}-e^{-ia\pi}}=\dfrac{\pi}{\sin\pi a}$.</li>
+</ol>
+<p>Substituting $x=\ln t$ shows this is the same as the keyhole result $\int_0^\infty\frac{t^{a-1}}{1+t}dt=\frac{\pi}{\sin\pi a}$.</p>
+
+<h2 id="exampat">13. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Type I</td><td>$\int_0^{2\pi}\frac{d\theta}{a+b\cos\theta}$</td><td>$\frac{2\pi}{\sqrt{a^2-b^2}}$ for $a\gt|b|$</td></tr>
+<tr><td>Type II</td><td>$\int_{-\infty}^\infty\frac{dx}{x^2+bx+c}$, $\int\frac{dx}{(x^2+a^2)^n}$</td><td>Upper-half-plane residues; or complete the square</td></tr>
+<tr><td>Type III</td><td>$\int\frac{\cos mx}{x^2+a^2}dx$</td><td>$\frac{\pi}{a}e^{-ma}$</td></tr>
+<tr><td>Type IV/V</td><td>$\int\frac{\sin x}x$, PV integrals, $\int_0^\infty\frac{x^{p-1}}{1+x}$</td><td>Small-arc lemma; keyhole</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>Do not use $\cos mz$ on the big arc: it grows in <b>both</b> half-planes. Use $e^{imz}$ and take the real part.</li>
+<li>An even integrand over $(0,\infty)$ is <b>half</b> of the integral over $(-\infty,\infty)$.</li>
+<li>Poles on the real axis contribute $\pi i\operatorname{Res}$, not $2\pi i\operatorname{Res}$, and only for simple poles.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$\int_{-\infty}^\infty\frac{dx}{x^2+a^2}=\frac\pi a$, $\ \int_{-\infty}^\infty\frac{dx}{(x^2+a^2)^2}=\frac{\pi}{2a^3}$, $\ \int_{-\infty}^\infty\frac{dx}{1+x^4}=\frac{\pi}{\sqrt2}$.</li>
+<li>$\int_{-\infty}^\infty\frac{\sin ax}{x}dx=\pi\operatorname{sgn}a$ and $\int_0^\infty\frac{\sin^2x}{x^2}dx=\frac\pi2$.</li>
+</ul></div>
+
+<h2 id="xprob">14. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> $\displaystyle\int_{-\infty}^\infty\frac{dx}{x^2+2x+2}=$ <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $\pi$</span><span>(b) $\pi/2$</span><span>(c) $2\pi$</span><span>(d) $\pi/\sqrt2$</span></div>
+<details class="sol"><summary>Show solution</summary><p>The upper pole is $-1+i$, with residue $\frac{1}{2i}$. Then $2\pi i\cdot\frac1{2i}=\pi$. Option <b>(a)</b>. Or: $(x+1)^2+1$ shifts to $\int\frac{du}{u^2+1}=\pi$.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> Evaluate $\displaystyle\int_0^{2\pi}\frac{d\theta}{2+\cos\theta}$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{2\pi}{\sqrt{4-1}}=\frac{2\pi}{\sqrt3}=\mathbf{3.628}$.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> Evaluate $\displaystyle\int_{-\infty}^\infty\frac{\cos2x}{x^2+1}dx$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\operatorname{Re}\left[2\pi i\operatorname{Res}_i\frac{e^{2iz}}{z^2+1}\right]=\operatorname{Re}\left[2\pi i\frac{e^{-2}}{2i}\right]=\pi e^{-2}=\mathbf{0.425}$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> (Multiple correct) <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\int_{-\infty}^\infty\frac{\sin3x}{x}dx=\pi$</span><span>(b) $\int_{-\infty}^\infty\frac{dx}{1+x^4}=\frac{\pi}{\sqrt2}$</span><span>(c) $\int_0^\infty\frac{dx}{(1+x^2)^2}=\frac\pi4$</span><span>(d) $\int_0^{2\pi}\frac{d\theta}{5-4\cos\theta}=\pi$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b), (c).</b> (d) equals $\frac{2\pi}{\sqrt{25-16}}=\frac{2\pi}3$.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> Evaluate $\mathrm{PV}\displaystyle\int_{-\infty}^\infty\frac{dx}{(x-1)(x^2+1)}$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><ol class="steps"><li>$\operatorname{Res}_i=\frac{1}{(i-1)\,2i}=-\frac{1-i}{4}$. Times $2\pi i$: $-\frac\pi2-\frac{i\pi}2$.</li><li>$\operatorname{Res}_1=\frac12$. Times $\pi i$: $\frac{i\pi}2$.</li><li>Sum: $-\frac\pi2=\mathbf{-1.571}$. The answer is real, as it must be.</li></ol></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Use the rectangle contour to show $\displaystyle\int_{-\infty}^\infty\frac{e^{x/3}}{1+e^x}dx=\frac{2\pi}{\sqrt3}$. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>By the derivation above with $a=\frac13$: $\frac{\pi}{\sin(\pi/3)}=\frac{2\pi}{\sqrt3}\approx3.628$. The vertical sides vanish: on $x=R$ the integrand is $\approx e^{(a-1)R}\to0$, and on $x=-R$ it is $\approx e^{-aR}\to0$.</p></details></div>
+<div class="mcq" data-ans="2" data-ok="$e^{imz}$ with $m\gt0$ decays where $\operatorname{Im}z\gt0$." data-no="$|e^{imz}|=e^{-m\operatorname{Im}z}$."><p>Rapid fire: to evaluate $\int_{-\infty}^\infty\frac{e^{-3ix}}{x^2+1}dx$, close the contour in the</p><div class="opts"><button>upper half-plane</button><button>either half-plane</button><button>lower half-plane</button><button>right half-plane</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">15. Connections</h2>
+<div class="xlinks">
+<a href="14.6_Methods_of_Finding_Residues.html"><b>Builds on</b>14.6 Residues<small>The input to every contour integral</small></a>
+<a href="14.8_Point_at_Infinity_Residues_at_Infinity.html"><b>Next</b>14.8 Point at infinity<small>Residue at ∞ and the sum rule</small></a>
+<a href="2.9_Eulers_Formula.html"><b>Recall</b>2.9 $z=e^{i\theta}$<small>Turns Type I integrals into circle integrals</small></a>
+<a href="2.13_Logarithms.html"><b>Recall</b>2.13 Branch cuts<small>Keyhole contours</small></a>
+<a href="2.16_Some_Applications.html"><b>Physics</b>2.16 Response functions<small>Kramers–Kronig and causality</small></a>
+<a href="14.11_Miscellaneous_Problems.html"><b>Review</b>14.11 Exam problems<small>Mixed integrals for practice</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="12. Summary">16. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$\theta$-integrals: $z=e^{i\theta}$, unit circle.</li>
 <li>Rational: semicircle (need $\deg Q\ge\deg P+2$). Fourier: use $e^{imz}$; Jordan's lemma needs only $\deg Q\ge\deg P+1$.</li>

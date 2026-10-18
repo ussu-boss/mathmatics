@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +150,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -335,7 +345,77 @@ $$\cosh3z=\frac{(C+S)^3+(C-S)^3}{2}=C^3+3CS^2,\qquad\sinh3z=\frac{(C+S)^3-(C-S)^
 <div class="mcq" data-ans="2" data-ok="Osborn: $\cos2z=\cos^2-\sin^2$ becomes $\cosh^2+\sinh^2$." data-no="Change the sign of the $\sin\cdot\sin$ term."><p>2. $\cosh2z=$</p><div class="opts"><button>$\cosh^2z-\sinh^2z$</button><button>$2\cosh^2z+1$</button><button>$\cosh^2z+\sinh^2z$</button><button>$1-2\sinh^2z$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="0" data-ok="$\tanh(z+i\pi)=\frac{-\sinh z}{-\cosh z}=\tanh z$." data-no="$\sinh$ and $\cosh$ both change sign when $i\pi$ is added."><p>3. The (smallest) period of $\tanh z$ is</p><div class="opts"><button>$i\pi$</button><button>$2\pi i$</button><button>$\pi$</button><button>it has none</button></div><div class="fb"></div></div>
 
-<h2 id="summary">9. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">9. Going deeper: $\cosh$ and $\tanh$ as partition function and magnetisation</h2>
+<p>Hyperbolic functions are the natural language of <b>two-state systems</b> in statistical physics. This is a high-yield overlap between Mathematical Methods and Statistical Mechanics.</p>
+<h3>A spin-$\tfrac12$ moment in a field</h3>
+<p>A magnetic moment $\mu$ in a field $B$ has energies $\mp\mu B$ (aligned / anti-aligned). With $x=\beta\mu B=\frac{\mu B}{k_BT}$:</p>
+$$Z=e^{x}+e^{-x}=2\cosh x,\qquad\langle m\rangle=\frac{\mu e^{x}-\mu e^{-x}}{Z}=\mu\tanh x,\qquad U=-\frac{\partial\ln Z}{\partial\beta}=-\mu B\tanh x .$$
+<ul>
+<li><b>Weak field / high $T$:</b> $\tanh x\approx x$, so $\langle m\rangle\approx\frac{\mu^2B}{k_BT}$. This is <b>Curie's law</b>, $\chi\propto1/T$.</li>
+<li><b>Strong field / low $T$:</b> $\tanh x\to1$, so every moment is aligned (saturation).</li>
+<li><b>Heat capacity:</b> $C=\frac{dU}{dT}=k_Bx^2\operatorname{sech}^2x$. It has a single maximum (the Schottky anomaly) near $x\approx1.2$.</li>
+</ul>
+<h3>Boundary-value problems: $y''=k^2y$</h3>
+<p>The general solution can be written as $Ae^{kx}+Be^{-kx}$ or as $C\cosh kx+D\sinh kx$. Choose the form that matches the boundary conditions:</p>
+<table class="t">
+<tr><th>Condition</th><th>Best form</th><th>Example</th></tr>
+<tr><td>$y(0)=0$</td><td>$D\sinh kx$</td><td>a string or fin held at zero at one end</td></tr>
+<tr><td>$y'(0)=0$ (symmetric)</td><td>$C\cosh kx$</td><td>a symmetric fin, or the even bound state in a finite well</td></tr>
+<tr><td>$y(L)=0$</td><td>$\sinh k(L-x)$</td><td>heat flow in a rod held at zero at $x=L$</td></tr>
+<tr><td>$y\to0$ as $x\to\infty$</td><td>$e^{-kx}$</td><td>an evanescent wave, or a wavefunction inside a barrier</td></tr>
+</table>
+<p>Quantum tunnelling through a barrier of width $a$ gives a transmission coefficient containing $\sinh^2(\kappa a)$, which grows like $\frac14e^{2\kappa a}$. Hence the exponential suppression $T\sim e^{-2\kappa a}$.</p>
+
+<h2 id="exampat">10. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Identities</td><td>Convert a trig identity via Osborn's rule; derivatives</td><td>Flip the sign of every product of two sines (sinh·sinh)</td></tr>
+<tr><td>Complex arguments</td><td>$\cosh(i\pi/3)$, $|\sinh(x+iy)|$, zeros, periods</td><td>$\cosh iy=\cos y$ and $\sinh iy=i\sin y$</td></tr>
+<tr><td>Statistical mechanics</td><td>$Z$, $\langle m\rangle$, $U$ for two-level systems</td><td>$Z=2\cosh x$ and $\langle m\rangle=\mu\tanh x$</td></tr>
+<tr><td>Relativity</td><td>Velocity addition, boosts</td><td>Rapidities add: $\tanh^{-1}\frac uc+\tanh^{-1}\frac vc$</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$\cosh^2x-\sinh^2x=1$ has a minus sign, unlike $\cos^2+\sin^2$.</li>
+<li>$\frac{d}{dx}\cosh x=+\sinh x$. There is no minus sign, unlike $\cos$.</li>
+<li>$\sinh z$ and $\cosh z$ have period $2\pi i$, but $\tanh z$ has period $\pi i$.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$|\sinh(x+iy)|^2=\sinh^2x+\sin^2y$ and $|\cosh(x+iy)|^2=\sinh^2x+\cos^2y$.</li>
+<li>$\cosh(\ln a)=\frac{a+1/a}{2}$ and $\sinh(\ln a)=\frac{a-1/a}{2}$. Many "nice" exam answers are of this form.</li>
+</ul></div>
+
+<h2 id="xprob">11. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> $N$ independent spin-$\frac12$ moments $\mu$ in a field $B$ at temperature $T$. The total mean energy is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $-N\mu B\tanh\frac{\mu B}{k_BT}$</span><span>(b) $-N\mu B\coth\frac{\mu B}{k_BT}$</span><span>(c) $N\mu B\cosh\frac{\mu B}{k_BT}$</span><span>(d) $-Nk_BT\ln2$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$Z_1=2\cosh x$, so $U=-N\partial_\beta\ln Z_1=-N\mu B\tanh x$. Option <b>(a)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> Find the positive solution of $\cosh x=\frac54$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>With $u=e^x$: $u+\frac1u=\frac52$, so $u=2$ and $x=\ln2=\mathbf{0.693}$. This is the shortcut $\cosh(\ln a)=\frac{a+1/a}2$.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> The fundamental period of $\tanh z$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $2\pi$</span><span>(b) $\pi$</span><span>(c) $2\pi i$</span><span>(d) $\pi i$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\sinh(z+i\pi)=-\sinh z$ and $\cosh(z+i\pi)=-\cosh z$. The ratio is unchanged, so the period is <b>(d) $\pi i$</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> (Multiple correct) For $z=x+iy$: <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) all zeros of $\cosh z$ lie on the imaginary axis</span><span>(b) $|\cosh z|^2=\sinh^2x+\cos^2y$</span><span>(c) $|\cosh z|\ge1$ for all $z$</span><span>(d) $\sinh(z+i\pi)=-\sinh z$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b), (d).</b> (c) fails at the zeros $z=i\pi/2+ik\pi$.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> A rocket moves at $0.6c$ relative to Earth and fires a probe forward at $0.8c$ relative to itself. Find the probe's speed relative to Earth, as a fraction of $c$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>Rapidities add, so $\tanh(\phi_1+\phi_2)=\frac{0.6+0.8}{1+0.48}=\mathbf{0.946}$.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Solve $y''=4y$ with $y(0)=0$ and $y(1)=\sinh2$. Find $y(\frac12)$ to three decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$y(0)=0$ suggests $y=D\sinh2x$. Then $y(1)=D\sinh2$ gives $D=1$, and $y(\frac12)=\sinh1=\mathbf{1.175}$.</p></details></div>
+<div class="prob"><div class="q"><b>X7.</b> For the two-level system of X1 (one moment), show that the heat capacity is $C=k_Bx^2\operatorname{sech}^2x$ with $x=\frac{\mu B}{k_BT}$, and find its limits as $T\to0$ and $T\to\infty$. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>$U=-\mu B\tanh x$ and $\frac{dx}{dT}=-\frac{x}{T}$. So $C=\frac{dU}{dT}=-\mu B\operatorname{sech}^2x\cdot\left(-\frac xT\right)=k_Bx^2\operatorname{sech}^2x$. As $T\to0$, $x\to\infty$ and $x^2\operatorname{sech}^2x\approx4x^2e^{-2x}\to0$. As $T\to\infty$, $x\to0$ and $C\approx k_Bx^2\to0$. So there is a peak in between: the Schottky anomaly.</p></details></div>
+<div class="mcq" data-ans="2" data-ok="$\tanh(iy)=i\tan y$, so it is $i\tan\frac\pi4=i$." data-no="Osborn: $\tanh(iy)=i\tan y$."><p>Rapid fire: $\tanh\dfrac{i\pi}{4}=$</p><div class="opts"><button>$1$</button><button>$\tanh\frac\pi4$</button><button>$i$</button><button>$-i$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">12. Connections</h2>
+<div class="xlinks">
+<a href="2.11_Exponential_and_Trigonometric_Functions.html"><b>Builds on</b>2.11 $\sin z$, $\cos z$<small>$\cos(iy)=\cosh y$</small></a>
+<a href="2.13_Logarithms.html"><b>Next</b>2.13 Logarithms<small>Needed to invert $\cosh$ and $\sinh$</small></a>
+<a href="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html"><b>Inverse</b>2.15 $\sinh^{-1}$, $\cosh^{-1}$<small>Log formulas</small></a>
+<a href="2.16_Some_Applications.html"><b>Physics</b>2.16 Applications<small>Damped and overdamped motion</small></a>
+<a href="14.10_Applications_of_Conformal_Mapping.html"><b>Later</b>14.10 Heat flow<small>Solutions of the form $\sinh ky\sin kx$</small></a>
+<a href="14.6_Methods_of_Finding_Residues.html"><b>Later</b>14.6 Residues of $\tanh z$<small>Poles at $i(\frac\pi2+k\pi)$</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="9. Summary">13. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$\sinh z=\frac{e^z-e^{-z}}2$ and $\cosh z=\frac{e^z+e^{-z}}2$, with $e^z=\cosh z+\sinh z$.</li>
 <li>$\sin iz=i\sinh z$, $\cos iz=\cosh z$, $\sinh iz=i\sin z$, $\cosh iz=\cos z$.</li>

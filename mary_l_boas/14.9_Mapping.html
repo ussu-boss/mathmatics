@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -135,6 +144,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="14.9_Mapping.html" selected>14.9 Mapping</option>
 <option value="14.10_Applications_of_Conformal_Mapping.html">14.10 Some Applications of Conformal Mapping</option>
 <option value="14.11_Miscellaneous_Problems.html">14.11 Miscellaneous Problems</option></select>
+  <a class="btn" href="2.0_Complex_Numbers_Index.html" title="Chapter 2 index">Ch. 2 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -252,7 +262,71 @@ $$\frac{A'B'}{AB}=\frac{B'C'}{BC}=\cdots=\frac{dS}{ds}=\left|\frac{dw}{dz}\right
 <div class="prob"><div class="q"><b>P5.</b> Find the magnification and rotation of $w=z^2$ at $z=1+i$. <span class="lvl e">Easy</span></div>
 <details class="sol"><summary>Show solution</summary><p>$f'=2z=2+2i$: magnification $2\sqrt2$, rotation $45^\circ$. Area magnification $|f'|^2=8$.</p></details></div>
 
-<h2 id="summary">7. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">7. Going deeper: Möbius maps, the Joukowski map, and area scaling</h2>
+<h3>Möbius (bilinear) transformations $w=\dfrac{az+b}{cz+d}$, $ad-bc\ne0$</h3>
+<p>Each one is a composition of four simple maps: translate $z\to z+\frac dc$, invert $z\to\frac1z$, rotate and scale, translate. Translations, rotations and scalings send circles to circles. Inversion sends "circles and lines" to "circles and lines", with lines counted as circles through $\infty$. Therefore:</p>
+<div class="box thm"><span class="tag">Properties</span><ul>
+<li>Circles and lines go to circles and lines. A circle through the pole $z=-d/c$ becomes a line.</li>
+<li>The map is fixed uniquely by the images of three points. It preserves the cross-ratio $\frac{(z-z_1)(z_2-z_3)}{(z-z_3)(z_2-z_1)}$.</li>
+<li>It has at most two fixed points (solve $cz^2+(d-a)z-b=0$), unless it is the identity.</li>
+<li>It is conformal everywhere except at the pole, since $w'=\frac{ad-bc}{(cz+d)^2}\ne0$.</li>
+</ul></div>
+<p><b>Which side goes where?</b> Test one interior point. For example, $w=\frac{z-i}{z+i}$ sends $i\to0$, so the upper half-plane goes to the <i>inside</i> of the unit disk.</p>
+<h3>The Joukowski map $w=z+\dfrac1z$ (aerofoils, flow past a cylinder)</h3>
+<p>Put $z=re^{i\theta}$:</p>
+$$u=\left(r+\frac1r\right)\cos\theta,\qquad v=\left(r-\frac1r\right)\sin\theta .$$
+<p>A circle $|z|=r\ne1$ becomes an ellipse with semi-axes $r+\frac1r$ and $\left|r-\frac1r\right|$, and foci at $\pm2$. The unit circle collapses onto the segment $[-2,2]$, traversed twice. Rays $\theta=$ const become hyperbolas with the same foci. Shifting the circle off-centre gives the Joukowski aerofoil.</p>
+<h3>How lengths and areas scale</h3>
+<p>Near $z_0$, $w-w_0\approx f'(z_0)(z-z_0)$: a rotation by $\arg f'$ and a scaling by $|f'|$. So lengths scale by $|f'(z_0)|$ and areas by $|f'(z_0)|^2$. Indeed the Jacobian of $(x,y)\to(u,v)$ is $u_xv_y-u_yv_x=u_x^2+v_x^2=|f'|^2$ by Cauchy–Riemann.</p>
+
+<h2 id="exampat">8. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Image of a region</td><td>Under $w=\frac1z$, $e^z$, $z^2$, or a Möbius map</td><td>Map the boundary, then test one interior point</td></tr>
+<tr><td>Constructing maps</td><td>The Möbius map sending three given points to three others</td><td>Cross-ratio, or solve for $a,b,c,d$ directly</td></tr>
+<tr><td>Fixed points, conformality</td><td>Where $f'=0$; fixed points</td><td>Critical points; the quadratic</td></tr>
+<tr><td>Scaling</td><td>Magnification, rotation, area factor at a point</td><td>$|f'|$, $\arg f'$, $|f'|^2$</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>Under $w=1/z$ a circle <b>through the origin</b> becomes a line, not a circle.</li>
+<li>$w=\bar z$ preserves angle sizes but reverses their orientation. It is <b>not</b> conformal in the complex-analysis sense.</li>
+<li>$w=z^2$ doubles angles at $z=0$ (where $f'=0$). Conformality fails at critical points.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$|z-1|=1\xrightarrow{1/z}\operatorname{Re}w=\frac12$, and $|z-a|=a\xrightarrow{1/z}\operatorname{Re}w=\frac1{2a}$ (for real $a\gt0$).</li>
+<li>Upper half-plane to unit disk: $\frac{z-i}{z+i}$. Unit disk to right half-plane: $\frac{1+z}{1-z}$.</li>
+</ul></div>
+
+<h2 id="xprob">9. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> Under $w=1/z$, the circle $|z-1|=1$ maps to <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) the circle $|w-1|=1$</span><span>(b) the line $\operatorname{Re}w=\frac12$</span><span>(c) the line $\operatorname{Im}w=\frac12$</span><span>(d) the unit circle</span></div>
+<details class="sol"><summary>Show solution</summary><p>The circle passes through $0$, so its image is a line. $z=2$ maps to $\frac12$, and $z=1+i$ maps to $\frac{1-i}2$. Both have real part $\frac12$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> The fixed points of $w=\dfrac{2z+1}{z+2}$ are <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $\pm i$</span><span>(b) $\pm1$</span><span>(c) $0,\infty$</span><span>(d) $1,2$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$z(z+2)=2z+1$ gives $z^2=1$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> Find the local area magnification factor of $w=z^3$ at $z=1+i$. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$|f'|^2=|3z^2|^2=9|z|^4=9\cdot4=\mathbf{36}$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> Under $w=z+\frac1z$, find the area enclosed by the image of $|z|=2$, to two decimal places. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>An ellipse with semi-axes $2.5$ and $1.5$. The area is $\pi\cdot2.5\cdot1.5=\mathbf{11.78}$.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> (Multiple correct) <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) Möbius maps send circles and lines to circles and lines</span><span>(b) Möbius maps are conformal except at their pole</span><span>(c) $w=\bar z$ is conformal</span><span>(d) $w=e^z$ is conformal at every point</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b), (d).</b> For (d), $(e^z)'=e^z\ne0$. (c) reverses orientation.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Find the Möbius map with $0\to i$, $1\to1$, $\infty\to-1$, and determine the image of the upper half-plane. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><ol class="steps"><li>$\infty\to-1$ gives $a/c=-1$. Take $c=1$, $a=-1$.</li><li>$0\to i$ gives $b=id$. Then $1\to1$ gives $-1+id=1+d$, so $d=\frac{2}{i-1}=-1-i$ and $b=1-i$.</li><li>$w=\dfrac{-z+1-i}{z-1-i}$.</li><li>The real axis goes to the circle through $i,1,-1$, i.e. $|w|=1$. Test $z=i$: $w=\frac{1-2i}{-1}=-1+2i$, with $|w|=\sqrt5\gt1$. So the upper half-plane goes to the <b>exterior</b> of the unit disk.</li></ol></details></div>
+<div class="mcq" data-ans="1" data-ok="Multiplying by $i=e^{i\pi/2}$ rotates by $90^\circ$ and does not scale." data-no="$|i|=1$ and $\arg i=\pi/2$."><p>Rapid fire: $w=iz$ is</p><div class="opts"><button>a reflection</button><button>a $90^\circ$ rotation</button><button>a scaling by 2</button><button>a translation</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">10. Connections</h2>
+<div class="xlinks">
+<a href="14.8_Point_at_Infinity_Residues_at_Infinity.html"><b>Builds on</b>14.8 Riemann sphere<small>$\infty$ as a point; lines as circles</small></a>
+<a href="14.10_Applications_of_Conformal_Mapping.html"><b>Next</b>14.10 Applications<small>Heat, electrostatics, fluid flow</small></a>
+<a href="14.2_Analytic_Functions.html"><b>Recall</b>14.2 CR equations<small>Jacobian $=|f'|^2$</small></a>
+<a href="2.3_The_Complex_Plane.html"><b>Recall</b>2.3 Rotations<small>Multiplying by $e^{i\alpha}$</small></a>
+<a href="2.5_Complex_Algebra.html"><b>Recall</b>2.5 Circles and lines<small>The equation $z\bar z+\bar\beta z+\beta\bar z+\gamma=0$</small></a>
+<a href="2.8_Elementary_Functions_of_Complex_Numbers.html"><b>Recall</b>2.8 $w=e^z$<small>Strips to sectors</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="7. Summary">11. Summary</h2>
 <div class="card"><ul class="summary">
 <li>Map curves and regions between a $z$-plane and a $w$-plane, using either elimination or parametric equations.</li>
 <li>Analytic and $f'\ne0$ means conformal: magnification $|f'|$, rotation $\arg f'$, angles kept, and the Jacobian is $|f'|^2$.</li>

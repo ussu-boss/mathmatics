@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +150,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -317,7 +327,70 @@ $$\int_{-\pi}^{\pi}e^{ikx}\,dx=\begin{cases}2\pi,&k=0\\[2pt] \dfrac{e^{ik\pi}-e^
 <div class="mcq" data-ans="0" data-ok="Since $|\sin z|^2=\sin^2x+\sinh^2y$, all zeros are real." data-no="Use $|\sin z|^2=\sin^2x+\sinh^2y$."><p>2. The zeros of $\sin z$ in $\mathbb C$ are</p><div class="opts"><button>only $z=n\pi$</button><button>$n\pi$ and $in\pi$</button><button>none off the real axis but infinitely many on lines $y=c$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="3" data-ok="The constant term of $\sin^2 x$ is $1/2$, so the integral is $\frac12\cdot2\pi$." data-no="Find the constant term in the exponential form."><p>3. $\int_{-\pi}^{\pi}\sin^2x\,dx=$</p><div class="opts"><button>$0$</button><button>$2\pi$</button><button>$\pi/2$</button><button>$\pi$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">10. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">10. Going deeper: why $\sin z$ must be unbounded, and evanescent waves</h2>
+<h3>The modulus formulas</h3>
+<p>From $\sin(x+iy)=\sin x\cosh y+i\cos x\sinh y$:</p>
+$$|\sin z|^2=\sin^2x\cosh^2y+\cos^2x\sinh^2y=\sin^2x+\sinh^2y,$$
+<p>using $\cosh^2y=1+\sinh^2y$. In the same way $|\cos z|^2=\cos^2x+\sinh^2y$. Three facts follow at once:</p>
+<ul>
+<li><b>Zeros.</b> $\sin z=0$ needs $\sin x=0$ <i>and</i> $\sinh y=0$, so $z=n\pi$. There are no new complex zeros.</li>
+<li><b>Unbounded.</b> $|\sin(iy)|=|\sinh y|\to\infty$. On the real line $|\sin x|\le1$, but that bound is lost as soon as you leave the axis.</li>
+<li><b>Lower bound.</b> $|\cos z|\ge|\cos x|$ and $|\cos z|\ge|\sinh y|$.</li>
+</ul>
+<div class="box fact"><span class="tag">Why unboundedness is unavoidable</span><p>Liouville's theorem (14.3) says a bounded function analytic on the whole plane is constant. $\sin z$ is analytic everywhere and not constant, so it <i>must</i> be unbounded somewhere. The same argument applies to $e^z$, $\cos z$ and every non-constant polynomial.</p></div>
+<h3>$\sin z=w$ always has solutions, except that $\tan z$ misses $\pm i$</h3>
+<p>Put $u=e^{iz}$. Then $\sin z=w$ becomes $u^2-2iwu-1=0$. This always has a non-zero root $u$, so $z=-i\ln u$ exists for every $w$: $\sin z$ takes every complex value. But $\tan z=\frac{u^2-1}{i(u^2+1)}=\pm i$ forces $u^2-1=\mp(u^2+1)$, i.e. $u=0$ or $-1=1$, both impossible. So <b>$\tan z\ne\pm i$</b>, and these are exactly the branch points of $\arctan$ in 2.15.</p>
+<h3>Physics: total internal reflection and evanescent waves</h3>
+<p>Snell's law $n_1\sin\theta_1=n_2\sin\theta_2$ with $n_1\sin\theta_1\gt n_2$ asks for $\sin\theta_2\gt1$. No real angle works, but a complex one does: $\cos\theta_2=\pm i\sqrt{\sin^2\theta_2-1}$. The transmitted wave $e^{i(k_xx+k_zz)}$ with $k_z=k_2\cos\theta_2=i\kappa$ becomes $e^{ik_xx}e^{-\kappa z}$. It is an <b>evanescent</b> field that decays over a distance $1/\kappa$ without carrying energy across the boundary. The same mathematics describes quantum tunnelling under a barrier.</p>
+
+<h2 id="exampat">11. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Values</td><td>$\cos i$, $\sin(\frac\pi2+i)$, $|\cos(x+iy)|$</td><td>$\cos(iy)=\cosh y$ and $\sin(iy)=i\sinh y$; the modulus formulas</td></tr>
+<tr><td>Solving</td><td>$\sin z=2$, $\cos z=3$, $\tan z=i$</td><td>Put $u=e^{iz}$ and solve the quadratic</td></tr>
+<tr><td>True/false sets</td><td>Bounded? Periodic? Zeros?</td><td>Modulus formulas and Liouville</td></tr>
+<tr><td>Real integrals</td><td>$\int e^{ax}\cos bx\,dx$</td><td>Real part of $\int e^{(a+ib)x}dx$</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>"$|\sin z|\le1$" is false for complex $z$.</li>
+<li>$\cos(iy)=\cosh y$ is real and $\ge1$. It is not $i\cosh y$.</li>
+<li>$\tan z=i$ has <b>no</b> solution, so do not choose an option giving one.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$\sin(\frac\pi2+iy)=\cosh y$ and $\cos(\pi+iy)=-\cosh y$.</li>
+<li>$\int_0^\infty e^{-ax}e^{ibx}dx=\frac{1}{a-ib}$ for $a\gt0$. Its real part gives $\int_0^\infty e^{-ax}\cos bx\,dx=\frac{a}{a^2+b^2}$.</li>
+</ul></div>
+
+<h2 id="xprob">12. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> Find $\left|\sin\left(\frac\pi2+i\right)\right|$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\sin(\frac\pi2+i)=\cos i=\cosh1=\mathbf{1.543}$.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> All solutions of $\sin z=2$ are <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) none</span><span>(b) $\frac\pi2+2k\pi\pm i\ln(2+\sqrt3)$</span><span>(c) $\frac\pi2+k\pi+i\ln2$</span><span>(d) $2k\pi\pm i\ln(2+\sqrt3)$</span></div>
+<details class="sol"><summary>Show solution</summary><p>We need $\sin x\cosh y=2$ and $\cos x\sinh y=0$. Then $y\ne0$ (else $|\sin x|\le1$), so $\cos x=0$. We need $\sin x=+1$, because $\cosh y\gt0$. So $x=\frac\pi2+2k\pi$, and $\cosh y=2$ gives $y=\pm\ln(2+\sqrt3)$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> The number of solutions of $\tan z=i$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) 0</span><span>(b) 1</span><span>(c) 2</span><span>(d) infinitely many</span></div>
+<details class="sol"><summary>Show solution</summary><p>With $u=e^{iz}$: $u^2-1=-(u^2+1)$, so $u^2=0$. But $e^{iz}\ne0$. Option <b>(a)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> (Multiple correct) For complex $z=x+iy$: <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\sin z$ is bounded on $\mathbb C$</span><span>(b) every zero of $\cos z$ is real</span><span>(c) $|\cos z|\ge|\cos x|$</span><span>(d) $\sin(iz)=i\sinh z$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(b), (c), (d).</b> For (b): $|\cos z|^2=\cos^2x+\sinh^2y=0$ forces $y=0$. For (c): the $\sinh^2y$ term is non-negative. (a) is false by Liouville, or by $\sin(iy)=i\sinh y$.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> Evaluate $\displaystyle\int_0^\infty e^{-2x}\cos3x\,dx$, to four decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\operatorname{Re}\frac{1}{2-3i}=\frac{2}{13}=\mathbf{0.1538}$.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Light in glass ($n=1.5$) hits a glass–air surface at $60^\circ$. Find the $1/e$ penetration depth of the evanescent field into the air, in units of the vacuum wavelength $\lambda$, to two decimal places. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><ol class="steps"><li>$\sin\theta_t=1.5\sin60^\circ=1.299\gt1$.</li><li>$\cos\theta_t=i\sqrt{1.299^2-1}=0.829i$.</li><li>$k_z=k\cos\theta_t=i\kappa$ with $\kappa=0.829k=0.829\cdot\frac{2\pi}{\lambda}$.</li><li>Depth $=\frac1\kappa=\frac{\lambda}{2\pi\cdot0.829}=\mathbf{0.19}\,\lambda$.</li></ol></details></div>
+<div class="mcq" data-ans="3" data-ok="$\cos i=\cosh1\approx1.543$, which is bigger than 1." data-no="$\cos(iy)=\cosh y$."><p>Rapid fire: $\cos i$ is</p><div class="opts"><button>$i\cos1$</button><button>$\cos1$</button><button>$0$</button><button>real and greater than $1$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">13. Connections</h2>
+<div class="xlinks">
+<a href="2.9_Eulers_Formula.html"><b>Builds on</b>2.9 Euler's formula<small>$\cos\theta=\frac{e^{i\theta}+e^{-i\theta}}2$</small></a>
+<a href="2.12_Hyperbolic_Functions.html"><b>Next</b>2.12 Hyperbolic functions<small>$\cosh y=\cos(iy)$</small></a>
+<a href="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html"><b>Inverse</b>2.15 $\arcsin$, $\arctan$<small>Solving $\sin z=w$ in general</small></a>
+<a href="14.3_Contour_Integrals.html"><b>Later</b>14.3 Liouville<small>Why entire, non-constant functions are unbounded</small></a>
+<a href="14.7_Evaluation_of_Definite_Integrals_by_Residues.html"><b>Later</b>14.7 Fourier integrals<small>$\int\frac{\cos mx}{x^2+a^2}$ via $e^{imz}$</small></a>
+<a href="14.5_The_Residue_Theorem.html"><b>Later</b>14.5 $\oint\tan z$<small>Zeros of $\cos z$ are the poles of $\tan z$</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="10. Summary">14. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$e^{x+iy}=e^x(\cos y+i\sin y)$, and $e^{\ln a}=a$.</li>
 <li>$\sin z=\frac{e^{iz}-e^{-iz}}{2i}$, $\cos z=\frac{e^{iz}+e^{-iz}}{2}$, valid for all complex $z$.</li>

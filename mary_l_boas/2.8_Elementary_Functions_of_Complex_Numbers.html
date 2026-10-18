@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +150,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -298,7 +308,69 @@ $$e^x\sin x=\sum_{n=0}^\infty\frac{2^{n/2}\sin\frac{n\pi}{4}}{n!}x^n=x+x^2+\frac
 <div class="mcq" data-ans="3" data-ok="$e^z$ has period $2\pi i$." data-no="When is $e^{z+c}=e^z$ for all $z$?"><p>2. $e^{z}$ is periodic with period</p><div class="opts"><button>$2\pi$</button><button>$\pi i$</button><button>it is not periodic</button><button>$2\pi i$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="0" data-ok="$e^{i\pi}=-1$." data-no="Try $z=i\pi$."><p>3. Can $e^z$ equal $-1$?</p><div class="opts"><button>yes, for example $z=i\pi$</button><button>no, $e^z>0$ always</button><button>only if $z$ is real</button></div><div class="fb"></div></div>
 
-<h2 id="summary">9. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">9. Going deeper: why the series definition is the only possible one</h2>
+<p>We defined $e^z=\sum\frac{z^n}{n!}$. Could some other definition also agree with $e^x$ on the real axis? Not if we also want the function to be differentiable in the complex sense (analytic). The reason:</p>
+<div class="box thm"><span class="tag">Identity theorem (proved in Ch. 14)</span><p>If two analytic functions agree on a segment of the real axis, or on any set with a limit point inside a connected region, they agree everywhere in that region.</p></div>
+<p>So $e^z$, $\sin z$, $\cos z$ and $\ln(1+z)$ each have <b>exactly one</b> analytic extension from the reals. Real identities that are themselves analytic in their variables carry over automatically. For example, $F(z)=\sin^2z+\cos^2z-1$ is analytic and vanishes on the real axis, so it vanishes for all $z$.</p>
+<h3>What changes when $x\to z$: the exponential</h3>
+<table class="t">
+<tr><th>Property</th><th>Real $e^x$</th><th>Complex $e^z$</th></tr>
+<tr><td>Periodic?</td><td>no</td><td>yes, period $2\pi i$: $e^{z+2\pi i}=e^z$</td></tr>
+<tr><td>One-to-one?</td><td>yes</td><td>no; one-to-one on any horizontal strip of height $2\pi$</td></tr>
+<tr><td>Range</td><td>$(0,\infty)$</td><td>every non-zero complex number</td></tr>
+<tr><td>Zeros</td><td>none</td><td>none, since $|e^z|=e^x\gt0$</td></tr>
+<tr><td>Modulus</td><td>$e^x$</td><td>$|e^z|=e^{\operatorname{Re}z}$, and $\arg e^z=\operatorname{Im}z$</td></tr>
+</table>
+<p><b>The strip picture.</b> Write $w=e^z=e^xe^{iy}$. A vertical line $x=c$ maps onto the circle $|w|=e^c$, and a horizontal line $y=c$ maps onto the ray $\arg w=c$. The strip $-\pi\lt y\le\pi$ covers $\mathbb C\setminus\{0\}$ exactly once. This is why the inverse, $\ln w$, needs a choice of strip (a branch), as you will see in 2.13.</p>
+
+<h2 id="exampat">10. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Solve $e^z=w$</td><td>All solutions, or the one of smallest modulus</td><td>$z=\ln|w|+i(\operatorname{Arg}w+2\pi k)$</td></tr>
+<tr><td>Modulus and argument</td><td>$|e^{f(z)}|$ or $\arg e^{f(z)}$ at a point</td><td>$|e^{f}|=e^{\operatorname{Re}f}$ and $\arg e^{f}=\operatorname{Im}f$</td></tr>
+<tr><td>Images under $e^z$</td><td>Image of lines, strips and rectangles</td><td>Vertical lines go to circles; horizontal lines go to rays</td></tr>
+<tr><td>Series identities</td><td>$\sum\frac{\cos n\theta}{n!}$ and similar</td><td>Real part of $e^{e^{i\theta}}$</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$e^z$ has period $2\pi i$, not $2\pi$.</li>
+<li>$e^z$ can be negative: $e^{i\pi}=-1$. It is never $0$.</li>
+<li>$|e^{iz}|\ne1$ in general. It equals $e^{-\operatorname{Im}z}$.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$e^{a+ib}$: modulus $e^a$, angle $b$. Read the answer off without expanding.</li>
+<li>$\overline{e^z}=e^{\bar z}$, which holds for any function with a real-coefficient series.</li>
+</ul></div>
+
+<h2 id="xprob">11. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> All solutions of $e^z=-3$ are <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $\ln3+2k\pi i$</span><span>(b) $\ln3+(2k+1)\pi i$</span><span>(c) $-\ln3+2k\pi i$</span><span>(d) none</span></div>
+<details class="sol"><summary>Show solution</summary><p>$|{-3}|=3$ and $\arg(-3)=\pi+2k\pi$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> Find $|e^{z^2}|$ for $z=1+2i$, to four decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$z^2=-3+4i$, so $|e^{z^2}|=e^{-3}=\mathbf{0.0498}$.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> The image of the line $\operatorname{Re}z=1$ under $w=e^z$ is <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) the line $\operatorname{Re}w=e$</span><span>(b) the circle $|w|=e$</span><span>(c) the ray $\arg w=1$</span><span>(d) the circle $|w|=1$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$w=e\cdot e^{iy}$, covered infinitely often as $y$ runs over $\mathbb R$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> (Multiple correct) For all complex $z$: <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $e^z\ne0$</span><span>(b) $e^{z+i\pi}=-e^z$</span><span>(c) $|e^{iz}|=1$</span><span>(d) $e^{z+2\pi}=e^z$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b).</b> (c) is true only for real $z$. (d) confuses $2\pi$ with $2\pi i$.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> Find $\operatorname{Re}\,e^{e^{i\pi/2}}$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$e^{i\pi/2}=i$, so $e^{i}=\cos1+i\sin1$, and the real part is $\cos1=\mathbf{0.540}$.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Show that $\displaystyle\sum_{n=0}^\infty\frac{\cos n\theta}{n!}=e^{\cos\theta}\cos(\sin\theta)$, and evaluate it at $\theta=\pi$. <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\sum\frac{e^{in\theta}}{n!}=e^{e^{i\theta}}=e^{\cos\theta}e^{i\sin\theta}$. Take the real part. At $\theta=\pi$: $e^{-1}\cos0=\frac1e\approx0.368$. Check: $\sum\frac{(-1)^n}{n!}=\frac1e$. ✓</p></details></div>
+<div class="mcq" data-ans="0" data-ok="$e^{\ln2}e^{i\pi/2}=2i$." data-no="Modulus $e^{\ln 2}=2$, angle $\pi/2$."><p>Rapid fire: $e^{\ln2+i\pi/2}=$</p><div class="opts"><button>$2i$</button><button>$-2$</button><button>$2$</button><button>$\ln2+i$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">12. Connections</h2>
+<div class="xlinks">
+<a href="2.7_Complex_Power_Series_Disk_of_Convergence.html"><b>Builds on</b>2.7 Power series<small>$R=\infty$ for $\sum z^n/n!$</small></a>
+<a href="2.9_Eulers_Formula.html"><b>Next</b>2.9 Euler's formula<small>$e^{i\theta}=\cos\theta+i\sin\theta$</small></a>
+<a href="2.13_Logarithms.html"><b>Inverse</b>2.13 Logarithms<small>Undoing $e^z$ needs a choice of branch</small></a>
+<a href="14.2_Analytic_Functions.html"><b>Later</b>14.2 Analytic functions<small>$e^z$ satisfies Cauchy–Riemann everywhere</small></a>
+<a href="14.9_Mapping.html"><b>Later</b>14.9 Mapping<small>$w=e^z$: strips to wedges</small></a>
+<a href="14.11_Miscellaneous_Problems.html"><b>Later</b>14.11 Problem E2<small>$\int e^{\cos\theta}\cos(n\theta-\sin\theta)$ uses the same series</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="9. Summary">13. Summary</h2>
 <div class="card"><ul class="summary">
 <li>Polynomials and rational functions: substitute and simplify.</li>
 <li>$e^z=\sum z^n/n!$ converges everywhere, reduces to $e^x$, and keeps $e^{z_1}e^{z_2}=e^{z_1+z_2}$ and $(e^z)'=e^z$.</li>

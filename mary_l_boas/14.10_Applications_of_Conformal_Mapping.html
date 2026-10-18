@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -135,6 +144,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="14.9_Mapping.html">14.9 Mapping</option>
 <option value="14.10_Applications_of_Conformal_Mapping.html" selected>14.10 Some Applications of Conformal Mapping</option>
 <option value="14.11_Miscellaneous_Problems.html">14.11 Miscellaneous Problems</option></select>
+  <a class="btn" href="2.0_Complex_Numbers_Index.html" title="Chapter 2 index">Ch. 2 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -256,7 +266,75 @@ $$T=20+\frac{20}{\pi}\arctan\frac{2y}{1-x^2-y^2}\qquad(x^2+y^2\lt1).$$
 <div class="prob"><div class="q"><b>P3.</b> Potential between concentric cylinders $r=a$ ($V_a$) and $r=b$ ($V_b$). <span class="lvl e">Easy</span></div>
 <details class="sol"><summary>Show solution</summary><p>$V=A\ln r+B=\operatorname{Re}(A\ln z)+B$, with $V=V_a+(V_b-V_a)\frac{\ln(r/a)}{\ln(b/a)}$.</p></details></div>
 
-<h2 id="summary">8. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">8. Going deeper: the complex potential toolkit</h2>
+<p>For any 2-D field that is both irrotational and divergence-free, there is an analytic <b>complex potential</b> $\Omega(z)=\Phi+i\Psi$. Its two parts have separate roles:</p>
+<ul>
+<li>$\Phi$ is the potential: the velocity potential, the electrostatic potential, or the temperature.</li>
+<li>$\Psi$ is the stream (flux) function. Its level curves are the field lines, and they are orthogonal to the equipotentials.</li>
+</ul>
+<p>The field itself comes from the derivative. By Cauchy–Riemann, $\Omega'=\Phi_x+i\Psi_x=\Phi_x-i\Phi_y$, so</p>
+$$\boxed{\vec v=\nabla\Phi\ \longleftrightarrow\ v_x+iv_y=\overline{\Omega'(z)}},\qquad|\vec v|=|\Omega'(z)| .$$
+<p>(In electrostatics $\vec E=-\nabla\Phi$, so $E_x+iE_y=-\overline{\Omega'}$.) Stagnation points are the zeros of $\Omega'$.</p>
+<table class="t">
+<tr><th>Flow</th><th>$\Omega(z)$</th><th>What it is</th></tr>
+<tr><td>Uniform stream</td><td>$Uz$</td><td>speed $U$ along $+x$</td></tr>
+<tr><td>Source of strength $m$</td><td>$\frac{m}{2\pi}\ln z$</td><td>radial outflow; volume flux $m$ (2-D electrostatics: a line charge)</td></tr>
+<tr><td>Point vortex</td><td>$\frac{\Gamma}{2\pi i}\ln z$</td><td>circular flow with circulation $\Gamma$</td></tr>
+<tr><td>Doublet</td><td>$\frac{\mu}{z}$</td><td>source–sink pair in the limit</td></tr>
+<tr><td>Flow past a cylinder</td><td>$U\left(z+\frac{a^2}z\right)$</td><td>$|z|=a$ is a streamline; speed $2U\sin\theta$ on the surface</td></tr>
+<tr><td>Corner of angle $\pi/n$</td><td>$Az^n$</td><td>flow into a wedge; $n=2$ gives the right-angle corner $\Psi=2Axy$</td></tr>
+</table>
+<h3>Why superposition plus mapping solves boundary-value problems</h3>
+<p>If $w=f(z)$ is conformal and $\Phi(u,v)$ is harmonic, then $\Phi(u(x,y),v(x,y))$ is harmonic too, because the composition of analytic maps is analytic. Boundary values are carried along with the boundary. So: map a hard region onto an easy one (a half-plane, strip or disk), write down the easy solution, and pull it back. Adding a vortex $\frac{\Gamma}{2\pi i}\ln z$ to the cylinder flow gives a lift force $\rho U\Gamma$ per unit length (Kutta–Joukowski).</p>
+
+<h2 id="exampat">9. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Fields from $\Omega$</td><td>Velocity or field at a point; stagnation points</td><td>$\overline{\Omega'}$; zeros of $\Omega'$</td></tr>
+<tr><td>Field lines</td><td>Streamlines or equipotentials of $z^2$, $\ln z$, $1/z$</td><td>Level curves of $\operatorname{Im}\Omega$ and $\operatorname{Re}\Omega$</td></tr>
+<tr><td>Wedges and half-planes</td><td>Potential between plates at an angle; temperature with a step on the boundary</td><td>$\Phi=A+B\arg z$</td></tr>
+<tr><td>Flux and circulation</td><td>Of a source or vortex</td><td>$\oint\Omega'\,dz=\Gamma+i\,(\text{flux})$</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>The velocity is the <b>conjugate</b> $\overline{\Omega'}$, not $\Omega'$. The speed is the same either way, but the direction is not.</li>
+<li>The source and vortex potentials differ by a factor $i$. Swapping them swaps streamlines and equipotentials.</li>
+<li>$\arg z$ is harmonic only away from the cut. Choose the branch to match the boundary.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>Upper half-plane with $\Phi=V_1$ on $x\lt0$ and $V_2$ on $x\gt0$: $\Phi=V_2+\frac{V_1-V_2}{\pi}\arg z$.</li>
+<li>Coaxial cylinders: $\Phi=A+B\ln r$, the real part of $A+B\ln z$.</li>
+</ul></div>
+
+<h2 id="xprob">10. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> A flow has complex potential $\Omega=z^2$. Find the speed at $z=1+2i$, to two decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$|\Omega'|=|2z|=2\sqrt5=\mathbf{4.47}$. The velocity vector is $\overline{2z}=2-4i$.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> For $\Omega=U\left(z+\frac{a^2}{z}\right)$, the maximum speed on the cylinder $|z|=a$ is <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $U$</span><span>(b) $2U$</span><span>(c) $\sqrt2U$</span><span>(d) $U/2$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\Omega'=U(1-a^2e^{-2i\theta}/a^2)=U(1-e^{-2i\theta})$, so $|\Omega'|=2U|\sin\theta|$. The maximum is $2U$, at the top and bottom. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> The volume flux out of any closed curve around the origin for $\Omega=m\ln z$ ($m$ real) is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $m$</span><span>(b) $2\pi m$</span><span>(c) $0$</span><span>(d) $\pi m$</span></div>
+<details class="sol"><summary>Show solution</summary><p>The flux is the jump in $\Psi=m\theta$ around the curve, $2\pi m$. Equivalently, $\oint\Omega'dz=2\pi im$ has imaginary part $2\pi m$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> Two semi-infinite conducting plates meet at a right angle. The plate on $\theta=0$ is at $0$ V and the plate on $\theta=\pi/2$ is at $100$ V. Find $|\vec E|$ at distance $r=2$ m from the edge, in V/m, to two decimal places. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\Phi=\frac{100}{\pi/2}\theta$, so $|E|=\frac1r\left|\frac{\partial\Phi}{\partial\theta}\right|=\frac{200}{\pi r}=\frac{100}{\pi}=\mathbf{31.83}$.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> (Multiple correct) For an analytic complex potential $\Omega=\Phi+i\Psi$: <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) level curves of $\Phi$ and $\Psi$ cross at right angles where $\Omega'\ne0$</span><span>(b) $\Phi$ and $\Psi$ are both harmonic</span><span>(c) the velocity is $\Omega'(z)$</span><span>(d) $\Psi$ is constant along each streamline</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b), (d).</b> The velocity is $\overline{\Omega'}$.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> The boundary of the upper half-plane is held at $T=100$ on $x\lt0$ and $T=0$ on $x\gt0$. Find the steady temperature at $z=1+i$. <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$T=\frac{100}{\pi}\arg z$ is harmonic, equals $0$ at $\theta=0$ and $100$ at $\theta=\pi$. At $1+i$, $\theta=\frac\pi4$, so $T=\mathbf{25}$. The isotherms are rays from the origin.</p></details></div>
+<div class="mcq" data-ans="0" data-ok="$\oint\Omega'dz=\Gamma$ (real) for the vortex: the flow circulates without net outflow." data-no="For $\frac{\Gamma}{2\pi i}\ln z$, $\Psi=-\frac{\Gamma}{2\pi}\ln r$, so the streamlines are circles."><p>Rapid fire: the streamlines of $\Omega=\frac{\Gamma}{2\pi i}\ln z$ are</p><div class="opts"><button>circles about $0$</button><button>rays from $0$</button><button>hyperbolas</button><button>parallel lines</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">11. Connections</h2>
+<div class="xlinks">
+<a href="14.9_Mapping.html"><b>Builds on</b>14.9 Mapping<small>The standard maps used here</small></a>
+<a href="14.11_Miscellaneous_Problems.html"><b>Next</b>14.11 Review<small>Formula sheet and mixed problems</small></a>
+<a href="14.2_Analytic_Functions.html"><b>Recall</b>14.2 Harmonic functions<small>Real and imaginary parts are potentials</small></a>
+<a href="2.5_Complex_Algebra.html"><b>Recall</b>2.5 Apollonius circles<small>Equipotentials of two line charges</small></a>
+<a href="2.12_Hyperbolic_Functions.html"><b>Recall</b>2.12 Hyperbolic functions<small>Slab and strip solutions</small></a>
+<a href="2.6_Complex_Infinite_Series.html"><b>Recall</b>2.6 Poisson kernel<small>Laplace's equation in a disk</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="8. Summary">12. Summary</h2>
 <div class="card"><ul class="summary">
 <li>Harmonic ∘ analytic = harmonic. Map the hard region to a slab or half-plane, solve there, and substitute back.</li>
 <li>Boundary values, insulated edges, isotherms and flow lines all carry over.</li>
