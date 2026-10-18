@@ -1,0 +1,911 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14.2 Analytic Functions — Boas Ch. 14</title>
+<script>try{var t=localStorage.getItem('boas-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{
+  --bg:#f6f7fb;--card:#ffffff;--fg:#1c2333;--muted:#596379;--line:#dde2ec;
+  --accent:#2f6bff;--accent2:#e8590c;--accent3:#0b9b6e;--accent4:#a33ec9;--warn:#c92a2a;
+  --defbg:#edf3ff;--thmbg:#eefaf4;--warnbg:#fff3ee;--factbg:#f8f0ff;--notebg:#f4f6fa;
+  --canvas:#ffffff;--grid:#e9ecf3;--axis:#7d879b;--code:#eef1f7;--shadow:0 1px 3px rgba(20,30,60,.08),0 4px 18px rgba(20,30,60,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1219;--card:#161b25;--fg:#e4e8f0;--muted:#9aa3b6;--line:#2a3141;
+    --accent:#6f9cff;--accent2:#ff922b;--accent3:#3ad8a6;--accent4:#d77cf2;--warn:#ff6b6b;
+    --defbg:#162238;--thmbg:#122a21;--warnbg:#2d1a16;--factbg:#23192e;--notebg:#1b212c;
+    --canvas:#11161f;--grid:#202834;--axis:#717b8f;--code:#1f2532;--shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1219;--card:#161b25;--fg:#e4e8f0;--muted:#9aa3b6;--line:#2a3141;
+  --accent:#6f9cff;--accent2:#ff922b;--accent3:#3ad8a6;--accent4:#d77cf2;--warn:#ff6b6b;
+  --defbg:#162238;--thmbg:#122a21;--warnbg:#2d1a16;--factbg:#23192e;--notebg:#1b212c;
+  --canvas:#11161f;--grid:#202834;--axis:#717b8f;--code:#1f2532;--shadow:none;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--fg);font:16.5px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+header.top{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center;padding:8px 16px;flex-wrap:wrap}
+header.top .brand{font-weight:700;font-size:15px;white-space:nowrap}
+header.top .brand small{color:var(--muted);font-weight:500}
+header.top .sp{flex:1}
+header.top select,header.top button,header.top a.btn{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 10px;text-decoration:none;cursor:pointer;max-width:100%}
+header.top select{max-width:260px}
+.layout{display:flex;gap:28px;max-width:1280px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:64px;align-self:flex-start;width:240px;flex:none;max-height:calc(100vh - 80px);overflow:auto;padding:18px 0;font-size:14px}
+nav.toc b{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:3px 10px;border-left:2px solid var(--line)}
+nav.toc a:hover,nav.toc a.on{color:var(--accent);border-left-color:var(--accent)}
+main{flex:1;min-width:0;max-width:940px;padding:10px 0 80px}
+@media (max-width:1100px){nav.toc{display:none}}
+h1{font-size:2rem;line-height:1.2;margin:26px 0 6px}
+h1 .num{color:var(--accent)}
+.subtitle{color:var(--muted);margin:0 0 18px}
+h2{font-size:1.45rem;margin:44px 0 12px;padding-top:6px;border-top:1px solid var(--line)}
+h3{font-size:1.15rem;margin:26px 0 8px}
+h4{font-size:1rem;margin:18px 0 6px}
+p{margin:10px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:16px 0;box-shadow:var(--shadow)}
+.box{border-radius:12px;padding:12px 16px;margin:16px 0;border:1px solid var(--line);border-left-width:5px}
+.box>.tag{display:inline-block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.box.def{background:var(--defbg);border-left-color:var(--accent)}.box.def>.tag{color:var(--accent)}
+.box.thm{background:var(--thmbg);border-left-color:var(--accent3)}.box.thm>.tag{color:var(--accent3)}
+.box.warn{background:var(--warnbg);border-left-color:var(--warn)}.box.warn>.tag{color:var(--warn)}
+.box.fact{background:var(--factbg);border-left-color:var(--accent4)}.box.fact>.tag{color:var(--accent4)}
+.box.note{background:var(--notebg);border-left-color:var(--axis)}.box.note>.tag{color:var(--muted)}
+.ex{border:1px solid var(--line);border-radius:12px;margin:18px 0;background:var(--card);overflow:hidden}
+.ex>.hd{background:var(--notebg);padding:8px 16px;font-weight:600;border-bottom:1px solid var(--line)}
+.ex>.bd{padding:6px 16px 10px}
+ol.steps{padding-left:22px;margin:8px 0}ol.steps>li{margin:6px 0}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}
+.katex{font-size:1.06em}
+table.t{border-collapse:collapse;width:100%;margin:12px 0;font-size:15px;display:block;overflow-x:auto}
+table.t th,table.t td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+table.t th{background:var(--notebg)}
+details.sol{margin:8px 0 4px;border:1px dashed var(--line);border-radius:10px;padding:2px 12px}
+details.sol>summary{cursor:pointer;color:var(--accent);font-weight:600;padding:6px 0;list-style:none}
+details.sol>summary::-webkit-details-marker{display:none}
+details.sol>summary::before{content:"▶ ";font-size:11px}
+details.sol[open]>summary::before{content:"▼ "}
+details.sol[open]{background:var(--card)}
+.prob{border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin:12px 0;background:var(--card)}
+.prob>.q{margin:4px 0}
+.prob>.q>b:first-child{color:var(--accent2)}
+.lvl{font-size:11px;font-weight:700;border-radius:20px;padding:1px 8px;margin-left:6px;vertical-align:middle;border:1px solid currentColor}
+.lvl.e{color:var(--accent3)}.lvl.m{color:var(--accent)}.lvl.h{color:var(--accent2)}.lvl.x{color:var(--warn)}
+.widget{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:18px 0;box-shadow:var(--shadow)}
+.widget>.wt{font-weight:700;margin-bottom:4px}
+.widget>.wd{color:var(--muted);font-size:14px;margin-bottom:8px}
+.widget canvas{width:100%;display:block;border-radius:10px;border:1px solid var(--line);background:var(--canvas)}
+.ctrls{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:10px 0;font-size:14.5px}
+.ctrls label{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.ctrls input[type=range]{width:150px;accent-color:var(--accent)}
+.ctrls output{min-width:46px;font-variant-numeric:tabular-nums;color:var(--accent);font-weight:600}
+.ctrls select,.ctrls input[type=text],.ctrls input[type=number],.ctrls button{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 9px}
+.ctrls input[type=text]{min-width:200px}
+.ctrls input[type=number]{width:80px}
+.ctrls button{cursor:pointer}
+.ctrls button.pri{background:var(--accent);color:#fff;border-color:var(--accent)}
+.readout{font-size:15px;background:var(--notebg);border-radius:10px;padding:8px 12px;margin-top:10px;overflow-x:auto;line-height:1.9}
+.readout .k{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+.pill{display:inline-block;background:var(--code);border-radius:6px;padding:0 6px;font-family:Consolas,monospace;font-size:.92em}
+.mcq{border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin:12px 0;background:var(--card)}
+.mcq .opts{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.mcq .opts button{font:inherit;font-size:15px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 12px;cursor:pointer}
+.mcq .opts button.ok{background:var(--thmbg);border-color:var(--accent3)}
+.mcq .opts button.bad{background:var(--warnbg);border-color:var(--warn)}
+.mcq .fb{font-size:14.5px;color:var(--muted)}
+.lead{font-size:1.07rem}
+.small{font-size:14px;color:var(--muted)}
+.center{text-align:center}
+.hl{color:var(--accent2);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13.5px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:14px;height:4px;border-radius:2px;vertical-align:middle;margin-right:5px}
+.pagenav{display:flex;justify-content:space-between;gap:12px;margin-top:50px;flex-wrap:wrap}
+.pagenav a{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 14px;text-decoration:none;max-width:48%}
+.pagenav a small{display:block;color:var(--muted)}
+.summary li{margin:4px 0}
+kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
+
+</style>
+</head>
+<body>
+<header class="top">
+  <span class="brand">Boas · Ch. 14 Functions of a Complex Variable <small>| Section 14.2</small></span>
+  <span class="sp"></span>
+  <select id="chapSel" aria-label="Go to section"><option value="14.0_Functions_of_a_Complex_Variable_Index.html">14.0 Chapter 14 Index</option>
+<option value="14.1_Introduction.html">14.1 Introduction</option>
+<option value="14.2_Analytic_Functions.html" selected>14.2 Analytic Functions</option>
+<option value="14.3_Contour_Integrals.html">14.3 Contour Integrals</option>
+<option value="14.4_Laurent_Series.html">14.4 Laurent Series</option>
+<option value="14.5_The_Residue_Theorem.html">14.5 The Residue Theorem</option>
+<option value="14.6_Methods_of_Finding_Residues.html">14.6 Methods of Finding Residues</option>
+<option value="14.7_Evaluation_of_Definite_Integrals_by_Residues.html">14.7 Evaluation of Definite Integrals by Use of the Residue Theorem</option>
+<option value="14.8_Point_at_Infinity_Residues_at_Infinity.html">14.8 The Point at Infinity; Residues at Infinity</option>
+<option value="14.9_Mapping.html">14.9 Mapping</option>
+<option value="14.10_Applications_of_Conformal_Mapping.html">14.10 Some Applications of Conformal Mapping</option>
+<option value="14.11_Miscellaneous_Problems.html">14.11 Miscellaneous Problems</option></select>
+  <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
+</header>
+<div class="layout">
+<nav class="toc" id="toc"></nav>
+<main>
+<h1><span class="num">14.2</span> Analytic Functions</h1>
+<p class="subtitle">Boas, Chapter 14, Section 2 · the complex derivative, why "the same from every direction" is so strong, the Cauchy–Riemann equations, Theorems I–IV, harmonic functions and how to find $f(z)$ from its real part.</p>
+
+<div class="box note"><span class="tag">Goals</span>
+<ul class="summary">
+<li>Decide quickly whether a function is analytic, and where (Cauchy–Riemann test).</li>
+<li>Compute $f'(z)$ from $u$ and $v$.</li>
+<li>Know Theorems I–IV and what each one is good for.</li>
+<li>Check that a function is harmonic and find its harmonic conjugate and $f(z)$ (Boas Problems 54–64).</li>
+<li>Find the disk of convergence of a Taylor series by locating the nearest singular point (Problems 34–42).</li>
+</ul></div>
+
+<h2 id="def">1. The derivative and the definition of "analytic"</h2>
+<div class="box def"><span class="tag">Definition (2.1)</span>
+$$f'(z)=\frac{df}{dz}=\lim_{\Delta z\to0}\frac{\Delta f}{\Delta z},\qquad \Delta f=f(z+\Delta z)-f(z),\quad\Delta z=\Delta x+i\Delta y .$$</div>
+<div class="box def"><span class="tag">Definition</span>
+<p>$f(z)$ is <b>analytic</b> (also called regular, holomorphic or monogenic) in a <b>region</b> if it has a (unique) derivative at every point of the region. "$f$ is analytic at $z=a$" means $f$ has a derivative at every point inside some small circle about $a$. Isolated points and curves are not regions: a region must be two-dimensional.</p></div>
+<h3>Why this is so demanding</h3>
+<p>For $f(x)$ on the real line, $\Delta x\to0$ from only two directions (left and right). For $f(z)$, $\Delta z$ can approach $0$ from <b>infinitely many</b> directions, or along spirals, and the limit must be <b>the same</b> every time (Boas Figs. 2.1, 2.2).</p>
+<div class="ex"><div class="hd">Example 1 — $\frac{d}{dz}z^2=2z$</div><div class="bd">
+$$\frac{(z+\Delta z)^2-z^2}{\Delta z}=\frac{2z\,\Delta z+(\Delta z)^2}{\Delta z}=2z+\Delta z\ \xrightarrow{\ \Delta z\to0\ }\ 2z,$$
+<p>with no dependence on the direction of $\Delta z$, so $z^2$ is analytic. In the same way $(z^n)'=nz^{n-1}$ (Problem 30).</p></div></div>
+<div class="ex"><div class="hd">Example 2 — $|z|^2$ has no derivative (except at $0$)</div><div class="bd">
+<p>$\dfrac{|z+\Delta z|^2-|z|^2}{\Delta z}$: the numerator is always <b>real</b>, but the denominator $\Delta z$ is real along a horizontal approach, imaginary along a vertical one, and complex in general. So the quotient depends on the direction.</p>
+<p>Explicitly, $\dfrac{\Delta(z\bar z)}{\Delta z}=\bar z+z\dfrac{\overline{\Delta z}}{\Delta z}+\overline{\Delta z}\to\bar z+z\,e^{-2i\phi}$, where $\phi$ is the direction of approach. This takes a whole circle of values unless $z=0$.</p></div></div>
+
+<div class="widget" id="w-dir">
+<div class="wt">Interactive 1 — Does $\Delta f/\Delta z$ depend on the direction?</div>
+<div class="wd">For the point $z_0$ (drag it) and a tiny step $h$, we compute $\frac{f(z_0+he^{i\phi})-f(z_0)}{he^{i\phi}}$ for every direction $\phi$ and plot all the results (right). <b>Analytic:</b> every direction gives the same number, so the curve shrinks to one dot, $f'(z_0)$. <b>Not analytic:</b> you get a circle or an ellipse of different "derivatives".</div>
+<div class="ctrls"><label>$f(z)=$ <select id="dr-f"><option value="z^2">z²</option><option value="abs(z)^2">|z|²</option><option value="conj(z)">z̄</option><option value="exp(z)">e^z</option><option value="re(z)">Re z</option><option value="z^2 - conj(z)^2">z² − z̄²</option><option value="1/z">1/z</option><option value="z conj(z)^2">z z̄²</option></select></label>
+<label>step $h$ <input type="range" id="dr-h" min="0.001" max="0.5" step="0.001" value="0.05"><output></output></label></div>
+<div class="grid2"><canvas id="cv-dz"></canvas><canvas id="cv-dw"></canvas></div>
+<div class="readout" id="dr-out"></div>
+</div>
+
+<h2 id="cr">2. The Cauchy–Riemann equations</h2>
+<div class="box thm"><span class="tag">Theorem I (proved)</span>
+<p>If $f(z)=u(x,y)+iv(x,y)$ is analytic in a region, then in that region</p>
+$$\boxed{\frac{\partial u}{\partial x}=\frac{\partial v}{\partial y},\qquad\frac{\partial v}{\partial x}=-\frac{\partial u}{\partial y}}\qquad(2.2)$$</div>
+<p><b>Proof.</b> Since $f=f(z)$ with $z=x+iy$, the chain rule gives (2.3)</p>
+$$\frac{\partial f}{\partial x}=\frac{df}{dz}\frac{\partial z}{\partial x}=\frac{df}{dz}\cdot1,\qquad\frac{\partial f}{\partial y}=\frac{df}{dz}\frac{\partial z}{\partial y}=\frac{df}{dz}\cdot i .$$
+<p>And from $f=u+iv$ (2.4): $\frac{\partial f}{\partial x}=u_x+iv_x$ and $\frac{\partial f}{\partial y}=u_y+iv_y$. So</p>
+$$\frac{df}{dz}=u_x+iv_x\qquad\text{and}\qquad\frac{df}{dz}=\frac1i(u_y+iv_y)=v_y-iu_y .$$
+<p>The derivative is unique, so the two expressions are equal. Equating real and imaginary parts gives $u_x=v_y$ and $v_x=-u_y$. $\blacksquare$</p>
+<div class="box thm"><span class="tag">Useful by-product: the derivative from $u,v$</span>
+$$f'(z)=u_x+iv_x=v_y-iu_y\ \ (=u_x-iu_y).$$</div>
+<div class="box thm"><span class="tag">Theorem II (stated)</span>
+<p>If $u$, $v$ and their first partial derivatives are <b>continuous</b> and satisfy the Cauchy–Riemann equations in a region, then $f=u+iv$ is analytic at all points inside the region (not necessarily on the boundary).</p></div>
+<p>Theorem I says CR is <b>necessary</b>. Theorem II says CR plus continuity is <b>sufficient</b>.</p>
+<div class="ex"><div class="hd">Boas Example 3 — plausibility of Theorem II: approach along any straight line</div><div class="bd">
+<p>Along a line of slope $m$ through $z_0$, $dy=m\,dx$:</p>
+$$\frac{df}{dz}=\frac{du+i\,dv}{dx+i\,dy}=\frac{u_x+u_ym+i(v_x+v_ym)}{1+im}\ \overset{\text{CR}}{=}\ \frac{u_x-v_xm+i(v_x+u_xm)}{1+im}=\frac{(u_x+iv_x)(1+im)}{1+im}=u_x+iv_x,$$
+<p>which does not depend on $m$. The theorem says the same holds for any curve.</p></div></div>
+<div class="box warn"><span class="tag">How to use CR (and the traps)</span>
+<ul>
+<li>If CR fails on a region, $f$ is <b>not</b> analytic there. If CR holds only on a <b>line</b> or at a <b>point</b>, $f$ is still not analytic anywhere, because analytic needs a 2-D region. Example: $z^2-\bar z^2$ satisfies CR only at $z=0$.</li>
+<li>A quick screen: any honest dependence on $\bar z$ (including $|z|$, $\operatorname{Re}z$, $\operatorname{Im}z$) destroys analyticity. Analytic functions are functions of $z$ alone. (Precisely: $\frac{\partial f}{\partial\bar z}=0$ is the CR equations in one line.)</li>
+<li>Rational functions, $e^z$, $\sin z$, … are analytic except where they blow up. $\sqrt z$ and $\ln z$ are analytic except at the branch point and on the cut.</li>
+</ul></div>
+
+<div class="widget" id="w-cr">
+<div class="wt">Interactive 2 — Cauchy–Riemann checker: where does CR hold?</div>
+<div class="wd">Type any $f$. The partial derivatives are computed numerically at each point, and the plane is shaded <span style="color:var(--accent3)">green</span> where both CR equations hold and <span style="color:var(--warn)">red</span> where they fail. Drag the probe point to see the numbers. Try $z^2-\bar z^2$ (CR only at one point), $x^2+iy^2$ (only on the line $y=x$), $|z|^2$ (only at $0$).</div>
+<div class="ctrls"><label>$f$ in terms of $z$ (or $x$, $y$) <input type="text" id="cr-f" value="z^2 - conj(z)^2"></label>
+<select id="cr-pre"><option value="">— Boas 14.2 —</option><option>z^3</option><option>conj(z)</option><option>abs(z)</option><option>re(z)</option><option>(2z+3)/(z+2)</option><option>ln(abs(z))</option><option>z^2 conj(z)</option><option>conj(exp(z))</option><option>z^2 - conj(z)^2</option><option>cos(conj(z))</option><option>sqrt(z)</option><option>y + i x</option><option>(x - i y)/(x^2+y^2)</option><option>(y - i x)/(x^2+y^2)</option><option>x^2 + i y^2</option></select></div>
+<div class="grid2"><canvas id="cv-cr"></canvas><div class="readout" id="cr-out" style="margin:0"></div></div>
+</div>
+
+<h2 id="defs">3. Regular and singular points; Theorem III</h2>
+<ul>
+<li>A <b>regular point</b> of $f$ is a point where $f$ is analytic.</li>
+<li>A <b>singular point</b> (singularity) is a point where $f$ is not analytic. It is <b>isolated</b> if $f$ is analytic everywhere else inside some small circle about it (e.g. $z=0$ for $1/z$; but not $z=0$ for $\ln z$, whose cut runs into it).</li>
+</ul>
+<div class="box thm"><span class="tag">Theorem III (stated)</span>
+<p>If $f(z)$ is analytic in a region $R$, then it has <b>derivatives of all orders</b> at points inside $R$, and can be expanded in a <b>Taylor series</b> about any point $z_0$ inside $R$. The series converges inside the circle about $z_0$ that extends to the <b>nearest singular point</b>.</p></div>
+<p>This is astonishing compared with real functions: $f(x)=x|x|$ has a first derivative but no second. For $f(z)$, one derivative everywhere in a region means infinitely many, and a convergent Taylor series.</p>
+<p>It also explains (Boas eqs. 2.5–2.6) why $\frac1{1+x^2}=1-x^2+x^4-\cdots$ converges only for $|x|\lt1$: the complex function $\frac{1}{1+z^2}$ blows up at $z=\pm i$, at distance 1 from the origin. See Interactive 1 of Chapter 2, §7 for a full visualisation.</p>
+
+<h2 id="harmonic">4. Harmonic functions (Theorem IV)</h2>
+<div class="box def"><span class="tag">Definition</span><p>$\phi(x,y)$ is <b>harmonic</b> if it satisfies Laplace's equation $\nabla^2\phi=\phi_{xx}+\phi_{yy}=0$.</p></div>
+<div class="box thm"><span class="tag">Theorem IV</span>
+<p><b>Part 1 (Problem 44).</b> If $f=u+iv$ is analytic in a region, then $u$ and $v$ are harmonic there.</p>
+<p><i>Proof:</i> $u_{xx}=\frac{\partial}{\partial x}v_y=v_{yx}$ and $u_{yy}=\frac{\partial}{\partial y}(-v_x)=-v_{xy}$. Mixed partials are equal (Theorem III guarantees continuity), so $u_{xx}+u_{yy}=0$. The same works for $v$.</p>
+<p><b>Part 2 (stated).</b> Any harmonic $u$ in a simply connected region is the real (or imaginary) part of some analytic $f(z)$.</p></div>
+<p>So <b>every analytic function hands you two solutions of Laplace's equation</b>. This is the foundation of 2-D electrostatics, heat flow and fluid flow (Section 14.10). $u$ and $v$ are called <b>conjugate harmonic functions</b>.</p>
+<h3>Geometric meaning: the level curves are orthogonal</h3>
+<p>By CR, $\nabla u\cdot\nabla v=u_xv_x+u_yv_y=u_x(-u_y)+u_y(u_x)=0$. So the curves $u=$const and $v=$const cross at right angles wherever $f'\ne0$. In physics these are equipotentials and field lines, or isotherms and heat-flow lines.</p>
+
+<h3>Finding $v$ (and $f$) from $u$ — Boas Example 4</h3>
+<div class="ex"><div class="hd">$u=x^2-y^2$</div><div class="bd"><ol class="steps">
+<li>Check that it is harmonic: $u_{xx}+u_{yy}=2-2=0$ ✔.</li>
+<li>CR: $v_y=u_x=2x$. Integrate in $y$: $v=2xy+g(x)$.</li>
+<li>CR: $v_x=2y+g'(x)$ must equal $-u_y=2y$. So $g'(x)=0$ and $g=$const.</li>
+<li>$f=u+iv=x^2-y^2+2ixy+\text{const}=z^2+\text{const}$.</li></ol></div></div>
+<div class="box thm"><span class="tag">Shortcut (Boas Problem 64, Struble 1979)</span>
+<p>If $u$ is harmonic and defined at $z_0$, then $f(z)=2u\!\left(\dfrac{z+\bar z_0}{2},\ \dfrac{z-\bar z_0}{2i}\right)+\text{const}$. With $z_0=0$ (if $u(0,0)$ is defined): $\ f(z)=2u\!\left(\frac z2,\frac z{2i}\right)+\text{const}$.</p>
+<p>Example: $u=x^2-y^2$ gives $2\left[\frac{z^2}4-\frac{z^2}{(2i)^2}\right]=2\left[\frac{z^2}{4}+\frac{z^2}{4}\right]=z^2$ ✔. A related, easier trick for most problems: put $y=0$ and look for $f(x)$ (the Milne-Thomson idea).</p></div>
+
+<div class="widget" id="w-harm">
+<div class="wt">Interactive 3 — Level curves of $u$ and $v$ cross at right angles</div>
+<div class="wd">Blue: curves $u=$const. Orange: curves $v=$const. For analytic $f$ they form an orthogonal net (a grid of little "squares" that become curved). Where $f'=0$ (e.g. $z=0$ for $z^2$) the right angles fail. Choose a non-analytic $f$ to see the net lose its right angles.</div>
+<div class="ctrls"><label>$f(z)=$ <select id="hm-f"><option value="z^2">z²</option><option value="z^3">z³</option><option value="exp(z)">e^z</option><option value="1/z">1/z</option><option value="ln(z)">ln z</option><option value="sin(z)">sin z</option><option value="z + 1/z">z + 1/z (flow past a cylinder)</option><option value="x^2 + i y^2">x² + iy² (not analytic)</option><option value="conj(z)^2">z̄² (not analytic)</option></select></label>
+<label>number of levels <input type="range" id="hm-n" min="6" max="30" value="14"><output></output></label></div>
+<canvas id="cv-hm"></canvas>
+<div class="small">Each level curve is drawn where the function crosses one of evenly spaced values.</div>
+</div>
+
+<h2 id="polar">5. Cauchy–Riemann in polar coordinates (Problems 46–47)</h2>
+<p>With $z=re^{i\theta}$ and $f=u(r,\theta)+iv(r,\theta)$: $\frac{\partial f}{\partial r}=f'(z)e^{i\theta}$ and $\frac{\partial f}{\partial\theta}=f'(z)\,ire^{i\theta}$. So $\frac{\partial f}{\partial\theta}=ir\frac{\partial f}{\partial r}$, i.e. $u_\theta+iv_\theta=ir(u_r+iv_r)$:</p>
+$$\boxed{\frac{\partial u}{\partial r}=\frac1r\frac{\partial v}{\partial\theta},\qquad\frac{\partial v}{\partial r}=-\frac1r\frac{\partial u}{\partial\theta}}$$
+<p>These lead (Problem 47) to Laplace's equation in polar form: $u_{rr}+\frac1ru_r+\frac1{r^2}u_{\theta\theta}=0$.</p>
+
+<h2 id="boas">6. Boas Problems, Section 2 — solutions</h2>
+<details class="sol"><summary>Show solutions 1–24 (analytic or not?)</summary>
+<table class="t">
+<tr><th>#</th><th>$f$</th><th>CR test</th><th>Verdict</th></tr>
+<tr><td>1</td><td>$z^3$</td><td>$u_x=3x^2-3y^2=v_y$; $\ u_y=-6xy=-v_x$</td><td>analytic everywhere</td></tr>
+<tr><td>2</td><td>$z$</td><td>$1=1$, $0=0$</td><td>analytic</td></tr>
+<tr><td>3</td><td>$\bar z$</td><td>$u_x=1$, $v_y=-1$</td><td>nowhere</td></tr>
+<tr><td>4</td><td>$|z|$</td><td>$v\equiv0$ but $u_x=x/r\ne0$</td><td>nowhere</td></tr>
+<tr><td>5</td><td>$\operatorname{Re}z$</td><td>$u_x=1\ne v_y=0$</td><td>nowhere</td></tr>
+<tr><td>6, 7, 8</td><td>$e^z,\cosh z,\sin z$</td><td>e.g. $e^x\cos y$: $u_x=e^x\cos y=v_y$, $u_y=-e^x\sin y=-v_x$</td><td>analytic everywhere</td></tr>
+<tr><td>9</td><td>$1/z$</td><td>CR holds for $z\ne0$</td><td>analytic except $z=0$</td></tr>
+<tr><td>10</td><td>$\frac{2z+3}{z+2}$</td><td>rational in $z$</td><td>analytic except $z=-2$</td></tr>
+<tr><td>11</td><td>$\frac{2z-i}{iz+2}$</td><td>rational</td><td>analytic except $z=2i$</td></tr>
+<tr><td>12</td><td>$\frac z{z^2+1}$</td><td>rational</td><td>analytic except $z=\pm i$</td></tr>
+<tr><td>13</td><td>$\ln|z|$</td><td>$v\equiv0$, $u_x=x/r^2\ne0$</td><td>nowhere</td></tr>
+<tr><td>14</td><td>$z^2\bar z$</td><td>$u_x=3x^2+y^2$, $v_y=x^2+3y^2$: equal only on $y=\pm x$. And $u_y=2xy$, $-v_x=-2xy$: equal only on the axes. Both hold only at $0$.</td><td>only at $z=0$, so analytic nowhere</td></tr>
+<tr><td>15</td><td>$\overline{e^z}$</td><td>$u_x=e^x\cos y$, $v_y=-e^x\cos y$</td><td>nowhere</td></tr>
+<tr><td>16</td><td>$z^2-\bar z^2$</td><td>$u=0$, $v=4xy$: need $0=4x$ and $0=-4y$</td><td>only at $0$ → analytic nowhere</td></tr>
+<tr><td>17</td><td>$\cos\bar z$</td><td>$u_x=-\sin x\cosh y$, $v_y=\sin x\cosh y$</td><td>only where $\sin x=0$ and $\cos x\sinh y=0$ (isolated points) → nowhere</td></tr>
+<tr><td>18</td><td>$\sqrt z$</td><td>polar CR hold (Problem 48)</td><td>analytic except at $0$ and on the cut</td></tr>
+<tr><td>19</td><td>$\ln z$</td><td>$u=\frac12\ln r^2$, $v=\theta$: polar CR hold</td><td>analytic except at $0$ and on the cut</td></tr>
+<tr><td>20</td><td>polynomial</td><td>—</td><td>analytic everywhere</td></tr>
+<tr><td>21</td><td>$e^{iz}$</td><td>$u=e^{-y}\cos x$: $u_x=-e^{-y}\sin x=v_y$ ✔, $u_y=-e^{-y}\cos x=-v_x$ ✔</td><td>analytic everywhere</td></tr>
+<tr><td>22</td><td>$y+ix$</td><td>$u_x=0=v_y$ ✔; $u_y=1$, $-v_x=-1$ ✘ (it is $i\bar z$)</td><td>nowhere</td></tr>
+<tr><td>23</td><td>$\frac{x-iy}{x^2+y^2}$</td><td>$=\frac{\bar z}{|z|^2}=\frac1z$</td><td>analytic except $0$</td></tr>
+<tr><td>24</td><td>$\frac{y-ix}{x^2+y^2}$</td><td>$=\frac{-iz}{|z|^2}=\frac{-i}{\bar z}$</td><td>nowhere</td></tr>
+</table></details>
+<details class="sol"><summary>Show solutions 25–33 (derivative rules from the definition)</summary>
+<p><b>25.</b> $\frac{\Delta(Af+Bg)}{\Delta z}=A\frac{\Delta f}{\Delta z}+B\frac{\Delta g}{\Delta z}\to Af'+Bg'$.</p>
+<p><b>26.</b> $\Delta(fg)=f(z+\Delta z)g(z+\Delta z)-f(z)g(z)=f(z+\Delta z)\Delta g+g\Delta f$. Divide by $\Delta z$ and let $\Delta z\to0$ (f is continuous since it is differentiable): $fg'+gf'$.</p>
+<p><b>27.</b> $\Delta\frac fg=\frac{f+\Delta f}{g+\Delta g}-\frac fg=\frac{g\Delta f-f\Delta g}{g(g+\Delta g)}$. Divide by $\Delta z$: $\to\frac{gf'-fg'}{g^2}$.</p>
+<p><b>28.</b> $\Delta f=(f'(g)+\epsilon_1)\Delta g$ and $\Delta g=(g'(z)+\epsilon_2)\Delta z$ with $\epsilon_{1,2}\to0$. So $\frac{\Delta f}{\Delta z}=(f'+\epsilon_1)(g'+\epsilon_2)\to\frac{df}{dg}\frac{dg}{dz}$.</p>
+<p><b>29, 30.</b> $(z+\Delta z)^n=z^n+nz^{n-1}\Delta z+O(\Delta z^2)$ (binomial), so the quotient $\to nz^{n-1}$.</p>
+<p><b>31.</b> $\frac{\ln(z+\Delta z)-\ln z}{\Delta z}=\frac{1}{\Delta z}\ln\left(1+\frac{\Delta z}{z}\right)=\frac1{\Delta z}\left(\frac{\Delta z}z-\frac{\Delta z^2}{2z^2}+\cdots\right)\to\frac1z$ (same branch).</p>
+<p><b>32.</b> Differentiate $\sum z^n/n!$ term by term: $\sum nz^{n-1}/n!=\sum z^{n-1}/(n-1)!=e^z$.</p>
+<p><b>33.</b> $(\sin z)'=\frac{ie^{iz}+ie^{-iz}}{2i}=\cos z$ and $(\cos z)'=-\sin z$. Then $(\cot z)'=\frac{-\sin z\sin z-\cos z\cos z}{\sin^2z}=-\csc^2z$ for $z\ne n\pi$.</p></details>
+<details class="sol"><summary>Show solutions 34–43 (disk of convergence = distance to nearest singularity)</summary>
+<table class="t">
+<tr><th>#</th><th>$f$</th><th>Series about 0</th><th>Nearest singular point</th><th>Disk</th></tr>
+<tr><td>34</td><td>$\ln(1-z)$</td><td>$-\sum_{n\ge1}\frac{z^n}n$</td><td>$z=1$ (branch point)</td><td>$|z|\lt1$</td></tr>
+<tr><td>35</td><td>$\cos z$</td><td>$\sum\frac{(-1)^nz^{2n}}{(2n)!}$</td><td>none</td><td>all $z$</td></tr>
+<tr><td>36</td><td>$\sqrt{1+z^2}$</td><td>$1+\frac{z^2}2-\frac{z^4}8+\frac{z^6}{16}-\cdots$</td><td>$z=\pm i$ (branch points)</td><td>$|z|\lt1$</td></tr>
+<tr><td>37</td><td>$\tanh z$</td><td>$z-\frac{z^3}3+\frac{2z^5}{15}-\cdots$</td><td>$z=\pm\frac{i\pi}2$ (zeros of $\cosh$)</td><td>$|z|\lt\frac\pi2$</td></tr>
+<tr><td>38</td><td>$\frac1{2i+z}$</td><td>$\frac1{2i}\sum\left(-\frac{z}{2i}\right)^n$</td><td>$z=-2i$</td><td>$|z|\lt2$</td></tr>
+<tr><td>39</td><td>$\frac z{z^2+9}$</td><td>$\frac z9\sum\left(-\frac{z^2}9\right)^n$</td><td>$z=\pm3i$</td><td>$|z|\lt3$</td></tr>
+<tr><td>40</td><td>$(1-z)^{-1}$</td><td>$\sum z^n$</td><td>$z=1$</td><td>$|z|\lt1$</td></tr>
+<tr><td>41</td><td>$e^{iz}$</td><td>$\sum\frac{(iz)^n}{n!}$</td><td>none</td><td>all $z$</td></tr>
+<tr><td>42</td><td>$\sinh z$</td><td>$\sum\frac{z^{2n+1}}{(2n+1)!}$</td><td>none</td><td>all $z$</td></tr>
+</table>
+<p><b>43.</b> $\Phi(x,h)=(1-2xh+h^2)^{-1/2}$ is singular where $h^2-2xh+1=0$, i.e. $h=x\pm i\sqrt{1-x^2}$. For $|x|\le1$, $|h|^2=x^2+(1-x^2)=1$. So the nearest singularity is at distance 1, and the Legendre series converges for $|h|\lt1$.</p></details>
+<details class="sol"><summary>Show solutions 44–53</summary>
+<p><b>44.</b> See Theorem IV, Part 1 above.</p>
+<p><b>45.</b> $\operatorname{div}\mathbf F=\frac{\partial v}{\partial x}+\frac{\partial u}{\partial y}=0\iff v_x=-u_y$. $\ (\operatorname{curl}\mathbf F)_z=\frac{\partial u}{\partial x}-\frac{\partial v}{\partial y}=0\iff u_x=v_y$. Together these are exactly CR. (This is why $\bar f$ is a divergence-free, curl-free 2-D vector field: an ideal flow.)</p>
+<p><b>46.</b> See Section 5: $u_r=\frac1rv_\theta$, $v_r=-\frac1ru_\theta$.</p>
+<p><b>47.</b> $u_{rr}=\frac{\partial}{\partial r}\left(\frac1rv_\theta\right)=-\frac1{r^2}v_\theta+\frac1rv_{\theta r}$ and $u_{\theta\theta}=\frac{\partial}{\partial\theta}(rv_r)=rv_{r\theta}$. Then $u_{rr}+\frac1ru_r+\frac1{r^2}u_{\theta\theta}=-\frac{v_\theta}{r^2}+\frac{v_{\theta r}}r+\frac{v_\theta}{r^2}-\frac{v_{r\theta}}{r}=0$.</p>
+<table class="t">
+<tr><th>#</th><th>$f$</th><th>$u,v$ (polar)</th><th>Polar CR?</th></tr>
+<tr><td>48</td><td>$\sqrt z$</td><td>$r^{1/2}\cos\frac\theta2$, $r^{1/2}\sin\frac\theta2$</td><td>yes: $u_r=\frac12r^{-1/2}\cos\frac\theta2=\frac1rv_\theta$</td></tr>
+<tr><td>49</td><td>$|z|$</td><td>$r$, $0$</td><td>no: $u_r=1\ne0$</td></tr>
+<tr><td>50</td><td>$\ln z$</td><td>$\ln r$, $\theta$</td><td>yes: $\frac1r=\frac1r\cdot1$, $0=0$</td></tr>
+<tr><td>51</td><td>$z^n$</td><td>$r^n\cos n\theta$, $r^n\sin n\theta$</td><td>yes</td></tr>
+<tr><td>52</td><td>$|z|^2$</td><td>$r^2$, $0$</td><td>no (only at $r=0$)</td></tr>
+<tr><td>53</td><td>$|z|^{1/2}e^{i\theta/2}$</td><td>same as $\sqrt z$</td><td>yes</td></tr>
+</table></details>
+<details class="sol"><summary>Show solutions 54–64 (harmonic: find $f$ and $v$)</summary>
+<p>Each $u$ below satisfies $u_{xx}+u_{yy}=0$ (check directly), and so does the $v$ found.</p>
+<table class="t">
+<tr><th>#</th><th>$u$</th><th>$f(z)$ (+ const)</th><th>$v$</th></tr>
+<tr><td>54</td><td>$y$</td><td>$-iz$</td><td>$-x$</td></tr>
+<tr><td>55</td><td>$3x^2y-y^3$</td><td>$-iz^3$</td><td>$3xy^2-x^3$</td></tr>
+<tr><td>56</td><td>$xy$</td><td>$-\frac i2z^2$</td><td>$-\frac12(x^2-y^2)$</td></tr>
+<tr><td>57</td><td>$x+y$</td><td>$(1-i)z$</td><td>$y-x$</td></tr>
+<tr><td>58</td><td>$\cosh y\cos x$</td><td>$\cos z$</td><td>$-\sin x\sinh y$</td></tr>
+<tr><td>59</td><td>$e^x\cos y$</td><td>$e^z$</td><td>$e^x\sin y$</td></tr>
+<tr><td>60</td><td>$\ln(x^2+y^2)$</td><td>$2\ln z$</td><td>$2\theta=2\arctan\frac yx$</td></tr>
+<tr><td>61</td><td>$\frac{x}{x^2+y^2}$</td><td>$\frac1z$</td><td>$\frac{-y}{x^2+y^2}$</td></tr>
+<tr><td>62</td><td>$e^{-y}\sin x$</td><td>$-ie^{iz}$</td><td>$-e^{-y}\cos x$</td></tr>
+<tr><td>63</td><td>$\frac{y}{(1-x)^2+y^2}$</td><td>$\frac{i}{z-1}$</td><td>$\frac{x-1}{(1-x)^2+y^2}$</td></tr>
+</table>
+<p><b>64 (Struble's formula) applied</b>, with $z_0=0$ unless $u(0,0)$ is undefined:</p>
+<ul>
+<li>55: $2u\left(\frac z2,\frac z{2i}\right)=2\left[3\frac{z^2}{4}\frac{z}{2i}-\frac{z^3}{(2i)^3}\right]=\frac{3z^3}{4i}-\frac{2z^3}{-8i}=\frac{3z^3}{4i}+\frac{z^3}{4i}=\frac{z^3}i=-iz^3$ ✔.</li>
+<li>59: $2e^{z/2}\cos\frac{z}{2i}=2e^{z/2}\cosh\frac z2=e^{z/2}(e^{z/2}+e^{-z/2})=e^z+1$, i.e. $e^z$ + const ✔.</li>
+<li>60 and 61: $u$ is undefined at $0$, so use $z_0=1$. For 61: $2u\left(\frac{z+1}2,\frac{z-1}{2i}\right)$. Here $x^2+y^2=\frac{(z+1)^2-(z-1)^2}{4}=z$, so $f=\frac{2(z+1)/2}{z}=1+\frac1z$, i.e. $\frac1z$ + const ✔.</li>
+</ul></details>
+
+<h2 id="practice">7. Extra practice (exam level)</h2>
+<div class="prob"><div class="q"><b>P1.</b> For which constants $a,b$ is $u=ax^3+bxy^2$ harmonic? Find $f$. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$u_{xx}+u_{yy}=6ax+2bx=0$ gives $b=-3a$. Then $u=a(x^3-3xy^2)=\operatorname{Re}(az^3)$, so $f=az^3$ + const.</p></details></div>
+<div class="prob"><div class="q"><b>P2.</b> Show that an analytic function with constant modulus in a region is constant. <span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>$u^2+v^2=c$. Differentiate: $uu_x+vv_x=0$ and $uu_y+vv_y=0$. Use CR to replace $u_y=-v_x$ and $v_y=u_x$: $\ uu_x+vv_x=0$ and $-uv_x+vu_x=0$. This linear system in $(u_x,v_x)$ has determinant $u^2+v^2=c$. If $c\ne0$, then $u_x=v_x=0$, so $f'=u_x+iv_x=0$ and $f$ is constant. (If $c=0$, $f\equiv0$.)</p></details></div>
+<div class="prob"><div class="q"><b>P3.</b> Find the analytic $f$ with $\operatorname{Im}f=v=e^{x}(x\sin y+y\cos y)$ and $f(0)=0$. <span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>Try $f=ze^z$: $(x+iy)e^x(\cos y+i\sin y)$ has imaginary part $e^x(x\sin y+y\cos y)$ ✔, and $f(0)=0$ ✔. (Systematically: $f'=v_y+iv_x$; put $y=0$: $v_y(x,0)=e^x(x+1)$ and $v_x(x,0)=0$, so $f'(x)=(x+1)e^x$, giving $f(z)=ze^z$.)</p></details></div>
+<div class="prob"><div class="q"><b>P4.</b> Is $f(z)=|z|^2$ differentiable at $z=0$? Is it analytic there? <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>Differentiable at $0$: $\frac{|\Delta z|^2}{\Delta z}=\overline{\Delta z}\to0$, so $f'(0)=0$. Not analytic at $0$: there is no neighbourhood where it is differentiable (it is differentiable <b>only</b> at $0$).</p></details></div>
+<div class="prob"><div class="q"><b>P5.</b> (NET) Which of these is harmonic: (a) $x^2+y^2$, (b) $x^3-3xy^2$, (c) $e^x\sin x$, (d) $xy^2$? <span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>(b) only. It is $\operatorname{Re}z^3$, with $\nabla^2=6x-6x=0$. (a) gives $4$, (c) gives $2e^x\cos x$, (d) gives $2x$.</p></details></div>
+<div class="prob"><div class="q"><b>P6.</b> Find $f'(z)$ for $f=e^x(\cos y+i\sin y)$ using $f'=u_x+iv_x$. <span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$u_x+iv_x=e^x\cos y+ie^x\sin y=f$, so $(e^z)'=e^z$ ✔.</p></details></div>
+
+<h2 id="quiz">8. Quick self-test</h2>
+<div class="mcq" data-ans="2" data-ok="It depends on $\bar z$; CR fails ($u_x=1$, $v_y=-1$)." data-no="Check $u_x$ vs $v_y$."><p>1. Is $f=\bar z$ analytic?</p><div class="opts"><button>yes, everywhere</button><button>yes, except at $0$</button><button>no, nowhere</button></div><div class="fb"></div></div>
+<div class="mcq" data-ans="0" data-ok="$u=x^2-y^2=\operatorname{Re}z^2$, so $v=2xy$." data-no="Use $v_y=u_x$, $v_x=-u_y$."><p>2. The harmonic conjugate of $u=x^2-y^2$ is</p><div class="opts"><button>$2xy$</button><button>$-2xy$</button><button>$x^2+y^2$</button><button>$xy$</button></div><div class="fb"></div></div>
+<div class="mcq" data-ans="3" data-ok="The nearest singularity is $\pm i\pi/2$ (zeros of $\cosh z$)." data-no="Where is $\cosh z=0$?"><p>3. The radius of convergence of the Maclaurin series of $\tanh z$ is</p><div class="opts"><button>$1$</button><button>$\pi$</button><button>$\infty$</button><button>$\pi/2$</button></div><div class="fb"></div></div>
+
+<h2 id="summary">9. Summary</h2>
+<div class="card"><ul class="summary">
+<li>$f'(z)=\lim\frac{\Delta f}{\Delta z}$ must be the same from every direction. Analytic means differentiable throughout a 2-D region.</li>
+<li>CR: $u_x=v_y$, $u_y=-v_x$ (necessary; with continuity, sufficient). Then $f'=u_x+iv_x$.</li>
+<li>Analytic implies infinitely differentiable and a Taylor series out to the nearest singularity (Theorem III).</li>
+<li>$u$ and $v$ are harmonic, and their level curves are orthogonal. Recover $f$ from $u$ via CR or Struble's formula.</li>
+</ul></div>
+
+
+<div class="pagenav"><a href="14.1_Introduction.html"><small>← Previous</small>14.1 Introduction</a><a href="14.3_Contour_Integrals.html" style="text-align:right"><small>Next →</small>14.3 Contour Integrals</a></div>
+</main>
+</div>
+<script>
+"use strict";
+/* ===== shared helpers for all Chapter 2 pages ===== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const PI = Math.PI, TAU = 2 * Math.PI;
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function onReady(fn) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
+
+/* ---------- number formatting ---------- */
+function fnum(x, d = 4) {
+  if (Number.isNaN(x)) return 'undefined';
+  if (!isFinite(x)) return x > 0 ? '∞' : '−∞';
+  if (Math.abs(x) >= 1e7) return x.toExponential(3).replace('-', '−');
+  let s = (+x.toFixed(d)).toString();
+  if (s === '-0') s = '0';
+  return s.replace('-', '−');
+}
+/* ---------- complex arithmetic, numbers are [re, im] ---------- */
+const Cx = {
+  c: (a, b = 0) => [a, b],
+  I: [0, 1],
+  add: (a, b) => [a[0] + b[0], a[1] + b[1]],
+  sub: (a, b) => [a[0] - b[0], a[1] - b[1]],
+  mul: (a, b) => [a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]],
+  div: (a, b) => { const d = b[0] * b[0] + b[1] * b[1]; return [(a[0] * b[0] + a[1] * b[1]) / d, (a[1] * b[0] - a[0] * b[1]) / d]; },
+  scale: (a, k) => [a[0] * k, a[1] * k],
+  conj: a => [a[0], -a[1]],
+  neg: a => [-a[0], -a[1]],
+  abs: a => Math.hypot(a[0], a[1]),
+  abs2: a => a[0] * a[0] + a[1] * a[1],
+  arg: a => Math.atan2(a[1], a[0]),
+  arg2pi: a => { let t = Math.atan2(a[1], a[0]); return t < 0 ? t + TAU : t; },
+  polar: (r, t) => [r * Math.cos(t), r * Math.sin(t)],
+  exp: a => { const e = Math.exp(a[0]); return [e * Math.cos(a[1]), e * Math.sin(a[1])]; },
+  log: (a, n = 0) => [Math.log(Math.hypot(a[0], a[1])), Math.atan2(a[1], a[0]) + TAU * n],
+  ipow(a, n) { let r = [1, 0], b = a, k = Math.abs(n); while (k) { if (k & 1) r = Cx.mul(r, b); b = Cx.mul(b, b); k >>= 1; } return n < 0 ? Cx.div([1, 0], r) : r; },
+  pow(a, b, n = 0) {
+    if (b[1] === 0 && Number.isInteger(b[0]) && Math.abs(b[0]) <= 4096) return Cx.ipow(a, b[0]);
+    if (a[0] === 0 && a[1] === 0) return b[0] > 0 ? [0, 0] : [NaN, NaN];
+    return Cx.exp(Cx.mul(b, Cx.log(a, n)));
+  },
+  sqrt: a => Cx.polar(Math.sqrt(Math.hypot(a[0], a[1])), Math.atan2(a[1], a[0]) / 2),
+  sin: a => [Math.sin(a[0]) * Math.cosh(a[1]), Math.cos(a[0]) * Math.sinh(a[1])],
+  cos: a => [Math.cos(a[0]) * Math.cosh(a[1]), -Math.sin(a[0]) * Math.sinh(a[1])],
+  tan: a => Cx.div(Cx.sin(a), Cx.cos(a)),
+  sinh: a => [Math.sinh(a[0]) * Math.cos(a[1]), Math.cosh(a[0]) * Math.sin(a[1])],
+  cosh: a => [Math.cosh(a[0]) * Math.cos(a[1]), Math.sinh(a[0]) * Math.sin(a[1])],
+  tanh: a => Cx.div(Cx.sinh(a), Cx.cosh(a)),
+  // principal branches
+  asin: z => Cx.mul([0, -1], Cx.log(Cx.add(Cx.mul([0, 1], z), Cx.sqrt(Cx.sub([1, 0], Cx.mul(z, z)))))),
+  acos: z => Cx.sub([PI / 2, 0], Cx.asin(z)),
+  atan: z => Cx.mul([0, -0.5], Cx.log(Cx.div(Cx.add([1, 0], Cx.mul([0, 1], z)), Cx.sub([1, 0], Cx.mul([0, 1], z))))),
+  asinh: z => Cx.log(Cx.add(z, Cx.sqrt(Cx.add(Cx.mul(z, z), [1, 0])))),
+  acosh: z => Cx.log(Cx.add(z, Cx.mul(Cx.sqrt(Cx.add(z, [1, 0])), Cx.sqrt(Cx.sub(z, [1, 0]))))),
+  atanh: z => Cx.scale(Cx.log(Cx.div(Cx.add([1, 0], z), Cx.sub([1, 0], z))), 0.5),
+  eq: (a, b, e = 1e-9) => Math.abs(a[0] - b[0]) < e && Math.abs(a[1] - b[1]) < e,
+  fmt(z, d = 4) {
+    if (!isFinite(z[0]) || !isFinite(z[1])) return 'undefined';
+    const eps = 0.5 * Math.pow(10, -d);
+    const R = Math.abs(z[0]) < eps ? 0 : z[0], I = Math.abs(z[1]) < eps ? 0 : z[1];
+    if (I === 0) return fnum(R, d);
+    const ai = Math.abs(I), ip = (Math.abs(ai - 1) < eps ? '' : fnum(ai, d)) + 'i';
+    if (R === 0) return (I < 0 ? '−' : '') + ip;
+    return fnum(R, d) + (I < 0 ? ' − ' : ' + ') + ip;
+  },
+  tex(z, d = 4) { return Cx.fmt(z, d).replace(/−/g, '-').replace('undefined', '\\text{undefined}'); },
+  polarTex(z, d = 3) {
+    const r = Cx.abs(z), t = Cx.arg(z);
+    return fnum(r, d).replace('−', '-') + '\\,e^{' + fnum(t, d).replace('−', '-') + 'i}';
+  }
+};
+/* angle as a nice multiple of pi if possible */
+function piFrac(t, maxDen = 12) {
+  const q = t / PI;
+  for (let den = 1; den <= maxDen; den++) {
+    const num = Math.round(q * den);
+    if (Math.abs(q * den - num) < 1e-9) {
+      if (num === 0) return '0';
+      const g = gcd(Math.abs(num), den), a = num / g, b = den / g;
+      const s = a < 0 ? '-' : '', A = Math.abs(a);
+      const top = (A === 1 ? '' : A) + '\\pi';
+      return b === 1 ? s + top : s + '\\frac{' + top + '}{' + b + '}';
+    }
+  }
+  return fnum(t, 4).replace('−', '-');
+}
+function gcd(a, b) { while (b) [a, b] = [b, a % b]; return a; }
+/* coefficient of i in TeX: 1 -> '', -1 -> '-' */
+function icoef(v, d = 3) { const s = fnum(v, d).replace('−', '-'); return s === '1' ? '' : s === '-1' ? '-' : s; }
+/* KaTeX render into element (falls back to plain text if KaTeX could not load) */
+function tex(el, s, disp = false) {
+  if (typeof el === 'string') el = $(el);
+  if (!el) return;
+  if (window.katex) { try { katex.render(s, el, { displayMode: disp, throwOnError: false }); return; } catch (e) { } }
+  el.textContent = s;
+}
+/* render a string that mixes text and $...$ math into an element */
+function texMix(el, s) {
+  if (typeof el === 'string') el = $(el);
+  el.innerHTML = '';
+  s.split(/(\$\$[^$]+\$\$|\$[^$]+\$)/).forEach(part => {
+    if (!part) return;
+    const span = document.createElement('span');
+    if (part.startsWith('$$')) tex(span, part.slice(2, -2), true);
+    else if (part.startsWith('$')) tex(span, part.slice(1, -1));
+    else span.innerHTML = part;
+    el.appendChild(span);
+  });
+}
+
+/* ---------- expression parser for complex expressions ---------- */
+const Parser = (() => {
+  const F = {
+    sin: Cx.sin, cos: Cx.cos, tan: Cx.tan, sinh: Cx.sinh, cosh: Cx.cosh, tanh: Cx.tanh,
+    sec: z => Cx.div([1, 0], Cx.cos(z)), csc: z => Cx.div([1, 0], Cx.sin(z)), cot: z => Cx.div(Cx.cos(z), Cx.sin(z)),
+    sech: z => Cx.div([1, 0], Cx.cosh(z)), csch: z => Cx.div([1, 0], Cx.sinh(z)), coth: z => Cx.div(Cx.cosh(z), Cx.sinh(z)),
+    exp: Cx.exp, ln: z => Cx.log(z), log: z => Cx.log(z), sqrt: Cx.sqrt, conj: Cx.conj,
+    abs: z => [Cx.abs(z), 0], arg: z => [Cx.arg(z), 0], re: z => [z[0], 0], im: z => [z[1], 0],
+    asin: Cx.asin, acos: Cx.acos, atan: Cx.atan, asinh: Cx.asinh, acosh: Cx.acosh, atanh: Cx.atanh,
+    arcsin: Cx.asin, arccos: Cx.acos, arctan: Cx.atan, arcsinh: Cx.asinh, arccosh: Cx.acosh, arctanh: Cx.atanh
+  };
+  function tokenize(s) {
+    s = s.replace(/−/g, '-').replace(/×|·/g, '*').replace(/÷/g, '/').replace(/π/g, 'pi').replace(/√/g, 'sqrt').replace(/\*\*/g, '^');
+    const out = []; let i = 0;
+    while (i < s.length) {
+      const c = s[i];
+      if (/\s/.test(c)) { i++; continue; }
+      if (/[0-9.]/.test(c)) { let j = i; while (j < s.length && /[0-9.]/.test(s[j])) j++; if (s[j] === 'e' && /[-+0-9]/.test(s[j + 1] || '') && /[0-9]/.test(s[j + 1] === '-' || s[j + 1] === '+' ? s[j + 2] : s[j + 1])) { j += 2; while (j < s.length && /[0-9]/.test(s[j])) j++; } out.push({ t: 'n', v: parseFloat(s.slice(i, j)) }); i = j; continue; }
+      if (/[a-zA-Z_]/.test(c)) { let j = i; while (j < s.length && /[a-zA-Z_0-9]/.test(s[j])) j++; out.push({ t: 'id', v: s.slice(i, j).toLowerCase() }); i = j; continue; }
+      if ('+-*/^(),'.includes(c)) { out.push({ t: 'op', v: c }); i++; continue; }
+      throw new Error('Unexpected character "' + c + '"');
+    }
+    return out;
+  }
+  function compile(src) {
+    const tk = tokenize(src); let p = 0;
+    const peek = () => tk[p], next = () => tk[p++];
+    const isOp = v => tk[p] && tk[p].t === 'op' && tk[p].v === v;
+    function expr() { let a = term(); while (isOp('+') || isOp('-')) { const o = next().v, b = term(), A = a; a = o === '+' ? e => Cx.add(A(e), b(e)) : e => Cx.sub(A(e), b(e)); } return a; }
+    function term() {
+      let a = unary();
+      for (; ;) {
+        if (isOp('*') || isOp('/')) { const o = next().v, b = unary(), A = a; a = o === '*' ? e => Cx.mul(A(e), b(e)) : e => Cx.div(A(e), b(e)); }
+        else if (peek() && (peek().t === 'n' || peek().t === 'id' || isOp('('))) { const b = power(), A = a; a = e => Cx.mul(A(e), b(e)); }
+        else break;
+      }
+      return a;
+    }
+    function unary() { if (isOp('-')) { next(); const a = unary(); return e => Cx.neg(a(e)); } if (isOp('+')) { next(); return unary(); } return power(); }
+    function power() { const a = primary(); if (isOp('^')) { next(); const b = unary(); return e => Cx.pow(a(e), b(e)); } return a; }
+    function primary() {
+      const t = next();
+      if (!t) throw new Error('Expression ended too early');
+      if (t.t === 'n') { const v = [t.v, 0]; return () => v; }
+      if (t.t === 'op' && t.v === '(') { const a = expr(); if (!isOp(')')) throw new Error('Missing ")"'); next(); return a; }
+      if (t.t === 'id') {
+        if (F[t.v]) {
+          if (!isOp('(')) throw new Error(t.v + ' needs brackets, e.g. ' + t.v + '(1+i)');
+          next(); const a = expr(); if (!isOp(')')) throw new Error('Missing ")"'); next(); const f = F[t.v]; return e => f(a(e));
+        }
+        if (t.v === 'i' || t.v === 'j') return () => [0, 1];
+        if (t.v === 'pi') return () => [PI, 0];
+        if (t.v === 'e') return () => [Math.E, 0];
+        const name = t.v; return e => { if (e && name in e) return e[name]; throw new Error('Unknown name "' + name + '"'); };
+      }
+      throw new Error('Unexpected "' + t.v + '"');
+    }
+    const f = expr(); if (p < tk.length) throw new Error('Unexpected "' + tk[p].v + '"');
+    return f;
+  }
+  return { compile, eval: (s, env) => compile(s)(env || {}) };
+})();
+
+/* ---------- contour integration: ∫ f(z) dz along z = path(t), t in [a,b] (composite Simpson) ---------- */
+function contourInt(f, path, a, b, N = 2000) {
+  if (N % 2) N++;
+  const h = (b - a) / N, d = h * 1e-3;
+  let s = [0, 0];
+  for (let k = 0; k <= N; k++) {
+    const t = a + k * h, z = path(t), dz = Cx.scale(Cx.sub(path(t + d), path(t - d)), 1 / (2 * d));
+    const w = k === 0 || k === N ? 1 : (k % 2 ? 4 : 2);
+    s = Cx.add(s, Cx.scale(Cx.mul(f(z), dz), w));
+  }
+  return Cx.scale(s, h / 3);
+}
+const circlePath = (c, r) => t => Cx.add(c, Cx.polar(r, t));
+
+/* ---------- colours ---------- */
+function hsl2rgb(h, s, l) { // h in [0,1)
+  const a = s * Math.min(l, 1 - l);
+  const f = n => { const k = (n + h * 12) % 12; return l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)); };
+  return [f(0) * 255, f(8) * 255, f(4) * 255];
+}
+function phaseRGB(t, light = 0.5) { let h = (t / TAU) % 1; if (h < 0) h += 1; return hsl2rgb(h, 0.85, light); }
+function heatRGB(u) { // 0..1 -> perceptual blue->teal->yellow
+  u = Math.max(0, Math.min(1, u));
+  const st = [[48, 18, 120], [33, 102, 172], [32, 164, 160], [110, 200, 90], [240, 220, 60]];
+  const x = u * (st.length - 1), i = Math.min(st.length - 2, Math.floor(x)), f = x - i;
+  return st[i].map((v, k) => v + (st[i + 1][k] - v) * f);
+}
+const rgbs = c => `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`;
+
+/* ---------- redraw registry (resize + theme change) ---------- */
+const _views = [];
+let _rzT = 0;
+window.addEventListener('resize', () => { clearTimeout(_rzT); _rzT = setTimeout(() => _views.forEach(v => v.resize()), 120); });
+function redrawAll() { _views.forEach(v => v.redraw()); }
+
+/* ---------- 2-D complex plane ---------- */
+class Plane {
+  constructor(cv, o = {}) {
+    this.cv = typeof cv === 'string' ? $(cv) : cv; this.ctx = this.cv.getContext('2d');
+    this.cx = o.cx ?? 0; this.cy = o.cy ?? 0; this.span = o.span ?? 3; this.aspect = o.aspect ?? 0.7;
+    this.gridOn = o.grid !== false; this.snap = o.snap ?? 0.05; this.axisLabels = o.axisLabels ?? ['Re', 'Im'];
+    this.draw = o.draw || (() => { }); this.drags = []; this.onClick = o.onClick || null; this.active = null;
+    this._bind(); _views.push(this); this.resize();
+  }
+  resize() {
+    const dpr = window.devicePixelRatio || 1, w = this.cv.clientWidth || 600, h = Math.round(w * this.aspect);
+    this.cv.style.height = h + 'px'; this.cv.width = Math.round(w * dpr); this.cv.height = Math.round(h * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); this.W = w; this.H = h; this.dpr = dpr; this.redraw();
+  }
+  get k() { return this.W / (2 * this.span); }
+  X(x) { return this.W / 2 + (x - this.cx) * this.k; }
+  Y(y) { return this.H / 2 - (y - this.cy) * this.k; }
+  wx(px) { return (px - this.W / 2) / this.k + this.cx; }
+  wy(py) { return -(py - this.H / 2) / this.k + this.cy; }
+  get x0() { return this.wx(0); } get x1() { return this.wx(this.W); }
+  get y0() { return this.wy(this.H); } get y1() { return this.wy(0); }
+  redraw() { if (!this.W) return; const c = this.ctx; c.save(); c.fillStyle = cssv('--canvas'); c.fillRect(0, 0, this.W, this.H); c.restore(); if (this.gridOn) this.grid(); this.draw(this); }
+  step() { const raw = 55 / this.k, p = Math.pow(10, Math.floor(Math.log10(raw))); for (const m of [1, 2, 5, 10]) if (m * p >= raw) return m * p; return 10 * p; }
+  grid() {
+    const c = this.ctx, s = this.step(); c.save(); c.lineWidth = 1; c.strokeStyle = cssv('--grid');
+    c.beginPath();
+    for (let x = Math.ceil(this.x0 / s) * s; x <= this.x1; x += s) { const X = Math.round(this.X(x)) + .5; c.moveTo(X, 0); c.lineTo(X, this.H); }
+    for (let y = Math.ceil(this.y0 / s) * s; y <= this.y1; y += s) { const Y = Math.round(this.Y(y)) + .5; c.moveTo(0, Y); c.lineTo(this.W, Y); }
+    c.stroke();
+    c.strokeStyle = cssv('--axis'); c.lineWidth = 1.3; c.beginPath();
+    const ox = this.X(0), oy = this.Y(0); c.moveTo(0, oy); c.lineTo(this.W, oy); c.moveTo(ox, 0); c.lineTo(ox, this.H); c.stroke();
+    c.fillStyle = cssv('--muted'); c.font = '11px system-ui,sans-serif';
+    const lx = Math.min(Math.max(ox, 4), this.W - 30), ly = Math.min(Math.max(oy, 12), this.H - 4);
+    c.textAlign = 'center';
+    for (let x = Math.ceil(this.x0 / s) * s; x <= this.x1; x += s) { if (Math.abs(x) < s / 2) continue; c.fillText(fnum(x, 3), this.X(x), ly + 13 > this.H ? ly - 4 : ly + 13); }
+    c.textAlign = 'left';
+    for (let y = Math.ceil(this.y0 / s) * s; y <= this.y1; y += s) { if (Math.abs(y) < s / 2) continue; c.fillText(fnum(y, 3) + (this.axisLabels[1] === 'Im' ? 'i' : ''), lx + 4, this.Y(y) + 4); }
+    c.font = '600 12px system-ui,sans-serif'; c.fillStyle = cssv('--axis');
+    if (this.axisLabels[0]) { c.textAlign = 'right'; c.fillText(this.axisLabels[0], this.W - 6, Math.min(Math.max(oy - 6, 14), this.H - 6)); }
+    if (this.axisLabels[1]) { c.textAlign = 'left'; c.fillText(this.axisLabels[1], Math.min(Math.max(ox + 6, 6), this.W - 30), 14); }
+    c.restore();
+  }
+  col(v) { return v && v.startsWith('--') ? cssv(v) : (v || cssv('--accent')); }
+  line(a, b, o = {}) { const c = this.ctx; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; if (o.dash) c.setLineDash(o.dash); c.globalAlpha = o.alpha ?? 1; c.beginPath(); c.moveTo(this.X(a[0]), this.Y(a[1])); c.lineTo(this.X(b[0]), this.Y(b[1])); c.stroke(); c.restore(); }
+  lineInf(p, d, o = {}) { const L = 1e4; this.line([p[0] - d[0] * L, p[1] - d[1] * L], [p[0] + d[0] * L, p[1] + d[1] * L], o); }
+  arrow(a, b, o = {}) {
+    const c = this.ctx, x0 = this.X(a[0]), y0 = this.Y(a[1]), x1 = this.X(b[0]), y1 = this.Y(b[1]), L = Math.hypot(x1 - x0, y1 - y0);
+    c.save(); c.strokeStyle = c.fillStyle = this.col(o.color); c.lineWidth = o.width || 2.5; c.globalAlpha = o.alpha ?? 1; if (o.dash) c.setLineDash(o.dash);
+    if (L < 1) { c.restore(); return; }
+    const h = Math.min(o.head || 11, L * 0.5), ux = (x1 - x0) / L, uy = (y1 - y0) / L;
+    c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1 - ux * h * 0.8, y1 - uy * h * 0.8); c.stroke(); c.setLineDash([]);
+    c.beginPath(); c.moveTo(x1, y1); c.lineTo(x1 - ux * h - uy * h * 0.45, y1 - uy * h + ux * h * 0.45); c.lineTo(x1 - ux * h + uy * h * 0.45, y1 - uy * h - ux * h * 0.45); c.closePath(); c.fill(); c.restore();
+  }
+  dot(z, o = {}) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(o.color); c.globalAlpha = o.alpha ?? 1;
+    c.beginPath(); c.arc(this.X(z[0]), this.Y(z[1]), o.r || 5, 0, TAU);
+    if (o.hollow) { c.strokeStyle = c.fillStyle; c.lineWidth = 2; c.stroke(); } else c.fill();
+    if (o.ring) { c.strokeStyle = cssv('--canvas'); c.lineWidth = 2; c.stroke(); }
+    c.restore(); if (o.label) this.label(z, o.label, o);
+  }
+  label(z, s, o = {}) {
+    const c = this.ctx; c.save(); c.font = o.font || '600 13px system-ui,sans-serif'; c.fillStyle = this.col(o.lcolor || o.color);
+    c.textAlign = o.align || 'left'; const X = this.X(z[0]) + (o.dx ?? 8), Y = this.Y(z[1]) + (o.dy ?? -8);
+    if (o.bg !== false) { const w = c.measureText(s).width, ax = c.textAlign === 'center' ? X - w / 2 : c.textAlign === 'right' ? X - w : X; c.globalAlpha = 0.75; c.fillStyle = cssv('--canvas'); c.fillRect(ax - 2, Y - 12, w + 4, 16); c.globalAlpha = 1; c.fillStyle = this.col(o.lcolor || o.color); }
+    c.fillText(s, X, Y); c.restore();
+  }
+  text(px, py, s, o = {}) { const c = this.ctx; c.save(); c.font = o.font || '600 13px system-ui,sans-serif'; c.fillStyle = this.col(o.color || '--fg'); c.textAlign = o.align || 'left'; c.fillText(s, px, py); c.restore(); }
+  circle(ctr, r, o = {}) {
+    const c = this.ctx; c.save(); c.beginPath(); c.arc(this.X(ctr[0]), this.Y(ctr[1]), Math.abs(r) * this.k, 0, TAU);
+    if (o.fill) { c.fillStyle = this.col(o.fill); c.globalAlpha = o.fillAlpha ?? 0.15; c.fill(); c.globalAlpha = 1; }
+    if (o.color !== 'none') { c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; if (o.dash) c.setLineDash(o.dash); c.stroke(); }
+    c.restore();
+  }
+  path(pts, o = {}) {
+    const c = this.ctx; if (!pts.length) return; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; c.globalAlpha = o.alpha ?? 1; if (o.dash) c.setLineDash(o.dash);
+    c.beginPath(); let pen = false;
+    for (const p of pts) { if (!p || !isFinite(p[0]) || !isFinite(p[1]) || Math.abs(p[0]) > 1e6 || Math.abs(p[1]) > 1e6) { pen = false; continue; } const X = this.X(p[0]), Y = this.Y(p[1]); if (pen) c.lineTo(X, Y); else { c.moveTo(X, Y); pen = true; } }
+    if (o.close) c.closePath();
+    if (o.fill) { c.fillStyle = this.col(o.fill); c.globalAlpha = o.fillAlpha ?? 0.15; c.fill(); c.globalAlpha = o.alpha ?? 1; }
+    if (o.color !== 'none') c.stroke(); c.restore();
+  }
+  angleArc(t0, t1, rpx, o = {}, ctr = [0, 0]) {
+    const c = this.ctx; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 1.8; c.beginPath();
+    c.arc(this.X(ctr[0]), this.Y(ctr[1]), rpx, -t0, -t1, t1 > t0); c.stroke(); c.restore();
+  }
+  /* shade region where test(x,y) is true */
+  region(test, color, alpha = 0.22, res = 3) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(color); c.globalAlpha = alpha;
+    for (let py = 0; py < this.H; py += res) for (let px = 0; px < this.W; px += res) if (test(this.wx(px + res / 2), this.wy(py + res / 2))) c.fillRect(px, py, res, res);
+    c.restore();
+  }
+  /* implicit curve F(x,y)=0 by marching squares (sign changes) */
+  implicit(Fn, o = {}, res = 3) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(o.color); const nx = Math.ceil(this.W / res) + 1, ny = Math.ceil(this.H / res) + 1; const v = new Float64Array(nx * ny);
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) v[j * nx + i] = Fn(this.wx(i * res), this.wy(j * res));
+    for (let j = 0; j < ny - 1; j++) for (let i = 0; i < nx - 1; i++) { const a = v[j * nx + i], b = v[j * nx + i + 1], d = v[(j + 1) * nx + i]; if (!isFinite(a) || !isFinite(b) || !isFinite(d)) continue; if ((a > 0) !== (b > 0) || (a > 0) !== (d > 0)) { if (o.maxJump && (Math.abs(a - b) > o.maxJump || Math.abs(a - d) > o.maxJump)) continue; c.fillRect(i * res - (o.width || 2) / 2 + res / 2, j * res - (o.width || 2) / 2 + res / 2, o.width || 2.4, o.width || 2.4); } }
+    c.restore();
+  }
+  /* domain colouring of w=f(z) : hue = arg w, brightness bands = log|w| */
+  domain(f, o = {}) {
+    const res = o.res || 2, c = this.ctx, w = Math.ceil(this.W / res), h = Math.ceil(this.H / res);
+    const img = c.createImageData(w, h), d = img.data;
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+      const z = [this.wx(i * res + res / 2), this.wy(j * res + res / 2)], v = f(z), k = (j * w + i) * 4;
+      if (!isFinite(v[0]) || !isFinite(v[1])) { d[k] = d[k + 1] = d[k + 2] = 255; d[k + 3] = 255; continue; }
+      const m = Math.hypot(v[0], v[1]); let L = 0.5;
+      if (o.bands !== false) { const fr = (Math.log2(m) % 1 + 1) % 1; L = 0.32 + 0.3 * fr; }
+      const rgb = phaseRGB(Math.atan2(v[1], v[0]), L); d[k] = rgb[0]; d[k + 1] = rgb[1]; d[k + 2] = rgb[2]; d[k + 3] = 255;
+    }
+    const tmp = document.createElement('canvas'); tmp.width = w; tmp.height = h; tmp.getContext('2d').putImageData(img, 0, 0);
+    c.save(); c.imageSmoothingEnabled = true; c.globalAlpha = o.alpha ?? 1; c.drawImage(tmp, 0, 0, this.W, this.H); c.restore();
+  }
+  addDrag(get, set, o = {}) { this.drags.push({ get, set, r: o.r || 16 }); this.cv.style.touchAction = 'none'; this.cv.style.cursor = 'grab'; }
+  _bind() {
+    const pos = e => { const b = this.cv.getBoundingClientRect(); return [e.clientX - b.left, e.clientY - b.top]; };
+    const snapv = v => this.snap ? Math.round(v / this.snap) * this.snap : v;
+    this.cv.addEventListener('pointerdown', e => {
+      const [px, py] = pos(e); let best = null, bd = 1e9;
+      for (const d of this.drags) { const z = d.get(); const dd = Math.hypot(this.X(z[0]) - px, this.Y(z[1]) - py); if (dd < d.r && dd < bd) { bd = dd; best = d; } }
+      if (best) { this.active = best; this.cv.setPointerCapture(e.pointerId); this.cv.style.cursor = 'grabbing'; e.preventDefault(); }
+      else if (this.onClick) { this.onClick([snapv(this.wx(px)), snapv(this.wy(py))]); this.redraw(); }
+    });
+    this.cv.addEventListener('pointermove', e => {
+      if (!this.active) return; const [px, py] = pos(e);
+      this.active.set([snapv(this.wx(px)), snapv(this.wy(py))]); this.redraw(); if (this.onchange) this.onchange();
+    });
+    const up = () => { if (this.active) { this.active = null; this.cv.style.cursor = this.drags.length ? 'grab' : ''; } };
+    this.cv.addEventListener('pointerup', up); this.cv.addEventListener('pointercancel', up);
+  }
+}
+
+/* ---------- simple 2-D function graph (real x, real y) ---------- */
+class Graph extends Plane {
+  constructor(cv, o = {}) { super(cv, Object.assign({ axisLabels: o.axisLabels || ['x', 'y'], snap: 0 }, o)); }
+  fn(f, o = {}) { const pts = []; const n = o.n || 600; for (let i = 0; i <= n; i++) { const x = this.x0 + (this.x1 - this.x0) * i / n; const y = f(x); pts.push(isFinite(y) && Math.abs(y) < 1e5 ? [x, y] : null); } this.path(pts, o); }
+}
+
+/* ---------- rotatable 3-D surface z = h(x,y) ---------- */
+class Surf3D {
+  constructor(cv, o = {}) {
+    this.cv = typeof cv === 'string' ? $(cv) : cv; this.ctx = this.cv.getContext('2d');
+    Object.assign(this, { xr: [-2, 2], yr: [-2, 2], zr: [0, 4], n: 46, yaw: -0.65, pitch: 0.55, zoom: 1, aspect: 0.72, zs: 0.9, labels: ['x', 'y', 'z'], wire: true }, o);
+    this.h = o.h; this.color = o.color || null; this.extra = o.extra || null;
+    this._bind(); _views.push(this); this.build(); this.resize();
+  }
+  setFn(h, color) { this.h = h; if (color !== undefined) this.color = color; this.build(); this.redraw(); }
+  build() {
+    const n = this.n, V = [];
+    for (let j = 0; j <= n; j++) for (let i = 0; i <= n; i++) {
+      let x, y, hv, u = 0, v = 0;
+      if (this.param) { // parametric surface (u,v) -> [x, y, height]
+        u = this.ur[0] + (this.ur[1] - this.ur[0]) * i / n; v = this.vr[0] + (this.vr[1] - this.vr[0]) * j / n;
+        [x, y, hv] = this.param(u, v);
+      } else { x = this.xr[0] + (this.xr[1] - this.xr[0]) * i / n; y = this.yr[0] + (this.yr[1] - this.yr[0]) * j / n; hv = this.h(x, y); }
+      if (!isFinite(hv)) hv = this.zr[1]; const hc = Math.max(this.zr[0], Math.min(this.zr[1], hv));
+      V.push({ x, y, u, v, h: hc, raw: hv, X: 2 * (x - this.xr[0]) / (this.xr[1] - this.xr[0]) - 1, Y: 2 * (y - this.yr[0]) / (this.yr[1] - this.yr[0]) - 1, Z: (2 * (hc - this.zr[0]) / (this.zr[1] - this.zr[0]) - 1) * this.zs });
+    }
+    this.V = V;
+  }
+  resize() {
+    const dpr = window.devicePixelRatio || 1, w = this.cv.clientWidth || 600, h = Math.round(w * this.aspect);
+    this.cv.style.height = h + 'px'; this.cv.width = Math.round(w * dpr); this.cv.height = Math.round(h * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); this.W = w; this.H = h; this.redraw();
+  }
+  proj(X, Y, Z) {
+    const cy = Math.cos(this.yaw), sy = Math.sin(this.yaw), cp = Math.cos(this.pitch), sp = Math.sin(this.pitch);
+    const x1 = X * cy - Y * sy, y1 = X * sy + Y * cy, y2 = y1 * cp - Z * sp, z2 = y1 * sp + Z * cp;
+    const f = 4 / (4 + y2), S = Math.min(this.W, this.H / 0.9) * 0.34 * this.zoom;
+    return [this.W / 2 + x1 * f * S, this.H / 2 + 10 - z2 * f * S, y2];
+  }
+  redraw() {
+    if (!this.W) return; const c = this.ctx, n = this.n, V = this.V;
+    c.save(); c.fillStyle = cssv('--canvas'); c.fillRect(0, 0, this.W, this.H);
+    const P = V.map(v => this.proj(v.X, v.Y, v.Z));
+    // base box
+    const bz = -this.zs, tz = this.zs, corners = [[-1, -1], [1, -1], [1, 1], [-1, 1]];
+    c.strokeStyle = cssv('--axis'); c.lineWidth = 1; c.globalAlpha = 0.55; c.beginPath();
+    corners.forEach((q, i) => { const a = this.proj(q[0], q[1], bz), b = this.proj(corners[(i + 1) % 4][0], corners[(i + 1) % 4][1], bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); });
+    c.stroke(); c.globalAlpha = 1;
+    // grid on floor
+    c.strokeStyle = cssv('--grid'); c.beginPath();
+    for (let t = -1; t <= 1.001; t += 0.25) { let a = this.proj(t, -1, bz), b = this.proj(t, 1, bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); a = this.proj(-1, t, bz); b = this.proj(1, t, bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); }
+    c.stroke();
+    const quads = [];
+    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
+      const a = j * (n + 1) + i, b = a + 1, d = a + n + 1, e = d + 1;
+      quads.push([a, b, e, d, (P[a][2] + P[b][2] + P[d][2] + P[e][2]) / 4]);
+    }
+    quads.sort((p, q) => q[4] - p[4]);
+    const L = [0.35, -0.45, 0.82], ll = Math.hypot(...L);
+    const wire = cssv('--canvas');
+    for (const q of quads) {
+      const A = V[q[0]], B = V[q[1]], E = V[q[2]], D = V[q[3]];
+      const ux = B.X - A.X, uy = B.Y - A.Y, uz = B.Z - A.Z, vx = D.X - A.X, vy = D.Y - A.Y, vz = D.Z - A.Z;
+      let nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx; const nl = Math.hypot(nx, ny, nz) || 1;
+      const lam = Math.abs((nx * L[0] + ny * L[1] + nz * L[2]) / (nl * ll)), sh = 0.5 + 0.5 * lam;
+      let rgb;
+      if (this.color) rgb = this.color((A.x + E.x) / 2, (A.y + E.y) / 2, (A.raw + E.raw) / 2, (A.u + E.u) / 2, (A.v + E.v) / 2);
+      else rgb = heatRGB(((A.h + B.h + D.h + E.h) / 4 - this.zr[0]) / (this.zr[1] - this.zr[0]));
+      c.fillStyle = rgbs(rgb.map(v => v * sh));
+      c.beginPath(); [q[0], q[1], q[2], q[3]].forEach((k, m) => m ? c.lineTo(P[k][0], P[k][1]) : c.moveTo(P[k][0], P[k][1])); c.closePath(); c.fill();
+      if (this.wire) { c.strokeStyle = wire; c.globalAlpha = 0.18; c.lineWidth = 0.6; c.stroke(); c.globalAlpha = 1; } else { c.strokeStyle = c.fillStyle; c.lineWidth = 0.5; c.stroke(); }
+    }
+    if (this.extra) this.extra(this);
+    // axis labels
+    c.fillStyle = cssv('--fg'); c.font = '600 13px system-ui,sans-serif'; c.textAlign = 'center';
+    let p = this.proj(1.18, -1, bz); c.fillText(this.labels[0] + ' →', p[0], p[1]);
+    p = this.proj(-1, 1.18, bz); c.fillText(this.labels[1] + ' →', p[0], p[1]);
+    p = this.proj(-1, -1, tz + 0.15); c.fillText(this.labels[2], p[0], p[1]);
+    c.font = '11px system-ui,sans-serif'; c.fillStyle = cssv('--muted');
+    p = this.proj(-1, -1, bz); c.fillText('(' + fnum(this.xr[0], 2) + ',' + fnum(this.yr[0], 2) + ')', p[0], p[1] + 14);
+    p = this.proj(1, -1, bz); c.fillText(fnum(this.xr[1], 2), p[0], p[1] + 14);
+    p = this.proj(-1, 1, bz); c.fillText(fnum(this.yr[1], 2), p[0], p[1] + 14);
+    const zt = this.proj(-1, -1, tz); c.textAlign = 'right'; c.fillText(fnum(this.zr[1], 2), zt[0] - 6, zt[1]);
+    c.strokeStyle = cssv('--axis'); c.globalAlpha = 0.5; c.beginPath(); const z0 = this.proj(-1, -1, bz); c.moveTo(z0[0], z0[1]); c.lineTo(zt[0], zt[1]); c.stroke();
+    c.restore();
+  }
+  pt3(x, y, h) { // world -> screen
+    return this.proj(2 * (x - this.xr[0]) / (this.xr[1] - this.xr[0]) - 1, 2 * (y - this.yr[0]) / (this.yr[1] - this.yr[0]) - 1, (2 * (Math.max(this.zr[0], Math.min(this.zr[1], h)) - this.zr[0]) / (this.zr[1] - this.zr[0]) - 1) * this.zs);
+  }
+  _bind() {
+    let drag = null; this.cv.style.touchAction = 'none'; this.cv.style.cursor = 'grab';
+    this.cv.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY, this.yaw, this.pitch]; this.cv.setPointerCapture(e.pointerId); this.cv.style.cursor = 'grabbing'; });
+    this.cv.addEventListener('pointermove', e => { if (!drag) return; this.yaw = drag[2] - (e.clientX - drag[0]) * 0.01; this.pitch = Math.max(-0.2, Math.min(1.5, drag[3] + (e.clientY - drag[1]) * 0.01)); this.redraw(); });
+    const up = () => { drag = null; this.cv.style.cursor = 'grab'; };
+    this.cv.addEventListener('pointerup', up); this.cv.addEventListener('pointercancel', up);
+  }
+}
+
+/* ---------- animation helper ---------- */
+function animator(step) { // step(dtSeconds) ; returns {play,pause,toggle,running}
+  let on = false, last = 0;
+  const tick = t => { if (!on) return; const dt = last ? Math.min(0.05, (t - last) / 1000) : 0; last = t; step(dt); requestAnimationFrame(tick); };
+  return { get running() { return on; }, play() { if (!on) { on = true; last = 0; requestAnimationFrame(tick); } }, pause() { on = false; }, toggle() { on ? this.pause() : this.play(); return on; } };
+}
+/* ---------- slider wiring: updates <output> next to each range ---------- */
+function val(id) { const el = document.getElementById(id); return el.type === 'checkbox' ? el.checked : (el.type === 'range' || el.type === 'number' ? +el.value : el.value); }
+function watch(ids, cb, fmtMap = {}) {
+  ids.forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    const out = el.parentElement.querySelector('output');
+    const upd = () => { if (out) out.textContent = fmtMap[id] ? fmtMap[id](+el.value) : fnum(+el.value, 3); };
+    upd(); el.addEventListener('input', () => { upd(); cb(); }); el.addEventListener('change', () => { upd(); cb(); });
+  });
+}
+
+/* ---------- page chrome: TOC, theme, MCQs, chapter nav ---------- */
+onReady(() => {
+  const toc = $('#toc'); if (toc) {
+    toc.innerHTML = '<b>On this page</b>';
+    $$('main h2').forEach((h, i) => { if (!h.id) h.id = 's' + (i + 1); const a = document.createElement('a'); a.href = '#' + h.id; a.textContent = h.textContent; toc.appendChild(a); });
+    const links = $$('a', toc), hs = $$('main h2');
+    const spy = () => { let k = 0; hs.forEach((h, i) => { if (h.getBoundingClientRect().top < 120) k = i; }); links.forEach((a, i) => a.classList.toggle('on', i === k)); };
+    window.addEventListener('scroll', spy, { passive: true }); spy();
+  }
+  if (window.renderMathInElement) renderMathInElement(document.body, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '\\[', right: '\\]', display: true }, { left: '$', right: '$', display: false }, { left: '\\(', right: '\\)', display: false }], ignoredClasses: ['nomath'], throwOnError: false });
+  $$('.mcq').forEach(q => {
+    const ans = +q.dataset.ans, fb = $('.fb', q), bs = $$('.opts button', q);
+    bs.forEach((b, i) => b.addEventListener('click', () => {
+      bs.forEach(x => x.classList.remove('ok', 'bad'));
+      b.classList.add(i === ans ? 'ok' : 'bad');
+      if (fb) { fb.style.display = 'block'; const msg = i === ans ? (q.dataset.ok || 'Correct!') : (q.dataset.no || 'Not quite — think again.'); texMix(fb, (i === ans ? '✔ ' : '✘ ') + msg); }
+    }));
+    if (fb) fb.style.display = 'none';
+  });
+  const tb = $('#themeBtn');
+  if (tb) tb.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const nx = cur === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', nx);
+    try { localStorage.setItem('boas-theme', nx); } catch (e) { }
+    redrawAll();
+  });
+  const sel = $('#chapSel'); if (sel) sel.addEventListener('change', () => { location.href = sel.value; });
+});
+try { const t = localStorage.getItem('boas-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) { }
+
+</script>
+<script>
+
+onReady(() => {
+  const comp = src => { const g = Parser.compile(src); return q => g({ z: q, x: [q[0], 0], y: [q[1], 0] }); };
+  /* ---------- Interactive 1: direction dependence ---------- */
+  let z0 = [0.8, 0.5];
+  const DZ = new Plane('#cv-dz', { span: 2, aspect: 0.95, snap: 0.05, axisLabels: ['x', 'y'], draw: p => {
+    const h = val('dr-h'); p.circle(z0, Math.max(h, 0.02), { color: '--accent3', dash: [3, 3], width: 1.2 });
+    for (let k = 0; k < 12; k++) p.arrow(z0, Cx.add(z0, Cx.polar(Math.max(h, 0.06), k * TAU / 12)), { color: '--accent3', width: 1.2, head: 5 });
+    p.dot(z0, { r: 8, color: '--accent', label: 'z₀ (drag)' });
+  }});
+  DZ.addDrag(() => z0, v => { z0 = v; DW.redraw(); drOut(); });
+  const quots = () => { const f = comp(val('dr-f')), h = val('dr-h'), f0 = f(z0), out = []; for (let k = 0; k <= 180; k++) { const dz = Cx.polar(h, k * TAU / 180); out.push([k * TAU / 180, Cx.div(Cx.sub(f(Cx.add(z0, dz)), f0), dz)]); } return out; };
+  const DW = new Plane('#cv-dw', { span: 3, aspect: 0.95, snap: 0, axisLabels: ['Re', 'Im'], draw: p => {
+    const Q = quots();
+    p.path(Q.map(q => q[1]), { color: '--accent2', width: 2.5 });
+    [0, 45, 90].forEach(i => { const q = Q[i]; p.dot(q[1], { r: 5, color: '--accent4', label: 'φ=' + Math.round(q[0] * 180 / PI) + '°' }); });
+  }});
+  const fitDW = () => { const Q = quots(), m = Cx.scale(Q.reduce((s, q) => Cx.add(s, q[1]), [0, 0]), 1 / Q.length), spread = Math.max(...Q.map(q => Cx.abs(Cx.sub(q[1], m)))); DW.cx = m[0]; DW.cy = m[1]; DW.span = Math.max(1.5, spread * 2.5 + 0.5); DW.redraw(); };
+  const drOut = () => { fitDW(); const Q = quots(); const vals = Q.map(q => q[1]); let maxd = 0; for (let i = 0; i < vals.length; i++) for (let j = i + 1; j < vals.length; j += 7) maxd = Math.max(maxd, Cx.abs(Cx.sub(vals[i], vals[j]))); texMix('#dr-out', `Along $\\phi=0$: $${Cx.tex(vals[0], 4)}$, along $\\phi=90^\\circ$: $${Cx.tex(vals[45], 4)}$. Spread of values: $${fnum(maxd, 4)}$ ` + (maxd < 0.05 + 2 * val('dr-h') ? '→ (nearly) one value: <b>differentiable here</b>. Shrink $h$ and the dot sharpens to $f\'(z_0)$.' : '→ <b>depends on direction: no derivative</b>.')); };
+  watch(['dr-h'], () => { DZ.redraw(); DW.redraw(); drOut(); }); $('#dr-f').addEventListener('change', () => { DW.redraw(); drOut(); });
+  drOut();
+
+  /* ---------- Interactive 2: CR checker ---------- */
+  let CF = null, pz = [0.5, 0.5];
+  const CRres = q => { const h = 1e-5, a = CF(Cx.add(q, [h, 0])), b = CF(Cx.sub(q, [h, 0])), c = CF(Cx.add(q, [0, h])), d = CF(Cx.sub(q, [0, h])); const fx = Cx.scale(Cx.sub(a, b), 1 / (2 * h)), fy = Cx.scale(Cx.sub(c, d), 1 / (2 * h)); return { ux: fx[0], vx: fx[1], uy: fy[0], vy: fy[1] }; };
+  const CR = new Plane('#cv-cr', { span: 2.5, aspect: 0.95, snap: 0.05, axisLabels: ['x', 'y'], draw: p => {
+    if (!CF) return; p.region((x, y) => { const r = CRres([x, y]); const s = Math.abs(r.ux - r.vy) + Math.abs(r.uy + r.vx); return isFinite(s) && s < 0.08; }, '--accent3', 0.45, 4);
+    p.region((x, y) => { const r = CRres([x, y]); const s = Math.abs(r.ux - r.vy) + Math.abs(r.uy + r.vx); return isFinite(s) && s >= 0.08; }, '--warn', 0.18, 4);
+    p.dot(pz, { r: 7, color: '--accent', label: 'probe' });
+  }});
+  CR.addDrag(() => pz, v => { pz = v; crOut(); });
+  const crOut = () => { if (!CF) { $('#cr-out').textContent = 'Could not read f.'; return; } const r = CRres(pz); const ok1 = Math.abs(r.ux - r.vy) < 1e-4, ok2 = Math.abs(r.uy + r.vx) < 1e-4; texMix('#cr-out', `At $z=${Cx.tex(pz, 2)}$:<br>$u_x=${fnum(r.ux, 4)}$, $v_y=${fnum(r.vy, 4)}$ ${ok1 ? '✔' : '✘'}<br>$u_y=${fnum(r.uy, 4)}$, $-v_x=${fnum(-r.vx, 4)}$ ${ok2 ? '✔' : '✘'}<br>` + (ok1 && ok2 ? `CR hold here; $f'=u_x+iv_x=${Cx.tex([r.ux, r.vx], 4)}$` : 'CR fail here.') + '<br><span class="small">Analytic needs CR on a whole region (green area), not just a line or a point.</span>'); };
+  const crAll = () => { try { CF = comp($('#cr-f').value); CF([0.3, 0.2]); } catch (e) { CF = null; } CR.redraw(); crOut(); };
+  $('#cr-f').addEventListener('change', crAll); $('#cr-f').addEventListener('keydown', e => { if (e.key === 'Enter') crAll(); });
+  $('#cr-pre').addEventListener('change', e => { if (e.target.value) { $('#cr-f').value = e.target.value; crAll(); } });
+  crAll();
+
+  /* ---------- Interactive 3: orthogonal level curves ---------- */
+  const HM = new Plane('#cv-hm', { span: 2.5, aspect: 0.62, snap: 0, axisLabels: ['x', 'y'], draw: p => {
+    const f = comp(val('hm-f')), n = val('hm-n');
+    const vals = []; for (let k = 0; k < 300; k++) { const w = f([(Math.random() - 0.5) * 4, (Math.random() - 0.5) * 2.4]); if (isFinite(w[0]) && isFinite(w[1])) vals.push(w); }
+    const span = (arr) => { arr.sort((a, b) => a - b); return [arr[Math.floor(arr.length * 0.05)], arr[Math.floor(arr.length * 0.95)]]; };
+    const [u0, u1] = span(vals.map(w => w[0])), [v0, v1] = span(vals.map(w => w[1]));
+    const du = (u1 - u0) / n || 1, dv = (v1 - v0) / n || 1;
+    p.implicit((x, y) => { const w = f([x, y]); return Math.sin(PI * (w[0] - u0) / du); }, { color: '--accent', width: 1.8, maxJump: 1.5 }, 2);
+    p.implicit((x, y) => { const w = f([x, y]); return Math.sin(PI * (w[1] - v0) / dv); }, { color: '--accent2', width: 1.8, maxJump: 1.5 }, 2);
+  }});
+  $('#hm-f').addEventListener('change', () => HM.redraw()); watch(['hm-n'], () => HM.redraw());
+});
+
+</script>
+</body>
+</html>

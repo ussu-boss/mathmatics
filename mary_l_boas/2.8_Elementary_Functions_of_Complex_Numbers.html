@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2.8 Elementary Functions of Complex Numbers — Boas Ch. 2</title>
+<script>try{var t=localStorage.getItem('boas-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{
+  --bg:#f6f7fb;--card:#ffffff;--fg:#1c2333;--muted:#596379;--line:#dde2ec;
+  --accent:#2f6bff;--accent2:#e8590c;--accent3:#0b9b6e;--accent4:#a33ec9;--warn:#c92a2a;
+  --defbg:#edf3ff;--thmbg:#eefaf4;--warnbg:#fff3ee;--factbg:#f8f0ff;--notebg:#f4f6fa;
+  --canvas:#ffffff;--grid:#e9ecf3;--axis:#7d879b;--code:#eef1f7;--shadow:0 1px 3px rgba(20,30,60,.08),0 4px 18px rgba(20,30,60,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1219;--card:#161b25;--fg:#e4e8f0;--muted:#9aa3b6;--line:#2a3141;
+    --accent:#6f9cff;--accent2:#ff922b;--accent3:#3ad8a6;--accent4:#d77cf2;--warn:#ff6b6b;
+    --defbg:#162238;--thmbg:#122a21;--warnbg:#2d1a16;--factbg:#23192e;--notebg:#1b212c;
+    --canvas:#11161f;--grid:#202834;--axis:#717b8f;--code:#1f2532;--shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1219;--card:#161b25;--fg:#e4e8f0;--muted:#9aa3b6;--line:#2a3141;
+  --accent:#6f9cff;--accent2:#ff922b;--accent3:#3ad8a6;--accent4:#d77cf2;--warn:#ff6b6b;
+  --defbg:#162238;--thmbg:#122a21;--warnbg:#2d1a16;--factbg:#23192e;--notebg:#1b212c;
+  --canvas:#11161f;--grid:#202834;--axis:#717b8f;--code:#1f2532;--shadow:none;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--fg);font:16.5px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+header.top{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center;padding:8px 16px;flex-wrap:wrap}
+header.top .brand{font-weight:700;font-size:15px;white-space:nowrap}
+header.top .brand small{color:var(--muted);font-weight:500}
+header.top .sp{flex:1}
+header.top select,header.top button,header.top a.btn{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 10px;text-decoration:none;cursor:pointer;max-width:100%}
+header.top select{max-width:260px}
+.layout{display:flex;gap:28px;max-width:1280px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:64px;align-self:flex-start;width:240px;flex:none;max-height:calc(100vh - 80px);overflow:auto;padding:18px 0;font-size:14px}
+nav.toc b{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:3px 10px;border-left:2px solid var(--line)}
+nav.toc a:hover,nav.toc a.on{color:var(--accent);border-left-color:var(--accent)}
+main{flex:1;min-width:0;max-width:940px;padding:10px 0 80px}
+@media (max-width:1100px){nav.toc{display:none}}
+h1{font-size:2rem;line-height:1.2;margin:26px 0 6px}
+h1 .num{color:var(--accent)}
+.subtitle{color:var(--muted);margin:0 0 18px}
+h2{font-size:1.45rem;margin:44px 0 12px;padding-top:6px;border-top:1px solid var(--line)}
+h3{font-size:1.15rem;margin:26px 0 8px}
+h4{font-size:1rem;margin:18px 0 6px}
+p{margin:10px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:16px 0;box-shadow:var(--shadow)}
+.box{border-radius:12px;padding:12px 16px;margin:16px 0;border:1px solid var(--line);border-left-width:5px}
+.box>.tag{display:inline-block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.box.def{background:var(--defbg);border-left-color:var(--accent)}.box.def>.tag{color:var(--accent)}
+.box.thm{background:var(--thmbg);border-left-color:var(--accent3)}.box.thm>.tag{color:var(--accent3)}
+.box.warn{background:var(--warnbg);border-left-color:var(--warn)}.box.warn>.tag{color:var(--warn)}
+.box.fact{background:var(--factbg);border-left-color:var(--accent4)}.box.fact>.tag{color:var(--accent4)}
+.box.note{background:var(--notebg);border-left-color:var(--axis)}.box.note>.tag{color:var(--muted)}
+.ex{border:1px solid var(--line);border-radius:12px;margin:18px 0;background:var(--card);overflow:hidden}
+.ex>.hd{background:var(--notebg);padding:8px 16px;font-weight:600;border-bottom:1px solid var(--line)}
+.ex>.bd{padding:6px 16px 10px}
+ol.steps{padding-left:22px;margin:8px 0}ol.steps>li{margin:6px 0}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}
+.katex{font-size:1.06em}
+table.t{border-collapse:collapse;width:100%;margin:12px 0;font-size:15px;display:block;overflow-x:auto}
+table.t th,table.t td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+table.t th{background:var(--notebg)}
+details.sol{margin:8px 0 4px;border:1px dashed var(--line);border-radius:10px;padding:2px 12px}
+details.sol>summary{cursor:pointer;color:var(--accent);font-weight:600;padding:6px 0;list-style:none}
+details.sol>summary::-webkit-details-marker{display:none}
+details.sol>summary::before{content:"▶ ";font-size:11px}
+details.sol[open]>summary::before{content:"▼ "}
+details.sol[open]{background:var(--card)}
+.prob{border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin:12px 0;background:var(--card)}
+.prob>.q{margin:4px 0}
+.prob>.q>b:first-child{color:var(--accent2)}
+.lvl{font-size:11px;font-weight:700;border-radius:20px;padding:1px 8px;margin-left:6px;vertical-align:middle;border:1px solid currentColor}
+.lvl.e{color:var(--accent3)}.lvl.m{color:var(--accent)}.lvl.h{color:var(--accent2)}.lvl.x{color:var(--warn)}
+.widget{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:18px 0;box-shadow:var(--shadow)}
+.widget>.wt{font-weight:700;margin-bottom:4px}
+.widget>.wd{color:var(--muted);font-size:14px;margin-bottom:8px}
+.widget canvas{width:100%;display:block;border-radius:10px;border:1px solid var(--line);background:var(--canvas)}
+.ctrls{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:10px 0;font-size:14.5px}
+.ctrls label{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.ctrls input[type=range]{width:150px;accent-color:var(--accent)}
+.ctrls output{min-width:46px;font-variant-numeric:tabular-nums;color:var(--accent);font-weight:600}
+.ctrls select,.ctrls input[type=text],.ctrls input[type=number],.ctrls button{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 9px}
+.ctrls input[type=text]{min-width:200px}
+.ctrls input[type=number]{width:80px}
+.ctrls button{cursor:pointer}
+.ctrls button.pri{background:var(--accent);color:#fff;border-color:var(--accent)}
+.readout{font-size:15px;background:var(--notebg);border-radius:10px;padding:8px 12px;margin-top:10px;overflow-x:auto;line-height:1.9}
+.readout .k{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+.pill{display:inline-block;background:var(--code);border-radius:6px;padding:0 6px;font-family:Consolas,monospace;font-size:.92em}
+.mcq{border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin:12px 0;background:var(--card)}
+.mcq .opts{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.mcq .opts button{font:inherit;font-size:15px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 12px;cursor:pointer}
+.mcq .opts button.ok{background:var(--thmbg);border-color:var(--accent3)}
+.mcq .opts button.bad{background:var(--warnbg);border-color:var(--warn)}
+.mcq .fb{font-size:14.5px;color:var(--muted)}
+.lead{font-size:1.07rem}
+.small{font-size:14px;color:var(--muted)}
+.center{text-align:center}
+.hl{color:var(--accent2);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13.5px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:14px;height:4px;border-radius:2px;vertical-align:middle;margin-right:5px}
+.pagenav{display:flex;justify-content:space-between;gap:12px;margin-top:50px;flex-wrap:wrap}
+.pagenav a{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 14px;text-decoration:none;max-width:48%}
+.pagenav a small{display:block;color:var(--muted)}
+.summary li{margin:4px 0}
+kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
+
+</style>
+</head>
+<body>
+<header class="top">
+  <span class="brand">Boas · Ch. 2 Complex Numbers <small>| Section 2.8</small></span>
+  <span class="sp"></span>
+  <select id="chapSel" aria-label="Go to section"><option value="2.0_Complex_Numbers_Index.html">2.0 Chapter 2 Index</option>
+<option value="2.1_Introduction.html">2.1 Introduction</option>
+<option value="2.2_Real_and_Imaginary_Parts.html">2.2 Real and Imaginary Parts of a Complex Number</option>
+<option value="2.3_The_Complex_Plane.html">2.3 The Complex Plane</option>
+<option value="2.4_Terminology_and_Notation.html">2.4 Terminology and Notation</option>
+<option value="2.5_Complex_Algebra.html">2.5 Complex Algebra</option>
+<option value="2.6_Complex_Infinite_Series.html">2.6 Complex Infinite Series</option>
+<option value="2.7_Complex_Power_Series_Disk_of_Convergence.html">2.7 Complex Power Series; Disk of Convergence</option>
+<option value="2.8_Elementary_Functions_of_Complex_Numbers.html" selected>2.8 Elementary Functions of Complex Numbers</option>
+<option value="2.9_Eulers_Formula.html">2.9 Euler&#x27;s Formula</option>
+<option value="2.10_Powers_and_Roots_of_Complex_Numbers.html">2.10 Powers and Roots of Complex Numbers</option>
+<option value="2.11_Exponential_and_Trigonometric_Functions.html">2.11 The Exponential and Trigonometric Functions</option>
+<option value="2.12_Hyperbolic_Functions.html">2.12 Hyperbolic Functions</option>
+<option value="2.13_Logarithms.html">2.13 Logarithms</option>
+<option value="2.14_Complex_Roots_and_Powers.html">2.14 Complex Roots and Powers</option>
+<option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
+<option value="2.16_Some_Applications.html">2.16 Some Applications</option>
+<option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
+</header>
+<div class="layout">
+<nav class="toc" id="toc"></nav>
+<main>
+<h1><span class="num">2.8</span> Elementary Functions of Complex Numbers</h1>
+<p class="subtitle">Boas, Chapter 2, Section 8 · evaluating polynomials and rational functions at complex points, defining $e^z$ by its power series, the law $e^{z_1}e^{z_2}=e^{z_1+z_2}$, and $\frac{d}{dz}e^z=e^z$.</p>
+
+<div class="box note"><span class="tag">Goals</span>
+<ul class="summary">
+<li>Understand <b>why</b> we define $e^z$ by a power series, and what rules such a definition must respect.</li>
+<li>Evaluate polynomials and rational functions at complex numbers quickly.</li>
+<li>Prove $e^{z_1}e^{z_2}=e^{z_1+z_2}$ and $(e^z)'=e^z$ from the series.</li>
+<li>Get $e^{x+iy}=e^x(\cos y+i\sin y)$ and use it: modulus, angle, periodicity, zeros.</li>
+<li>See functions of $z$ as <b>mappings</b> of the plane (grids, landscapes).</li>
+</ul></div>
+
+<h2 id="what">1. What is an "elementary function" of $z$?</h2>
+<p>The elementary functions are powers and roots, the trigonometric functions and their inverses, logarithms and exponentials, and combinations of these. For real arguments you know how to compute them. Now we want things like $i^i$, $\sin(1+i)$ and $\ln i$. These are not curiosities: they appear in physics calculations whose final answers ($\operatorname{Re}z$, $\operatorname{Im}z$, $|z|$, angle) are real and measurable.</p>
+<div class="box thm"><span class="tag">Two requirements for any definition</span>
+<ol>
+<li><b>Consistency:</b> when $z=x$ is real ($y=0$), the new definition must give the old real function.</li>
+<li><b>Keep the laws:</b> familiar identities and calculus rules should still hold, e.g. $\sin2z=2\sin z\cos z$ and $\frac{d}{dz}e^z=e^z$.</li>
+</ol></div>
+
+<h2 id="poly">2. Polynomials and rational functions: just substitute</h2>
+<p>These use only $+,-,\times,\div$, which we already know how to do with complex numbers.</p>
+<div class="ex"><div class="hd">Boas example — $f(z)=\dfrac{z^2+1}{z-3}$ at $z=i-2$</div><div class="bd"><ol class="steps">
+<li>Numerator: $(i-2)^2+1=i^2-4i+4+1=4-4i$.</li>
+<li>Denominator: $i-2-3=i-5$.</li>
+<li>Divide, multiplying by the conjugate $-i-5$: $\dfrac{(4-4i)(-i-5)}{(i-5)(-i-5)}=\dfrac{-4i-20+4i^2+20i}{1+25}=\dfrac{-24+16i}{26}$.</li>
+<li>$f(i-2)=\dfrac{8i-12}{13}$.</li></ol></div></div>
+<div class="box note"><span class="tag">Speed tip: Horner's rule</span>
+<p>For $p(z)=z^3-2z+1$ write $p(z)=((z)z-2)z+1$, which needs only two multiplications. At $z=1+i$: $(1+i)^2=2i$, then $2i-2$, then $(2i-2)(1+i)=2i-2-2-2i=-4$, and $-4+1=-3$. So $p(1+i)=-3$.</p></div>
+<p>Facts carried over from algebra: a polynomial of degree $n$ has exactly $n$ complex zeros, and if its coefficients are real, $p(\bar z)=\overline{p(z)}$, so its zeros come in conjugate pairs (Section 2.5B).</p>
+
+<h2 id="exp">3. Defining $e^z$</h2>
+<p>We cannot "multiply $e$ by itself $z$ times" when $z=2+3i$. So we use the power series, which only needs $+$ and $\times$:</p>
+$$\boxed{\,e^z=\sum_{n=0}^\infty\frac{z^n}{n!}=1+z+\frac{z^2}{2!}+\frac{z^3}{3!}+\cdots\,}\qquad(8.1)$$
+<ul>
+<li>It converges for <b>every</b> $z$, since $\rho=\lim\frac{|z|}{n+1}=0$ (Boas Problem 7.1).</li>
+<li>For $z=x$ real it is the familiar series of $e^x$: requirement 1 ✔.</li>
+<li>It satisfies the law of exponents and the derivative rule (below): requirement 2 ✔.</li>
+</ul>
+<p>It can be shown that (8.1) is the <b>only</b> definition with these properties (uniqueness of analytic continuation, Ch. 14).</p>
+
+<h3>Proof of the law of exponents $e^{z_1}e^{z_2}=e^{z_1+z_2}$ (Boas Problem 8.1)</h3>
+<p>Both series converge absolutely, so we may multiply them and collect the terms of total degree $n$ (Cauchy product):</p>
+$$e^{z_1}e^{z_2}=\sum_{j=0}^\infty\frac{z_1^j}{j!}\sum_{k=0}^\infty\frac{z_2^k}{k!}=\sum_{n=0}^\infty\ \sum_{j+k=n}\frac{z_1^jz_2^k}{j!\,k!}=\sum_{n=0}^\infty\frac1{n!}\sum_{j=0}^n\binom nj z_1^jz_2^{n-j}=\sum_{n=0}^\infty\frac{(z_1+z_2)^n}{n!}.$$
+<p>The last step is the binomial theorem, which holds for complex numbers because $z_1z_2=z_2z_1$. $\blacksquare$</p>
+
+<h3>Proof that $\frac{d}{dz}e^z=e^z$ (Boas Problem 8.2)</h3>
+<p>Differentiate term by term (allowed inside the disk of convergence, which here is the whole plane), using $\frac{d}{dz}z^n=nz^{n-1}$:</p>
+$$\frac{d}{dz}\sum_{n=0}^\infty\frac{z^n}{n!}=\sum_{n=1}^\infty\frac{nz^{n-1}}{n!}=\sum_{n=1}^\infty\frac{z^{n-1}}{(n-1)!}=\sum_{m=0}^\infty\frac{z^m}{m!}=e^z.\ \blacksquare$$
+<p>More generally, all the differentiation and integration formulas of elementary calculus hold with $x$ replaced by $z$ (Boas Ch. 14).</p>
+
+<h2 id="split">4. The key consequence: $e^{x+iy}=e^x(\cos y+i\sin y)$</h2>
+<p>By the law of exponents, $e^{x+iy}=e^xe^{iy}$. Write out the series for $e^{iy}$ and group the even and odd powers (Section 2.9 does this in detail):</p>
+$$e^{iy}=\left(1-\frac{y^2}{2!}+\frac{y^4}{4!}-\dots\right)+i\left(y-\frac{y^3}{3!}+\dots\right)=\cos y+i\sin y.$$
+$$\boxed{e^{z}=e^{x}(\cos y+i\sin y)}\qquad\Rightarrow\qquad \operatorname{Re}e^z=e^x\cos y,\quad\operatorname{Im}e^z=e^x\sin y .$$
+<table class="t">
+<tr><th>Property</th><th>Reason</th></tr>
+<tr><td>$|e^z|=e^x=e^{\operatorname{Re}z}$</td><td>$|\cos y+i\sin y|=1$ (Boas Problem 9.27)</td></tr>
+<tr><td>$\arg e^z=y=\operatorname{Im}z$</td><td>the polar form can be read off directly</td></tr>
+<tr><td>$e^z\ne0$ for every $z$</td><td>$|e^z|=e^x>0$</td></tr>
+<tr><td>$e^{z+2\pi i}=e^z$: <b>periodic</b> with period $2\pi i$</td><td>$\cos$ and $\sin$ have period $2\pi$</td></tr>
+<tr><td>$e^z=1\iff z=2\pi in$</td><td>need $e^x=1$ and $y=2\pi n$</td></tr>
+<tr><td>$\overline{e^z}=e^{\bar z}$</td><td>the series has real coefficients</td></tr>
+<tr><td>$e^z$ can be negative: $e^{i\pi}=-1$</td><td>for real $x$, $e^x>0$ always; not so for complex $z$</td></tr>
+</table>
+<div class="box warn"><span class="tag">Things that change from real to complex</span>
+<ul>
+<li>$e^x$ is one-to-one, but $e^z$ is <b>not</b>: $e^{0}=e^{2\pi i}=e^{4\pi i}=1$. That is why $\ln z$ will be multivalued (Section 2.13).</li>
+<li>$e^x>0$, but $e^z$ takes every nonzero complex value, including negative reals.</li>
+</ul></div>
+
+<h3>Boas Problem 8.3: series for $e^x\cos x$ and $e^x\sin x$</h3>
+<p>Put $y=x$ in $e^{x+iy}=e^x(\cos y+i\sin y)$: $\ e^{x(1+i)}=e^x\cos x+ie^x\sin x$. Now expand the left side and use $(1+i)^n=(\sqrt2)^ne^{in\pi/4}$:</p>
+$$e^{x(1+i)}=\sum_{n=0}^\infty\frac{(1+i)^nx^n}{n!}=\sum_{n=0}^\infty\frac{2^{n/2}x^n}{n!}\left(\cos\frac{n\pi}4+i\sin\frac{n\pi}4\right).$$
+$$e^x\cos x=\sum_{n=0}^\infty\frac{2^{n/2}\cos\frac{n\pi}{4}}{n!}x^n=1+x-\frac{x^3}{3}-\frac{x^4}{6}-\frac{x^5}{30}+\frac{x^7}{630}+\cdots$$
+$$e^x\sin x=\sum_{n=0}^\infty\frac{2^{n/2}\sin\frac{n\pi}{4}}{n!}x^n=x+x^2+\frac{x^3}{3}-\frac{x^5}{30}-\frac{x^6}{90}-\frac{x^7}{630}+\cdots$$
+<p>Since $\cos\frac{n\pi}4=0$ for $n=2,6,10,\dots$, the $e^x\cos x$ series has <b>no $x^2$, $x^6$, $x^{10}$ terms</b>. Similarly $e^x\sin x$ has no $x^4,x^8,\dots$ terms (Boas Problem 17.30).</p>
+
+<div class="widget" id="w-series">
+<div class="wt">Interactive 1 — $e^z$ is built from its series (drag $z$)</div>
+<div class="wd">Left: drag $z$ in the $z$-plane. Right: the partial sums $1,\ 1+z,\ 1+z+\frac{z^2}{2},\dots$ in the $w$-plane, drawn as a chain of arrows that lands on $e^z=e^x(\cos y+i\sin y)$ (ring). For large $|z|$ the chain swings far out before coming back: the series still converges, just more slowly.</div>
+<div class="ctrls"><label>terms $N$ <input type="range" id="es-N" min="1" max="40" value="12"><output></output></label></div>
+<div class="grid2"><canvas id="cv-es1"></canvas><canvas id="cv-es2"></canvas></div>
+<div class="readout" id="es-out"></div>
+</div>
+
+<h2 id="map">5. Seeing a complex function: mapping and landscapes</h2>
+<p>A function $w=f(z)$ needs 4 real dimensions to graph ($x,y$ in and $u,v$ out), so we use two pictures:</p>
+<ul>
+<li><b>Mapping picture:</b> draw a grid in the $z$-plane and draw its image in the $w$-plane. For $e^z$, vertical lines $x=c$ become circles of radius $e^c$, and horizontal lines $y=c$ become rays at angle $c$. The horizontal strip $-\pi\lt y\le\pi$ covers the entire $w$-plane except $0$ exactly once.</li>
+<li><b>Landscape picture:</b> plot the height $|f(z)|$ over the $z$-plane and colour each point by $\arg f(z)$. For $e^z$ the height is $e^x$ (a ramp that does not depend on $y$), and the colour cycles with period $2\pi$ in $y$. For polynomials, the zeros are where the landscape touches the floor.</li>
+</ul>
+<div class="widget" id="w-map">
+<div class="wt">Interactive 2 — Mapping: grid in the $z$-plane → image in the $w$-plane</div>
+<div class="wd">Left: a grid of vertical (blue) and horizontal (orange) lines, plus a draggable point. Right: their images under $w=f(z)$. For $e^z$ notice the circles and rays, and that moving $z$ up by $2\pi$ returns $w$ to the same place.</div>
+<div class="ctrls"><label>$f(z)=$ <select id="mp-f"><option value="exp">e^z</option><option value="sq">z²</option><option value="inv">1/z</option><option value="rat">(z²+1)/(z−3)</option><option value="cube">z³ − 2z + 1</option></select></label>
+<label>grid half-width <input type="range" id="mp-w" min="0.5" max="4" step="0.25" value="1.5"><output></output></label>
+<label>grid half-height <input type="range" id="mp-h" min="0.5" max="4" step="0.25" value="3.25"><output></output></label></div>
+<div class="grid2"><canvas id="cv-mp1"></canvas><canvas id="cv-mp2"></canvas></div>
+<div class="readout" id="mp-out"></div>
+</div>
+<div class="widget" id="w-land">
+<div class="wt">Interactive 3 — 3-D landscape $|f(z)|$ coloured by $\arg f(z)$ (drag to rotate)</div>
+<div class="wd">The height is $|f|$ and the colour is the angle of $f$ (red = $0$, through yellow, green, blue, back to red at $2\pi$). Zeros are where the surface touches the floor, and all colours meet there.</div>
+<div class="ctrls"><label>$f$ <select id="ld-f"><option value="exp">e^z</option><option value="p1">z² + 1</option><option value="p2">z³ − 2z + 1</option><option value="rat">(z²+1)/(z−3)</option><option value="sq">z²</option></select></label>
+<label>zoom <input type="range" id="ld-z" min="0.6" max="1.6" step="0.05" value="1"><output></output></label></div>
+<canvas id="cv-land"></canvas>
+<div class="small" id="ld-cap"></div>
+</div>
+
+<h2 id="worked">6. Worked examples</h2>
+<div class="ex"><div class="hd">Example 1 — $e^{1+i\pi/2}$ and $e^{2-i\pi/3}$</div><div class="bd"><ol class="steps">
+<li>$e^{1+i\pi/2}=e\left(\cos\frac\pi2+i\sin\frac\pi2\right)=ei\approx2.718i$.</li>
+<li>$e^{2-i\pi/3}=e^2\left(\frac12-\frac{\sqrt3}2i\right)\approx3.695-6.399i$.</li></ol></div></div>
+<div class="ex"><div class="hd">Example 2 — Re, Im and modulus of $e^{z^2}$</div><div class="bd"><ol class="steps">
+<li>$z^2=(x^2-y^2)+2ixy$.</li>
+<li>$e^{z^2}=e^{x^2-y^2}\big(\cos2xy+i\sin2xy\big)$.</li>
+<li>$|e^{z^2}|=e^{x^2-y^2}$: it grows along the real axis and <b>decays</b> along the imaginary axis (a Gaussian there: $e^{-y^2}$).</li></ol></div></div>
+<div class="ex"><div class="hd">Example 3 — Where is $|e^{iz}|\gt1$?</div><div class="bd"><ol class="steps">
+<li>$iz=i(x+iy)=-y+ix$.</li>
+<li>$|e^{iz}|=e^{-y}\gt1\iff y\lt0$: the lower half-plane.</li>
+<li>This matters for waves: $e^{i(kz-\omega t)}$ with complex $k$ grows or decays depending on the sign of $\operatorname{Im}k$.</li></ol></div></div>
+<div class="ex"><div class="hd">Example 4 — Solve $e^z=1$ and $e^z=-1$</div><div class="bd"><ol class="steps">
+<li>$e^z=e^xe^{iy}=1=1\cdot e^{i0}$. Compare moduli: $e^x=1$, so $x=0$. Compare angles: $y=0+2\pi n$.</li>
+<li>So $z=2\pi in$, $n\in\mathbb Z$: infinitely many solutions.</li>
+<li>$e^z=-1=e^{i\pi}$ gives $x=0$ and $y=\pi+2\pi n$, so $z=(2n+1)\pi i$.</li></ol></div></div>
+
+<h2 id="practice">7. Practice problems</h2>
+<div class="prob"><div class="q"><b>P1.</b> Evaluate $p(z)=z^3-2z+1$ at $z=1+i$ and $z=i$. <span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$p(1+i)=-3$ (see the Horner example). $p(i)=i^3-2i+1=-i-2i+1=1-3i$.</p></details></div>
+<div class="prob"><div class="q"><b>P2.</b> Evaluate $f(z)=\dfrac{z-1}{z^2+1}$ at $z=2i$. <span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\dfrac{2i-1}{-4+1}=\dfrac{-1+2i}{-3}=\dfrac13-\dfrac23i$.</p></details></div>
+<div class="prob"><div class="q"><b>P3.</b> Show from the series that $\overline{e^z}=e^{\bar z}$. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>Conjugate term by term: $\overline{\sum z^n/n!}=\sum\bar z^n/n!$ (the coefficients $1/n!$ are real, and conjugation is continuous, so it passes through the limit).</p></details></div>
+<div class="prob"><div class="q"><b>P4.</b> Find Re and Im of $e^{1/z}$. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac1z=\frac{x-iy}{x^2+y^2}$, so $e^{1/z}=e^{x/(x^2+y^2)}\left[\cos\frac{y}{x^2+y^2}-i\sin\frac{y}{x^2+y^2}\right]$.</p></details></div>
+<div class="prob"><div class="q"><b>P5.</b> Show $e^z\ne0$ for all $z$, and find all $z$ with $e^z=i$. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$|e^z|=e^x>0$. For $e^z=i=e^{i\pi/2}$: $x=0$ and $y=\frac\pi2+2\pi n$, so $z=i\left(\frac\pi2+2\pi n\right)$.</p></details></div>
+<div class="prob"><div class="q"><b>P6.</b> Using $e^{z_1}e^{z_2}=e^{z_1+z_2}$, prove the addition formulas for $\cos(a+b)$ and $\sin(a+b)$ (with $a,b$ real). <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$e^{i(a+b)}=e^{ia}e^{ib}=(\cos a+i\sin a)(\cos b+i\sin b)=(\cos a\cos b-\sin a\sin b)+i(\sin a\cos b+\cos a\sin b)$. Equating real and imaginary parts with $\cos(a+b)+i\sin(a+b)$ gives both formulas at once.</p></details></div>
+<div class="prob"><div class="q"><b>P7.</b> Find the $x^8$ coefficient of $e^x\cos x$. <span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\dfrac{2^4\cos2\pi}{8!}=\dfrac{16}{40320}=\dfrac{1}{2520}$.</p></details></div>
+<div class="prob"><div class="q"><b>P8.</b> Show that $\sum_{n=0}^\infty\frac{(1+i)^n}{n!}=e\cos1+ie\sin1$, and use this to show $\sum_{n=0}^\infty\frac{2^{n/2}\cos(n\pi/4)}{n!}=e\cos1$. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>The series is $e^{1+i}=e(\cos1+i\sin1)$. Writing $(1+i)^n=2^{n/2}e^{in\pi/4}$ and taking real parts gives the second identity.</p></details></div>
+<div class="prob"><div class="q"><b>P9.</b> Where in the plane is $|e^{z^2}|\lt1$? <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$e^{x^2-y^2}\lt1\iff y^2\gt x^2\iff|y|\gt|x|$: the two "vertical" quarter-wedges between the lines $y=\pm x$.</p></details></div>
+
+<h2 id="quiz">8. Quick self-test</h2>
+<div class="mcq" data-ans="1" data-ok="$|e^z|=e^{\operatorname{Re}z}=e^2$." data-no="$|e^{x+iy}|=e^x$."><p>1. $|e^{2+5i}|=$</p><div class="opts"><button>$e^5$</button><button>$e^2$</button><button>$e^{\sqrt{29}}$</button><button>$1$</button></div><div class="fb"></div></div>
+<div class="mcq" data-ans="3" data-ok="$e^z$ has period $2\pi i$." data-no="When is $e^{z+c}=e^z$ for all $z$?"><p>2. $e^{z}$ is periodic with period</p><div class="opts"><button>$2\pi$</button><button>$\pi i$</button><button>it is not periodic</button><button>$2\pi i$</button></div><div class="fb"></div></div>
+<div class="mcq" data-ans="0" data-ok="$e^{i\pi}=-1$." data-no="Try $z=i\pi$."><p>3. Can $e^z$ equal $-1$?</p><div class="opts"><button>yes, for example $z=i\pi$</button><button>no, $e^z>0$ always</button><button>only if $z$ is real</button></div><div class="fb"></div></div>
+
+<h2 id="summary">9. Summary</h2>
+<div class="card"><ul class="summary">
+<li>Polynomials and rational functions: substitute and simplify.</li>
+<li>$e^z=\sum z^n/n!$ converges everywhere, reduces to $e^x$, and keeps $e^{z_1}e^{z_2}=e^{z_1+z_2}$ and $(e^z)'=e^z$.</li>
+<li>$e^{x+iy}=e^x(\cos y+i\sin y)$: $|e^z|=e^x$, $\arg e^z=y$, never zero, period $2\pi i$.</li>
+<li>A complex function is best "seen" as a mapping, or as a landscape coloured by phase.</li>
+</ul></div>
+
+
+<div class="pagenav"><a href="2.7_Complex_Power_Series_Disk_of_Convergence.html"><small>← Previous</small>2.7 Complex Power Series; Disk of Convergence</a><a href="2.9_Eulers_Formula.html" style="text-align:right"><small>Next →</small>2.9 Euler&#x27;s Formula</a></div>
+</main>
+</div>
+<script>
+"use strict";
+/* ===== shared helpers for all Chapter 2 pages ===== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const PI = Math.PI, TAU = 2 * Math.PI;
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function onReady(fn) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
+
+/* ---------- number formatting ---------- */
+function fnum(x, d = 4) {
+  if (Number.isNaN(x)) return 'undefined';
+  if (!isFinite(x)) return x > 0 ? '∞' : '−∞';
+  if (Math.abs(x) >= 1e7) return x.toExponential(3).replace('-', '−');
+  let s = (+x.toFixed(d)).toString();
+  if (s === '-0') s = '0';
+  return s.replace('-', '−');
+}
+/* ---------- complex arithmetic, numbers are [re, im] ---------- */
+const Cx = {
+  c: (a, b = 0) => [a, b],
+  I: [0, 1],
+  add: (a, b) => [a[0] + b[0], a[1] + b[1]],
+  sub: (a, b) => [a[0] - b[0], a[1] - b[1]],
+  mul: (a, b) => [a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]],
+  div: (a, b) => { const d = b[0] * b[0] + b[1] * b[1]; return [(a[0] * b[0] + a[1] * b[1]) / d, (a[1] * b[0] - a[0] * b[1]) / d]; },
+  scale: (a, k) => [a[0] * k, a[1] * k],
+  conj: a => [a[0], -a[1]],
+  neg: a => [-a[0], -a[1]],
+  abs: a => Math.hypot(a[0], a[1]),
+  abs2: a => a[0] * a[0] + a[1] * a[1],
+  arg: a => Math.atan2(a[1], a[0]),
+  arg2pi: a => { let t = Math.atan2(a[1], a[0]); return t < 0 ? t + TAU : t; },
+  polar: (r, t) => [r * Math.cos(t), r * Math.sin(t)],
+  exp: a => { const e = Math.exp(a[0]); return [e * Math.cos(a[1]), e * Math.sin(a[1])]; },
+  log: (a, n = 0) => [Math.log(Math.hypot(a[0], a[1])), Math.atan2(a[1], a[0]) + TAU * n],
+  ipow(a, n) { let r = [1, 0], b = a, k = Math.abs(n); while (k) { if (k & 1) r = Cx.mul(r, b); b = Cx.mul(b, b); k >>= 1; } return n < 0 ? Cx.div([1, 0], r) : r; },
+  pow(a, b, n = 0) {
+    if (b[1] === 0 && Number.isInteger(b[0]) && Math.abs(b[0]) <= 4096) return Cx.ipow(a, b[0]);
+    if (a[0] === 0 && a[1] === 0) return b[0] > 0 ? [0, 0] : [NaN, NaN];
+    return Cx.exp(Cx.mul(b, Cx.log(a, n)));
+  },
+  sqrt: a => Cx.polar(Math.sqrt(Math.hypot(a[0], a[1])), Math.atan2(a[1], a[0]) / 2),
+  sin: a => [Math.sin(a[0]) * Math.cosh(a[1]), Math.cos(a[0]) * Math.sinh(a[1])],
+  cos: a => [Math.cos(a[0]) * Math.cosh(a[1]), -Math.sin(a[0]) * Math.sinh(a[1])],
+  tan: a => Cx.div(Cx.sin(a), Cx.cos(a)),
+  sinh: a => [Math.sinh(a[0]) * Math.cos(a[1]), Math.cosh(a[0]) * Math.sin(a[1])],
+  cosh: a => [Math.cosh(a[0]) * Math.cos(a[1]), Math.sinh(a[0]) * Math.sin(a[1])],
+  tanh: a => Cx.div(Cx.sinh(a), Cx.cosh(a)),
+  // principal branches
+  asin: z => Cx.mul([0, -1], Cx.log(Cx.add(Cx.mul([0, 1], z), Cx.sqrt(Cx.sub([1, 0], Cx.mul(z, z)))))),
+  acos: z => Cx.sub([PI / 2, 0], Cx.asin(z)),
+  atan: z => Cx.mul([0, -0.5], Cx.log(Cx.div(Cx.add([1, 0], Cx.mul([0, 1], z)), Cx.sub([1, 0], Cx.mul([0, 1], z))))),
+  asinh: z => Cx.log(Cx.add(z, Cx.sqrt(Cx.add(Cx.mul(z, z), [1, 0])))),
+  acosh: z => Cx.log(Cx.add(z, Cx.mul(Cx.sqrt(Cx.add(z, [1, 0])), Cx.sqrt(Cx.sub(z, [1, 0]))))),
+  atanh: z => Cx.scale(Cx.log(Cx.div(Cx.add([1, 0], z), Cx.sub([1, 0], z))), 0.5),
+  eq: (a, b, e = 1e-9) => Math.abs(a[0] - b[0]) < e && Math.abs(a[1] - b[1]) < e,
+  fmt(z, d = 4) {
+    if (!isFinite(z[0]) || !isFinite(z[1])) return 'undefined';
+    const eps = 0.5 * Math.pow(10, -d);
+    const R = Math.abs(z[0]) < eps ? 0 : z[0], I = Math.abs(z[1]) < eps ? 0 : z[1];
+    if (I === 0) return fnum(R, d);
+    const ai = Math.abs(I), ip = (Math.abs(ai - 1) < eps ? '' : fnum(ai, d)) + 'i';
+    if (R === 0) return (I < 0 ? '−' : '') + ip;
+    return fnum(R, d) + (I < 0 ? ' − ' : ' + ') + ip;
+  },
+  tex(z, d = 4) { return Cx.fmt(z, d).replace(/−/g, '-').replace('undefined', '\\text{undefined}'); },
+  polarTex(z, d = 3) {
+    const r = Cx.abs(z), t = Cx.arg(z);
+    return fnum(r, d).replace('−', '-') + '\\,e^{' + fnum(t, d).replace('−', '-') + 'i}';
+  }
+};
+/* angle as a nice multiple of pi if possible */
+function piFrac(t, maxDen = 12) {
+  const q = t / PI;
+  for (let den = 1; den <= maxDen; den++) {
+    const num = Math.round(q * den);
+    if (Math.abs(q * den - num) < 1e-9) {
+      if (num === 0) return '0';
+      const g = gcd(Math.abs(num), den), a = num / g, b = den / g;
+      const s = a < 0 ? '-' : '', A = Math.abs(a);
+      const top = (A === 1 ? '' : A) + '\\pi';
+      return b === 1 ? s + top : s + '\\frac{' + top + '}{' + b + '}';
+    }
+  }
+  return fnum(t, 4).replace('−', '-');
+}
+function gcd(a, b) { while (b) [a, b] = [b, a % b]; return a; }
+/* coefficient of i in TeX: 1 -> '', -1 -> '-' */
+function icoef(v, d = 3) { const s = fnum(v, d).replace('−', '-'); return s === '1' ? '' : s === '-1' ? '-' : s; }
+/* KaTeX render into element (falls back to plain text if KaTeX could not load) */
+function tex(el, s, disp = false) {
+  if (typeof el === 'string') el = $(el);
+  if (!el) return;
+  if (window.katex) { try { katex.render(s, el, { displayMode: disp, throwOnError: false }); return; } catch (e) { } }
+  el.textContent = s;
+}
+/* render a string that mixes text and $...$ math into an element */
+function texMix(el, s) {
+  if (typeof el === 'string') el = $(el);
+  el.innerHTML = '';
+  s.split(/(\$\$[^$]+\$\$|\$[^$]+\$)/).forEach(part => {
+    if (!part) return;
+    const span = document.createElement('span');
+    if (part.startsWith('$$')) tex(span, part.slice(2, -2), true);
+    else if (part.startsWith('$')) tex(span, part.slice(1, -1));
+    else span.innerHTML = part;
+    el.appendChild(span);
+  });
+}
+
+/* ---------- expression parser for complex expressions ---------- */
+const Parser = (() => {
+  const F = {
+    sin: Cx.sin, cos: Cx.cos, tan: Cx.tan, sinh: Cx.sinh, cosh: Cx.cosh, tanh: Cx.tanh,
+    sec: z => Cx.div([1, 0], Cx.cos(z)), csc: z => Cx.div([1, 0], Cx.sin(z)), cot: z => Cx.div(Cx.cos(z), Cx.sin(z)),
+    sech: z => Cx.div([1, 0], Cx.cosh(z)), csch: z => Cx.div([1, 0], Cx.sinh(z)), coth: z => Cx.div(Cx.cosh(z), Cx.sinh(z)),
+    exp: Cx.exp, ln: z => Cx.log(z), log: z => Cx.log(z), sqrt: Cx.sqrt, conj: Cx.conj,
+    abs: z => [Cx.abs(z), 0], arg: z => [Cx.arg(z), 0], re: z => [z[0], 0], im: z => [z[1], 0],
+    asin: Cx.asin, acos: Cx.acos, atan: Cx.atan, asinh: Cx.asinh, acosh: Cx.acosh, atanh: Cx.atanh,
+    arcsin: Cx.asin, arccos: Cx.acos, arctan: Cx.atan, arcsinh: Cx.asinh, arccosh: Cx.acosh, arctanh: Cx.atanh
+  };
+  function tokenize(s) {
+    s = s.replace(/−/g, '-').replace(/×|·/g, '*').replace(/÷/g, '/').replace(/π/g, 'pi').replace(/√/g, 'sqrt').replace(/\*\*/g, '^');
+    const out = []; let i = 0;
+    while (i < s.length) {
+      const c = s[i];
+      if (/\s/.test(c)) { i++; continue; }
+      if (/[0-9.]/.test(c)) { let j = i; while (j < s.length && /[0-9.]/.test(s[j])) j++; if (s[j] === 'e' && /[-+0-9]/.test(s[j + 1] || '') && /[0-9]/.test(s[j + 1] === '-' || s[j + 1] === '+' ? s[j + 2] : s[j + 1])) { j += 2; while (j < s.length && /[0-9]/.test(s[j])) j++; } out.push({ t: 'n', v: parseFloat(s.slice(i, j)) }); i = j; continue; }
+      if (/[a-zA-Z_]/.test(c)) { let j = i; while (j < s.length && /[a-zA-Z_0-9]/.test(s[j])) j++; out.push({ t: 'id', v: s.slice(i, j).toLowerCase() }); i = j; continue; }
+      if ('+-*/^(),'.includes(c)) { out.push({ t: 'op', v: c }); i++; continue; }
+      throw new Error('Unexpected character "' + c + '"');
+    }
+    return out;
+  }
+  function compile(src) {
+    const tk = tokenize(src); let p = 0;
+    const peek = () => tk[p], next = () => tk[p++];
+    const isOp = v => tk[p] && tk[p].t === 'op' && tk[p].v === v;
+    function expr() { let a = term(); while (isOp('+') || isOp('-')) { const o = next().v, b = term(), A = a; a = o === '+' ? e => Cx.add(A(e), b(e)) : e => Cx.sub(A(e), b(e)); } return a; }
+    function term() {
+      let a = unary();
+      for (; ;) {
+        if (isOp('*') || isOp('/')) { const o = next().v, b = unary(), A = a; a = o === '*' ? e => Cx.mul(A(e), b(e)) : e => Cx.div(A(e), b(e)); }
+        else if (peek() && (peek().t === 'n' || peek().t === 'id' || isOp('('))) { const b = power(), A = a; a = e => Cx.mul(A(e), b(e)); }
+        else break;
+      }
+      return a;
+    }
+    function unary() { if (isOp('-')) { next(); const a = unary(); return e => Cx.neg(a(e)); } if (isOp('+')) { next(); return unary(); } return power(); }
+    function power() { const a = primary(); if (isOp('^')) { next(); const b = unary(); return e => Cx.pow(a(e), b(e)); } return a; }
+    function primary() {
+      const t = next();
+      if (!t) throw new Error('Expression ended too early');
+      if (t.t === 'n') { const v = [t.v, 0]; return () => v; }
+      if (t.t === 'op' && t.v === '(') { const a = expr(); if (!isOp(')')) throw new Error('Missing ")"'); next(); return a; }
+      if (t.t === 'id') {
+        if (F[t.v]) {
+          if (!isOp('(')) throw new Error(t.v + ' needs brackets, e.g. ' + t.v + '(1+i)');
+          next(); const a = expr(); if (!isOp(')')) throw new Error('Missing ")"'); next(); const f = F[t.v]; return e => f(a(e));
+        }
+        if (t.v === 'i' || t.v === 'j') return () => [0, 1];
+        if (t.v === 'pi') return () => [PI, 0];
+        if (t.v === 'e') return () => [Math.E, 0];
+        const name = t.v; return e => { if (e && name in e) return e[name]; throw new Error('Unknown name "' + name + '"'); };
+      }
+      throw new Error('Unexpected "' + t.v + '"');
+    }
+    const f = expr(); if (p < tk.length) throw new Error('Unexpected "' + tk[p].v + '"');
+    return f;
+  }
+  return { compile, eval: (s, env) => compile(s)(env || {}) };
+})();
+
+/* ---------- contour integration: ∫ f(z) dz along z = path(t), t in [a,b] (composite Simpson) ---------- */
+function contourInt(f, path, a, b, N = 2000) {
+  if (N % 2) N++;
+  const h = (b - a) / N, d = h * 1e-3;
+  let s = [0, 0];
+  for (let k = 0; k <= N; k++) {
+    const t = a + k * h, z = path(t), dz = Cx.scale(Cx.sub(path(t + d), path(t - d)), 1 / (2 * d));
+    const w = k === 0 || k === N ? 1 : (k % 2 ? 4 : 2);
+    s = Cx.add(s, Cx.scale(Cx.mul(f(z), dz), w));
+  }
+  return Cx.scale(s, h / 3);
+}
+const circlePath = (c, r) => t => Cx.add(c, Cx.polar(r, t));
+
+/* ---------- colours ---------- */
+function hsl2rgb(h, s, l) { // h in [0,1)
+  const a = s * Math.min(l, 1 - l);
+  const f = n => { const k = (n + h * 12) % 12; return l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)); };
+  return [f(0) * 255, f(8) * 255, f(4) * 255];
+}
+function phaseRGB(t, light = 0.5) { let h = (t / TAU) % 1; if (h < 0) h += 1; return hsl2rgb(h, 0.85, light); }
+function heatRGB(u) { // 0..1 -> perceptual blue->teal->yellow
+  u = Math.max(0, Math.min(1, u));
+  const st = [[48, 18, 120], [33, 102, 172], [32, 164, 160], [110, 200, 90], [240, 220, 60]];
+  const x = u * (st.length - 1), i = Math.min(st.length - 2, Math.floor(x)), f = x - i;
+  return st[i].map((v, k) => v + (st[i + 1][k] - v) * f);
+}
+const rgbs = c => `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`;
+
+/* ---------- redraw registry (resize + theme change) ---------- */
+const _views = [];
+let _rzT = 0;
+window.addEventListener('resize', () => { clearTimeout(_rzT); _rzT = setTimeout(() => _views.forEach(v => v.resize()), 120); });
+function redrawAll() { _views.forEach(v => v.redraw()); }
+
+/* ---------- 2-D complex plane ---------- */
+class Plane {
+  constructor(cv, o = {}) {
+    this.cv = typeof cv === 'string' ? $(cv) : cv; this.ctx = this.cv.getContext('2d');
+    this.cx = o.cx ?? 0; this.cy = o.cy ?? 0; this.span = o.span ?? 3; this.aspect = o.aspect ?? 0.7;
+    this.gridOn = o.grid !== false; this.snap = o.snap ?? 0.05; this.axisLabels = o.axisLabels ?? ['Re', 'Im'];
+    this.draw = o.draw || (() => { }); this.drags = []; this.onClick = o.onClick || null; this.active = null;
+    this._bind(); _views.push(this); this.resize();
+  }
+  resize() {
+    const dpr = window.devicePixelRatio || 1, w = this.cv.clientWidth || 600, h = Math.round(w * this.aspect);
+    this.cv.style.height = h + 'px'; this.cv.width = Math.round(w * dpr); this.cv.height = Math.round(h * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); this.W = w; this.H = h; this.dpr = dpr; this.redraw();
+  }
+  get k() { return this.W / (2 * this.span); }
+  X(x) { return this.W / 2 + (x - this.cx) * this.k; }
+  Y(y) { return this.H / 2 - (y - this.cy) * this.k; }
+  wx(px) { return (px - this.W / 2) / this.k + this.cx; }
+  wy(py) { return -(py - this.H / 2) / this.k + this.cy; }
+  get x0() { return this.wx(0); } get x1() { return this.wx(this.W); }
+  get y0() { return this.wy(this.H); } get y1() { return this.wy(0); }
+  redraw() { if (!this.W) return; const c = this.ctx; c.save(); c.fillStyle = cssv('--canvas'); c.fillRect(0, 0, this.W, this.H); c.restore(); if (this.gridOn) this.grid(); this.draw(this); }
+  step() { const raw = 55 / this.k, p = Math.pow(10, Math.floor(Math.log10(raw))); for (const m of [1, 2, 5, 10]) if (m * p >= raw) return m * p; return 10 * p; }
+  grid() {
+    const c = this.ctx, s = this.step(); c.save(); c.lineWidth = 1; c.strokeStyle = cssv('--grid');
+    c.beginPath();
+    for (let x = Math.ceil(this.x0 / s) * s; x <= this.x1; x += s) { const X = Math.round(this.X(x)) + .5; c.moveTo(X, 0); c.lineTo(X, this.H); }
+    for (let y = Math.ceil(this.y0 / s) * s; y <= this.y1; y += s) { const Y = Math.round(this.Y(y)) + .5; c.moveTo(0, Y); c.lineTo(this.W, Y); }
+    c.stroke();
+    c.strokeStyle = cssv('--axis'); c.lineWidth = 1.3; c.beginPath();
+    const ox = this.X(0), oy = this.Y(0); c.moveTo(0, oy); c.lineTo(this.W, oy); c.moveTo(ox, 0); c.lineTo(ox, this.H); c.stroke();
+    c.fillStyle = cssv('--muted'); c.font = '11px system-ui,sans-serif';
+    const lx = Math.min(Math.max(ox, 4), this.W - 30), ly = Math.min(Math.max(oy, 12), this.H - 4);
+    c.textAlign = 'center';
+    for (let x = Math.ceil(this.x0 / s) * s; x <= this.x1; x += s) { if (Math.abs(x) < s / 2) continue; c.fillText(fnum(x, 3), this.X(x), ly + 13 > this.H ? ly - 4 : ly + 13); }
+    c.textAlign = 'left';
+    for (let y = Math.ceil(this.y0 / s) * s; y <= this.y1; y += s) { if (Math.abs(y) < s / 2) continue; c.fillText(fnum(y, 3) + (this.axisLabels[1] === 'Im' ? 'i' : ''), lx + 4, this.Y(y) + 4); }
+    c.font = '600 12px system-ui,sans-serif'; c.fillStyle = cssv('--axis');
+    if (this.axisLabels[0]) { c.textAlign = 'right'; c.fillText(this.axisLabels[0], this.W - 6, Math.min(Math.max(oy - 6, 14), this.H - 6)); }
+    if (this.axisLabels[1]) { c.textAlign = 'left'; c.fillText(this.axisLabels[1], Math.min(Math.max(ox + 6, 6), this.W - 30), 14); }
+    c.restore();
+  }
+  col(v) { return v && v.startsWith('--') ? cssv(v) : (v || cssv('--accent')); }
+  line(a, b, o = {}) { const c = this.ctx; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; if (o.dash) c.setLineDash(o.dash); c.globalAlpha = o.alpha ?? 1; c.beginPath(); c.moveTo(this.X(a[0]), this.Y(a[1])); c.lineTo(this.X(b[0]), this.Y(b[1])); c.stroke(); c.restore(); }
+  lineInf(p, d, o = {}) { const L = 1e4; this.line([p[0] - d[0] * L, p[1] - d[1] * L], [p[0] + d[0] * L, p[1] + d[1] * L], o); }
+  arrow(a, b, o = {}) {
+    const c = this.ctx, x0 = this.X(a[0]), y0 = this.Y(a[1]), x1 = this.X(b[0]), y1 = this.Y(b[1]), L = Math.hypot(x1 - x0, y1 - y0);
+    c.save(); c.strokeStyle = c.fillStyle = this.col(o.color); c.lineWidth = o.width || 2.5; c.globalAlpha = o.alpha ?? 1; if (o.dash) c.setLineDash(o.dash);
+    if (L < 1) { c.restore(); return; }
+    const h = Math.min(o.head || 11, L * 0.5), ux = (x1 - x0) / L, uy = (y1 - y0) / L;
+    c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1 - ux * h * 0.8, y1 - uy * h * 0.8); c.stroke(); c.setLineDash([]);
+    c.beginPath(); c.moveTo(x1, y1); c.lineTo(x1 - ux * h - uy * h * 0.45, y1 - uy * h + ux * h * 0.45); c.lineTo(x1 - ux * h + uy * h * 0.45, y1 - uy * h - ux * h * 0.45); c.closePath(); c.fill(); c.restore();
+  }
+  dot(z, o = {}) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(o.color); c.globalAlpha = o.alpha ?? 1;
+    c.beginPath(); c.arc(this.X(z[0]), this.Y(z[1]), o.r || 5, 0, TAU);
+    if (o.hollow) { c.strokeStyle = c.fillStyle; c.lineWidth = 2; c.stroke(); } else c.fill();
+    if (o.ring) { c.strokeStyle = cssv('--canvas'); c.lineWidth = 2; c.stroke(); }
+    c.restore(); if (o.label) this.label(z, o.label, o);
+  }
+  label(z, s, o = {}) {
+    const c = this.ctx; c.save(); c.font = o.font || '600 13px system-ui,sans-serif'; c.fillStyle = this.col(o.lcolor || o.color);
+    c.textAlign = o.align || 'left'; const X = this.X(z[0]) + (o.dx ?? 8), Y = this.Y(z[1]) + (o.dy ?? -8);
+    if (o.bg !== false) { const w = c.measureText(s).width, ax = c.textAlign === 'center' ? X - w / 2 : c.textAlign === 'right' ? X - w : X; c.globalAlpha = 0.75; c.fillStyle = cssv('--canvas'); c.fillRect(ax - 2, Y - 12, w + 4, 16); c.globalAlpha = 1; c.fillStyle = this.col(o.lcolor || o.color); }
+    c.fillText(s, X, Y); c.restore();
+  }
+  text(px, py, s, o = {}) { const c = this.ctx; c.save(); c.font = o.font || '600 13px system-ui,sans-serif'; c.fillStyle = this.col(o.color || '--fg'); c.textAlign = o.align || 'left'; c.fillText(s, px, py); c.restore(); }
+  circle(ctr, r, o = {}) {
+    const c = this.ctx; c.save(); c.beginPath(); c.arc(this.X(ctr[0]), this.Y(ctr[1]), Math.abs(r) * this.k, 0, TAU);
+    if (o.fill) { c.fillStyle = this.col(o.fill); c.globalAlpha = o.fillAlpha ?? 0.15; c.fill(); c.globalAlpha = 1; }
+    if (o.color !== 'none') { c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; if (o.dash) c.setLineDash(o.dash); c.stroke(); }
+    c.restore();
+  }
+  path(pts, o = {}) {
+    const c = this.ctx; if (!pts.length) return; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; c.globalAlpha = o.alpha ?? 1; if (o.dash) c.setLineDash(o.dash);
+    c.beginPath(); let pen = false;
+    for (const p of pts) { if (!p || !isFinite(p[0]) || !isFinite(p[1]) || Math.abs(p[0]) > 1e6 || Math.abs(p[1]) > 1e6) { pen = false; continue; } const X = this.X(p[0]), Y = this.Y(p[1]); if (pen) c.lineTo(X, Y); else { c.moveTo(X, Y); pen = true; } }
+    if (o.close) c.closePath();
+    if (o.fill) { c.fillStyle = this.col(o.fill); c.globalAlpha = o.fillAlpha ?? 0.15; c.fill(); c.globalAlpha = o.alpha ?? 1; }
+    if (o.color !== 'none') c.stroke(); c.restore();
+  }
+  angleArc(t0, t1, rpx, o = {}, ctr = [0, 0]) {
+    const c = this.ctx; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 1.8; c.beginPath();
+    c.arc(this.X(ctr[0]), this.Y(ctr[1]), rpx, -t0, -t1, t1 > t0); c.stroke(); c.restore();
+  }
+  /* shade region where test(x,y) is true */
+  region(test, color, alpha = 0.22, res = 3) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(color); c.globalAlpha = alpha;
+    for (let py = 0; py < this.H; py += res) for (let px = 0; px < this.W; px += res) if (test(this.wx(px + res / 2), this.wy(py + res / 2))) c.fillRect(px, py, res, res);
+    c.restore();
+  }
+  /* implicit curve F(x,y)=0 by marching squares (sign changes) */
+  implicit(Fn, o = {}, res = 3) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(o.color); const nx = Math.ceil(this.W / res) + 1, ny = Math.ceil(this.H / res) + 1; const v = new Float64Array(nx * ny);
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) v[j * nx + i] = Fn(this.wx(i * res), this.wy(j * res));
+    for (let j = 0; j < ny - 1; j++) for (let i = 0; i < nx - 1; i++) { const a = v[j * nx + i], b = v[j * nx + i + 1], d = v[(j + 1) * nx + i]; if (!isFinite(a) || !isFinite(b) || !isFinite(d)) continue; if ((a > 0) !== (b > 0) || (a > 0) !== (d > 0)) { if (o.maxJump && (Math.abs(a - b) > o.maxJump || Math.abs(a - d) > o.maxJump)) continue; c.fillRect(i * res - (o.width || 2) / 2 + res / 2, j * res - (o.width || 2) / 2 + res / 2, o.width || 2.4, o.width || 2.4); } }
+    c.restore();
+  }
+  /* domain colouring of w=f(z) : hue = arg w, brightness bands = log|w| */
+  domain(f, o = {}) {
+    const res = o.res || 2, c = this.ctx, w = Math.ceil(this.W / res), h = Math.ceil(this.H / res);
+    const img = c.createImageData(w, h), d = img.data;
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+      const z = [this.wx(i * res + res / 2), this.wy(j * res + res / 2)], v = f(z), k = (j * w + i) * 4;
+      if (!isFinite(v[0]) || !isFinite(v[1])) { d[k] = d[k + 1] = d[k + 2] = 255; d[k + 3] = 255; continue; }
+      const m = Math.hypot(v[0], v[1]); let L = 0.5;
+      if (o.bands !== false) { const fr = (Math.log2(m) % 1 + 1) % 1; L = 0.32 + 0.3 * fr; }
+      const rgb = phaseRGB(Math.atan2(v[1], v[0]), L); d[k] = rgb[0]; d[k + 1] = rgb[1]; d[k + 2] = rgb[2]; d[k + 3] = 255;
+    }
+    const tmp = document.createElement('canvas'); tmp.width = w; tmp.height = h; tmp.getContext('2d').putImageData(img, 0, 0);
+    c.save(); c.imageSmoothingEnabled = true; c.globalAlpha = o.alpha ?? 1; c.drawImage(tmp, 0, 0, this.W, this.H); c.restore();
+  }
+  addDrag(get, set, o = {}) { this.drags.push({ get, set, r: o.r || 16 }); this.cv.style.touchAction = 'none'; this.cv.style.cursor = 'grab'; }
+  _bind() {
+    const pos = e => { const b = this.cv.getBoundingClientRect(); return [e.clientX - b.left, e.clientY - b.top]; };
+    const snapv = v => this.snap ? Math.round(v / this.snap) * this.snap : v;
+    this.cv.addEventListener('pointerdown', e => {
+      const [px, py] = pos(e); let best = null, bd = 1e9;
+      for (const d of this.drags) { const z = d.get(); const dd = Math.hypot(this.X(z[0]) - px, this.Y(z[1]) - py); if (dd < d.r && dd < bd) { bd = dd; best = d; } }
+      if (best) { this.active = best; this.cv.setPointerCapture(e.pointerId); this.cv.style.cursor = 'grabbing'; e.preventDefault(); }
+      else if (this.onClick) { this.onClick([snapv(this.wx(px)), snapv(this.wy(py))]); this.redraw(); }
+    });
+    this.cv.addEventListener('pointermove', e => {
+      if (!this.active) return; const [px, py] = pos(e);
+      this.active.set([snapv(this.wx(px)), snapv(this.wy(py))]); this.redraw(); if (this.onchange) this.onchange();
+    });
+    const up = () => { if (this.active) { this.active = null; this.cv.style.cursor = this.drags.length ? 'grab' : ''; } };
+    this.cv.addEventListener('pointerup', up); this.cv.addEventListener('pointercancel', up);
+  }
+}
+
+/* ---------- simple 2-D function graph (real x, real y) ---------- */
+class Graph extends Plane {
+  constructor(cv, o = {}) { super(cv, Object.assign({ axisLabels: o.axisLabels || ['x', 'y'], snap: 0 }, o)); }
+  fn(f, o = {}) { const pts = []; const n = o.n || 600; for (let i = 0; i <= n; i++) { const x = this.x0 + (this.x1 - this.x0) * i / n; const y = f(x); pts.push(isFinite(y) && Math.abs(y) < 1e5 ? [x, y] : null); } this.path(pts, o); }
+}
+
+/* ---------- rotatable 3-D surface z = h(x,y) ---------- */
+class Surf3D {
+  constructor(cv, o = {}) {
+    this.cv = typeof cv === 'string' ? $(cv) : cv; this.ctx = this.cv.getContext('2d');
+    Object.assign(this, { xr: [-2, 2], yr: [-2, 2], zr: [0, 4], n: 46, yaw: -0.65, pitch: 0.55, zoom: 1, aspect: 0.72, zs: 0.9, labels: ['x', 'y', 'z'], wire: true }, o);
+    this.h = o.h; this.color = o.color || null; this.extra = o.extra || null;
+    this._bind(); _views.push(this); this.build(); this.resize();
+  }
+  setFn(h, color) { this.h = h; if (color !== undefined) this.color = color; this.build(); this.redraw(); }
+  build() {
+    const n = this.n, V = [];
+    for (let j = 0; j <= n; j++) for (let i = 0; i <= n; i++) {
+      let x, y, hv, u = 0, v = 0;
+      if (this.param) { // parametric surface (u,v) -> [x, y, height]
+        u = this.ur[0] + (this.ur[1] - this.ur[0]) * i / n; v = this.vr[0] + (this.vr[1] - this.vr[0]) * j / n;
+        [x, y, hv] = this.param(u, v);
+      } else { x = this.xr[0] + (this.xr[1] - this.xr[0]) * i / n; y = this.yr[0] + (this.yr[1] - this.yr[0]) * j / n; hv = this.h(x, y); }
+      if (!isFinite(hv)) hv = this.zr[1]; const hc = Math.max(this.zr[0], Math.min(this.zr[1], hv));
+      V.push({ x, y, u, v, h: hc, raw: hv, X: 2 * (x - this.xr[0]) / (this.xr[1] - this.xr[0]) - 1, Y: 2 * (y - this.yr[0]) / (this.yr[1] - this.yr[0]) - 1, Z: (2 * (hc - this.zr[0]) / (this.zr[1] - this.zr[0]) - 1) * this.zs });
+    }
+    this.V = V;
+  }
+  resize() {
+    const dpr = window.devicePixelRatio || 1, w = this.cv.clientWidth || 600, h = Math.round(w * this.aspect);
+    this.cv.style.height = h + 'px'; this.cv.width = Math.round(w * dpr); this.cv.height = Math.round(h * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); this.W = w; this.H = h; this.redraw();
+  }
+  proj(X, Y, Z) {
+    const cy = Math.cos(this.yaw), sy = Math.sin(this.yaw), cp = Math.cos(this.pitch), sp = Math.sin(this.pitch);
+    const x1 = X * cy - Y * sy, y1 = X * sy + Y * cy, y2 = y1 * cp - Z * sp, z2 = y1 * sp + Z * cp;
+    const f = 4 / (4 + y2), S = Math.min(this.W, this.H / 0.9) * 0.34 * this.zoom;
+    return [this.W / 2 + x1 * f * S, this.H / 2 + 10 - z2 * f * S, y2];
+  }
+  redraw() {
+    if (!this.W) return; const c = this.ctx, n = this.n, V = this.V;
+    c.save(); c.fillStyle = cssv('--canvas'); c.fillRect(0, 0, this.W, this.H);
+    const P = V.map(v => this.proj(v.X, v.Y, v.Z));
+    // base box
+    const bz = -this.zs, tz = this.zs, corners = [[-1, -1], [1, -1], [1, 1], [-1, 1]];
+    c.strokeStyle = cssv('--axis'); c.lineWidth = 1; c.globalAlpha = 0.55; c.beginPath();
+    corners.forEach((q, i) => { const a = this.proj(q[0], q[1], bz), b = this.proj(corners[(i + 1) % 4][0], corners[(i + 1) % 4][1], bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); });
+    c.stroke(); c.globalAlpha = 1;
+    // grid on floor
+    c.strokeStyle = cssv('--grid'); c.beginPath();
+    for (let t = -1; t <= 1.001; t += 0.25) { let a = this.proj(t, -1, bz), b = this.proj(t, 1, bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); a = this.proj(-1, t, bz); b = this.proj(1, t, bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); }
+    c.stroke();
+    const quads = [];
+    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
+      const a = j * (n + 1) + i, b = a + 1, d = a + n + 1, e = d + 1;
+      quads.push([a, b, e, d, (P[a][2] + P[b][2] + P[d][2] + P[e][2]) / 4]);
+    }
+    quads.sort((p, q) => q[4] - p[4]);
+    const L = [0.35, -0.45, 0.82], ll = Math.hypot(...L);
+    const wire = cssv('--canvas');
+    for (const q of quads) {
+      const A = V[q[0]], B = V[q[1]], E = V[q[2]], D = V[q[3]];
+      const ux = B.X - A.X, uy = B.Y - A.Y, uz = B.Z - A.Z, vx = D.X - A.X, vy = D.Y - A.Y, vz = D.Z - A.Z;
+      let nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx; const nl = Math.hypot(nx, ny, nz) || 1;
+      const lam = Math.abs((nx * L[0] + ny * L[1] + nz * L[2]) / (nl * ll)), sh = 0.5 + 0.5 * lam;
+      let rgb;
+      if (this.color) rgb = this.color((A.x + E.x) / 2, (A.y + E.y) / 2, (A.raw + E.raw) / 2, (A.u + E.u) / 2, (A.v + E.v) / 2);
+      else rgb = heatRGB(((A.h + B.h + D.h + E.h) / 4 - this.zr[0]) / (this.zr[1] - this.zr[0]));
+      c.fillStyle = rgbs(rgb.map(v => v * sh));
+      c.beginPath(); [q[0], q[1], q[2], q[3]].forEach((k, m) => m ? c.lineTo(P[k][0], P[k][1]) : c.moveTo(P[k][0], P[k][1])); c.closePath(); c.fill();
+      if (this.wire) { c.strokeStyle = wire; c.globalAlpha = 0.18; c.lineWidth = 0.6; c.stroke(); c.globalAlpha = 1; } else { c.strokeStyle = c.fillStyle; c.lineWidth = 0.5; c.stroke(); }
+    }
+    if (this.extra) this.extra(this);
+    // axis labels
+    c.fillStyle = cssv('--fg'); c.font = '600 13px system-ui,sans-serif'; c.textAlign = 'center';
+    let p = this.proj(1.18, -1, bz); c.fillText(this.labels[0] + ' →', p[0], p[1]);
+    p = this.proj(-1, 1.18, bz); c.fillText(this.labels[1] + ' →', p[0], p[1]);
+    p = this.proj(-1, -1, tz + 0.15); c.fillText(this.labels[2], p[0], p[1]);
+    c.font = '11px system-ui,sans-serif'; c.fillStyle = cssv('--muted');
+    p = this.proj(-1, -1, bz); c.fillText('(' + fnum(this.xr[0], 2) + ',' + fnum(this.yr[0], 2) + ')', p[0], p[1] + 14);
+    p = this.proj(1, -1, bz); c.fillText(fnum(this.xr[1], 2), p[0], p[1] + 14);
+    p = this.proj(-1, 1, bz); c.fillText(fnum(this.yr[1], 2), p[0], p[1] + 14);
+    const zt = this.proj(-1, -1, tz); c.textAlign = 'right'; c.fillText(fnum(this.zr[1], 2), zt[0] - 6, zt[1]);
+    c.strokeStyle = cssv('--axis'); c.globalAlpha = 0.5; c.beginPath(); const z0 = this.proj(-1, -1, bz); c.moveTo(z0[0], z0[1]); c.lineTo(zt[0], zt[1]); c.stroke();
+    c.restore();
+  }
+  pt3(x, y, h) { // world -> screen
+    return this.proj(2 * (x - this.xr[0]) / (this.xr[1] - this.xr[0]) - 1, 2 * (y - this.yr[0]) / (this.yr[1] - this.yr[0]) - 1, (2 * (Math.max(this.zr[0], Math.min(this.zr[1], h)) - this.zr[0]) / (this.zr[1] - this.zr[0]) - 1) * this.zs);
+  }
+  _bind() {
+    let drag = null; this.cv.style.touchAction = 'none'; this.cv.style.cursor = 'grab';
+    this.cv.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY, this.yaw, this.pitch]; this.cv.setPointerCapture(e.pointerId); this.cv.style.cursor = 'grabbing'; });
+    this.cv.addEventListener('pointermove', e => { if (!drag) return; this.yaw = drag[2] - (e.clientX - drag[0]) * 0.01; this.pitch = Math.max(-0.2, Math.min(1.5, drag[3] + (e.clientY - drag[1]) * 0.01)); this.redraw(); });
+    const up = () => { drag = null; this.cv.style.cursor = 'grab'; };
+    this.cv.addEventListener('pointerup', up); this.cv.addEventListener('pointercancel', up);
+  }
+}
+
+/* ---------- animation helper ---------- */
+function animator(step) { // step(dtSeconds) ; returns {play,pause,toggle,running}
+  let on = false, last = 0;
+  const tick = t => { if (!on) return; const dt = last ? Math.min(0.05, (t - last) / 1000) : 0; last = t; step(dt); requestAnimationFrame(tick); };
+  return { get running() { return on; }, play() { if (!on) { on = true; last = 0; requestAnimationFrame(tick); } }, pause() { on = false; }, toggle() { on ? this.pause() : this.play(); return on; } };
+}
+/* ---------- slider wiring: updates <output> next to each range ---------- */
+function val(id) { const el = document.getElementById(id); return el.type === 'checkbox' ? el.checked : (el.type === 'range' || el.type === 'number' ? +el.value : el.value); }
+function watch(ids, cb, fmtMap = {}) {
+  ids.forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    const out = el.parentElement.querySelector('output');
+    const upd = () => { if (out) out.textContent = fmtMap[id] ? fmtMap[id](+el.value) : fnum(+el.value, 3); };
+    upd(); el.addEventListener('input', () => { upd(); cb(); }); el.addEventListener('change', () => { upd(); cb(); });
+  });
+}
+
+/* ---------- page chrome: TOC, theme, MCQs, chapter nav ---------- */
+onReady(() => {
+  const toc = $('#toc'); if (toc) {
+    toc.innerHTML = '<b>On this page</b>';
+    $$('main h2').forEach((h, i) => { if (!h.id) h.id = 's' + (i + 1); const a = document.createElement('a'); a.href = '#' + h.id; a.textContent = h.textContent; toc.appendChild(a); });
+    const links = $$('a', toc), hs = $$('main h2');
+    const spy = () => { let k = 0; hs.forEach((h, i) => { if (h.getBoundingClientRect().top < 120) k = i; }); links.forEach((a, i) => a.classList.toggle('on', i === k)); };
+    window.addEventListener('scroll', spy, { passive: true }); spy();
+  }
+  if (window.renderMathInElement) renderMathInElement(document.body, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '\\[', right: '\\]', display: true }, { left: '$', right: '$', display: false }, { left: '\\(', right: '\\)', display: false }], ignoredClasses: ['nomath'], throwOnError: false });
+  $$('.mcq').forEach(q => {
+    const ans = +q.dataset.ans, fb = $('.fb', q), bs = $$('.opts button', q);
+    bs.forEach((b, i) => b.addEventListener('click', () => {
+      bs.forEach(x => x.classList.remove('ok', 'bad'));
+      b.classList.add(i === ans ? 'ok' : 'bad');
+      if (fb) { fb.style.display = 'block'; const msg = i === ans ? (q.dataset.ok || 'Correct!') : (q.dataset.no || 'Not quite — think again.'); texMix(fb, (i === ans ? '✔ ' : '✘ ') + msg); }
+    }));
+    if (fb) fb.style.display = 'none';
+  });
+  const tb = $('#themeBtn');
+  if (tb) tb.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const nx = cur === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', nx);
+    try { localStorage.setItem('boas-theme', nx); } catch (e) { }
+    redrawAll();
+  });
+  const sel = $('#chapSel'); if (sel) sel.addEventListener('change', () => { location.href = sel.value; });
+});
+try { const t = localStorage.getItem('boas-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) { }
+
+</script>
+<script>
+
+onReady(() => {
+  /* ---------- Interactive 1: series of e^z ---------- */
+  let z = [1, 2];
+  const P1 = new Plane('#cv-es1', { span: 4, aspect: 0.9, snap: 0.05, axisLabels: ['x', 'y'], draw: p => {
+    p.line([0, 0], [z[0], 0], { color: '--accent3', dash: [4, 4], width: 1.2 }); p.line([z[0], 0], z, { color: '--accent3', dash: [4, 4], width: 1.2 });
+    p.dot(z, { r: 8, color: '--accent', label: 'z = ' + Cx.fmt(z, 2) });
+  }});
+  P1.addDrag(() => z, v => { z = v; P2.redraw(); out(); });
+  const partial = N => { const pts = [[0, 0]]; let t = [1, 0], s = [0, 0]; for (let n = 0; n < N; n++) { s = Cx.add(s, t); pts.push(s); t = Cx.scale(Cx.mul(t, z), 1 / (n + 1)); } return pts; };
+  const P2 = new Plane('#cv-es2', { span: 8, aspect: 0.9, snap: 0, axisLabels: ['u', 'v'], draw: p => {
+    const pts = partial(val('es-N')), E = Cx.exp(z);
+    p.circle([0, 0], Math.exp(z[0]), { color: '--grid', dash: [4, 4], width: 1.2 });
+    for (let j = 1; j < pts.length; j++) p.arrow(pts[j - 1], pts[j], { color: '--accent', width: 1.8, head: 8, alpha: Math.max(0.35, 1 - j / pts.length) });
+    p.dot(E, { r: 8, color: '--accent2', hollow: true, label: 'e^z' });
+  }});
+  const out = () => {
+    const N = val('es-N'), pts = partial(N), S = pts[pts.length - 1], E = Cx.exp(z);
+    texMix('#es-out', `$z=${Cx.tex(z, 2)}$: $\\ e^z=e^{${fnum(z[0], 2)}}(\\cos ${fnum(z[1], 2)}+i\\sin ${fnum(z[1], 2)})=${Cx.tex(E, 4)}$, &nbsp; $|e^z|=e^x=${fnum(Math.exp(z[0]), 4)}$<br>` +
+      `$S_{${N}}=\\sum_{n=0}^{${N - 1}}\\frac{z^n}{n!}=${Cx.tex(S, 4)}$, &nbsp; error $=${fnum(Cx.abs(Cx.sub(S, E)), 6)}$`);
+    // keep the w-plane view sensible
+    const m = Math.max(2, ...pts.map(q => Math.max(Math.abs(q[0]), Math.abs(q[1]))), Math.exp(z[0]));
+    if (Math.abs(P2.span - m * 1.15) > 0.3) { P2.span = Math.min(60, m * 1.15); P2.redraw(); }
+  };
+  watch(['es-N'], () => { P2.redraw(); out(); });
+  out();
+
+  /* ---------- Interactive 2: mapping ---------- */
+  const F = { exp: Cx.exp, sq: q => Cx.mul(q, q), inv: q => Cx.div([1, 0], q), rat: q => Cx.div(Cx.add(Cx.mul(q, q), [1, 0]), Cx.sub(q, [3, 0])), cube: q => Cx.add(Cx.sub(Cx.ipow(q, 3), Cx.scale(q, 2)), [1, 0]) };
+  const VIEW = { exp: 25, sq: 12, inv: 4, rat: 6, cube: 25 };
+  let mz = [0.5, 0.8];
+  const lines = () => { const W = val('mp-w'), H = val('mp-h'), V = [], Hh = []; const nv = 9, nh = 9; for (let i = 0; i < nv; i++) { const x = -W + 2 * W * i / (nv - 1), pts = []; for (let k = 0; k <= 200; k++) pts.push([x, -H + 2 * H * k / 200]); V.push(pts); } for (let j = 0; j < nh; j++) { const y = -H + 2 * H * j / (nh - 1), pts = []; for (let k = 0; k <= 200; k++) pts.push([-W + 2 * W * k / 200, y]); Hh.push(pts); } return [V, Hh]; };
+  const M1 = new Plane('#cv-mp1', { span: 4.5, aspect: 0.95, snap: 0.05, draw: p => {
+    const [V, Hh] = lines(); V.forEach(l => p.path(l, { color: '--accent', width: 1.6, alpha: 0.85 })); Hh.forEach(l => p.path(l, { color: '--accent2', width: 1.6, alpha: 0.85 }));
+    p.dot(mz, { r: 8, color: '--accent3', label: 'z' });
+  }});
+  M1.addDrag(() => mz, v => { mz = v; M2.redraw(); mpOut(); });
+  const M2 = new Plane('#cv-mp2', { span: 25, aspect: 0.95, snap: 0, axisLabels: ['u', 'v'], draw: p => {
+    const f = F[val('mp-f')], [V, Hh] = lines();
+    const cut = (pts) => { const o = []; let prev = null; pts.forEach(q => { const w = f(q); if (prev && Math.hypot(w[0] - prev[0], w[1] - prev[1]) > p.span * 0.6) o.push(null); o.push(w); prev = w; }); return o; };
+    V.forEach(l => p.path(cut(l), { color: '--accent', width: 1.6, alpha: 0.85 })); Hh.forEach(l => p.path(cut(l), { color: '--accent2', width: 1.6, alpha: 0.85 }));
+    p.dot(f(mz), { r: 8, color: '--accent3', label: 'w = f(z)' });
+  }});
+  const mpOut = () => { const k = val('mp-f'), w = F[k](mz); let s = `$z=${Cx.tex(mz, 2)}\\ \\mapsto\\ w=${Cx.tex(w, 4)}$, &nbsp; $|w|=${fnum(Cx.abs(w), 4)}$, &nbsp; $\\arg w=${fnum(Cx.arg(w), 4)}$`; if (k === 'exp') s += `<br>For $e^z$: $|w|=e^{x}=${fnum(Math.exp(mz[0]), 4)}$ and $\\arg w=y=${fnum(mz[1], 3)}$ (mod $2\\pi$). Vertical lines become circles, horizontal lines become rays. A strip of height $2\\pi$ covers the whole $w$-plane except $0$.`; texMix('#mp-out', s); };
+  const mpAll = () => { M2.span = VIEW[val('mp-f')]; if (val('mp-f') === 'exp') M2.span = Math.max(3, Math.exp(val('mp-w')) * 1.3); M1.redraw(); M2.redraw(); mpOut(); };
+  $('#mp-f').addEventListener('change', mpAll); watch(['mp-w', 'mp-h'], mpAll);
+  mpAll();
+
+  /* ---------- Interactive 3: landscape ---------- */
+  const LF = { exp: [Cx.exp, [-2, 2], [-4, 4], [0, 7.5], '|eᶻ| = eˣ: a ramp that ignores y. The colour cycles as y increases, with period 2π.'], p1: [q => Cx.add(Cx.mul(q, q), [1, 0]), [-2, 2], [-2, 2], [0, 5], '|z²+1| touches the floor at the zeros z = ±i, where every colour meets.'], p2: [F.cube, [-2, 2], [-2, 2], [0, 8], 'z³−2z+1 = (z−1)(z²+z−1): three real zeros at 1 and (−1±√5)/2.'], rat: [F.rat, [-2, 4.5], [-3, 3], [0, 8], '(z²+1)/(z−3): zeros at ±i (floor) and a pole at z = 3 (a spike to infinity).'], sq: [q => Cx.mul(q, q), [-2, 2], [-2, 2], [0, 6], '|z²| = r²: a bowl. Going once around 0, the colour cycles twice, because arg z² = 2 arg z.'] };
+  const S3 = new Surf3D('#cv-land', { n: 52, h: (x, y) => Math.exp(x), xr: [-2, 2], yr: [-4, 4], zr: [0, 7.5], labels: ['x', 'y', '|f|'] });
+  const land = () => { const q = LF[val('ld-f')]; S3.xr = q[1]; S3.yr = q[2]; S3.zr = q[3]; S3.zoom = val('ld-z'); S3.setFn((x, y) => Cx.abs(q[0]([x, y])), (x, y) => phaseRGB(Cx.arg(q[0]([x, y])), 0.52)); $('#ld-cap').textContent = q[4]; };
+  $('#ld-f').addEventListener('change', land); watch(['ld-z'], () => { S3.zoom = val('ld-z'); S3.redraw(); });
+  land();
+});
+
+</script>
+</body>
+</html>

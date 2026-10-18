@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:110px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:85px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:collapse;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;margin:3px 4px;width:auto}
+.mx.det{border-radius:0}
+.mx td{border:0;padding:1px 8px;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.verdict{font-weight:700;font-size:1.05rem;margin:6px 0}
+.sys{font-family:"Cambria Math",Cambria,"Times New Roman",serif;display:inline-block;text-align:left;line-height:1.5}
+</style>
+<title>Cartesian Tensors</title>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>19. Cartesian Tensors</h1>
+<p>Direction cosines · Orthogonal transformations · Proper and improper rotations · Rotation about an arbitrary axis · Cartesian tensors · Isotropic tensors · Stress, strain and Hooke's law · Piezoelectricity and dielectric susceptibility · Moment of inertia tensor &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 196–212</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">Direction cosines</a><a href="#s2">Orthogonal transf.</a><a href="#s3">Axis–angle</a><a href="#s4">Rotation lab</a><a href="#s5">Cartesian tensors</a><a href="#s6">Isotropic</a><a href="#s7">Isotropy lab</a><a href="#s8">Stress &amp; strain</a><a href="#s9">Strain lab</a><a href="#s10">Crystals</a><a href="#s11">Inertia</a><a href="#s12">Inertia lab</a><a href="#s13">Summary</a><a href="#s14">Exercise 19</a><a href="#s15">Practice</a><a href="#s16">Quiz</a><a href="#s17">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>General tensors (Sections 15–18) must transform correctly under <b>every</b> change of coordinates, including curvilinear ones. That is more than most physics needs. Crystals, elasticity, rigid bodies and electrostatics usually only need <b>Cartesian axes</b>, and the only freedom is to <b>rotate</b> (and shift) them. Restricting to these changes:</p>
+<ul>
+<li>the transformation matrix a<sub>ij</sub> is <b>orthogonal</b> (rows and columns are orthonormal),</li>
+<li>so ∂x̄<sub>i</sub>/∂x<sub>j</sub> = ∂x<sub>j</sub>/∂x̄<sub>i</sub> = a<sub>ij</sub>, and <b>upper and lower indices become the same</b>. Every index can be written as a subscript,</li>
+<li>a <b>Cartesian tensor</b> of rank r has 3<sup>r</sup> components with Ā<sub>α₁…α<sub>r</sub></sub> = a<sub>α₁i₁</sub>…a<sub>α<sub>r</sub>i<sub>r</sub></sub>A<sub>i₁…i<sub>r</sub></sub>.</li>
+</ul>
+<div class="flow"><span>direction cosines a<sub>ij</sub></span><b>→</b><span>AAᵀ = I</span><b>→</b><span>x̄ = Ax</span><b>→</b><span>Ā = AXAᵀ (rank 2)</span><b>→</b><span>physics: stress, strain, χ<sub>ij</sub>, d<sub>ijk</sub>, I<sub>ij</sub></span></div>
+<div class="box tip"><b class="t">Needed from earlier</b> Orthogonal matrices (Section 5), rotation matrices and Euler angles (Section 14), real symmetric matrices diagonalized by rotations (Section 10, 11), ε<sub>ijk</sub> and δ<sub>ij</sub> (Section 16), quotient law (Section 17), g<sub>ij</sub> = δ<sub>ij</sub> in Cartesian coordinates (Section 18).</div>
+</section>
+
+<section id="s1">
+<h2>1. Direction cosines (Eqs. 1–10)</h2>
+<p>The most general change of right-handed Cartesian axes is a rotation about an axis through O followed by a translation t to the new origin O′. The translation is simple: <b>x̄ = x − t</b> (1). The two operations commute. So the work is in the rotation.</p>
+<p>The <b>direction cosines</b> (l₁, l₂, l₃) of a line OP are the cosines of the angles it makes with Ox₁, Ox₂, Ox₃. They are just the Cartesian components of a <b>unit vector</b> along OP, so:</p>
+<div class="eq">l<sub>i</sub>l<sub>i</sub> = 1 &nbsp;(2, 3); &nbsp;&nbsp; cos θ = l<sub>i</sub>l′<sub>i</sub> &nbsp;(6); &nbsp;&nbsp; perpendicular ⇔ l<sub>i</sub>l′<sub>i</sub> = 0 &nbsp;(7)</div>
+<p>The <b>projection</b> of OP onto a line with direction cosines l′<sub>i</sub> is OR = x·n = l′<sub>i</sub>x<sub>i</sub>. &nbsp;(10)</p>
+</section>
+
+<section id="s2">
+<h2>2. Orthogonal transformations (Eqs. 11–20)</h2>
+<p>Rotate the axes to Ox̄₁, Ox̄₂, Ox̄₃. Let a<sub>ij</sub> = cosine of the angle between the <b>new</b> axis Ox̄<sub>i</sub> and the <b>old</b> axis Ox<sub>j</sub>. The new coordinate x̄<sub>i</sub> is the projection of OP on Ox̄<sub>i</sub>, so by (10):</p>
+<div class="eq">x̄<sub>i</sub> = a<sub>ij</sub>x<sub>j</sub>, &nbsp;&nbsp; A = [a<sub>ij</sub>] &nbsp;&nbsp;(12, 13)</div>
+<ul>
+<li><b>Rows</b> of A = new axes written in old coordinates. They are orthonormal unit vectors: a<sub>ij</sub>a<sub>kj</sub> = δ<sub>ik</sub> (16), i.e. AAᵀ = I.</li>
+<li><b>Columns</b> of A = old axes in new coordinates: a<sub>ji</sub>a<sub>jk</sub> = δ<sub>ik</sub> (17), i.e. AᵀA = I.</li>
+<li><b>Inverse</b>: multiply (12) by a<sub>ik</sub> and sum: x<sub>i</sub> = a<sub>ji</sub>x̄<sub>j</sub> (19), i.e. A⁻¹ = Aᵀ.</li>
+<li>det A = ±1. <b>+1</b>: a proper rotation (right-handed stays right-handed). <b>−1</b>: an <b>improper rotation</b> (rotation combined with reflection or inversion; right-handed becomes left-handed).</li>
+<li>Most general change of Cartesian axes: <b>x̄<sub>i</sub> = a<sub>ij</sub>(x<sub>j</sub> − t<sub>j</sub>)</b>, inverse x<sub>i</sub> = a<sub>ji</sub>x̄<sub>j</sub> + t<sub>i</sub>. &nbsp;(20)</li>
+</ul>
+<div class="box fact"><b class="t">Count the freedom</b> 9 entries a<sub>ij</sub>, 6 conditions in AAᵀ = I (it is symmetric), so <b>3 free parameters</b>: the three Euler angles, or an axis (2 numbers) plus an angle (1 number).</div>
+</section>
+
+<section id="s3">
+<h2>3. Example 1: rotation through θ about an arbitrary axis (Eqs. 21–29)</h2>
+<p>Rotate a point P (position x) through θ, right-handedly, about the line OR with direction cosines λ<sub>i</sub> (unit vector λ). It goes to Q. With S the foot of the perpendicular from P (and Q) on OR, and T the foot from Q on PS (Fig. 13):</p>
+<ol>
+<li>OQ = OP + PT + TQ. &nbsp;(21)</li>
+<li><b>OS</b>: the projection of OP on OR is λ<sub>j</sub>x<sub>j</sub>, so OS⃗ = (λ<sub>j</sub>x<sub>j</sub>)λ<sub>i</sub>. &nbsp;(22) &nbsp; Then PS⃗ = (λ<sub>j</sub>x<sub>j</sub>)λ<sub>i</sub> − x<sub>i</sub>. &nbsp;(23)</li>
+<li><b>PT</b>: TS = QS cos θ = PS cos θ, so PT = (1 − cos θ)PS, and PT⃗ = (1 − cos θ)[(λ<sub>j</sub>x<sub>j</sub>)λ<sub>i</sub> − x<sub>i</sub>]. &nbsp;(24)</li>
+<li><b>TQ</b>: perpendicular to both PS⃗ and λ, of length QS sin θ = PS sin θ. Using the cross product: TQ⃗<sub>i</sub> = ε<sub>ijk</sub>λ<sub>j</sub>x<sub>k</sub> sin θ (after using ε<sub>ijk</sub>λ<sub>j</sub>λ<sub>k</sub> = 0). &nbsp;(25–27)</li>
+<li>Add them:
+<div class="eq">x̄<sub>i</sub> = x<sub>i</sub> + (1 − cos θ)(λ<sub>j</sub>x<sub>j</sub>λ<sub>i</sub> − x<sub>i</sub>) + ε<sub>ijk</sub>λ<sub>j</sub>x<sub>k</sub> sin θ &nbsp;&nbsp;(28)</div></li>
+<li>Read off the matrix:
+<div class="eq"><b>a<sub>ij</sub> = cos θ δ<sub>ij</sub> + (1 − cos θ)λ<sub>i</sub>λ<sub>j</sub> + ε<sub>ilj</sub>λ<sub>l</sub> sin θ</b> &nbsp;&nbsp;(29)</div></li>
+</ol>
+<p>In vector form this is <b>Rodrigues' rotation formula</b>: x′ = x cos θ + λ(λ·x)(1 − cos θ) + (λ × x) sin θ.</p>
+<div class="box warnb"><b class="t">Active, not passive</b> Eq. (29) <b>moves the point</b> (active rotation), unlike Eq. (12), which <b>turns the axes</b> (passive). They are transposes of each other: turning the axes by +θ is the same as turning the point by −θ. Check with Exercise 3(a): (29) with λ = (0, 0, 1), θ = π/2 sends (1, 0, 0) to (0, 1, 0), which rotates the point anticlockwise. For Eq. (12) you would use the transpose.</div>
+<h3>Reading axis and angle from any rotation matrix</h3>
+<ul>
+<li>Trace: a<sub>ii</sub> = 3cos θ + (1 − cos θ) = <b>1 + 2cos θ</b>.</li>
+<li>Antisymmetric part: a<sub>ij</sub> − a<sub>ji</sub> = 2ε<sub>ilj</sub>λ<sub>l</sub> sin θ, so e.g. a₃₂ − a₂₃ = 2λ₁ sin θ (with the sign set by the active convention).</li>
+<li>The axis λ is the eigenvector with eigenvalue 1. The other eigenvalues are e<sup>±iθ</sup>.</li>
+</ul>
+</section>
+
+<section id="s4">
+<h2>4. 🔬 Rotation lab: axis–angle in 3D (drag to rotate the view)</h2>
+<p>Choose an axis λ (purple) and an angle θ. The blue cube is moved by the matrix of Eq. (29). The orange point traces its circle around the axis, like P → Q in Fig. 13. The readout checks orthogonality, det = +1, the trace formula, and recovers the axis from the matrix.</p>
+<div class="lab">
+<div class="grid2">
+<div><canvas id="cvR" width="460" height="460"></canvas></div>
+<div>
+<div class="ctrl"><button class="alt" data-ax="z">x₃ axis (Ex 3a)</button><button class="alt" data-ax="111">(1,1,1)/√3 (Ex 3b)</button><button class="alt" data-ax="x">x₁ axis</button><button class="alt" data-ax="r">random</button></div>
+<div class="ctrl"><label>axis tilt <input type="range" id="rTh" min="0" max="180" step="any" value="54.7"><span id="rThv"></span></label><label>axis turn <input type="range" id="rPh" min="0" max="360" step="any" value="45"><span id="rPhv"></span></label></div>
+<div class="ctrl"><label>θ <input type="range" id="rAng" min="-180" max="180" step="1" value="120" style="width:170px"><span id="rAngv"></span></label><button id="rPlay">▶</button><label><input type="checkbox" id="rInv"> improper (× −I)</label></div>
+<div class="readout out" id="rOut"></div>
+</div></div></div>
+</section>
+
+<section id="s5">
+<h2>5. Cartesian tensors (Eqs. 30–32)</h2>
+<div class="box def"><b class="t">Definition</b> A <b>Cartesian tensor</b> of rank r (in 3D) is a set of 3<sup>r</sup> components that obey (15.41) <b>only under orthogonal transformations</b> of Cartesian axes. This is a weaker condition than for a general tensor:
+<div class="eq">every general tensor is a Cartesian tensor, but not every Cartesian tensor is a general tensor.</div></div>
+<p>From (20): ∂x̄<sub>i</sub>/∂x<sub>j</sub> = a<sub>ij</sub> = ∂x<sub>j</sub>/∂x̄<sub>i</sub>. &nbsp;(30) &nbsp; The two kinds of Jacobian are equal, so covariant and contravariant laws coincide and all indices can be written as subscripts:</p>
+<div class="eq">Ā<sub>α₁α₂…α<sub>r</sub></sub> = a<sub>α₁i₁</sub>a<sub>α₂i₂</sub>…a<sub>α<sub>r</sub>i<sub>r</sub></sub> A<sub>i₁i₂…i<sub>r</sub></sub> &nbsp;&nbsp;(31)</div>
+<p>For rank 2 in matrix form: <b>Ā = A X Aᵀ</b>, which is also a similarity transformation (Aᵀ = A⁻¹). So eigenvalues, trace and determinant of a Cartesian rank-2 tensor are invariants.</p>
+<ul>
+<li>The <b>position x<sub>i</sub></b> is a Cartesian vector, since (12) is linear, but not a general vector (Section 15).</li>
+<li><b>δ<sub>ij</sub></b> is a Cartesian tensor: δ̄<sub>αβ</sub> = a<sub>αi</sub>a<sub>βj</sub>δ<sub>ij</sub> = a<sub>αi</sub>a<sub>βi</sub> = δ<sub>αβ</sub> (32), by (16). Compare: lowered δ in general coordinates is g<sub>ij</sub> (Exercise 18.8).</li>
+<li><b>ε<sub>ijk</sub></b> is a Cartesian tensor under proper rotations: ε̄<sub>αβγ</sub> = a<sub>αi</sub>a<sub>βj</sub>a<sub>γk</sub>ε<sub>ijk</sub> = (det A)ε<sub>αβγ</sub>. Under improper rotations it gets a factor −1: a <b>pseudotensor</b>.</li>
+<li>The quotient law (Section 17) works for Cartesian tensors too.</li>
+</ul>
+</section>
+
+<section id="s6">
+<h2>6. Isotropic tensors (Eqs. 33–46, Example 2)</h2>
+<div class="box def"><b class="t">Definition</b> A Cartesian tensor is <b>isotropic</b> if its components are unchanged by every rotation of the axes. A material property described by an isotropic tensor is the same in every direction.</div>
+<div class="tbl-wrap"><table>
+<tr><th>Rank</th><th>All isotropic tensors in 3D</th></tr>
+<tr><td>0</td><td>every scalar</td></tr>
+<tr><td>1</td><td>only the zero vector</td></tr>
+<tr><td>2</td><td>λδ<sub>ij</sub></td></tr>
+<tr><td>3</td><td>cε<sub>ijk</sub> (under proper rotations)</td></tr>
+<tr><td>4</td><td>aδ<sub>ij</sub>δ<sub>kl</sub> + bδ<sub>ik</sub>δ<sub>jl</sub> + cδ<sub>il</sub>δ<sub>jk</sub> &nbsp;(46)</td></tr>
+</table></div>
+<h3>Rank 1 (Eqs. 33–34)</h3>
+<p>If u is isotropic, ū = Au = u for every rotation A, so (A − I)u = 0 for every A. A rotation about any axis not along u moves u, so <b>u = 0</b>.</p>
+<h3>Example 2: rank 2 ⇒ λδ<sub>ij</sub>, step by step</h3>
+<ol>
+<li>Use an <b>infinitesimal rotation</b> a<sub>ij</sub> = δ<sub>ij</sub> − c<sub>ij</sub>, with C antisymmetric and |c<sub>ij</sub>| ≪ 1. &nbsp;(36, 37) &nbsp; It is orthogonal to first order: a<sub>ij</sub>a<sub>ik</sub> ≈ δ<sub>jk</sub> − c<sub>kj</sub> − c<sub>jk</sub> = δ<sub>jk</sub>. &nbsp;(38)</li>
+<li>Isotropy: Ā<sub>ij</sub> = a<sub>ik</sub>a<sub>jl</sub>A<sub>kl</sub> ≈ A<sub>ij</sub> − c<sub>jl</sub>A<sub>il</sub> − c<sub>ik</sub>A<sub>kj</sub> must equal A<sub>ij</sub>. So <b>c<sub>jl</sub>A<sub>il</sub> + c<sub>ik</sub>A<sub>kj</sub> = 0</b> for all small antisymmetric C. &nbsp;(39, 40)</li>
+<li>Take i = 1, j = 2: c₁₂(A₂₂ − A₁₁) + c₁₃A₃₂ + c₂₃A₁₃ = 0. &nbsp;(41) &nbsp; c₁₂, c₁₃, c₂₃ are independent, so A₁₁ = A₂₂ and A₃₂ = A₁₃ = 0. &nbsp;(42)</li>
+<li>Other choices of (i, j) give A₁₁ = A₂₂ = A₃₃ and every off-diagonal A<sub>ij</sub> = 0. &nbsp;(43)</li>
+<li>So <b>A<sub>ij</sub> = λδ<sub>ij</sub></b>, λ = A₁₁. &nbsp;(45) ∎</li>
+</ol>
+<div class="box fact"><b class="t">Physical meaning</b> In an isotropic medium (glass, a liquid, a cubic crystal for rank-2 properties) conductivity, susceptibility and the like reduce to a single number: σ<sub>ij</sub> = σδ<sub>ij</sub> ⇒ j = σE. For an isotropic elastic solid, (46) plus the symmetries of stress and strain leaves <b>2</b> constants (the Lamé constants λ, μ): X<sub>ij</sub> = λ e<sub>kk</sub>δ<sub>ij</sub> + 2μ e<sub>ij</sub>.</div>
+</section>
+
+<section id="s7">
+<h2>7. 🔬 Isotropy lab: which tensors survive every rotation?</h2>
+<p>Pick a rank-2 tensor. The lab applies 300 random rotations, Ā = AXAᵀ, and shows how much the components change (left), and the <b>average</b> of Ā over all rotations (right). Only multiples of δ survive unchanged. The average of any tensor over all orientations is its isotropic part (Tr X/3)δ: the "orientation average" used for powders and liquids.</p>
+<div class="lab">
+<div class="ctrl"><button class="alt" data-iso="delta">2δ</button><button class="alt" data-iso="diag">diag(1, 2, 3)</button><button class="alt" data-iso="anti">antisymmetric</button><button class="alt" data-iso="gen">general</button><button id="isoGo">Run 300 random rotations</button></div>
+<div id="isoIn" class="ctrl"></div>
+<div id="isoOut"></div>
+<p class="small" style="margin-top:10px"><b>Rank 3:</b> the lab also rotates ε<sub>ijk</sub> by a proper and an improper rotation: <span id="epsChk"></span></p>
+</div>
+</section>
+
+<section id="s8">
+<h2>8. Stress, strain and Hooke's law (Eqs. 47–59)</h2>
+<h3>Stress tensor</h3>
+<p>Stress = force per unit area, but its value depends on the <b>orientation</b> of the area. At a point P take three small area elements dσ<sub>x</sub>, dσ<sub>y</sub>, dσ<sub>z</sub> normal to the x, y, z axes (Fig. 14). The force on dσ<sub>x</sub> has three components, giving X<sub>x</sub> = F<sub>1x</sub>/dσ<sub>x</sub>, Y<sub>x</sub> = F<sub>1y</sub>/dσ<sub>x</sub>, Z<sub>x</sub> = F<sub>1z</sub>/dσ<sub>x</sub> (47). Similarly for dσ<sub>y</sub> and dσ<sub>z</sub>: <b>9 components X<sub>ij</sub></b> (force direction i, area normal j).</p>
+<ul>
+<li>Force is a vector and area (its normal) is a vector, and the force is not necessarily along the normal. Linking two vectors in this way makes stress a <b>rank-2 tensor</b> (quotient law).</li>
+<li>For an area with unit normal n, the force per area is <b>t<sub>i</sub> = X<sub>ij</sub>n<sub>j</sub></b>. Diagonal entries are normal stresses (push or pull); off-diagonal entries are shear stresses.</li>
+<li>Balance of torques on a tiny cube gives <b>X<sub>ij</sub> = X<sub>ji</sub></b> (57): only 6 independent components.</li>
+</ul>
+<h3>Strain tensor</h3>
+<p>Before deformation: orthonormal x̂, ŷ, ẑ. After a small deformation the edges become (48):</p>
+<div class="eq">x′ = (1 + ε<sub>xx</sub>)x̂ + ε<sub>xy</sub>ŷ + ε<sub>xz</sub>ẑ, &nbsp; etc.; &nbsp; Δx<sub>i</sub> = Σ<sub>j</sub> ε<sub>ij</sub>x<sub>j</sub> &nbsp;(52)</div>
+<ul>
+<li>Length: |x′| ≈ 1 + ε<sub>xx</sub>, so the diagonal ε's are fractional changes of length. &nbsp;(49)</li>
+<li>Volume: V′ = x′·(y′ × z′) ≈ 1 + ε<sub>xx</sub> + ε<sub>yy</sub> + ε<sub>zz</sub>, so the <b>dilation</b> δ = ΔV/V = ε<sub>xx</sub> + ε<sub>yy</sub> + ε<sub>zz</sub> (50, 51), the <b>trace</b>, which is invariant.</li>
+<li><b>Strain tensor</b> (53): e<sub>xx</sub> = ε<sub>xx</sub>, …, e<sub>xy</sub> = e<sub>yx</sub> = ε<sub>xy</sub> + ε<sub>yx</sub>, …. Symmetric (57). The antisymmetric part of ε is just a small <b>rotation</b> of the body, which produces no stress, so it is left out.</li>
+</ul>
+<div class="box warnb"><b class="t">Factor-of-2 convention</b> Joshi uses the engineering shear strain e<sub>xy</sub> = ε<sub>xy</sub> + ε<sub>yx</sub>. Many physics books use ½(ε<sub>xy</sub> + ε<sub>yx</sub>) instead, so that e<sub>ij</sub> transforms exactly as a tensor. Check which one a problem uses.</div>
+<h3>Hooke's law</h3>
+<div class="eq">X<sub>ij</sub> = C<sub>ijkl</sub>e<sub>kl</sub> &nbsp;(54), &nbsp;&nbsp; e<sub>ij</sub> = S<sub>ijkl</sub>X<sub>kl</sub> &nbsp;(55), &nbsp;&nbsp; C<sub>ijkl</sub>S<sub>klmn</sub> = δ<sub>im</sub>δ<sub>jn</sub> &nbsp;(56)</div>
+<p>C<sub>ijkl</sub> = <b>elastic stiffness constants</b> (moduli), S<sub>ijkl</sub> = <b>compliance constants</b>. Both are rank-4 tensors and reciprocals of each other (conjugate, as in Section 17).</p>
+<div class="tbl-wrap"><table>
+<tr><th>Reason</th><th>Independent elastic constants</th></tr>
+<tr><td>rank 4 in 3D</td><td>3⁴ = 81</td></tr>
+<tr><td>X<sub>ij</sub>, e<sub>ij</sub> symmetric (6 each)</td><td>6 × 6 = 36</td></tr>
+<tr><td>C<sub>ijkl</sub> = C<sub>klij</sub> (58; from a stored energy)</td><td>6·7/2 = <b>21</b> (any solid, e.g. triclinic)</td></tr>
+<tr><td>cubic crystal</td><td><b>3</b>: C₁₁ = C<sub>xxxx</sub>, C₁₂ = C<sub>xxyy</sub>, C₄₄ = C<sub>yzyz</sub> (59)</td></tr>
+<tr><td>isotropic solid</td><td><b>2</b> (Lamé λ, μ; or Young's modulus and Poisson's ratio)</td></tr>
+</table></div>
+</section>
+
+<section id="s9">
+<h2>9. 🔬 Strain lab: deform a unit square</h2>
+<p>Set the 2D deformation Δx<sub>i</sub> = ε<sub>ij</sub>x<sub>j</sub> (Eq. 52). The grey square becomes the blue parallelogram. The lab splits ε into the <b>symmetric strain</b> (which changes shape and size) and the <b>antisymmetric rotation</b> (which only turns the square). Make ε antisymmetric and the square just rotates: no strain, no stress. The dashed lines are the principal strain axes (eigenvectors of the symmetric part), along which the material is purely stretched.</p>
+<div class="lab">
+<div class="grid2">
+<div><canvas id="cvS" width="460" height="460"></canvas></div>
+<div>
+<div class="ctrl"><button class="alt" data-st="ext">stretch x</button><button class="alt" data-st="shear">pure shear</button><button class="alt" data-st="simple">simple shear</button><button class="alt" data-st="rot">rotation only</button><button class="alt" data-st="dil">uniform dilation</button></div>
+<div class="ctrl"><label>ε<sub>xx</sub> <input type="range" id="sXX" min="-0.4" max="0.4" step="0.01" value="0.2"><span id="sXXv"></span></label><label>ε<sub>xy</sub> <input type="range" id="sXY" min="-0.4" max="0.4" step="0.01" value="0.1"><span id="sXYv"></span></label></div>
+<div class="ctrl"><label>ε<sub>yx</sub> <input type="range" id="sYX" min="-0.4" max="0.4" step="0.01" value="0.1"><span id="sYXv"></span></label><label>ε<sub>yy</sub> <input type="range" id="sYY" min="-0.4" max="0.4" step="0.01" value="-0.1"><span id="sYYv"></span></label></div>
+<div class="readout out" id="sOut"></div>
+</div></div></div>
+</section>
+
+<section id="s10">
+<h2>10. Dielectric susceptibility and piezoelectricity (Eqs. 60–62)</h2>
+<ul>
+<li><b>Dielectric susceptibility</b> (rank 2): P<sub>i</sub> = χ<sub>ij</sub>E<sub>j</sub>. &nbsp;(60) &nbsp; In an anisotropic crystal P need not be parallel to E. Isotropic: χ<sub>ij</sub> = χδ<sub>ij</sub>.</li>
+<li><b>Piezoelectric strain coefficients</b> (rank 3): stress alone polarizes crystals like quartz: P<sub>i</sub> = d<sub>ijk</sub>X<sub>jk</sub>. &nbsp;(61) &nbsp; Since X<sub>jk</sub> is symmetric, d<sub>ijk</sub> = d<sub>ikj</sub>: 3 × 6 = <b>18</b> independent components rather than 27.</li>
+<li><b>Both together</b> (small fields, no interaction): P<sub>i</sub> = d<sub>ijk</sub>X<sub>jk</sub> + χ<sub>ij</sub>E<sub>j</sub>. &nbsp;(62)</li>
+</ul>
+<div class="box fact"><b class="t">Why no piezoelectricity in centrosymmetric crystals</b> Under inversion (a<sub>ij</sub> = −δ<sub>ij</sub>, an improper rotation) a rank-3 tensor changes as d̄<sub>ijk</sub> = (−1)³d<sub>ijk</sub> = −d<sub>ijk</sub>. If the crystal looks the same after inversion, d̄ = d, so d = 0. Of the 32 crystal classes, the 21 without a centre of symmetry can be piezoelectric (all but one actually are). This is Neumann's principle at work.</div>
+</section>
+
+<section id="s11">
+<h2>11. Moment of inertia tensor (Eqs. 63–67)</h2>
+<p>For point masses m<sub>i</sub> at r<sub>i</sub> rotating with angular velocity ω (v<sub>i</sub> = ω × r<sub>i</sub>):</p>
+<div class="eq">L = Σ m<sub>i</sub> r<sub>i</sub> × (ω × r<sub>i</sub>) = Σ m<sub>i</sub>[ω r<sub>i</sub>² − r<sub>i</sub>(r<sub>i</sub>·ω)] &nbsp;&nbsp;(63, 64)</div>
+<p>using a × (b × c) = (a·c)b − (a·b)c. In components, L<sub>i</sub> = I<sub>ij</sub>ω<sub>j</sub> (67), with</p>
+<div class="eq">I<sub>xx</sub> = Σm(r² − x²) = Σm(y² + z²), &nbsp; I<sub>xy</sub> = I<sub>yx</sub> = −Σm xy, &nbsp; etc. &nbsp;&nbsp;(66) &nbsp;&nbsp; i.e. &nbsp; I<sub>ij</sub> = Σm(r²δ<sub>ij</sub> − x<sub>i</sub>x<sub>j</sub>)</div>
+<ul>
+<li>L and ω are vectors, so by the quotient law I<sub>ij</sub> is a rank-2 tensor, the <b>moment of inertia tensor</b>. It is real and symmetric.</li>
+<li><b>L is not necessarily parallel to ω</b>. That is why an unbalanced wheel wobbles.</li>
+<li>Diagonalize I by a rotation (Section 10): the eigenvectors are the <b>principal axes</b> and the eigenvalues I₁, I₂, I₃ are the <b>principal moments</b>. About a principal axis, L ∥ ω.</li>
+<li>Kinetic energy T = ½ω<sub>i</sub>I<sub>ij</sub>ω<sub>j</sub> is a quadratic form (Section 11), and ω<sub>i</sub>I<sub>ij</sub>ω<sub>j</sub> = 1 is the <b>inertia ellipsoid</b>.</li>
+<li>Moment about a unit axis n: I<sub>n</sub> = n<sub>i</sub>I<sub>ij</sub>n<sub>j</sub>.</li>
+</ul>
+</section>
+
+<section id="s12">
+<h2>12. 🔬 Inertia lab: L versus ω (drag to rotate the view)</h2>
+<p>A rigid body made of point masses (spheres; size ∝ mass). Choose the direction of ω (purple). The lab computes I<sub>ij</sub> from Eq. (66) and L = Iω (orange). In general L and ω point in different directions. Press "snap ω to principal axis" and they line up. The faint ellipsoid is the inertia ellipsoid.</p>
+<div class="lab">
+<div class="grid2">
+<div><canvas id="cvI" width="460" height="460"></canvas></div>
+<div>
+<div class="ctrl"><button class="alt" data-bd="dumb">tilted dumbbell</button><button class="alt" data-bd="rod">rod + side mass</button><button class="alt" data-bd="cube">cube corners (isotropic)</button><button class="alt" data-bd="rnd">random cloud</button></div>
+<div class="ctrl"><label>ω tilt <input type="range" id="iT" min="0" max="180" step="any" value="0"><span id="iTv"></span></label><label>ω turn <input type="range" id="iP" min="0" max="360" step="any" value="0"><span id="iPv"></span></label></div>
+<div class="ctrl"><button id="iSnap" class="alt">snap ω to principal axis</button><button id="iSpin" class="alt">⟳ spin body about ω</button></div>
+<div class="readout out" id="iOut"></div>
+</div></div></div>
+</section>
+
+<section id="s13">
+<h2>13. Summary sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Item</th><th>Formula</th></tr>
+<tr><td>Change of Cartesian axes</td><td>x̄<sub>i</sub> = a<sub>ij</sub>(x<sub>j</sub> − t<sub>j</sub>), a<sub>ij</sub> = cos(x̄<sub>i</sub>, x<sub>j</sub>)</td></tr>
+<tr><td>Orthogonality</td><td>a<sub>ij</sub>a<sub>kj</sub> = a<sub>ji</sub>a<sub>jk</sub> = δ<sub>ik</sub>; A⁻¹ = Aᵀ; det A = ±1</td></tr>
+<tr><td>Axis–angle (active)</td><td>a<sub>ij</sub> = cos θ δ<sub>ij</sub> + (1 − cos θ)λ<sub>i</sub>λ<sub>j</sub> + ε<sub>ilj</sub>λ<sub>l</sub> sin θ; Tr = 1 + 2cos θ</td></tr>
+<tr><td>Cartesian tensor</td><td>Ā<sub>α…</sub> = a<sub>αi</sub>… A<sub>i…</sub>; all indices down; rank 2: Ā = AXAᵀ</td></tr>
+<tr><td>Isotropic</td><td>rank 0: any; 1: 0; 2: λδ<sub>ij</sub>; 3: cε<sub>ijk</sub>; 4: aδδ + bδδ + cδδ</td></tr>
+<tr><td>Stress / strain</td><td>t<sub>i</sub> = X<sub>ij</sub>n<sub>j</sub>; dilation = e<sub>xx</sub> + e<sub>yy</sub> + e<sub>zz</sub>; both symmetric</td></tr>
+<tr><td>Hooke</td><td>X<sub>ij</sub> = C<sub>ijkl</sub>e<sub>kl</sub>; 81 → 36 → 21 (general) → 3 (cubic) → 2 (isotropic)</td></tr>
+<tr><td>Crystal response</td><td>P<sub>i</sub> = χ<sub>ij</sub>E<sub>j</sub> + d<sub>ijk</sub>X<sub>jk</sub>; d has 18 components</td></tr>
+<tr><td>Inertia</td><td>I<sub>ij</sub> = Σm(r²δ<sub>ij</sub> − x<sub>i</sub>x<sub>j</sub>); L = Iω; T = ½ωᵀIω</td></tr>
+</table></div>
+</section>
+
+<section id="s14">
+<h2>14. Book's Exercise 19: all problems solved</h2>
+<div class="prob"><div class="q">1. The direction cosines of Ox̄₁, Ox̄₂, Ox̄₃ are (1/√2, 1/√2, 0), (−1/√2, 1/√2, 0), (0, 0, 1). Prove that the barred system is Cartesian. If A₁₁ = 1, A₂₂ = −1, A₃₃ = 3, A₁₂ = A₂₁ = ½, A₂₃ = A₃₂ = −1, A₁₃ = A₃₁ = −⅓, find its components in the barred system.</div>
+<details><summary>Show solution</summary>
+<p>a = [[1/√2, 1/√2, 0], [−1/√2, 1/√2, 0], [0, 0, 1]]. Rows: each has length 1 (½ + ½ = 1), and row1·row2 = −½ + ½ = 0, row1·row3 = row2·row3 = 0. So aaᵀ = I and det a = ½ + ½ = 1: a proper rotation (45° about x₃). ✓ Cartesian.</p>
+<p>Ā = a A aᵀ with A = [[1, ½, −⅓], [½, −1, −1], [−⅓, −1, 3]]:</p>
+<ul>
+<li>Ā₁₁ = ½(A₁₁ + 2A₁₂ + A₂₂) = ½(1 + 1 − 1) = <b>½</b></li>
+<li>Ā₂₂ = ½(A₁₁ − 2A₁₂ + A₂₂) = ½(1 − 1 − 1) = <b>−½</b></li>
+<li>Ā₁₂ = ½(−A₁₁ + A₂₂) + ½(A₁₂ − A₂₁) = ½(−1 − 1) = <b>−1</b></li>
+<li>Ā₁₃ = (A₁₃ + A₂₃)/√2 = (−⅓ − 1)/√2 = <b>−2√2/3</b></li>
+<li>Ā₂₃ = (−A₁₃ + A₂₃)/√2 = (⅓ − 1)/√2 = <b>−√2/3</b></li>
+<li>Ā₃₃ = <b>3</b></li>
+</ul>
+<div class="eq">Ā = <table class="mx"><tr><td>1/2</td><td>−1</td><td>−2√2/3</td></tr><tr><td>−1</td><td>−1/2</td><td>−√2/3</td></tr><tr><td>−2√2/3</td><td>−√2/3</td><td>3</td></tr></table></div>
+<p>Checks: trace 1 − 1 + 3 = 3 = ½ − ½ + 3 ✓; still symmetric ✓. (Verified symbolically.)</p></details></div>
+
+<div class="prob"><div class="q">2. The direction cosines of the barred axes are (1, 1, 1)/√3, (1, −2, 1)/√6, (1, 0, −1)/√2. Given A<sub>i</sub> = (1, 1, 1), B<sub>i</sub> = (1, 1, 0), C<sub>i</sub> = (1, 0, 1), find A<sub>i</sub>B<sub>i</sub>, A<sub>i</sub>B<sub>j</sub>C<sub>j</sub>, Ā<sub>i</sub>B̄<sub>i</sub>, Ā<sub>i</sub>B̄<sub>j</sub>C̄<sub>j</sub>.</div>
+<details><summary>Show solution</summary>
+<p>The rows are orthonormal (check: (1 − 2 + 1)/√18 = 0, (1 − 1)/√6 = 0, (1 + 0 − 1)/√12 = 0) and det = +1.</p>
+<p><b>Unbarred:</b> A<sub>i</sub>B<sub>i</sub> = 1 + 1 + 0 = <b>2</b>. &nbsp; A<sub>i</sub>B<sub>j</sub>C<sub>j</sub> = A<sub>i</sub>(B·C) = A<sub>i</sub>·1 = <b>(1, 1, 1)</b>.</p>
+<p><b>Barred:</b> Ā = aA = (√3, 0, 0), B̄ = aB = (2/√3, −1/√6, 1/√2), C̄ = aC = (2/√3, 2/√6, 0).</p>
+<p>Ā<sub>i</sub>B̄<sub>i</sub> = √3 · 2/√3 = <b>2</b> (a scalar: unchanged ✓).</p>
+<p>B̄·C̄ = 4/3 − 2/6 + 0 = 1, so Ā<sub>i</sub>B̄<sub>j</sub>C̄<sub>j</sub> = Ā<sub>i</sub> = <b>(√3, 0, 0)</b>, which is just the barred components of the vector (1, 1, 1) ✓ (a vector transforms; a scalar doesn't).</p></details></div>
+
+<div class="prob"><div class="q">3. Obtain a<sub>ij</sub> of Eq. (29) for (a) a rotation through π/2 about the x₃ axis; (b) a rotation through 2π/3 about the line with direction cosines (1, 1, 1)/√3.</div>
+<details><summary>Show solution</summary>
+<p>(a) λ = (0, 0, 1), cos θ = 0, sin θ = 1. a<sub>ij</sub> = λ<sub>i</sub>λ<sub>j</sub> + ε<sub>i3j</sub>: ε₁₃₂ = −1 ⇒ a₁₂ = −1; ε₂₃₁ = +1 ⇒ a₂₁ = 1; a₃₃ = 1:</p>
+<div class="eq">a = <table class="mx"><tr><td>0</td><td>−1</td><td>0</td></tr><tr><td>1</td><td>0</td><td>0</td></tr><tr><td>0</td><td>0</td><td>1</td></tr></table> &nbsp; (sends (1, 0, 0) → (0, 1, 0): the point turns anticlockwise)</div>
+<p>(b) cos θ = −½, sin θ = √3/2, λ<sub>i</sub>λ<sub>j</sub> = ⅓ for all i, j. Diagonal: −½ + (3/2)(⅓) = 0. Off-diagonal: (3/2)(⅓) ± (1/√3)(√3/2) = ½ ± ½ ∈ {0, 1}. Result:</p>
+<div class="eq">a = <table class="mx"><tr><td>0</td><td>0</td><td>1</td></tr><tr><td>1</td><td>0</td><td>0</td></tr><tr><td>0</td><td>1</td><td>0</td></tr></table></div>
+<p>It sends x₁ → x₂ → x₃ → x₁: a cyclic permutation of the axes, as expected for 120° about the body diagonal. Trace = 0 = 1 + 2cos(120°) ✓. Load both in the rotation lab.</p></details></div>
+</section>
+
+<section id="s15">
+<h2>15. Practice set (CSIR-NET / GATE style)</h2>
+<div class="prob"><div class="q">P1. Is a = [[0, 1, 0], [0, 0, 1], [1, 0, 0]] a proper rotation? Find its axis and angle. <span class="tag">rotation</span></div>
+<details><summary>Show solution</summary><p>Orthogonal with det +1. Trace 0 ⇒ cos θ = −½ ⇒ θ = 120°. Axis (1, 1, 1)/√3 (eigenvalue 1). It is the transpose of Exercise 3(b): the same rotation in the opposite sense.</p></details></div>
+<div class="prob"><div class="q">P2. How do the components of a rank-3 Cartesian tensor change under inversion x̄ = −x? <span class="tag">parity</span></div>
+<details><summary>Show solution</summary><p>a<sub>ij</sub> = −δ<sub>ij</sub> ⇒ T̄<sub>ijk</sub> = (−1)³T<sub>ijk</sub> = −T<sub>ijk</sub>. Even-rank tensors are unchanged. So centrosymmetric crystals have zero odd-rank properties (no piezoelectricity, no pyroelectricity).</p></details></div>
+<div class="prob"><div class="q">P3. Find the principal moments of four equal masses m at (±a, ±a, 0). <span class="tag">inertia</span></div>
+<details><summary>Show solution</summary><p>I<sub>xx</sub> = Σm y² = 4ma², I<sub>yy</sub> = 4ma², I<sub>zz</sub> = Σm(x² + y²) = 8ma², products Σxy = 0. Principal moments 4ma², 4ma², 8ma² (perpendicular-axis theorem: I<sub>zz</sub> = I<sub>xx</sub> + I<sub>yy</sub> for a flat body).</p></details></div>
+<div class="prob"><div class="q">P4. A dumbbell (masses m at ±(a, a, 0)/√2) rotates with ω along the x axis. Find L and the angle between L and ω. <span class="tag">L vs ω</span></div>
+<details><summary>Show solution</summary><p>Positions ±(a/√2)(1, 1, 0). I = 2m(a²δ<sub>ij</sub> − x<sub>i</sub>x<sub>j</sub>) with x = (a/√2)(1, 1, 0): I = m a² [[1, −1, 0], [−1, 1, 0], [0, 0, 2]]. ω = ω(1, 0, 0) ⇒ L = ma²ω(1, −1, 0). Angle between L and x̂: 45°. The rod lies along (1, 1, 0); L is perpendicular to the rod, as it must be.</p></details></div>
+<div class="prob"><div class="q">P5. Show that the only isotropic vector is zero. <span class="tag">isotropy</span></div>
+<details><summary>Show solution</summary><p>A rotation by π about any axis perpendicular to u sends u to −u. Isotropy needs −u = u ⇒ u = 0.</p></details></div>
+<div class="prob"><div class="q">P6. A strain has ε = [[0.01, 0.003], [0.003, −0.004]] (2D). Find the area change and the principal strains. <span class="tag">strain</span></div>
+<details><summary>Show solution</summary><p>ΔA/A = trace = 0.006. Eigenvalues: mean 0.003, radius √(0.007² + 0.003²) ≈ 0.00762 ⇒ 0.01062 and −0.00462.</p></details></div>
+<div class="prob"><div class="q">P7. Count the independent components of a symmetric rank-2 Cartesian tensor and of an isotropic rank-4 tensor. <span class="tag">count</span></div>
+<details><summary>Show solution</summary><p>6 and 3 (a, b, c in Eq. 46). For elasticity the symmetries reduce the 3 to 2 (Lamé constants).</p></details></div>
+<div class="prob"><div class="q">P8. Show that A<sub>ij</sub>B<sub>ij</sub> is invariant under orthogonal transformations. <span class="tag">invariant</span></div>
+<details><summary>Show solution</summary><p>Ā<sub>αβ</sub>B̄<sub>αβ</sub> = a<sub>αi</sub>a<sub>βj</sub>a<sub>αk</sub>a<sub>βl</sub>A<sub>ij</sub>B<sub>kl</sub> = δ<sub>ik</sub>δ<sub>jl</sub>A<sub>ij</sub>B<sub>kl</sub> = A<sub>ij</sub>B<sub>ij</sub>, using a<sub>αi</sub>a<sub>αk</sub> = δ<sub>ik</sub> (17). In Cartesian tensors there is no need to pair upper with lower.</p></details></div>
+</section>
+
+<section id="s16" class="quiz">
+<h2>16. Self-test quiz</h2>
+<div id="quiz"></div>
+<p><b>Score: <span id="qScore">0</span> / <span id="qTot">0</span></b></p>
+</section>
+
+<section id="s17">
+<h2>17. Interesting facts</h2>
+<div class="box fact"><b class="t">The tennis-racket effect</b> Spin a racket (or a phone) about its axis of intermediate moment I₂ and it flips over unexpectedly. Rotation about the largest and smallest principal axes is stable; about the middle one it is not. Astronaut Vladimir Dzhanibekov saw a wing nut doing this in orbit in 1985 (the "Dzhanibekov effect").</div>
+<div class="box fact"><b class="t">Quartz watches</b> A tuning fork cut from quartz vibrates at 32 768 Hz = 2¹⁵ Hz. The piezoelectric tensor d<sub>ijk</sub> converts its mechanical vibration into an electric signal and back. The crystal cut is chosen along special directions where the frequency hardly changes with temperature.</div>
+<div class="box fact"><b class="t">Cauchy and the stress tensor</b> Augustin-Louis Cauchy introduced the stress tensor in 1822. It was the first tensor in physics, named "tension". Voigt later introduced the 6×6 matrix notation C<sub>11</sub>, C<sub>12</sub>, C<sub>44</sub>, … still used for elastic constants.</div>
+<div class="box fact"><b class="t">Rodrigues' formula (1840)</b> Olinde Rodrigues found Eq. (29) and the composition law for rotations before quaternions were invented. Rotations about different axes do not commute, but Rodrigues' parameters tell you exactly how they combine.</div>
+</section>
+</div>
+<script>
+/* ---------- small linear-algebra toolkit ---------- */
+const $=id=>document.getElementById(id);
+const cssv=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const eye=n=>Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0));
+const zeros=n=>Array.from({length:n},()=>Array(n).fill(0));
+const clone=M=>M.map(r=>r.slice());
+const mul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>s+v*B[k][j],0)));
+const add=(A,B)=>A.map((r,i)=>r.map((v,j)=>v+B[i][j]));
+const sub=(A,B)=>A.map((r,i)=>r.map((v,j)=>v-B[i][j]));
+const scl=(k,A)=>A.map(r=>r.map(v=>k*v));
+const trc=A=>A.reduce((s,r,i)=>s+r[i],0);
+const T=A=>A[0].map((_,j)=>A.map(r=>r[j]));
+const maxAbs=A=>Math.max(...A.flat().map(Math.abs));
+const mv=(A,x)=>A.map(r=>r.reduce((s,v,k)=>s+v*x[k],0));
+const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
+const nrm=a=>Math.sqrt(dot(a,a));
+const neg=s=>String(s).replace(/-/g,'−');
+function fmt(x,dec=3){
+  if(!isFinite(x))return '∞';
+  if(Math.abs(x)<1e-9)return '0';
+  const r=Math.round(x); if(Math.abs(x-r)<1e-7*Math.max(1,Math.abs(x)))return neg(r);
+  for(let q=2;q<=12;q++){const p=Math.round(x*q);if(Math.abs(x*q-p)<1e-7*q)return neg(p)+'/'+q;}
+  return neg(+x.toFixed(dec));
+}
+function mxH(M,heat,scale){
+  const s=scale||Math.max(1e-12,maxAbs(M));
+  return '<table class="mx">'+M.map(r=>'<tr>'+r.map(v=>{
+    let st='';
+    if(heat){const a=Math.min(1,Math.abs(v)/s)*0.55;if(Math.abs(v)>1e-9)st=` style="background:${v>0?`rgba(47,111,223,${a})`:`rgba(201,42,42,${a})`}"`;}
+    return `<td${st}>${fmt(v)}</td>`;}).join('')+'</tr>').join('')+'</table>';
+}
+function rank(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol)continue;
+    [A[r],A[p]]=[A[p],A[r]];
+    for(let i=r+1;i<n;i++){const f=A[i][c]/A[r][c];for(let j=c;j<m;j++)A[i][j]-=f*A[r][j];}
+    r++;
+  }
+  return r;
+}
+function nullspace(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  const piv=[];let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol){for(let i=r;i<n;i++)A[i][c]=0;continue;}
+    [A[r],A[p]]=[A[p],A[r]];
+    const d=A[r][c];for(let j=0;j<m;j++)A[r][j]/=d;
+    for(let i=0;i<n;i++)if(i!==r){const f=A[i][c];for(let j=0;j<m;j++)A[i][j]-=f*A[r][j];}
+    piv.push(c);r++;
+  }
+  const basis=[];
+  for(let f=0;f<m;f++){if(piv.includes(f))continue;
+    const v=Array(m).fill(0);v[f]=1;piv.forEach((c,i)=>{v[c]=-A[i][f];});basis.push(v);}
+  return basis;
+}
+function inv(M){
+  const n=M.length,A=M.map((r,i)=>r.concat(eye(n)[i]));
+  for(let c=0;c<n;c++){
+    let p=c;for(let i=c+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<1e-12)return null;
+    [A[c],A[p]]=[A[p],A[c]];const d=A[c][c];for(let j=0;j<2*n;j++)A[c][j]/=d;
+    for(let i=0;i<n;i++)if(i!==c){const f=A[i][c];for(let j=0;j<2*n;j++)A[i][j]-=f*A[c][j];}
+  }
+  return A.map(r=>r.slice(n));
+}
+/* Faddeev–LeVerrier: det(λI−A)=Σ c[k] λ^k, c[n]=1 */
+function charCoeffs(A){
+  const n=A.length,c=Array(n+1).fill(0);c[n]=1;let M=zeros(n);
+  for(let k=1;k<=n;k++){M=add(mul(A,M),scl(c[n-k+1],eye(n)));c[n-k]=-trc(mul(A,M))/k;}
+  return c;
+}
+/* complex helpers + Durand–Kerner roots of monic poly (c indexed by power) */
+const cm=(a,b)=>[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]];
+const cd=(a,b)=>{const d=b[0]*b[0]+b[1]*b[1];return[(a[0]*b[0]+a[1]*b[1])/d,(a[1]*b[0]-a[0]*b[1])/d];};
+function polyRoots(c){
+  const n=c.length-1;if(n===1)return[[-c[0],0]];
+  let z=Array.from({length:n},(_,k)=>{let w=[1,0];for(let i=0;i<=k;i++)w=cm(w,[0.4,0.9]);return w;});
+  const R=1+Math.max(...c.slice(0,n).map(Math.abs));z=z.map(w=>[w[0]*R,w[1]*R]);
+  const ev=x=>{let s=[1,0];for(let k=n-1;k>=0;k--)s=[s[0]*x[0]-s[1]*x[1]+c[k],s[0]*x[1]+s[1]*x[0]];return s;};
+  for(let it=0;it<2000;it++){
+    let delta=0;
+    z=z.map((zi,i)=>{let den=[1,0];z.forEach((zj,j)=>{if(j!==i)den=cm(den,[zi[0]-zj[0],zi[1]-zj[1]]);});
+      if(Math.hypot(den[0],den[1])<1e-300)den=[1e-12,0];
+      const q=cd(ev(zi),den);delta=Math.max(delta,Math.hypot(q[0],q[1]));return[zi[0]-q[0],zi[1]-q[1]];});
+    if(delta<1e-14)break;
+  }
+  return z;
+}
+function snap(x){for(const q of [1,2,3,4,6,12]){const r=Math.round(x*q)/q;if(Math.abs(x-r)<2e-4)return r;}return x;}
+function eigGroups(A){
+  const z=polyRoots(charCoeffs(A)),used=Array(z.length).fill(false),G=[];
+  const tol=2e-3*Math.max(1,maxAbs(A));
+  for(let i=0;i<z.length;i++){if(used[i])continue;const cl=[z[i]];used[i]=true;
+    for(let j=i+1;j<z.length;j++)if(!used[j]&&Math.hypot(z[j][0]-z[i][0],z[j][1]-z[i][1])<tol){cl.push(z[j]);used[j]=true;}
+    let re=cl.reduce((s,w)=>s+w[0],0)/cl.length,im=cl.reduce((s,w)=>s+w[1],0)/cl.length;
+    if(Math.abs(im)<1e-6)im=0;re=snap(re);if(im)im=snap(im);
+    G.push({re,im,m:cl.length});}
+  G.sort((a,b)=>b.re-a.re||b.im-a.im);return G;
+}
+const powM=(M,k)=>{let R=eye(M.length);for(let i=0;i<k;i++)R=mul(R,M);return R;};
+const lamF=a=>a===0?'λ':(a>0?`(λ − ${fmt(a)})`:`(λ + ${fmt(-a)})`);
+const supN=k=>k===1?'':String(k).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+function minimalPoly(A){
+  const G=eigGroups(A),n=A.length;
+  if(G.some(g=>g.im!==0))return{G,complex:true};
+  const sc=Math.max(1,maxAbs(A));
+  let tups=[[]];G.forEach(g=>{const nt=[];tups.forEach(t=>{for(let r=1;r<=g.m;r++)nt.push(t.concat(r));});tups=nt;});
+  tups.sort((a,b)=>a.reduce((s,v)=>s+v,0)-b.reduce((s,v)=>s+v,0));
+  const tried=[];
+  for(const t of tups){
+    let P=eye(n);G.forEach((g,i)=>{P=mul(P,powM(sub(A,scl(g.re,eye(n))),t[i]));});
+    const deg=t.reduce((s,v)=>s+v,0),zero=maxAbs(P)<1e-6*Math.pow(sc,deg);
+    tried.push({t,P,zero});if(zero)return{G,r:t,tried};
+  }
+  return{G,r:G.map(g=>g.m),tried};
+}
+function expandRoots(rs){let p=[1];rs.forEach(a=>{const q=Array(p.length+1).fill(0);p.forEach((v,i)=>{q[i]+=v;q[i+1]-=a*v;});p=q;});return p;}
+function polyStr(p,v,mat){
+  const d=p.length-1;let s='';
+  p.forEach((c,i)=>{if(Math.abs(c)<1e-9)return;const k=d-i;const a=Math.abs(c);
+    const coef=(a===1&&k>0)?'':fmt(a);const term=k===0?(mat?coef+'I':fmt(a)):(k===1?coef+v:coef+v+supN(k));
+    s+=(s===''?(c<0?'−':''):(c<0?' − ':' + '))+term;});
+  return s||'0';
+}
+function makeEditor(id,M,cb){
+  const box=$(id);let n=M.length;
+  function build(M){n=M.length;box.innerHTML='<div style="display:grid;grid-template-columns:repeat('+n+',58px);gap:4px">'+M.flat().map((v,i)=>`<input type="number" step="any" data-i="${i}" value="${v}" style="width:58px">`).join('')+'</div>';
+    box.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',cb));}
+  build(M);
+  return{get(){const v=[...box.querySelectorAll('input')].map(i=>parseFloat(i.value)||0);return Array.from({length:n},(_,i)=>v.slice(i*n,i*n+n));},
+         set(M){build(M);cb();}};
+}
+function arrow(ctx,x0,y0,x1,y1,col,w=2.5,dash){
+  ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;if(dash)ctx.setLineDash(dash);
+  ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();ctx.setLineDash([]);
+  const a=Math.atan2(y1-y0,x1-x0),L=Math.hypot(x1-x0,y1-y0);
+  if(L>6){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-10*Math.cos(a-0.4),y1-10*Math.sin(a-0.4));ctx.lineTo(x1-10*Math.cos(a+0.4),y1-10*Math.sin(a+0.4));ctx.fill();}
+  ctx.restore();
+}
+function canvasPt(cv,e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height];}
+
+/* ---------- helpers ---------- */
+function jacobi(S){const n=S.length;let A=clone(S),V=eye(n);
+  for(let sw=0;sw<60;sw++){let off=0;for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)off+=A[i][j]*A[i][j];if(off<1e-22)break;
+    for(let p=0;p<n;p++)for(let q=p+1;q<n;q++){if(Math.abs(A[p][q])<1e-15)continue;const th=(A[q][q]-A[p][p])/(2*A[p][q]),t=Math.sign(th||1)/(Math.abs(th)+Math.sqrt(th*th+1)),c=1/Math.sqrt(t*t+1),s=t*c;
+      for(let k=0;k<n;k++){const a=A[k][p],b=A[k][q];A[k][p]=c*a-s*b;A[k][q]=s*a+c*b;}for(let k=0;k<n;k++){const a=A[p][k],b=A[q][k];A[p][k]=c*a-s*b;A[q][k]=s*a+c*b;}for(let k=0;k<n;k++){const a=V[k][p],b=V[k][q];V[k][p]=c*a-s*b;V[k][q]=s*a+c*b;}}}
+  return A.map((r,i)=>({l:r[i],v:V.map(row=>row[i])})).sort((a,b)=>b.l-a.l);}
+const eps3=(i,j,k)=>((i-j)*(j-k)*(k-i))/2;
+function rodr(l,th){return Array.from({length:3},(_,i)=>Array.from({length:3},(_,j)=>{let e=0;for(let m=0;m<3;m++)e+=eps3(i,m,j)*l[m];return Math.cos(th)*(i===j?1:0)+(1-Math.cos(th))*l[i]*l[j]+e*Math.sin(th);}));}
+function det3(M){return M[0][0]*(M[1][1]*M[2][2]-M[1][2]*M[2][1])-M[0][1]*(M[1][0]*M[2][2]-M[1][2]*M[2][0])+M[0][2]*(M[1][0]*M[2][1]-M[1][1]*M[2][0]);}
+function randRot(){const u=[Math.random()*2-1,Math.random()*2-1,Math.random()*2-1];const n=nrm(u)||1;return rodr(u.map(x=>x/n),Math.random()*2*Math.PI);}
+function mkView(y,p){return{yaw:y,pitch:p};}
+function pr3(v,p,s,W,H){const c=Math.cos(v.yaw),sn=Math.sin(v.yaw),cp=Math.cos(v.pitch),sp=Math.sin(v.pitch);const x=c*p[0]-sn*p[1],y1=sn*p[0]+c*p[1];return[W/2+s*x,H/2-s*(cp*p[2]-sp*y1)];}
+function dragView(cv,v,redraw){let d=null;cv.addEventListener('pointerdown',e=>{d=[e.clientX,e.clientY];cv.setPointerCapture(e.pointerId);});
+  cv.addEventListener('pointermove',e=>{if(!d)return;v.yaw+=(e.clientX-d[0])*0.01;v.pitch=Math.max(-1.5,Math.min(1.5,v.pitch+(e.clientY-d[1])*0.01));d=[e.clientX,e.clientY];redraw();});cv.addEventListener('pointerup',()=>d=null);}
+function axes3(ctx,v,s,W,H,L){[['x₁','#c92a2a'],['x₂','#2b9348'],['x₃','#2f6fdf']].forEach(([n,c],i)=>{const e=[0,0,0];e[i]=L;const q=pr3(v,e,s,W,H),o=pr3(v,[0,0,0],s,W,H);ctx.strokeStyle=c;ctx.globalAlpha=0.5;ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(...o);ctx.lineTo(...q);ctx.stroke();ctx.globalAlpha=1;ctx.fillStyle=c;ctx.font='13px sans-serif';ctx.fillText(n,q[0]+4,q[1]);});}
+const v3=x=>'('+x.map(y=>fmt(y,3)).join(', ')+')';
+const m3=M=>M.map(r=>'  ['+r.map(v=>fmt(v,4).padStart(8)).join(' ')+' ]').join('\n');
+
+/* ---------- Rotation lab ---------- */
+const rv=mkView(0.7,0.35);let rRun=false;
+const AXP={z:[0,0],x:[90,0],'111':[54.7356,45]};
+document.querySelectorAll('[data-ax]').forEach(b=>b.onclick=()=>{const k=b.dataset.ax;if(k==='r'){$('rTh').value=Math.round(Math.random()*180);$('rPh').value=Math.round(Math.random()*360);}else{$('rTh').value=AXP[k][0];$('rPh').value=AXP[k][1];$('rAng').value=k==='z'?90:k==='111'?120:60;}drawR();});
+['rTh','rPh','rAng','rInv'].forEach(k=>$(k).addEventListener('input',drawR));
+$('rPlay').onclick=()=>{rRun=!rRun;$('rPlay').textContent=rRun?'❚❚':'▶';if(rRun)(function f(){if(!rRun)return;let a=+$('rAng').value+1.5;if(a>180)a=-180;$('rAng').value=a;drawR();requestAnimationFrame(f);})();};
+dragView($('cvR'),rv,()=>drawR());
+function drawR(){
+  const th=+$('rTh').value*Math.PI/180,ph=+$('rPh').value*Math.PI/180,ang=+$('rAng').value*Math.PI/180,inv=$('rInv').checked;
+  $('rThv').textContent=(+$('rTh').value).toFixed(1)+'°';$('rPhv').textContent=(+$('rPh').value).toFixed(1)+'°';$('rAngv').textContent=$('rAng').value+'°';
+  const l=[Math.sin(th)*Math.cos(ph),Math.sin(th)*Math.sin(ph),Math.cos(th)];let R=rodr(l,ang);if(inv)R=scl(-1,R);
+  const cv=$('cvR'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,s=120,P=p=>pr3(rv,p,s,W,H);
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);axes3(ctx,rv,s,W,H,1.6);
+  const C=[];for(let a=0;a<2;a++)for(let b=0;b<2;b++)for(let c=0;c<2;c++)C.push([a,b,c].map(x=>x*0.8+0.1));
+  const E=[[0,1],[0,2],[0,4],[1,3],[1,5],[2,3],[2,6],[3,7],[4,5],[4,6],[5,7],[6,7]];
+  const drawCube=(pts,col,w,dash)=>{ctx.strokeStyle=col;ctx.lineWidth=w;ctx.setLineDash(dash||[]);E.forEach(([i,j])=>{ctx.beginPath();ctx.moveTo(...P(pts[i]));ctx.lineTo(...P(pts[j]));ctx.stroke();});ctx.setLineDash([]);};
+  drawCube(C,cssv('--muted'),1,[4,4]);drawCube(C.map(p=>mv(R,p)),cssv('--acc'),2.2);
+  const a1=P(l.map(x=>-1.6*x)),a2=P(l.map(x=>1.6*x));ctx.strokeStyle=cssv('--acc4');ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(...a1);ctx.lineTo(...a2);ctx.stroke();arrow(ctx,...P([0,0,0]),...a2,cssv('--acc4'),3);
+  const p0=C[5].slice();const ld=dot(l,p0),S=l.map(x=>x*ld);
+  ctx.strokeStyle=cssv('--acc2');ctx.lineWidth=1.5;ctx.setLineDash([3,3]);ctx.beginPath();for(let k=0;k<=60;k++){const t=k/60*ang;const q=mv(rodr(l,t),p0);k?ctx.lineTo(...P(q)):ctx.moveTo(...P(q));}ctx.stroke();ctx.setLineDash([]);
+  const pq=mv(R,p0);[[p0,cssv('--muted')],[pq,cssv('--acc2')]].forEach(([q,c])=>{ctx.fillStyle=c;ctx.beginPath();ctx.arc(...P(q),5,0,7);ctx.fill();});
+  ctx.strokeStyle=cssv('--acc2');ctx.lineWidth=1;[p0,pq].forEach(q=>{ctx.beginPath();ctx.moveTo(...P(S));ctx.lineTo(...P(q));ctx.stroke();});
+  ctx.fillStyle=cssv('--ink');ctx.font='12px sans-serif';ctx.fillText('P',...P(p0).map((x,i)=>x+(i?-6:6)));ctx.fillText('Q',...P(pq).map((x,i)=>x+(i?-6:6)));ctx.fillText('S',...P(S).map((x,i)=>x+(i?14:6)));
+  const RtR=mul(T(R),R),tr=trc(R),cosB=(tr-1)/2;
+  let axis='—';const ns=nullspace(sub(R,scl(inv?-1:1,eye(3))),1e-7);if(ns[0]){const n=nrm(ns[0]);axis=v3(ns[0].map(x=>x/n));}
+  $('rOut').textContent=`λ = ${v3(l)}, θ = ${$('rAng').value}°${inv?'  × (−I)':''}
+a_ij (Eq. 29)${inv?' × (−1)':''} =
+${m3(R)}
+max|AᵀA − I| = ${maxAbs(sub(RtR,eye(3))).toExponential(1)}   det A = ${fmt(det3(R),5)} ${inv?'→ IMPROPER':'→ proper'}
+Tr A = ${fmt(tr,4)}   ${inv?'':'1 + 2cos θ = '+fmt(1+2*Math.cos(ang),4)}
+axis from eigenvector (λ = ${inv?'−1':'+1'}): ${axis}
+P = ${v3(p0)} → Q = A·P = ${v3(pq)}   |P| = |Q| = ${fmt(nrm(pq),4)}`;
+}
+
+/* ---------- Isotropy lab ---------- */
+const ISO={delta:[[2,0,0],[0,2,0],[0,0,2]],diag:[[1,0,0],[0,2,0],[0,0,3]],anti:[[0,1,-2],[-1,0,0.5],[2,-0.5,0]],gen:[[1,2,0],[0,3,1],[1,-1,2]]};
+const edI=makeEditor('isoIn',ISO.diag,runIso);
+document.querySelectorAll('[data-iso]').forEach(b=>b.onclick=()=>edI.set(ISO[b.dataset.iso]));$('isoGo').onclick=runIso;
+function runIso(){const X=edI.get();let avg=zeros(3),maxd=0;const N=300;let ex=null;
+  for(let n=0;n<N;n++){const A=randRot(),Xb=mul(mul(A,X),T(A));avg=add(avg,scl(1/N,Xb));maxd=Math.max(maxd,maxAbs(sub(Xb,X)));if(!ex)ex=Xb;}
+  const iso=trc(X)/3,iso_ok=maxd<1e-9;
+  $('isoOut').innerHTML=`<div style="display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start"><div class="small">X<br>${mxH(X,true)}</div><div class="small">one rotated Ā = AXAᵀ<br>${mxH(ex,true)}</div><div class="small">average of Ā over ${N} rotations<br>${mxH(avg,true)}</div><div class="small">(Tr X/3)·δ<br>${mxH(scl(iso,eye(3)))}</div></div>
+  <p class="${iso_ok?'ok':'bad'}">${iso_ok?'✓ Unchanged by every rotation: X is isotropic (a multiple of δ).':'✗ Components change (max change '+fmt(maxd,3)+'): not isotropic.'} Invariants: Tr = ${fmt(trc(X),4)} (kept in every Ā ✓); the average tends to (Tr X/3)δ${Math.abs(trc(X))<1e-12?' = 0 for a traceless (e.g. antisymmetric) tensor':''}.</p>`;
+  const A=randRot(),Pm=scl(-1,A);let dP=0,dI=0;
+  for(let i=0;i<3;i++)for(let j=0;j<3;j++)for(let k=0;k<3;k++){let s1=0,s2=0;for(let l=0;l<3;l++)for(let m=0;m<3;m++)for(let n=0;n<3;n++){const e=eps3(l,m,n);if(!e)continue;s1+=A[i][l]*A[j][m]*A[k][n]*e;s2+=Pm[i][l]*Pm[j][m]*Pm[k][n]*e;}dP=Math.max(dP,Math.abs(s1-eps3(i,j,k)));dI=Math.max(dI,Math.abs(s2+eps3(i,j,k)));}
+  $('epsChk').innerHTML=`proper rotation: max|ε̄ − ε| = ${dP.toExponential(1)} <span class="ok">✓ unchanged</span>; improper (−A): ε̄ = −ε (max|ε̄ + ε| = ${dI.toExponential(1)}) <span class="bad">sign flips: pseudotensor</span>.`;
+}
+
+/* ---------- Strain lab ---------- */
+const ST={ext:[0.25,0,0,0],shear:[0.2,0,0,-0.2],simple:[0,0.3,0,0],rot:[0,-0.25,0.25,0],dil:[0.15,0,0,0.15]};
+document.querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>{const v=ST[b.dataset.st];['sXX','sXY','sYX','sYY'].forEach((k,i)=>$(k).value=v[i]);drawS();});
+['sXX','sXY','sYX','sYY'].forEach(k=>$(k).addEventListener('input',drawS));
+function drawS(){
+  const e=[[+$('sXX').value,+$('sXY').value],[+$('sYX').value,+$('sYY').value]];['sXX','sXY','sYX','sYY'].forEach(k=>$(k+'v').textContent=fmt(+$(k).value,2));
+  const F=add(eye(2),e),Sym=scl(0.5,add(e,T(e))),Rot=scl(0.5,sub(e,T(e)));
+  const cv=$('cvS'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,s=150,X=x=>W/2-60+x*s,Y=y=>H/2+60-y*s;
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);ctx.strokeStyle=cssv('--line');ctx.lineWidth=1;for(let k=-2;k<=3;k++){ctx.beginPath();ctx.moveTo(X(k*0.5),0);ctx.lineTo(X(k*0.5),H);ctx.moveTo(0,Y(k*0.5));ctx.lineTo(W,Y(k*0.5));ctx.stroke();}
+  const sq=[[0,0],[1,0],[1,1],[0,1]];
+  ctx.fillStyle='rgba(128,128,128,.15)';ctx.strokeStyle=cssv('--muted');ctx.setLineDash([5,4]);ctx.beginPath();sq.forEach((p,i)=>i?ctx.lineTo(X(p[0]),Y(p[1])):ctx.moveTo(X(p[0]),Y(p[1])));ctx.closePath();ctx.fill();ctx.stroke();ctx.setLineDash([]);
+  const def=sq.map(p=>mv(F,p));ctx.fillStyle='rgba(47,111,223,.18)';ctx.strokeStyle=cssv('--acc');ctx.lineWidth=2.5;ctx.beginPath();def.forEach((p,i)=>i?ctx.lineTo(X(p[0]),Y(p[1])):ctx.moveTo(X(p[0]),Y(p[1])));ctx.closePath();ctx.fill();ctx.stroke();
+  arrow(ctx,X(0),Y(0),X(def[1][0]),Y(def[1][1]),cssv('--acc2'),3);arrow(ctx,X(0),Y(0),X(def[3][0]),Y(def[3][1]),cssv('--acc3'),3);
+  ctx.fillStyle=cssv('--acc2');ctx.font='bold 13px sans-serif';ctx.fillText("x′",X(def[1][0])+5,Y(def[1][1])+14);ctx.fillStyle=cssv('--acc3');ctx.fillText("y′",X(def[3][0])-18,Y(def[3][1])-4);
+  const J=jacobi(Sym);J.forEach(j=>{ctx.save();ctx.setLineDash([6,4]);ctx.strokeStyle=cssv('--acc4');ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(X(0.5-0.9*j.v[0]),Y(0.5-0.9*j.v[1]));ctx.lineTo(X(0.5+0.9*j.v[0]),Y(0.5+0.9*j.v[1]));ctx.stroke();ctx.restore();});
+  const area=F[0][0]*F[1][1]-F[0][1]*F[1][0],ang=Math.acos(dot(def[1],def[3])/(nrm(def[1])*nrm(def[3])))*180/Math.PI;
+  const m=M=>'['+M.map(r=>'['+r.map(v=>fmt(v,3)).join(', ')+']').join(', ')+']';
+  $('sOut').textContent=`ε = ${m(e)}
+symmetric part (strain)   = ${m(Sym)}
+antisymmetric part (rotation) = ${m(Rot)}  → turns by ≈ ${(Rot[1][0]*180/Math.PI).toFixed(2)}°
+
+|x′| = ${fmt(nrm(def[1]),4)} ≈ 1 + ε_xx = ${fmt(1+e[0][0],4)}
+area ratio = ${fmt(area,4)} ≈ 1 + ε_xx + ε_yy = ${fmt(1+e[0][0]+e[1][1],4)}  (dilation = trace)
+angle between x′ and y′: ${ang.toFixed(2)}°  (shear e_xy = ε_xy + ε_yx = ${fmt(e[0][1]+e[1][0],3)} rad ≈ ${((e[0][1]+e[1][0])*180/Math.PI).toFixed(2)}° change)
+principal strains: ${J.map(j=>fmt(j.l,4)).join(', ')}
+${maxAbs(Sym)<1e-9?'pure rotation: NO strain, so no stress':''}`;
+}
+
+/* ---------- Inertia lab ---------- */
+const iv=mkView(0.6,0.3);let iBody=[],iSpinA=0,iSpinOn=false;
+const BODY={dumb:[[1,0.8,0.6,0.3],[1,-0.8,-0.6,-0.3]],rod:[[1,-1,0,0],[1,1,0,0],[1.5,0.3,0.7,0.2]],cube:[[-1,-1,-1],[-1,-1,1],[-1,1,-1],[-1,1,1],[1,-1,-1],[1,-1,1],[1,1,-1],[1,1,1]].map(p=>[0.5,...p.map(x=>x*0.6)]),
+  rnd:null};
+function setBody(k){if(k==='rnd'){iBody=Array.from({length:6},()=>[0.4+Math.random(),...[0,0,0].map(()=>Math.random()*1.6-0.8)]);const M=iBody.reduce((s,b)=>s+b[0],0),c=[1,2,3].map(i=>iBody.reduce((s,b)=>s+b[0]*b[i],0)/M);iBody=iBody.map(b=>[b[0],b[1]-c[0],b[2]-c[1],b[3]-c[2]]);}else iBody=BODY[k].map(b=>b.slice());drawI();}
+document.querySelectorAll('[data-bd]').forEach(b=>b.onclick=()=>setBody(b.dataset.bd));
+['iT','iP'].forEach(k=>$(k).addEventListener('input',drawI));
+dragView($('cvI'),iv,()=>drawI());
+function inertia(){const I=zeros(3);iBody.forEach(([m,x,y,z])=>{const r=[x,y,z],r2=dot(r,r);for(let i=0;i<3;i++)for(let j=0;j<3;j++)I[i][j]+=m*((i===j?r2:0)-r[i]*r[j]);});return I;}
+$('iSnap').onclick=()=>{const J=jacobi(inertia());const ok=[0,1,2].filter(i=>J[i].l>1e-9);const k=ok[Math.floor(Math.random()*ok.length)];let v=J[k].v;if(v[2]<0)v=v.map(x=>-x);$('iT').value=Math.acos(Math.max(-1,Math.min(1,v[2])))*180/Math.PI;$('iP').value=((Math.atan2(v[1],v[0])*180/Math.PI)+360)%360;drawI();};
+$('iSpin').onclick=()=>{iSpinOn=!iSpinOn;if(iSpinOn)(function f(){if(!iSpinOn)return;iSpinA+=0.03;drawI();requestAnimationFrame(f);})();};
+function drawI(){
+  const th=+$('iT').value*Math.PI/180,ph=+$('iP').value*Math.PI/180;$('iTv').textContent=(+$('iT').value).toFixed(1)+'°';$('iPv').textContent=(+$('iP').value).toFixed(1)+'°';
+  const w=[Math.sin(th)*Math.cos(ph),Math.sin(th)*Math.sin(ph),Math.cos(th)],I=inertia(),L=mv(I,w),J=jacobi(I);
+  const cv=$('cvI'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,s=130,P=p=>pr3(iv,p,s,W,H);
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);axes3(ctx,iv,s,W,H,1.4);
+  const maxI=Math.max(...J.map(j=>j.l)),k0=1.1*Math.sqrt(J[2].l>1e-9?J[2].l:maxI);
+  if(J.every(j=>j.l>1e-9)){ctx.strokeStyle=cssv('--acc4');ctx.globalAlpha=0.25;ctx.lineWidth=1;
+    for(let a=-60;a<=60;a+=30){ctx.beginPath();for(let k=0;k<=48;k++){const t=k/48*2*Math.PI,ph2=a*Math.PI/180,u=[Math.cos(ph2)*Math.cos(t),Math.cos(ph2)*Math.sin(t),Math.sin(ph2)];const p=[0,0,0];J.forEach((j,ii)=>{const r=k0/Math.sqrt(j.l)*u[ii];for(let c=0;c<3;c++)p[c]+=r*j.v[c];});k?ctx.lineTo(...P(p)):ctx.moveTo(...P(p));}ctx.stroke();}
+    ctx.globalAlpha=1;}
+  const Rs=rodr(w,iSpinA),pts=iBody.map(b=>({m:b[0],p:mv(Rs,[b[1],b[2],b[3]])}));
+  ctx.strokeStyle=cssv('--muted');ctx.lineWidth=1.5;pts.forEach(b=>{ctx.beginPath();ctx.moveTo(...P([0,0,0]));ctx.lineTo(...P(b.p));ctx.stroke();});
+  pts.forEach(b=>{ctx.fillStyle=cssv('--acc');ctx.beginPath();ctx.arc(...P(b.p),5+5*b.m,0,7);ctx.fill();});
+  const o=P([0,0,0]),wn=1.5,Ln=nrm(L)||1;arrow(ctx,...o,...P(w.map(x=>x*wn)),cssv('--acc4'),4);arrow(ctx,...o,...P(L.map(x=>x/Ln*wn)),cssv('--acc2'),4);
+  ctx.font='bold 14px sans-serif';ctx.fillStyle=cssv('--acc4');ctx.fillText('ω',...P(w.map(x=>x*wn*1.08)));ctx.fillStyle=cssv('--acc2');ctx.fillText('L',...P(L.map(x=>x/Ln*wn*1.08)));
+  const ang=Math.acos(Math.max(-1,Math.min(1,dot(L,w)/Ln)))*180/Math.PI;
+  $('iOut').textContent=`I_ij = Σ m (r² δ_ij − x_i x_j) =
+${m3(I)}
+ω (unit) = ${v3(w)}
+L = I·ω  = ${v3(L)}
+${nrm(L)<1e-9?'L = 0: ω is along an axis of zero moment (e.g. the rod of a dumbbell)':'angle between L and ω: '+ang.toFixed(2)+'° '+(ang<0.05?'→ ω is along a principal axis':'→ NOT parallel')}
+T = ½ ωᵀIω = ${fmt(0.5*dot(w,L),4)}
+
+principal moments: ${J.map(j=>fmt(j.l,4)).join(', ')}
+principal axes: ${J.map(j=>v3(j.v)).join('  ')}`;
+}
+
+/* ---------- Quiz ---------- */
+const QZ=[
+ {q:'For an orthogonal transformation, A⁻¹ equals…',o:['Aᵀ','A','−A','adj A'],a:0,e:'Rows and columns are orthonormal.'},
+ {q:'det A = −1 means the transformation is…',o:['an improper rotation','a proper rotation','singular','a translation'],a:0,e:'Rotation combined with reflection or inversion.'},
+ {q:'The trace of a rotation matrix by θ is…',o:['1 + 2cos θ','3cos θ','2cos θ','1'],a:0,e:'From Eq. (29).'},
+ {q:'Why can all indices be written as subscripts for Cartesian tensors?',o:['∂x̄_i/∂x_j = ∂x_j/∂x̄_i = a_ij','because N = 3','because tensors are symmetric','because det A = 1'],a:0,e:'Eq. (30).'},
+ {q:'The only isotropic rank-2 tensor in 3D is…',o:['λδ_ij','λε_ijk','0','any symmetric tensor'],a:0,e:'Example 2.'},
+ {q:'The dilation (fractional volume change) equals…',o:['e_xx + e_yy + e_zz','e_xx e_yy e_zz','e_xy + e_yz + e_zx','det e'],a:0,e:'Eq. (51).'},
+ {q:'Independent elastic constants for a general (triclinic) solid:',o:['21','81','36','3'],a:0,e:'81 → 36 → 21.'},
+ {q:'Independent elastic constants for a cubic crystal:',o:['3','2','21','6'],a:0,e:'C11, C12, C44.'},
+ {q:'Piezoelectric tensor d_ijk is impossible in crystals with…',o:['a centre of inversion','cubic symmetry','no symmetry','an electric field'],a:0,e:'Odd rank changes sign under inversion.'},
+ {q:'L is parallel to ω when ω is along…',o:['a principal axis of I','any axis','the x axis','L itself, always'],a:0,e:'Eigenvector of I.'}
+];
+(function(){let sc=0;$('qTot').textContent=QZ.length;
+ $('quiz').innerHTML=QZ.map((x,i)=>{const ord=x.o.map((t,j)=>({t,j})).sort(()=>Math.random()-0.5);
+  return `<div class="qq" data-q="${i}"><b>Q${i+1}.</b> ${x.q}${ord.map(o=>`<label class="opt"><input type="radio" name="q${i}" value="${o.j}"> ${o.t}</label>`).join('')}<div class="fb"></div></div>`;}).join('');
+ document.querySelectorAll('#quiz .qq').forEach(div=>{const i=+div.dataset.q;let done=false;
+  div.querySelectorAll('input').forEach(inp=>inp.addEventListener('change',()=>{if(done)return;done=true;const ok=+inp.value===QZ[i].a;if(ok)sc++;$('qScore').textContent=sc;
+    div.querySelector('.fb').innerHTML=`<span class="${ok?'ok':'bad'}">${ok?'✓ Correct.':'✗ Answer: '+QZ[i].o[QZ[i].a]+'.'}</span> ${QZ[i].e}`;
+    div.querySelectorAll('input').forEach(x=>x.disabled=true);}));});})();
+
+function drawAll(){drawR();drawS();drawI();}
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+$('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawAll();};})();
+setBody('dumb');runIso();drawR();drawS();
+</script>
+</body>
+</html>

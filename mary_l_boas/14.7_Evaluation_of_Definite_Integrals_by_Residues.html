@@ -1,0 +1,1005 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14.7 Evaluation of Definite Integrals by Use of the Residue Theorem — Boas Ch. 14</title>
+<script>try{var t=localStorage.getItem('boas-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{
+  --bg:#f6f7fb;--card:#ffffff;--fg:#1c2333;--muted:#596379;--line:#dde2ec;
+  --accent:#2f6bff;--accent2:#e8590c;--accent3:#0b9b6e;--accent4:#a33ec9;--warn:#c92a2a;
+  --defbg:#edf3ff;--thmbg:#eefaf4;--warnbg:#fff3ee;--factbg:#f8f0ff;--notebg:#f4f6fa;
+  --canvas:#ffffff;--grid:#e9ecf3;--axis:#7d879b;--code:#eef1f7;--shadow:0 1px 3px rgba(20,30,60,.08),0 4px 18px rgba(20,30,60,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1219;--card:#161b25;--fg:#e4e8f0;--muted:#9aa3b6;--line:#2a3141;
+    --accent:#6f9cff;--accent2:#ff922b;--accent3:#3ad8a6;--accent4:#d77cf2;--warn:#ff6b6b;
+    --defbg:#162238;--thmbg:#122a21;--warnbg:#2d1a16;--factbg:#23192e;--notebg:#1b212c;
+    --canvas:#11161f;--grid:#202834;--axis:#717b8f;--code:#1f2532;--shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1219;--card:#161b25;--fg:#e4e8f0;--muted:#9aa3b6;--line:#2a3141;
+  --accent:#6f9cff;--accent2:#ff922b;--accent3:#3ad8a6;--accent4:#d77cf2;--warn:#ff6b6b;
+  --defbg:#162238;--thmbg:#122a21;--warnbg:#2d1a16;--factbg:#23192e;--notebg:#1b212c;
+  --canvas:#11161f;--grid:#202834;--axis:#717b8f;--code:#1f2532;--shadow:none;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--fg);font:16.5px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+header.top{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center;padding:8px 16px;flex-wrap:wrap}
+header.top .brand{font-weight:700;font-size:15px;white-space:nowrap}
+header.top .brand small{color:var(--muted);font-weight:500}
+header.top .sp{flex:1}
+header.top select,header.top button,header.top a.btn{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 10px;text-decoration:none;cursor:pointer;max-width:100%}
+header.top select{max-width:260px}
+.layout{display:flex;gap:28px;max-width:1280px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:64px;align-self:flex-start;width:240px;flex:none;max-height:calc(100vh - 80px);overflow:auto;padding:18px 0;font-size:14px}
+nav.toc b{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:3px 10px;border-left:2px solid var(--line)}
+nav.toc a:hover,nav.toc a.on{color:var(--accent);border-left-color:var(--accent)}
+main{flex:1;min-width:0;max-width:940px;padding:10px 0 80px}
+@media (max-width:1100px){nav.toc{display:none}}
+h1{font-size:2rem;line-height:1.2;margin:26px 0 6px}
+h1 .num{color:var(--accent)}
+.subtitle{color:var(--muted);margin:0 0 18px}
+h2{font-size:1.45rem;margin:44px 0 12px;padding-top:6px;border-top:1px solid var(--line)}
+h3{font-size:1.15rem;margin:26px 0 8px}
+h4{font-size:1rem;margin:18px 0 6px}
+p{margin:10px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:16px 0;box-shadow:var(--shadow)}
+.box{border-radius:12px;padding:12px 16px;margin:16px 0;border:1px solid var(--line);border-left-width:5px}
+.box>.tag{display:inline-block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.box.def{background:var(--defbg);border-left-color:var(--accent)}.box.def>.tag{color:var(--accent)}
+.box.thm{background:var(--thmbg);border-left-color:var(--accent3)}.box.thm>.tag{color:var(--accent3)}
+.box.warn{background:var(--warnbg);border-left-color:var(--warn)}.box.warn>.tag{color:var(--warn)}
+.box.fact{background:var(--factbg);border-left-color:var(--accent4)}.box.fact>.tag{color:var(--accent4)}
+.box.note{background:var(--notebg);border-left-color:var(--axis)}.box.note>.tag{color:var(--muted)}
+.ex{border:1px solid var(--line);border-radius:12px;margin:18px 0;background:var(--card);overflow:hidden}
+.ex>.hd{background:var(--notebg);padding:8px 16px;font-weight:600;border-bottom:1px solid var(--line)}
+.ex>.bd{padding:6px 16px 10px}
+ol.steps{padding-left:22px;margin:8px 0}ol.steps>li{margin:6px 0}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}
+.katex{font-size:1.06em}
+table.t{border-collapse:collapse;width:100%;margin:12px 0;font-size:15px;display:block;overflow-x:auto}
+table.t th,table.t td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+table.t th{background:var(--notebg)}
+details.sol{margin:8px 0 4px;border:1px dashed var(--line);border-radius:10px;padding:2px 12px}
+details.sol>summary{cursor:pointer;color:var(--accent);font-weight:600;padding:6px 0;list-style:none}
+details.sol>summary::-webkit-details-marker{display:none}
+details.sol>summary::before{content:"▶ ";font-size:11px}
+details.sol[open]>summary::before{content:"▼ "}
+details.sol[open]{background:var(--card)}
+.prob{border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin:12px 0;background:var(--card)}
+.prob>.q{margin:4px 0}
+.prob>.q>b:first-child{color:var(--accent2)}
+.lvl{font-size:11px;font-weight:700;border-radius:20px;padding:1px 8px;margin-left:6px;vertical-align:middle;border:1px solid currentColor}
+.lvl.e{color:var(--accent3)}.lvl.m{color:var(--accent)}.lvl.h{color:var(--accent2)}.lvl.x{color:var(--warn)}
+.widget{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:18px 0;box-shadow:var(--shadow)}
+.widget>.wt{font-weight:700;margin-bottom:4px}
+.widget>.wd{color:var(--muted);font-size:14px;margin-bottom:8px}
+.widget canvas{width:100%;display:block;border-radius:10px;border:1px solid var(--line);background:var(--canvas)}
+.ctrls{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:10px 0;font-size:14.5px}
+.ctrls label{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.ctrls input[type=range]{width:150px;accent-color:var(--accent)}
+.ctrls output{min-width:46px;font-variant-numeric:tabular-nums;color:var(--accent);font-weight:600}
+.ctrls select,.ctrls input[type=text],.ctrls input[type=number],.ctrls button{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 9px}
+.ctrls input[type=text]{min-width:200px}
+.ctrls input[type=number]{width:80px}
+.ctrls button{cursor:pointer}
+.ctrls button.pri{background:var(--accent);color:#fff;border-color:var(--accent)}
+.readout{font-size:15px;background:var(--notebg);border-radius:10px;padding:8px 12px;margin-top:10px;overflow-x:auto;line-height:1.9}
+.readout .k{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+.pill{display:inline-block;background:var(--code);border-radius:6px;padding:0 6px;font-family:Consolas,monospace;font-size:.92em}
+.mcq{border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin:12px 0;background:var(--card)}
+.mcq .opts{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.mcq .opts button{font:inherit;font-size:15px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 12px;cursor:pointer}
+.mcq .opts button.ok{background:var(--thmbg);border-color:var(--accent3)}
+.mcq .opts button.bad{background:var(--warnbg);border-color:var(--warn)}
+.mcq .fb{font-size:14.5px;color:var(--muted)}
+.lead{font-size:1.07rem}
+.small{font-size:14px;color:var(--muted)}
+.center{text-align:center}
+.hl{color:var(--accent2);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13.5px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:14px;height:4px;border-radius:2px;vertical-align:middle;margin-right:5px}
+.pagenav{display:flex;justify-content:space-between;gap:12px;margin-top:50px;flex-wrap:wrap}
+.pagenav a{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 14px;text-decoration:none;max-width:48%}
+.pagenav a small{display:block;color:var(--muted)}
+.summary li{margin:4px 0}
+kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
+
+</style>
+</head>
+<body>
+<header class="top">
+  <span class="brand">Boas · Ch. 14 Functions of a Complex Variable <small>| Section 14.7</small></span>
+  <span class="sp"></span>
+  <select id="chapSel" aria-label="Go to section"><option value="14.0_Functions_of_a_Complex_Variable_Index.html">14.0 Chapter 14 Index</option>
+<option value="14.1_Introduction.html">14.1 Introduction</option>
+<option value="14.2_Analytic_Functions.html">14.2 Analytic Functions</option>
+<option value="14.3_Contour_Integrals.html">14.3 Contour Integrals</option>
+<option value="14.4_Laurent_Series.html">14.4 Laurent Series</option>
+<option value="14.5_The_Residue_Theorem.html">14.5 The Residue Theorem</option>
+<option value="14.6_Methods_of_Finding_Residues.html">14.6 Methods of Finding Residues</option>
+<option value="14.7_Evaluation_of_Definite_Integrals_by_Residues.html" selected>14.7 Evaluation of Definite Integrals by Use of the Residue Theorem</option>
+<option value="14.8_Point_at_Infinity_Residues_at_Infinity.html">14.8 The Point at Infinity; Residues at Infinity</option>
+<option value="14.9_Mapping.html">14.9 Mapping</option>
+<option value="14.10_Applications_of_Conformal_Mapping.html">14.10 Some Applications of Conformal Mapping</option>
+<option value="14.11_Miscellaneous_Problems.html">14.11 Miscellaneous Problems</option></select>
+  <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
+</header>
+<div class="layout">
+<nav class="toc" id="toc"></nav>
+<main>
+<h1><span class="num">14.7</span> Evaluation of Definite Integrals by Use of the Residue Theorem</h1>
+<p class="subtitle">Boas, Chapter 14, Section 7 · trigonometric integrals over $[0,2\pi]$, rational and Fourier integrals over the real line, poles on the axis and principal values, branch cuts (keyhole), rectangles and wedges, the argument principle, the Bromwich (inverse Laplace) integral, and dispersion relations.</p>
+
+<div class="box note"><span class="tag">Goals</span>
+<ul class="summary">
+<li>Recognise the <b>type</b> of a real integral and pick the right contour at once.</li>
+<li>Prove that the "extra" parts of the contour vanish (ML estimate, Jordan's lemma).</li>
+<li>Handle poles on the path (half-residue rule, principal value) and multivalued integrands (branch cuts).</li>
+<li>Count zeros with the argument principle, and invert Laplace transforms with residues.</li>
+<li>Solve all 66 of Boas's Section 7 problems. Every answer here was checked by high-precision numerical integration.</li>
+</ul></div>
+
+<h2 id="map">1. The map: which contour for which integral</h2>
+<table class="t">
+<tr><th>Integral</th><th>Trick / contour</th><th>Answer</th><th>Boas</th></tr>
+<tr><td>$\int_0^{2\pi}R(\cos\theta,\sin\theta)\,d\theta$</td><td>$z=e^{i\theta}$: unit circle</td><td>$2\pi i\sum$Res inside $|z|=1$</td><td>Ex. 1, Probs 1–9</td></tr>
+<tr><td>$\int_{-\infty}^\infty\frac{P(x)}{Q(x)}dx$, $\deg Q\ge\deg P+2$</td><td>real axis + big upper semicircle</td><td>$2\pi i\sum$Res in UHP</td><td>Ex. 2, Probs 10–13</td></tr>
+<tr><td>$\int_{-\infty}^\infty\frac{P}{Q}e^{imx}dx$ ($m>0$), $\deg Q\ge\deg P+1$</td><td>same; $|e^{imz}|=e^{-my}\le1$ (Jordan)</td><td>$2\pi i\sum$Res of $\frac PQe^{imz}$ in UHP; take Re/Im for cos/sin</td><td>Ex. 3, Probs 14–20</td></tr>
+<tr><td>simple poles <b>on</b> the real axis</td><td>indent with small semicircles</td><td>PV $=2\pi i\sum_{\text{UHP}}$Res $+\pi i\sum_{\text{axis}}$Res</td><td>Ex. 4, Probs 21–29</td></tr>
+<tr><td>$\int_0^\infty x^{p-1}R(x)\,dx$, $\ln x$</td><td>keyhole around a branch cut</td><td>$(1-e^{2\pi ip})\int_0^\infty=2\pi i\sum$Res</td><td>Ex. 5, Probs 30–36</td></tr>
+<tr><td>$\int_{-\infty}^\infty\frac{e^{px}}{1\pm e^x}$, $\frac{1}{\cosh}$, $\frac{x}{\sinh x}$</td><td>rectangle of height $2\pi$ (or $\pi$, or $1$)</td><td>the top side is a multiple of the bottom</td><td>Probs 37–40</td></tr>
+<tr><td>$\int_0^\infty\frac{dx}{1+x^n}$, Fresnel $\int\sin u^2$</td><td>wedge / quarter circle (or $u=x^n$ then keyhole)</td><td>—</td><td>Probs 30–32, 41</td></tr>
+<tr><td>number of zeros in a region</td><td>argument principle</td><td>$N-P=\frac{\Delta\arg f}{2\pi}$</td><td>Ex. 6, Probs 42–54</td></tr>
+<tr><td>inverse Laplace transform</td><td>Bromwich line + left semicircle</td><td>$f(t)=\sum$Res of $F(z)e^{zt}$</td><td>Ex. 7, Probs 55–65</td></tr>
+</table>
+
+<h2 id="type1">2. Type I — $\int_0^{2\pi}R(\cos\theta,\sin\theta)\,d\theta$</h2>
+<p>Put $z=e^{i\theta}$. As $\theta$ goes from $0$ to $2\pi$, $z$ goes once counter-clockwise around $|z|=1$ (Boas Fig. 7.1):</p>
+$$d\theta=\frac{dz}{iz},\qquad\cos\theta=\frac12\left(z+\frac1z\right),\qquad\sin\theta=\frac1{2i}\left(z-\frac1z\right).$$
+<div class="ex"><div class="hd">Boas Example 1 — $I=\displaystyle\int_0^{2\pi}\frac{d\theta}{5+4\cos\theta}$</div><div class="bd"><ol class="steps">
+<li>$I=\oint\frac{dz/(iz)}{5+2(z+1/z)}=\frac1i\oint\frac{dz}{2z^2+5z+2}=\frac1i\oint\frac{dz}{(2z+1)(z+2)}$.</li>
+<li>Poles at $-\frac12$ (inside) and $-2$ (outside).</li>
+<li>$R\left(-\frac12\right)=\lim\left(z+\frac12\right)\frac{1}{(2z+1)(z+2)}=\frac{1}{2(z+2)}\Big|_{-1/2}=\frac13$.</li>
+<li>$I=\frac1i\cdot2\pi i\cdot\frac13=\frac{2\pi}3$.</li></ol>
+<p>This works for any rational function of $\sin\theta,\cos\theta$ whose denominator is never zero. For an even integrand, $\int_0^\pi=\frac12\int_0^{2\pi}$.</p></div></div>
+<div class="box thm"><span class="tag">Useful general results (derived the same way)</span>
+$$\int_0^{2\pi}\frac{d\theta}{a+b\cos\theta}=\int_0^{2\pi}\frac{d\theta}{a+b\sin\theta}=\frac{2\pi}{\sqrt{a^2-b^2}},\qquad\int_0^{2\pi}\frac{\sin^2\theta\,d\theta}{a+b\cos\theta}=\frac{2\pi}{b^2}\left(a-\sqrt{a^2-b^2}\right)\qquad(a>|b|)$$</div>
+
+<h2 id="type2">3. Type II — $\int_{-\infty}^\infty\frac{P(x)}{Q(x)}dx$</h2>
+<div class="ex"><div class="hd">Boas Example 2 — $\displaystyle\int_{-\infty}^\infty\frac{dx}{1+x^2}=\pi$</div><div class="bd"><ol class="steps">
+<li>Close the real segment $[-\rho,\rho]$ with the upper semicircle $|z|=\rho$ (Fig. 7.2). For $\rho>1$ it encloses only $z=i$, with residue $\frac{1}{2i}$, so the contour integral is $2\pi i\cdot\frac1{2i}=\pi$ for every $\rho>1$.</li>
+<li>On the semicircle: $\left|\int\right|\le\pi\rho\cdot\frac{1}{\rho^2-1}\to0$ (ML estimate).</li>
+<li>So $\int_{-\infty}^\infty\frac{dx}{1+x^2}=\pi$.</li></ol></div></div>
+<div class="box thm"><span class="tag">Rule</span>
+<p>If $P$ and $Q$ are polynomials, $\deg Q\ge\deg P+2$, and $Q$ has no real zeros, then</p>
+$$\int_{-\infty}^\infty\frac{P(x)}{Q(x)}dx=2\pi i\sum\text{(residues of }P/Q\text{ in the upper half-plane)}.$$</div>
+
+<h2 id="type3">4. Type III — Fourier-type integrals ($\cos mx$, $\sin mx$)</h2>
+<div class="ex"><div class="hd">Boas Example 3 — $\displaystyle\int_0^\infty\frac{\cos x}{1+x^2}dx=\frac{\pi}{2e}$</div><div class="bd"><ol class="steps">
+<li>Use $\oint\frac{e^{iz}}{1+z^2}dz$, <b>not</b> $\cos z$: $\cos z$ blows up like $e^{|y|}$ in the upper half-plane, but $|e^{iz}|=e^{-y}\le1$ there.</li>
+<li>The residue at $i$ is $\frac{e^{-1}}{2i}$, so the integral is $\frac\pi e$, and the semicircle part $\to0$.</li>
+<li>$\int_{-\infty}^\infty\frac{e^{ix}}{1+x^2}dx=\frac\pi e$. The real part gives $\int_{-\infty}^\infty\frac{\cos x}{1+x^2}=\frac\pi e$, and by evenness $\int_0^\infty=\frac{\pi}{2e}$.</li></ol></div></div>
+<div class="box thm"><span class="tag">Rule (with Jordan's lemma)</span>
+<p>If $P,Q$ are polynomials, $Q$ has no real zeros, $\deg Q\ge\deg P+1$, and $m>0$:</p>
+$$\int_{-\infty}^{\infty}\frac{P(x)}{Q(x)}e^{imx}dx=2\pi i\sum\text{Res}\left(\frac{P(z)}{Q(z)}e^{imz}\right)_{\text{UHP}}.$$
+<p>Take real and imaginary parts to get the $\cos mx$ and $\sin mx$ integrals. (For $m\lt0$ close in the lower half-plane, or just use $\cos(-x)=\cos x$.) Standard results:</p>
+$$\int_{-\infty}^\infty\frac{\cos mx}{x^2+a^2}dx=\frac{\pi}{a}e^{-ma},\qquad\int_{-\infty}^\infty\frac{x\sin mx}{x^2+a^2}dx=\pi e^{-ma},\qquad\int_{-\infty}^\infty\frac{\cos mx}{(x^2+a^2)^2}dx=\frac{\pi(1+ma)e^{-ma}}{2a^3}.$$</div>
+
+<div class="widget" id="w-cont">
+<div class="wt">Interactive 1 — Watch the extra parts of the contour vanish</div>
+<div class="wd">Each piece of the closed contour is integrated numerically and listed. As you increase $R$ (and shrink $r$), the arcs go to $0$ (or to the half-residue value), and the straight piece converges to the real integral we want. The total always equals $2\pi i\sum$(residues inside).</div>
+<div class="ctrls"><label>example <select id="ct-ex"><option value="semi">Ex. 2: 1/(1+z²), semicircle</option><option value="four">∫dx/(1+x⁴), semicircle</option><option value="fourier">Ex. 3: e^{iz}/(1+z²), semicircle</option><option value="indent">Ex. 4: e^{iz}/z, indented semicircle</option><option value="key">Ex. 5: z^{p−1}/(1+z), keyhole (p = 0.3)</option><option value="rect">Prob. 37: e^{pz}/(1+e^z), rectangle (p = 0.3)</option></select></label>
+<label>$R$ <input type="range" id="ct-R" min="1.2" max="30" step="0.1" value="3"><output></output></label>
+<label>$r$ (small) <input type="range" id="ct-r" min="0.02" max="0.8" step="0.01" value="0.3"><output></output></label>
+<button class="pri" id="ct-play">▶ R → ∞</button></div>
+<canvas id="cv-cont"></canvas>
+<div class="readout" id="ct-out"></div>
+</div>
+
+<h2 id="type4">5. Type IV — poles on the real axis; principal values</h2>
+<div class="ex"><div class="hd">Boas Example 4 — $\displaystyle\int_{-\infty}^\infty\frac{\sin x}{x}dx=\pi$</div><div class="bd"><ol class="steps">
+<li>Use $\oint\frac{e^{iz}}{z}dz$ around the contour of Fig. 7.3: the real axis with a small semicircle $C'$ of radius $r$ <b>above</b> the pole at $0$, closed by a large semicircle $C$.</li>
+<li>No pole is inside, so the total is $0$. The $C$ part $\to0$ (Jordan).</li>
+<li>On $C'$: $z=re^{i\theta}$, $\frac{dz}{z}=i\,d\theta$, and $e^{iz}\to1$, so the integral (traversed from $\theta=\pi$ to $0$) $\to\int_\pi^0i\,d\theta=-i\pi$.</li>
+<li>So $\mathrm{PV}\int_{-\infty}^\infty\frac{e^{ix}}{x}dx=i\pi$. Real part: $\mathrm{PV}\int\frac{\cos x}{x}=0$. Imaginary part: $\int\frac{\sin x}{x}=\pi$, so $\int_0^\infty\frac{\sin x}{x}dx=\frac\pi2$.</li></ol></div></div>
+<div class="box thm"><span class="tag">Half-residue rule (Problem 21)</span>
+<p>For a closed contour that passes <b>straight through</b> simple poles on its boundary (a tangent exists at the pole):</p>
+$$\mathrm{PV}\oint=2\pi i\left(\sum\text{Res inside}+\frac12\sum\text{Res at simple poles on the boundary}\right).$$
+<p>A pole inside contributes $2\pi i\,R$, outside contributes $0$, and on a straight boundary exactly halfway, $\pi i\,R$. <b>Warning:</b> this does not hold for a multiple pole on the boundary.</p></div>
+<div class="box def"><span class="tag">Principal value</span>
+<p>$\int_0^\infty\frac{\cos x}{x}dx$ diverges (the integrand $\approx\frac1x$ near $0$). The "$0$" found above is a <b>Cauchy principal value</b>: cut out a symmetric interval $(-r,r)$ about the singular point and let $r\to0$. Example: $\int_0^5\frac{dx}{x-3}$. Here $\int_0^{3-r}+\int_{3+r}^5=(\ln r-\ln3)+(\ln2-\ln r)=\ln\frac23$, so $\mathrm{PV}\int_0^5\frac{dx}{x-3}=\ln\frac23$. The infinite areas on the two sides cancel.</p></div>
+
+<h2 id="type5">6. Type V — branch points: the keyhole contour</h2>
+<div class="ex"><div class="hd">Boas Example 5 — $\displaystyle\int_0^\infty\frac{r^{p-1}}{1+r}dr=\frac{\pi}{\sin\pi p}$, $\ 0\lt p\lt1$</div><div class="bd"><ol class="steps">
+<li>$z^{p-1}$ is multivalued. Choose the branch $0\le\theta\lt2\pi$, with the branch cut along the positive real axis and the branch point at $0$.</li>
+<li>Contour (Fig. 7.4): along the top of the cut ($\theta=0$) from $r$ to $R$, around the big circle, back along the bottom of the cut ($\theta=2\pi$), around the small circle.</li>
+<li>Inside: a pole at $z=-1=e^{i\pi}$ with residue $(e^{i\pi})^{p-1}=-e^{i\pi p}$. Total: $-2\pi ie^{i\pi p}$.</li>
+<li>Both circles $\to0$, since on them the integrand is $\sim\frac{r^p}{1}$ (small $r$) or $\frac{r^p}{r}$ (large $r$), times $d\theta$, and $0\lt p\lt1$.</li>
+<li>Top: $\int_0^\infty\frac{r^{p-1}}{1+r}dr$. Bottom: $z=re^{2\pi i}$, giving $-e^{2\pi ip}\int_0^\infty\frac{r^{p-1}}{1+r}dr$.</li>
+<li>$(1-e^{2\pi ip})\int_0^\infty=-2\pi ie^{i\pi p}$, so $\int_0^\infty=\frac{-2\pi ie^{i\pi p}}{1-e^{2\pi ip}}=\frac{2\pi i}{e^{i\pi p}-e^{-i\pi p}}=\frac{\pi}{\sin\pi p}$.</li></ol>
+<p>Bonus: with $B(p,1-p)=\int_0^\infty\frac{y^{p-1}}{1+y}dy=\Gamma(p)\Gamma(1-p)$ this proves the reflection formula $\Gamma(p)\Gamma(1-p)=\frac{\pi}{\sin\pi p}$.</p></div></div>
+
+<h2 id="argument">7. The argument principle</h2>
+<div class="box thm"><span class="tag">Argument principle (7.8)</span>
+<p>If $f$ is analytic on and inside a simple closed curve $C$ except for finitely many poles, and $f\ne0$ on $C$, then</p>
+$$N-P=\frac{1}{2\pi i}\oint_C\frac{f'(z)}{f(z)}dz=\frac{1}{2\pi}\big(\text{change in the angle of }f(z)\text{ around }C\big),$$
+<p>where $N$ and $P$ count the zeros and poles inside $C$, with multiplicity.</p></div>
+<p><b>Why:</b> $\frac{f'}{f}$ has residue $n$ at a zero of order $n$ and $-p$ at a pole of order $p$ (Problem 42). Also $\oint\frac{f'}{f}dz=[\ln f]_C=[\operatorname{Ln}R+i\Theta]_C=i\Delta\Theta$, since $\operatorname{Ln}R$ returns to its starting value but the angle $\Theta$ need not.</p>
+<p>Picture: follow the <b>image</b> curve $w=f(z)$ as $z$ goes around $C$. The number of times it winds around $w=0$ is $N-P$.</p>
+<div class="ex"><div class="hd">Boas Example 6 — $z^3+4z+1$ has exactly one zero in the first quadrant</div><div class="bd"><ol class="steps">
+<li>Contour: $O\to P$ along the $x$-axis, a big quarter circle $PQ$, then back down the $y$-axis $QO$.</li>
+<li>On $OP$: $f(x)>0$, so the angle $\Theta=0$ throughout.</li>
+<li>On $PQ$: $f\approx z^3=\rho^3e^{3i\theta}$, so $\Theta$ goes from $0$ to $\frac{3\pi}2$.</li>
+<li>On $QO$: $f=1+i(4y-y^3)$ and $\tan\Theta=4y-y^3$, negative and then positive, with no crossing of $\pm\infty$. So $\Theta$ goes from $\frac{3\pi}2$ to $2\pi$, wiggles, and returns to $2\pi$.</li>
+<li>Total change $2\pi$, so $N=1$. With conjugate pairs, one zero is in Q4 and the third is on the negative real axis.</li></ol></div></div>
+<div class="widget" id="w-arg">
+<div class="wt">Interactive 2 — Argument principle: count the windings</div>
+<div class="wd">Type a polynomial (or rational function). Left: the contour (a circle of radius $R$, or a first-quadrant sector) with the actual zeros (green) and poles (black) found numerically. Right: the image curve $f(z)$, starting at the orange dot. The number of times it circles the origin is $N-P$.</div>
+<div class="ctrls"><label>$f(z)=$ <input type="text" id="ap-f" value="z^3 + 4z + 1"></label>
+<select id="ap-pre"><option value="">— Boas —</option><option>z^3 + 4z + 1</option><option>z^3 + z^2 + 9</option><option>z^3 + z^2 + z + 4</option><option>z^3 + 3z^2 + 4z + 2</option><option>z^3 + 4z^2 + 12</option><option>z^4 - z^3 + 6z^2 - 3z + 5</option><option>z^4 - 4z^3 + 11z^2 - 14z + 10</option><option>z^4 + z^3 + 4z^2 + 2z + 3</option><option>(z^2+1)/(z-0.5)^2</option></select>
+<label>contour <select id="ap-c"><option value="q1">first quadrant sector</option><option value="circ">circle |z| = R</option></select></label>
+<label>$R$ <input type="range" id="ap-R" min="0.3" max="6" step="0.05" value="4"><output></output></label></div>
+<div class="grid2"><canvas id="cv-ap1"></canvas><canvas id="cv-ap2"></canvas></div>
+<div class="readout" id="ap-out"></div>
+</div>
+
+<h2 id="bromwich">8. Bromwich integral — inverse Laplace transforms</h2>
+<p>With complex $p=x+iy$, the Laplace transform $F(p)=\int_0^\infty e^{-pt}f(t)\,dt$ is a Fourier transform of $e^{-xt}f(t)$ (7.11–7.12). Inverting it gives the <b>Bromwich integral</b> (7.15):</p>
+$$f(t)=\frac{1}{2\pi i}\int_{c-i\infty}^{c+i\infty}F(z)e^{zt}\,dz,\qquad t>0,$$
+<p>along a vertical line $x=c$ to the right of all singularities of $F$. Closing it with a large semicircle to the left (the integral there $\to0$ when $F=P/Q$ with $\deg Q>\deg P$):</p>
+$$\boxed{f(t)=\sum\text{residues of }F(z)e^{zt}\text{ at all its poles}}\qquad(7.16)$$
+<div class="ex"><div class="hd">Boas Example 7 — $F(p)=\dfrac{5}{(p+2)(p^2+1)}$</div><div class="bd">
+<p>Residues of $\frac{5e^{zt}}{(z+2)(z+i)(z-i)}$: at $-2$, $e^{-2t}$; at $i$, $\frac{5e^{it}}{(2+i)(2i)}$; at $-i$, $\frac{5e^{-it}}{(2-i)(-2i)}$. Adding: $f(t)=e^{-2t}+2\sin t-\cos t$.</p></div></div>
+<div class="widget" id="w-brom">
+<div class="wt">Interactive 3 — Bromwich: the poles of $F$ decide $f(t)$</div>
+<div class="wd">Left: the poles of $F(p)$ and the Bromwich line $x=c$ to their right. Right: $f(t)=\sum\text{Res}\,F(z)e^{zt}$, computed numerically from the residues, together with the closed-form answer. Poles in the right half-plane give growth, poles on the imaginary axis give oscillation, and poles on the left give decay.</div>
+<div class="ctrls"><label>$F(p)$ <select id="bw-f"></select></label></div>
+<div class="grid2"><canvas id="cv-bw1"></canvas><canvas id="cv-bw2"></canvas></div>
+<div class="readout" id="bw-out"></div>
+</div>
+
+<h2 id="disp">9. Dispersion relations (Kramers–Kronig)</h2>
+<p>Let $f(z)$ be analytic for $y\ge0$ and vanish fast enough at $\infty$. Integrating $\frac{f(z)}{z-a}$ ($a$ real) around the upper half-plane, with the half-residue rule at $z=a$:</p>
+$$\mathrm{PV}\int_{-\infty}^\infty\frac{f(x)}{x-a}dx=i\pi f(a).\qquad(7.17)$$
+<p>With $f=u+iv$, the real and imaginary parts give (7.18):</p>
+$$\mathrm{PV}\int_{-\infty}^\infty\frac{u(x)}{x-a}dx=-\pi v(a),\qquad\mathrm{PV}\int_{-\infty}^\infty\frac{v(x)}{x-a}dx=\pi u(a).$$
+<p>$u$ and $v$ are <b>Hilbert transforms</b> of each other. In optics, $u$ and $v$ are the refractive and absorptive parts of the complex index of refraction. Causality (analyticity in the upper half-plane) forces each to determine the other.</p>
+
+<h2 id="boas">10. Boas Problems, Section 7 — solutions</h2>
+<p class="small">Each closed form was confirmed by high-precision numerical integration (mpmath), and each inverse Laplace transform by sympy.</p>
+<details class="sol"><summary>Show solutions 1–9 ($\theta$-integrals)</summary>
+<table class="t">
+<tr><th>#</th><th>Integral</th><th>Key step</th><th>Answer</th></tr>
+<tr><td>1</td><td>$\int_0^{2\pi}\frac{d\theta}{13+5\sin\theta}$</td><td>$\frac{2\pi}{\sqrt{169-25}}$; or poles of $5z^2+26iz-5$ at $-\frac i5$ (inside) and $-5i$</td><td>$\frac\pi6$</td></tr>
+<tr><td>2</td><td>$\int_0^{2\pi}\frac{d\theta}{5-3\cos\theta}$</td><td>$\frac{2\pi}{\sqrt{25-9}}$</td><td>$\frac\pi2$</td></tr>
+<tr><td>3</td><td>$\int_0^{2\pi}\frac{d\theta}{5-4\sin\theta}$</td><td>$\frac{2\pi}{\sqrt{25-16}}$</td><td>$\frac{2\pi}3$</td></tr>
+<tr><td>4</td><td>$\int_0^{2\pi}\frac{\sin^2\theta\,d\theta}{5+3\cos\theta}$</td><td>$\frac{2\pi}{9}(5-4)$ (double pole at $0$ and simple pole at $-\frac13$)</td><td>$\frac{2\pi}9$</td></tr>
+<tr><td>5</td><td>$\int_0^\pi\frac{d\theta}{1-2r\cos\theta+r^2}$</td><td>$\frac12\cdot\frac{2\pi}{1-r^2}$ (pole at $z=r$ inside)</td><td>$\frac{\pi}{1-r^2}$</td></tr>
+<tr><td>6</td><td>$\int_0^\pi\frac{d\theta}{(2+\cos\theta)^2}$</td><td>double pole at $z=-2+\sqrt3$; general $\int_0^\pi\frac{d\theta}{(a+\cos\theta)^2}=\frac{\pi a}{(a^2-1)^{3/2}}$</td><td>$\frac{2\pi}{3\sqrt3}$</td></tr>
+<tr><td>7</td><td>$\int_0^{2\pi}\frac{\cos2\theta\,d\theta}{5+4\cos\theta}$</td><td>$\cos2\theta=\operatorname{Re}z^2$, so $I=\operatorname{Re}\frac1i\oint\frac{z^2\,dz}{(2z+1)(z+2)}$; residue at $-\frac12$: $\frac{1/4}{2\cdot3/2}=\frac1{12}$</td><td>$\frac\pi6$</td></tr>
+<tr><td>8</td><td>$\int_0^\pi\frac{\sin^2\theta\,d\theta}{13-12\cos\theta}$</td><td>$\frac12\cdot\frac{2\pi}{144}(13-5)$</td><td>$\frac{\pi}{18}$</td></tr>
+<tr><td>9</td><td>$\int_0^{2\pi}\frac{d\theta}{1+\sin\theta\cos\alpha}$</td><td>$a=1$, $b=\cos\alpha$</td><td>$\frac{2\pi}{|\sin\alpha|}$</td></tr>
+</table></details>
+<details class="sol"><summary>Show solutions 10–20 ($\int_{-\infty}^\infty$ and Fourier integrals)</summary>
+<table class="t">
+<tr><th>#</th><th>Integral</th><th>UHP poles and residues</th><th>Answer</th></tr>
+<tr><td>10</td><td>$\int_{-\infty}^\infty\frac{dx}{x^2+4x+5}$</td><td>$-2+i$: $\frac{1}{2i}$</td><td>$\pi$</td></tr>
+<tr><td>11</td><td>$\int_0^\infty\frac{dx}{(4x^2+1)^3}$</td><td>triple pole at $\frac i2$; or $u=2x$: $\frac12\cdot\frac12\int_{-\infty}^\infty\frac{du}{(1+u^2)^3}=\frac14\cdot\frac{3\pi}8$</td><td>$\frac{3\pi}{32}$</td></tr>
+<tr><td>12</td><td>$\int_0^\infty\frac{x^2dx}{x^4+16}$</td><td>$2e^{i\pi/4},2e^{3i\pi/4}$: residues $\frac{1}{4z}$</td><td>$\frac{\pi}{4\sqrt2}=\frac{\pi\sqrt2}{8}$</td></tr>
+<tr><td>13</td><td>$\int_0^\infty\frac{x^2dx}{(x^2+4)(x^2+9)}$</td><td>$2i$: $-\frac{i}{5}$; $3i$: $\frac{3i}{10}$</td><td>$\frac\pi{10}$</td></tr>
+<tr><td>14</td><td>$\int_{-\infty}^\infty\frac{\sin x\,dx}{x^2+4x+5}$</td><td>$\operatorname{Im}\left[2\pi i\frac{e^{i(-2+i)}}{2i}\right]=\operatorname{Im}\left[\pi e^{-1}e^{-2i}\right]$</td><td>$-\frac{\pi\sin2}{e}$</td></tr>
+<tr><td>15</td><td>$\int_0^\infty\frac{\cos2x\,dx}{9x^2+4}$</td><td>$\frac1{9}\cdot\frac12\cdot\frac{\pi}{2/3}e^{-4/3}$</td><td>$\frac{\pi}{12}e^{-4/3}$</td></tr>
+<tr><td>16</td><td>$\int_0^\infty\frac{x\sin x\,dx}{9x^2+4}$</td><td>$\frac19\cdot\frac12\pi e^{-2/3}$</td><td>$\frac{\pi}{18}e^{-2/3}$</td></tr>
+<tr><td>17</td><td>$\int_{-\infty}^\infty\frac{x\sin x\,dx}{x^2+4x+5}$</td><td>$\operatorname{Im}\left[\pi(-2+i)e^{-1}e^{-2i}\right]$</td><td>$\frac\pi e(\cos2+2\sin2)$</td></tr>
+<tr><td>18</td><td>$\int_0^\infty\frac{\cos\pi x\,dx}{1+x^2+x^4}$</td><td>$e^{i\pi/3},e^{2i\pi/3}$: the sum is $-\frac i2e^{-\pi\sqrt3/2}$</td><td>$\frac\pi2e^{-\pi\sqrt3/2}\approx0.1034$</td></tr>
+<tr><td>19</td><td>$\int_0^\infty\frac{\cos2x\,dx}{(4x^2+9)^2}$</td><td>$\frac1{16}\cdot\frac12\cdot\frac{\pi(1+3)e^{-3}}{2(3/2)^3}$</td><td>$\frac{\pi}{54}e^{-3}$</td></tr>
+<tr><td>20</td><td>$\int_0^\infty\frac{\cos x\,dx}{(1+9x^2)^2}$</td><td>$\frac1{81}\cdot\frac12\cdot\frac{\pi(4/3)e^{-1/3}}{2/27}$</td><td>$\frac\pi9e^{-1/3}$</td></tr>
+</table></details>
+<details class="sol"><summary>Show solutions 21–29 (poles on the axis, principal values)</summary>
+<p><b>21.</b> (a) Near $0$, $\frac{f(z)}{z}=\frac{f(0)}{z}+g(z)$ with $g$ analytic. On the small semicircle, $\int\frac{f(0)}{z}dz=f(0)\int_\pi^0i\,d\theta=-i\pi f(0)$, and $\int g\to0$ as $r\to0$. So the contribution is $-\pi i\times$(residue), and the PV of the rest equals $\pi i\,R$ (or $2\pi i$ times the inside residues plus $\pi i R$). (b) The same with $z\to z-a$.</p>
+<table class="t">
+<tr><th>#</th><th>Integral</th><th>Residues used</th><th>Answer</th></tr>
+<tr><td>22</td><td>$\mathrm{PV}\int_{-\infty}^\infty\frac{dx}{(x-1)(x^2+1)}$</td><td>UHP $i$: $\frac{-1+i}4$; axis $1$: $\frac12$</td><td>$2\pi i\frac{-1+i}4+\pi i\frac12=-\frac\pi2$</td></tr>
+<tr><td>23</td><td>$\mathrm{PV}\int_{-\infty}^\infty\frac{dx}{(x^2+4)(2-x)}$</td><td>UHP $2i$: $\frac{1-i}{16}$; axis $2$: $-\frac18$</td><td>$\frac\pi8$</td></tr>
+<tr><td>24</td><td>$\int_{-\infty}^\infty\frac{x\sin\pi x}{1-x^2}dx$</td><td>$\operatorname{Im}$, axis $\pm1$: residues $\frac12,\frac12$</td><td>$\pi$ (the integrand is in fact finite at $\pm1$)</td></tr>
+<tr><td>25</td><td>$\mathrm{PV}\int_0^\infty\frac{x\sin x}{9x^2-\pi^2}dx$</td><td>$\frac12\operatorname{Im}$; axis $\pm\frac\pi3$: $\frac{e^{\pm i\pi/3}}{18}$, sum $\frac1{18}$</td><td>$\frac{\pi}{36}$</td></tr>
+<tr><td>26</td><td>$\mathrm{PV}\int_{-\infty}^\infty\frac{x\,dx}{(x-1)^4-1}$</td><td>UHP $1+i$: $\frac{i-1}4$; axis $2$: $\frac12$, axis $0$: $0$</td><td>$-\frac\pi2$</td></tr>
+<tr><td>27</td><td>$\int_0^\infty\frac{\cos\pi x}{1-4x^2}dx$</td><td>$\frac12\operatorname{Re}$; axis $\pm\frac12$: both $-\frac i4$</td><td>$\frac\pi4$</td></tr>
+<tr><td>28</td><td>$\mathrm{PV}\int_0^\infty\frac{dx}{1-x^4}$</td><td>UHP $i$: $-\frac i4$; axis $\pm1$: $\mp\frac14$ (they cancel)</td><td>$\frac\pi4$</td></tr>
+<tr><td>29</td><td>$\int_0^\infty\frac{\sin ax}{x}dx$</td><td>scale $x\to x/a$</td><td>$\frac\pi2$ for $a>0$, $-\frac\pi2$ for $a\lt0$ ($=\frac\pi2\operatorname{sgn}a$)</td></tr>
+</table></details>
+<details class="sol"><summary>Show solutions 30–36 (wedges, keyholes, branch cuts)</summary>
+<p><b>30.</b> (a) UHP poles $e^{i\pi/4}$, $e^{3i\pi/4}$ with residues $\frac1{4z^3}=-\frac z4$. Sum: $-\frac14\left(e^{i\pi/4}+e^{3i\pi/4}\right)=-\frac{i\sqrt2}{4}$. So $\int_{-\infty}^\infty=2\pi i\left(-\frac{i\sqrt2}4\right)=\frac{\pi}{\sqrt2}$, and $\int_0^\infty\frac{dx}{1+x^4}=\frac{\pi}{2\sqrt2}$.</p>
+<p>(b) The antiderivative $\frac{1}{4\sqrt2}\ln\frac{x^2+\sqrt2x+1}{x^2-\sqrt2x+1}+\frac{1}{2\sqrt2}\arctan\frac{\sqrt2x}{1-x^2}$ looks like it gives $0$ at both ends. But $\arctan\frac{\sqrt2x}{1-x^2}$ jumps by $\pi$ at $x=1$ (a branch jump), and that missing $\pi$ is the whole answer.</p>
+<p>(c) $u=x^4$: $\frac14\int_0^\infty\frac{u^{-3/4}}{1+u}du=\frac14\cdot\frac{\pi}{\sin(\pi/4)}=\frac{\pi}{2\sqrt2}$ ✔.</p>
+<p><b>31.</b> $u=x^6$: $\frac16\int\frac{u^{-5/6}}{1+u}du=\frac16\frac{\pi}{\sin(\pi/6)}=\frac\pi3$.</p>
+<p><b>32.</b> $u=x^4$: $\frac14\int_0^\infty\frac{u^{-3/4}}{(1+u)^2}du$. The keyhole with a double pole at $-1$ gives $\int_0^\infty\frac{u^{p-1}}{(1+u)^2}du=\frac{(1-p)\pi}{\sin\pi p}$. With $p=\frac14$: $\frac14\cdot\frac{3\pi/4}{1/\sqrt2}=\frac{3\pi}{8\sqrt2}$.</p>
+<table class="t">
+<tr><th>#</th><th>Integral</th><th>Method</th><th>Answer</th></tr>
+<tr><td>33</td><td>$\int_0^\infty\frac{\sqrt x}{1+x^2}dx$</td><td>keyhole, poles $\pm i$; or $u=x^2$: $\frac12\int\frac{u^{-1/4}}{1+u}=\frac12\frac{\pi}{\sin(3\pi/4)}$</td><td>$\frac{\pi}{\sqrt2}$</td></tr>
+<tr><td>34</td><td>$\int_0^\infty\frac{\sqrt x}{(1+x)^2}dx$</td><td>double pole at $-1$, $p=\frac32$: $\frac{(1-p)\pi}{\sin\pi p}=\frac{-\pi/2}{-1}$</td><td>$\frac\pi2$</td></tr>
+<tr><td>35</td><td>$\int_0^\infty\frac{x^{1/3}dx}{(1+x)(2+x)}$</td><td>residues at $-1$ and $-2$: $(1-e^{2\pi i/3})I=2\pi i\left(e^{i\pi/3}-2^{1/3}e^{i\pi/3}\right)$</td><td>$\frac{2\pi}{\sqrt3}(2^{1/3}-1)\approx0.9429$</td></tr>
+<tr><td>36</td><td>$\int_0^\infty\frac{\ln x\,dx}{x^{3/4}(1+x)}$</td><td>$\frac{d}{dp}\frac{\pi}{\sin\pi p}=-\frac{\pi^2\cos\pi p}{\sin^2\pi p}$ at $p=\frac14$ (or a keyhole with $\ln$)</td><td>$-\sqrt2\pi^2\approx-13.958$</td></tr>
+</table></details>
+<details class="sol"><summary>Show solutions 37–41 (rectangles and the Fresnel integrals)</summary>
+<p><b>37.</b> (a) Rectangle $-A\to A\to A+2\pi i\to-A+2\pi i$. On the top side $e^{p(x+2\pi i)}=e^{2\pi ip}e^{px}$ and $e^{x+2\pi i}=e^x$, so the top integral is $-e^{2\pi ip}I$. The vertical sides $\to0$ for $0\lt p\lt1$. The only pole inside is $z=i\pi$, with residue $\frac{e^{i\pi p}}{e^{i\pi}}=-e^{i\pi p}$. So $(1-e^{2\pi ip})I=-2\pi ie^{i\pi p}$, giving $I=\frac{\pi}{\sin\pi p}$.</p>
+<p>(b) $y=e^x$: $I=\int_0^\infty\frac{y^{p-1}}{1+y}dy=B(p,1-p)=\Gamma(p)\Gamma(1-p)$. Hence $\Gamma(p)\Gamma(1-p)=\frac{\pi}{\sin\pi p}$.</p>
+<p><b>38.</b> Same rectangle, but now the poles $z=0$ and $z=2\pi i$ lie <b>on</b> the contour. Residues of $\frac{e^{pz}}{1-e^z}$: at $0$, $-1$; at $2\pi i$, $-e^{2\pi ip}$. Half-residue rule: $(1-e^{2\pi ip})\,\mathrm{PV}\,I=\pi i(-1-e^{2\pi ip})$, so $\mathrm{PV}\int_{-\infty}^\infty\frac{e^{px}}{1-e^x}dx=\pi\cot\pi p$.</p>
+<p><b>39.</b> Height-1 rectangle. On the top, $\cosh\pi(x+i)=-\cosh\pi x$ and $e^{2\pi(x+i)/3}=e^{2\pi i/3}e^{2\pi x/3}$, so the top integral is $+e^{2\pi i/3}I$. The pole at $\frac i2$ has residue $\frac{e^{i\pi/3}}{\pi\sinh(i\pi/2)}=\frac{e^{i\pi/3}}{i\pi}$. Then $(1+e^{2\pi i/3})I=2\pi i\frac{e^{i\pi/3}}{i\pi}=2e^{i\pi/3}$, and $1+e^{2\pi i/3}=e^{i\pi/3}$, so $I=2$. (General: $\int\frac{e^{ax}}{\cosh bx}dx=\frac\pi b\sec\frac{\pi a}{2b}$.)</p>
+<p><b>40.</b> Rectangle of height $\pi$ for $\frac{z}{\sinh z}$, with a simple pole at $i\pi$ on the top side. On the top, $\sinh(x+i\pi)=-\sinh x$, so the top integral is $\int\frac{x+i\pi}{\sinh x}dx$, and the $i\pi$ part is a PV that vanishes by oddness. Then $2\int_{-\infty}^\infty\frac{x}{\sinh x}dx=\pi i\cdot\text{Res}_{i\pi}\cdots$. The residue is $\frac{i\pi}{\cosh i\pi}=-i\pi$, giving $\int_{-\infty}^\infty=\frac{\pi^2}2$. So $\int_0^\infty\frac{x\,dx}{\sinh x}=\frac{\pi^2}4$.</p>
+<p><b>41.</b> $x=u^2$: $\int_0^\infty e^{iu^2}du=\frac12\int_0^\infty x^{-1/2}e^{ix}dx$. Quarter-circle contour (no poles inside): the arcs $\to0$. On the $y$-axis, $z=iy$: $\int_0^\infty(iy)^{-1/2}e^{-y}i\,dy=e^{i\pi/4}\Gamma\left(\frac12\right)=e^{i\pi/4}\sqrt\pi$. So $\int_0^\infty x^{-1/2}e^{ix}dx=\sqrt\pi e^{i\pi/4}$, and $\int_0^\infty\cos u^2du=\int_0^\infty\sin u^2du=\frac12\sqrt{\frac\pi2}\approx0.6267$.</p></details>
+<details class="sol"><summary>Show solutions 42–54 (argument principle)</summary>
+<p><b>42.</b> (a) $f=(z-a)^ng$ with $g(a)\ne0$ gives $\frac{f'}{f}=\frac{n}{z-a}+\frac{g'}{g}$, residue $n$. (b) $f=(z-a)^{-p}g$ gives residue $-p$.</p>
+<p><b>44.</b> On $|z|=r$ large, $f\approx a_nz^n$, whose angle increases by $2\pi n$. So $N=n$ zeros inside, since a polynomial has no poles.</p>
+<table class="t">
+<tr><th>#</th><th>Equation</th><th>Roots (numerical check)</th><th>Quadrants</th></tr>
+<tr><td>43</td><td>$z^3+z^2+9=0$</td><td>$-2.472$, $\ 0.736\pm1.760i$</td><td>one each in Q1 and Q4, one on the negative real axis</td></tr>
+<tr><td>45</td><td>$z^3+z^2+z+4=0$</td><td>$-1.743$, $\ 0.372\pm1.469i$</td><td>Q1, Q4, negative real axis</td></tr>
+<tr><td>46</td><td>$z^3+3z^2+4z+2=0$</td><td>$-1$, $\ -1\pm i$</td><td>Q2, Q3, negative real axis</td></tr>
+<tr><td>47</td><td>$z^3+4z^2+12=0$</td><td>$-4.574$, $\ 0.287\pm1.594i$</td><td>Q1, Q4, negative real axis</td></tr>
+<tr><td>48</td><td>$z^4-z^3+6z^2-3z+5=0$</td><td>$0.233\pm2.152i$, $\ 0.267\pm0.998i$</td><td>two in Q1, two in Q4</td></tr>
+<tr><td>49</td><td>$z^4-4z^3+11z^2-14z+10=0$</td><td>$1\pm2i$, $\ 1\pm i$</td><td>two in Q1, two in Q4</td></tr>
+<tr><td>50</td><td>$z^4+z^3+4z^2+2z+3=0$</td><td>$-0.208\pm1.601i$, $\ -0.292\pm1.033i$</td><td>two in Q2, two in Q3</td></tr>
+</table>
+<p class="small">The method: count the change in the angle along the axes and the big quarter-circle (as in Example 6), then use conjugate symmetry. Interactive 2 does this live.</p>
+<p><b>51.</b> $f=\frac{z^3(z+1)^2\sin z}{(z^2+1)^2(z-3)}$. Inside $|z|=2$: zeros at $0$ (order $3+1=4$, including $\sin z$) and $-1$ (order 2), since $\sin z$'s other zeros $\pm\pi$ are outside. Poles at $\pm i$ (order 2 each). $N-P=6-4=2$, so $\oint=4\pi i$. Inside $|z|=\frac12$: only the zero of order 4, so $8\pi i$.</p>
+<p><b>52.</b> $\frac{z^3}{1+2z^4}=\frac18\frac{f'}{f}$ with $f=1+2z^4$, whose 4 zeros have $|z|=2^{-1/4}\lt1$. So $\oint=\frac18\cdot2\pi i\cdot4=\pi i$.</p>
+<p><b>53.</b> $\frac{z^3+4z}{(z^2+4)^2}=\frac14\frac{f'}{f}$ with $f=(z^2+4)^2$. Only the double zero at $2i$ is inside $|z-2i|=2$. So $\oint=\frac14\cdot2\pi i\cdot2=\pi i$.</p>
+<p><b>54.</b> With $g=1-\tan\frac z4$: $g'=-\frac14\sec^2\frac z4$, so the integrand is $-4\frac{g'}{g}$. Zeros of $g$: $\frac z4=\frac\pi4+n\pi$, i.e. $z=\pi$ inside. Poles: $z=\pm2\pi$ inside ($|x|\le\frac{5\pi}2$). $N-P=1-2=-1$, so $\oint=-4\cdot2\pi i\cdot(-1)=8\pi i$.</p></details>
+<details class="sol"><summary>Show solutions 55–65 (inverse Laplace transforms by residues)</summary>
+<table class="t">
+<tr><th>#</th><th>$F(p)$</th><th>Poles and residues of $F e^{pt}$</th><th>$f(t)$</th></tr>
+<tr><td>55</td><td>$\frac{p^3}{p^4+4}$</td><td>$p=\pm1\pm i$; by (6.2), $\frac{p^3e^{pt}}{4p^3}=\frac{e^{pt}}{4}$</td><td>$\cos t\cosh t$</td></tr>
+<tr><td>56</td><td>$\frac{1}{p^4-1}$</td><td>$\pm1,\pm i$: $\frac{e^{pt}}{4p^3}$</td><td>$\frac12(\sinh t-\sin t)$</td></tr>
+<tr><td>57</td><td>$\frac{p+1}{p(p^2+1)}$</td><td>$0$: $1$; $\pm i$: $-\frac{(1\pm i)e^{\pm it}}2$</td><td>$1-\cos t+\sin t$</td></tr>
+<tr><td>58</td><td>$\frac{p^3}{p^4-16}$</td><td>$\pm2,\pm2i$: $\frac{e^{pt}}4$</td><td>$\frac12(\cosh2t+\cos2t)$</td></tr>
+<tr><td>59</td><td>$\frac{3p^2}{p^3+8}$</td><td>$-2,\ 1\pm i\sqrt3$: $e^{pt}$</td><td>$e^{-2t}+2e^t\cos\sqrt3t$</td></tr>
+<tr><td>60</td><td>$\frac{1}{p^2(p+1)}$</td><td>double pole at $0$: $t-1$; $-1$: $e^{-t}$</td><td>$t-1+e^{-t}$</td></tr>
+<tr><td>61</td><td>$\frac{p^5}{p^6-64}$</td><td>sixth roots of 64: $\frac{e^{pt}}6$</td><td>$\frac13\left(\cosh2t+2\cosh t\cos\sqrt3t\right)$</td></tr>
+<tr><td>62</td><td>$\frac{(p-1)^2}{p(p+1)^2}$</td><td>$0$: $1$; double pole at $-1$: $-4te^{-t}$</td><td>$1-4te^{-t}$</td></tr>
+<tr><td>63</td><td>$\frac{p}{p^4-1}$</td><td>$\frac{e^{pt}}{4p^2}$</td><td>$\frac12(\cosh t-\cos t)$</td></tr>
+<tr><td>64</td><td>$\frac{p^2}{(p^2-1)(p^2-4)}$</td><td>$\pm1$: $\mp\frac{e^{\pm t}}6$; $\pm2$: $\pm\frac{e^{\pm2t}}{3}$</td><td>$\frac23\sinh2t-\frac13\sinh t$</td></tr>
+<tr><td>65</td><td>$\frac{p}{(p+1)(p^2+4)}$</td><td>$-1$: $-\frac{e^{-t}}5$; $\pm2i$: $\frac{e^{\pm2it}}{2(1\pm2i)}$</td><td>$\frac15\left(-e^{-t}+\cos2t+2\sin2t\right)$</td></tr>
+</table></details>
+<details class="sol"><summary>Show solution 66 (Kramers–Kronig)</summary>
+<p>(a) $u$ even and $v$ odd $\iff\ \bar f(x)=u(x)-iv(x)=u(-x)+iv(-x)=f(-x)$.</p>
+<p>(b) In $\mathrm{PV}\int_{-\infty}^\infty\frac{v(x)}{x-a}dx=\pi u(a)$, split at $0$, substitute $x\to-x$ in the negative half, and use $v(-x)=-v(x)$: $\int_0^\infty v(x)\left[\frac{1}{x-a}+\frac{1}{x+a}\right]dx=\int_0^\infty\frac{2x\,v(x)}{x^2-a^2}dx$. Hence</p>
+$$u(a)=\frac2\pi\,\mathrm{PV}\int_0^\infty\frac{x\,v(x)}{x^2-a^2}dx,\qquad v(a)=-\frac{2a}{\pi}\,\mathrm{PV}\int_0^\infty\frac{u(x)}{x^2-a^2}dx .$$</details>
+
+<h2 id="quiz">11. Quick self-test</h2>
+<div class="mcq" data-ans="1" data-ok="Only $e^{iz}$ is bounded in the UHP ($e^{-y}$); $\cos z$ blows up." data-no="How big is $\cos(iy)$?"><p>1. To find $\int_{-\infty}^\infty\frac{\cos x}{x^2+1}dx$ we integrate</p><div class="opts"><button>$\frac{\cos z}{z^2+1}$</button><button>$\frac{e^{iz}}{z^2+1}$</button><button>$\frac{\sin z}{z^2+1}$</button></div><div class="fb"></div></div>
+<div class="mcq" data-ans="2" data-ok="Half-residue rule: $\pi i\cdot1$; the imaginary part is $\pi$." data-no="A pole on a straight boundary counts half."><p>2. $\int_{-\infty}^\infty\frac{\sin x}{x}dx=$</p><div class="opts"><button>$\pi/2$</button><button>$2\pi$</button><button>$\pi$</button><button>$0$</button></div><div class="fb"></div></div>
+<div class="mcq" data-ans="0" data-ok="$2\pi/\sqrt{a^2-b^2}=2\pi/4$." data-no="Use $2\pi/\sqrt{a^2-b^2}$."><p>3. $\int_0^{2\pi}\frac{d\theta}{5-3\cos\theta}=$</p><div class="opts"><button>$\pi/2$</button><button>$\pi$</button><button>$2\pi/5$</button><button>$\pi/4$</button></div><div class="fb"></div></div>
+
+<h2 id="summary">12. Summary</h2>
+<div class="card"><ul class="summary">
+<li>$\theta$-integrals: $z=e^{i\theta}$, unit circle.</li>
+<li>Rational: semicircle (need $\deg Q\ge\deg P+2$). Fourier: use $e^{imz}$; Jordan's lemma needs only $\deg Q\ge\deg P+1$.</li>
+<li>Poles on the axis: PV $=2\pi i\sum_{\text{in}}+\pi i\sum_{\text{on}}$ (simple poles only).</li>
+<li>$x^{p-1}$, $\ln x$: keyhole, giving $\frac{\pi}{\sin\pi p}$ type results. Exponentials: rectangles. $x^n$: wedges.</li>
+<li>Zeros: $N-P=\Delta\arg f/2\pi$. Inverse Laplace: $f(t)=\sum\text{Res}\,F(z)e^{zt}$.</li>
+</ul></div>
+
+
+<div class="pagenav"><a href="14.6_Methods_of_Finding_Residues.html"><small>← Previous</small>14.6 Methods of Finding Residues</a><a href="14.8_Point_at_Infinity_Residues_at_Infinity.html" style="text-align:right"><small>Next →</small>14.8 The Point at Infinity; Residues at Infinity</a></div>
+</main>
+</div>
+<script>
+"use strict";
+/* ===== shared helpers for all Chapter 2 pages ===== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const PI = Math.PI, TAU = 2 * Math.PI;
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function onReady(fn) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
+
+/* ---------- number formatting ---------- */
+function fnum(x, d = 4) {
+  if (Number.isNaN(x)) return 'undefined';
+  if (!isFinite(x)) return x > 0 ? '∞' : '−∞';
+  if (Math.abs(x) >= 1e7) return x.toExponential(3).replace('-', '−');
+  let s = (+x.toFixed(d)).toString();
+  if (s === '-0') s = '0';
+  return s.replace('-', '−');
+}
+/* ---------- complex arithmetic, numbers are [re, im] ---------- */
+const Cx = {
+  c: (a, b = 0) => [a, b],
+  I: [0, 1],
+  add: (a, b) => [a[0] + b[0], a[1] + b[1]],
+  sub: (a, b) => [a[0] - b[0], a[1] - b[1]],
+  mul: (a, b) => [a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]],
+  div: (a, b) => { const d = b[0] * b[0] + b[1] * b[1]; return [(a[0] * b[0] + a[1] * b[1]) / d, (a[1] * b[0] - a[0] * b[1]) / d]; },
+  scale: (a, k) => [a[0] * k, a[1] * k],
+  conj: a => [a[0], -a[1]],
+  neg: a => [-a[0], -a[1]],
+  abs: a => Math.hypot(a[0], a[1]),
+  abs2: a => a[0] * a[0] + a[1] * a[1],
+  arg: a => Math.atan2(a[1], a[0]),
+  arg2pi: a => { let t = Math.atan2(a[1], a[0]); return t < 0 ? t + TAU : t; },
+  polar: (r, t) => [r * Math.cos(t), r * Math.sin(t)],
+  exp: a => { const e = Math.exp(a[0]); return [e * Math.cos(a[1]), e * Math.sin(a[1])]; },
+  log: (a, n = 0) => [Math.log(Math.hypot(a[0], a[1])), Math.atan2(a[1], a[0]) + TAU * n],
+  ipow(a, n) { let r = [1, 0], b = a, k = Math.abs(n); while (k) { if (k & 1) r = Cx.mul(r, b); b = Cx.mul(b, b); k >>= 1; } return n < 0 ? Cx.div([1, 0], r) : r; },
+  pow(a, b, n = 0) {
+    if (b[1] === 0 && Number.isInteger(b[0]) && Math.abs(b[0]) <= 4096) return Cx.ipow(a, b[0]);
+    if (a[0] === 0 && a[1] === 0) return b[0] > 0 ? [0, 0] : [NaN, NaN];
+    return Cx.exp(Cx.mul(b, Cx.log(a, n)));
+  },
+  sqrt: a => Cx.polar(Math.sqrt(Math.hypot(a[0], a[1])), Math.atan2(a[1], a[0]) / 2),
+  sin: a => [Math.sin(a[0]) * Math.cosh(a[1]), Math.cos(a[0]) * Math.sinh(a[1])],
+  cos: a => [Math.cos(a[0]) * Math.cosh(a[1]), -Math.sin(a[0]) * Math.sinh(a[1])],
+  tan: a => Cx.div(Cx.sin(a), Cx.cos(a)),
+  sinh: a => [Math.sinh(a[0]) * Math.cos(a[1]), Math.cosh(a[0]) * Math.sin(a[1])],
+  cosh: a => [Math.cosh(a[0]) * Math.cos(a[1]), Math.sinh(a[0]) * Math.sin(a[1])],
+  tanh: a => Cx.div(Cx.sinh(a), Cx.cosh(a)),
+  // principal branches
+  asin: z => Cx.mul([0, -1], Cx.log(Cx.add(Cx.mul([0, 1], z), Cx.sqrt(Cx.sub([1, 0], Cx.mul(z, z)))))),
+  acos: z => Cx.sub([PI / 2, 0], Cx.asin(z)),
+  atan: z => Cx.mul([0, -0.5], Cx.log(Cx.div(Cx.add([1, 0], Cx.mul([0, 1], z)), Cx.sub([1, 0], Cx.mul([0, 1], z))))),
+  asinh: z => Cx.log(Cx.add(z, Cx.sqrt(Cx.add(Cx.mul(z, z), [1, 0])))),
+  acosh: z => Cx.log(Cx.add(z, Cx.mul(Cx.sqrt(Cx.add(z, [1, 0])), Cx.sqrt(Cx.sub(z, [1, 0]))))),
+  atanh: z => Cx.scale(Cx.log(Cx.div(Cx.add([1, 0], z), Cx.sub([1, 0], z))), 0.5),
+  eq: (a, b, e = 1e-9) => Math.abs(a[0] - b[0]) < e && Math.abs(a[1] - b[1]) < e,
+  fmt(z, d = 4) {
+    if (!isFinite(z[0]) || !isFinite(z[1])) return 'undefined';
+    const eps = 0.5 * Math.pow(10, -d);
+    const R = Math.abs(z[0]) < eps ? 0 : z[0], I = Math.abs(z[1]) < eps ? 0 : z[1];
+    if (I === 0) return fnum(R, d);
+    const ai = Math.abs(I), ip = (Math.abs(ai - 1) < eps ? '' : fnum(ai, d)) + 'i';
+    if (R === 0) return (I < 0 ? '−' : '') + ip;
+    return fnum(R, d) + (I < 0 ? ' − ' : ' + ') + ip;
+  },
+  tex(z, d = 4) { return Cx.fmt(z, d).replace(/−/g, '-').replace('undefined', '\\text{undefined}'); },
+  polarTex(z, d = 3) {
+    const r = Cx.abs(z), t = Cx.arg(z);
+    return fnum(r, d).replace('−', '-') + '\\,e^{' + fnum(t, d).replace('−', '-') + 'i}';
+  }
+};
+/* angle as a nice multiple of pi if possible */
+function piFrac(t, maxDen = 12) {
+  const q = t / PI;
+  for (let den = 1; den <= maxDen; den++) {
+    const num = Math.round(q * den);
+    if (Math.abs(q * den - num) < 1e-9) {
+      if (num === 0) return '0';
+      const g = gcd(Math.abs(num), den), a = num / g, b = den / g;
+      const s = a < 0 ? '-' : '', A = Math.abs(a);
+      const top = (A === 1 ? '' : A) + '\\pi';
+      return b === 1 ? s + top : s + '\\frac{' + top + '}{' + b + '}';
+    }
+  }
+  return fnum(t, 4).replace('−', '-');
+}
+function gcd(a, b) { while (b) [a, b] = [b, a % b]; return a; }
+/* coefficient of i in TeX: 1 -> '', -1 -> '-' */
+function icoef(v, d = 3) { const s = fnum(v, d).replace('−', '-'); return s === '1' ? '' : s === '-1' ? '-' : s; }
+/* KaTeX render into element (falls back to plain text if KaTeX could not load) */
+function tex(el, s, disp = false) {
+  if (typeof el === 'string') el = $(el);
+  if (!el) return;
+  if (window.katex) { try { katex.render(s, el, { displayMode: disp, throwOnError: false }); return; } catch (e) { } }
+  el.textContent = s;
+}
+/* render a string that mixes text and $...$ math into an element */
+function texMix(el, s) {
+  if (typeof el === 'string') el = $(el);
+  el.innerHTML = '';
+  s.split(/(\$\$[^$]+\$\$|\$[^$]+\$)/).forEach(part => {
+    if (!part) return;
+    const span = document.createElement('span');
+    if (part.startsWith('$$')) tex(span, part.slice(2, -2), true);
+    else if (part.startsWith('$')) tex(span, part.slice(1, -1));
+    else span.innerHTML = part;
+    el.appendChild(span);
+  });
+}
+
+/* ---------- expression parser for complex expressions ---------- */
+const Parser = (() => {
+  const F = {
+    sin: Cx.sin, cos: Cx.cos, tan: Cx.tan, sinh: Cx.sinh, cosh: Cx.cosh, tanh: Cx.tanh,
+    sec: z => Cx.div([1, 0], Cx.cos(z)), csc: z => Cx.div([1, 0], Cx.sin(z)), cot: z => Cx.div(Cx.cos(z), Cx.sin(z)),
+    sech: z => Cx.div([1, 0], Cx.cosh(z)), csch: z => Cx.div([1, 0], Cx.sinh(z)), coth: z => Cx.div(Cx.cosh(z), Cx.sinh(z)),
+    exp: Cx.exp, ln: z => Cx.log(z), log: z => Cx.log(z), sqrt: Cx.sqrt, conj: Cx.conj,
+    abs: z => [Cx.abs(z), 0], arg: z => [Cx.arg(z), 0], re: z => [z[0], 0], im: z => [z[1], 0],
+    asin: Cx.asin, acos: Cx.acos, atan: Cx.atan, asinh: Cx.asinh, acosh: Cx.acosh, atanh: Cx.atanh,
+    arcsin: Cx.asin, arccos: Cx.acos, arctan: Cx.atan, arcsinh: Cx.asinh, arccosh: Cx.acosh, arctanh: Cx.atanh
+  };
+  function tokenize(s) {
+    s = s.replace(/−/g, '-').replace(/×|·/g, '*').replace(/÷/g, '/').replace(/π/g, 'pi').replace(/√/g, 'sqrt').replace(/\*\*/g, '^');
+    const out = []; let i = 0;
+    while (i < s.length) {
+      const c = s[i];
+      if (/\s/.test(c)) { i++; continue; }
+      if (/[0-9.]/.test(c)) { let j = i; while (j < s.length && /[0-9.]/.test(s[j])) j++; if (s[j] === 'e' && /[-+0-9]/.test(s[j + 1] || '') && /[0-9]/.test(s[j + 1] === '-' || s[j + 1] === '+' ? s[j + 2] : s[j + 1])) { j += 2; while (j < s.length && /[0-9]/.test(s[j])) j++; } out.push({ t: 'n', v: parseFloat(s.slice(i, j)) }); i = j; continue; }
+      if (/[a-zA-Z_]/.test(c)) { let j = i; while (j < s.length && /[a-zA-Z_0-9]/.test(s[j])) j++; out.push({ t: 'id', v: s.slice(i, j).toLowerCase() }); i = j; continue; }
+      if ('+-*/^(),'.includes(c)) { out.push({ t: 'op', v: c }); i++; continue; }
+      throw new Error('Unexpected character "' + c + '"');
+    }
+    return out;
+  }
+  function compile(src) {
+    const tk = tokenize(src); let p = 0;
+    const peek = () => tk[p], next = () => tk[p++];
+    const isOp = v => tk[p] && tk[p].t === 'op' && tk[p].v === v;
+    function expr() { let a = term(); while (isOp('+') || isOp('-')) { const o = next().v, b = term(), A = a; a = o === '+' ? e => Cx.add(A(e), b(e)) : e => Cx.sub(A(e), b(e)); } return a; }
+    function term() {
+      let a = unary();
+      for (; ;) {
+        if (isOp('*') || isOp('/')) { const o = next().v, b = unary(), A = a; a = o === '*' ? e => Cx.mul(A(e), b(e)) : e => Cx.div(A(e), b(e)); }
+        else if (peek() && (peek().t === 'n' || peek().t === 'id' || isOp('('))) { const b = power(), A = a; a = e => Cx.mul(A(e), b(e)); }
+        else break;
+      }
+      return a;
+    }
+    function unary() { if (isOp('-')) { next(); const a = unary(); return e => Cx.neg(a(e)); } if (isOp('+')) { next(); return unary(); } return power(); }
+    function power() { const a = primary(); if (isOp('^')) { next(); const b = unary(); return e => Cx.pow(a(e), b(e)); } return a; }
+    function primary() {
+      const t = next();
+      if (!t) throw new Error('Expression ended too early');
+      if (t.t === 'n') { const v = [t.v, 0]; return () => v; }
+      if (t.t === 'op' && t.v === '(') { const a = expr(); if (!isOp(')')) throw new Error('Missing ")"'); next(); return a; }
+      if (t.t === 'id') {
+        if (F[t.v]) {
+          if (!isOp('(')) throw new Error(t.v + ' needs brackets, e.g. ' + t.v + '(1+i)');
+          next(); const a = expr(); if (!isOp(')')) throw new Error('Missing ")"'); next(); const f = F[t.v]; return e => f(a(e));
+        }
+        if (t.v === 'i' || t.v === 'j') return () => [0, 1];
+        if (t.v === 'pi') return () => [PI, 0];
+        if (t.v === 'e') return () => [Math.E, 0];
+        const name = t.v; return e => { if (e && name in e) return e[name]; throw new Error('Unknown name "' + name + '"'); };
+      }
+      throw new Error('Unexpected "' + t.v + '"');
+    }
+    const f = expr(); if (p < tk.length) throw new Error('Unexpected "' + tk[p].v + '"');
+    return f;
+  }
+  return { compile, eval: (s, env) => compile(s)(env || {}) };
+})();
+
+/* ---------- contour integration: ∫ f(z) dz along z = path(t), t in [a,b] (composite Simpson) ---------- */
+function contourInt(f, path, a, b, N = 2000) {
+  if (N % 2) N++;
+  const h = (b - a) / N, d = h * 1e-3;
+  let s = [0, 0];
+  for (let k = 0; k <= N; k++) {
+    const t = a + k * h, z = path(t), dz = Cx.scale(Cx.sub(path(t + d), path(t - d)), 1 / (2 * d));
+    const w = k === 0 || k === N ? 1 : (k % 2 ? 4 : 2);
+    s = Cx.add(s, Cx.scale(Cx.mul(f(z), dz), w));
+  }
+  return Cx.scale(s, h / 3);
+}
+const circlePath = (c, r) => t => Cx.add(c, Cx.polar(r, t));
+
+/* ---------- colours ---------- */
+function hsl2rgb(h, s, l) { // h in [0,1)
+  const a = s * Math.min(l, 1 - l);
+  const f = n => { const k = (n + h * 12) % 12; return l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)); };
+  return [f(0) * 255, f(8) * 255, f(4) * 255];
+}
+function phaseRGB(t, light = 0.5) { let h = (t / TAU) % 1; if (h < 0) h += 1; return hsl2rgb(h, 0.85, light); }
+function heatRGB(u) { // 0..1 -> perceptual blue->teal->yellow
+  u = Math.max(0, Math.min(1, u));
+  const st = [[48, 18, 120], [33, 102, 172], [32, 164, 160], [110, 200, 90], [240, 220, 60]];
+  const x = u * (st.length - 1), i = Math.min(st.length - 2, Math.floor(x)), f = x - i;
+  return st[i].map((v, k) => v + (st[i + 1][k] - v) * f);
+}
+const rgbs = c => `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`;
+
+/* ---------- redraw registry (resize + theme change) ---------- */
+const _views = [];
+let _rzT = 0;
+window.addEventListener('resize', () => { clearTimeout(_rzT); _rzT = setTimeout(() => _views.forEach(v => v.resize()), 120); });
+function redrawAll() { _views.forEach(v => v.redraw()); }
+
+/* ---------- 2-D complex plane ---------- */
+class Plane {
+  constructor(cv, o = {}) {
+    this.cv = typeof cv === 'string' ? $(cv) : cv; this.ctx = this.cv.getContext('2d');
+    this.cx = o.cx ?? 0; this.cy = o.cy ?? 0; this.span = o.span ?? 3; this.aspect = o.aspect ?? 0.7;
+    this.gridOn = o.grid !== false; this.snap = o.snap ?? 0.05; this.axisLabels = o.axisLabels ?? ['Re', 'Im'];
+    this.draw = o.draw || (() => { }); this.drags = []; this.onClick = o.onClick || null; this.active = null;
+    this._bind(); _views.push(this); this.resize();
+  }
+  resize() {
+    const dpr = window.devicePixelRatio || 1, w = this.cv.clientWidth || 600, h = Math.round(w * this.aspect);
+    this.cv.style.height = h + 'px'; this.cv.width = Math.round(w * dpr); this.cv.height = Math.round(h * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); this.W = w; this.H = h; this.dpr = dpr; this.redraw();
+  }
+  get k() { return this.W / (2 * this.span); }
+  X(x) { return this.W / 2 + (x - this.cx) * this.k; }
+  Y(y) { return this.H / 2 - (y - this.cy) * this.k; }
+  wx(px) { return (px - this.W / 2) / this.k + this.cx; }
+  wy(py) { return -(py - this.H / 2) / this.k + this.cy; }
+  get x0() { return this.wx(0); } get x1() { return this.wx(this.W); }
+  get y0() { return this.wy(this.H); } get y1() { return this.wy(0); }
+  redraw() { if (!this.W) return; const c = this.ctx; c.save(); c.fillStyle = cssv('--canvas'); c.fillRect(0, 0, this.W, this.H); c.restore(); if (this.gridOn) this.grid(); this.draw(this); }
+  step() { const raw = 55 / this.k, p = Math.pow(10, Math.floor(Math.log10(raw))); for (const m of [1, 2, 5, 10]) if (m * p >= raw) return m * p; return 10 * p; }
+  grid() {
+    const c = this.ctx, s = this.step(); c.save(); c.lineWidth = 1; c.strokeStyle = cssv('--grid');
+    c.beginPath();
+    for (let x = Math.ceil(this.x0 / s) * s; x <= this.x1; x += s) { const X = Math.round(this.X(x)) + .5; c.moveTo(X, 0); c.lineTo(X, this.H); }
+    for (let y = Math.ceil(this.y0 / s) * s; y <= this.y1; y += s) { const Y = Math.round(this.Y(y)) + .5; c.moveTo(0, Y); c.lineTo(this.W, Y); }
+    c.stroke();
+    c.strokeStyle = cssv('--axis'); c.lineWidth = 1.3; c.beginPath();
+    const ox = this.X(0), oy = this.Y(0); c.moveTo(0, oy); c.lineTo(this.W, oy); c.moveTo(ox, 0); c.lineTo(ox, this.H); c.stroke();
+    c.fillStyle = cssv('--muted'); c.font = '11px system-ui,sans-serif';
+    const lx = Math.min(Math.max(ox, 4), this.W - 30), ly = Math.min(Math.max(oy, 12), this.H - 4);
+    c.textAlign = 'center';
+    for (let x = Math.ceil(this.x0 / s) * s; x <= this.x1; x += s) { if (Math.abs(x) < s / 2) continue; c.fillText(fnum(x, 3), this.X(x), ly + 13 > this.H ? ly - 4 : ly + 13); }
+    c.textAlign = 'left';
+    for (let y = Math.ceil(this.y0 / s) * s; y <= this.y1; y += s) { if (Math.abs(y) < s / 2) continue; c.fillText(fnum(y, 3) + (this.axisLabels[1] === 'Im' ? 'i' : ''), lx + 4, this.Y(y) + 4); }
+    c.font = '600 12px system-ui,sans-serif'; c.fillStyle = cssv('--axis');
+    if (this.axisLabels[0]) { c.textAlign = 'right'; c.fillText(this.axisLabels[0], this.W - 6, Math.min(Math.max(oy - 6, 14), this.H - 6)); }
+    if (this.axisLabels[1]) { c.textAlign = 'left'; c.fillText(this.axisLabels[1], Math.min(Math.max(ox + 6, 6), this.W - 30), 14); }
+    c.restore();
+  }
+  col(v) { return v && v.startsWith('--') ? cssv(v) : (v || cssv('--accent')); }
+  line(a, b, o = {}) { const c = this.ctx; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; if (o.dash) c.setLineDash(o.dash); c.globalAlpha = o.alpha ?? 1; c.beginPath(); c.moveTo(this.X(a[0]), this.Y(a[1])); c.lineTo(this.X(b[0]), this.Y(b[1])); c.stroke(); c.restore(); }
+  lineInf(p, d, o = {}) { const L = 1e4; this.line([p[0] - d[0] * L, p[1] - d[1] * L], [p[0] + d[0] * L, p[1] + d[1] * L], o); }
+  arrow(a, b, o = {}) {
+    const c = this.ctx, x0 = this.X(a[0]), y0 = this.Y(a[1]), x1 = this.X(b[0]), y1 = this.Y(b[1]), L = Math.hypot(x1 - x0, y1 - y0);
+    c.save(); c.strokeStyle = c.fillStyle = this.col(o.color); c.lineWidth = o.width || 2.5; c.globalAlpha = o.alpha ?? 1; if (o.dash) c.setLineDash(o.dash);
+    if (L < 1) { c.restore(); return; }
+    const h = Math.min(o.head || 11, L * 0.5), ux = (x1 - x0) / L, uy = (y1 - y0) / L;
+    c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1 - ux * h * 0.8, y1 - uy * h * 0.8); c.stroke(); c.setLineDash([]);
+    c.beginPath(); c.moveTo(x1, y1); c.lineTo(x1 - ux * h - uy * h * 0.45, y1 - uy * h + ux * h * 0.45); c.lineTo(x1 - ux * h + uy * h * 0.45, y1 - uy * h - ux * h * 0.45); c.closePath(); c.fill(); c.restore();
+  }
+  dot(z, o = {}) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(o.color); c.globalAlpha = o.alpha ?? 1;
+    c.beginPath(); c.arc(this.X(z[0]), this.Y(z[1]), o.r || 5, 0, TAU);
+    if (o.hollow) { c.strokeStyle = c.fillStyle; c.lineWidth = 2; c.stroke(); } else c.fill();
+    if (o.ring) { c.strokeStyle = cssv('--canvas'); c.lineWidth = 2; c.stroke(); }
+    c.restore(); if (o.label) this.label(z, o.label, o);
+  }
+  label(z, s, o = {}) {
+    const c = this.ctx; c.save(); c.font = o.font || '600 13px system-ui,sans-serif'; c.fillStyle = this.col(o.lcolor || o.color);
+    c.textAlign = o.align || 'left'; const X = this.X(z[0]) + (o.dx ?? 8), Y = this.Y(z[1]) + (o.dy ?? -8);
+    if (o.bg !== false) { const w = c.measureText(s).width, ax = c.textAlign === 'center' ? X - w / 2 : c.textAlign === 'right' ? X - w : X; c.globalAlpha = 0.75; c.fillStyle = cssv('--canvas'); c.fillRect(ax - 2, Y - 12, w + 4, 16); c.globalAlpha = 1; c.fillStyle = this.col(o.lcolor || o.color); }
+    c.fillText(s, X, Y); c.restore();
+  }
+  text(px, py, s, o = {}) { const c = this.ctx; c.save(); c.font = o.font || '600 13px system-ui,sans-serif'; c.fillStyle = this.col(o.color || '--fg'); c.textAlign = o.align || 'left'; c.fillText(s, px, py); c.restore(); }
+  circle(ctr, r, o = {}) {
+    const c = this.ctx; c.save(); c.beginPath(); c.arc(this.X(ctr[0]), this.Y(ctr[1]), Math.abs(r) * this.k, 0, TAU);
+    if (o.fill) { c.fillStyle = this.col(o.fill); c.globalAlpha = o.fillAlpha ?? 0.15; c.fill(); c.globalAlpha = 1; }
+    if (o.color !== 'none') { c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; if (o.dash) c.setLineDash(o.dash); c.stroke(); }
+    c.restore();
+  }
+  path(pts, o = {}) {
+    const c = this.ctx; if (!pts.length) return; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; c.globalAlpha = o.alpha ?? 1; if (o.dash) c.setLineDash(o.dash);
+    c.beginPath(); let pen = false;
+    for (const p of pts) { if (!p || !isFinite(p[0]) || !isFinite(p[1]) || Math.abs(p[0]) > 1e6 || Math.abs(p[1]) > 1e6) { pen = false; continue; } const X = this.X(p[0]), Y = this.Y(p[1]); if (pen) c.lineTo(X, Y); else { c.moveTo(X, Y); pen = true; } }
+    if (o.close) c.closePath();
+    if (o.fill) { c.fillStyle = this.col(o.fill); c.globalAlpha = o.fillAlpha ?? 0.15; c.fill(); c.globalAlpha = o.alpha ?? 1; }
+    if (o.color !== 'none') c.stroke(); c.restore();
+  }
+  angleArc(t0, t1, rpx, o = {}, ctr = [0, 0]) {
+    const c = this.ctx; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 1.8; c.beginPath();
+    c.arc(this.X(ctr[0]), this.Y(ctr[1]), rpx, -t0, -t1, t1 > t0); c.stroke(); c.restore();
+  }
+  /* shade region where test(x,y) is true */
+  region(test, color, alpha = 0.22, res = 3) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(color); c.globalAlpha = alpha;
+    for (let py = 0; py < this.H; py += res) for (let px = 0; px < this.W; px += res) if (test(this.wx(px + res / 2), this.wy(py + res / 2))) c.fillRect(px, py, res, res);
+    c.restore();
+  }
+  /* implicit curve F(x,y)=0 by marching squares (sign changes) */
+  implicit(Fn, o = {}, res = 3) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(o.color); const nx = Math.ceil(this.W / res) + 1, ny = Math.ceil(this.H / res) + 1; const v = new Float64Array(nx * ny);
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) v[j * nx + i] = Fn(this.wx(i * res), this.wy(j * res));
+    for (let j = 0; j < ny - 1; j++) for (let i = 0; i < nx - 1; i++) { const a = v[j * nx + i], b = v[j * nx + i + 1], d = v[(j + 1) * nx + i]; if (!isFinite(a) || !isFinite(b) || !isFinite(d)) continue; if ((a > 0) !== (b > 0) || (a > 0) !== (d > 0)) { if (o.maxJump && (Math.abs(a - b) > o.maxJump || Math.abs(a - d) > o.maxJump)) continue; c.fillRect(i * res - (o.width || 2) / 2 + res / 2, j * res - (o.width || 2) / 2 + res / 2, o.width || 2.4, o.width || 2.4); } }
+    c.restore();
+  }
+  /* domain colouring of w=f(z) : hue = arg w, brightness bands = log|w| */
+  domain(f, o = {}) {
+    const res = o.res || 2, c = this.ctx, w = Math.ceil(this.W / res), h = Math.ceil(this.H / res);
+    const img = c.createImageData(w, h), d = img.data;
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+      const z = [this.wx(i * res + res / 2), this.wy(j * res + res / 2)], v = f(z), k = (j * w + i) * 4;
+      if (!isFinite(v[0]) || !isFinite(v[1])) { d[k] = d[k + 1] = d[k + 2] = 255; d[k + 3] = 255; continue; }
+      const m = Math.hypot(v[0], v[1]); let L = 0.5;
+      if (o.bands !== false) { const fr = (Math.log2(m) % 1 + 1) % 1; L = 0.32 + 0.3 * fr; }
+      const rgb = phaseRGB(Math.atan2(v[1], v[0]), L); d[k] = rgb[0]; d[k + 1] = rgb[1]; d[k + 2] = rgb[2]; d[k + 3] = 255;
+    }
+    const tmp = document.createElement('canvas'); tmp.width = w; tmp.height = h; tmp.getContext('2d').putImageData(img, 0, 0);
+    c.save(); c.imageSmoothingEnabled = true; c.globalAlpha = o.alpha ?? 1; c.drawImage(tmp, 0, 0, this.W, this.H); c.restore();
+  }
+  addDrag(get, set, o = {}) { this.drags.push({ get, set, r: o.r || 16 }); this.cv.style.touchAction = 'none'; this.cv.style.cursor = 'grab'; }
+  _bind() {
+    const pos = e => { const b = this.cv.getBoundingClientRect(); return [e.clientX - b.left, e.clientY - b.top]; };
+    const snapv = v => this.snap ? Math.round(v / this.snap) * this.snap : v;
+    this.cv.addEventListener('pointerdown', e => {
+      const [px, py] = pos(e); let best = null, bd = 1e9;
+      for (const d of this.drags) { const z = d.get(); const dd = Math.hypot(this.X(z[0]) - px, this.Y(z[1]) - py); if (dd < d.r && dd < bd) { bd = dd; best = d; } }
+      if (best) { this.active = best; this.cv.setPointerCapture(e.pointerId); this.cv.style.cursor = 'grabbing'; e.preventDefault(); }
+      else if (this.onClick) { this.onClick([snapv(this.wx(px)), snapv(this.wy(py))]); this.redraw(); }
+    });
+    this.cv.addEventListener('pointermove', e => {
+      if (!this.active) return; const [px, py] = pos(e);
+      this.active.set([snapv(this.wx(px)), snapv(this.wy(py))]); this.redraw(); if (this.onchange) this.onchange();
+    });
+    const up = () => { if (this.active) { this.active = null; this.cv.style.cursor = this.drags.length ? 'grab' : ''; } };
+    this.cv.addEventListener('pointerup', up); this.cv.addEventListener('pointercancel', up);
+  }
+}
+
+/* ---------- simple 2-D function graph (real x, real y) ---------- */
+class Graph extends Plane {
+  constructor(cv, o = {}) { super(cv, Object.assign({ axisLabels: o.axisLabels || ['x', 'y'], snap: 0 }, o)); }
+  fn(f, o = {}) { const pts = []; const n = o.n || 600; for (let i = 0; i <= n; i++) { const x = this.x0 + (this.x1 - this.x0) * i / n; const y = f(x); pts.push(isFinite(y) && Math.abs(y) < 1e5 ? [x, y] : null); } this.path(pts, o); }
+}
+
+/* ---------- rotatable 3-D surface z = h(x,y) ---------- */
+class Surf3D {
+  constructor(cv, o = {}) {
+    this.cv = typeof cv === 'string' ? $(cv) : cv; this.ctx = this.cv.getContext('2d');
+    Object.assign(this, { xr: [-2, 2], yr: [-2, 2], zr: [0, 4], n: 46, yaw: -0.65, pitch: 0.55, zoom: 1, aspect: 0.72, zs: 0.9, labels: ['x', 'y', 'z'], wire: true }, o);
+    this.h = o.h; this.color = o.color || null; this.extra = o.extra || null;
+    this._bind(); _views.push(this); this.build(); this.resize();
+  }
+  setFn(h, color) { this.h = h; if (color !== undefined) this.color = color; this.build(); this.redraw(); }
+  build() {
+    const n = this.n, V = [];
+    for (let j = 0; j <= n; j++) for (let i = 0; i <= n; i++) {
+      let x, y, hv, u = 0, v = 0;
+      if (this.param) { // parametric surface (u,v) -> [x, y, height]
+        u = this.ur[0] + (this.ur[1] - this.ur[0]) * i / n; v = this.vr[0] + (this.vr[1] - this.vr[0]) * j / n;
+        [x, y, hv] = this.param(u, v);
+      } else { x = this.xr[0] + (this.xr[1] - this.xr[0]) * i / n; y = this.yr[0] + (this.yr[1] - this.yr[0]) * j / n; hv = this.h(x, y); }
+      if (!isFinite(hv)) hv = this.zr[1]; const hc = Math.max(this.zr[0], Math.min(this.zr[1], hv));
+      V.push({ x, y, u, v, h: hc, raw: hv, X: 2 * (x - this.xr[0]) / (this.xr[1] - this.xr[0]) - 1, Y: 2 * (y - this.yr[0]) / (this.yr[1] - this.yr[0]) - 1, Z: (2 * (hc - this.zr[0]) / (this.zr[1] - this.zr[0]) - 1) * this.zs });
+    }
+    this.V = V;
+  }
+  resize() {
+    const dpr = window.devicePixelRatio || 1, w = this.cv.clientWidth || 600, h = Math.round(w * this.aspect);
+    this.cv.style.height = h + 'px'; this.cv.width = Math.round(w * dpr); this.cv.height = Math.round(h * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); this.W = w; this.H = h; this.redraw();
+  }
+  proj(X, Y, Z) {
+    const cy = Math.cos(this.yaw), sy = Math.sin(this.yaw), cp = Math.cos(this.pitch), sp = Math.sin(this.pitch);
+    const x1 = X * cy - Y * sy, y1 = X * sy + Y * cy, y2 = y1 * cp - Z * sp, z2 = y1 * sp + Z * cp;
+    const f = 4 / (4 + y2), S = Math.min(this.W, this.H / 0.9) * 0.34 * this.zoom;
+    return [this.W / 2 + x1 * f * S, this.H / 2 + 10 - z2 * f * S, y2];
+  }
+  redraw() {
+    if (!this.W) return; const c = this.ctx, n = this.n, V = this.V;
+    c.save(); c.fillStyle = cssv('--canvas'); c.fillRect(0, 0, this.W, this.H);
+    const P = V.map(v => this.proj(v.X, v.Y, v.Z));
+    // base box
+    const bz = -this.zs, tz = this.zs, corners = [[-1, -1], [1, -1], [1, 1], [-1, 1]];
+    c.strokeStyle = cssv('--axis'); c.lineWidth = 1; c.globalAlpha = 0.55; c.beginPath();
+    corners.forEach((q, i) => { const a = this.proj(q[0], q[1], bz), b = this.proj(corners[(i + 1) % 4][0], corners[(i + 1) % 4][1], bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); });
+    c.stroke(); c.globalAlpha = 1;
+    // grid on floor
+    c.strokeStyle = cssv('--grid'); c.beginPath();
+    for (let t = -1; t <= 1.001; t += 0.25) { let a = this.proj(t, -1, bz), b = this.proj(t, 1, bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); a = this.proj(-1, t, bz); b = this.proj(1, t, bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); }
+    c.stroke();
+    const quads = [];
+    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
+      const a = j * (n + 1) + i, b = a + 1, d = a + n + 1, e = d + 1;
+      quads.push([a, b, e, d, (P[a][2] + P[b][2] + P[d][2] + P[e][2]) / 4]);
+    }
+    quads.sort((p, q) => q[4] - p[4]);
+    const L = [0.35, -0.45, 0.82], ll = Math.hypot(...L);
+    const wire = cssv('--canvas');
+    for (const q of quads) {
+      const A = V[q[0]], B = V[q[1]], E = V[q[2]], D = V[q[3]];
+      const ux = B.X - A.X, uy = B.Y - A.Y, uz = B.Z - A.Z, vx = D.X - A.X, vy = D.Y - A.Y, vz = D.Z - A.Z;
+      let nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx; const nl = Math.hypot(nx, ny, nz) || 1;
+      const lam = Math.abs((nx * L[0] + ny * L[1] + nz * L[2]) / (nl * ll)), sh = 0.5 + 0.5 * lam;
+      let rgb;
+      if (this.color) rgb = this.color((A.x + E.x) / 2, (A.y + E.y) / 2, (A.raw + E.raw) / 2, (A.u + E.u) / 2, (A.v + E.v) / 2);
+      else rgb = heatRGB(((A.h + B.h + D.h + E.h) / 4 - this.zr[0]) / (this.zr[1] - this.zr[0]));
+      c.fillStyle = rgbs(rgb.map(v => v * sh));
+      c.beginPath(); [q[0], q[1], q[2], q[3]].forEach((k, m) => m ? c.lineTo(P[k][0], P[k][1]) : c.moveTo(P[k][0], P[k][1])); c.closePath(); c.fill();
+      if (this.wire) { c.strokeStyle = wire; c.globalAlpha = 0.18; c.lineWidth = 0.6; c.stroke(); c.globalAlpha = 1; } else { c.strokeStyle = c.fillStyle; c.lineWidth = 0.5; c.stroke(); }
+    }
+    if (this.extra) this.extra(this);
+    // axis labels
+    c.fillStyle = cssv('--fg'); c.font = '600 13px system-ui,sans-serif'; c.textAlign = 'center';
+    let p = this.proj(1.18, -1, bz); c.fillText(this.labels[0] + ' →', p[0], p[1]);
+    p = this.proj(-1, 1.18, bz); c.fillText(this.labels[1] + ' →', p[0], p[1]);
+    p = this.proj(-1, -1, tz + 0.15); c.fillText(this.labels[2], p[0], p[1]);
+    c.font = '11px system-ui,sans-serif'; c.fillStyle = cssv('--muted');
+    p = this.proj(-1, -1, bz); c.fillText('(' + fnum(this.xr[0], 2) + ',' + fnum(this.yr[0], 2) + ')', p[0], p[1] + 14);
+    p = this.proj(1, -1, bz); c.fillText(fnum(this.xr[1], 2), p[0], p[1] + 14);
+    p = this.proj(-1, 1, bz); c.fillText(fnum(this.yr[1], 2), p[0], p[1] + 14);
+    const zt = this.proj(-1, -1, tz); c.textAlign = 'right'; c.fillText(fnum(this.zr[1], 2), zt[0] - 6, zt[1]);
+    c.strokeStyle = cssv('--axis'); c.globalAlpha = 0.5; c.beginPath(); const z0 = this.proj(-1, -1, bz); c.moveTo(z0[0], z0[1]); c.lineTo(zt[0], zt[1]); c.stroke();
+    c.restore();
+  }
+  pt3(x, y, h) { // world -> screen
+    return this.proj(2 * (x - this.xr[0]) / (this.xr[1] - this.xr[0]) - 1, 2 * (y - this.yr[0]) / (this.yr[1] - this.yr[0]) - 1, (2 * (Math.max(this.zr[0], Math.min(this.zr[1], h)) - this.zr[0]) / (this.zr[1] - this.zr[0]) - 1) * this.zs);
+  }
+  _bind() {
+    let drag = null; this.cv.style.touchAction = 'none'; this.cv.style.cursor = 'grab';
+    this.cv.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY, this.yaw, this.pitch]; this.cv.setPointerCapture(e.pointerId); this.cv.style.cursor = 'grabbing'; });
+    this.cv.addEventListener('pointermove', e => { if (!drag) return; this.yaw = drag[2] - (e.clientX - drag[0]) * 0.01; this.pitch = Math.max(-0.2, Math.min(1.5, drag[3] + (e.clientY - drag[1]) * 0.01)); this.redraw(); });
+    const up = () => { drag = null; this.cv.style.cursor = 'grab'; };
+    this.cv.addEventListener('pointerup', up); this.cv.addEventListener('pointercancel', up);
+  }
+}
+
+/* ---------- animation helper ---------- */
+function animator(step) { // step(dtSeconds) ; returns {play,pause,toggle,running}
+  let on = false, last = 0;
+  const tick = t => { if (!on) return; const dt = last ? Math.min(0.05, (t - last) / 1000) : 0; last = t; step(dt); requestAnimationFrame(tick); };
+  return { get running() { return on; }, play() { if (!on) { on = true; last = 0; requestAnimationFrame(tick); } }, pause() { on = false; }, toggle() { on ? this.pause() : this.play(); return on; } };
+}
+/* ---------- slider wiring: updates <output> next to each range ---------- */
+function val(id) { const el = document.getElementById(id); return el.type === 'checkbox' ? el.checked : (el.type === 'range' || el.type === 'number' ? +el.value : el.value); }
+function watch(ids, cb, fmtMap = {}) {
+  ids.forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    const out = el.parentElement.querySelector('output');
+    const upd = () => { if (out) out.textContent = fmtMap[id] ? fmtMap[id](+el.value) : fnum(+el.value, 3); };
+    upd(); el.addEventListener('input', () => { upd(); cb(); }); el.addEventListener('change', () => { upd(); cb(); });
+  });
+}
+
+/* ---------- page chrome: TOC, theme, MCQs, chapter nav ---------- */
+onReady(() => {
+  const toc = $('#toc'); if (toc) {
+    toc.innerHTML = '<b>On this page</b>';
+    $$('main h2').forEach((h, i) => { if (!h.id) h.id = 's' + (i + 1); const a = document.createElement('a'); a.href = '#' + h.id; a.textContent = h.textContent; toc.appendChild(a); });
+    const links = $$('a', toc), hs = $$('main h2');
+    const spy = () => { let k = 0; hs.forEach((h, i) => { if (h.getBoundingClientRect().top < 120) k = i; }); links.forEach((a, i) => a.classList.toggle('on', i === k)); };
+    window.addEventListener('scroll', spy, { passive: true }); spy();
+  }
+  if (window.renderMathInElement) renderMathInElement(document.body, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '\\[', right: '\\]', display: true }, { left: '$', right: '$', display: false }, { left: '\\(', right: '\\)', display: false }], ignoredClasses: ['nomath'], throwOnError: false });
+  $$('.mcq').forEach(q => {
+    const ans = +q.dataset.ans, fb = $('.fb', q), bs = $$('.opts button', q);
+    bs.forEach((b, i) => b.addEventListener('click', () => {
+      bs.forEach(x => x.classList.remove('ok', 'bad'));
+      b.classList.add(i === ans ? 'ok' : 'bad');
+      if (fb) { fb.style.display = 'block'; const msg = i === ans ? (q.dataset.ok || 'Correct!') : (q.dataset.no || 'Not quite — think again.'); texMix(fb, (i === ans ? '✔ ' : '✘ ') + msg); }
+    }));
+    if (fb) fb.style.display = 'none';
+  });
+  const tb = $('#themeBtn');
+  if (tb) tb.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const nx = cur === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', nx);
+    try { localStorage.setItem('boas-theme', nx); } catch (e) { }
+    redrawAll();
+  });
+  const sel = $('#chapSel'); if (sel) sel.addEventListener('change', () => { location.href = sel.value; });
+});
+try { const t = localStorage.getItem('boas-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) { }
+
+</script>
+<script>
+
+onReady(() => {
+  /* ---------- Interactive 1: contour pieces ---------- */
+  const P = 0.3;
+  const zp = (z, p, b0) => { let t = Math.atan2(z[1], z[0]); if (t < 0) t += TAU; if (b0 !== undefined) t = b0; return Cx.polar(Math.pow(Cx.abs(z), p), p * t); };
+  const EX = {
+    semi: { f: z => Cx.div([1, 0], Cx.add([1, 0], Cx.mul(z, z))), poles: [[[0, 1], [0, -0.5]]], target: [PI, 0], label: '∫_{−R}^{R} dx/(1+x²)' },
+    four: { f: z => Cx.div([1, 0], Cx.add([1, 0], Cx.ipow(z, 4))), poles: [1, 3].map(k => { const p = Cx.polar(1, k * PI / 4); return [p, Cx.div([1, 0], Cx.scale(Cx.ipow(p, 3), 4))]; }), target: [PI / Math.SQRT2, 0], label: '∫ dx/(1+x⁴)' },
+    fourier: { f: z => Cx.div(Cx.exp(Cx.mul([0, 1], z)), Cx.add([1, 0], Cx.mul(z, z))), poles: [[[0, 1], [0, -0.5 / Math.E]]], target: [PI / Math.E, 0], label: '∫ e^{ix} dx/(1+x²)' },
+    indent: { f: z => Cx.div(Cx.exp(Cx.mul([0, 1], z)), z), poles: [], target: [0, PI], label: 'PV∫ e^{ix} dx/x' },
+    key: { f: null, poles: [[[-1, 0], Cx.neg(Cx.polar(1, PI * P))]], target: [PI / Math.sin(PI * P), 0], label: '∫₀^∞ x^{p−1}/(1+x) dx' },
+    rect: { f: z => Cx.div(Cx.exp(Cx.scale(z, P)), Cx.add([1, 0], Cx.exp(z))), poles: [[[0, PI], Cx.neg(Cx.polar(1, PI * P))]], target: [PI / Math.sin(PI * P), 0], label: '∫ e^{px}/(1+e^x) dx' }
+  };
+  const seg = (a, b) => t => Cx.add(a, Cx.scale(Cx.sub(b, a), t));
+  const pieces = () => {
+    const k = val('ct-ex'), R = val('ct-R'), r = val('ct-r'), E = EX[k], out = [];
+    if (k === 'semi' || k === 'four' || k === 'fourier') {
+      out.push(['real axis −R → R', contourInt(E.f, seg([-R, 0], [R, 0]), 0, 1, 4000), t => [-R + 2 * R * t, 0]]);
+      out.push(['big semicircle', contourInt(E.f, t => Cx.polar(R, t), 0, PI, 2000), t => Cx.polar(R, PI * t)]);
+    } else if (k === 'indent') {
+      out.push(['−R → −r', contourInt(E.f, seg([-R, 0], [-r, 0]), 0, 1, 6000), t => [-R + (R - r) * t, 0]]);
+      out.push(['small semicircle (clockwise)', contourInt(E.f, t => Cx.polar(r, PI - t), 0, PI, 800), t => Cx.polar(r, PI * (1 - t))]);
+      out.push(['r → R', contourInt(E.f, seg([r, 0], [R, 0]), 0, 1, 6000), t => [r + (R - r) * t, 0]]);
+      out.push(['big semicircle', contourInt(E.f, t => Cx.polar(R, t), 0, PI, 3000), t => Cx.polar(R, PI * t)]);
+    } else if (k === 'key') {
+      const fa = (z, b) => Cx.div(Cx.div(zp(z, P, b), z), Cx.add([1, 0], z));
+      out.push(['top of cut r → R (θ=0)', contourInt(z => fa(z, 0), seg([r, 0], [R, 0]), 0, 1, 6000), t => [r + (R - r) * t, 0.02]]);
+      out.push(['big circle', contourInt(z => fa(z), t => Cx.polar(R, t), 0.0001, TAU - 0.0001, 3000), t => Cx.polar(R, TAU * t)]);
+      out.push(['bottom of cut R → r (θ=2π)', contourInt(z => fa(z, TAU), seg([R, 0], [r, 0]), 0, 1, 6000), t => [R - (R - r) * t, -0.02]]);
+      out.push(['small circle (clockwise)', contourInt(z => fa(z), t => Cx.polar(r, TAU - t), 0.0001, TAU - 0.0001, 1500), t => Cx.polar(r, TAU * (1 - t))]);
+    } else {
+      const A = R, H = TAU;
+      out.push(['bottom −A → A', contourInt(E.f, seg([-A, 0], [A, 0]), 0, 1, 6000), t => [-A + 2 * A * t, 0]]);
+      out.push(['right side', contourInt(E.f, seg([A, 0], [A, H]), 0, 1, 1500), t => [A, H * t]]);
+      out.push(['top A → −A', contourInt(E.f, seg([A, H], [-A, H]), 0, 1, 6000), t => [A - 2 * A * t, H]]);
+      out.push(['left side', contourInt(E.f, seg([-A, H], [-A, 0]), 0, 1, 1500), t => [-A, H * (1 - t)]]);
+    }
+    return out;
+  };
+  const CT = new Plane('#cv-cont', { span: 4, aspect: 0.6, snap: 0, draw: p => {
+    const k = val('ct-ex'), R = val('ct-R'), E = EX[k];
+    p.span = k === 'rect' ? Math.max(R, 4) * 1.15 : Math.max(R * 1.15, 1.5); p.cy = k === 'rect' ? PI : (k === 'key' ? 0 : R * 0.3);
+    if (k === 'key') p.line([0, 0], [100, 0], { color: '--warn', width: 3, dash: [6, 4] });
+    const cols = ['--accent', '--accent2', '--accent3', '--accent4'];
+    pieces().forEach((pc, j) => { const pts = []; for (let s = 0; s <= 200; s++) pts.push(pc[2](s / 200)); p.path(pts, { color: cols[j % 4], width: 3 }); const m = pc[2](0.5), m2 = pc[2](0.52); p.arrow(m, m2, { color: cols[j % 4], width: 3, head: 10 }); });
+    E.poles.forEach(([z]) => p.dot(z, { r: 6, color: '--fg', label: 'pole' }));
+    if (k === 'indent') p.dot([0, 0], { r: 5, color: '--fg', label: 'pole on the path' });
+  }});
+  const ctOut = () => {
+    const k = val('ct-ex'), E = EX[k], pcs = pieces(), cols = ['accent', 'accent2', 'accent3', 'accent4'];
+    let tot = [0, 0]; pcs.forEach(pc => tot = Cx.add(tot, pc[1]));
+    const R = val('ct-R'); let inside = [0, 0]; E.poles.forEach(([z, res]) => { if (Cx.abs(z) < R || k === 'rect' || k === 'key') inside = Cx.add(inside, res); });
+    let s = pcs.map((pc, j) => `<span style="color:var(--${cols[j % 4]})">■</span> ${pc[0]}: $${Cx.tex(pc[1], 5)}$`).join('<br>');
+    s += `<br><b>Total</b> $=${Cx.tex(tot, 5)}$ &nbsp; vs &nbsp; $2\\pi i\\sum\\text{Res}=${Cx.tex(Cx.mul([0, TAU], inside), 5)}$`;
+    if (k === 'key') { const top = pcs[0][1]; s += `<br>Top-of-cut integral → $\\frac{\\pi}{\\sin\\pi p}=${fnum(PI / Math.sin(PI * P), 5)}$ as $R\\to\\infty$, $r\\to0$. Now: $${Cx.tex(top, 5)}$. The bottom of the cut is $-e^{2\\pi ip}\\times$top.`; }
+    else if (k === 'rect') s += `<br>Top side $=-e^{2\\pi ip}\\times$bottom. Bottom → $\\frac{\\pi}{\\sin\\pi p}=${fnum(PI / Math.sin(PI * P), 5)}$.`;
+    else if (k === 'indent') s += '<br>Small semicircle → $-i\\pi$ as $r\\to0$; real-axis pieces → $\\mathrm{PV}\\int\\frac{e^{ix}}{x}dx=i\\pi$.';
+    else s += `<br>Real-axis piece → the target value $${Cx.tex(E.target, 5)}$, and the semicircle → 0.`;
+    texMix('#ct-out', s);
+  };
+  const ctAll = () => { CT.redraw(); ctOut(); };
+  watch(['ct-R', 'ct-r'], ctAll); $('#ct-ex').addEventListener('change', ctAll);
+  const an = animator(dt => { let R = val('ct-R') * (1 + dt * 0.6); if (R > 30) { R = 30; an.pause(); $('#ct-play').textContent = '▶ R → ∞'; } $('#ct-R').value = R; $('#ct-R').parentElement.querySelector('output').textContent = fnum(R, 2); ctAll(); });
+  $('#ct-play').onclick = e => { if (val('ct-R') >= 29.9) { $('#ct-R').value = 1.5; } e.currentTarget.textContent = an.toggle() ? '❚❚ Pause' : '▶ R → ∞'; };
+  ctAll();
+
+  /* ---------- Interactive 2: argument principle ---------- */
+  let AF = null;
+  const polyRoots = (f) => { // Newton from many seeds, dedupe
+    const out = [], h = 1e-7; for (let i = 0; i < 40; i++) { let z = Cx.polar(0.3 + 6 * i / 40, i * 2.39996); for (let k = 0; k < 80; k++) { const v = f(z), d = Cx.scale(Cx.sub(f(Cx.add(z, [h, 0])), v), 1 / h); if (!isFinite(v[0]) || Cx.abs(d) < 1e-14) break; const dz = Cx.div(v, d); z = Cx.sub(z, dz); if (Cx.abs(dz) < 1e-13) break; } if (Cx.abs(f(z)) < 1e-8 && !out.some(q => Cx.abs(Cx.sub(q, z)) < 1e-5)) out.push(z); } return out; };
+  const contour = () => { const R = val('ap-R'), pts = []; if (val('ap-c') === 'circ') { for (let k = 0; k <= 1200; k++) pts.push(Cx.polar(R, TAU * k / 1200)); } else { for (let k = 0; k <= 400; k++) pts.push([R * k / 400, 0]); for (let k = 0; k <= 400; k++) pts.push(Cx.polar(R, PI / 2 * k / 400)); for (let k = 0; k <= 400; k++) pts.push([0, R * (1 - k / 400)]); } return pts; };
+  const AP1 = new Plane('#cv-ap1', { span: 4.5, aspect: 0.95, snap: 0, draw: p => {
+    if (!AF) return; p.path(contour(), { color: '--accent', width: 2.5 });
+    polyRoots(AF).forEach(z => p.dot(z, { r: 5, color: '--accent3' }));
+    polyRoots(z => Cx.div([1, 0], AF(z))).forEach(z => p.dot(z, { r: 5, color: '--fg' }));
+  }});
+  const AP2 = new Plane('#cv-ap2', { span: 50, aspect: 0.95, snap: 0, grid: false, axisLabels: ['u', 'v'], draw: p => {
+    p.line([-1e3, 0], [1e3, 0], { color: '--axis', width: 1 }); p.line([0, -1e3], [0, 1e3], { color: '--axis', width: 1 });
+    if (!AF) return; const W = contour().map(AF); const m = Math.max(1, ...W.map(w => Math.min(1e6, Cx.abs(w)))); const sc = w => { const r = Cx.abs(w); return Cx.scale(w, Math.log1p(r) / (r || 1)); }; // log-compressed view
+    p.span = Math.log1p(m) * 1.15; p.path(W.map(sc), { color: '--accent2', width: 2 }); p.dot(sc(W[0]), { r: 6, color: '--accent2', label: 'start' }); p.dot([0, 0], { r: 5, color: '--fg', label: '0' });
+    p.text(8, 16, 'image of the contour (radius compressed: r → ln(1+r))', { color: '--muted', font: '12px system-ui' });
+  }});
+  const apOut = () => {
+    if (!AF) { $('#ap-out').textContent = 'Could not read f.'; return; }
+    const pts = contour(); let tot = 0; for (let k = 0; k < pts.length - 1; k++) { const a = AF(pts[k]), b = AF(pts[k + 1]); let d = Cx.arg(b) - Cx.arg(a); while (d > PI) d -= TAU; while (d < -PI) d += TAU; tot += d; }
+    const R = val('ap-R'), q1 = val('ap-c') === 'q1', inside = z => q1 ? (z[0] > 1e-9 && z[1] > 1e-9 && Cx.abs(z) < R) : Cx.abs(z) < R;
+    const Z = polyRoots(AF).filter(inside).length, Pn = polyRoots(z => Cx.div([1, 0], AF(z))).filter(inside).length;
+    texMix('#ap-out', `Change in $\\arg f$ around $C$: $${fnum(tot / PI, 3)}\\pi$ ⇒ $N-P=${fnum(tot / TAU, 3)}$ &nbsp; (numerically found inside: ${Z} distinct zero(s), ${Pn} distinct pole(s)${Z || Pn ? '; multiple roots count with multiplicity in N − P' : ''}).`);
+  };
+  const apAll = () => { try { const g = Parser.compile($('#ap-f').value); AF = z => g({ z }); AF([0.1, 0.2]); } catch (e) { AF = null; } AP1.redraw(); AP2.redraw(); apOut(); };
+  $('#ap-f').addEventListener('change', apAll); $('#ap-f').addEventListener('keydown', e => { if (e.key === 'Enter') apAll(); });
+  $('#ap-pre').addEventListener('change', e => { if (e.target.value) { $('#ap-f').value = e.target.value; apAll(); } });
+  $('#ap-c').addEventListener('change', apAll); watch(['ap-R'], apAll);
+  apAll();
+
+  /* ---------- Interactive 3: Bromwich ---------- */
+  const s3 = Math.sqrt(3);
+  const BW = [
+    ['5/((p+2)(p²+1))  (Ex. 7)', p => Cx.div([5, 0], Cx.mul(Cx.add(p, [2, 0]), Cx.add(Cx.mul(p, p), [1, 0]))), [[-2, 0], [0, 1], [0, -1]], t => Math.exp(-2 * t) + 2 * Math.sin(t) - Math.cos(t), 'e^{-2t}+2\\sin t-\\cos t'],
+    ['p³/(p⁴+4)  (55)', p => Cx.div(Cx.ipow(p, 3), Cx.add(Cx.ipow(p, 4), [4, 0])), [[1, 1], [1, -1], [-1, 1], [-1, -1]], t => Math.cos(t) * Math.cosh(t), '\\cos t\\cosh t'],
+    ['1/(p⁴−1)  (56)', p => Cx.div([1, 0], Cx.sub(Cx.ipow(p, 4), [1, 0])), [[1, 0], [-1, 0], [0, 1], [0, -1]], t => (Math.sinh(t) - Math.sin(t)) / 2, '\\tfrac12(\\sinh t-\\sin t)'],
+    ['(p+1)/(p(p²+1))  (57)', p => Cx.div(Cx.add(p, [1, 0]), Cx.mul(p, Cx.add(Cx.mul(p, p), [1, 0]))), [[0, 0], [0, 1], [0, -1]], t => 1 - Math.cos(t) + Math.sin(t), '1-\\cos t+\\sin t'],
+    ['3p²/(p³+8)  (59)', p => Cx.div(Cx.scale(Cx.mul(p, p), 3), Cx.add(Cx.ipow(p, 3), [8, 0])), [[-2, 0], [1, s3], [1, -s3]], t => Math.exp(-2 * t) + 2 * Math.exp(t) * Math.cos(s3 * t), 'e^{-2t}+2e^t\\cos\\sqrt3t'],
+    ['1/(p²(p+1))  (60)', p => Cx.div([1, 0], Cx.mul(Cx.mul(p, p), Cx.add(p, [1, 0]))), [[0, 0], [-1, 0]], t => t - 1 + Math.exp(-t), 't-1+e^{-t}'],
+    ['(p−1)²/(p(p+1)²)  (62)', p => Cx.div(Cx.ipow(Cx.sub(p, [1, 0]), 2), Cx.mul(p, Cx.ipow(Cx.add(p, [1, 0]), 2))), [[0, 0], [-1, 0]], t => 1 - 4 * t * Math.exp(-t), '1-4te^{-t}'],
+    ['p/((p+1)(p²+4))  (65)', p => Cx.div(p, Cx.mul(Cx.add(p, [1, 0]), Cx.add(Cx.mul(p, p), [4, 0]))), [[-1, 0], [0, 2], [0, -2]], t => (-Math.exp(-t) + Math.cos(2 * t) + 2 * Math.sin(2 * t)) / 5, '\\tfrac15(-e^{-t}+\\cos2t+2\\sin2t)']
+  ];
+  const sel = $('#bw-f'); BW.forEach((b, k) => { const o = document.createElement('option'); o.value = k; o.textContent = b[0]; sel.appendChild(o); });
+  const B = () => BW[+val('bw-f')];
+  const fNum = t => { const b = B(); let s = [0, 0]; b[2].forEach(z => { s = Cx.add(s, contourInt(q => Cx.mul(b[1](q), Cx.exp(Cx.scale(q, t))), circlePath(z, 0.2), 0, TAU, 600)); }); return Cx.scale(Cx.div(s, [0, TAU]), 1)[0]; };
+  const BW1 = new Plane('#cv-bw1', { span: 3, aspect: 0.95, snap: 0, axisLabels: ['Re p', 'Im p'], draw: p => { const b = B(); const c = Math.max(...b[2].map(z => z[0])) + 0.6; p.region((x) => x < 0, '--accent3', 0.07, 8); p.line([c, -10], [c, 10], { color: '--accent', width: 2.5 }); p.label([c, 2.6], 'Bromwich line x = c', { color: '--accent' }); b[2].forEach(z => p.dot(z, { r: 6, color: '--fg', label: Cx.fmt(z, 2) })); } });
+  const BW2 = new Graph('#cv-bw2', { span: 4, cx: 3.6, aspect: 0.95, axisLabels: ['t', 'f(t)'], draw: g => { const b = B(); g.fn(b[3], { color: '--accent', width: 3 }); const pts = []; for (let k = 0; k <= 40; k++) { const t = 7.2 * k / 40; pts.push([t, fNum(t)]); } pts.forEach(q => g.dot(q, { r: 3, color: '--accent2' })); } });
+  const bwOut = () => texMix('#bw-out', `$f(t)=${B()[4]}$ (blue curve). Orange dots: $\\sum\\text{Res}\\,F(z)e^{zt}$ computed numerically at each $t$. They match.`);
+  sel.addEventListener('change', () => { BW1.redraw(); BW2.redraw(); bwOut(); }); bwOut();
+});
+
+</script>
+</body>
+</html>

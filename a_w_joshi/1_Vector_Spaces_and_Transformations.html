@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vector Spaces and Transformations</title>
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+h4{margin-bottom:4px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:120px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:90px}section{padding:16px 14px}}
+.read{font-weight:600;color:var(--acc2)}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.legend span{display:inline-block;margin-right:12px;font-size:.88rem}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:middle}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">Light / Dark</button>
+<h1>1 · Vector Spaces and Transformations</h1>
+<p>A. W. Joshi, <i>Matrices and Tensors in Physics</i>, Section 1 (pp. 3–14). Complete notes, interactive labs, shortcuts, the book's Exercise 1 fully solved, and extra practice for CSIR-NET / GATE / JEST / TIFR.</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#roadmap">Roadmap</a><a href="#group">Group</a><a href="#field">Field</a><a href="#vspace">Vector space</a>
+<a href="#subspace">Subspaces</a><a href="#lind">Linear independence</a><a href="#basis">Basis &amp; dimension</a>
+<a href="#ntuple">n-tuples</a><a href="#inner">Inner product</a><a href="#gs">Gram–Schmidt</a><a href="#schwarz">Schwarz</a>
+<a href="#lt">Linear transformations</a><a href="#short">Shortcuts</a><a href="#bookex">Book Exercise 1</a>
+<a href="#practice">Practice</a><a href="#quiz">Quiz</a><a href="#facts">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<!-- ===================================================== ROADMAP -->
+<section id="roadmap">
+<h2>0. Roadmap: what this chapter covers and why</h2>
+<p>In physics, matrices come from <b>linear transformations of vectors</b>. To understand matrices properly, especially for quantum mechanics, we first need to know exactly what a "vector" is. The chapter builds the ideas in this order:</p>
+<div class="flow">
+<span>Group</span><b>→</b><span>Field (scalars)</span><b>→</b><span>Vector space</span><b>→</b><span>Linear (in)dependence</span><b>→</b><span>Basis, dimension</span><b>→</b><span>Inner product, norm, orthogonality</span><b>→</b><span>Gram–Schmidt</span><b>→</b><span>Schwarz inequality</span><b>→</b><span>Linear transformations → matrices</span>
+</div>
+<div class="box warnb"><b class="t">⚠ Three notation points to know before you read the book</b>
+<ol>
+<li><b>Norm.</b> Joshi writes <span class="m">‖u‖ = (u, u)</span>, which is the <i>square</i> of the length (Eq. 22). Almost every other book and every exam uses <span class="m">‖u‖ = √(u, u)</span>. In these notes <span class="m">‖u‖</span> means the <b>length</b> <span class="m">√(u,u)</span>. So the book's Schwarz inequality <span class="m">|(u,v)|² ≤ ‖u‖‖v‖</span> (its notation) is the same as the standard <span class="m">|(u,v)| ≤ ‖u‖ ‖v‖</span>.</li>
+<li><b>Inner product convention (physics).</b> <span class="m">(u, v) = Σ u<sub>i</sub>* v<sub>i</sub></span>. The complex conjugate is on the <b>first</b> vector. So <span class="m">(au, bv) = a* b (u, v)</span>. Many maths books put the conjugate on the second vector instead. Both are fine; just stay consistent within one problem.</li>
+<li><b>Misprint in the book (p. 12).</b> The book says equality in the Schwarz inequality holds "iff the vectors are linearly <i>independent</i>". The correct statement is <b>linearly dependent</b> (one vector is a multiple of the other).</li>
+</ol></div>
+</section>
+
+<!-- ===================================================== GROUP -->
+<section id="group">
+<h2>1. Group</h2>
+<div class="box def"><b class="t">Definition (group)</b>
+A set <span class="m">G = {x, y, z, …}</span> with one binary operation (written <span class="m">xy</span>) is a <b>group</b> if:
+<ol type="a">
+<li><b>Closure:</b> <span class="m">xy ∈ G</span> for all <span class="m">x, y ∈ G</span>.</li>
+<li><b>Identity:</b> there is an <span class="m">e ∈ G</span> with <span class="m">xe = ex = x</span> for all <span class="m">x</span>.</li>
+<li><b>Inverse:</b> for each <span class="m">x</span> there is a <span class="m">y ∈ G</span> with <span class="m">xy = yx = e</span> (write <span class="m">y = x<sup>−1</sup></span>).</li>
+<li><b>Associativity:</b> <span class="m">x(yz) = (xy)z</span>.</li>
+</ol>
+If also <span class="m">xy = yx</span> for all <span class="m">x, y</span>, the group is <b>abelian</b> (commutative).</div>
+<p>A memory aid for the four axioms is "CIIA": Closure, Identity, Inverse, Associativity. <b>Commutativity is not required</b>. Most groups in physics, such as rotations and matrix groups, are not commutative.</p>
+
+<h3>Examples from the book</h3>
+<ul>
+<li><b>(ℝ, +)</b>: real numbers under addition. Identity is 0, the inverse of x is −x. Abelian.</li>
+<li><b>U(1) = {z : |z| = 1}</b> under multiplication. If z = e<sup>iθ</sup>, then z<sub>1</sub>z<sub>2</sub> = e<sup>i(θ₁+θ₂)</sup>, which still has modulus 1. Identity is 1, the inverse is z* = e<sup>−iθ</sup>. Abelian. (In physics this is the phase group of quantum mechanics and the gauge group of electromagnetism.)</li>
+</ul>
+
+<div class="lab"><h4>🔬 Lab 1 – Feel U(1): multiplying unit complex numbers just adds angles</h4>
+<div class="ctrl">
+<label>θ₁ <input type="range" id="u1a" min="0" max="360" value="40"><span id="u1av"></span></label>
+<label>θ₂ <input type="range" id="u1b" min="0" max="360" value="110"><span id="u1bv"></span></label>
+<label><input type="checkbox" id="u1inv" checked> show inverse of z₁</label>
+</div>
+<canvas id="cvU1" width="460" height="360"></canvas>
+<div class="legend"><span><i style="background:#2f6fdf"></i>z₁</span><span><i style="background:#2b9348"></i>z₂</span><span><i style="background:#e8590c"></i>z₁z₂</span><span><i style="background:#9c36b5"></i>z₁⁻¹ = z₁*</span></div>
+<p class="small">However you move the sliders, the product stays on the unit circle (closure). z₁·z₁* lands exactly on 1 (inverse).</p>
+</div>
+
+<h3>All variations: is it a group?</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Set, operation</th><th>Group?</th><th>Reason</th></tr>
+<tr><td>ℤ (integers), +</td><td class="ok">Yes, abelian</td><td>0 is the identity, −n is the inverse</td></tr>
+<tr><td>ℕ = {1,2,3,…}, +</td><td class="bad">No</td><td>no identity (0 ∉ ℕ), no inverses</td></tr>
+<tr><td>ℝ, ×</td><td class="bad">No</td><td>0 has no inverse</td></tr>
+<tr><td>ℝ∖{0}, ×</td><td class="ok">Yes, abelian</td><td>1 is the identity, 1/x is the inverse</td></tr>
+<tr><td>ℤ∖{0}, ×</td><td class="bad">No</td><td>2 has no integer inverse</td></tr>
+<tr><td>{1, −1, i, −i}, ×</td><td class="ok">Yes, abelian (order 4)</td><td>4th roots of unity, a cyclic group</td></tr>
+<tr><td>Invertible n×n matrices, matrix product (GL(n))</td><td class="ok">Yes, non-abelian (n≥2)</td><td>AB ≠ BA in general</td></tr>
+<tr><td>All n×n matrices, product</td><td class="bad">No</td><td>singular matrices have no inverse</td></tr>
+<tr><td>All n×n matrices, addition</td><td class="ok">Yes, abelian</td><td>the zero matrix is the identity</td></tr>
+<tr><td>Rotations of 3D space, composition (SO(3))</td><td class="ok">Yes, non-abelian</td><td>rotating about x then y ≠ rotating about y then x</td></tr>
+<tr><td>Vectors in 3D, cross product</td><td class="bad">No</td><td>not associative, and there is no identity</td></tr>
+<tr><td>{0,1,…,n−1}, addition mod n</td><td class="ok">Yes, abelian</td><td>ℤ<sub>n</sub></td></tr>
+<tr><td>Odd integers, +</td><td class="bad">No</td><td>odd + odd = even (fails closure)</td></tr>
+</table></div>
+
+<div class="box thm"><b class="t">Quick facts (often asked)</b>
+<ul>
+<li>The identity is <b>unique</b>: if e and e′ are both identities, then e = ee′ = e′.</li>
+<li>Each inverse is <b>unique</b>, and <span class="m">(xy)<sup>−1</sup> = y<sup>−1</sup>x<sup>−1</sup></span> (the order reverses, "socks and shoes").</li>
+<li>Cancellation holds: if xy = xz then y = z.</li>
+<li>In a finite group's multiplication table (Cayley table), each element appears exactly once in every row and column.</li>
+<li>Every group of order ≤ 5 is abelian. The smallest non-abelian group has order 6 (S<sub>3</sub>, the symmetries of a triangle).</li>
+</ul></div>
+</section>
+
+<!-- ===================================================== FIELD -->
+<section id="field">
+<h2>2. Field (the scalars)</h2>
+<div class="box def"><b class="t">Definition (field)</b>
+A set F with two operations, + and ·, is a <b>field</b> if
+<ol type="a"><li>(F, +) is an <b>abelian group</b> with identity 0, and</li>
+<li>(F∖{0}, ·) is an <b>abelian group</b> with identity 1,</li></ol>
+and multiplication distributes over addition: <span class="m">a(b + c) = ab + ac</span>. (The book leaves the distributive law implicit, but it is part of the definition.)</div>
+<p>Put simply, a field is a set where you can add, subtract, multiply and divide by anything nonzero, with all the usual rules of arithmetic. <b>The elements of a field are called scalars.</b></p>
+<div class="tbl-wrap"><table>
+<tr><th>Set</th><th>Field?</th><th>Why</th></tr>
+<tr><td>ℝ (real numbers)</td><td class="ok">Yes</td><td>the standard example</td></tr>
+<tr><td>ℂ (complex numbers)</td><td class="ok">Yes</td><td>the scalars of quantum mechanics</td></tr>
+<tr><td>ℚ (rationals)</td><td class="ok">Yes</td><td>closed under + − × ÷</td></tr>
+<tr><td>ℤ (integers)</td><td class="bad">No</td><td>2 has no inverse in ℤ</td></tr>
+<tr><td>ℤ<sub>p</sub> = {0,1,…,p−1}, mod p, p prime</td><td class="ok">Yes (a Galois field GF(p))</td><td>every nonzero element has an inverse mod p</td></tr>
+<tr><td>ℤ<sub>n</sub>, n not prime (e.g. ℤ<sub>6</sub>)</td><td class="bad">No</td><td>2·3 = 0 mod 6, so 2 has no inverse</td></tr>
+<tr><td>{a + b√2 : a, b ∈ ℚ}</td><td class="ok">Yes</td><td>1/(a+b√2) = (a−b√2)/(a²−2b²)</td></tr>
+<tr><td>2×2 real matrices</td><td class="bad">No</td><td>multiplication is not commutative, and there are nonzero singular matrices</td></tr>
+</table></div>
+
+<div class="lab"><h4>🔬 Lab 2 – When is ℤ<sub>n</sub> a field? Multiplication table mod n</h4>
+<div class="ctrl"><label>n = <input type="range" id="zn" min="2" max="13" value="6"><b id="znv"></b></label><span id="znverdict"></span></div>
+<div class="tbl-wrap" id="zntable"></div>
+<p class="small">Cells equal to 1 are green: that pair are inverses of each other. A row with no green cell (shown in red) belongs to an element with <b>no multiplicative inverse</b>, so ℤ<sub>n</sub> is not a field. Try n = 5, 7, 11 (prime) and then n = 4, 6, 9, 12.</p>
+</div>
+
+<div class="box fact"><b class="t">Interesting facts</b>
+<ul><li>A finite field must have p<sup>k</sup> elements (p prime). There is exactly one field of each such size, GF(p<sup>k</sup>). There is no field with 6 or 10 elements.</li>
+<li>The smallest field is GF(2) = {0, 1}, where 1 + 1 = 0. Computers, error-correcting codes and quantum error correction are built on it.</li>
+<li>In GF(2), u + u = 0 for every vector. This makes some statements that are true over ℝ fail (see Practice problem P15).</li></ul></div>
+</section>
+
+<!-- ===================================================== VECTOR SPACE -->
+<section id="vspace">
+<h2>3. Vector space</h2>
+<div class="box def"><b class="t">Definition (vector space L over a field F)</b>
+<ol type="a">
+<li>L is an <b>abelian group under addition</b>. That gives closure u+v ∈ L, commutativity u+v = v+u, associativity, a null vector <b>0</b> with u+0 = u, and a negative −u with u + (−u) = 0.</li>
+<li>A <b>scalar multiplication</b> a·u ∈ L is defined for a ∈ F, u ∈ L, such that for all u, v ∈ L and a, b ∈ F:
+<div class="eq">a(u + v) = au + av,  (a + b)u = au + bu,  a(bu) = (ab)u,  1u = u,  0u = <b>0</b></div></li>
+</ol>
+The elements of L are called <b>vectors</b>. The same object is also called a "linear vector space" or "linear space".</div>
+<p><b>In plain words:</b> a vector space is any collection of objects that you can <b>add</b> and <b>scale by numbers</b> without ever leaving the collection, with the usual rules of algebra holding. Being an arrow is not required. Functions, matrices, polynomials and quantum states are all vectors in this sense.</p>
+<div class="box warnb"><b class="t">Two different zeros</b> The scalar 0 ∈ F is a number. The null vector <b>0</b> ∈ L is a vector, such as (0,0,0). The rule 0u = <b>0</b> connects them: scalar zero times any vector gives the null vector.</div>
+
+<h3>Rules that follow from the axioms (useful in proofs)</h3>
+<ul>
+<li><span class="m">a<b>0</b> = <b>0</b></span>, <span class="m">(−1)u = −u</span>, and <span class="m">au = <b>0</b> ⇒ a = 0 or u = <b>0</b></span>.</li>
+<li>The null vector and each negative are unique, because these hold in any group.</li>
+</ul>
+
+<h3>Catalogue of vector spaces (all the variations you will meet)</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Space</th><th>Field</th><th>Dimension</th><th>A standard basis</th></tr>
+<tr><td>3D position vectors / ℝ³</td><td>ℝ</td><td>3</td><td>î, ĵ, k̂</td></tr>
+<tr><td>ℝ<sup>n</sup> (real n-tuples)</td><td>ℝ</td><td>n</td><td>e₁,…,eₙ</td></tr>
+<tr><td>ℂ<sup>n</sup> (complex n-tuples)</td><td>ℂ</td><td>n</td><td>e₁,…,eₙ</td></tr>
+<tr><td>ℂ<sup>n</sup></td><td><b>ℝ</b></td><td><b>2n</b></td><td>e₁,…,eₙ, ie₁,…,ieₙ</td></tr>
+<tr><td>ℂ (as a set of numbers)</td><td>ℝ</td><td>2</td><td>1, i</td></tr>
+<tr><td>ℝ</td><td>ℚ</td><td>∞</td><td>none can be written down (needs the axiom of choice)</td></tr>
+<tr><td>Polynomials of degree ≤ n, Pₙ</td><td>ℝ or ℂ</td><td>n+1</td><td>1, x, x², …, xⁿ</td></tr>
+<tr><td>All polynomials</td><td>ℝ</td><td>∞ (countable)</td><td>1, x, x², …</td></tr>
+<tr><td>m×n matrices</td><td>ℝ/ℂ</td><td>mn</td><td>E<sub>ij</sub> (a single 1 in position ij)</td></tr>
+<tr><td>n×n symmetric real matrices</td><td>ℝ</td><td>n(n+1)/2</td><td>E<sub>ii</sub>, E<sub>ij</sub>+E<sub>ji</sub></td></tr>
+<tr><td>n×n antisymmetric real matrices</td><td>ℝ</td><td>n(n−1)/2</td><td>E<sub>ij</sub>−E<sub>ji</sub> (i&lt;j)</td></tr>
+<tr><td>n×n Hermitian matrices</td><td><b>ℝ only</b></td><td>n²</td><td>for 2×2: I, σₓ, σᵧ, σ_z</td></tr>
+<tr><td>n×n traceless matrices</td><td>ℝ/ℂ</td><td>n²−1</td><td>for 2×2: σₓ, σᵧ, σ_z</td></tr>
+<tr><td>n×n diagonal matrices</td><td>ℝ/ℂ</td><td>n</td><td>E<sub>ii</sub></td></tr>
+<tr><td>n×n upper triangular matrices</td><td>ℝ/ℂ</td><td>n(n+1)/2</td><td>E<sub>ij</sub>, i≤j</td></tr>
+<tr><td>Solutions of y″ + y = 0</td><td>ℝ</td><td>2</td><td>sin x, cos x</td></tr>
+<tr><td>Solutions of an n-th order linear homogeneous ODE</td><td>ℝ/ℂ</td><td>n</td><td>n independent solutions</td></tr>
+<tr><td>Continuous functions on [a,b], C[a,b]</td><td>ℝ</td><td>∞</td><td>—</td></tr>
+<tr><td>Square-integrable functions L² (QM wavefunctions)</td><td>ℂ</td><td>∞</td><td>e.g. harmonic oscillator states |n⟩</td></tr>
+<tr><td>Sequences (a₁, a₂, …)</td><td>ℝ</td><td>∞</td><td>—</td></tr>
+<tr><td>{<b>0</b>} (only the null vector)</td><td>any</td><td>0</td><td>empty set</td></tr>
+</table></div>
+
+<h3>Non-examples: why each fails</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Set</th><th>Failure</th></tr>
+<tr><td>{(x,y) : x + y = 1}</td><td>does not contain (0,0); (1,0)+(0,1) = (1,1) is not in the set</td></tr>
+<tr><td>First quadrant {(x,y) : x ≥ 0, y ≥ 0}</td><td>(−1)(1,1) = (−1,−1) leaves the set (no negatives)</td></tr>
+<tr><td>{(x,y) : xy ≥ 0} (1st and 3rd quadrants)</td><td>(1,0)+(0,−1) = (1,−1) leaves the set (not closed under +)</td></tr>
+<tr><td>Polynomials of degree <b>exactly</b> n</td><td>(xⁿ + 1) + (−xⁿ) = 1 has degree 0; also 0 is not in the set</td></tr>
+<tr><td>Invertible n×n matrices</td><td>I + (−I) = 0 is singular; the zero matrix is missing</td></tr>
+<tr><td>2×2 matrices with det = 0</td><td>diag(1,0) + diag(0,1) = I has det 1</td></tr>
+<tr><td>Hermitian matrices over ℂ</td><td>i·σₓ is anti-Hermitian (not closed under complex scalars)</td></tr>
+<tr><td>ℝⁿ "over ℂ"</td><td>i·(1,0) = (i,0) ∉ ℝⁿ</td></tr>
+<tr><td>Solutions of y″ + y = 1 (inhomogeneous)</td><td>the sum of two solutions solves y″ + y = 2</td></tr>
+<tr><td>Unit vectors {u : |u| = 1}</td><td>the sum of two unit vectors is usually not a unit vector, and 0 is missing</td></tr>
+</table></div>
+<div class="box tip"><b class="t">⚡ Shortcut: the 3-second test</b> First check whether the zero vector is in the set. If it isn't, the set is not a vector space (or subspace). If it is, check whether <span class="m">au + bv</span> stays inside. Every non-example above fails one of these two checks.</div>
+</section>
+
+<!-- ===================================================== SUBSPACE -->
+<section id="subspace">
+<h2>4. Subspaces (needed for exam problems)</h2>
+<div class="box def"><b class="t">Definition</b> A subset W of a vector space L is a <b>subspace</b> if W is itself a vector space under the same operations.</div>
+<div class="box thm"><b class="t">Subspace test (one line)</b> A non-empty W ⊆ L is a subspace ⇔ <span class="m">au + bv ∈ W</span> for all u, v ∈ W and all scalars a, b. Taking a = b = 0 shows that <b>0</b> ∈ W is necessary.</div>
+<ul>
+<li>Subspaces of ℝ³ come in four kinds only: {0}, lines through the origin, planes through the origin, and ℝ³ itself.</li>
+<li>Solutions of a <b>homogeneous</b> linear system <span class="m">Ax = 0</span> always form a subspace (the null space). The solutions of <span class="m">Ax = b</span> with b ≠ 0 never do.</li>
+<li>Intersection: U ∩ W is always a subspace. Union: U ∪ W is a subspace <b>only if</b> one of them contains the other.</li>
+<li>Sum: U + W = {u + w} is a subspace, and
+<div class="eq">dim(U + W) = dim U + dim W − dim(U ∩ W)</div>
+(the same structure as |A ∪ B| = |A| + |B| − |A ∩ B|).</li>
+<li>Span: the set of all linear combinations of some vectors is the smallest subspace containing them.</li>
+</ul>
+<div class="box tip"><b class="t">⚡ Shortcut: dimension of a solution set</b> A subspace of ℝⁿ defined by k <b>independent</b> homogeneous linear equations has dimension <b>n − k</b>. For example, {(x,y,z,w) : x + y = 0, z − w = 0} has dimension 4 − 2 = 2.</div>
+</section>
+
+<!-- ===================================================== LINEAR INDEPENDENCE -->
+<section id="lind">
+<h2>5. Linear dependence and independence</h2>
+<div class="box def"><b class="t">Definitions</b>
+A <b>linear combination</b> of x₁, …, xₙ is any vector <span class="m">a₁x₁ + a₂x₂ + … + aₙxₙ</span>.<br>
+The vectors are <b>linearly dependent</b> if
+<div class="eq">a₁x₁ + a₂x₂ + … + aₙxₙ = <b>0</b>   (Eq. 3)</div>
+has a solution with <b>not all aᵢ = 0</b>. Then at least one vector is a linear combination of the others (divide by a nonzero aᵢ, as in Eq. 4).<br>
+The vectors are <b>linearly independent</b> if the <b>only</b> solution of Eq. (3) is a₁ = a₂ = … = aₙ = 0. In other words, the null vector cannot be built from them except trivially.</div>
+<p><b>Two vectors:</b> u and v are dependent ⇔ one is a multiple of the other (u = cv), i.e. they lie on one line. <b>Three vectors in 3D</b> are dependent ⇔ they lie in one plane (coplanar).</p>
+<div class="box warnb"><b class="t">Fine print</b>
+<ul>
+<li>The book says "at least two of which are nonzero" because it assumes no xᵢ is the null vector. In general: <b>any set containing 0 is dependent</b>, since 1·<b>0</b> = <b>0</b>.</li>
+<li>Pairwise independence does <b>not</b> imply independence of the whole set. For example (1,0), (0,1), (1,1) are independent in pairs, but (1,0) + (0,1) − (1,1) = 0. (This is the book's Exercise 7(b).)</li>
+<li>Independence <b>depends on the field</b>. In ℂ viewed as a space over ℝ, the numbers 1 and i are independent (a + bi = 0 with a, b real forces a = b = 0). Over ℂ they are dependent, because i·1 − 1·i = 0.</li>
+</ul></div>
+
+<div class="lab"><h4>🔬 Lab 3 – 3D independence lab (drag to rotate, sliders set the vectors)</h4>
+<div class="grid2">
+<div><canvas id="cv3d" width="480" height="420"></canvas></div>
+<div>
+<div class="ctrl"><b style="color:#2f6fdf">u</b>
+<label>x<input type="range" id="ux" min="-3" max="3" step="0.5" value="2"></label><label>y<input type="range" id="uy" min="-3" max="3" step="0.5" value="0"></label><label>z<input type="range" id="uz" min="-3" max="3" step="0.5" value="0"></label></div>
+<div class="ctrl"><b style="color:#2b9348">v</b>
+<label>x<input type="range" id="vx" min="-3" max="3" step="0.5" value="0"></label><label>y<input type="range" id="vy" min="-3" max="3" step="0.5" value="2"></label><label>z<input type="range" id="vz" min="-3" max="3" step="0.5" value="0"></label></div>
+<div class="ctrl"><b style="color:#e8590c">w</b>
+<label>x<input type="range" id="wx" min="-3" max="3" step="0.5" value="0.5"></label><label>y<input type="range" id="wy" min="-3" max="3" step="0.5" value="0.5"></label><label>z<input type="range" id="wz" min="-3" max="3" step="0.5" value="2"></label></div>
+<div class="ctrl">
+<button class="alt" data-p3="ind">Independent</button><button class="alt" data-p3="cop">Coplanar</button><button class="alt" data-p3="col">Collinear</button><button class="alt" data-p3="zero">Contains 0</button></div>
+<div class="ctrl"><b>Combination a u + b v + c w</b></div>
+<div class="ctrl"><label>a<input type="range" id="ca" min="-2" max="2" step="0.1" value="0.5"></label><label>b<input type="range" id="cb" min="-2" max="2" step="0.1" value="0.5"></label><label>c<input type="range" id="cc" min="-2" max="2" step="0.1" value="0.5"></label></div>
+<div class="out" id="out3d"></div>
+</div></div>
+<p class="small">Shading shows the <b>span</b>. When the vectors are independent you get a box (the parallelepiped), whose volume is |det| and whose span is all of ℝ³. When they are coplanar you get a plane, det = 0, and the combination (purple) can never leave that plane. When they are collinear you get a line. Drag a, b, c and watch where the purple tip is allowed to go.</p>
+</div>
+
+<h3>All the methods to test independence (choose the fastest)</h3>
+<div class="tbl-wrap"><table>
+<tr><th>#</th><th>Situation</th><th>Method</th></tr>
+<tr><td>1</td><td>Any case</td><td>Solve Σaᵢxᵢ = 0 (a homogeneous system). A free parameter means dependent.</td></tr>
+<tr><td>2</td><td><b>n vectors in n-dimensional space</b></td><td>Put the vectors as rows (or columns) of a matrix: <b>det ≠ 0 ⇔ independent</b>. This is the fastest method.</td></tr>
+<tr><td>3</td><td>m vectors in ℝⁿ (any m)</td><td>Row-reduce the matrix of rows. <b>rank = m ⇔ independent</b>. Rank = number of nonzero rows in echelon form.</td></tr>
+<tr><td>4</td><td><b>m &gt; n</b> vectors in an n-dim space</td><td><b>Automatically dependent.</b> No calculation needed (e.g. 4 vectors in ℝ³: Book Example 1).</td></tr>
+<tr><td>5</td><td>Any inner product space</td><td>Gram determinant det[(uᵢ,uⱼ)] ≠ 0 ⇔ independent (Exercise 8). This is useful for functions.</td></tr>
+<tr><td>6</td><td>Functions f₁,…,fₙ</td><td>Wronskian W = det[fⱼ<sup>(i)</sup>]. If <b>W ≠ 0 at even one point, they are independent</b>. (W ≡ 0 does not by itself prove dependence for arbitrary functions, but it does for solutions of the same linear ODE.)</td></tr>
+<tr><td>7</td><td>Mutually orthogonal nonzero vectors</td><td><b>Always independent.</b> Take the inner product of Σaᵢxᵢ = 0 with xⱼ to get aⱼ(xⱼ,xⱼ) = 0, so aⱼ = 0.</td></tr>
+<tr><td>8</td><td>Inspection</td><td>The set contains 0, or two vectors are proportional, or one vector is an obvious sum of others. Then it is dependent.</td></tr>
+<tr><td>9</td><td>Echelon / triangular look</td><td>If the vectors are in staircase form (each has a nonzero entry where all the later ones have 0), they are independent.</td></tr>
+<tr><td>10</td><td>Polynomials, matrices</td><td>Write them as coordinate n-tuples in the standard basis (1, x, x², … or E<sub>ij</sub>), then apply methods 2–3.</td></tr>
+</table></div>
+
+<h3>Worked example (Book Example 1): are these four vectors dependent?</h3>
+<p>u = (1, 2, 3), v = (2, 0, −1), w = (1, −1, 1), x = (2, 1, 0).</p>
+<div class="box tip"><b class="t">⚡ Exam answer in 1 second</b> These are 4 vectors in a 3-dimensional space, so they are <b>dependent</b> (method 4). Calculation is needed only to find the actual relation.</div>
+<details><summary>Show full step-by-step solution (finding the relation)</summary>
+<p><b>Step 1.</b> Write au + bv + cw + dx = 0 component by component:</p>
+<div class="eq">a + 2b + c + 2d = 0,  2a − c + d = 0,  3a − b + c = 0</div>
+<p><b>Step 2.</b> From the 2nd equation: c = 2a + d.</p>
+<p><b>Step 3.</b> Substitute into the 3rd: 3a − b + 2a + d = 0 ⇒ b = 5a + d.</p>
+<p><b>Step 4.</b> Substitute b and c into the 1st: a + 2(5a + d) + (2a + d) + 2d = 0 ⇒ 13a + 5d = 0 ⇒ d = −13a/5.</p>
+<p><b>Step 5.</b> Then b = 5a − 13a/5 = 12a/5 and c = 2a − 13a/5 = −3a/5. The value of a is arbitrary.</p>
+<p><b>Step 6.</b> Take a = 5 to clear fractions: <b>5u + 12v − 3w − 13x = 0</b>.</p>
+<p><b>Check</b> (always do this): 1st component 5 + 24 − 3 − 26 = 0 ✓. 2nd: 10 + 0 + 3 − 13 = 0 ✓. 3rd: 15 − 12 − 3 − 0 = 0 ✓.</p>
+</details>
+
+<h3>Worked example: find x so that the vectors are dependent</h3>
+<p>(1, 2, 3), (4, 5, 6), (x, 8, 9). <span class="tag">Book Ex 1.5(a)</span></p>
+<details><summary>Show solution</summary>
+<p>These are 3 vectors in ℝ³, so they are dependent ⇔ det = 0.</p>
+<div class="eq">det = 1(5·9 − 6·8) − 2(4·9 − 6x) + 3(4·8 − 5x) = −3 − 72 + 12x + 96 − 15x = 21 − 3x</div>
+<p>21 − 3x = 0 ⇒ <b>x = 7</b>. Check: (7,8,9) = 2(4,5,6) − (1,2,3) ✓. Here the rows form an arithmetic progression, which is a pattern worth recognising.</p>
+</details>
+
+<div class="lab"><h4>🧮 Calculator – Independence checker with steps (exact fractions)</h4>
+<p class="small">Enter one vector per line, with components separated by commas or spaces. You can use fractions such as 1/2. The calculator row-reduces and shows the rank, a verdict, and an explicit dependence relation if one exists.</p>
+<textarea id="indIn">1, 2, 3
+2, 0, -1
+1, -1, 1
+2, 1, 0</textarea>
+<div class="ctrl"><button id="indBtn">Check independence</button>
+<button class="alt" data-ind="1,2,-1&#10;0,5,-3&#10;-4,1,3">Ex 2(a)</button>
+<button class="alt" data-ind="1,-2,3,1&#10;2,0,-2,2&#10;6,2,1,-5&#10;-3,2,0,1">Ex 2(b)</button>
+<button class="alt" data-ind="1,2,0,-2,-1&#10;3,-1,4,1,-2&#10;0,2,-3,4,1&#10;3,3,3,4,1&#10;-1,0,2,1,3">Ex 2(c)</button>
+<button class="alt" data-ind="1,2,3,4&#10;1,0,2,1&#10;2,-1,4,1&#10;-1,3,0,4">Ex 9</button></div>
+<div class="out" id="indOut"></div>
+</div>
+</section>
+
+<!-- ===================================================== BASIS -->
+<section id="basis">
+<h2>6. Span, basis, dimension, components</h2>
+<div class="box def"><b class="t">Definitions</b>
+<ul>
+<li><b>Dimension</b> of a space is the maximum number of linearly independent vectors it contains.</li>
+<li>A <b>basis</b> of an n-dimensional space is any set of n linearly independent vectors. Equivalently, it is an independent set that spans the space.</li>
+<li>If {x₁, …, xₙ} is a basis, then every vector can be written <b>uniquely</b> as <span class="m">u = a₁x₁ + … + aₙxₙ</span>. The numbers aᵢ are the <b>components</b> (coordinates) of u in this basis.</li>
+</ul></div>
+<div class="box thm"><b class="t">Key theorems</b>
+<ol>
+<li><b>Uniqueness</b> (Exercise 4): if Σaᵢxᵢ = Σbᵢxᵢ with the xᵢ independent, then Σ(aᵢ − bᵢ)xᵢ = 0, so aᵢ = bᵢ.</li>
+<li>The basis is <b>not unique</b> (there are infinitely many choices), but the <b>number</b> of basis vectors is always the same, and that number is the dimension.</li>
+<li>In an n-dimensional space: any n independent vectors form a basis, and any n vectors that span form a basis. More than n vectors must be dependent. Fewer than n vectors cannot span.</li>
+<li>Any independent set can be extended to a basis.</li>
+<li>Every n-dimensional space over F behaves exactly like Fⁿ (it is "isomorphic" to Fⁿ): map a vector to its component list. This is why the book says the space of n-tuples is "the most general vector space".</li>
+</ol></div>
+
+<h3>The standard basis (Book Example 2)</h3>
+<div class="eq">e₁ = (1, 0, …, 0), e₂ = (0, 1, …, 0), …, eₙ = (0, …, 0, 1)</div>
+<p>(a) <b>Independent:</b> Σaᵢeᵢ = (a₁, a₂, …, aₙ) = (0, …, 0) forces every aᵢ = 0.<br>
+(b) <b>Spanning, uniquely:</b> u = (u₁, …, uₙ) = Σ uᵢeᵢ. The components in the standard basis are just the entries.</p>
+
+<div class="lab"><h4>🔬 Lab 4 – Coordinates in a skewed basis (drag the arrow tips and the point P)</h4>
+<canvas id="cvBasis" width="640" height="420"></canvas>
+<div class="out" id="outBasis"></div>
+<p class="small">The skewed grid is made of the lines a·u + b·v with a or b an integer. The coordinates of P are read off this grid. Drag v until it lies along u: the grid collapses to a line, det → 0, and P can no longer be reached. This is exactly the statement "u, v dependent ⇒ not a basis".</p>
+</div>
+
+<h3>How to find components in a general basis</h3>
+<ul>
+<li><b>General basis:</b> solve the linear system Σaᵢxᵢ = u.</li>
+<li><b>Orthogonal basis (shortcut):</b> <span class="m">aᵢ = (xᵢ, u) / (xᵢ, xᵢ)</span>. There is no system to solve.</li>
+<li><b>Orthonormal basis:</b> <span class="m">aᵢ = (xᵢ, u)</span>. In quantum mechanics this is cₙ = ⟨n|ψ⟩.</li>
+</ul>
+
+<h3>Change of basis = a linear transformation</h3>
+<p>If a vector has components xᵢ in one basis and yᵢ in another, the two lists are related linearly: yᵢ = Σ bᵢₖxₖ. This is where matrices enter (see Section 11 below).</p>
+</section>
+
+<!-- ===================================================== N-TUPLES -->
+<section id="ntuple">
+<h2>7. Vector space of n-tuples (the working model)</h2>
+<p>An <b>n-tuple</b> is an ordered list u = (u₁, u₂, …, uₙ) of numbers, all real or all complex. The uᵢ are its <b>components</b>.</p>
+<div class="eq">u = v ⇔ uᵢ = vᵢ for every i   (Eq. 6)</div>
+<div class="eq">u + v = (u₁+v₁, …, uₙ+vₙ),   au = (au₁, …, auₙ)   (Eq. 7)</div>
+<p>The null vector is 0 = (0, …, 0). A <b>real vector</b> has all components real, and a <b>real vector space</b> contains only real vectors.</p>
+<div class="box tip"><b class="t">Why this matters</b> Once you choose a basis, every finite-dimensional problem (polynomials, matrices, spin states) becomes a problem about n-tuples. For example, 3 + 2x − x² ↔ (3, 2, −1), and [[a,b],[c,d]] ↔ (a, b, c, d).</div>
+</section>
+
+<!-- ===================================================== INNER PRODUCT -->
+<section id="inner">
+<h2>8. Inner product space, norm, orthogonality</h2>
+<div class="box def"><b class="t">Definition (inner product, physics convention)</b>
+A vector space over ℝ or ℂ is an <b>inner product space</b> if each pair u, v is assigned a number (u, v) ∈ F such that
+<div class="eq">(u, v) = (v, u)*    (au, bv) = a* b (u, v)    (w, au + bv) = a(w, u) + b(w, v)    (u, u) ≥ 0, with = 0 ⇔ u = 0</div>
+The book states the first three as Eq. (8). The fourth, <b>positivity</b>, is used in Eq. (21) and is essential: without it (u,u) could not be a "length squared".</div>
+<p><b>Consequences:</b> (u, u) = (u, u)*, so (u, u) is always <b>real</b>. The product is <b>linear in the second slot and antilinear (conjugate-linear) in the first</b>: (au, v) = a*(u, v).</p>
+
+<h3>Standard inner product on n-tuples (Eq. 9)</h3>
+<div class="eq">(u, v) = Σᵢ uᵢ* vᵢ = u₁*v₁ + u₂*v₂ + … + uₙ*vₙ</div>
+<p>For real vectors the conjugate does nothing, and this is the ordinary dot product u·v.</p>
+
+<h3>Norm, unit vector, orthogonality</h3>
+<div class="eq">(u, u) = Σ |uᵢ|² ≥ 0    length ‖u‖ = √(u, u)    unit vector û = u / ‖u‖</div>
+<div class="box warnb"><b class="t">Book notation again</b> The book's "norm" ‖u‖ is (u,u) = Σ|uᵢ|², the squared length. That is why it normalises with u/‖u‖<sup>1/2</sup> (Eq. 30). Both mean "divide by the length".</div>
+<ul>
+<li><b>Orthogonal:</b> (u, v) = 0. <b>Orthogonal set:</b> every pair is orthogonal. <b>Orthonormal set:</b> orthogonal and every vector has unit length, i.e. <span class="m">(eᵢ, eⱼ) = δᵢⱼ</span> (Kronecker delta: 1 if i = j, 0 otherwise). The standard basis is orthonormal (Eq. 24).</li>
+<li><b>Pitfall with complex vectors:</b> (1, i) "dot" (1, i) without conjugation gives 1 + i² = 0, which looks like zero length. With the conjugate, (u,u) = 1·1 + (−i)(i) = 2, so ‖u‖ = √2. <b>Always conjugate the first vector.</b></li>
+</ul>
+
+<h3>Variations: other inner products (exam favourites)</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Space</th><th>Inner product</th><th>Comment</th></tr>
+<tr><td>ℝⁿ, weighted</td><td>(u,v) = Σ wᵢuᵢvᵢ, all wᵢ &gt; 0</td><td>valid only if every weight is positive</td></tr>
+<tr><td>ℝⁿ, with matrix</td><td>(u,v) = uᵀGv</td><td>valid ⇔ G is symmetric and positive definite</td></tr>
+<tr><td>Functions on [a,b]</td><td>(f,g) = ∫ₐᵇ f*(x) g(x) dx</td><td>the QM ⟨f|g⟩; leads to Legendre polynomials etc.</td></tr>
+<tr><td>Functions, weight w(x) &gt; 0</td><td>∫ f* g w dx</td><td>w = e<sup>−x²</sup> gives Hermite polynomials, w = e<sup>−x</sup> on [0,∞) gives Laguerre</td></tr>
+<tr><td>Matrices</td><td>(A,B) = Tr(A†B) = Σ A*ᵢⱼBᵢⱼ</td><td>the Hilbert–Schmidt / Frobenius inner product</td></tr>
+<tr><td class="bad">ℝ², (u,v) = u₁v₁ − u₂v₂</td><td>Not valid</td><td>(u,u) = u₁² − u₂² can be negative (this is the Minkowski metric of relativity)</td></tr>
+<tr><td class="bad">ℝ², (u,v) = u₁v₂ + u₂v₁</td><td>Not valid</td><td>(e₁,e₁) = 0 with e₁ ≠ 0</td></tr>
+<tr><td class="bad">ℂⁿ, (u,v) = Σuᵢvᵢ (no conjugate)</td><td>Not valid</td><td>((1,i),(1,i)) = 0</td></tr>
+</table></div>
+
+<h3>Key results</h3>
+<div class="box thm"><ul>
+<li><b>Orthogonal nonzero vectors are independent.</b> So n mutually orthogonal nonzero vectors in an n-dim space form a basis.</li>
+<li><b>Expansion in an orthonormal basis:</b> u = Σ (eᵢ, u) eᵢ.</li>
+<li><b>Pythagoras / Parseval:</b> if u = Σcᵢeᵢ with the eᵢ orthonormal, then ‖u‖² = Σ|cᵢ|². If (u,v) = 0, then ‖u + v‖² = ‖u‖² + ‖v‖².</li>
+<li><b>Parallelogram law:</b> ‖u + v‖² + ‖u − v‖² = 2‖u‖² + 2‖v‖².</li>
+<li><b>Projection of u on v:</b> <span class="m">proj<sub>v</sub>u = [(v, u)/(v, v)] v</span>. The remainder u − proj<sub>v</sub>u is orthogonal to v. This single fact is the whole idea behind Gram–Schmidt.</li>
+</ul></div>
+</section>
+
+<!-- ===================================================== GRAM-SCHMIDT -->
+<section id="gs">
+<h2>9. Schmidt (Gram–Schmidt) orthogonalisation</h2>
+<p><b>Goal:</b> from linearly independent (not orthogonal) vectors u₁, …, uₙ, build orthogonal vectors v₁, …, vₙ that span the <b>same</b> space. Then normalise them.</p>
+<p><b>Idea:</b> take each new vector and <b>subtract its shadows (projections) on all the vectors already built</b>. What remains is perpendicular to all of them.</p>
+<div class="eq">v₁ = u₁<br>v₂ = u₂ − [(v₁,u₂)/(v₁,v₁)] v₁<br>v₃ = u₃ − [(v₁,u₃)/(v₁,v₁)] v₁ − [(v₂,u₃)/(v₂,v₂)] v₂<br>vᵢ = uᵢ − Σ<sub>j&lt;i</sub> [(vⱼ,uᵢ)/(vⱼ,vⱼ)] vⱼ    then  xᵢ = vᵢ/‖vᵢ‖</div>
+<p>In the book's notation, vᵢ = uᵢ + Σ aᵢⱼvⱼ with aᵢⱼ = −(vⱼ, uᵢ)/(vⱼ, vⱼ) (Eqs. 25–30). This is the same formula with the sign moved into the coefficient.</p>
+
+<div class="lab"><h4>🔬 Lab 5 – Watch Gram–Schmidt happen in 3D (drag to rotate)</h4>
+<div class="grid2"><div><canvas id="cvGS" width="480" height="420"></canvas></div>
+<div>
+<div class="ctrl"><label>u₁ <input type="text" id="gsu1" value="2, 1, 0" size="9"></label><label>u₂ <input type="text" id="gsu2" value="1, 2, 0.5" size="9"></label><label>u₃ <input type="text" id="gsu3" value="0.5, 1, 2" size="9"></label></div>
+<div class="ctrl"><button id="gsPrev" class="alt">◀ Back</button><button id="gsNext">Next step ▶</button><button id="gsReset" class="alt">Reset</button></div>
+<div class="out" id="gsOut"></div>
+</div></div>
+<p class="small">Step 1 keeps u₁. Step 2 drops the shadow of u₂ on v₁ (dashed) and keeps the perpendicular part. Step 3 removes u₃'s shadows on v₁ and v₂. Step 4 shrinks everything to unit length. The final three arrows meet at right angles.</p>
+</div>
+
+<h3>Worked example (Book Example 3)</h3>
+<p>u₁ = (1,1,0,1), u₂ = (2,0,0,1), u₃ = (0,2,3,−2), u₄ = (1,1,1,−5).</p>
+<details><summary>Show full step-by-step solution</summary>
+<p><b>v₁</b> = u₁ = (1,1,0,1), with (v₁,v₁) = 3.</p>
+<p><b>v₂:</b> (v₁,u₂) = 2 + 0 + 0 + 1 = 3. Coefficient 3/3 = 1.<br>v₂ = (2,0,0,1) − 1·(1,1,0,1) = <b>(1,−1,0,0)</b>, with (v₂,v₂) = 2.</p>
+<p><b>v₃:</b> (v₁,u₃) = 0 + 2 + 0 − 2 = 0, so there is nothing to remove along v₁. (v₂,u₃) = 0 − 2 = −2, coefficient −2/2 = −1.<br>v₃ = u₃ − 0·v₁ − (−1)v₂ = (0,2,3,−2) + (1,−1,0,0) = <b>(1,1,3,−2)</b>, with (v₃,v₃) = 1 + 1 + 9 + 4 = 15.</p>
+<p><b>v₄:</b> (v₁,u₄) = 1 + 1 + 0 − 5 = −3, coefficient −1. (v₂,u₄) = 1 − 1 = 0. (v₃,u₄) = 1 + 1 + 3 + 10 = 15, coefficient 1.<br>v₄ = u₄ + v₁ − v₃ = (1,1,1,−5) + (1,1,0,1) − (1,1,3,−2) = <b>(1,1,−2,−2)</b>, with (v₄,v₄) = 10.</p>
+<p><b>Check orthogonality:</b> v₁·v₄ = 1 + 1 + 0 − 2 = 0 ✓, v₂·v₄ = 0 ✓, v₃·v₄ = 1 + 1 − 6 + 4 = 0 ✓, v₁·v₃ = 1 + 1 + 0 − 2 = 0 ✓.</p>
+<p><b>Orthonormal set:</b> x₁ = (1,1,0,1)/√3, x₂ = (1,−1,0,0)/√2, x₃ = (1,1,3,−2)/√15, x₄ = (1,1,−2,−2)/√10.</p>
+</details>
+
+<div class="box tip"><b class="t">⚡ Gram–Schmidt shortcuts and traps</b>
+<ul>
+<li><b>Scale freely:</b> multiplying any vᵢ by a nonzero constant does not spoil orthogonality. Clear fractions at every step (e.g. (½, −½, 1) → (1, −1, 2)), and normalise only at the end.</li>
+<li><b>Zero coefficient shortcut:</b> if (vⱼ, uᵢ) = 0, skip that term entirely.</li>
+<li><b>If some vᵢ comes out as 0</b>, then uᵢ was a linear combination of the earlier vectors. Gram–Schmidt doubles as a test for dependence.</li>
+<li><b>Order matters:</b> a different order of the uᵢ gives a different orthogonal set, but it spans the same space.</li>
+<li><b>Complex vectors:</b> the coefficient is (vⱼ, uᵢ)/(vⱼ, vⱼ) with vⱼ in the <b>conjugated (first) slot</b>. Using (uᵢ, vⱼ) by mistake leaves the vectors non-orthogonal (see Practice P31).</li>
+<li><b>MCQ trick:</b> to check a claimed answer, don't redo the process. Just verify that the vectors are mutually orthogonal and that each vᵢ is a combination of u₁…uᵢ.</li>
+<li><b>In 3D with 2 vectors given</b>, the third orthogonal direction is v₁ × v₂ (cross product). This is very fast.</li>
+</ul></div>
+<div class="box fact"><b class="t">Variation: functions</b> Applying Gram–Schmidt to 1, x, x², … with (f,g) = ∫₋₁¹ fg dx produces the <b>Legendre polynomials</b> (up to scale): 1, x, x² − 1/3, x³ − 3x/5, …. With other weights it produces Hermite, Laguerre and Chebyshev polynomials. Computers use a rearranged "modified Gram–Schmidt" (or QR decomposition) because the classical version loses accuracy with rounding.</div>
+
+<div class="lab"><h4>🧮 Calculator – Gram–Schmidt with exact steps (real vectors)</h4>
+<textarea id="gsIn">1, 1, 0, 1
+2, 0, 0, 1
+0, 2, 3, -2
+1, 1, 1, -5</textarea>
+<div class="ctrl"><button id="gsCalcBtn">Orthogonalise</button><label><input type="checkbox" id="gsClear" checked> clear fractions (scale each vᵢ to integers)</label></div>
+<div class="out" id="gsCalcOut"></div>
+</div>
+</section>
+
+<!-- ===================================================== SCHWARZ -->
+<section id="schwarz">
+<h2>10. Schwarz (Cauchy–Schwarz) inequality</h2>
+<div class="box thm"><b class="t">Statement</b>
+<div class="eq">|(u, v)|² ≤ (u, u)(v, v)    i.e.  |(u, v)| ≤ ‖u‖ ‖v‖</div>
+Equality holds <b>if and only if u and v are linearly dependent</b> (one is a multiple of the other). The book's p.12 says "independent", which is a misprint.</div>
+<p>For real vectors this is |u·v| ≤ |u||v|, i.e. <b>|cos θ| ≤ 1</b>. It is the reason the angle cos θ = (u,v)/(‖u‖‖v‖) is well defined in any real inner product space.</p>
+
+<h3>Proof 1 (quick, the standard one)</h3>
+<p>If v = 0 both sides are 0. Otherwise let λ = (v,u)/(v,v) and w = u − λv. This w is the part of u perpendicular to v, so (v, w) = 0. Then</p>
+<div class="eq">0 ≤ (w, w) = (u, u) − |(v,u)|²/(v,v)  ⇒  |(u,v)|² ≤ (u,u)(v,v)</div>
+<p>Equality ⇔ (w,w) = 0 ⇔ w = 0 ⇔ u = λv (dependent).</p>
+<h3>Proof 2 (the book's method, by minimising)</h3>
+<p>Let w = u + λv with λ = α + iβ complex. Expand (w,w) = (u,u) + λ(u,v) + λ*(u,v)* + |λ|²(v,v), using (v,u) = (u,v)*. Setting ∂/∂α = ∂/∂β = 0 gives λ<sub>min</sub> = −(u,v)*/(v,v). Then (w,w)<sub>min</sub> = (u,u) − |(u,v)|²/(v,v) ≥ 0, which is the inequality. (Exercise 13 explains why λ must be allowed to be complex.)</p>
+<h3>Consequences you must know</h3>
+<ul>
+<li><b>Triangle inequality:</b> ‖u + v‖ ≤ ‖u‖ + ‖v‖. Proof: ‖u+v‖² = ‖u‖² + 2Re(u,v) + ‖v‖² ≤ ‖u‖² + 2‖u‖‖v‖ + ‖v‖².</li>
+<li><b>Reverse triangle inequality:</b> |‖u‖ − ‖v‖| ≤ ‖u − v‖.</li>
+<li><b>Sums:</b> (Σaᵢbᵢ)² ≤ (Σaᵢ²)(Σbᵢ²). <b>Integrals:</b> |∫f*g|² ≤ ∫|f|² ∫|g|².</li>
+<li><b>Physics:</b> the Heisenberg uncertainty relation ΔA ΔB ≥ ½|⟨[A,B]⟩| is a direct application. So is |⟨φ|ψ⟩|² ≤ 1 for normalised states (probabilities never exceed 1).</li>
+</ul>
+<div class="box tip"><b class="t">⚡ Shortcut: maximum/minimum problems</b> The maximum of a₁x₁ + … + aₙxₙ subject to x₁² + … + xₙ² = R² is <b>R·√(Σaᵢ²)</b>, reached when x ∥ a. For example, max(3x + 4y) on x² + y² = 1 is 5. The minimum is −R√(Σaᵢ²). Also, (a+b+c)² ≤ 3(a²+b²+c²), taking (1,1,1) as one of the vectors.</div>
+
+<div class="lab"><h4>🔬 Lab 6 – Projection, angle, Schwarz and triangle inequality (drag the arrow tips)</h4>
+<canvas id="cvSch" width="640" height="400"></canvas>
+<div class="out" id="outSch"></div>
+<p class="small">The orange bar |(u,v)| can never be longer than the blue bar ‖u‖‖v‖. They are equal only when you line u up with v (dependent). The dashed line is the perpendicular part w = u − proj. Its length² is exactly the "gap" (u,u) − |(u,v)|²/(v,v) in Proof 1.</p>
+</div>
+</section>
+
+<!-- ===================================================== LINEAR TRANSFORMATIONS -->
+<section id="lt">
+<h2>11. Linear transformations, and how matrices are born</h2>
+<h3>Homogeneous vs inhomogeneous (book's terms)</h3>
+<p>A change of coordinate system that keeps the origin fixed (no translation) is <b>homogeneous</b>. One that includes a translation is <b>inhomogeneous</b>. Shifting the origin does not change a vector's components in Euclidean space, so we only need homogeneous transformations.</p>
+<div class="box def"><b class="t">Linear transformation (operator)</b> T : L → L′ is <b>linear</b> if
+<div class="eq">T(au + bv) = a T(u) + b T(v)   for all vectors u, v and scalars a, b</div>
+In components: the new components are linear functions of the old ones (Eq. 46):
+<div class="eq">yᵢ = Σₖ bᵢₖ xₖ = bᵢ₁x₁ + bᵢ₂x₂ + … + bᵢₙxₙ,  1 ≤ i ≤ n</div>
+The n² numbers bᵢₖ, arranged in a square array, form the <b>matrix</b> of the transformation.</div>
+
+<h3>Successive transformations → matrix multiplication (Eqs. 46–50)</h3>
+<p>Suppose first x → y with yₖ = Σⱼ bₖⱼxⱼ, and then y → z with zᵢ = Σₖ aᵢₖyₖ. Eliminating y:</p>
+<div class="eq">zᵢ = Σₖ aᵢₖ (Σⱼ bₖⱼ xⱼ) = Σⱼ (Σₖ aᵢₖ bₖⱼ) xⱼ = Σⱼ cᵢⱼ xⱼ,    <b>cᵢⱼ = Σₖ aᵢₖ bₖⱼ</b></div>
+<p>This rule, "row i of A times column j of B", <b>is</b> matrix multiplication, C = AB. Matrix algebra was invented (Cayley, 1858) to describe chains of transformations like this. Note the order: the transformation applied <b>first</b> (B) is written on the <b>right</b>.</p>
+<div class="box thm"><b class="t">The single most useful fact</b> The <b>j-th column</b> of the matrix of T is <b>T(eⱼ)</b>, the image of the j-th basis vector. To find a matrix, see where each basis vector goes and write the results as columns.</div>
+
+<div class="lab"><h4>🔬 Lab 7 – See a matrix act on the whole plane</h4>
+<div class="grid2"><div><canvas id="cvLT" width="480" height="440"></canvas></div>
+<div>
+<div class="ctrl"><b>M =</b> [ a b ; c d ]</div>
+<div class="ctrl"><label>a<input type="range" id="ma" min="-3" max="3" step="0.1" value="1"><span id="mav"></span></label><label>b<input type="range" id="mb" min="-3" max="3" step="0.1" value="1"><span id="mbv"></span></label></div>
+<div class="ctrl"><label>c<input type="range" id="mc" min="-3" max="3" step="0.1" value="0"><span id="mcv"></span></label><label>d<input type="range" id="md" min="-3" max="3" step="0.1" value="1"><span id="mdv"></span></label></div>
+<div class="ctrl"><label>morph t<input type="range" id="mt" min="0" max="1" step="0.01" value="1"></label><button id="mAnim">▶ Animate</button></div>
+<div class="ctrl"><select id="mPreset">
+<option value="">— presets —</option>
+<option value="1,1,0,1">Shear</option>
+<option value="0.7071,-0.7071,0.7071,0.7071">Rotation 45°</option>
+<option value="0,-1,1,0">Rotation 90°</option>
+<option value="1,0,0,-1">Reflection in x-axis</option>
+<option value="0,1,1,0">Reflection in y = x</option>
+<option value="1,0,0,0">Projection on x-axis</option>
+<option value="0.5,0.5,0.5,0.5">Projection on y = x</option>
+<option value="2,0,0,0.5">Stretch / squeeze</option>
+<option value="1,2,2,4">Singular (det 0)</option>
+<option value="-1,0,0,-1">Inversion (−I)</option>
+<option value="2,1,1,2">Symmetric (eigen-directions)</option>
+</select></div>
+<div class="out" id="outLT"></div>
+</div></div>
+<p class="small">The blue arrow is M e₁, which equals column 1 of M. The green arrow is M e₂, column 2. The unit square (orange) turns into a parallelogram whose signed area is <b>det M</b>. A negative det means the orientation is flipped, and det = 0 means the plane is crushed onto a line: the transformation can't be undone and its kernel is nonzero. Straight lines stay straight and the origin stays fixed, which is what "linear" means geometrically.</p>
+</div>
+
+<div class="lab"><h4>🔬 Lab 8 – Order matters: AB ≠ BA</h4>
+<div class="ctrl"><label>A = <select id="cA"><option value="0,-1,1,0">Rotate 90°</option><option value="1,1,0,1">Shear x</option><option value="1,0,0,-1">Reflect in x-axis</option><option value="2,0,0,1">Stretch x by 2</option></select></label>
+<label>B = <select id="cB"><option value="1,1,0,1">Shear x</option><option value="0,-1,1,0">Rotate 90°</option><option value="1,0,0,-1">Reflect in x-axis</option><option value="2,0,0,1">Stretch x by 2</option></select></label></div>
+<canvas id="cvComp" width="640" height="360"></canvas>
+<div class="out" id="outComp"></div>
+<p class="small">Grey is the original letter F. Blue is "first B, then A" = (AB)F. Orange is "first A, then B" = (BA)F. When the two shapes differ, the matrices do not commute. Try A = Stretch, B = Rotate (they don't commute) and A = Rotate, B = Rotate (they do).</p>
+</div>
+
+<h3>Catalogue of transformations: linear or not?</h3>
+<div class="tbl-wrap"><table>
+<tr><th>T</th><th>Linear?</th><th>Matrix / comment</th></tr>
+<tr><td>Rotation by θ in ℝ²</td><td class="ok">Yes</td><td>[cos θ, −sin θ; sin θ, cos θ], det 1</td></tr>
+<tr><td>Reflection in a line through 0</td><td class="ok">Yes</td><td>det −1, T² = I</td></tr>
+<tr><td>Projection onto a line/plane through 0</td><td class="ok">Yes</td><td>P² = P, det 0 (if not I)</td></tr>
+<tr><td>Scaling, shear</td><td class="ok">Yes</td><td>diag(k₁,k₂); [1,k;0,1]</td></tr>
+<tr><td>T(r) = a × r</td><td class="ok">Yes</td><td>[0,−a₃,a₂; a₃,0,−a₁; −a₂,a₁,0] (antisymmetric), A³ = −a²A</td></tr>
+<tr><td>d/dx on polynomials</td><td class="ok">Yes</td><td>on P₂ with basis 1, x, x²: [0,1,0; 0,0,2; 0,0,0], nilpotent</td></tr>
+<tr><td>∫₀ˣ f(t) dt</td><td class="ok">Yes</td><td>—</td></tr>
+<tr><td>A ↦ Aᵀ, A ↦ Tr A</td><td class="ok">Yes</td><td>trace is a linear map to scalars (a "linear functional")</td></tr>
+<tr><td>Translation T(r) = r + c, c ≠ 0</td><td class="bad">No</td><td>T(0) = c ≠ 0 (an affine, inhomogeneous map)</td></tr>
+<tr><td>T(x,y) = (x², y), (xy, x), (|x|, y)</td><td class="bad">No</td><td>T(2u) ≠ 2T(u)</td></tr>
+<tr><td>T(x,y) = (x + 1, y)</td><td class="bad">No</td><td>T(0) ≠ 0</td></tr>
+<tr><td>A ↦ det A (n ≥ 2)</td><td class="bad">No</td><td>det(2A) = 2ⁿ det A</td></tr>
+<tr><td>Complex conjugation z ↦ z*</td><td>Over ℝ: <span class="ok">yes</span>. Over ℂ: <span class="bad">no</span></td><td>T(iz) = −iz* ≠ iT(z). It is <b>antilinear</b> (like time reversal in QM).</td></tr>
+<tr><td>Normalisation u ↦ u/‖u‖</td><td class="bad">No</td><td>not defined at 0, and not additive</td></tr>
+</table></div>
+<div class="box tip"><b class="t">⚡ Linearity test in 10 seconds</b>
+(1) Check T(0) = 0. If not, T is not linear. (2) Look for squares, products of components, constants, |·|, sin, etc. Any of these means not linear. (3) If every output component is a plain combination like 3x − 2y + z, T is linear, and the coefficients <b>are</b> the rows of the matrix.</div>
+
+<h3>Kernel, range, rank–nullity</h3>
+<ul>
+<li><b>Kernel (null space):</b> ker T = {u : Tu = 0}, a subspace. <b>Range (image):</b> {Tu}, a subspace.</li>
+<li><b>Rank–nullity theorem:</b> <span class="m">dim(ker T) + dim(range T) = n</span> (the dimension of the domain).</li>
+<li>T is one-to-one ⇔ ker T = {0}. For square matrices: invertible ⇔ det ≠ 0 ⇔ ker = {0} ⇔ the columns are independent ⇔ rank n.</li>
+<li>rank(M) = number of independent rows = number of independent columns.</li>
+</ul>
+
+<h3>Active vs passive (a frequent physics confusion)</h3>
+<p><b>Active:</b> rotate the <i>vector</i> by θ with the axes fixed: r′ = R(θ) r. <b>Passive:</b> rotate the <i>axes</i> by θ with the vector fixed. The new components are then r′ = R(−θ) r = R(θ)ᵀ r:</p>
+<div class="eq">x′ = x cos θ + y sin θ,   y′ = −x sin θ + y cos θ   (axes rotated by θ)</div>
+<p>The book's yᵢ = Σbᵢₖxₖ describes the <b>passive</b> case: the same vector, seen in a new coordinate system.</p>
+
+<h3>Worked examples</h3>
+<div class="prob"><div class="q">E1. Find the matrix of T(x, y, z) = (x + y, y + z, x + 2y + z), and its rank, kernel and range.</div>
+<details><summary>Show solution</summary>
+<p>The rows are the coefficients: M = [1 1 0; 0 1 1; 1 2 1]. Row 3 = row 1 + row 2, so <b>rank = 2</b> and det = 0.</p>
+<p>Kernel: x + y = 0 and y + z = 0 give (x,y,z) = t(1, −1, 1). So <b>nullity = 1</b>, and 2 + 1 = 3 ✓ (rank–nullity).</p>
+<p>Range: spanned by the columns (1,0,1), (1,1,2), (0,1,1). It is a plane in ℝ³. Its normal is (1,0,1) × (0,1,1) = (−1,−1,1), so the range is {(p,q,r) : r = p + q}.</p></details></div>
+
+<div class="prob"><div class="q">E2. Successive transformations: y = Bx with B = [1 2; 0 1], then z = Ay with A = [2 0; 1 1]. Find z in terms of x.</div>
+<details><summary>Show solution</summary>
+<p>z = A(Bx) = (AB)x, with cᵢⱼ = Σₖ aᵢₖbₖⱼ:</p>
+<p>c₁₁ = 2·1 + 0·0 = 2, c₁₂ = 2·2 + 0·1 = 4, c₂₁ = 1·1 + 1·0 = 1, c₂₂ = 1·2 + 1·1 = 3. So AB = [2 4; 1 3].</p>
+<p>z₁ = 2x₁ + 4x₂ and z₂ = x₁ + 3x₂. (Compare BA = [4 2; 1 1], which is different: <b>order matters</b>.)</p>
+<p>Check directly: y₁ = x₁ + 2x₂, y₂ = x₂. Then z₁ = 2y₁ = 2x₁ + 4x₂ ✓ and z₂ = y₁ + y₂ = x₁ + 3x₂ ✓.</p></details></div>
+
+<div class="prob"><div class="q">E3. Find the matrix of d/dx on P₃ (basis 1, x, x², x³). What are its rank and nullity, and what is D⁴?</div>
+<details><summary>Show solution</summary>
+<p>D(1) = 0, D(x) = 1, D(x²) = 2x, D(x³) = 3x². Writing these images as columns:</p>
+<div class="eq">D = [0 1 0 0; 0 0 2 0; 0 0 0 3; 0 0 0 0]</div>
+<p>Rank 3 (the range is P₂). Nullity 1 (the constants). D⁴ = 0, because the 4th derivative of a cubic is 0, so D is <b>nilpotent</b>.</p></details></div>
+
+<div class="lab"><h4>🔬 Lab 9 – The operator A r = a × r (Book Exercise 10): watch A³ = −a²A</h4>
+<div class="grid2"><div><canvas id="cvCross" width="480" height="400"></canvas></div>
+<div>
+<div class="ctrl"><b>a</b><label>x<input type="range" id="ax" min="-2" max="2" step="0.1" value="0"></label><label>y<input type="range" id="ay" min="-2" max="2" step="0.1" value="0"></label><label>z<input type="range" id="az" min="-2" max="2" step="0.1" value="1.2"></label></div>
+<div class="ctrl"><b>r</b><label>x<input type="range" id="rx" min="-2" max="2" step="0.1" value="1.5"></label><label>y<input type="range" id="ry" min="-2" max="2" step="0.1" value="0"></label><label>z<input type="range" id="rz" min="-2" max="2" step="0.1" value="1"></label></div>
+<div class="out" id="outCross"></div>
+</div></div>
+<p class="small">Each application of A removes the part of r along a, rotates the rest by 90° about a, and multiplies its length by |a|. After three applications you get −a² times the first application. The pink A³r always lies along the green Ar, pointing the opposite way.</p>
+</div>
+</section>
+
+<!-- ===================================================== SHORTCUTS -->
+<section id="short">
+<h2>12. Exam shortcut sheet (CSIR-NET / GATE / JEST)</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Question type</th><th>Fastest route</th></tr>
+<tr><td>Is S a vector space / subspace?</td><td>Check that 0 ∈ S, then that au + bv ∈ S. Any constant term, inequality, product, or "exactly degree n" condition means NO.</td></tr>
+<tr><td>Are m vectors in ℝⁿ independent?</td><td>If m &gt; n: dependent. If m = n: compute det. If m &lt; n: find the rank by row reduction. Look for 0 or proportional pairs first.</td></tr>
+<tr><td>Find k making vectors dependent</td><td>Set det = 0 and solve for k. The matrix with k on the diagonal and 1 elsewhere has det (k−1)²(k+2), giving k = 1, −2. In general, det(aI + bJ) for n×n = aⁿ⁻¹(a + nb), where J is the all-ones matrix.</td></tr>
+<tr><td>If u, v, w are independent, are combinations independent?</td><td>Write the coefficient matrix of the new vectors in terms of u, v, w. They are independent ⇔ its det ≠ 0. E.g. u+v, v+w, w+u: det = 2 ≠ 0 (but over GF(2), det = 0).</td></tr>
+<tr><td>Dimension of a matrix subspace</td><td>Count the free entries: symmetric n(n+1)/2, antisymmetric n(n−1)/2, traceless n²−1, Hermitian n² (over ℝ), upper-triangular n(n+1)/2, diagonal n.</td></tr>
+<tr><td>Dimension of a subspace given by equations</td><td>n − (number of independent equations).</td></tr>
+<tr><td>dim(U + W), dim(U ∩ W)</td><td>dim U + dim W − dim(U ∩ W). Two different planes through 0 in ℝ³ meet in a line.</td></tr>
+<tr><td>Components in an orthogonal basis</td><td>aᵢ = (xᵢ,u)/(xᵢ,xᵢ). No system to solve.</td></tr>
+<tr><td>Vector ⟂ to two vectors in ℝ³</td><td>Cross product.</td></tr>
+<tr><td>Gram–Schmidt MCQ</td><td>Check that the options are mutually orthogonal and lie in the right spans. Remember v₁ ∥ u₁ always.</td></tr>
+<tr><td>Normalise a complex vector</td><td>Divide by √(Σ|uᵢ|²), using |a + ib|² = a² + b².</td></tr>
+<tr><td>Max of a·x with |x| = R</td><td>R|a| (Schwarz).</td></tr>
+<tr><td>Independence of functions</td><td>Wronskian at one convenient point (x = 0). e<sup>aᵢx</sup> with distinct aᵢ: always independent (Vandermonde). sin²x, cos²x, 1 (or cos 2x): dependent.</td></tr>
+<tr><td>Is T linear?</td><td>T(0) = 0? Every output a pure linear combination? Then the matrix = coefficient rows.</td></tr>
+<tr><td>Matrix of T</td><td>Columns = T(basis vectors).</td></tr>
+<tr><td>Composition</td><td>Applying B first, then A gives the matrix AB (right to left).</td></tr>
+<tr><td>Rank of T</td><td>Number of independent columns. Nullity = n − rank.</td></tr>
+<tr><td>Is (·,·) an inner product?</td><td>Test (e₁,e₁) &gt; 0, symmetry/conjugate symmetry, and a "minus sign" counterexample. For uᵀGv: G symmetric with all leading principal minors &gt; 0.</td></tr>
+<tr><td>Number of vectors in an n-dim space over GF(q)</td><td>qⁿ. Number of ordered bases: (qⁿ−1)(qⁿ−q)…(qⁿ−qⁿ⁻¹).</td></tr>
+</table></div>
+</section>
+
+<!-- ===================================================== BOOK EXERCISES -->
+<section id="bookex">
+<h2>13. Book's Exercise 1 – all 14 problems solved</h2>
+<p class="small">Here "(u,u)" is the squared length, which is the book's ‖u‖, and ‖u‖ is the length.</p>
+
+<div class="prob"><div class="q">1. Find the norm and write each as a normalised vector: (a) (2,1,3,−1) (b) (1,0,−2,3,5) (c) (1,i) (d) (1+i, −2+3i, 3, 4i) (e) (2+i, 1−i, 0, 3+3i).</div>
+<details><summary>Show solution</summary>
+<p>Rule: (u,u) = Σ|uᵢ|², with |a+ib|² = a² + b². Normalised vector = u/√(u,u).</p>
+<table><tr><th></th><th>(u,u) (book's norm)</th><th>length</th><th>normalised</th></tr>
+<tr><td>(a)</td><td>4+1+9+1 = 15</td><td>√15</td><td>(2,1,3,−1)/√15</td></tr>
+<tr><td>(b)</td><td>1+0+4+9+25 = 39</td><td>√39</td><td>(1,0,−2,3,5)/√39</td></tr>
+<tr><td>(c)</td><td>1 + |i|² = 2</td><td>√2</td><td>(1, i)/√2</td></tr>
+<tr><td>(d)</td><td>2 + 13 + 9 + 16 = 40</td><td>2√10</td><td>(1+i, −2+3i, 3, 4i)/(2√10)</td></tr>
+<tr><td>(e)</td><td>5 + 2 + 0 + 18 = 25</td><td>5</td><td>(2+i, 1−i, 0, 3+3i)/5</td></tr></table>
+<p>Trap in (c): without conjugation you would get 1 + i² = 0. Lengths always use |uᵢ|².</p></details></div>
+
+<div class="prob"><div class="q">2. Dependent or independent? (a) (1,2,−1), (0,5,−3), (−4,1,3) (b) (1,−2,3,1), (2,0,−2,2), (6,2,1,−5), (−3,2,0,1) (c) (1,2,0,−2,−1), (3,−1,4,1,−2), (0,2,−3,4,1), (3,3,3,4,1), (−1,0,2,1,3).</div>
+<details><summary>Show solution</summary>
+<p>(a) det [1 2 −1; 0 5 −3; −4 1 3] = 1(15+3) − 2(0−12) + (−1)(0+20) = 18 + 24 − 20 = 22 ≠ 0 ⇒ <b>independent</b>.</p>
+<p>(b) 4 vectors in ℝ⁴. The 4×4 determinant works out to <b>220 ≠ 0</b> ⇒ <b>independent</b>. (Row-reduce, or expand. Lab calculator: press "Ex 2(b)".)</p>
+<p>(c) 5 vectors in ℝ⁵. Row reduction gives rank 4 (det = 0) ⇒ <b>dependent</b>. The relation is
+<b>v₁ + v₂ + v₃ − v₄ + v₅ = 0</b>, i.e. v₄ = v₁ + v₂ + v₃ + v₅.<br>
+Check, first component: 1 + 3 + 0 − 1 = 3 ✓. Second: 2 − 1 + 2 + 0 = 3 ✓. Third: 0 + 4 − 3 + 2 = 3 ✓. Fourth: −2 + 1 + 4 + 1 = 4 ✓. Fifth: −1 − 2 + 1 + 3 = 1 ✓.<br>
+<b>Exam trick:</b> when one vector looks "different" (here v₄ has all-positive entries), try adding up the others.</p></details></div>
+
+<div class="prob"><div class="q">3. Show (1,1,1), (1,0,−1), (1,−2,1) are independent and orthogonal. Express (i) (1,0,0) and (ii) (2,−1,3) in terms of them.</div>
+<details><summary>Show solution</summary>
+<p>Orthogonal: (1,1,1)·(1,0,−1) = 0, (1,1,1)·(1,−2,1) = 0, (1,0,−1)·(1,−2,1) = 1 − 1 = 0 ✓. Orthogonal nonzero vectors are independent (or det = −6 ≠ 0).</p>
+<p>Use the shortcut aᵢ = (xᵢ,u)/(xᵢ,xᵢ), with (xᵢ,xᵢ) = 3, 2, 6:</p>
+<p>(i) u = (1,0,0): a₁ = 1/3, a₂ = 1/2, a₃ = 1/6. So <b>(1,0,0) = ⅓(1,1,1) + ½(1,0,−1) + ⅙(1,−2,1)</b>.<br>Check: ⅓ + ½ + ⅙ = 1 ✓, ⅓ − ⅓ = 0 ✓, ⅓ − ½ + ⅙ = 0 ✓.</p>
+<p>(ii) u = (2,−1,3): a₁ = 4/3, a₂ = (2−3)/2 = −½, a₃ = (2+2+3)/6 = 7/6. So <b>(2,−1,3) = (4/3)(1,1,1) − ½(1,0,−1) + (7/6)(1,−2,1)</b>.<br>Check: 4/3 − 1/2 + 7/6 = 2 ✓, 4/3 − 7/3 = −1 ✓, 4/3 + 1/2 + 7/6 = 3 ✓.</p></details></div>
+
+<div class="prob"><div class="q">4. If the xᵢ are independent and Σaᵢxᵢ = Σbᵢxᵢ, show aᵢ = bᵢ.</div>
+<details><summary>Show solution</summary>
+<p>Subtract: Σ(aᵢ − bᵢ)xᵢ = 0. Since the xᵢ are independent, the only way a combination can vanish is with all coefficients zero, so aᵢ − bᵢ = 0 for every i. <b>Meaning:</b> components with respect to a basis are unique.</p></details></div>
+
+<div class="prob"><div class="q">5. Find x for which the sets are dependent: (a) (1,2,3), (4,5,6), (x,8,9) (b) (1,1,0), (x,2,−1), (0,0,1) (c) (0,−1,2), (0,1,6), (1,2,x) (d) (2,3,1,4), (1,1,1,1), (0,1,2,x), (1,−1,1,−1).</div>
+<details><summary>Show solution</summary>
+<p>(a) det = 21 − 3x = 0 ⇒ <b>x = 7</b> (worked out in Section 5).</p>
+<p>(b) Expand along row 3 (0,0,1): det = 1·(1·2 − 1·x) = 2 − x ⇒ <b>x = 2</b>. Check: (2,2,−1) = 2(1,1,0) − (0,0,1) ✓.</p>
+<p>(c) Expand along column 1 (0,0,1): det = 1·[(−1)(6) − (2)(1)] = −8 ≠ 0 for <b>every</b> x. So they are <b>never dependent</b>. (The first two vectors are independent and both lack an x-component. The third has one, so it can never be their combination.)</p>
+<p>(d) Expanding the 4×4 determinant gives det = −2x − 2 ⇒ <b>x = −1</b>. Check: with x = −1 the relation is <b>4(2,3,1,4) − 11(1,1,1,1) + 2(0,1,2,−1) + 3(1,−1,1,−1) = 0</b>. Components: 8 − 11 + 0 + 3 = 0, 12 − 11 + 2 − 3 = 0, 4 − 11 + 4 + 3 = 0, 16 − 11 − 2 − 3 = 0 ✓.<br>
+<b>Shortcut for the determinant:</b> x appears only in row 3, column 4, so det is linear in x: det = (cofactor of position (3,4))·x + (det with x = 0). Evaluating at two values of x gives the line.</p></details></div>
+
+<div class="prob"><div class="q">6. Express the vectors of 1(a), 1(d), 1(e) as linear combinations of the four vectors of 2(b).</div>
+<details><summary>Show solution</summary>
+<p>Let b₁ = (1,−2,3,1), b₂ = (2,0,−2,2), b₃ = (6,2,1,−5), b₄ = (−3,2,0,1). They are independent (Ex 2(b)), so they form a basis of ℝ⁴ (and of ℂ⁴ over ℂ). Solving Σcᵢbᵢ = u means solving Bᵀc = u, so c = (Bᵀ)⁻¹u, where</p>
+<div class="eq">(Bᵀ)⁻¹ = (1/220) [ 20 10 60 40 ; 40 31 −12 58 ; 20 32 16 −4 ; 0 88 44 44 ]</div>
+<p><b>1(a)</b> u = (2,1,3,−1): c = (190, 17, 124, 176)/220, so<br><b>u = (19/22)b₁ + (17/220)b₂ + (31/55)b₃ + (4/5)b₄</b>.</p>
+<p><b>Shortcut for complex vectors:</b> split u = (real part) + i(imaginary part), solve each real problem, then combine (this works by linearity).</p>
+<p><b>1(d)</b> = (1,−2,3,0) + i(1,3,0,4):<br>real part → (9/11, −29/110, 1/55, −1/5), imaginary part → (21/22, 73/44, 5/11, 2).<br><b>c = (9/11 + 21i/22, −29/110 + 73i/44, 1/55 + 5i/11, −1/5 + 2i)</b>.</p>
+<p><b>1(e)</b> = (2,1,0,3) + i(1,−1,0,3):<br>real part → (17/22, 57/44, 3/11, 1), imaginary part → (13/22, 183/220, −6/55, 1/5).<br><b>c = (17/22 + 13i/22, 57/44 + 183i/220, 3/11 − 6i/55, 1 + i/5)</b>.</p>
+<p>If the <i>normalised</i> vectors are meant, divide each list of coefficients by √15, 2√10 and 5 respectively.</p>
+<p>Check 1(a), first component: 19/22 + 2(17/220) + 6(31/55) − 3(4/5) = (190 + 34 + 744 − 528)/220 = 440/220 = 2 ✓.</p></details></div>
+
+<div class="prob"><div class="q">7. True or false: (a) pairwise orthogonal ⇒ orthogonal set; (b) pairwise independent ⇒ independent set.</div>
+<details><summary>Show solution</summary>
+<p>(a) <b>True.</b> "Orthogonal set" is <i>defined</i> by pairwise orthogonality, since orthogonality is a property of pairs.</p>
+<p>(b) <b>False.</b> Independence is a property of the whole set. Counterexample: (1,0), (0,1), (1,1). Every pair is independent, but (1,0) + (0,1) − (1,1) = 0. More generally, any 3 vectors in ℝ² are dependent.</p></details></div>
+
+<div class="prob"><div class="q">8. Gram determinant D = det[(uᵢ,uⱼ)]. Prove: the uᵢ are dependent ⇔ D = 0.</div>
+<details><summary>Show solution</summary>
+<p>Let G be the matrix with Gᵢⱼ = (uᵢ, uⱼ), and a = (a₁,…,aₙ).</p>
+<p><b>(⇒)</b> Suppose Σⱼaⱼuⱼ = 0 with a ≠ 0. Take the inner product with uᵢ: Σⱼ(uᵢ,uⱼ)aⱼ = (uᵢ, Σⱼaⱼuⱼ) = 0 for every i. So Ga = 0 with a ≠ 0, and therefore det G = 0.</p>
+<p><b>(⇐)</b> Suppose D = 0. Then there is a ≠ 0 with Ga = 0. Let w = Σⱼaⱼuⱼ. Then (w,w) = Σᵢ Σⱼ aᵢ* aⱼ (uᵢ,uⱼ) = Σᵢ aᵢ* (Ga)ᵢ = 0. Positivity gives w = 0, so Σaⱼuⱼ = 0 with a ≠ 0: the vectors are dependent.</p>
+<p><b>Bonus facts:</b> D ≥ 0 always. For 2 vectors, D = ‖u‖²‖v‖² − |(u,v)|² ≥ 0, which is the Schwarz inequality again. For real vectors, √D is the volume of the parallelepiped they span.</p></details></div>
+
+<div class="prob"><div class="q">9. Show (1,2,3,4), (1,0,2,1), (2,−1,4,1), (−1,3,0,4) are dependent. Find the condition for (x,y,z,w) to be a combination of the first three.</div>
+<details><summary>Show solution</summary>
+<p>Relation: <b>−2(1,2,3,4) + 5(1,0,2,1) − (2,−1,4,1) + (−1,3,0,4) = 0</b>. Check: −2 + 5 − 2 − 1 = 0, −4 + 0 + 1 + 3 = 0, −6 + 10 − 4 + 0 = 0, −8 + 5 − 1 + 4 = 0 ✓. So they are dependent, and (−1,3,0,4) = 2(1,2,3,4) − 5(1,0,2,1) + (2,−1,4,1).</p>
+<p>Condition: write (x,y,z,w) = a(1,2,3,4) + b(1,0,2,1) + c(2,−1,4,1):</p>
+<div class="eq">x = a + b + 2c,  y = 2a − c,  z = 3a + 2b + 4c,  w = 4a + b + c</div>
+<p>Then x + w = 5a + 2b + 3c and y + z = 5a + 2b + 3c. So <b>x + w = y + z</b>. The first three vectors are independent (rank 3), so their span is a 3-dim subspace of ℝ⁴, described by exactly one equation. This is that equation.</p>
+<p><b>Shortcut:</b> look for a pattern each of the three vectors satisfies: 1+4 = 2+3, 1+1 = 0+2, 2+1 = −1+4 ✓.</p></details></div>
+
+<div class="prob"><div class="q">10. If Ar = a × r, show A³ + a²A = 0.</div>
+<details><summary>Show solution</summary>
+<p>Use b × (c × d) = (b·d)c − (b·c)d.</p>
+<p>A²r = a × (a × r) = (a·r)a − a²r.</p>
+<p>A³r = a × [(a·r)a − a²r] = (a·r)(a × a) − a²(a × r) = 0 − a²Ar.</p>
+<p>So (A³ + a²A)r = 0 for every r, i.e. A³ + a²A = 0. Consequence: the eigenvalues λ satisfy λ³ + a²λ = 0, so λ = 0, ±i|a|. (See Lab 9.)</p></details></div>
+
+<div class="prob"><div class="q">11. P(θ) is a rotation by angle θ = |θ| about an axis along θ through the origin. Show that for infinitesimal θ, P(θ)r = r + θ × r.</div>
+<details><summary>Show solution</summary>
+<p>Let n̂ = θ/θ. Split r into r<sub>∥</sub> = (n̂·r)n̂ along the axis and r<sub>⊥</sub> = r − r<sub>∥</sub>. The parallel part does not change. The perpendicular part rotates in the plane spanned by r<sub>⊥</sub> and n̂ × r. This gives the <b>Rodrigues formula</b>:</p>
+<div class="eq">P(θ)r = r cos θ + (n̂ × r) sin θ + n̂(n̂·r)(1 − cos θ)</div>
+<p>For small θ: cos θ ≈ 1 and sin θ ≈ θ, so P(θ)r ≈ r + θ n̂ × r = <b>r + θ × r</b>.</p>
+<p>Geometric picture: the tip of r moves on a circle of radius |r<sub>⊥</sub>| = r sin φ, through an arc of length θ r sin φ, in the direction n̂ × r. That displacement is θ × r. (In mechanics this gives v = ω × r, and in QM the angular momentum operator L generates rotations.)</p></details></div>
+
+<div class="prob"><div class="q">12. Verify the Schwarz inequality for u = (1+i, 2−i, −3), v = (3i, −1+2i, 2+i).</div>
+<details><summary>Show solution</summary>
+<p>(u,v) = Σuᵢ*vᵢ = (1−i)(3i) + (2+i)(−1+2i) + (−3)(2+i)<br>
+= (3i + 3) + (−2 + 4i − i − 2) + (−6 − 3i) = (3 + 3i) + (−4 + 3i) + (−6 − 3i) = <b>−7 + 3i</b>.</p>
+<p>|(u,v)|² = 49 + 9 = 58. (u,u) = 2 + 5 + 9 = 16. (v,v) = 9 + 5 + 5 = 19.</p>
+<p>58 ≤ 16 × 19 = 304 ✓. (In terms of lengths: √58 ≈ 7.62 ≤ 4 × √19 ≈ 17.4.)</p></details></div>
+
+<div class="prob"><div class="q">13. Why must λ be complex in the proof of the Schwarz inequality?</div>
+<details><summary>Show solution</summary>
+<p>Take λ real. Then (w,w) = (u,u) + 2λ Re(u,v) + λ²(v,v) ≥ 0 for every real λ. A quadratic in λ that is never negative must have discriminant ≤ 0:</p>
+<div class="eq">[Re(u,v)]² ≤ (u,u)(v,v)</div>
+<p>This is <b>weaker</b> than the Schwarz inequality, because |Re z| ≤ |z|. It only controls the real part of (u,v). For example, if (u,v) is purely imaginary, it says nothing at all. Allowing λ complex lets us rotate the phase so that the whole of |(u,v)| is captured. For real vectors, (u,v) is real, and a real λ is enough.</p></details></div>
+
+<div class="prob"><div class="q">14. Interpret the Schwarz inequality in the 2D real plane.</div>
+<details><summary>Show solution</summary>
+<p>u·v = |u||v|cos θ, so the inequality reads <b>cos²θ ≤ 1</b>. Equivalently:</p>
+<ul><li>The projection of u onto v, |u| |cos θ|, is never longer than u itself. A shadow is never longer than the stick.</li>
+<li>Lagrange's identity: |u|²|v|² − (u·v)² = (u₁v₂ − u₂v₁)² = (area of the parallelogram)² ≥ 0. Equality means zero area, i.e. collinear (dependent) vectors.</li></ul></details></div>
+</section>
+
+<!-- ===================================================== PRACTICE -->
+<section id="practice">
+<h2>14. Practice set: every problem type (with full solutions)</h2>
+
+<h3>A. Vector spaces and subspaces</h3>
+<div class="prob"><div class="q">P1. Is W = {(x,y,z) : x + 2y − z = 0} a subspace of ℝ³? Find its dimension and a basis. <span class="tag">Type: subspace + basis</span></div>
+<details><summary>Show solution</summary><p>Yes. It contains 0, and if u and v satisfy the equation, so does au + bv (the equation is linear and homogeneous). One equation in ℝ³ gives dimension 3 − 1 = <b>2</b>. Set y = 0: (1,0,1). Set x = 0: (0,1,2). Basis {(1,0,1), (0,1,2)}. (Check: 1 + 0 − 1 = 0, 0 + 2 − 2 = 0 ✓.)</p></details></div>
+<div class="prob"><div class="q">P2. Is {(x,y) : xy ≥ 0} a subspace of ℝ²?</div>
+<details><summary>Show solution</summary><p>No. (1,0) and (0,−1) are both in it (xy = 0), but their sum (1,−1) has xy = −1 &lt; 0. It is not closed under addition, even though it is closed under scalar multiplication.</p></details></div>
+<div class="prob"><div class="q">P3. Is the set of 2×2 real matrices with determinant 0 a subspace?</div>
+<details><summary>Show solution</summary><p>No. diag(1,0) + diag(0,1) = I, and det I = 1. (det is not linear.)</p></details></div>
+<div class="prob"><div class="q">P4. Dimension of {A ∈ M₃(ℝ) : A = Aᵀ, Tr A = 0}? <span class="tag">NET-type</span></div>
+<details><summary>Show solution</summary><p>Symmetric 3×3 matrices: 3·4/2 = 6 free entries. The trace condition is one more equation: 6 − 1 = <b>5</b>. (This is the dimension of the quadrupole tensor and the d-orbital count, 2l+1 with l = 2.)</p></details></div>
+<div class="prob"><div class="q">P5. Do the n×n Hermitian matrices form a vector space over ℂ? Over ℝ? What is the dimension?</div>
+<details><summary>Show solution</summary><p>Over ℂ: no, since H† = H ⇒ (iH)† = −iH, which is anti-Hermitian. Over ℝ: yes, because a real combination of Hermitian matrices is Hermitian. The dimension is n²: n real diagonal entries plus 2 real numbers for each of the n(n−1)/2 upper off-diagonal entries gives n + n(n−1) = n². For n = 2 the basis is {I, σₓ, σᵧ, σ_z}.</p></details></div>
+<div class="prob"><div class="q">P6. In P₃ (polynomials of degree ≤ 3), what is the dimension of {p : p(1) = 0}? Give a basis.</div>
+<details><summary>Show solution</summary><p>dim P₃ = 4 and there is one linear condition, so the dimension is <b>3</b>. Every such p = (x − 1)q(x) with deg q ≤ 2. Basis: (x−1), x(x−1), x²(x−1).</p></details></div>
+<div class="prob"><div class="q">P7. U = xy-plane and W = yz-plane in ℝ³. Find dim(U ∩ W) and dim(U + W).</div>
+<details><summary>Show solution</summary><p>U ∩ W = the y-axis, dimension 1. dim(U + W) = 2 + 2 − 1 = 3, so U + W = ℝ³.</p></details></div>
+<div class="prob"><div class="q">P8. What is the dimension of ℂ³ as a vector space over ℝ? Give a basis.</div>
+<details><summary>Show solution</summary><p><b>6</b>: e₁, e₂, e₃, ie₁, ie₂, ie₃. Each complex component carries 2 real numbers.</p></details></div>
+<div class="prob"><div class="q">P9. What is the dimension of the solution space of y‴ − y′ = 0?</div>
+<details><summary>Show solution</summary><p>Third-order linear homogeneous ⇒ dimension 3. Basis: 1, eˣ, e⁻ˣ (roots of m³ − m = 0 are 0, ±1). Equivalently 1, cosh x, sinh x.</p></details></div>
+
+<h3>B. Linear independence</h3>
+<div class="prob"><div class="q">P10. For what k are (k,1,1), (1,k,1), (1,1,k) dependent? <span class="tag">very common</span></div>
+<details><summary>Show solution</summary><p>det = k³ − 3k + 2 = (k − 1)²(k + 2). <b>k = 1</b> (all three vectors are equal) or <b>k = −2</b> (the sum is 0). Shortcut: the matrix is (k−1)I + J, so det = (k−1)²(k−1+3).</p></details></div>
+<div class="prob"><div class="q">P11. u, v, w are independent. Are (a) u+v, v+w, w+u and (b) u−v, v−w, w−u independent?</div>
+<details><summary>Show solution</summary><p>Write the coefficient rows in terms of (u,v,w). (a) [1 1 0; 0 1 1; 1 0 1], det = 1(1) − 1(0 − 1) + 0 = 2 ≠ 0 ⇒ <b>independent</b>. (b) The three vectors add up to 0 ⇒ <b>dependent</b> (det = 0).</p></details></div>
+<div class="prob"><div class="q">P12. Are 1, x, x² independent functions? Are eˣ, e²ˣ, e³ˣ?</div>
+<details><summary>Show solution</summary><p>W(1,x,x²) = det[1 x x²; 0 1 2x; 0 0 2] = 2 ≠ 0 ⇒ independent.<br>W(eˣ,e²ˣ,e³ˣ) = e⁶ˣ·det[1 1 1; 1 2 3; 1 4 9] = e⁶ˣ(2−1)(3−1)(3−2) = 2e⁶ˣ ≠ 0 ⇒ independent (a Vandermonde determinant).</p></details></div>
+<div class="prob"><div class="q">P13. Are sin²x, cos²x, cos 2x independent?</div>
+<details><summary>Show solution</summary><p>No: cos 2x = cos²x − sin²x, so sin²x − cos²x + cos 2x = 0 ⇒ dependent. The span is 2-dimensional.</p></details></div>
+<div class="prob"><div class="q">P14. Over ℝ, are cos x, sin x, e^{ix} independent (as complex-valued functions)? Over ℂ?</div>
+<details><summary>Show solution</summary><p>Over ℂ: e^{ix} = cos x + i sin x ⇒ dependent. Over ℝ: suppose a cos x + b sin x + c e^{ix} = 0 with a, b, c real. The imaginary part is c sin x = 0, so c = 0, and then a = b = 0 ⇒ <b>independent</b>. Independence depends on the field.</p></details></div>
+<div class="prob"><div class="q">P15. Are (1,0,1), (0,1,1), (1,1,0) independent over ℝ? Over GF(2)?</div>
+<details><summary>Show solution</summary><p>det = 1(0 − 1) − 0 + 1(0 − 1) = −2. Over ℝ: −2 ≠ 0 ⇒ independent. Over GF(2): −2 ≡ 0 ⇒ dependent, and indeed their sum (2,2,2) ≡ (0,0,0).</p></details></div>
+<div class="prob"><div class="q">P16. Are the Pauli matrices σₓ, σᵧ, σ_z linearly independent (over ℂ)?</div>
+<details><summary>Show solution</summary><p>aσₓ + bσᵧ + cσ_z = [c, a − ib; a + ib, −c] = 0 ⇒ c = 0, a − ib = 0, a + ib = 0 ⇒ a = b = 0. Independent. Together with I they form a basis of all 2×2 complex matrices.</p></details></div>
+<div class="prob"><div class="q">P17. For which a is {(1,a), (a,1)} a basis of ℝ²?</div>
+<details><summary>Show solution</summary><p>det = 1 − a² ≠ 0 ⇔ <b>a ≠ ±1</b>.</p></details></div>
+<div class="prob"><div class="q">P18. Using the Gram determinant, test (1,2) and (2,4).</div>
+<details><summary>Show solution</summary><p>G = [5 10; 10 20], det = 100 − 100 = 0 ⇒ dependent (indeed (2,4) = 2(1,2)).</p></details></div>
+
+<h3>C. Bases and components</h3>
+<div class="prob"><div class="q">P19. Find the coordinates of (3,5) in the basis (1,1), (1,−1).</div>
+<details><summary>Show solution</summary><p>The basis is orthogonal, so a = (3+5)/2 = 4 and b = (3−5)/2 = −1. Check: 4(1,1) − (1,−1) = (3,5) ✓.</p></details></div>
+<div class="prob"><div class="q">P20. Expand (2,3,4) in the orthogonal basis (1,1,1), (1,0,−1), (1,−2,1).</div>
+<details><summary>Show solution</summary><p>a₁ = 9/3 = 3, a₂ = (2 − 4)/2 = −1, a₃ = (2 − 6 + 4)/6 = 0. So (2,3,4) = 3(1,1,1) − (1,0,−1) ✓.</p></details></div>
+<div class="prob"><div class="q">P21. Write M = [1 2; 3 4] as aI + bσₓ + cσᵧ + dσ_z. <span class="tag">QM favourite</span></div>
+<details><summary>Show solution</summary><p>Shortcut: under (A,B) = Tr(A†B), the matrices I, σₖ are orthogonal with norm² 2. So each coefficient is Tr(σₖM)/2.<br>a = Tr M/2 = 5/2. d = (1 − 4)/2 = −3/2. b = (M₁₂ + M₂₁)/2 = 5/2. c = i(M₁₂ − M₂₁)/2 = −i/2.<br>Check: M₁₂ = b − ic = 5/2 − 1/2 = 2 ✓, M₂₁ = b + ic = 5/2 + 1/2 = 3 ✓.</p></details></div>
+<div class="prob"><div class="q">P22. The span of (1,2,3), (2,4,6), (1,0,1): what is its dimension?</div>
+<details><summary>Show solution</summary><p>(2,4,6) = 2(1,2,3), and (1,0,1) is not parallel to (1,2,3). Dimension <b>2</b> (a plane).</p></details></div>
+
+<h3>D. Inner products, norms, orthogonality</h3>
+<div class="prob"><div class="q">P23. Which are inner products on ℝ²? (a) 2u₁v₁ + 3u₂v₂ (b) u₁v₁ − u₂v₂ (c) u₁v₂ + u₂v₁ (d) u₁v₁ + u₁v₂ + u₂v₁ + 2u₂v₂</div>
+<details><summary>Show solution</summary><p>(a) Yes (positive weights). (b) No: (e₂,e₂) = −1. (c) No: (e₁,e₁) = 0. (d) Yes: G = [1 1; 1 2] is symmetric with leading minors 1 &gt; 0 and det = 1 &gt; 0, so it is positive definite. Equivalently (u,u) = (u₁ + u₂)² + u₂² &gt; 0.</p></details></div>
+<div class="prob"><div class="q">P24. The angle between u = (1,0,1,0) and v = (1,1,0,0)?</div>
+<details><summary>Show solution</summary><p>u·v = 1 and |u| = |v| = √2, so cos θ = 1/2 and θ = <b>60°</b>.</p></details></div>
+<div class="prob"><div class="q">P25. With (f,g) = ∫₀¹ fg dx, find ‖x‖ and the angle between 1 and x.</div>
+<details><summary>Show solution</summary><p>(x,x) = 1/3 ⇒ ‖x‖ = 1/√3. (1,1) = 1. (1,x) = 1/2. cos θ = (1/2)/(1·1/√3) = √3/2 ⇒ θ = <b>30°</b>.</p></details></div>
+<div class="prob"><div class="q">P26. Show that u = (1, i) and v = (i, 1) are orthogonal in ℂ².</div>
+<details><summary>Show solution</summary><p>(u,v) = 1*·i + i*·1 = i + (−i) = 0 ✓. Without conjugation you would get i + i = 2i, which is wrong.</p></details></div>
+<div class="prob"><div class="q">P27. Find a,b such that (1,a,b) ⟂ (1,1,1) and (1,a,b) ⟂ (1,−1,0).</div>
+<details><summary>Show solution</summary><p>1 + a + b = 0 and 1 − a = 0 ⇒ a = 1, b = −2. Check with the cross product: (1,1,1) × (1,−1,0) = (0·1 − 1·(−1), 1·1 − 1·0, 1·(−1) − 1·1) = (1, 1, −2) ✓.</p></details></div>
+<div class="prob"><div class="q">P28. Normalise (3, 4i) and (1+i, 1−i, 2).</div>
+<details><summary>Show solution</summary><p>(3, 4i): 9 + 16 = 25 ⇒ (3, 4i)/5. (1+i, 1−i, 2): 2 + 2 + 4 = 8 ⇒ divide by 2√2.</p></details></div>
+
+<h3>E. Gram–Schmidt</h3>
+<div class="prob"><div class="q">P29. Orthonormalise (1,1,0), (1,0,1), (0,1,1).</div>
+<details><summary>Show solution</summary><p>v₁ = (1,1,0), (v₁,v₁) = 2.<br>v₂ = (1,0,1) − (1/2)(1,1,0) = (1/2, −1/2, 1). Scale to (1,−1,2), (v₂,v₂) = 6.<br>v₃ = (0,1,1) − (1/2)(1,1,0) − [(1,−1,2)·(0,1,1)/6](1,−1,2) = (0,1,1) − (½,½,0) − (1/6)(1,−1,2) = (−2/3, 2/3, 2/3). Scale to (−1,1,1).<br>Orthonormal: (1,1,0)/√2, (1,−1,2)/√6, (−1,1,1)/√3. Check: (1,−1,2)·(−1,1,1) = −1 − 1 + 2 = 0 ✓.</p></details></div>
+<div class="prob"><div class="q">P30. Gram–Schmidt on 1, x, x² with (f,g) = ∫₋₁¹ fg dx.</div>
+<details><summary>Show solution</summary><p>v₁ = 1, (1,1) = 2. (1,x) = 0 ⇒ v₂ = x, (x,x) = 2/3. (1,x²) = 2/3 and (x,x²) = 0 ⇒ v₃ = x² − (2/3)/2 = <b>x² − 1/3</b>. Up to scale this is P₂(x) = (3x² − 1)/2, a Legendre polynomial. Normalised: 1/√2, √(3/2) x, √(45/8)(x² − 1/3).</p></details></div>
+<div class="prob"><div class="q">P31. Complex Gram–Schmidt: u₁ = (1, i), u₂ = (1, 1) in ℂ².</div>
+<details><summary>Show solution</summary><p>v₁ = (1,i), (v₁,v₁) = 2. (v₁,u₂) = 1·1 + (−i)·1 = 1 − i.<br>v₂ = (1,1) − [(1−i)/2](1,i) = (1 − (1−i)/2, 1 − (i+1)/2) = ((1+i)/2, (1−i)/2).<br>Check: (v₁,v₂) = 1·(1+i)/2 + (−i)(1−i)/2 = [(1+i) + (−i − 1)]/2 = 0 ✓.<br><b>Trap:</b> using (u₂,v₁) = 1 + i instead gives a non-orthogonal vector.</p></details></div>
+<div class="prob"><div class="q">P32. Gram–Schmidt on (1,2,3), (2,4,6), (0,0,1): what happens?</div>
+<details><summary>Show solution</summary><p>v₂ = (2,4,6) − 2(1,2,3) = 0. A zero vector appears, so u₂ depends on u₁. Drop it and continue: v₃ = (0,0,1) − (3/14)(1,2,3) = (−3, −6, 5)/14. The result is an orthogonal basis of the 2-dim span.</p></details></div>
+
+<h3>F. Schwarz inequality</h3>
+<div class="prob"><div class="q">P33. Find the maximum of 3x + 4y + 12z on x² + y² + z² = 4.</div>
+<details><summary>Show solution</summary><p>|(3,4,12)·(x,y,z)| ≤ √(9 + 16 + 144)·2 = 13·2 = <b>26</b>, attained at (x,y,z) = (2/13)(3,4,12).</p></details></div>
+<div class="prob"><div class="q">P34. Show (a + b + c)² ≤ 3(a² + b² + c²).</div>
+<details><summary>Show solution</summary><p>Apply Schwarz to (1,1,1) and (a,b,c): (a+b+c)² ≤ (1+1+1)(a²+b²+c²). Equality ⇔ a = b = c.</p></details></div>
+<div class="prob"><div class="q">P35. If x, y, z &gt; 0 and x + y + z = 1, show 1/x + 1/y + 1/z ≥ 9.</div>
+<details><summary>Show solution</summary><p>Apply Schwarz to (√x, √y, √z) and (1/√x, 1/√y, 1/√z): (1 + 1 + 1)² ≤ (x + y + z)(1/x + 1/y + 1/z) = 1·(Σ1/x). So Σ1/x ≥ 9.</p></details></div>
+<div class="prob"><div class="q">P36. Verify Schwarz for u = (1,2,2), v = (3,0,4), and find the angle.</div>
+<details><summary>Show solution</summary><p>u·v = 3 + 0 + 8 = 11. |u| = 3, |v| = 5. 11 ≤ 15 ✓. cos θ = 11/15 ⇒ θ ≈ 42.8°.</p></details></div>
+
+<h3>G. Linear transformations</h3>
+<div class="prob"><div class="q">P37. Which are linear? (a) T(x,y) = (2x − y, 3y) (b) T(x,y) = (x + 1, y) (c) T(x,y) = (xy, x) (d) T(f) = f″ + f (e) T(z) = z* on ℂ over ℂ (f) T(A) = AB − BA for fixed B</div>
+<details><summary>Show solution</summary><p>(a) Linear, matrix [2 −1; 0 3]. (b) Not linear: T(0) = (1,0). (c) Not linear: T(2u) = (4xy, 2x) ≠ 2T(u). (d) Linear. (e) Not linear over ℂ (it is antilinear), though it is linear over ℝ. (f) Linear (the commutator map).</p></details></div>
+<div class="prob"><div class="q">P38. Find the matrix of the rotation by θ about the z-axis in ℝ³, and of the projection onto the plane z = 0.</div>
+<details><summary>Show solution</summary><p>Columns are the images of e₁, e₂, e₃: R = [cos θ −sin θ 0; sin θ cos θ 0; 0 0 1]. Projection P = diag(1,1,0), with P² = P and rank 2.</p></details></div>
+<div class="prob"><div class="q">P39. Find the matrix of T(r) = a × r with a = (a₁,a₂,a₃).</div>
+<details><summary>Show solution</summary><p>T(e₁) = a × e₁ = (0, a₃, −a₂), T(e₂) = (−a₃, 0, a₁), T(e₃) = (a₂, −a₁, 0). As columns: [0 −a₃ a₂; a₃ 0 −a₁; −a₂ a₁ 0], an antisymmetric matrix. Every 3×3 antisymmetric matrix is a cross product with some vector.</p></details></div>
+<div class="prob"><div class="q">P40. Show R(α)R(β) = R(α + β) for 2D rotations. Do 2D rotations commute?</div>
+<details><summary>Show solution</summary><p>Multiply: the (1,1) entry is cos α cos β − sin α sin β = cos(α+β), and the (2,1) entry is sin α cos β + cos α sin β = sin(α+β), and so on. So R(α)R(β) = R(α+β) = R(β)R(α): yes, they commute (SO(2) is abelian). 3D rotations about different axes do not.</p></details></div>
+<div class="prob"><div class="q">P41. A linear map T: ℝ⁵ → ℝ³ has rank 3. What is dim ker T?</div>
+<details><summary>Show solution</summary><p>Rank–nullity: 5 − 3 = <b>2</b>.</p></details></div>
+<div class="prob"><div class="q">P42. Axes are rotated by 30° (passive). Find the new components of r = (2, 0).</div>
+<details><summary>Show solution</summary><p>x′ = x cos θ + y sin θ = 2(√3/2) = √3. y′ = −x sin θ + y cos θ = −1. So (√3, −1). The vector appears rotated by −30°, and its length 2 is unchanged.</p></details></div>
+
+<h3>H. Groups and fields</h3>
+<div class="prob"><div class="q">P43. Is {1, −1, i, −i} a group under multiplication? Under addition?</div>
+<details><summary>Show solution</summary><p>Multiplication: yes (closed, identity 1, inverses 1, −1, −i, i, cyclic). Addition: no, since 1 + i is not in the set and 0 is missing.</p></details></div>
+<div class="prob"><div class="q">P44. Find the inverse of 3 in ℤ₇ and explain why ℤ₈ is not a field.</div>
+<details><summary>Show solution</summary><p>3·5 = 15 ≡ 1 (mod 7) ⇒ 3⁻¹ = 5. In ℤ₈, 2·4 = 8 ≡ 0, so 2 has no inverse (if 2y ≡ 1 then 4 ≡ 4·2y ≡ 0, a contradiction).</p></details></div>
+<div class="prob"><div class="q">P45. How many vectors does a 3-dimensional space over GF(2) have? How many ordered bases does GF(2)² have?</div>
+<details><summary>Show solution</summary><p>2³ = 8 vectors. Ordered bases of GF(2)²: (4 − 1)(4 − 2) = 6, because the first vector is any of the 3 nonzero vectors and the second is any vector not a multiple of the first (2 choices).</p></details></div>
+</section>
+
+<!-- ===================================================== QUIZ -->
+<section id="quiz" class="quiz">
+<h2>15. Self-test quiz (exam style)</h2>
+<p class="small">Choose an answer for each question, then press "Check". Every question has an explanation.</p>
+<div id="quizBox"></div>
+<div class="ctrl"><button id="quizCheck">Check answers</button><button class="alt" id="quizReset">Reset</button><span id="quizScore"></span></div>
+</section>
+
+<!-- ===================================================== FACTS -->
+<section id="facts">
+<h2>16. Interesting facts and the big picture</h2>
+<div class="box fact"><ul>
+<li><b>History:</b> Cayley's 1858 "memoir on matrices" came directly from composing linear transformations, which is exactly Eqs. (46)–(50). Peano gave the axiomatic definition of a vector space in 1888.</li>
+<li><b>Abelian</b> is named after Niels Henrik Abel (1802–1829), who proved that the general quintic equation cannot be solved by radicals, using group-like ideas.</li>
+<li><b>Schwarz inequality</b> has three discoverers: Cauchy (1821, for sums), Bunyakovsky (1859, for integrals), Schwarz (1888). It is called CBS in some books.</li>
+<li><b>Every vector space has a basis.</b> For infinite dimensions this needs the axiom of choice. Nobody can write down a basis of ℝ over ℚ (a "Hamel basis").</li>
+<li><b>Quantum mechanics</b> is linear algebra in a complex inner product space (a Hilbert space). States are vectors, observables are Hermitian linear operators, (φ,ψ) = ⟨φ|ψ⟩ is a probability amplitude, and the conjugate in the first slot is exactly Dirac's "bra".</li>
+<li><b>Superposition</b> works because the solutions of linear homogeneous equations (Schrödinger, Maxwell in vacuum, the wave equation) form a vector space.</li>
+<li><b>Fourier series</b> are orthonormal expansion in disguise: cₙ = (eₙ, f) with eₙ = e^{inx}/√(2π), and Parseval's theorem is Pythagoras in infinite dimensions.</li>
+<li><b>Minkowski spacetime</b> uses a "metric" x₀y₀ − x·y that is <i>not</i> positive definite. So it is not an inner product in this chapter's sense, which is why light-like vectors have zero "length" without being zero.</li>
+<li><b>Dimension counting in physics:</b> 2×2 traceless Hermitian matrices form a 3-dim space (the Pauli matrices), which is why spin-½ lives on a sphere (the Bloch sphere). 3×3 traceless Hermitian matrices form an 8-dim space (the Gell-Mann matrices), giving the 8 gluons of QCD.</li>
+</ul></div>
+<div class="box thm"><b class="t">One-paragraph summary</b> A vector space is a set where you can add and scale. Independence means no redundancy, and a basis is a minimal set that builds everything. The dimension is the size of a basis. An inner product adds lengths and angles. Gram–Schmidt turns any basis into a perpendicular one, and Schwarz says a shadow is never longer than the object. A linear transformation is fixed by where it sends the basis vectors. Writing those images as columns gives a matrix, and doing two transformations in a row multiplies the matrices.</div>
+</section>
+
+<script>
+/* ================= common helpers ================= */
+const $=id=>document.getElementById(id);
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function pal(){return{ink:css('--ink'),muted:css('--muted'),line:css('--line'),bg:css('--card'),blue:css('--acc'),orange:css('--acc2'),green:css('--acc3'),purple:css('--acc4'),pink:'#e64980',red:css('--warn')}}
+const redrawers=[];
+function fmt(x,d=2){if(Math.abs(x)<1e-9)x=0;return (+x.toFixed(d)).toString()}
+function vfmt(v,d=2){return '('+v.map(x=>fmt(x,d)).join(', ')+')'}
+function arrow(ctx,x1,y1,x2,y2,col,w=2.5,label,dash){
+  ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;
+  if(dash)ctx.setLineDash(dash);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.setLineDash([]);
+  const L=Math.hypot(x2-x1,y2-y1);
+  if(L>3){const a=Math.atan2(y2-y1,x2-x1),h=Math.min(12,L*0.4);ctx.beginPath();ctx.moveTo(x2,y2);
+    ctx.lineTo(x2-h*Math.cos(a-0.4),y2-h*Math.sin(a-0.4));ctx.lineTo(x2-h*Math.cos(a+0.4),y2-h*Math.sin(a+0.4));ctx.closePath();ctx.fill();}
+  if(label){ctx.font='bold 14px Segoe UI, sans-serif';ctx.fillText(label,x2+6,y2-6)}
+  ctx.restore();
+}
+const add=(a,b)=>a.map((x,i)=>x+b[i]), sub=(a,b)=>a.map((x,i)=>x-b[i]), mul=(k,a)=>a.map(x=>k*x);
+const dot=(a,b)=>a.reduce((s,x,i)=>s+x*b[i],0), nrm=a=>Math.sqrt(dot(a,a));
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const det3=(u,v,w)=>dot(u,cross(v,w));
+function evtPos(cv,e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height]}
+
+/* theme */
+$('themeBtn').onclick=()=>{const h=document.documentElement;const dark=h.getAttribute('data-theme')?h.getAttribute('data-theme')==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  h.setAttribute('data-theme',dark?'light':'dark');redrawers.forEach(f=>f());};
+
+/* ================= 3D scene ================= */
+class Scene3D{
+  constructor(cv,onDraw){this.cv=cv;this.ctx=cv.getContext('2d');this.yaw=-0.75;this.pitch=0.42;this.s=cv.height/9;this.onDraw=onDraw;
+    let drag=null;
+    cv.addEventListener('pointerdown',e=>{drag=evtPos(cv,e);cv.setPointerCapture(e.pointerId)});
+    cv.addEventListener('pointermove',e=>{if(!drag)return;const p=evtPos(cv,e);this.yaw-=(p[0]-drag[0])*0.01;this.pitch=Math.max(-1.45,Math.min(1.45,this.pitch+(p[1]-drag[1])*0.01));drag=p;this.draw()});
+    cv.addEventListener('pointerup',()=>drag=null);cv.addEventListener('pointercancel',()=>drag=null);
+    cv.style.cursor='grab';redrawers.push(()=>this.draw());}
+  P(p){const [x,y,z]=p,cy=Math.cos(this.yaw),sy=Math.sin(this.yaw);const x1=x*cy-y*sy,y1=x*sy+y*cy;
+    const cp=Math.cos(this.pitch),sp=Math.sin(this.pitch);const Y=z*cp+y1*sp,dep=y1*cp-z*sp;const f=14/(14+dep);
+    return[this.cv.width/2+x1*this.s*f,this.cv.height/2-Y*this.s*f];}
+  line(a,b,col,w=1,dash){const c=this.ctx,p=this.P(a),q=this.P(b);c.save();c.strokeStyle=col;c.lineWidth=w;if(dash)c.setLineDash(dash);c.beginPath();c.moveTo(...p);c.lineTo(...q);c.stroke();c.restore()}
+  arrow(a,b,col,label,w=2.6,dash){const p=this.P(a),q=this.P(b);arrow(this.ctx,p[0],p[1],q[0],q[1],col,w,label,dash)}
+  poly(pts,fill,alpha=0.18){const c=this.ctx;c.save();c.globalAlpha=alpha;c.fillStyle=fill;c.beginPath();pts.forEach((p,i)=>{const q=this.P(p);i?c.lineTo(...q):c.moveTo(...q)});c.closePath();c.fill();c.restore()}
+  text(p,t,col){const q=this.P(p);this.ctx.fillStyle=col;this.ctx.font='13px Segoe UI, sans-serif';this.ctx.fillText(t,q[0]+4,q[1]-4)}
+  axes(L=3.5){const pl=pal();for(let i=-3;i<=3;i++){this.line([i,-3,0],[i,3,0],pl.line,1);this.line([-3,i,0],[3,i,0],pl.line,1)}
+    this.line([-L,0,0],[L,0,0],pl.muted,1.2);this.line([0,-L,0],[0,L,0],pl.muted,1.2);this.line([0,0,-L],[0,0,L],pl.muted,1.2);
+    this.text([L,0,0],'x',pl.muted);this.text([0,L,0],'y',pl.muted);this.text([0,0,L],'z',pl.muted);}
+  draw(){const c=this.ctx;c.clearRect(0,0,this.cv.width,this.cv.height);c.fillStyle=pal().bg;c.fillRect(0,0,this.cv.width,this.cv.height);this.onDraw(this)}
+}
+
+/* ================= 2D plane ================= */
+class Plane2D{
+  constructor(cv,unit,onDraw){this.cv=cv;this.ctx=cv.getContext('2d');this.u=unit;this.ox=cv.width/2;this.oy=cv.height/2;this.drag=[];this.onDraw=onDraw;this.act=null;
+    cv.addEventListener('pointerdown',e=>{const p=evtPos(cv,e);let best=null,bd=18;this.drag.forEach(d=>{const s=this.S(d.get());const dd=Math.hypot(s[0]-p[0],s[1]-p[1]);if(dd<bd){bd=dd;best=d}});
+      if(best){this.act=best;cv.setPointerCapture(e.pointerId)}});
+    cv.addEventListener('pointermove',e=>{const p=evtPos(cv,e);if(this.act){const w=this.W(p);this.act.set([Math.round(w[0]*10)/10,Math.round(w[1]*10)/10]);this.draw();}
+      else{const near=this.drag.some(d=>{const s=this.S(d.get());return Math.hypot(s[0]-p[0],s[1]-p[1])<18});cv.style.cursor=near?'pointer':'default'}});
+    const up=()=>this.act=null;cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+    redrawers.push(()=>this.draw());}
+  S(p){return[this.ox+p[0]*this.u,this.oy-p[1]*this.u]}
+  W(p){return[(p[0]-this.ox)/this.u,(this.oy-p[1])/this.u]}
+  grid(){const c=this.ctx,pl=pal(),W=this.cv.width,H=this.cv.height;c.save();c.strokeStyle=pl.line;c.lineWidth=1;
+    for(let x=this.ox%this.u;x<W;x+=this.u){c.beginPath();c.moveTo(x,0);c.lineTo(x,H);c.stroke()}
+    for(let y=this.oy%this.u;y<H;y+=this.u){c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke()}
+    c.strokeStyle=pl.muted;c.lineWidth=1.3;c.beginPath();c.moveTo(0,this.oy);c.lineTo(W,this.oy);c.moveTo(this.ox,0);c.lineTo(this.ox,H);c.stroke();c.restore()}
+  line(a,b,col,w=1,dash){const c=this.ctx,p=this.S(a),q=this.S(b);c.save();c.strokeStyle=col;c.lineWidth=w;if(dash)c.setLineDash(dash);c.beginPath();c.moveTo(...p);c.lineTo(...q);c.stroke();c.restore()}
+  lineInf(p,d,col,w=1,dash){const n=Math.hypot(d[0],d[1]);if(n<1e-9)return;const e=[d[0]/n*60,d[1]/n*60];this.line(sub(p,e),add(p,e),col,w,dash)}
+  arrow(a,b,col,label,w=2.6,dash){const p=this.S(a),q=this.S(b);arrow(this.ctx,p[0],p[1],q[0],q[1],col,w,label,dash)}
+  poly(pts,fill,alpha=0.25,stroke){const c=this.ctx;c.save();c.beginPath();pts.forEach((p,i)=>{const q=this.S(p);i?c.lineTo(...q):c.moveTo(...q)});c.closePath();c.globalAlpha=alpha;c.fillStyle=fill;c.fill();c.globalAlpha=1;if(stroke){c.strokeStyle=stroke;c.lineWidth=1.5;c.stroke()}c.restore()}
+  dot(p,col,r=6){const c=this.ctx,q=this.S(p);c.fillStyle=col;c.beginPath();c.arc(q[0],q[1],r,0,7);c.fill()}
+  text(p,t,col,dx=6,dy=-6){const q=this.S(p);this.ctx.fillStyle=col;this.ctx.font='bold 14px Segoe UI, sans-serif';this.ctx.fillText(t,q[0]+dx,q[1]+dy)}
+  draw(){const c=this.ctx;c.clearRect(0,0,this.cv.width,this.cv.height);c.fillStyle=pal().bg;c.fillRect(0,0,this.cv.width,this.cv.height);this.onDraw(this)}
+}
+
+/* ================= exact fractions ================= */
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a||1}
+class Fr{constructor(n,d=1){if(d===0)throw'div0';if(d<0){n=-n;d=-d}const g=gcd(n,d);this.n=n/g;this.d=d/g}
+  add(o){return new Fr(this.n*o.d+o.n*this.d,this.d*o.d)} sub(o){return new Fr(this.n*o.d-o.n*this.d,this.d*o.d)}
+  mul(o){return new Fr(this.n*o.n,this.d*o.d)} div(o){return new Fr(this.n*o.d,this.d*o.n)}
+  isZero(){return this.n===0} isOne(){return this.n===1&&this.d===1} val(){return this.n/this.d}
+  toString(){return this.d===1?''+this.n:this.n+'/'+this.d}}
+function parseFr(s){s=s.trim();if(s.includes('/')){const [a,b]=s.split('/');return parseFr(a).div(parseFr(b))}
+  if(!/^[-+]?\d*\.?\d+$/.test(s))throw 'Cannot read "'+s+'"';const k=(s.split('.')[1]||'').length;return new Fr(Math.round(parseFloat(s)*10**k),10**k)}
+function frNum(x){return parseFr(String(Math.round(x*1000)/1000))}
+function parseVecs(txt){return txt.trim().split(/\n+/).filter(l=>l.trim()).map(l=>l.trim().split(/[\s,;]+/).filter(Boolean).map(parseFr))}
+function matStr(A){const S=A.map(r=>r.map(x=>x.toString()));const w=Math.max(...S.flat().map(s=>s.length));return S.map(r=>'  [ '+r.map(s=>s.padStart(w)).join('  ')+' ]').join('\n')}
+function rref(M){const A=M.map(r=>r.slice()),R=A.length,C=A[0].length;let r=0;const piv=[],steps=[];
+  for(let c=0;c<C&&r<R;c++){let p=-1;for(let i=r;i<R;i++)if(!A[i][c].isZero()){p=i;break}if(p<0)continue;
+    if(p!==r){[A[p],A[r]]=[A[r],A[p]];steps.push(`R${r+1} ↔ R${p+1}`)}
+    const pv=A[r][c];if(!pv.isOne()){A[r]=A[r].map(x=>x.div(pv));steps.push(`R${r+1} → R${r+1} ÷ (${pv})`)}
+    for(let i=0;i<R;i++)if(i!==r&&!A[i][c].isZero()){const f=A[i][c];A[i]=A[i].map((x,j)=>x.sub(f.mul(A[r][j])));steps.push(`R${i+1} → R${i+1} − (${f})·R${r+1}`)}
+    steps.push(matStr(A));piv.push(c);r++;}
+  return{A,piv,steps}}
+function detFr(M){const A=M.map(r=>r.slice()),n=A.length;let d=new Fr(1);
+  for(let c=0;c<n;c++){let p=-1;for(let i=c;i<n;i++)if(!A[i][c].isZero()){p=i;break}if(p<0)return new Fr(0);
+    if(p!==c){[A[p],A[c]]=[A[c],A[p]];d=d.mul(new Fr(-1))}d=d.mul(A[c][c]);
+    for(let i=c+1;i<n;i++){const f=A[i][c].div(A[c][c]);A[i]=A[i].map((x,j)=>x.sub(f.mul(A[c][j])))}}return d}
+function intScale(v){let L=1;v.forEach(x=>{L=L/gcd(L,x.d)*x.d});let ints=v.map(x=>x.n*(L/x.d));const g=ints.reduce((a,b)=>gcd(a,b),0)||1;ints=ints.map(x=>x/g);
+  if(ints.find(x=>x!==0)<0)ints=ints.map(x=>-x);return ints}
+function nullSpace(res,C){const {A,piv}=res;const free=[];for(let c=0;c<C;c++)if(!piv.includes(c))free.push(c);
+  return free.map(f=>{const x=Array(C).fill(0).map(()=>new Fr(0));x[f]=new Fr(1);piv.forEach((pc,i)=>{x[pc]=A[i][f].mul(new Fr(-1))});return x})}
+
+/* ================= Lab 1: U(1) ================= */
+(function(){const cv=$('cvU1'),c=cv.getContext('2d');
+ function draw(){const a=+$('u1a').value,b=+$('u1b').value;$('u1av').textContent=a+'°';$('u1bv').textContent=b+'°';
+  const pl=pal(),W=cv.width,H=cv.height,cx=W/2,cy=H/2,R=130;c.clearRect(0,0,W,H);c.fillStyle=pl.bg;c.fillRect(0,0,W,H);
+  c.strokeStyle=pl.line;c.beginPath();c.moveTo(0,cy);c.lineTo(W,cy);c.moveTo(cx,0);c.lineTo(cx,H);c.stroke();
+  c.strokeStyle=pl.muted;c.lineWidth=1.5;c.beginPath();c.arc(cx,cy,R,0,7);c.stroke();
+  c.fillStyle=pl.muted;c.font='13px Segoe UI';c.fillText('Re',W-24,cy-6);c.fillText('Im',cx+6,14);c.fillText('1',cx+R+4,cy+14);
+  const pt=t=>[cx+R*Math.cos(t*Math.PI/180),cy-R*Math.sin(t*Math.PI/180)];
+  const A=pt(a),B=pt(b),P=pt(a+b);
+  arrow(c,cx,cy,A[0],A[1],'#2f6fdf',2.5,'z₁');arrow(c,cx,cy,B[0],B[1],'#2b9348',2.5,'z₂');arrow(c,cx,cy,P[0],P[1],'#e8590c',3,'z₁z₂');
+  if($('u1inv').checked){const I=pt(-a);arrow(c,cx,cy,I[0],I[1],'#9c36b5',2,'z₁⁻¹',[5,4])}
+  c.fillStyle=pl.ink;c.font='14px Segoe UI';
+  c.fillText(`z₁z₂ = e^{i(${a}°+${b}°)} = e^{i${(a+b)%360}°},  |z₁z₂| = 1`,10,H-12);}
+ ['u1a','u1b','u1inv'].forEach(id=>$(id).addEventListener('input',draw));redrawers.push(draw);draw();})();
+
+/* ================= Lab 2: Z_n ================= */
+(function(){function build(){const n=+$('zn').value;$('znv').textContent=n;let h='<table style="width:auto"><tr><th>×</th>';
+  for(let j=1;j<n;j++)h+=`<th>${j}</th>`;h+='</tr>';let field=true;
+  for(let i=1;i<n;i++){let hasInv=false,row='';for(let j=1;j<n;j++){const v=(i*j)%n;if(v===1)hasInv=true;
+      row+=`<td style="text-align:center;${v===1?'background:var(--softg);font-weight:700':''}${v===0?'color:var(--warn);font-weight:700':''}">${v}</td>`}
+    if(!hasInv)field=false;h+=`<tr><th style="${hasInv?'':'background:var(--softr)'}">${i}</th>${row}</tr>`}
+  $('zntable').innerHTML=h+'</table>';
+  $('znverdict').innerHTML=field?`<span class="ok">ℤ<sub>${n}</sub> IS a field (${n} is prime)</span>`:`<span class="bad">ℤ<sub>${n}</sub> is NOT a field: some rows have no 1, and red zeros show zero divisors (${n} is not prime)</span>`}
+ $('zn').addEventListener('input',build);build();})();
+
+/* ================= Lab 3: 3D independence ================= */
+(function(){const ids=['ux','uy','uz','vx','vy','vz','wx','wy','wz','ca','cb','cc'];
+ const g=id=>+$(id).value;
+ const sc=new Scene3D($('cv3d'),S=>{const pl=pal();S.axes();
+  const u=[g('ux'),g('uy'),g('uz')],v=[g('vx'),g('vy'),g('vz')],w=[g('wx'),g('wy'),g('wz')];
+  const vs=[u,v,w];const D=det3(u,v,w);
+  // numeric rank
+  const nz=vs.filter(x=>nrm(x)>1e-9);let rank=0;
+  if(Math.abs(D)>1e-9)rank=3;else{const cr=[cross(u,v),cross(v,w),cross(u,w)];if(cr.some(c=>nrm(c)>1e-9))rank=2;else rank=nz.length?1:0}
+  if(rank===3){const V=[[0,0,0],u,v,w,add(u,v),add(u,w),add(v,w),add(add(u,v),w)];
+    const E=[[0,1],[0,2],[0,3],[1,4],[1,5],[2,4],[2,6],[3,5],[3,6],[4,7],[5,7],[6,7]];
+    S.poly([V[0],V[1],V[4],V[2]],pl.blue,0.12);S.poly([V[0],V[1],V[5],V[3]],pl.green,0.10);S.poly([V[0],V[2],V[6],V[3]],pl.orange,0.10);
+    E.forEach(([a,b])=>S.line(V[a],V[b],pl.muted,1,[4,3]));}
+  else if(rank===2){const cr=[cross(u,v),cross(v,w),cross(u,w)].sort((a,b)=>nrm(b)-nrm(a))[0];const n=mul(1/nrm(cr),cr);
+    const big=vs.sort((a,b)=>nrm(b)-nrm(a))[0];const e1=mul(1/nrm(big),big),e2=cross(n,e1);const L=3.6;
+    S.poly([add(mul(L,e1),mul(L,e2)),add(mul(-L,e1),mul(L,e2)),add(mul(-L,e1),mul(-L,e2)),add(mul(L,e1),mul(-L,e2))],pl.purple,0.18);
+    for(let k=-3;k<=3;k++){S.line(add(mul(k,e1),mul(-L,e2)),add(mul(k,e1),mul(L,e2)),pl.purple,0.6);S.line(add(mul(-L,e1),mul(k,e2)),add(mul(L,e1),mul(k,e2)),pl.purple,0.6)}}
+  else if(rank===1){const d=nz[0],e=mul(4/nrm(d),d);S.line(mul(-1,e),e,pl.purple,4)}
+  S.arrow([0,0,0],u,pl.blue,'u');S.arrow([0,0,0],v,pl.green,'v');S.arrow([0,0,0],w,pl.orange,'w');
+  const a=g('ca'),b=g('cb'),c=g('cc');const p1=mul(a,u),p2=add(p1,mul(b,v)),p3=add(p2,mul(c,w));
+  S.line([0,0,0],p1,pl.blue,1.5,[3,3]);S.line(p1,p2,pl.green,1.5,[3,3]);S.line(p2,p3,pl.orange,1.5,[3,3]);
+  S.arrow([0,0,0],p3,pl.purple,'au+bv+cw',3);
+  // output
+  const M=[u,v,w].map(r=>r.map(frNum));let rel='';
+  if(rank<3){const cols=[0,1,2].map(i=>[u[i],v[i],w[i]].map(frNum));const R=rref(cols);const ns=nullSpace(R,3);
+    if(ns.length){const k=intScale(ns[0]);rel='\nRelation: '+[['u',k[0]],['v',k[1]],['w',k[2]]].filter(t=>t[1]!==0).map(t=>`(${t[1]})${t[0]}`).join(' + ')+' = 0'}}
+  $('out3d').textContent=`u = ${vfmt(u,1)}\nv = ${vfmt(v,1)}\nw = ${vfmt(w,1)}\n\ndet[u;v;w] = ${fmt(D,3)}   rank = ${rank}\n`+
+   (rank===3?'✔ INDEPENDENT: span = all of ℝ³ (box volume = |det|)':rank===2?'✘ DEPENDENT: all three lie in one plane (span = plane)':rank===1?'✘ DEPENDENT: all on one line':'✘ all zero')+rel+
+   `\n\nau+bv+cw = ${vfmt(p3)}`;});
+ ids.forEach(id=>$(id).addEventListener('input',()=>sc.draw()));
+ const presets={ind:[2,0,0, 0,2,0, 0.5,0.5,2],cop:[2,0,0, 0,2,0, 1,1.5,0],col:[1,1,0.5, 2,2,1, -1,-1,-0.5],zero:[2,0,1, 0,2,0, 0,0,0]};
+ document.querySelectorAll('[data-p3]').forEach(b=>b.onclick=()=>{presets[b.dataset.p3].forEach((x,i)=>$(ids[i]).value=x);sc.draw()});
+ sc.draw();})();
+
+/* ================= Independence calculator ================= */
+(function(){function run(){const out=$('indOut');try{const V=parseVecs($('indIn').value);if(!V.length)throw'Enter vectors';const n=V[0].length;
+   if(V.some(v=>v.length!==n))throw'All vectors must have the same number of components';const m=V.length;
+   const C=[...Array(n)].map((_,i)=>V.map(v=>v[i]));
+   let s=`${m} vectors in a ${n}-dimensional space.\n`;if(m>n)s+=`⚡ m = ${m} > n = ${n} ⇒ automatically DEPENDENT (shortcut). Finding the relation anyway:\n`;
+   if(m===n)s+=`Square case ⇒ det = ${detFr(V)}  (det ≠ 0 ⇔ independent)\n`;
+   s+=`\nSolve c₁v₁+…+c${m===1?'₁':'ₘ'}v${m===1?'₁':'ₘ'} = 0. Coefficient matrix (vectors as COLUMNS):\n${matStr(C)}\n\nRow reduction:\n`;
+   const R=rref(C);s+=R.steps.join('\n')+'\n';const rank=R.piv.length;s+=`\nrank = ${rank}\n`;
+   if(rank===m)s+='✔ LINEARLY INDEPENDENT (only solution: all cᵢ = 0)';
+   else{s+=`✘ LINEARLY DEPENDENT (${m-rank} free parameter${m-rank>1?'s':''})\n`;nullSpace(R,m).forEach((x,k)=>{const c=intScale(x);
+     s+=`Relation ${k+1}: `+c.map((ci,i)=>ci?`(${ci})v${i+1}`:'').filter(Boolean).join(' + ')+' = 0\n'})}
+   out.textContent=s}catch(e){out.textContent='Error: '+e}}
+ $('indBtn').onclick=run;document.querySelectorAll('[data-ind]').forEach(b=>b.onclick=()=>{$('indIn').value=b.dataset.ind;run()});run();})();
+
+/* ================= Lab 4: basis / coordinates ================= */
+(function(){let u=[2,0.5],v=[0.5,1.5],P=[3,2.5];
+ const pl2=new Plane2D($('cvBasis'),40,S=>{const pl=pal();S.grid();const D=u[0]*v[1]-u[1]*v[0];
+  if(Math.abs(D)>0.02){for(let k=-12;k<=12;k++){S.lineInf(mul(k,u),v,pl.purple,0.7);S.lineInf(mul(k,v),u,pl.purple,0.7)}
+    const a=(P[0]*v[1]-P[1]*v[0])/D,b=(u[0]*P[1]-u[1]*P[0])/D;const A=mul(a,u);
+    S.arrow([0,0],A,pl.blue,null,2,[5,4]);S.arrow(A,P,pl.green,null,2,[5,4]);
+    $('outBasis').textContent=`u = ${vfmt(u,1)},  v = ${vfmt(v,1)},  det[u v] = ${fmt(D,2)}  ✔ basis\nP = ${vfmt(P,1)} = (${fmt(a)})·u + (${fmt(b)})·v\nComponents of P in basis {u, v}: (${fmt(a)}, ${fmt(b)})   (in standard basis: ${vfmt(P,1)})`;}
+  else{S.lineInf([0,0],nrm(u)>0.01?u:v,pl.red,3);$('outBasis').textContent=`u = ${vfmt(u,1)},  v = ${vfmt(v,1)},  det = ${fmt(D,2)}\n✘ u and v are (almost) parallel ⇒ DEPENDENT ⇒ not a basis. Span is only the red line; most points P cannot be reached.`}
+  S.arrow([0,0],u,pl.blue,'u',3);S.arrow([0,0],v,pl.green,'v',3);S.dot(P,pl.orange,7);S.text(P,'P',pl.orange);
+  [u,v].forEach(p=>S.dot(p,pl.ink,4));});
+ pl2.drag=[{get:()=>u,set:p=>u=p},{get:()=>v,set:p=>v=p},{get:()=>P,set:p=>P=p}];pl2.draw();})();
+
+/* ================= Lab 5: Gram–Schmidt 3D ================= */
+(function(){let stage=0,t=1,anim=null,U=[],V=[],E=[],ok=true;
+ function load(){try{U=['gsu1','gsu2','gsu3'].map(id=>{const a=$(id).value.split(/[\s,]+/).filter(Boolean).map(Number);if(a.length!==3||a.some(isNaN))throw 0;return a})}catch(e){U=[[2,1,0],[1,2,0.5],[0.5,1,2]]}
+  V=[];ok=true;U.forEach(u=>{let w=u.slice();V.forEach(v=>{w=sub(w,mul(dot(v,u)/dot(v,v),v))});if(nrm(w)<1e-6)ok=false;V.push(w)});
+  E=V.map(v=>nrm(v)>1e-9?mul(1/nrm(v),v):v);}
+ function go(s){stage=Math.max(0,Math.min(4,s));t=0;cancelAnimationFrame(anim);const t0=performance.now();
+  const step=now=>{t=Math.min(1,(now-t0)/900);sc.draw();if(t<1)anim=requestAnimationFrame(step)};anim=requestAnimationFrame(step);}
+ const sc=new Scene3D($('cvGS'),S=>{const pl=pal();S.axes();const O=[0,0,0],col=[pl.blue,pl.green,pl.orange];let msg='';
+  if(!ok){U.forEach((u,i)=>S.arrow(O,u,col[i],'u'+(i+1)));$('gsOut').textContent='The input vectors are linearly DEPENDENT: some vᵢ becomes 0. Change them.';return}
+  const fade=pl.muted;
+  if(stage===0){U.forEach((u,i)=>S.arrow(O,u,col[i],'u'+(i+1)));msg='Start: three independent but non-orthogonal vectors.\nu₁·u₂ = '+fmt(dot(U[0],U[1]))+',  u₁·u₃ = '+fmt(dot(U[0],U[2]))+',  u₂·u₃ = '+fmt(dot(U[1],U[2]));}
+  if(stage>=1&&stage<=3){S.arrow(O,V[0],pl.blue,'v₁',3.4)}
+  if(stage===1){S.arrow(O,U[1],fade,'u₂',1.5);S.arrow(O,U[2],fade,'u₃',1.5);msg='Step 1: v₁ = u₁ = '+vfmt(V[0]);}
+  if(stage===2){const p=mul(dot(V[0],U[1])/dot(V[0],V[0]),V[0]);S.arrow(O,U[2],fade,'u₃',1.5);S.arrow(O,U[1],fade,'u₂',1.5,[4,3]);
+    S.arrow(O,p,pl.orange,'proj',2,[5,4]);const cur=sub(U[1],mul(t,p));S.line(U[1],cur,pl.red,1.5,[3,3]);S.arrow(O,cur,pl.green,t>0.99?'v₂':'',3.4);
+    msg=`Step 2: coefficient (v₁,u₂)/(v₁,v₁) = ${fmt(dot(V[0],U[1]))}/${fmt(dot(V[0],V[0]))} = ${fmt(dot(V[0],U[1])/dot(V[0],V[0]),3)}\nproj = ${vfmt(p)}\nv₂ = u₂ − proj = ${vfmt(V[1])}\ncheck v₁·v₂ = ${fmt(dot(V[0],V[1]),4)}`;}
+  if(stage===3){S.arrow(O,V[1],pl.green,'v₂',3.4);const L=3.2,e1=E[0],e2=E[1];S.poly([add(mul(L,e1),mul(L,e2)),add(mul(-L,e1),mul(L,e2)),add(mul(-L,e1),mul(-L,e2)),add(mul(L,e1),mul(-L,e2))],pl.purple,0.12);
+    const p1=mul(dot(V[0],U[2])/dot(V[0],V[0]),V[0]),p2=mul(dot(V[1],U[2])/dot(V[1],V[1]),V[1]);S.arrow(O,U[2],fade,'u₃',1.5,[4,3]);
+    S.arrow(O,add(p1,p2),pl.purple,'shadow in plane',2,[5,4]);const cur=sub(U[2],mul(t,add(p1,p2)));S.line(U[2],cur,pl.red,1.5,[3,3]);S.arrow(O,cur,pl.orange,t>0.99?'v₃':'',3.4);
+    msg=`Step 3: remove u₃'s shadows on v₁ and v₂\n(v₁,u₃)/(v₁,v₁) = ${fmt(dot(V[0],U[2])/dot(V[0],V[0]),3)},  (v₂,u₃)/(v₂,v₂) = ${fmt(dot(V[1],U[2])/dot(V[1],V[1]),3)}\nv₃ = ${vfmt(V[2])}  ⟂ shaded plane of v₁,v₂\ncheck v₁·v₃ = ${fmt(dot(V[0],V[2]),4)}, v₂·v₃ = ${fmt(dot(V[1],V[2]),4)}`;}
+  if(stage===4){V.forEach((v,i)=>{const k=(1-t)+t/nrm(v);S.arrow(O,mul(k,v),col[i],'x'+(i+1),3.4)});
+    msg='Step 4: normalise xᵢ = vᵢ/‖vᵢ‖\n'+E.map((e,i)=>`x${i+1} = ${vfmt(e,3)}`).join('\n')+'\n→ orthonormal: xᵢ·xⱼ = δᵢⱼ';}
+  $('gsOut').textContent=`Stage ${stage}/4\n`+msg;});
+ $('gsNext').onclick=()=>go(stage+1);$('gsPrev').onclick=()=>go(stage-1);$('gsReset').onclick=()=>{load();go(0)};
+ ['gsu1','gsu2','gsu3'].forEach(id=>$(id).addEventListener('change',()=>{load();go(0)}));load();sc.draw();})();
+
+/* ================= Gram–Schmidt calculator ================= */
+(function(){const dotF=(a,b)=>a.reduce((s,x,i)=>s.add(x.mul(b[i])),new Fr(0));
+ function run(){const out=$('gsCalcOut');try{const U=parseVecs($('gsIn').value);const n=U[0].length;if(U.some(u=>u.length!==n))throw'Vectors must have equal length';
+   const clear=$('gsClear').checked;const V=[];let s='';
+   U.forEach((u,i)=>{s+=`\n— v${i+1} —\n`;let w=u.slice();let parts=[];
+     V.forEach((v,j)=>{const num=dotF(v,u),den=dotF(v,v),c=num.div(den);s+=`(v${j+1},u${i+1}) = ${num},  (v${j+1},v${j+1}) = ${den}  ⇒ coefficient ${c}\n`;
+       if(!num.isZero()){w=w.map((x,k)=>x.sub(c.mul(v[k])));parts.push(`(${c})v${j+1}`)}});
+     s+=`v${i+1} = u${i+1}${parts.length?' − '+parts.join(' − '):''} = (${w.join(', ')})\n`;
+     if(w.every(x=>x.isZero())){s+=`⚠ v${i+1} = 0 ⇒ u${i+1} depends on the previous vectors. Dropping it.\n`;return}
+     if(clear){const k=intScale(w);const cur=w.find(x=>!x.isZero());const sign=Math.sign(cur.val())*Math.sign(k[w.indexOf(cur)]);w=k.map(x=>new Fr(sign*x));s+=`scaled ⇒ v${i+1} = (${w.join(', ')})\n`}
+     V.push(w)});
+   s+='\n=== Orthogonal set ===\n'+V.map((v,i)=>`v${i+1} = (${v.join(', ')}),  (v,v) = ${dotF(v,v)}`).join('\n');
+   s+='\n\n=== Orthonormal set ===\n'+V.map((v,i)=>{const q=dotF(v,v);const r=Math.sqrt(q.val());const nice=Number.isInteger(r)&&q.d===1;return `x${i+1} = (${v.join(', ')})${nice?(r===1?'':' / '+r):' / √('+q+')'}`}).join('\n');
+   let chk=[];for(let i=0;i<V.length;i++)for(let j=i+1;j<V.length;j++)chk.push(`v${i+1}·v${j+1} = ${dotF(V[i],V[j])}`);s+='\n\nCheck: '+(chk.join(',  ')||'—');
+   out.textContent=s.trim()}catch(e){out.textContent='Error: '+e}}
+ $('gsCalcBtn').onclick=run;run();})();
+
+/* ================= Lab 6: Schwarz ================= */
+(function(){let u=[2,3],v=[4,1];
+ const S2=new Plane2D($('cvSch'),45,S=>{const pl=pal();S.ox=S.cv.width*0.42;S.grid();
+  const uv=dot(u,v),nu=nrm(u),nv=nrm(v);S.arrow([0,0],add(u,v),pl.muted,'u+v',1.5,[4,4]);S.line(u,add(u,v),pl.muted,1,[2,4]);
+  if(nv>1e-9){const p=mul(uv/(nv*nv),v);S.lineInf([0,0],v,pl.line,1);S.arrow([0,0],p,pl.orange,'proj',3);S.line(p,u,pl.red,2,[5,4]);}
+  S.arrow([0,0],u,pl.blue,'u',3);S.arrow([0,0],v,pl.green,'v',3);S.dot(u,pl.ink,4);S.dot(v,pl.ink,4);
+  const c=S.ctx,W=S.cv.width,H=S.cv.height,maxv=Math.max(nu*nv,1),bw=(W*0.3)/maxv,x0=W*0.66,y0=H-70;
+  c.fillStyle=pl.bg;c.globalAlpha=0.85;c.fillRect(x0-10,y0-26,W-x0+5,90);c.globalAlpha=1;c.font='13px Segoe UI';
+  c.fillStyle=pl.orange;c.fillRect(x0,y0,Math.abs(uv)*bw,16);c.fillStyle=pl.ink;c.fillText('|(u,v)| = '+fmt(Math.abs(uv)),x0,y0-6);
+  c.fillStyle=pl.blue;c.fillRect(x0,y0+36,nu*nv*bw,16);c.fillStyle=pl.ink;c.fillText('‖u‖‖v‖ = '+fmt(nu*nv),x0,y0+32);
+  const th=Math.acos(Math.max(-1,Math.min(1,uv/(nu*nv||1))))*180/Math.PI;const dep=Math.abs(u[0]*v[1]-u[1]*v[0])<1e-9;
+  $('outSch').textContent=`u = ${vfmt(u,1)}, v = ${vfmt(v,1)}\n(u,v) = ${fmt(uv)},  ‖u‖ = ${fmt(nu)},  ‖v‖ = ${fmt(nv)},  θ = ${fmt(th,1)}°,  cos θ = ${fmt(uv/(nu*nv||1),3)}\nSchwarz: |(u,v)|² = ${fmt(uv*uv)} ≤ (u,u)(v,v) = ${fmt(nu*nu*nv*nv)}  ${dep?'← EQUALITY (u ∥ v, dependent)':'(strict: u, v independent)'}\nGap (u,u) − |(u,v)|²/(v,v) = ${fmt(nu*nu-uv*uv/(nv*nv||1))} = |perpendicular part|²\nTriangle: ‖u+v‖ = ${fmt(nrm(add(u,v)))} ≤ ‖u‖+‖v‖ = ${fmt(nu+nv)}`;});
+ S2.drag=[{get:()=>u,set:p=>u=p},{get:()=>v,set:p=>v=p}];S2.draw();})();
+
+/* ================= Lab 7: matrix on plane ================= */
+(function(){const ids=['ma','mb','mc','md'];let animH=null;
+ const S7=new Plane2D($('cvLT'),40,S=>{const pl=pal();const [a,b,c,d]=ids.map(i=>+$(i).value);ids.forEach(i=>$(i+'v').textContent=(+$(i).value).toFixed(1));
+  const t=+$('mt').value;const A=(1-t)+t*a,B=t*b,C=t*c,D=(1-t)+t*d;const T=p=>[A*p[0]+B*p[1],C*p[0]+D*p[1]];
+  S.grid();for(let k=-12;k<=12;k++){S.line(T([k,-12]),T([k,12]),pl.blue,k===0?1.6:0.6);S.line(T([-12,k]),T([12,k]),pl.green,k===0?1.6:0.6)}
+  S.poly([[0,0],T([1,0]),T([1,1]),T([0,1])],pl.orange,0.35,pl.orange);
+  const e1=T([1,0]),e2=T([0,1]);S.arrow([0,0],e1,pl.blue,'Me₁',3.2);S.arrow([0,0],e2,pl.green,'Me₂',3.2);
+  const det=a*d-b*c,tr=a+d,disc=tr*tr-4*det;let eig='';
+  if(t>0.99){if(disc>=-1e-9){const r=Math.sqrt(Math.max(0,disc)),l1=(tr+r)/2,l2=(tr-r)/2;eig=`eigenvalues ${fmt(l1)}, ${fmt(l2)} (real: purple dashed lines are directions that only get stretched)`;
+      [l1,l2].forEach(l=>{let ev=Math.abs(b)>1e-9?[b,l-a]:Math.abs(c)>1e-9?[l-d,c]:(Math.abs(l-a)<1e-9?[1,0]:[0,1]);S.lineInf([0,0],ev,pl.purple,1.6,[6,5])})}
+    else eig=`eigenvalues complex ${fmt(tr/2)} ± ${fmt(Math.sqrt(-disc)/2)}i (no real invariant direction: rotation-like)`}
+  let kind=Math.abs(det)<1e-9?'det = 0 ⇒ SINGULAR: plane collapses to a line/point, not invertible, kernel ≠ {0}':det<0?'det < 0 ⇒ orientation flipped (contains a reflection)':'det > 0 ⇒ orientation kept';
+  $('outLT').textContent=`M = [ ${a.toFixed(2)}  ${b.toFixed(2)} ]\n    [ ${c.toFixed(2)}  ${d.toFixed(2)} ]\ncolumn 1 = Me₁ = (${a.toFixed(2)}, ${c.toFixed(2)}),  column 2 = Me₂ = (${b.toFixed(2)}, ${d.toFixed(2)})\ndet = ${fmt(det,3)} = area of unit square's image.  ${kind}\ntrace = ${fmt(tr)};  ${eig}`;});
+ S7.drag=[{get:()=>{const t=+$('mt').value;return[(1-t)+t*+$('ma').value,t*+$('mc').value]},set:p=>{$('mt').value=1;$('ma').value=p[0];$('mc').value=p[1]}},
+          {get:()=>{const t=+$('mt').value;return[t*+$('mb').value,(1-t)+t*+$('md').value]},set:p=>{$('mt').value=1;$('mb').value=p[0];$('md').value=p[1]}}];
+ [...ids,'mt'].forEach(i=>$(i).addEventListener('input',()=>S7.draw()));
+ $('mPreset').onchange=e=>{if(!e.target.value)return;e.target.value.split(',').forEach((x,i)=>$(ids[i]).value=x);$('mAnim').click()};
+ $('mAnim').onclick=()=>{cancelAnimationFrame(animH);const t0=performance.now();const st=now=>{const t=Math.min(1,(now-t0)/1200);$('mt').value=t;S7.draw();if(t<1)animH=requestAnimationFrame(st)};animH=requestAnimationFrame(st)};
+ S7.draw();})();
+
+/* ================= Lab 8: composition ================= */
+(function(){const F=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.6,1.8],[1.6,1.2],[0.6,1.2],[0.6,0]];
+ const M=s=>s.split(',').map(Number);const ap=(m,p)=>[m[0]*p[0]+m[1]*p[1],m[2]*p[0]+m[3]*p[1]];
+ const mm=(x,y)=>[x[0]*y[0]+x[1]*y[2],x[0]*y[1]+x[1]*y[3],x[2]*y[0]+x[3]*y[2],x[2]*y[1]+x[3]*y[3]];
+ const ms=m=>`[${m[0]} ${m[1]}; ${m[2]} ${m[3]}]`;
+ const S8=new Plane2D($('cvComp'),36,S=>{const pl=pal();S.grid();const A=M($('cA').value),B=M($('cB').value),AB=mm(A,B),BA=mm(B,A);
+  S.poly(F,pl.muted,0.3,pl.muted);S.poly(F.map(p=>ap(AB,p)),pl.blue,0.3,pl.blue);S.poly(F.map(p=>ap(BA,p)),pl.orange,0.3,pl.orange);
+  const same=AB.every((x,i)=>Math.abs(x-BA[i])<1e-9);
+  $('outComp').textContent=`A = ${ms(A)},  B = ${ms(B)}\nAB = ${ms(AB)}   (blue: apply B first, then A)\nBA = ${ms(BA)}   (orange: apply A first, then B)\n`+(same?'AB = BA ⇒ these two commute (the shapes coincide)':'AB ≠ BA ⇒ order of transformations matters!');});
+ ['cA','cB'].forEach(i=>$(i).addEventListener('change',()=>S8.draw()));S8.draw();})();
+
+/* ================= Lab 9: cross-product operator ================= */
+(function(){const g=id=>+$(id).value;
+ const sc=new Scene3D($('cvCross'),S=>{const pl=pal();const a=[g('ax'),g('ay'),g('az')],r=[g('rx'),g('ry'),g('rz')];
+  const A=x=>cross(a,x);const r1=A(r),r2=A(r1),r3=A(r2),a2=dot(a,a);
+  const mx=Math.max(nrm(a),nrm(r),nrm(r1),nrm(r2),nrm(r3),1);S.s=Math.min(S.cv.height/9,S.cv.height*0.36/mx);
+  S.axes(Math.max(3.5,mx));S.line(mul(-mx,a.map(x=>x/(nrm(a)||1))),mul(mx,a.map(x=>x/(nrm(a)||1))),pl.muted,1,[2,4]);
+  S.arrow([0,0,0],a,pl.ink,'a',3);S.arrow([0,0,0],r,pl.blue,'r');S.arrow([0,0,0],r1,pl.green,'Ar');S.arrow([0,0,0],r2,pl.orange,'A²r');S.arrow([0,0,0],r3,pl.pink,'A³r',3);
+  $('outCross').textContent=`a = ${vfmt(a,1)},  a² = ${fmt(a2)}\nr   = ${vfmt(r)}\nAr  = a×r = ${vfmt(r1)}\nA²r = ${vfmt(r2)}   (= (a·r)a − a²r = ${vfmt(sub(mul(dot(a,r),a),mul(a2,r)))})\nA³r = ${vfmt(r3)}\n−a²Ar = ${vfmt(mul(-a2,r1))}  ✔ equal ⇒ A³ + a²A = 0`;});
+ ['ax','ay','az','rx','ry','rz'].forEach(id=>$(id).addEventListener('input',()=>sc.draw()));sc.draw();})();
+
+/* ================= Quiz ================= */
+(function(){const Q=[
+ ['Which subset of ℝ² is a vector space?',['{(x,y): y = 2x + 1}','{(x,y): y = 3x}','{(x,y): x ≥ 0}','{(x,y): x² = y²}'],1,'Only a line through the origin is closed under addition and scaling. x² = y² is two lines, and (1,1) + (1,−1) = (2,0) is not on them.'],
+ ['Dimension of the space of 4×4 real antisymmetric matrices?',['4','6','10','16'],1,'n(n−1)/2 = 4·3/2 = 6.'],
+ ['(1,1,0), (0,1,1), (1,0,1), (1,1,1) in ℝ³ are',['independent','dependent','independent iff det ≠ 0','orthogonal'],1,'4 vectors in a 3-dim space are always dependent.'],
+ ['(1,2,k), (0,1,k−1), (3,4,3) are dependent for k =',['0','1','2','3'],1,'det = 1 − k = 0 ⇒ k = 1. Check: (3,4,3) = 3(1,2,1) − 2(0,1,0).'],
+ ['The length of (1+i, 1−i, i) is',['√3','√5','√2','1'],1,'|1+i|² + |1−i|² + |i|² = 2 + 2 + 1 = 5.'],
+ ['In the physics convention, (2i u, 3v) equals',['6i (u,v)','−6i (u,v)','6 (u,v)','−6 (u,v)'],1,'(au, bv) = a*b(u,v) = (−2i)(3)(u,v).'],
+ ['Gram–Schmidt on u₁ = (1,0), u₂ = (1,1) gives v₂ =',['(1,1)','(0,1)','(1,−1)','(−1,1)'],1,'v₂ = (1,1) − 1·(1,0) = (0,1).'],
+ ['The maximum of x + 2y + 2z on x² + y² + z² = 1 is',['5','3','√5','1'],1,'Schwarz: √(1+4+4)·1 = 3.'],
+ ['Which map ℝ² → ℝ² is linear?',['(x,y) ↦ (x+y, 1)','(x,y) ↦ (x², y)','(x,y) ↦ (3x − y, 2x)','(x,y) ↦ (|x|, y)'],2,'Only (c) is a pure linear combination with T(0) = 0.'],
+ ['T(e₁) = (1,2) and T(e₂) = (3,4). The matrix of T is',['[1 2; 3 4]','[1 3; 2 4]','[4 3; 2 1]','[2 1; 4 3]'],1,'The columns are the images of the basis vectors.'],
+ ['T: ℝ⁴ → ℝ⁴ has a 1-dimensional kernel. dim(range) =',['1','2','3','4'],2,'Rank–nullity: 4 − 1 = 3.'],
+ ['Dimension of ℂ² as a vector space over ℝ is',['2','4','1','8'],1,'2n = 4: basis e₁, e₂, ie₁, ie₂.'],
+ ['Equality in the Schwarz inequality |(u,v)| ≤ ‖u‖‖v‖ holds iff',['u ⟂ v','u, v independent','u, v linearly dependent','‖u‖ = ‖v‖'],2,'Equality ⇔ one vector is a multiple of the other (the book misprints this).'],
+ ['Which of these is a field?',['ℤ₄','ℤ₆','ℤ₇','ℤ₉'],2,'ℤₙ is a field iff n is prime.'],
+ ['u, v, w are independent. Which set is DEPENDENT?',['u, u+v, u+v+w','u+v, v+w, u−w','u+v, v+w, w+u','2u, 3v, w'],1,'(u+v) − (v+w) = u − w, so the set is dependent.'],
+ ['The solution set of Ax = b (b ≠ 0) is',['always a subspace','a subspace iff A is square','never a subspace','a subspace iff det A ≠ 0'],2,'It does not contain 0 (A·0 = 0 ≠ b).'],
+ ['Pairwise linearly independent vectors are always independent as a set.',['True','False'],1,'Counterexample: (1,0), (0,1), (1,1).'],
+ ['Hermitian 2×2 matrices form a vector space over ℂ.',['True','False'],1,'Only over ℝ: i·H is anti-Hermitian.']];
+ const box=$('quizBox');box.innerHTML=Q.map((q,i)=>`<div class="qq" id="qq${i}"><b>Q${i+1}.</b> ${q[0]}<div>${q[1].map((o,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"> ${String.fromCharCode(97+j)}) ${o}</label>`).join('')}</div><div class="small" id="qe${i}"></div></div>`).join('');
+ $('quizCheck').onclick=()=>{let sc=0;Q.forEach((q,i)=>{const s=document.querySelector(`input[name=q${i}]:checked`);const e=$('qe'+i);
+   if(s&&+s.value===q[2]){sc++;e.innerHTML='<span class="ok">✔ Correct.</span> '+q[3]}else e.innerHTML=`<span class="bad">✘ ${s?'Wrong':'Not answered'}.</span> Answer: ${String.fromCharCode(97+q[2])}) ${q[1][q[2]]}. ${q[3]}`});
+   $('quizScore').innerHTML=`<b>Score: ${sc} / ${Q.length}</b>`};
+ $('quizReset').onclick=()=>{box.querySelectorAll('input').forEach(i=>i.checked=false);Q.forEach((q,i)=>$('qe'+i).innerHTML='');$('quizScore').textContent=''};})();
+</script>
+
+
+
+
+
+</div>
+</body>
+</html>

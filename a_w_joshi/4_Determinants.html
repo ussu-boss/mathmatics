@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Determinants</title>
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+h4{margin-bottom:4px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:120px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:90px}section{padding:16px 14px}}
+.read{font-weight:600;color:var(--acc2)}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.legend span{display:inline-block;margin-right:12px;font-size:.88rem}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:middle}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:separate;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;padding:1px 3px;margin:3px 4px;width:auto}
+.mx td{border:0!important;padding:1px 8px!important;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.mulgrid{display:grid;grid-template-columns:auto auto;gap:8px 14px;align-items:center;justify-content:start;overflow-x:auto}
+.mulgrid table{width:auto;border-collapse:collapse;margin:0}
+.mulgrid td{min-width:46px;text-align:center;font-family:Consolas,monospace;padding:6px 8px;border:1px solid var(--line)}
+.mulgrid .lbl{font-weight:700;color:var(--muted);text-align:center}
+td.hr{background:var(--soft)!important;color:var(--acc);font-weight:700}
+td.hc{background:var(--softg)!important;color:var(--acc3);font-weight:700}
+td.hx{background:var(--softw)!important;color:var(--acc2);font-weight:800;outline:2px solid var(--acc2)}
+#prodC td{cursor:pointer}
+.tpbox{position:relative;margin:10px 0}
+.tpcell{position:absolute;width:64px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:6px;background:var(--card);font-family:Consolas,monospace;font-size:.9rem;transition:left 1s ease,top 1s ease,background .4s}
+.tpcell.diag{background:var(--softw)}
+.tpcell.flip{background:var(--softr);color:var(--warn);font-weight:700}
+.mx.dt{border-radius:0}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">Light / Dark</button>
+<h1>4 · Determinants</h1>
+<p>A. W. Joshi, <i>Matrices and Tensors in Physics</i>, Section 4 (pp. 44–46). The book gives a short recap. This page gives the complete toolkit: meaning, all properties, every evaluation trick, special determinants, the derivative of a determinant, labs, the book's Exercise 4 fully solved, and exam practice.</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#roadmap">Roadmap</a><a href="#meaning">Meaning</a><a href="#def">Minor &amp; cofactor</a><a href="#leibniz">n! terms</a>
+<a href="#props">Properties</a><a href="#alien">Alien cofactors</a><a href="#deriv">d(det)/ds</a><a href="#methods">Evaluation tricks</a>
+<a href="#special">Special determinants</a><a href="#types">det of special matrices</a><a href="#apps">Applications</a><a href="#short">Shortcuts</a>
+<a href="#calc">Calculator</a><a href="#bookex">Book Exercise 4</a><a href="#practice">Practice</a><a href="#quiz">Quiz</a><a href="#facts">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<section id="roadmap">
+<h2>0. Roadmap</h2>
+<p>A <b>determinant</b> is a single number (or function) attached to a <b>square</b> matrix. It tells you whether the matrix can be inverted (det ≠ 0), how much the matrix scales areas and volumes, and whether it flips orientation. The book needs three things from this section: <b>(1)</b> expansion by cofactors, <b>(2)</b> the "alien cofactor" identity Σₖ aᵢₖAʲᵏ = (det A)δᵢⱼ, which gives the inverse in Section 5, and <b>(3)</b> the derivative of a determinant.</p>
+<div class="flow"><span>Area/volume meaning</span><b>→</b><span>Minor, cofactor, expansion</span><b>→</b><span>n! permutation terms</span><b>→</b><span>Properties</span><b>→</b><span>Σ aᵢₖAʲᵏ = det·δᵢⱼ</span><b>→</b><span>d(det)/ds</span><b>→</b><span>Tricks &amp; special determinants</span></div>
+<div class="box warnb"><b class="t">Notation</b> det A = det(A) = |A|. The book writes the cofactor of aᵢⱼ as <b>Aⁱʲ</b> (superscripts). Many books write it as Cᵢⱼ. Do not confuse |A| (determinant) with the absolute value |a| of a number.</div>
+</section>
+
+<section id="meaning">
+<h2>1. What a determinant means</h2>
+<div class="eq">det <span class="M" data-m="a b; c d"></span> = ad − bc</div>
+<p><b>Geometric meaning:</b> the columns (a,c) and (b,d) are the images of the unit vectors e₁ and e₂. det is the <b>signed area</b> of the parallelogram they span, i.e. the factor by which the matrix scales every area. In 3D, det is the signed <b>volume</b> of the parallelepiped spanned by the three columns, and it equals the scalar triple product a·(b × c). The <b>sign</b> says whether orientation is kept (+) or flipped (−, a mirror image).</p>
+<div class="box thm"><b class="t">The single most important fact</b> det A = 0 ⇔ the columns (or rows) are linearly dependent ⇔ space is squashed into a lower dimension ⇔ A has no inverse ⇔ Ax = 0 has a nonzero solution.</div>
+<div class="lab"><h4>🔬 Lab 1 – det = signed area. Drag the column tips, then try the row/column operations</h4>
+<canvas id="cvArea" width="640" height="400"></canvas>
+<div class="ctrl"><button id="opShear">col₂ → col₂ + 0.5·col₁ (area unchanged)</button><button class="alt" id="opSwap">swap columns (sign flips)</button><button class="alt" id="opScale">col₁ × 2 (area doubles)</button><button class="alt" id="opReset">reset</button></div>
+<div class="out" id="outArea"></div>
+<p class="small">Adding a multiple of one column to another <b>shears</b> the parallelogram: the base stays and the height stays, so the area is unchanged. This is why row and column operations of that kind don't change det, and it is the basis of the fastest method of evaluation. Drag one arrow onto the other's line and the area becomes 0 (dependent columns).</p>
+</div>
+<div class="lab"><h4>🔬 Lab 2 – 3D: det = signed volume of the parallelepiped (drag to rotate)</h4>
+<div class="grid2"><div><canvas id="cvVol" width="480" height="400"></canvas></div><div>
+<div class="ctrl"><b style="color:#2f6fdf">col 1</b><label>x<input type="range" id="v1x" min="-3" max="3" step="0.5" value="2"></label><label>y<input type="range" id="v1y" min="-3" max="3" step="0.5" value="0"></label><label>z<input type="range" id="v1z" min="-3" max="3" step="0.5" value="0"></label></div>
+<div class="ctrl"><b style="color:#2b9348">col 2</b><label>x<input type="range" id="v2x" min="-3" max="3" step="0.5" value="0.5"></label><label>y<input type="range" id="v2y" min="-3" max="3" step="0.5" value="2"></label><label>z<input type="range" id="v2z" min="-3" max="3" step="0.5" value="0"></label></div>
+<div class="ctrl"><b style="color:#e8590c">col 3</b><label>x<input type="range" id="v3x" min="-3" max="3" step="0.5" value="0"></label><label>y<input type="range" id="v3y" min="-3" max="3" step="0.5" value="0.5"></label><label>z<input type="range" id="v3z" min="-3" max="3" step="0.5" value="2"></label></div>
+<div class="out" id="outVol"></div></div></div>
+</div>
+</section>
+
+<section id="def">
+<h2>2. Minors, cofactors and expansion (the book's definition)</h2>
+<div class="box def"><b class="t">Definitions</b>
+<ul>
+<li><b>Minor</b> Mᵢⱼ of aᵢⱼ: the determinant of the (n−1)×(n−1) matrix left after deleting <b>row i and column j</b>.</li>
+<li><b>Cofactor</b> Aⁱʲ = (−1)^{i+j} Mᵢⱼ. The sign follows a checkerboard: <span class="M" data-m="+ − + ⋯; − + − ⋯; + − + ⋯; ⋮ ⋮ ⋮ ⋱"></span></li>
+<li><b>Laplace expansion</b> along row i, or along column i:
+<div class="eq">det A = Σₖ aᵢₖ Aⁱᵏ = Σₖ aₖᵢ Aᵏⁱ    (Eq. 1)</div>
+Any row or column gives the same value, so the determinant is unique.</li>
+</ul></div>
+<p><b>3×3 example:</b> expanding along row 1,</p>
+<div class="eq">det <span class="M" data-m="a₁₁ a₁₂ a₁₃; a₂₁ a₂₂ a₂₃; a₃₁ a₃₂ a₃₃"></span> = a₁₁(a₂₂a₃₃ − a₂₃a₃₂) − a₁₂(a₂₁a₃₃ − a₂₃a₃₁) + a₁₃(a₂₁a₃₂ − a₂₂a₃₁)</div>
+<div class="box tip"><b class="t">⚡ Choose the row or column with the most zeros</b> Each zero kills a whole (n−1)×(n−1) determinant. <b>Sarrus' rule</b> (copy the first two columns to the right, add the three "down" diagonals and subtract the three "up" diagonals) works <b>only for 3×3</b>. Never use it for 4×4.</div>
+<div class="lab"><h4>🔬 Lab 3 – Cofactor explorer: click any element</h4>
+<div class="ctrl"><label>Matrix<textarea id="cfIn" style="min-height:70px;width:230px">2 -1 3
+1 0 4
+5 2 1</textarea></label><div><button id="cfLoad">Load</button><br><br><label><input type="checkbox" id="cfAlien"> alien mode: row i × cofactors of row j</label></div></div>
+<div class="grid2"><div id="cfGrid"></div><div class="out" id="cfOut">Click an element.</div></div>
+<p class="small">The clicked element's row and column are struck out (grey). What remains is its minor, and the checkerboard sign turns the minor into the cofactor. The expansion along that row is shown in full. In alien mode, the elements of one row multiplied by the cofactors of a different row always add up to 0 (Eq. 4).</p>
+</div>
+</section>
+
+<section id="leibniz">
+<h2>3. The full formula: n! terms (Eq. 2)</h2>
+<div class="eq">det A = Σ<sub>permutations (i₁ i₂ … iₙ)</sub> ε · a<sub>1i₁</sub> a<sub>2i₂</sub> ⋯ a<sub>niₙ</sub>,   ε = +1 (even permutation) or −1 (odd permutation)</div>
+<ul>
+<li>There are <b>n!</b> terms: 2, 6, 24, 120, …. Each term contains exactly <b>one element from every row and every column</b>, like n rooks on a chessboard that do not attack each other.</li>
+<li><b>Sign:</b> count the <b>inversions</b> in (i₁ … iₙ), i.e. the pairs that are out of order. If the count is even, the sign is +; if odd, −. Example: a₁₃a₂₁a₃₂a₄₄ has permutation (3,1,2,4) with inversions (3,1) and (3,2), so 2 inversions and sign +.</li>
+<li>With the Levi-Civita symbol: det A = ε<sub>ijk</sub> a₁ᵢa₂ⱼa₃ₖ (3×3, summed).</li>
+<li>Every term is a product of n elements. So if every element is a polynomial of degree p, det has degree ≤ np. This is useful for the "degree counting" trick below.</li>
+</ul>
+<div class="lab"><h4>🔬 Lab 4 – Watch all n! terms build the determinant</h4>
+<div class="ctrl"><label>n <select id="lzN"><option>2</option><option selected>3</option><option>4</option></select></label><button id="lzRand" class="alt">random matrix</button><button id="lzPlay">▶ play terms</button><button id="lzStep" class="alt">next term</button></div>
+<div class="grid2"><div id="lzGrid"></div><div class="out" id="lzOut"></div></div>
+<p class="small">Each step lights up one "rook placement" (one element in each row and column), shows its permutation, its inversion count, its sign and its product, and adds it to the running total. After all n! terms, the total equals det A.</p>
+</div>
+</section>
+
+<section id="props">
+<h2>4. Properties (complete list, all exam-relevant)</h2>
+<div class="tbl-wrap"><table>
+<tr><th>#</th><th>Property</th><th>Comment / quick reason</th></tr>
+<tr><td>1</td><td><b>det Ã = det A</b></td><td>rows and columns play equal roles, so everything said about rows also holds for columns</td></tr>
+<tr><td>2</td><td>Swapping two rows (or columns) changes the <b>sign</b></td><td>it changes the parity of every permutation</td></tr>
+<tr><td>3</td><td><b>Two equal (or proportional) rows ⇒ det = 0</b></td><td>a swap leaves the matrix the same but flips the sign, so D = −D</td></tr>
+<tr><td>4</td><td>Multiplying <b>one row</b> by c multiplies det by c</td><td>each term contains exactly one element of that row</td></tr>
+<tr><td>5</td><td><b>det(cA) = cⁿ det A</b></td><td>every row is multiplied by c (Exercise 3). So det(−A) = (−1)ⁿ det A.</td></tr>
+<tr><td>6</td><td><b>Adding a multiple of one row to another leaves det unchanged</b></td><td>splits into det A + c·(a det with two equal rows) = det A. Geometrically, a shear.</td></tr>
+<tr><td>7</td><td>Linear in each row separately: if row i = u + v, then det = det(…u…) + det(…v…)</td><td>but det(A + B) ≠ det A + det B in general</td></tr>
+<tr><td>8</td><td>A zero row (or column) ⇒ det = 0</td><td></td></tr>
+<tr><td>9</td><td><b>det(AB) = det A · det B</b> (A, B square of the same order)</td><td>volume scalings multiply. Hence det(AB) = det(BA), even though AB ≠ BA.</td></tr>
+<tr><td>10</td><td>det(A⁻¹) = 1/det A,  det(Aᵏ) = (det A)ᵏ</td><td>from 9 with AA⁻¹ = I</td></tr>
+<tr><td>11</td><td><b>det(triangular or diagonal) = product of the diagonal</b></td><td>Exercise 4. det I = 1 (Exercise 2).</td></tr>
+<tr><td>12</td><td>det A* = (det A)*,  det A† = (det A)*</td><td>Exercise 5</td></tr>
+<tr><td>13</td><td>det(P⁻¹AP) = det A</td><td>basis-independent (like the trace)</td></tr>
+<tr><td>14</td><td>det A = product of the eigenvalues, Tr A = sum of the eigenvalues</td><td>Section 9</td></tr>
+<tr><td>15</td><td>Block triangular: det <span class="M" data-m="A B; 0 D"></span> = det A · det D</td><td>A and D square blocks</td></tr>
+<tr><td>16</td><td>det <span class="M" data-m="A B; C D"></span> = det A · det(D − CA⁻¹B)</td><td>Schur complement (Section 6)</td></tr>
+<tr><td>17</td><td>det(I + uvᵀ) = 1 + vᵀu</td><td>matrix determinant lemma</td></tr>
+<tr><td>18</td><td>det(e^A) = e^{Tr A}, and det(I + εA) ≈ 1 + ε Tr A</td><td>Section 12. This links det and trace.</td></tr>
+<tr><td>19</td><td>For square A: det A = 0 ⇔ rank A &lt; n</td><td>For A (m×n) and B (n×m) with m &gt; n, the m×m matrix AB has rank ≤ n &lt; m, so det(AB) = 0 always.</td></tr>
+</table></div>
+<div class="box warnb"><b class="t">Traps</b> det(A + B) ≠ det A + det B. det(cA) ≠ c det A (it is cⁿ det A). det(AB) = det A det B needs <b>square</b> A and B: for rectangular ones, det(AB) can be nonzero while det(BA) = 0.</div>
+</section>
+
+<section id="alien">
+<h2>5. Expansion with "alien" cofactors (Eqs. 3–5)</h2>
+<p>Take the elements of row i but the cofactors of a <b>different</b> row j:</p>
+<div class="eq">S = Σₖ aᵢₖ Aʲᵏ</div>
+<p>This is the expansion, along row j, of the matrix obtained from A by <b>replacing row j with row i</b>. That matrix has two identical rows, so S = 0. The same holds for columns. Combined with Eq. (1):</p>
+<div class="eq"><b>Σₖ aᵢₖ Aʲᵏ = Σₖ aₖᵢ Aᵏʲ = (det A) δᵢⱼ</b>    (Eq. 5)</div>
+<div class="box thm"><b class="t">Why this matters: the inverse (Section 5)</b> Define the adjugate adj A = (matrix of cofactors)ᵀ, so (adj A)ₖⱼ = Aʲᵏ. Then Eq. (5) says exactly
+<div class="eq">A · adj A = adj A · A = (det A) I  ⇒  A⁻¹ = adj A / det A  (if det A ≠ 0)</div>
+For 2×2: <span class="M" data-m="a b; c d"></span>⁻¹ = (1/(ad − bc))<span class="M" data-m="d -b; -c a"></span>. Also det(adj A) = (det A)ⁿ⁻¹.</div>
+<p>Check with A = <span class="M" data-m="2 -1 3; 1 0 4; 5 2 1"></span>, which has det = −29. Row 1 with the cofactors of row 2: the cofactors of row 2 are A²¹ = −(−1·1 − 3·2) = 7, A²² = 2·1 − 3·5 = −13, A²³ = −(2·2 − (−1)·5) = −9. Then 2(7) + (−1)(−13) + 3(−9) = 14 + 13 − 27 = 0 ✓. Try it in Lab 3's alien mode.</p>
+</section>
+
+<section id="deriv">
+<h2>6. Derivative of a determinant (Eq. 6)</h2>
+<p>If the elements aᵢⱼ(s) depend on a parameter s, then each aᵢⱼ appears linearly in det A, with coefficient its cofactor Aⁱʲ. So:</p>
+<div class="eq">d(det A)/ds = Σᵢ Σⱼ Aⁱʲ · (daᵢⱼ/ds)    (Eq. 6)</div>
+<div class="box thm"><b class="t">Two equivalent forms (use whichever is quicker)</b>
+<ul>
+<li><b>Row-by-row rule:</b> d(det A)/ds = Σᵢ det(A with row i differentiated), giving n determinants. For 2×2: d/ds|a b; c d| = |a′ b′; c d| + |a b; c′ d′|.</li>
+<li><b>Jacobi's formula:</b> d(det A)/ds = det A · Tr(A⁻¹ dA/ds), when A is invertible. In particular d(ln det A)/ds = Tr(A⁻¹ dA/ds).</li>
+</ul></div>
+<div class="box fact"><b class="t">Application: Abel's formula for the Wronskian</b> For y″ + p(x)y′ + q(x)y = 0 with solutions y₁, y₂: W = |y₁ y₂; y₁′ y₂′|. By the row rule, W′ = |y₁′ y₂′; y₁′ y₂′| + |y₁ y₂; y₁″ y₂″| = 0 + |y₁ y₂; −py₁′ − qy₁, −py₂′ − qy₂| = −pW. So <b>W = W₀ e^{−∫p dx}</b>, which is either never zero or always zero. This explains why "W ≠ 0 at one point" is enough for independence of ODE solutions (Section 1).</div>
+<div class="prob"><div class="q">Example: verify Eq. (6) for D = <span class="M" data-m="x x²; 1 2x"></span>.</div>
+<details><summary>Show solution</summary><p>Directly: D = 2x² − x² = x², so D′ = 2x.<br>Row rule: <span class="M" data-m="1 2x; 1 2x"></span> + <span class="M" data-m="x x²; 0 2"></span> = 0 + 2x = 2x ✓.<br>Cofactor form: the cofactors are A¹¹ = 2x, A¹² = −1, A²¹ = −x², A²² = x, and the derivatives of the elements are 1, 2x, 0, 2. Σ = 2x·1 + (−1)(2x) + (−x²)(0) + x·2 = 2x ✓.</p></details></div>
+</section>
+<section id="methods">
+<h2>7. Evaluation methods and tricks (choose the fastest)</h2>
+<div class="tbl-wrap"><table>
+<tr><th>#</th><th>Method</th><th>Use when</th></tr>
+<tr><td>1</td><td><b>Row-reduce to triangular form</b>, then multiply the diagonal. Track sign changes from swaps and factors taken out.</td><td>any numeric matrix of size ≥ 4. About n³/3 operations, versus n! for the expansion.</td></tr>
+<tr><td>2</td><td><b>Expand along the row/column with the most zeros</b></td><td>sparse matrices</td></tr>
+<tr><td>3</td><td><b>Create zeros first</b> (row/column operations), then expand</td><td>a row has one convenient pivot, such as a 1</td></tr>
+<tr><td>4</td><td><b>Take out common factors</b> from a row or column</td><td>a row has an obvious common factor</td></tr>
+<tr><td>5</td><td><b>Add all rows (or columns)</b> into one</td><td>every row has the same sum. That sum is then a factor: det(aI + bJ) = aⁿ⁻¹(a + nb).</td></tr>
+<tr><td>6</td><td><b>Factor theorem + degree counting + one special value</b></td><td>symbolic determinants. If setting a = b makes two rows equal, then (a − b) is a factor. Compare total degrees to find what's left, then fix the constant with an easy special case.</td></tr>
+<tr><td>7</td><td><b>Signed row combinations</b> (R₁ + R₂ − R₃ − R₄, etc.)</td><td>patterned symmetric matrices like Exercise 1(e)</td></tr>
+<tr><td>8</td><td><b>Block / triangular structure</b></td><td>a block of zeros: det = det(A) det(D)</td></tr>
+<tr><td>9</td><td><b>Recursion</b> Dₙ = aDₙ₋₁ − bcDₙ₋₂</td><td>tridiagonal matrices (a chain of springs or atoms, Hückel theory)</td></tr>
+<tr><td>10</td><td><b>Eigenvalues / known products</b></td><td>det = Πλᵢ, det(AB) = det A det B, det Aᵏ = (det A)ᵏ</td></tr>
+</table></div>
+<div class="prob"><div class="q">Worked example (method 1): det <span class="M" data-m="1 2 0 1; 2 5 1 3; 0 1 4 2; 1 3 2 6"></span></div>
+<details><summary>Show solution</summary>
+<p>R₂ → R₂ − 2R₁ gives (0,1,1,1). R₄ → R₄ − R₁ gives (0,1,2,5). These operations don't change det.</p>
+<p>R₃ → R₃ − R₂ gives (0,0,3,1). R₄ → R₄ − R₂ gives (0,0,1,4).</p>
+<p>The matrix is now <span class="M" data-m="1 2 0 1; 0 1 1 1; 0 0 3 1; 0 0 1 4"></span>. Expanding, det = 1·1·det<span class="M" data-m="3 1; 1 4"></span> = 12 − 1 = <b>11</b>.</p></details></div>
+<div class="prob"><div class="q">Worked example (method 6): show det <span class="M" data-m="1 1 1; a b c; a³ b³ c³"></span> = (a − b)(b − c)(c − a)(a + b + c) (Book Exercise 1(c)).</div>
+<details><summary>Show solution</summary>
+<p><b>Factors:</b> a = b makes columns 1 and 2 equal, so det = 0 and (a − b) is a factor. Likewise (b − c) and (c − a) are factors.</p>
+<p><b>Degree:</b> each term is (1)(degree 1)(degree 3), so total degree 4. The three factors have degree 3, so one more <b>linear</b> factor is left. The determinant is symmetric under swapping any two variables (it changes sign, and so does (a−b)(b−c)(c−a)). So the leftover factor is symmetric: k(a + b + c).</p>
+<p><b>Constant:</b> test a = 0. The product (a − b)(b − c)(c − a)·k(a + b + c) becomes (−b)(b − c)(c)·k(b + c) = k(bc³ − b³c). The determinant at a = 0 is det<span class="M" data-m="1 1 1; 0 b c; 0 b³ c³"></span> = bc³ − cb³. So k = 1.</p></details></div>
+</section>
+
+<section id="special">
+<h2>8. Special determinants to memorise</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Determinant</th><th>Value</th></tr>
+<tr><td><b>Vandermonde</b> <span class="M D" data-m="1 x₁ x₁² ⋯ x₁ⁿ⁻¹; 1 x₂ x₂² ⋯ x₂ⁿ⁻¹; ⋮ ⋮ ⋮ ⋱ ⋮; 1 xₙ xₙ² ⋯ xₙⁿ⁻¹"></span></td><td><b>Π<sub>i&lt;j</sub>(xⱼ − xᵢ)</b>. 3×3: (b − a)(c − a)(c − b) (Exercise 1(b)). Zero ⇔ two x's are equal.</td></tr>
+<tr><td><span class="M D" data-m="1 1 1; a b c; a³ b³ c³"></span></td><td>(a − b)(b − c)(c − a)(a + b + c)</td></tr>
+<tr><td><span class="M D" data-m="1 1 1; a² b² c²; a³ b³ c³"></span></td><td>(a − b)(b − c)(c − a)(ab + bc + ca)</td></tr>
+<tr><td><b>Circulant</b> <span class="M D" data-m="a b c; c a b; b c a"></span></td><td>a³ + b³ + c³ − 3abc = (a + b + c)(a² + b² + c² − ab − bc − ca). In general it is Πₖ(c₀ + c₁ωᵏ + c₂ω²ᵏ + …), with ω = e^{2πi/n}.</td></tr>
+<tr><td><b>aI + bJ</b> (a + b on the diagonal, b elsewhere, n×n)</td><td>aⁿ⁻¹(a + nb). E.g. k on the diagonal and 1 elsewhere (3×3): (k − 1)²(k + 2).</td></tr>
+<tr><td><span class="M D" data-m="1+a 1 1; 1 1+b 1; 1 1 1+c"></span></td><td>abc + ab + bc + ca = abc(1 + 1/a + 1/b + 1/c)</td></tr>
+<tr><td>Tridiagonal: 2 on the diagonal, −1 next to it (n×n)</td><td>n + 1 (recursion Dₙ = 2Dₙ₋₁ − Dₙ₋₂)</td></tr>
+<tr><td>Antisymmetric, odd order</td><td>0</td></tr>
+<tr><td>Antisymmetric 4×4 <span class="M D" data-m="0 a b c; −a 0 d e; −b −d 0 f; −c −e −f 0"></span></td><td>(af − be + cd)², the square of the Pfaffian</td></tr>
+<tr><td>Book Exercise 1(a) <span class="M D" data-m="b²+c² a² a²; b² c²+a² b²; c² c² a²+b²"></span></td><td>4a²b²c²</td></tr>
+<tr><td>Book Exercise 1(d) <span class="M D" data-m="a−b−c 2a 2a; 2b b−c−a 2b; 2c 2c c−a−b"></span></td><td>(a + b + c)³</td></tr>
+<tr><td>Book Exercise 1(e) <span class="M D" data-m="0 a b c; a 0 c b; b c 0 a; c b a 0"></span></td><td>(a+b+c)(a−b−c)(a−b+c)(a+b−c) = a⁴ + b⁴ + c⁴ − 2a²b² − 2b²c² − 2c²a² (minus 16 × (Heron area)² of a triangle with sides a, b, c)</td></tr>
+</table></div>
+</section>
+
+<section id="types">
+<h2>9. Determinants of special matrices (Exercises 2–7 and more)</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Matrix</th><th>det</th><th>Reason</th></tr>
+<tr><td>Iₙ</td><td>1</td><td>diagonal product</td></tr>
+<tr><td>aI (order n)</td><td>aⁿ</td><td></td></tr>
+<tr><td>−A</td><td>(−1)ⁿ det A</td><td>Exercise 3</td></tr>
+<tr><td>Triangular / diagonal</td><td>Π tᵢᵢ</td><td>Exercise 4</td></tr>
+<tr><td>Hermitian</td><td><b>real</b></td><td>det H = det H† = (det H)* (Exercise 6)</td></tr>
+<tr><td>Real antisymmetric, odd n</td><td><b>0</b></td><td>det A = det Ã = (−1)ⁿ det A (Exercise 7)</td></tr>
+<tr><td>AntiHermitian, odd n</td><td><b>purely imaginary or 0</b></td><td>det A = det(−A†) = (−1)ⁿ(det A)* = −(det A)* (Exercise 7)</td></tr>
+<tr><td>Orthogonal (AᵀA = I)</td><td>±1</td><td>(det A)² = 1. Rotations give +1, reflections −1.</td></tr>
+<tr><td>Unitary (U†U = I)</td><td>|det| = 1, i.e. e^{iφ}</td><td>|det U|² = 1</td></tr>
+<tr><td>Idempotent (P² = P)</td><td>0 or 1</td><td>d² = d</td></tr>
+<tr><td>Involution (A² = I)</td><td>±1</td><td>d² = 1</td></tr>
+<tr><td>Nilpotent (Nᵏ = 0)</td><td>0</td><td>dᵏ = 0</td></tr>
+<tr><td>Permutation matrix</td><td>±1 (the sign of the permutation)</td><td></td></tr>
+<tr><td>Pauli σₓ, σᵧ, σ_z, and n̂·σ</td><td>−1</td><td>det(a₀I + r·σ) = a₀² − |r|²</td></tr>
+<tr><td>Rank-1 uvᵀ (n ≥ 2)</td><td>0</td><td>its rows are proportional</td></tr>
+</table></div>
+</section>
+
+<section id="apps">
+<h2>10. Where determinants are used</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Use</th><th>Formula</th></tr>
+<tr><td>Area of a triangle with vertices (x₁,y₁), (x₂,y₂), (x₃,y₃)</td><td>½ |det <span class="M" data-m="x₁ y₁ 1; x₂ y₂ 1; x₃ y₃ 1"></span>|. It is 0 ⇔ the points are collinear.</td></tr>
+<tr><td>Line through two points / plane through three points</td><td>det <span class="M" data-m="x y 1; x₁ y₁ 1; x₂ y₂ 1"></span> = 0, and the 4×4 analogue for a plane</td></tr>
+<tr><td>Volume of a tetrahedron</td><td>(1/6)|det[b − a, c − a, d − a]|</td></tr>
+<tr><td>Cross product, scalar triple product</td><td>a × b = det <span class="M" data-m="î ĵ k̂; a₁ a₂ a₃; b₁ b₂ b₃"></span>,  a·(b × c) = det[a; b; c]</td></tr>
+<tr><td>Jacobian (change of variables)</td><td>dx dy = |∂(x,y)/∂(r,θ)| dr dθ = r dr dθ; spherical: r² sin θ</td></tr>
+<tr><td>Cramer's rule (Section 7)</td><td>xᵢ = det Aᵢ / det A, where Aᵢ has column i replaced by b</td></tr>
+<tr><td>Eigenvalues (Section 9)</td><td>det(A − λI) = 0</td></tr>
+<tr><td>Inverse (Section 5)</td><td>A⁻¹ = adj A / det A</td></tr>
+<tr><td>Wronskian, Gram determinant (Section 1)</td><td>tests of independence</td></tr>
+<tr><td>Slater determinant (QM)</td><td>the antisymmetric wavefunction of N fermions. Two electrons in the same state make two equal rows, so ψ = 0: the Pauli exclusion principle!</td></tr>
+</table></div>
+</section>
+
+<section id="short">
+<h2>11. Exam shortcut sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Question</th><th>Shortcut</th></tr>
+<tr><td>det(kA), det(−A), det(Aᵀ), det(A⁻¹), det(adj A)</td><td>kⁿ d, (−1)ⁿ d, d, 1/d, dⁿ⁻¹</td></tr>
+<tr><td>det(AB), det(AᵏBˡ)</td><td>det A det B, (det A)ᵏ(det B)ˡ</td></tr>
+<tr><td>Two rows proportional / a row is a sum of others</td><td>0, no calculation needed</td></tr>
+<tr><td>Every row sums to s</td><td>s is a factor (add all columns to the first)</td></tr>
+<tr><td>k on the diagonal, 1 elsewhere</td><td>(k − 1)ⁿ⁻¹(k − 1 + n)</td></tr>
+<tr><td>Symbolic det that vanishes when a = b</td><td>(a − b) is a factor. Then count degrees and test a special value.</td></tr>
+<tr><td>Odd-order antisymmetric</td><td>0</td></tr>
+<tr><td>Triangular / block triangular</td><td>product of diagonal entries / of the diagonal blocks' determinants</td></tr>
+<tr><td>2×2 a₀I + r·σ</td><td>a₀² − |r|²</td></tr>
+<tr><td>det(I + uvᵀ)</td><td>1 + vᵀu</td></tr>
+<tr><td>Sign of a term a₁ᵢ₁⋯aₙᵢₙ</td><td>(−1)^(number of inversions in i₁…iₙ)</td></tr>
+<tr><td>Number of terms in an n×n det</td><td>n!</td></tr>
+<tr><td>d/dx of a function determinant</td><td>sum of n determinants, each with one row differentiated. Or Jacobi: det A · Tr(A⁻¹A′).</td></tr>
+<tr><td>Σₖ aᵢₖAʲᵏ (i ≠ j)</td><td>0 (alien cofactors)</td></tr>
+<tr><td>det e^A</td><td>e^{Tr A}</td></tr>
+<tr><td>Product of the eigenvalues</td><td>det A (so a zero eigenvalue ⇔ singular)</td></tr>
+</table></div>
+</section>
+
+<section id="calc">
+<h2>12. 🧮 Determinant calculator with steps (exact fractions)</h2>
+<div class="lab">
+<textarea id="dtIn">1 2 0 1
+2 5 1 3
+0 1 4 2
+1 3 2 6</textarea>
+<div class="ctrl"><button id="dtGo">Row-reduce &amp; evaluate</button><label>expand along row <input type="number" id="dtRow" value="1" min="1" max="8" style="width:55px"></label><button id="dtExp" class="alt">Cofactor expansion</button>
+<button class="alt" data-dt="2 -1 3&#10;1 0 4&#10;5 2 1">3×3 example</button><button class="alt" data-dt="2 -1 0 0 0&#10;-1 2 -1 0 0&#10;0 -1 2 -1 0&#10;0 0 -1 2 -1&#10;0 0 0 -1 2">tridiagonal 5×5</button><button class="alt" data-dt="0 2 -1 3&#10;-2 0 4 1&#10;1 -4 0 5&#10;-3 -1 -5 0">antisymmetric 4×4</button><button class="alt" data-dt="1 1 1 1&#10;1 2 3 4&#10;1 4 9 16&#10;1 8 27 64">Vandermonde (1,2,3,4)</button></div>
+<div class="out" id="dtOut"></div>
+</div>
+</section>
+
+<section id="bookex">
+<h2>13. Book's Exercise 4 – all problems solved</h2>
+<div class="prob"><div class="q">1(a). Evaluate <span class="M D" data-m="b²+c² a² a²; b² c²+a² b²; c² c² a²+b²"></span>.</div>
+<details><summary>Show solution</summary>
+<p><b>Method (factor theorem):</b> put a = 0. The matrix becomes <span class="M" data-m="b²+c² 0 0; b² c² b²; c² c² b²"></span>, whose det is (b² + c²)(c²b² − b²c²) = 0. So a² is a factor (the det is even in a, so a² rather than a). By symmetry, b² and c² are factors. The total degree is 6, so det = k a²b²c².</p>
+<p><b>Constant:</b> put a = b = c = 1: det<span class="M" data-m="2 1 1; 1 2 1; 1 1 2"></span> = (2 − 1)²(2 + 2) = 4 (using the aI + bJ rule). So k = 4.</p>
+<p><b>Answer: 4a²b²c²</b> ✓ (verified symbolically).</p>
+<p><b>Alternative (direct):</b> R₁ → R₁ − R₂ − R₃ gives row 1 = (0, −2c², −2b²). Expanding along it: det = 2c²[b²(a²+b²) − b²c²] − 2b²[b²c² − c²(c²+a²)] = 2b²c²[(a² + b² − c²) − (b² − c² − a²)] = 2b²c²·2a² = 4a²b²c² ✓. The factor method is usually faster in exams.</p></details></div>
+
+<div class="prob"><div class="q">1(b). Evaluate <span class="M D" data-m="1 a a²; 1 b b²; 1 c c²"></span>.</div>
+<details><summary>Show solution</summary>
+<p>R₂ − R₁ and R₃ − R₁: <span class="M" data-m="1 a a²; 0 b−a b²−a²; 0 c−a c²−a²"></span>. Take (b − a) out of row 2 and (c − a) out of row 3: (b − a)(c − a)·det<span class="M" data-m="1 b+a; 1 c+a"></span> = (b − a)(c − a)(c − b).</p>
+<p><b>Answer: (a − b)(b − c)(c − a)</b>, which is the same thing (Vandermonde).</p></details></div>
+
+<div class="prob"><div class="q">1(c). Evaluate <span class="M D" data-m="1 1 1; a b c; a³ b³ c³"></span>.</div>
+<details><summary>Show solution</summary>
+<p><b>(a − b)(b − c)(c − a)(a + b + c)</b>. See the worked example in Section 7. Direct route: C₂ − C₁ and C₃ − C₁, then take out (b − a)(c − a). This leaves det<span class="M" data-m="1 1; b²+ab+a² c²+ca+a²"></span> = c² + ca − b² − ab = (c − b)(a + b + c).</p></details></div>
+
+<div class="prob"><div class="q">1(d). Evaluate <span class="M D" data-m="a−b−c 2a 2a; 2b b−c−a 2b; 2c 2c c−a−b"></span>.</div>
+<details><summary>Show solution</summary>
+<p>R₁ → R₁ + R₂ + R₃: every entry of the new row 1 is a + b + c. Take that factor out: (a + b + c)·det<span class="M" data-m="1 1 1; 2b b−c−a 2b; 2c 2c c−a−b"></span>.</p>
+<p>C₂ → C₂ − C₁ and C₃ → C₃ − C₁: <span class="M" data-m="1 0 0; 2b −(a+b+c) 0; 2c 0 −(a+b+c)"></span>, which is lower triangular.</p>
+<p>det = (a + b + c)·1·(a + b + c)² = <b>(a + b + c)³</b>.</p></details></div>
+
+<div class="prob"><div class="q">1(e). Evaluate <span class="M D" data-m="0 a b c; a 0 c b; b c 0 a; c b a 0"></span>.</div>
+<details><summary>Show solution</summary>
+<p><b>Signed row combinations</b> pull out linear factors:</p>
+<ul><li>R₁ + R₂ + R₃ + R₄ = (a+b+c)(1, 1, 1, 1) ⇒ factor (a + b + c).</li>
+<li>R₁ + R₂ − R₃ − R₄ = (a−b−c)(1, 1, −1, −1) ⇒ factor (a − b − c).</li>
+<li>R₁ − R₂ + R₃ − R₄ = (a−b+c)(−1, 1, −1, 1) ⇒ factor (a − b + c).</li>
+<li>R₁ − R₂ − R₃ + R₄ = (a+b−c)(−1, 1, 1, −1) ⇒ factor (a + b − c).</li></ul>
+<p>Degree 4, four linear factors ⇒ det = k(a+b+c)(a−b−c)(a−b+c)(a+b−c). At b = c = 0 the matrix is two 2×2 swap blocks, with det = (−a²)(−a²) = a⁴, while the product gives a·a·a·a = a⁴ ⇒ k = 1.</p>
+<p><b>Answer:</b> (a+b+c)(a−b−c)(a−b+c)(a+b−c) = a⁴ + b⁴ + c⁴ − 2a²b² − 2b²c² − 2c²a² ✓.</p></details></div>
+
+<div class="prob"><div class="q">2. Show det Iₙ = 1.</div>
+<details><summary>Show solution</summary><p>I is diagonal, so det = 1·1⋯1 = 1. (In the n!-term formula, only the identity permutation picks no zeros.)</p></details></div>
+<div class="prob"><div class="q">3. Show det(cA) = cⁿ det A, and hence det(−A) = ±det A depending on whether n is even or odd.</div>
+<details><summary>Show solution</summary><p>Every term of the permutation formula is a product of n elements, each multiplied by c, so each term gains cⁿ. With c = −1: det(−A) = (−1)ⁿ det A, which is +det A for even n and −det A for odd n.</p></details></div>
+<div class="prob"><div class="q">4. The determinant of a triangular matrix is the product of its diagonal elements.</div>
+<details><summary>Show solution</summary><p>For upper triangular T, expand along the first column. Its only nonzero element is t₁₁, so det T = t₁₁·det(T with row 1 and column 1 deleted), which is again upper triangular. Repeating: det T = t₁₁t₂₂⋯tₙₙ. (Permutation view: any permutation other than the identity uses some element below the diagonal, which is 0.)</p></details></div>
+<div class="prob"><div class="q">5. Show (a) det A* = (det A)*, (b) det Ã = det A, (c) det A† = (det A)*.</div>
+<details><summary>Show solution</summary>
+<p>(a) Conjugate every element. Each term of Eq. (2), a product of elements, becomes the conjugate of that term, so the sum becomes (det A)*.</p>
+<p>(b) In Eq. (2), choosing one element from each <b>row</b> by a permutation is the same as choosing one from each <b>column</b> by the inverse permutation, which has the same sign. So the sum for Ã equals the sum for A. (Equivalently, expanding along a row of Ã is expanding along a column of A.)</p>
+<p>(c) det A† = det((A*)~) = det A* = (det A)*.</p></details></div>
+<div class="prob"><div class="q">6. The determinant of a Hermitian matrix is real.</div>
+<details><summary>Show solution</summary><p>det H = det H† = (det H)* by 5(c), so det H is real. (It is the product of real eigenvalues, Section 9.)</p></details></div>
+<div class="prob"><div class="q">7. The determinant of an antisymmetric matrix of odd order is 0. That of an antiHermitian matrix of odd order is purely imaginary or 0.</div>
+<details><summary>Show solution</summary>
+<p>Antisymmetric: det A = det Ã = det(−A) = (−1)ⁿ det A = −det A ⇒ det A = 0.</p>
+<p>AntiHermitian: det A = det(−A†) = (−1)ⁿ det A† = −(det A)* ⇒ det A + (det A)* = 0 ⇒ Re(det A) = 0. So it is purely imaginary (or 0). Example: det(iI₁) = i.</p></details></div>
+
+<div class="prob"><div class="q">8(a). Find all cofactors of D = <span class="M D" data-m="1 x x²; x x² 1; x² 1 x"></span>, get dD/dx by Eq. (6), and verify by direct expansion.</div>
+<details><summary>Show solution</summary>
+<p><b>Cofactors:</b> A¹¹ = x³ − 1, A¹² = −(x² − x²) = 0, A¹³ = x − x⁴; A²¹ = −(x² − x²) = 0, A²² = x − x⁴, A²³ = −(1 − x³) = x³ − 1; A³¹ = x − x⁴, A³² = −(1 − x³) = x³ − 1, A³³ = x² − x² = 0.</p>
+<p>(Example: A¹³ = det<span class="M" data-m="x x²; x² 1"></span> = x − x⁴.)</p>
+<p><b>Derivatives of the elements:</b> <span class="M" data-m="0 1 2x; 1 2x 0; 2x 0 1"></span>.</p>
+<p><b>Eq. (6):</b> Σ Aⁱʲ aᵢⱼ′ = (x³−1)(0) + 0 + (x − x⁴)(2x) + 0 + (x − x⁴)(2x) + (x³ − 1)(0) + (x − x⁴)(2x) + (x³ − 1)(0) + 0 = 3·2x(x − x⁴) = 6x² − 6x⁵ = <b>−6x²(x³ − 1)</b>.</p>
+<p><b>Direct:</b> expand along row 1: D = 1(x³ − 1) + x·0 + x²(x − x⁴) = x³ − 1 + x³ − x⁶ = −(x⁶ − 2x³ + 1) = <b>−(x³ − 1)²</b>. Then dD/dx = −2(x³ − 1)(3x²) = −6x²(x³ − 1) ✓.</p>
+<p>(Also D is a circulant-type determinant: rows are cyclic shifts of (1, x, x²), and indeed D = 3x³ − (1 + x³ + x⁶) ✓.)</p></details></div>
+
+<div class="prob"><div class="q">8(b). The same for D = <span class="M D" data-m="sin x cos x e⁻ˣ; cos x −sin x −e⁻ˣ; −sin x −cos x e⁻ˣ"></span>.</div>
+<details><summary>Show solution</summary>
+<p>Write s = sin x, c = cos x, E = e⁻ˣ.</p>
+<p><b>Cofactors:</b><br>A¹¹ = (−s)(E) − (−E)(−c) = −E(s + c),  A¹² = −[cE − (−E)(−s)] = −E(c − s),  A¹³ = −c² − s² = −1;<br>
+A²¹ = −[cE − E(−c)] = −2cE,  A²² = sE + sE = 2sE,  A²³ = −[−sc + sc] = 0;<br>
+A³¹ = c(−E) − E(−s) = E(s − c),  A³² = −[s(−E) − Ec] = E(s + c),  A³³ = −s² − c² = −1.</p>
+<p><b>D</b> (row 1): s·(−E(s + c)) + c·(−E(c − s)) + E(−1) = −E(s² + sc + c² − sc) − E = −E − E = <b>−2e⁻ˣ</b>.</p>
+<p><b>Derivatives of the elements:</b> row 1 (c, −s, −E), row 2 (−s, −c, E), row 3 (−c, s, −E).</p>
+<p><b>Eq. (6):</b><br>row 1: c(−E(s+c)) + (−s)(−E(c−s)) + (−E)(−1) = −E(sc + c²) + E(sc − s²) + E = −E(c² + s²) + E = 0;<br>
+row 2: (−s)(−2cE) + (−c)(2sE) + E·0 = 2scE − 2scE = 0;<br>
+row 3: (−c)·E(s − c) + s·E(s + c) + (−E)(−1) = E(−cs + c² + s² + sc) + E = E + E = 2E.<br>
+Total: dD/dx = <b>2e⁻ˣ</b>, matching d(−2e⁻ˣ)/dx = 2e⁻ˣ ✓.</p></details></div>
+</section>
+
+<section id="practice">
+<h2>14. Practice set (with solutions)</h2>
+<h3>A. Numeric evaluation</h3>
+<div class="prob"><div class="q">P1. det <span class="M D" data-m="2 -1 3; 1 0 4; 5 2 1"></span></div>
+<details><summary>Show solution</summary><p>Expanding along row 2 (it has a 0): −1·det<span class="M" data-m="-1 3; 2 1"></span> + 0 − 4·det<span class="M" data-m="2 -1; 5 2"></span> = −1(−1 − 6) − 4(4 + 5) = 7 − 36 = <b>−29</b>.</p></details></div>
+<div class="prob"><div class="q">P2. det of the 5×5 tridiagonal matrix with 2 on the diagonal and −1 on both neighbouring diagonals.</div>
+<details><summary>Show solution</summary><p>Dₙ = 2Dₙ₋₁ − Dₙ₋₂, with D₁ = 2 and D₂ = 3 ⇒ D₃ = 4, D₄ = 5, D₅ = <b>6</b>. In general Dₙ = n + 1.</p></details></div>
+<div class="prob"><div class="q">P3. det of the Vandermonde matrix with nodes 1, 2, 3, 4.</div>
+<details><summary>Show solution</summary><p>Π<sub>i&lt;j</sub>(xⱼ − xᵢ) = (2−1)(3−1)(4−1)(3−2)(4−2)(4−3) = 1·2·3·1·2·1 = <b>12</b>.</p></details></div>
+<h3>B. Properties</h3>
+<div class="prob"><div class="q">P4. A is 3×3 with det A = 5. Find det(2A), det(−A), det(A⁻¹), det(AᵀA), det(adj A), det(A³).</div>
+<details><summary>Show solution</summary><p>2³·5 = 40; −5; 1/5; 25; 5² = 25; 125.</p></details></div>
+<div class="prob"><div class="q">P5. If A² = A, what can det A be? If A² = I? If A³ = 0? If AᵀA = I?</div>
+<details><summary>Show solution</summary><p>0 or 1; ±1; 0; ±1.</p></details></div>
+<div class="prob"><div class="q">P6. A is 2×3 and B is 3×2. Can det(AB) ≠ 0? Can det(BA) ≠ 0?</div>
+<details><summary>Show solution</summary><p>det(AB) (2×2) can be nonzero, e.g. A = [I₂ | 0] and B = [I₂; 0] give AB = I₂. det(BA) (3×3) is always 0, because rank(BA) ≤ 2.</p></details></div>
+<div class="prob"><div class="q">P7. What is the sign of the term a₁₃a₂₁a₃₂a₄₄ in a 4×4 determinant? Of a₁₄a₂₃a₃₂a₄₁?</div>
+<details><summary>Show solution</summary><p>(3,1,2,4): inversions (3,1), (3,2), so 2 ⇒ <b>+</b>. (4,3,2,1): all 6 pairs are inverted ⇒ even ⇒ <b>+</b>.</p></details></div>
+<div class="prob"><div class="q">P8. How many terms does a 5×5 determinant have? How many contain a₁₁?</div>
+<details><summary>Show solution</summary><p>5! = 120. Those containing a₁₁ correspond to permutations fixing 1: 4! = 24.</p></details></div>
+<h3>C. Symbolic (factor theorem)</h3>
+<div class="prob"><div class="q">P9. Solve det <span class="M D" data-m="x 1 1; 1 x 1; 1 1 x"></span> = 0.</div>
+<details><summary>Show solution</summary><p>(x − 1)²(x + 2) = 0 ⇒ x = 1 (double root) or x = −2.</p></details></div>
+<div class="prob"><div class="q">P10. Evaluate the circulant <span class="M D" data-m="a b c; c a b; b c a"></span>.</div>
+<details><summary>Show solution</summary><p>Every row sums to a + b + c, so that is a factor. The result is a³ + b³ + c³ − 3abc = (a + b + c)(a² + b² + c² − ab − bc − ca).</p></details></div>
+<div class="prob"><div class="q">P11. Evaluate <span class="M D" data-m="1+a 1 1; 1 1+b 1; 1 1 1+c"></span>.</div>
+<details><summary>Show solution</summary><p>This is diag(a,b,c) + J, a diagonal matrix plus a rank-1 matrix, so the matrix determinant lemma applies: det = abc(1 + 1/a + 1/b + 1/c) = abc + ab + bc + ca.</p></details></div>
+<div class="prob"><div class="q">P12. Show the 4×4 antisymmetric matrix with entries a, b, c, d, e, f has det (af − be + cd)².</div>
+<details><summary>Show solution</summary><p>This can be verified by expansion. The general fact is that det(antisymmetric, even order) = Pf(A)², a perfect square, so it is always ≥ 0 for real matrices.</p></details></div>
+<h3>D. Derivative and applications</h3>
+<div class="prob"><div class="q">P13. For y″ + (2/x)y′ + y = 0, find the Wronskian of two solutions up to a constant.</div>
+<details><summary>Show solution</summary><p>Abel: W = W₀ e^{−∫(2/x)dx} = W₀/x². (Check with y₁ = sin x/x and y₂ = cos x/x: W = −1/x².)</p></details></div>
+<div class="prob"><div class="q">P14. Find d/dt det(I + tA) at t = 0.</div>
+<details><summary>Show solution</summary><p>Jacobi: det(I)·Tr(I⁻¹A) = <b>Tr A</b>. So det(I + εA) ≈ 1 + ε Tr A.</p></details></div>
+<div class="prob"><div class="q">P15. Area of the triangle with vertices (0,0), (4,1), (1,3). Are (1,2), (3,6), (−2,−4) collinear?</div>
+<details><summary>Show solution</summary><p>½|4·3 − 1·1| = 11/2. For collinearity: det<span class="M" data-m="1 2 1; 3 6 1; -2 -4 1"></span> = 1(6 + 4) − 2(3 + 2) + 1(−12 + 12) = 10 − 10 + 0 = 0 ⇒ yes (all on y = 2x).</p></details></div>
+<div class="prob"><div class="q">P16. Jacobian of spherical coordinates (x = r sin θ cos φ, y = r sin θ sin φ, z = r cos θ).</div>
+<details><summary>Show solution</summary><p>|∂(x,y,z)/∂(r,θ,φ)| = r² sin θ, so dV = r² sin θ dr dθ dφ.</p></details></div>
+<div class="prob"><div class="q">P17. Use Cramer's rule: 2x + y = 5, x − y = 1.</div>
+<details><summary>Show solution</summary><p>D = det<span class="M" data-m="2 1; 1 -1"></span> = −3. x = det<span class="M" data-m="5 1; 1 -1"></span>/D = (−6)/(−3) = 2. y = det<span class="M" data-m="2 5; 1 1"></span>/D = (−3)/(−3) = 1.</p></details></div>
+<div class="prob"><div class="q">P18. det(I + uvᵀ) for u = (1,2)ᵀ, v = (3,4)ᵀ. Verify directly.</div>
+<details><summary>Show solution</summary><p>1 + vᵀu = 1 + 3 + 8 = 12. Directly: I + uvᵀ = <span class="M" data-m="4 4; 6 9"></span>, det = 36 − 24 = 12 ✓.</p></details></div>
+<div class="prob"><div class="q">P19. Why does a Slater determinant vanish if two electrons occupy the same orbital?</div>
+<details><summary>Show solution</summary><p>Two identical rows (or columns) give det = 0. That is the Pauli exclusion principle. Swapping two electrons swaps two rows, so the wavefunction changes sign (fermion antisymmetry).</p></details></div>
+</section>
+
+<section id="quiz" class="quiz">
+<h2>15. Self-test quiz</h2>
+<div id="quizBox"></div>
+<div class="ctrl"><button id="quizCheck">Check answers</button><button class="alt" id="quizReset">Reset</button><span id="quizScore"></span></div>
+</section>
+
+<section id="facts">
+<h2>16. Interesting facts</h2>
+<div class="box fact"><ul>
+<li>Determinants are <b>older than matrices</b>. Seki Takakazu in Japan (1683) and Leibniz (1693) used them to solve linear equations, and Cramer published his rule in 1750. The word "matrix" came 150 years later.</li>
+<li>Computing a 25×25 determinant by the n! formula would need about 1.5 × 10²⁵ terms, which is longer than the age of the universe on a fast computer. Row reduction does it in about 5000 operations.</li>
+<li>det is the <b>only</b> function of the rows that is linear in each row, changes sign under a row swap, and gives 1 for I. These three properties define it completely.</li>
+<li>The Slater determinant (1929) builds Pauli's principle into the mathematics, so that fermion wavefunctions are automatically antisymmetric.</li>
+<li>The Jacobian determinant is why the volume element in polar coordinates is r dr dθ, and also why probability densities change when you change variables.</li>
+</ul></div>
+</section>
+
+<script>
+/* ===== helpers ===== */
+const $=id=>document.getElementById(id);
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function pal(){return{ink:css('--ink'),muted:css('--muted'),line:css('--line'),bg:css('--card'),blue:css('--acc'),orange:css('--acc2'),green:css('--acc3'),purple:css('--acc4'),red:css('--warn')}}
+const redrawers=[];
+function fmt(x,d=2){if(Math.abs(x)<1e-9)x=0;return (+x.toFixed(d)).toString()}
+const add=(a,b)=>a.map((x,i)=>x+b[i]),sub=(a,b)=>a.map((x,i)=>x-b[i]),mul=(k,a)=>a.map(x=>k*x),nrm=a=>Math.hypot(...a);
+const ap=(m,p)=>[m[0]*p[0]+m[1]*p[1],m[2]*p[0]+m[3]*p[1]];
+const mm=(x,y)=>[x[0]*y[0]+x[1]*y[2],x[0]*y[1]+x[1]*y[3],x[2]*y[0]+x[3]*y[2],x[2]*y[1]+x[3]*y[3]];
+const m2s=m=>`[ ${m.map(v=>fmt(v,3)).slice(0,2).join('  ')} ]\n[ ${m.map(v=>fmt(v,3)).slice(2).join('  ')} ]`;
+function arrow(ctx,x1,y1,x2,y2,col,w=2.5,label,dash){ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;if(dash)ctx.setLineDash(dash);
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.setLineDash([]);const L=Math.hypot(x2-x1,y2-y1);
+  if(L>3){const a=Math.atan2(y2-y1,x2-x1),h=Math.min(12,L*0.4);ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-0.4),y2-h*Math.sin(a-0.4));ctx.lineTo(x2-h*Math.cos(a+0.4),y2-h*Math.sin(a+0.4));ctx.closePath();ctx.fill();}
+  if(label){ctx.font='bold 14px Segoe UI, sans-serif';ctx.fillText(label,x2+6,y2-6)}ctx.restore()}
+function evtPos(cv,e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height]}
+class Plane2D{
+  constructor(cv,unit,onDraw){this.cv=cv;this.ctx=cv.getContext('2d');this.u=unit;this.ox=cv.width/2;this.oy=cv.height/2;this.drag=[];this.onDraw=onDraw;this.act=null;
+    cv.addEventListener('pointerdown',e=>{const p=evtPos(cv,e);let best=null,bd=18;this.drag.forEach(d=>{const s=this.S(d.get());const dd=Math.hypot(s[0]-p[0],s[1]-p[1]);if(dd<bd){bd=dd;best=d}});if(best){this.act=best;cv.setPointerCapture(e.pointerId)}});
+    cv.addEventListener('pointermove',e=>{const p=evtPos(cv,e);if(this.act){const w=this.W(p);this.act.set([Math.round(w[0]*10)/10,Math.round(w[1]*10)/10]);this.draw()}
+      else{const near=this.drag.some(d=>{const s=this.S(d.get());return Math.hypot(s[0]-p[0],s[1]-p[1])<18});cv.style.cursor=near?'pointer':'default'}});
+    const up=()=>this.act=null;cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);redrawers.push(()=>this.draw())}
+  S(p){return[this.ox+p[0]*this.u,this.oy-p[1]*this.u]} W(p){return[(p[0]-this.ox)/this.u,(this.oy-p[1])/this.u]}
+  grid(){const c=this.ctx,pl=pal(),W=this.cv.width,H=this.cv.height;c.save();c.strokeStyle=pl.line;c.lineWidth=1;
+    for(let x=this.ox%this.u;x<W;x+=this.u){c.beginPath();c.moveTo(x,0);c.lineTo(x,H);c.stroke()}
+    for(let y=this.oy%this.u;y<H;y+=this.u){c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke()}
+    c.strokeStyle=pl.muted;c.lineWidth=1.3;c.beginPath();c.moveTo(0,this.oy);c.lineTo(W,this.oy);c.moveTo(this.ox,0);c.lineTo(this.ox,H);c.stroke();c.restore()}
+  line(a,b,col,w=1,dash){const c=this.ctx,p=this.S(a),q=this.S(b);c.save();c.strokeStyle=col;c.lineWidth=w;if(dash)c.setLineDash(dash);c.beginPath();c.moveTo(...p);c.lineTo(...q);c.stroke();c.restore()}
+  arrow(a,b,col,label,w=2.6,dash){const p=this.S(a),q=this.S(b);arrow(this.ctx,p[0],p[1],q[0],q[1],col,w,label,dash)}
+  dot(p,col,r=6){const c=this.ctx,q=this.S(p);c.fillStyle=col;c.beginPath();c.arc(q[0],q[1],r,0,7);c.fill()}
+  ring(p,col,r=10){const c=this.ctx,q=this.S(p);c.save();c.strokeStyle=col;c.lineWidth=2;c.setLineDash([3,3]);c.beginPath();c.arc(q[0],q[1],r,0,7);c.stroke();c.restore()}
+  poly(pts,fill,alpha=0.25,stroke){const c=this.ctx;c.save();c.beginPath();pts.forEach((p,i)=>{const q=this.S(p);i?c.lineTo(...q):c.moveTo(...q)});c.closePath();c.globalAlpha=alpha;c.fillStyle=fill;c.fill();c.globalAlpha=1;if(stroke){c.strokeStyle=stroke;c.lineWidth=1.5;c.stroke()}c.restore()}
+  text(p,t,col,dx=6,dy=-6){const q=this.S(p);this.ctx.fillStyle=col;this.ctx.font='bold 14px Segoe UI, sans-serif';this.ctx.fillText(t,q[0]+dx,q[1]+dy)}
+  draw(){const c=this.ctx;c.clearRect(0,0,this.cv.width,this.cv.height);c.fillStyle=pal().bg;c.fillRect(0,0,this.cv.width,this.cv.height);this.onDraw(this)}
+}
+$('themeBtn').onclick=()=>{const h=document.documentElement;const dark=h.getAttribute('data-theme')?h.getAttribute('data-theme')==='dark':matchMedia('(prefers-color-scheme: dark)').matches;h.setAttribute('data-theme',dark?'light':'dark');redrawers.forEach(f=>f())};
+
+/* ===== static matrix renderer ===== */
+document.querySelectorAll('.M').forEach(el=>{const rows=el.dataset.m.split(';').map(r=>r.trim().split(/\s+/));
+  el.innerHTML='<table class="mx">'+rows.map(r=>'<tr>'+r.map(x=>`<td>${x.replace(/^-/,'−')}</td>`).join('')+'</tr>').join('')+'</table>'});
+
+/* ===== complex numbers ===== */
+const C=(re,im=0)=>({re,im});
+const cadd=(a,b)=>C(a.re+b.re,a.im+b.im),csub=(a,b)=>C(a.re-b.re,a.im-b.im),cmul=(a,b)=>C(a.re*b.re-a.im*b.im,a.re*b.im+a.im*b.re),cconj=a=>C(a.re,-a.im);
+function pReal(s){if(s===''||s==='+')return 1;if(s==='-')return -1;if(s.includes('/')){const[a,b]=s.split('/');return pReal(a)/pReal(b)}const v=Number(s);if(isNaN(v))throw `cannot read "${s}"`;return v}
+function parseC(s){s=s.replace(/\s/g,'').replace(/−/g,'-');if(!s)throw'empty entry';
+  if(s.endsWith('i')){const body=s.slice(0,-1);let k=-1;for(let i=body.length-1;i>0;i--)if(body[i]==='+'||body[i]==='-'){k=i;break}
+    if(k<0)return C(0,pReal(body));return C(pReal(body.slice(0,k)),pReal(body.slice(k)))}
+  return C(pReal(s))}
+function fR(x){if(Math.abs(x)<1e-10)return'0';const r=Math.round(x);if(Math.abs(x-r)<1e-9)return''+r;
+  for(let d=2;d<=1000;d++){const n=Math.round(x*d);if(Math.abs(x*d-n)<1e-7)return n+'/'+d}return x.toFixed(4)}
+function fC(z){const re=Math.abs(z.re)<1e-10?0:z.re,im=Math.abs(z.im)<1e-10?0:z.im;if(im===0)return fR(re);
+  const ims=(Math.abs(im-1)<1e-12?'':Math.abs(im+1)<1e-12?'-':fR(im));if(re===0)return (ims===''?'':ims==='-'?'-':ims)+'i';
+  const a=Math.abs(im);return fR(re)+(im<0?'-':'+')+(Math.abs(a-1)<1e-12?'':fR(a))+'i'}
+function parseMat(t){const rows=t.trim().split(/\n|;/).map(r=>r.trim()).filter(Boolean).map(r=>r.split(/[\s,]+/).filter(Boolean).map(parseC));
+  if(!rows.length)throw'empty matrix';if(rows.some(r=>r.length!==rows[0].length))throw'rows have different lengths';return rows}
+const msz=A=>`${A.length}×${A[0].length}`;
+function mmul(A,B){if(A[0].length!==B.length)throw`cannot multiply ${msz(A)} by ${msz(B)}: inner sizes ${A[0].length} ≠ ${B.length}`;
+  return A.map(r=>B[0].map((_,j)=>r.reduce((s,a,k)=>cadd(s,cmul(a,B[k][j])),C(0))))}
+function madd(A,B,s=1){if(msz(A)!==msz(B))throw`cannot add ${msz(A)} and ${msz(B)}`;return A.map((r,i)=>r.map((a,j)=>s>0?cadd(a,B[i][j]):csub(a,B[i][j])))}
+const mT=A=>A[0].map((_,j)=>A.map(r=>r[j])),mConj=A=>A.map(r=>r.map(cconj)),mDag=A=>mT(mConj(A));
+const mScal=(c,A)=>A.map(r=>r.map(a=>cmul(c,a)));
+function mId(n){return[...Array(n)].map((_,i)=>[...Array(n)].map((_,j)=>C(i===j?1:0)))}
+function mStr(A){const S=A.map(r=>r.map(fC));const w=Math.max(...S.flat().map(s=>s.length));return S.map(r=>'  [ '+r.map(s=>s.padStart(w)).join('  ')+' ]').join('\n')}
+function mTr(A){if(A.length!==A[0].length)throw'trace needs a square matrix';return A.reduce((s,r,i)=>cadd(s,r[i]),C(0))}
+
+/* ================= 3D scene ================= */
+class Scene3D{
+  constructor(cv,onDraw){this.cv=cv;this.ctx=cv.getContext('2d');this.yaw=-0.75;this.pitch=0.42;this.s=cv.height/9;this.onDraw=onDraw;
+    let drag=null;
+    cv.addEventListener('pointerdown',e=>{drag=evtPos(cv,e);cv.setPointerCapture(e.pointerId)});
+    cv.addEventListener('pointermove',e=>{if(!drag)return;const p=evtPos(cv,e);this.yaw-=(p[0]-drag[0])*0.01;this.pitch=Math.max(-1.45,Math.min(1.45,this.pitch+(p[1]-drag[1])*0.01));drag=p;this.draw()});
+    cv.addEventListener('pointerup',()=>drag=null);cv.addEventListener('pointercancel',()=>drag=null);
+    cv.style.cursor='grab';redrawers.push(()=>this.draw());}
+  P(p){const [x,y,z]=p,cy=Math.cos(this.yaw),sy=Math.sin(this.yaw);const x1=x*cy-y*sy,y1=x*sy+y*cy;
+    const cp=Math.cos(this.pitch),sp=Math.sin(this.pitch);const Y=z*cp+y1*sp,dep=y1*cp-z*sp;const f=14/(14+dep);
+    return[this.cv.width/2+x1*this.s*f,this.cv.height/2-Y*this.s*f];}
+  line(a,b,col,w=1,dash){const c=this.ctx,p=this.P(a),q=this.P(b);c.save();c.strokeStyle=col;c.lineWidth=w;if(dash)c.setLineDash(dash);c.beginPath();c.moveTo(...p);c.lineTo(...q);c.stroke();c.restore()}
+  arrow(a,b,col,label,w=2.6,dash){const p=this.P(a),q=this.P(b);arrow(this.ctx,p[0],p[1],q[0],q[1],col,w,label,dash)}
+  poly(pts,fill,alpha=0.18){const c=this.ctx;c.save();c.globalAlpha=alpha;c.fillStyle=fill;c.beginPath();pts.forEach((p,i)=>{const q=this.P(p);i?c.lineTo(...q):c.moveTo(...q)});c.closePath();c.fill();c.restore()}
+  text(p,t,col){const q=this.P(p);this.ctx.fillStyle=col;this.ctx.font='13px Segoe UI, sans-serif';this.ctx.fillText(t,q[0]+4,q[1]-4)}
+  axes(L=3.5){const pl=pal();for(let i=-3;i<=3;i++){this.line([i,-3,0],[i,3,0],pl.line,1);this.line([-3,i,0],[3,i,0],pl.line,1)}
+    this.line([-L,0,0],[L,0,0],pl.muted,1.2);this.line([0,-L,0],[0,L,0],pl.muted,1.2);this.line([0,0,-L],[0,0,L],pl.muted,1.2);
+    this.text([L,0,0],'x',pl.muted);this.text([0,L,0],'y',pl.muted);this.text([0,0,L],'z',pl.muted);}
+  draw(){const c=this.ctx;c.clearRect(0,0,this.cv.width,this.cv.height);c.fillStyle=pal().bg;c.fillRect(0,0,this.cv.width,this.cv.height);this.onDraw(this)}
+}
+
+/* ================= exact fractions ================= */
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a||1}
+class Fr{constructor(n,d=1){if(d===0)throw'div0';if(d<0){n=-n;d=-d}const g=gcd(n,d);this.n=n/g;this.d=d/g}
+  add(o){return new Fr(this.n*o.d+o.n*this.d,this.d*o.d)} sub(o){return new Fr(this.n*o.d-o.n*this.d,this.d*o.d)}
+  mul(o){return new Fr(this.n*o.n,this.d*o.d)} div(o){return new Fr(this.n*o.d,this.d*o.n)}
+  isZero(){return this.n===0} isOne(){return this.n===1&&this.d===1} val(){return this.n/this.d}
+  toString(){return this.d===1?''+this.n:this.n+'/'+this.d}}
+function parseFr(s){s=s.trim();if(s.includes('/')){const [a,b]=s.split('/');return parseFr(a).div(parseFr(b))}
+  if(!/^[-+]?\d*\.?\d+$/.test(s))throw 'Cannot read "'+s+'"';const k=(s.split('.')[1]||'').length;return new Fr(Math.round(parseFloat(s)*10**k),10**k)}
+function frNum(x){return parseFr(String(Math.round(x*1000)/1000))}
+function parseVecs(txt){return txt.trim().split(/\n+/).filter(l=>l.trim()).map(l=>l.trim().split(/[\s,;]+/).filter(Boolean).map(parseFr))}
+function matStr(A){const S=A.map(r=>r.map(x=>x.toString()));const w=Math.max(...S.flat().map(s=>s.length));return S.map(r=>'  [ '+r.map(s=>s.padStart(w)).join('  ')+' ]').join('\n')}
+function rref(M){const A=M.map(r=>r.slice()),R=A.length,C=A[0].length;let r=0;const piv=[],steps=[];
+  for(let c=0;c<C&&r<R;c++){let p=-1;for(let i=r;i<R;i++)if(!A[i][c].isZero()){p=i;break}if(p<0)continue;
+    if(p!==r){[A[p],A[r]]=[A[r],A[p]];steps.push(`R${r+1} ↔ R${p+1}`)}
+    const pv=A[r][c];if(!pv.isOne()){A[r]=A[r].map(x=>x.div(pv));steps.push(`R${r+1} → R${r+1} ÷ (${pv})`)}
+    for(let i=0;i<R;i++)if(i!==r&&!A[i][c].isZero()){const f=A[i][c];A[i]=A[i].map((x,j)=>x.sub(f.mul(A[r][j])));steps.push(`R${i+1} → R${i+1} − (${f})·R${r+1}`)}
+    steps.push(matStr(A));piv.push(c);r++;}
+  return{A,piv,steps}}
+function detFr(M){const A=M.map(r=>r.slice()),n=A.length;let d=new Fr(1);
+  for(let c=0;c<n;c++){let p=-1;for(let i=c;i<n;i++)if(!A[i][c].isZero()){p=i;break}if(p<0)return new Fr(0);
+    if(p!==c){[A[p],A[c]]=[A[c],A[p]];d=d.mul(new Fr(-1))}d=d.mul(A[c][c]);
+    for(let i=c+1;i<n;i++){const f=A[i][c].div(A[c][c]);A[i]=A[i].map((x,j)=>x.sub(f.mul(A[c][j])))}}return d}
+function intScale(v){let L=1;v.forEach(x=>{L=L/gcd(L,x.d)*x.d});let ints=v.map(x=>x.n*(L/x.d));const g=ints.reduce((a,b)=>gcd(a,b),0)||1;ints=ints.map(x=>x/g);
+  if(ints.find(x=>x!==0)<0)ints=ints.map(x=>-x);return ints}
+function nullSpace(res,C){const {A,piv}=res;const free=[];for(let c=0;c<C;c++)if(!piv.includes(c))free.push(c);
+  return free.map(f=>{const x=Array(C).fill(0).map(()=>new Fr(0));x[f]=new Fr(1);piv.forEach((pc,i)=>{x[pc]=A[i][f].mul(new Fr(-1))});return x})}
+
+
+document.querySelectorAll('.M.D table').forEach(t=>t.classList.add('dt'));
+const frM=t=>{const R=t.trim().split(/\n|;/).map(r=>r.trim()).filter(Boolean).map(r=>r.split(/[\s,]+/).filter(Boolean).map(parseFr));if(!R.length||R.some(r=>r.length!==R.length))throw'enter a SQUARE matrix';return R};
+const minorOf=(A,i,j)=>A.filter((_,r)=>r!==i).map(r=>r.filter((_,c)=>c!==j));
+const sgn=(i,j)=>((i+j)%2?-1:1);
+
+/* ===== Lab 1: area ===== */
+(function(){let u=[3,0.5],v=[1,2.5],anim=null;
+ const S=new Plane2D($('cvArea'),45,s=>{const pl=pal();s.grid();const D=u[0]*v[1]-u[1]*v[0];
+  s.poly([[0,0],u,add(u,v),v],D>=0?pl.blue:pl.red,0.25,D>=0?pl.blue:pl.red);
+  s.arrow([0,0],u,pl.blue,'col 1',3);s.arrow([0,0],v,pl.green,'col 2',3);s.dot(u,pl.ink,4);s.dot(v,pl.ink,4);
+  const L=Math.hypot(...u);if(L>1e-9){const h=Math.abs(D)/L;s.text(add(u,v),`area ${fmt(Math.abs(D))}`,pl.ink,6,14)}
+  $('outArea').textContent=`A = [ ${fmt(u[0])}  ${fmt(v[0])} ]\n    [ ${fmt(u[1])}  ${fmt(v[1])} ]\ndet A = (${fmt(u[0])})(${fmt(v[1])}) − (${fmt(v[0])})(${fmt(u[1])}) = ${fmt(D,3)}\n`+(Math.abs(D)<1e-9?'det = 0 ⇒ columns DEPENDENT (parallel): zero area, A is singular.':D>0?'det > 0 ⇒ orientation kept (col 2 is counter-clockwise from col 1).':'det < 0 ⇒ orientation FLIPPED (shaded red).')});
+ S.drag=[{get:()=>u,set:p=>u=p},{get:()=>v,set:p=>v=p}];
+ function animTo(nv,nu){cancelAnimationFrame(anim);const v0=v.slice(),u0=u.slice(),t0=performance.now();const st=now=>{const t=Math.min(1,(now-t0)/700);v=add(v0,mul(t,sub(nv,v0)));u=add(u0,mul(t,sub(nu,u0)));S.draw();if(t<1)anim=requestAnimationFrame(st)};anim=requestAnimationFrame(st)}
+ $('opShear').onclick=()=>animTo(add(v,mul(0.5,u)),u);$('opSwap').onclick=()=>animTo(u.slice(),v.slice());$('opScale').onclick=()=>animTo(v,mul(2,u));$('opReset').onclick=()=>animTo([1,2.5],[3,0.5]);S.draw();})();
+
+/* ===== Lab 2: volume ===== */
+(function(){const ids=['v1x','v1y','v1z','v2x','v2y','v2z','v3x','v3y','v3z'];const g=i=>+$(i).value;
+ const sc=new Scene3D($('cvVol'),S=>{const pl=pal();S.axes();const a=[g('v1x'),g('v1y'),g('v1z')],b=[g('v2x'),g('v2y'),g('v2z')],c=[g('v3x'),g('v3y'),g('v3z')];
+  const D=a[0]*(b[1]*c[2]-b[2]*c[1])-a[1]*(b[0]*c[2]-b[2]*c[0])+a[2]*(b[0]*c[1]-b[1]*c[0]);
+  const V=[[0,0,0],a,b,c,add(a,b),add(a,c),add(b,c),add(add(a,b),c)];const col=D>=0?pl.blue:pl.red;
+  S.poly([V[0],V[1],V[4],V[2]],col,0.15);S.poly([V[0],V[1],V[5],V[3]],col,0.12);S.poly([V[0],V[2],V[6],V[3]],col,0.12);S.poly([V[7],V[4],V[1],V[5]],col,0.08);S.poly([V[7],V[6],V[2],V[4]],col,0.08);
+  [[0,1],[0,2],[0,3],[1,4],[1,5],[2,4],[2,6],[3,5],[3,6],[4,7],[5,7],[6,7]].forEach(([p,q])=>S.line(V[p],V[q],pl.muted,1,[4,3]));
+  S.arrow([0,0,0],a,pl.blue,'c₁');S.arrow([0,0,0],b,pl.green,'c₂');S.arrow([0,0,0],c,pl.orange,'c₃');
+  $('outVol').textContent=`det[c₁ c₂ c₃] = c₁·(c₂ × c₃) = ${fmt(D,3)}\nvolume = |det| = ${fmt(Math.abs(D),3)}\n`+(Math.abs(D)<1e-9?'0 ⇒ coplanar columns ⇒ singular':D>0?'+ ⇒ right-handed (c₁, c₂, c₃)':'− ⇒ left-handed (mirror image) — shaded red')});
+ ids.forEach(i=>$(i).addEventListener('input',()=>sc.draw()));sc.draw();})();
+
+/* ===== Lab 3: cofactor explorer ===== */
+(function(){let A=null,sel=null;
+ function render(){const n=A.length;let h='<table style="width:auto;border-collapse:collapse">';
+  for(let i=0;i<n;i++){h+='<tr>';for(let j=0;j<n;j++){let st='min-width:48px;height:38px;text-align:center;cursor:pointer;font-family:Consolas,monospace;';
+    if(sel){if(i===sel[0]&&j===sel[1])st+='background:var(--softw);outline:2px solid var(--acc2);font-weight:800;';else if(i===sel[0]||j===sel[1])st+='background:var(--line);color:var(--muted);text-decoration:line-through;';else st+='background:var(--soft);';}
+    h+=`<td data-i="${i}" data-j="${j}" style="${st}">${A[i][j]}<sup style="color:var(--muted);font-size:.7em">${sgn(i,j)>0?'+':'−'}</sup></td>`}h+='</tr>'}
+  $('cfGrid').innerHTML=h+'</table>';$('cfGrid').querySelectorAll('td').forEach(td=>td.onclick=()=>{sel=[+td.dataset.i,+td.dataset.j];render();explain()})}
+ function explain(){const [i,j]=sel,n=A.length;if(n===1){$('cfOut').textContent='1×1: det = the element.';return}
+  const Mi=minorOf(A,i,j),m=detFr(Mi),cof=m.mul(new Fr(sgn(i,j)));
+  let s=`Element a${i+1}${j+1} = ${A[i][j]}\nMinor M${i+1}${j+1} = det of what is left after deleting row ${i+1} and column ${j+1}:\n${matStr(Mi)}\n= ${m}\nSign (−1)^(${i+1}+${j+1}) = ${sgn(i,j)>0?'+1':'−1'}  ⇒  cofactor A^${i+1}${j+1} = ${cof}\n`;
+  const rowC=k=>detFr(minorOf(A,i,k)).mul(new Fr(sgn(i,k)));
+  if(!$('cfAlien').checked){let tot=new Fr(0);const terms=[];for(let k=0;k<n;k++){const c=rowC(k);tot=tot.add(A[i][k].mul(c));terms.push(`(${A[i][k]})(${c})`)}
+   s+=`\nExpansion along row ${i+1}:  det = ${terms.join(' + ')} = ${tot}`}
+  else{const jr=(i+1)%n;let tot=new Fr(0);const terms=[];for(let k=0;k<n;k++){const c=detFr(minorOf(A,jr,k)).mul(new Fr(sgn(jr,k)));tot=tot.add(A[i][k].mul(c));terms.push(`(${A[i][k]})(${c})`)}
+   s+=`\nALIEN: elements of row ${i+1} × cofactors of row ${jr+1}:\n${terms.join(' + ')} = ${tot}   ← always 0 (Eq. 4)`}
+  $('cfOut').textContent=s}
+ function load(){try{A=frM($('cfIn').value);sel=null;render();$('cfOut').textContent=`det A = ${detFr(A)}. Click an element.`}catch(e){$('cfOut').textContent='✘ '+e}}
+ $('cfLoad').onclick=load;$('cfAlien').onchange=()=>{if(sel)explain()};load();})();
+
+/* ===== Lab 4: Leibniz ===== */
+(function(){let A,perms,k=0,run=0,timer=null;
+ function permute(n){const res=[];const p=[...Array(n).keys()];(function go(i){if(i===n){res.push(p.slice());return}for(let j=i;j<n;j++){[p[i],p[j]]=[p[j],p[i]];go(i+1);[p[i],p[j]]=[p[j],p[i]]}})(0);return res}
+ const inv=p=>{let c=0;for(let i=0;i<p.length;i++)for(let j=i+1;j<p.length;j++)if(p[i]>p[j])c++;return c};
+ function setup(rand){const n=+$('lzN').value;if(rand||!A||A.length!==n)A=[...Array(n)].map(()=>[...Array(n)].map(()=>Math.floor(Math.random()*9)-4));perms=permute(n);k=0;run=0;draw(-1)}
+ function draw(idx){const n=A.length,p=idx>=0?perms[idx]:null;let h='<table style="width:auto;border-collapse:collapse">';
+  for(let i=0;i<n;i++){h+='<tr>';for(let j=0;j<n;j++){const on=p&&p[i]===j;h+=`<td style="min-width:46px;height:38px;text-align:center;font-family:Consolas,monospace;${on?'background:var(--softw);outline:2px solid var(--acc2);font-weight:800':''}">${A[i][j]}</td>`}h+='</tr>'}
+  $('lzGrid').innerHTML=h+'</table>';
+  if(!p){$('lzOut').textContent=`${n}! = ${perms.length} terms. Press "next term" or "play".\nTrue det = ${detFr(A.map(r=>r.map(x=>new Fr(x))))}`;return}
+  const iv=inv(p),sg=iv%2?-1:1,prod=p.reduce((s,j,i)=>s*A[i][j],1);run+=sg*prod;
+  $('lzOut').textContent=`Term ${idx+1} of ${perms.length}\npermutation (${p.map(x=>x+1).join(',')})  inversions = ${iv} ⇒ sign ${sg>0?'+':'−'}\nproduct = ${p.map((j,i)=>`a${i+1}${j+1}`).join('·')} = ${p.map((j,i)=>A[i][j]).join('·')} = ${prod}\ncontribution ${sg*prod>=0?'+':''}${sg*prod}\nrunning total = ${run}`+(idx===perms.length-1?`\n✔ all terms done: det = ${run}`:'')}
+ function step(){if(k>=perms.length){k=0;run=0}draw(k);k++}
+ $('lzStep').onclick=()=>{clearInterval(timer);timer=null;$('lzPlay').textContent='▶ play terms';step()};
+ $('lzPlay').onclick=()=>{if(timer){clearInterval(timer);timer=null;$('lzPlay').textContent='▶ play terms';return}$('lzPlay').textContent='⏸ pause';if(k>=perms.length){k=0;run=0}step();timer=setInterval(()=>{if(k>=perms.length){clearInterval(timer);timer=null;$('lzPlay').textContent='▶ play terms';return}step()},+$('lzN').value===4?650:1200)};
+ $('lzN').onchange=()=>setup(true);$('lzRand').onclick=()=>setup(true);A=[[2,-1,3],[1,0,4],[5,2,1]];setup(false);})();
+
+/* ===== calculator ===== */
+(function(){function reduce(){try{const A=frM($('dtIn').value).map(r=>r.slice()),n=A.length;let s=`Start:\n${matStr(A)}\n`,sign=1,d=new Fr(1);
+  for(let c=0;c<n;c++){let p=-1;for(let r=c;r<n;r++)if(!A[r][c].isZero()){p=r;break}
+   if(p<0){s+=`\nColumn ${c+1} has no nonzero pivot ⇒ det = 0`;$('dtOut').textContent=s;return}
+   if(p!==c){[A[p],A[c]]=[A[c],A[p]];sign=-sign;s+=`\nR${c+1} ↔ R${p+1}  (sign flips)\n`}
+   for(let r=c+1;r<n;r++)if(!A[r][c].isZero()){const f=A[r][c].div(A[c][c]);A[r]=A[r].map((x,j)=>x.sub(f.mul(A[c][j])));s+=`R${r+1} → R${r+1} − (${f})·R${c+1}\n`}
+   s+=matStr(A)+'\n'}
+  for(let i=0;i<n;i++)d=d.mul(A[i][i]);
+  s+=`\nTriangular ⇒ det = ${sign<0?'−':''}(${A.map((r,i)=>r[i].toString()).join(')(')}) = ${d.mul(new Fr(sign))}`;$('dtOut').textContent=s}catch(e){$('dtOut').textContent='✘ '+e}}
+ function expand(){try{const A=frM($('dtIn').value),n=A.length,i=Math.min(n,Math.max(1,+$('dtRow').value))-1;let s=`Expansion along row ${i+1}:\n`,tot=new Fr(0);
+  for(let k=0;k<n;k++){const Mi=minorOf(A,i,k),m=n>1?detFr(Mi):new Fr(1),c=m.mul(new Fr(sgn(i,k)));tot=tot.add(A[i][k].mul(c));
+   s+=`\na${i+1}${k+1} = ${A[i][k]},  sign ${sgn(i,k)>0?'+':'−'},  minor =\n${n>1?matStr(Mi):''}\n  = ${m}  ⇒ term = ${A[i][k].mul(c)}${A[i][k].isZero()?'  (zero element: skip!)':''}\n`}
+  s+=`\ndet = ${tot}`;$('dtOut').textContent=s}catch(e){$('dtOut').textContent='✘ '+e}}
+ $('dtGo').onclick=reduce;$('dtExp').onclick=expand;document.querySelectorAll('[data-dt]').forEach(b=>b.onclick=()=>{$('dtIn').value=b.dataset.dt;reduce()});reduce();})();
+
+/* ===== quiz ===== */
+(function(){const Q=[
+ ['A is 3×3 with det A = 4. det(2A) =',['8','32','16','4'],1,'2³·4 = 32.'],
+ ['det(−A) for a 5×5 matrix A equals',['det A','−det A','5 det A','0'],1,'(−1)⁵ det A.'],
+ ['Swapping two rows of a determinant',['leaves it unchanged','changes its sign','doubles it','makes it 0'],1,'Property 2.'],
+ ['R₂ → R₂ + 7R₁ changes det by',['×7','+7','nothing','×(−1)'],2,'Adding a multiple of a row is a shear: det is unchanged.'],
+ ['Number of terms in a 4×4 determinant',['16','24','12','8'],1,'4! = 24.'],
+ ['Σₖ a₁ₖA²ᵏ (row-1 elements × row-2 cofactors) equals',['det A','0','1','Tr A'],1,'Alien cofactors give 0.'],
+ ['det of an odd-order real antisymmetric matrix',['1','0','−1','positive'],1,'det A = (−1)ⁿ det A.'],
+ ['det of a Hermitian matrix is',['real','imaginary','0','1'],0,'det H = (det H)*.'],
+ ['det[[1,a,a²],[1,b,b²],[1,c,c²]] =',['(a−b)(b−c)(c−a)','abc','a+b+c','0'],0,'Vandermonde.'],
+ ['det(aI + bJ), n×n, J all ones',['aⁿ + bⁿ','aⁿ⁻¹(a + nb)','(a+b)ⁿ','a(a+nb)ⁿ⁻¹'],1,'Eigenvalues a (n−1 times) and a + nb.'],
+ ['The sign of a₁₂a₂₁a₃₃ in a 3×3 det is',['+','−'],1,'(2,1,3) has 1 inversion.'],
+ ['If A² = A and A ≠ I, then det A =',['1','0','−1','2'],1,'d² = d gives 0 or 1. An idempotent other than I is singular (A(A − I) = 0 with A − I ≠ 0), so det = 0.'],
+ ['d/dt det(I + tA) at t = 0 equals',['det A','Tr A','0','n'],1,'Jacobi formula.'],
+ ['det of the 2×2 matrix a₀I + r·σ is',['a₀² + r²','a₀² − |r|²','2a₀','|r|²'],1,'Product of the eigenvalues a₀ ± |r|.'],
+ ['A (3×2) and B (2×3): det(AB) is',['always 0','never 0','det A det B','1'],0,'rank(AB) ≤ 2 < 3.'],
+ ['det(e^A) equals',['e^{det A}','e^{Tr A}','Tr e^A','1'],1,'det e^A = e^{Tr A}.'],
+ ['Two electrons in the same orbital: the Slater determinant is',['1','0','−1','undefined'],1,'Two equal rows.'],
+ ['The determinant of a 3×3 rotation matrix',['0','1','−1','depends on the angle'],1,'Proper rotations have det = +1.']];
+ const box=$('quizBox');box.innerHTML=Q.map((q,i)=>`<div class="qq"><b>Q${i+1}.</b> ${q[0]}<div>${q[1].map((o,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"> ${String.fromCharCode(97+j)}) ${o}</label>`).join('')}</div><div class="small" id="qe${i}"></div></div>`).join('');
+ $('quizCheck').onclick=()=>{let s=0;Q.forEach((q,i)=>{const c=document.querySelector(`input[name=q${i}]:checked`),e=$('qe'+i);
+   if(c&&+c.value===q[2]){s++;e.innerHTML='<span class="ok">✔ Correct.</span> '+q[3]}else e.innerHTML=`<span class="bad">✘ ${c?'Wrong':'Not answered'}.</span> Answer: ${String.fromCharCode(97+q[2])}) ${q[1][q[2]]}. ${q[3]}`});$('quizScore').innerHTML=`<b>Score: ${s} / ${Q.length}</b>`};
+ $('quizReset').onclick=()=>{box.querySelectorAll('input').forEach(i=>i.checked=false);Q.forEach((q,i)=>$('qe'+i).innerHTML='');$('quizScore').textContent=''};})();
+</script>
+
+
+</div>
+</body>
+</html>

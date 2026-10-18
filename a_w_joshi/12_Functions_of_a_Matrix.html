@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:110px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:85px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:collapse;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;margin:3px 4px;width:auto}
+.mx.det{border-radius:0}
+.mx td{border:0;padding:1px 8px;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.verdict{font-weight:700;font-size:1.05rem;margin:6px 0}
+.sys{font-family:"Cambria Math",Cambria,"Times New Roman",serif;display:inline-block;text-align:left;line-height:1.5}
+</style>
+<title>Functions of a Matrix</title>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>12. Functions of a Matrix</h1>
+<p>Powers · Roots and fractional powers · Matrix series and convergence · Exponential · Logarithm · Trigonometric and hyperbolic functions · Cayley–Hamilton (Sylvester) method · det e<sup>A</sup> = e<sup>Tr A</sup> · e<sup>A</sup>e<sup>B</sup> ≠ e<sup>A+B</sup> &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 122–137</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">Two methods</a><a href="#s2">Powers</a><a href="#s3">Roots</a><a href="#s4">Series</a><a href="#s5">Exponential</a><a href="#s6">Flow lab</a><a href="#s7">Logarithm</a><a href="#s8">sin, cos, cosh</a><a href="#s9">CH method</a><a href="#s10">det e^A</a><a href="#s11">e^A e^B</a><a href="#s12">Summary</a><a href="#s13">Exercise 12</a><a href="#s14">Practice</a><a href="#s15">Quiz</a><a href="#s16">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>We know what 2<sup>10</sup>, √5, e<sup>3</sup>, ln 7 and sin π/2 mean for numbers. This section gives the same meaning to A<sup>10</sup>, √A, e<sup>A</sup>, ln A and sin A for a square matrix A. The key idea:</p>
+<div class="box thm"><b class="t">The one idea behind everything</b> A function of a matrix acts on the <b>eigenvalues</b> and leaves the <b>eigenvectors</b> alone.<br>
+If Ax = λx then f(A)x = f(λ)x.</div>
+<p>Why physicists care: the solution of dx/dt = Ax is <b>x(t) = e<sup>tA</sup>x(0)</b>. The time evolution in quantum mechanics is <b>e<sup>−iHt/ħ</sup></b>. Rotations are <b>e<sup>θJ</sup></b>. All of these are functions of matrices.</p>
+<div class="flow"><span>A = PΛP⁻¹</span><b>→</b><span>f(A) = P f(Λ) P⁻¹</span><b>or</b><span>f(A) = α₀I + α₁A + … + α<sub>m−1</sub>A<sup>m−1</sup></span><b>→</b><span>e<sup>A</sup>, ln A, √A, sin A, …</span></div>
+<div class="box tip"><b class="t">Needed from earlier</b> Diagonalization P⁻¹AP = Λ (Section 9). Minimal polynomial and Cayley–Hamilton (Section 10): every polynomial in A reduces to degree ≤ m − 1. Taylor series of e<sup>x</sup>, sin x, cos x, ln(1 + x).</div>
+</section>
+
+<section id="s1">
+<h2>1. Two methods</h2>
+<div class="grid2">
+<div class="box def"><b class="t">Method 1: diagonalization (Eqs. 1, 2)</b>
+If P⁻¹AP = Λ = diag(λ₁, …, λₙ), then
+<div class="eq">f(A) = P f(Λ) P⁻¹, &nbsp; f(Λ) = diag(f(λ₁), …, f(λₙ))</div>
+✔ simple and mechanical<br>✘ works for <b>diagonalizable</b> matrices only</div>
+<div class="box thm"><b class="t">Method 2: Cayley–Hamilton (Eqs. 58–60)</b>
+If the minimal polynomial has degree m,
+<div class="eq">f(A) = α<sub>m−1</sub>A<sup>m−1</sup> + … + α₁A + α₀I</div>
+Find the α's from f(λᵢ) = r(λᵢ), plus <b>derivatives</b> for repeated eigenvalues.<br>✔ works for <b>every</b> matrix<br>✔ no eigenvectors needed</div>
+</div>
+<p><b>Why method 1 works:</b> A<sup>k</sup> = (PΛP⁻¹)(PΛP⁻¹)…(PΛP⁻¹) = PΛ<sup>k</sup>P⁻¹, because each P⁻¹P in the middle cancels. A power series Σa<sub>k</sub>A<sup>k</sup> is therefore PΣa<sub>k</sub>Λ<sup>k</sup>P⁻¹ = Pf(Λ)P⁻¹. Powers of a diagonal matrix are just powers of its entries.</p>
+</section>
+
+<section id="s2">
+<h2>2. Integer powers (Eqs. 3–13, Example 1)</h2>
+<p>A<sup>k</sup> = AA…A (k times). A<sup>0</sup> = I. For nonsingular A, A<sup>−k</sup> = (A⁻¹)<sup>k</sup>. With diagonalization:</p>
+<div class="eq">A<sup>k</sup> = PΛ<sup>k</sup>P⁻¹ &nbsp; (6), &nbsp;&nbsp; A<sup>−k</sup> = P(Λ⁻¹)<sup>k</sup>P⁻¹ &nbsp; (7)</div>
+<h3>Worked Example 1 (book)</h3>
+<div class="eq">A = <table class="mx"><tr><td>4/3</td><td>√2/3</td></tr><tr><td>√2/3</td><td>5/3</td></tr></table> &nbsp;&nbsp;(8)</div>
+<ol>
+<li>Tr = 3, det = 20/9 − 2/9 = 2 ⇒ λ² − 3λ + 2 = 0 ⇒ <b>λ = 1, 2</b>.</li>
+<li>λ = 1: (1/3)x + (√2/3)y = 0 ⇒ (√2, −1). &nbsp; λ = 2: −(2/3)x + (√2/3)y = 0 ⇒ (1, √2). &nbsp;(9)</li>
+<li>P = [[√2, 1], [−1, √2]], det P = 3, P⁻¹ = (1/3)[[√2, −1], [1, √2]]. &nbsp;(10)</li>
+<li>A<sup>k</sup> = P diag(1, 2<sup>k</sup>) P⁻¹:
+<div class="eq">A<sup>k</sup> = ⅓ <table class="mx"><tr><td>2<sup>k</sup> + 2</td><td>(2<sup>k</sup> − 1)√2</td></tr><tr><td>(2<sup>k</sup> − 1)√2</td><td>2<sup>k+1</sup> + 1</td></tr></table> &nbsp;&nbsp;(11)</div></li>
+<li>Checks: k = 0 gives I ✓. k = 1 gives back A ✓. Valid for <b>negative k</b> too, e.g. A<sup>−10</sup> = ⅓[[2<sup>−10</sup> + 2, (2<sup>−10</sup> − 1)√2], [(2<sup>−10</sup> − 1)√2, 2<sup>−9</sup> + 1]]. &nbsp;(13)</li>
+</ol>
+<div class="box fact"><b class="t">Large k</b> For large k, A<sup>k</sup> ≈ 2<sup>k</sup> × (projector onto the λ = 2 eigenvector). The <b>largest eigenvalue dominates</b>. This is the basis of the "power method" for finding the largest eigenvalue.</div>
+</section>
+
+<section id="s3">
+<h2>3. Roots and fractional powers (Eqs. 14–23, Examples 2, 3, 8)</h2>
+<p>B is a <b>k-th root</b> of A if B<sup>k</sup> = A. With A = PΛP⁻¹, take</p>
+<div class="eq">A<sup>q</sup> = PΛ<sup>q</sup>P⁻¹, &nbsp; Λ<sup>q</sup> = diag(λ₁<sup>q</sup>, …, λₙ<sup>q</sup>) &nbsp;&nbsp;(15)</div>
+<p><b>Check:</b> (PΛ<sup>1/k</sup>P⁻¹)<sup>k</sup> = P(Λ<sup>1/k</sup>)<sup>k</sup>P⁻¹ = PΛP⁻¹ = A. ✓ &nbsp;(14)</p>
+<p><b>Example 2:</b> A<sup>3/7</sup> for the matrix of Eq. (8): replace 2<sup>k</sup> by 2<sup>3/7</sup> in (11):
+A<sup>3/7</sup> = ⅓[[2<sup>3/7</sup> + 2, (2<sup>3/7</sup> − 1)√2], [(2<sup>3/7</sup> − 1)√2, 2<sup>10/7</sup> + 1]]. &nbsp;(17)</p>
+<h3>Worked Example 3 (book): all square roots of A = [[3/2, 1/2], [1/2, 3/2]]</h3>
+<ol>
+<li>λ = 2 with (1, 1), λ = 1 with (1, −1). P = [[1, 1], [1, −1]], P⁻¹ = ½[[1, 1], [1, −1]]. &nbsp;(19, 20)</li>
+<li>Λ<sup>1/2</sup> = diag(±√2, ±1): <b>4 choices</b> of sign. &nbsp;(21)</li>
+<li>A<sup>1/2</sup> = PΛ<sup>1/2</sup>P⁻¹ gives ±B and ±C:
+<div class="eq">B = ½<table class="mx"><tr><td>√2+1</td><td>√2−1</td></tr><tr><td>√2−1</td><td>√2+1</td></tr></table>, &nbsp; C = ½<table class="mx"><tr><td>√2−1</td><td>√2+1</td></tr><tr><td>√2+1</td><td>√2−1</td></tr></table> &nbsp;(23)</div></li>
+<li>Check B²: diagonal = [(√2+1)² + (√2−1)²]/4 = (3 + 2√2 + 3 − 2√2)/4 = 3/2 ✓. Off-diagonal = 2(√2+1)(√2−1)/4 = 2/4 = 1/2 ✓.</li>
+</ol>
+<div class="box warnb"><b class="t">How many roots? Careful</b> The book says: if A has m nonzero eigenvalues, there are k<sup>m</sup> k-th roots. This counts the roots of the form PΛ<sup>1/k</sup>P⁻¹, and it is exact when the eigenvalues are <b>distinct</b>. Two warnings:
+<ul style="margin:4px 0">
+<li><b>Repeated eigenvalue ⇒ infinitely many roots.</b> I (2×2) has, besides ±I, every reflection [[cos θ, sin θ], [sin θ, −cos θ]] as a square root.</li>
+<li><b>Some matrices have no square root at all:</b> N = [[0, 1], [0, 0]]. If B² = N, then B⁴ = N² = 0, so B is nilpotent, so B² = 0 (in 2×2), contradiction.</li>
+</ul>
+"The principal root" means taking the positive root of each positive eigenvalue. For a positive definite symmetric A it is the unique positive definite root.</div>
+<div class="lab"><h4>🔬 Lab 1: A<sup>p</sup> for any real p, and the four square roots</h4>
+<p class="small">The black curve is the image of the unit circle under A<sup>p</sup>. Slide p continuously: p = 0 is the circle itself (I), p = 1 is A, negative p shrinks it, p = ½ is the principal square root. The eigen-lines (dashed) never move. Only the stretching along them changes, as λ<sup>p</sup>.</p>
+<div class="grid2">
+<div><canvas id="cvP" width="460" height="460"></canvas></div>
+<div>
+<div class="ctrl"><button class="alt" data-pw="ex1">Example 1 (λ = 1, 2)</button><button class="alt" data-pw="ex3">Example 3 (λ = 2, 1)</button><button class="alt" data-pw="sk">Skew [[1.5,0.5],[0,0.75]]</button></div>
+<div class="ctrl"><label>p <input type="range" id="pP" min="-3" max="3" step="0.01" value="0.5" style="width:180px"><span id="pPv"></span></label><button id="pPlay">▶ p: 0 → 2</button></div>
+<div class="ctrl small">Square-root sign choices: <button class="alt" data-sg="++">(+,+)</button><button class="alt" data-sg="+-">(+,−)</button><button class="alt" data-sg="-+">(−,+)</button><button class="alt" data-sg="--">(−,−)</button></div>
+<div class="readout out" id="pOut"></div>
+</div></div></div>
+</section>
+
+<section id="s4">
+<h2>4. Matrix series and convergence (Eqs. 24–27)</h2>
+<p>A series S = Σ a<sub>k</sub>A<sup>k</sup> <b>converges</b> if every entry converges. &nbsp;(24, 25)</p>
+<div class="box thm"><b class="t">Convergence theorem (stated without proof)</b> If the scalar series f(λ) = Σa<sub>k</sub>λ<sup>k</sup> converges for |λ| &lt; R, then f(A) = Σa<sub>k</sub>A<sup>k</sup> converges <b>iff every eigenvalue satisfies |λᵢ| &lt; R</b>. &nbsp;(26, 27)<br>
+In other words, the <b>spectral radius</b> ρ(A) = max|λᵢ| must be &lt; R.</div>
+<div class="tbl-wrap"><table>
+<tr><th>Series</th><th>Sum</th><th>R</th><th>Condition on A</th></tr>
+<tr><td>I + A + A² + …</td><td>(I − A)⁻¹</td><td>1</td><td>ρ(A) &lt; 1</td></tr>
+<tr><td>A − A²/2 + A³/3 − …</td><td>ln(I + A)</td><td>1</td><td>ρ(A) &lt; 1</td></tr>
+<tr><td>Σ A<sup>k</sup>/k!</td><td>e<sup>A</sup></td><td>∞</td><td>always</td></tr>
+<tr><td>Σ (−1)<sup>k</sup>A<sup>2k+1</sup>/(2k+1)!</td><td>sin A</td><td>∞</td><td>always</td></tr>
+</table></div>
+<p><b>Why the eigenvalues decide:</b> on each eigenvector the series acts like the scalar series Σa<sub>k</sub>λ<sub>i</sub><sup>k</sup>. If even one of those diverges, the matrix series diverges.</p>
+<div class="box warnb"><b class="t">Entries can mislead</b> A = [[0.5, 100], [0, 0.5]] has huge entries but ρ = 0.5 &lt; 1, so I + A + A² + … still converges, to (I − A)⁻¹ = [[2, 400], [0, 2]]. The partial sums first grow big, then settle. Try it in the lab ("big entries").</div>
+<div class="lab"><h4>🔬 Lab 2: watch a matrix series converge or blow up</h4>
+<p class="small">X = s·M. The graph shows log₁₀ of the error ‖S<sub>N</sub> − exact‖ against the number of terms N. Move s so that the spectral radius crosses R = 1 and watch the line turn from falling to rising.</p>
+<div class="ctrl"><label>series <select id="sSer"><option value="geo">I + X + X² + … = (I − X)⁻¹</option><option value="log">X − X²/2 + … = ln(I + X)</option><option value="exp">I + X + X²/2! + … = e^X</option></select></label>
+<label>M <select id="sM"><option value="a">[[0.6,0.3],[0.2,0.5]]</option><option value="b">[[0,1],[−1,0]] (λ = ±i)</option><option value="c">big entries [[0.5,100],[0,0.5]]</option><option value="d">Ex 12.5 [[3/8,1/8,1/8],[0,1/3,0],[1/8,1/24,3/8]]</option></select></label></div>
+<div class="ctrl"><label>s <input type="range" id="sS" min="0.1" max="2.5" step="0.01" value="1" style="width:200px"><span id="sSv"></span></label></div>
+<canvas id="cvSer" width="900" height="260"></canvas>
+<div class="readout out" id="serOut"></div>
+</div>
+</section>
+
+<section id="s5">
+<h2>5. The exponential of a matrix (Eqs. 28–40, Example 4)</h2>
+<div class="box def"><b class="t">Definition</b>
+<div class="eq">e<sup>A</sup> = exp A = I + A + A²/2! + A³/3! + … = Σ A<sup>k</sup>/k! &nbsp;&nbsp;(29, 34)</div>
+It converges for <b>every</b> square matrix (R = ∞).</div>
+<ul>
+<li><b>Diagonal:</b> exp(diag(λ₁, …, λₙ)) = diag(e<sup>λ₁</sup>, …, e<sup>λₙ</sup>). &nbsp;(30–33)</li>
+<li><b>Diagonalizable:</b> exp A = P exp(Λ) P⁻¹. &nbsp;(35, 36)</li>
+<li><b>Other bases:</b> a<sup>A</sup> = exp(A ln a) = P diag(a<sup>λᵢ</sup>) P⁻¹. &nbsp;(37, 38)</li>
+</ul>
+<h3>Worked Example 4 (book): e<sup>A</sup> and 4<sup>A</sup> for A = [[3/2, 1/2], [1/2, 3/2]]</h3>
+<p>P = [[1, 1], [1, −1]], Λ = diag(2, 1).</p>
+<div class="eq">e<sup>A</sup> = P diag(e², e) P⁻¹ = ½<table class="mx"><tr><td>e² + e</td><td>e² − e</td></tr><tr><td>e² − e</td><td>e² + e</td></tr></table> &nbsp;(40a)</div>
+<div class="eq">4<sup>A</sup> = P diag(16, 4) P⁻¹ = ½[[20, 12], [12, 20]] = <table class="mx"><tr><td>10</td><td>6</td></tr><tr><td>6</td><td>10</td></tr></table> &nbsp;(40b)</div>
+<h3>Key properties (you will use these constantly)</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Property</th><th>Note</th></tr>
+<tr><td>e<sup>0</sup> = I</td><td>Exercise 3: a<sup>0</sup> = I</td></tr>
+<tr><td>e<sup>A</sup>e<sup>−A</sup> = I ⇒ (e<sup>A</sup>)⁻¹ = e<sup>−A</sup></td><td>e<sup>A</sup> is <b>never</b> singular (Exercise 2)</td></tr>
+<tr><td>e<sup>A</sup>e<sup>B</sup> = e<sup>A+B</sup></td><td><b>only if AB = BA</b> (Section 11)</td></tr>
+<tr><td>det e<sup>A</sup> = e<sup>Tr A</sup></td><td>Example 12</td></tr>
+<tr><td>d/dt e<sup>tA</sup> = Ae<sup>tA</sup> = e<sup>tA</sup>A</td><td>so x(t) = e<sup>tA</sup>x₀ solves ẋ = Ax</td></tr>
+<tr><td>e<sup>PAP⁻¹</sup> = Pe<sup>A</sup>P⁻¹</td><td>similarity passes through</td></tr>
+<tr><td>(e<sup>A</sup>)ᵀ = e<sup>Aᵀ</sup>, (e<sup>A</sup>)† = e<sup>A†</sup></td><td>term by term</td></tr>
+<tr><td>A antihermitian ⇒ e<sup>A</sup> unitary</td><td>(e<sup>A</sup>)†e<sup>A</sup> = e<sup>−A</sup>e<sup>A</sup> = I</td></tr>
+<tr><td>A real antisymmetric ⇒ e<sup>A</sup> orthogonal</td><td>e.g. e<sup>θ[[0,−1],[1,0]]</sup> = rotation by θ</td></tr>
+<tr><td>H hermitian ⇒ e<sup>iH</sup> unitary</td><td>quantum time evolution U = e<sup>−iHt/ħ</sup></td></tr>
+</table></div>
+<h3>Three special 2×2 exponentials (memorize)</h3>
+<div class="tbl-wrap"><table>
+<tr><th>A</th><th>e<sup>tA</sup></th><th>Why</th></tr>
+<tr><td>[[0, −1], [1, 0]] (J² = −I)</td><td>[[cos t, −sin t], [sin t, cos t]]</td><td>e<sup>tJ</sup> = I cos t + J sin t (like e<sup>it</sup> = cos t + i sin t)</td></tr>
+<tr><td>[[0, 1], [1, 0]] (K² = I)</td><td>[[cosh t, sinh t], [sinh t, cosh t]]</td><td>e<sup>tK</sup> = I cosh t + K sinh t (Lorentz boost)</td></tr>
+<tr><td>[[0, 1], [0, 0]] (N² = 0)</td><td>[[1, t], [0, 1]]</td><td>the series stops: e<sup>tN</sup> = I + tN</td></tr>
+</table></div>
+</section>
+
+<section id="s6">
+<h2>6. 🔬 Flow lab: e<sup>tA</sup> moves the plane</h2>
+<p>For each starting point x₀ the curve shows x(t) = e<sup>tA</sup>x₀, the solution of ẋ = Ax. Press play and watch the dots move. The shaded parallelogram is the image of the unit square. Its area is det e<sup>tA</sup> = e<sup>t·Tr A</sup> (Example 12), so <b>Tr A = 0 ⇒ the area is preserved</b>.</p>
+<div class="lab">
+<div class="grid2">
+<div><canvas id="cvF" width="480" height="480"></canvas></div>
+<div>
+<div class="ctrl"><button class="alt" data-fl="rot">Rotation</button><button class="alt" data-fl="spiral">Spiral in</button><button class="alt" data-fl="saddle">Saddle</button><button class="alt" data-fl="node">Node</button><button class="alt" data-fl="shear">Shear (defective)</button><button class="alt" data-fl="boost">Boost</button></div>
+<div class="ctrl"><label>a <input type="range" id="fA" min="-2" max="2" step="0.05" value="0"><span id="fAv"></span></label><label>b <input type="range" id="fB" min="-2" max="2" step="0.05" value="-1"><span id="fBv"></span></label></div>
+<div class="ctrl"><label>c <input type="range" id="fC" min="-2" max="2" step="0.05" value="1"><span id="fCv"></span></label><label>d <input type="range" id="fD" min="-2" max="2" step="0.05" value="0"><span id="fDv"></span></label></div>
+<div class="ctrl"><label>t <input type="range" id="fT" min="-3" max="3" step="0.01" value="0" style="width:170px"><span id="fTv"></span></label><button id="fPlay">▶ Play</button></div>
+<div class="readout out" id="fOut"></div>
+</div></div></div>
+</section>
+
+<section id="s7">
+<h2>7. The logarithm (Eqs. 41–49, Example 5)</h2>
+<p>B = ln A means e<sup>B</sup> = A. &nbsp;(41) &nbsp; For diagonal A, ln A = diag(ln λᵢ). &nbsp;(42, 43) &nbsp; For diagonalizable A:</p>
+<div class="eq">ln A = P (ln Λ) P⁻¹ &nbsp;&nbsp;(44) &nbsp; — check: e<sup>P(ln Λ)P⁻¹</sup> = P e<sup>ln Λ</sup> P⁻¹ = PΛP⁻¹ = A ✓ (45)</div>
+<h3>Worked Example 5 (book): a negative eigenvalue</h3>
+<div class="eq">A = <table class="mx"><tr><td>39</td><td>−50</td><td>−20</td></tr><tr><td>15</td><td>−16</td><td>−10</td></tr><tr><td>30</td><td>−50</td><td>−11</td></tr></table>, &nbsp; P = <table class="mx"><tr><td>3</td><td>1</td><td>2</td></tr><tr><td>1</td><td>1</td><td>1</td></tr><tr><td>2</td><td>−1</td><td>2</td></tr></table>, &nbsp; Λ = diag(9, 9, −6), &nbsp; P⁻¹ = ⅓<table class="mx"><tr><td>3</td><td>−4</td><td>−1</td></tr><tr><td>0</td><td>2</td><td>−1</td></tr><tr><td>−3</td><td>5</td><td>2</td></tr></table></div>
+<p>ln(−6) is not real: ln(−6) = ln 6 + iπ (since e<sup>iπ</sup> = −1). With a = ln 9 and b = ln 6 + iπ:</p>
+<div class="eq">ln A = ⅓ <table class="mx"><tr><td>9a − 6b</td><td>10(b − a)</td><td>4(b − a)</td></tr><tr><td>3(a − b)</td><td>5b − 2a</td><td>2(b − a)</td></tr><tr><td>6(a − b)</td><td>10(b − a)</td><td>4b − a</td></tr></table> &nbsp;(49)</div>
+<p class="small">I checked numerically that e<sup>ln A</sup> = A for this matrix. ✓</p>
+<div class="box warnb"><b class="t">Logarithms are not unique</b> e<sup>2πi</sup> = 1, so ln λ + 2πin works for any integer n, separately for each eigenvalue. The <b>principal</b> logarithm uses −π &lt; Im ln λ ≤ π. A real matrix with a negative eigenvalue can still have a real logarithm (e.g. −I in 2×2 = e<sup>πJ</sup>, a rotation by π), but not always. ln A does not exist if A is singular (ln 0).</div>
+<h3>Series form (Exercise 5)</h3>
+<p>ln(I + A) = A − A²/2 + A³/3 − A⁴/4 + …, converging when every |λᵢ| &lt; 1.</p>
+</section>
+
+<section id="s8">
+<h2>8. Hyperbolic and trigonometric functions (Eqs. 50–57, Example 6)</h2>
+<div class="eq">sinh A = ½(e<sup>A</sup> − e<sup>−A</sup>) = Σ A<sup>2k+1</sup>/(2k+1)!, &nbsp; cosh A = ½(e<sup>A</sup> + e<sup>−A</sup>) = Σ A<sup>2k</sup>/(2k)! &nbsp;(50)</div>
+<div class="eq">sin A = (e<sup>iA</sup> − e<sup>−iA</sup>)/(2i) = Σ (−1)<sup>k</sup>A<sup>2k+1</sup>/(2k+1)!, &nbsp; cos A = ½(e<sup>iA</sup> + e<sup>−iA</sup>) &nbsp;(51)</div>
+<p>All of these exist for every square matrix. Identities like <b>sin²A + cos²A = I</b>, cosh²A − sinh²A = I, and sin 2A = 2 sin A cos A all hold, because only one matrix A is involved and its powers commute. Identities like sin(A + B) = sin A cos B + cos A sin B need AB = BA.</p>
+<h3>Worked Example 6 (book): sin πA and cos πA</h3>
+<div class="eq">A = <table class="mx"><tr><td>−47/2</td><td>53</td><td>30</td></tr><tr><td>−12</td><td>53/2</td><td>15</td></tr><tr><td>2</td><td>−7/2</td><td>−2</td></tr></table>, &nbsp; P = <table class="mx"><tr><td>5</td><td>8</td><td>1</td></tr><tr><td>0</td><td>2</td><td>1</td></tr><tr><td>4</td><td>3</td><td>−1</td></tr></table>, &nbsp; Λ = diag(½, 1, −½), &nbsp; P⁻¹ = <table class="mx"><tr><td>5</td><td>−11</td><td>−6</td></tr><tr><td>−4</td><td>9</td><td>5</td></tr><tr><td>8</td><td>−17</td><td>−10</td></tr></table></div>
+<p>sin πΛ = diag(sin π/2, sin π, sin(−π/2)) = diag(1, 0, −1). &nbsp; cos πΛ = diag(0, −1, 0).</p>
+<div class="eq">sin πA = P diag(1,0,−1) P⁻¹ = <table class="mx"><tr><td>17</td><td>−38</td><td>−20</td></tr><tr><td>−8</td><td>17</td><td>10</td></tr><tr><td>28</td><td>−61</td><td>−34</td></tr></table>, &nbsp; cos πA = <table class="mx"><tr><td>32</td><td>−72</td><td>−40</td></tr><tr><td>8</td><td>−18</td><td>−10</td></tr><tr><td>12</td><td>−27</td><td>−15</td></tr></table> &nbsp;(55, 57)</div>
+<p class="small">Both are confirmed with the exact P and P⁻¹. (Hint for checking by hand: only the columns of P with nonzero diagonal entries contribute, e.g. sin πA = x₁ρ₁ − x₃ρ₃, where ρ<sub>i</sub> is row i of P⁻¹.)</p>
+</section>
+
+<section id="s9">
+<h2>9. The Cayley–Hamilton method: works for every matrix (Eqs. 58–81)</h2>
+<p>From Section 10, any polynomial in A equals a polynomial of degree ≤ m − 1 (m = degree of the minimal polynomial). The same holds for any function given by a convergent power series:</p>
+<div class="eq">f(A) = r(A) = α<sub>m−1</sub>A<sup>m−1</sup> + … + α₁A + α₀I &nbsp;&nbsp;(58, 59)</div>
+<div class="box thm"><b class="t">How to find the α's (Eq. 60)</b> For each eigenvalue λᵢ appearing r times in the minimal polynomial, match the value and the first r − 1 derivatives:
+<div class="eq">f(λᵢ) = r(λᵢ), &nbsp; f′(λᵢ) = r′(λᵢ), &nbsp; …, &nbsp; f<sup>(r−1)</sup>(λᵢ) = r<sup>(r−1)</sup>(λᵢ)</div>
+That gives m linear equations for the m unknowns α₀, …, α<sub>m−1</sub>.</div>
+<p><b>Why derivatives?</b> f(λ) − r(λ) must be divisible by the minimal polynomial (so that it vanishes at A). A root of multiplicity r in the divisor means f − r must vanish there together with its first r − 1 derivatives.</p>
+
+<h3>Example 7: A<sup>p</sup> for the matrix of Eq. (8) (λ = 1, 2)</h3>
+<p>r(λ) = α₁λ + α₀. Conditions: 1 = α₁ + α₀ and 2<sup>p</sup> = 2α₁ + α₀ ⇒ α₁ = 2<sup>p</sup> − 1, α₀ = 2 − 2<sup>p</sup>.</p>
+<div class="eq">A<sup>p</sup> = (2<sup>p</sup> − 1)A + (2 − 2<sup>p</sup>)I = ⅓[[2<sup>p</sup> + 2, (2<sup>p</sup> − 1)√2], [(2<sup>p</sup> − 1)√2, 2<sup>p+1</sup> + 1]] &nbsp;(64)</div>
+<p>This agrees with (11). <b>For non-integer p this is only one of the matrices equal to A<sup>p</sup></b>: other root choices exist.</p>
+<h3>Example 8: all square roots of A = [[3/2, 1/2], [1/2, 3/2]] (λ = 2, 1)</h3>
+<p>±√2 = 2α₁ + α₀, ±1 = α₁ + α₀ (independent signs) ⇒ α₁ = ±(√2 − 1), α₀ = ±(2 − √2), or α₁ = ±(√2 + 1), α₀ = ∓(2 + √2). These give ±B, ±C of Eq. (23).</p>
+<h3>Example 9: 4<sup>A</sup> and ln A for the same A</h3>
+<p>(a) 4 = α₁ + α₀, 16 = 2α₁ + α₀ ⇒ α₁ = 12, α₀ = −8 ⇒ 4<sup>A</sup> = 12A − 8I = [[10, 6], [6, 10]] ✓ (68).<br>
+(b) 0 = α₁ + α₀, ln 2 = 2α₁ + α₀ ⇒ α₁ = ln 2, α₀ = −ln 2 ⇒ ln A = ln 2 (A − I) = (ln √2)[[1, 1], [1, 1]]. &nbsp;(69)</p>
+<h3>Example 10: e<sup>tA</sup> for a <b>nondiagonalizable</b> matrix (Eq. 10.19)</h3>
+<p>A = [[3, 1, −1], [2, 2, −1], [2, 2, 0]], minimal polynomial (λ − 1)(λ − 2)², m = 3. f(λ) = e<sup>λt</sup>, r(λ) = α₂λ² + α₁λ + α₀.</p>
+<div class="eq"><span class="sys">f(1) = r(1): &nbsp; e<sup>t</sup> = α₂ + α₁ + α₀<br>f(2) = r(2): &nbsp; e<sup>2t</sup> = 4α₂ + 2α₁ + α₀<br>f′(2) = r′(2): &nbsp; te<sup>2t</sup> = 4α₂ + α₁ &nbsp;← the derivative condition</span></div>
+<p>Solution: α₂ = (t − 1)e<sup>2t</sup> + e<sup>t</sup>, α₁ = (4 − 3t)e<sup>2t</sup> − 4e<sup>t</sup>, α₀ = (2t − 3)e<sup>2t</sup> + 4e<sup>t</sup>. &nbsp;(72) With A² = [[9, 3, −4], [8, 4, −4], [10, 6, −4]]:</p>
+<div class="eq">e<sup>tA</sup> = <table class="mx"><tr><td>2te<sup>2t</sup> + e<sup>t</sup></td><td>e<sup>2t</sup> − e<sup>t</sup></td><td>−te<sup>2t</sup></td></tr><tr><td>2te<sup>2t</sup></td><td>e<sup>2t</sup></td><td>−te<sup>2t</sup></td></tr><tr><td>(4t − 2)e<sup>2t</sup> + 2e<sup>t</sup></td><td>2e<sup>2t</sup> − 2e<sup>t</sup></td><td>(1 − 2t)e<sup>2t</sup></td></tr></table> &nbsp;(73)</div>
+<p>Note the <b>te<sup>2t</sup></b> terms. They are the fingerprint of a nondiagonalizable matrix: a repeated eigenvalue without enough eigenvectors. They are the same te<sup>−γt</sup> as in a critically damped oscillator. Putting t = 3 and t = −1 gives e<sup>3A</sup> and e<sup>−A</sup> (74a, b). I checked both numerically ✓.</p>
+<div class="box warnb"><b class="t">Misprint in Eq. (75)</b> cosh At = ½(e<sup>At</sup> + e<sup>−At</sup>). The (3,1) entry comes out as ½[(4t − 2)e<sup>2t</sup> + 2e<sup>t</sup> + (−4t − 2)e<sup>−2t</sup> + 2e<sup>−t</sup>] = <b>4t sinh 2t</b> + 2cosh t − 2cosh 2t. The book prints "2t sinh 2t". The other entries of (75) are correct. (Check at t = 0.7: the true value is 3.541.)</div>
+<h3>Example 11: ln A when all eigenvalues are equal</h3>
+<p>A = [[2, −2, 0], [0, 2, 0], [1, −3, 2]]: only λ = 2, multiplicity 3, and (A − 2I)² ≠ 0, so m = 3. f = ln λ, f′ = 1/λ, f″ = −1/λ²:</p>
+<div class="eq">ln 2 = 4α₂ + 2α₁ + α₀, &nbsp; ½ = 4α₂ + α₁, &nbsp; −¼ = 2α₂ &nbsp;⇒&nbsp; α₂ = −⅛, α₁ = 1, α₀ = ln 2 − 3/2</div>
+<div class="eq">ln A = −⅛A² + A + (ln 2 − 3/2)I = <table class="mx"><tr><td>ln 2</td><td>−1</td><td>0</td></tr><tr><td>0</td><td>ln 2</td><td>0</td></tr><tr><td>½</td><td>−5/4</td><td>ln 2</td></tr></table> &nbsp;(81)</div>
+<p class="small">The book's intermediate step (81) shows A with a stray "9" in position (2,3). It should be 0. The final answer is right; I checked it with a numerical matrix logarithm.</p>
+
+<div class="lab"><h4>🔬 Lab 3: f(A) calculator by the Cayley–Hamilton method</h4>
+<p class="small">The lab finds the eigenvalues and the minimal polynomial, writes down the conditions (with derivatives for repeated roots), solves for the α's, and builds f(A). It then checks the answer: e<sup>B</sup> = A for ln, B² = A for √, and the power series for exp, sin and cos.</p>
+<div class="ctrl"><label>Matrix <select id="hM"><option value="e8">Eq. (8) [[4/3,√2/3],[√2/3,5/3]]</option><option value="e18">Eq. (18) [[3/2,1/2],[1/2,3/2]]</option><option value="e1019">Eq. (10.19) (defective)</option><option value="e76">Eq. (76) (triple λ = 2)</option><option value="x8">Exercise 8 [[1,1,1],[0,1,1],[0,0,1]]</option><option value="x5">Exercise 5 (I + A)</option><option value="e6">Example 6</option></select></label>
+<label>f <select id="hF"><option value="exp">exp(tλ)</option><option value="ln">ln λ</option><option value="sqrt">√λ</option><option value="pow">λ^p</option><option value="sin">sin(tλ)</option><option value="cos">cos(tλ)</option><option value="cosh">cosh(tλ)</option></select></label>
+<label>t / p <input type="number" id="hT" value="1" step="0.1" style="width:80px"></label></div>
+<div id="hOutC"></div>
+</div>
+</section>
+
+<section id="s10">
+<h2>10. det(e<sup>A</sup>) = e<sup>Tr A</sup> (Example 12)</h2>
+<p><b>(a) Diagonalizable A:</b> det e<sup>A</sup> = det(P e<sup>Λ</sup> P⁻¹) = det e<sup>Λ</sup> = e<sup>λ₁</sup>e<sup>λ₂</sup>…e<sup>λₙ</sup> = e<sup>λ₁+…+λₙ</sup> = e<sup>Tr A</sup>. &nbsp;(83–86)</p>
+<p><b>(b) Any A:</b> bring it to triangular form T = P⁻¹AP with diagonal λᵢ. Powers of a triangular matrix are triangular with diagonal λᵢ<sup>k</sup>, so e<sup>T</sup> is triangular with diagonal e<sup>λᵢ</sup>. Then det e<sup>A</sup> = det e<sup>T</sup> = Πe<sup>λᵢ</sup> = e<sup>Tr A</sup>. &nbsp;(87–90)</p>
+<ul>
+<li>Consequence: e<sup>A</sup> is <b>always invertible</b> (e<sup>x</sup> &gt; 0 is never 0).</li>
+<li>Tr A = 0 ⇒ det e<sup>A</sup> = 1. This is why traceless matrices generate the groups SU(n) and SL(n). In mechanics, Liouville's theorem (phase-space volume is conserved) is this fact for Hamiltonian flows.</li>
+<li>Equivalent form: <b>ln det A = Tr ln A</b>, used all the time in field theory and statistics.</li>
+</ul>
+</section>
+
+<section id="s11">
+<h2>11. e<sup>A</sup>e<sup>B</sup> vs e<sup>A+B</sup> (Example 13)</h2>
+<p>For numbers, e<sup>a</sup>e<sup>b</sup> = e<sup>a+b</sup>. For matrices, expand to second order:</p>
+<div class="eq">e<sup>A</sup>e<sup>B</sup> = I + A + B + ½A² + AB + ½B² + … &nbsp;&nbsp; e<sup>A+B</sup> = I + A + B + ½(A² + AB + BA + B²) + …</div>
+<p>The difference starts at <b>½(AB − BA) = ½[A, B]</b>. So:</p>
+<ul>
+<li><b>AB = BA ⇒ e<sup>A</sup>e<sup>B</sup> = e<sup>A+B</sup></b> (exactly).</li>
+<li>If C = [A, B] commutes with both A and B ([C, A] = [C, B] = 0), then
+<div class="eq">e<sup>A</sup>e<sup>B</sup> = e<sup>A+B+½C</sup> &nbsp;&nbsp;(91)</div></li>
+<li>In general you get the Baker–Campbell–Hausdorff series e<sup>A</sup>e<sup>B</sup> = exp(A + B + ½[A,B] + (1/12)([A,[A,B]] + [B,[B,A]]) + …).</li>
+</ul>
+<h3>The book's proof, in steps</h3>
+<ol>
+<li>Let f(λ) = e<sup>λA</sup>e<sup>λB</sup>e<sup>−λ(A+B)</sup>. Then f(0) = I.</li>
+<li>Exercise 10 gives e<sup>λA</sup>Be<sup>−λA</sup> = B + λ[A, B] + (λ²/2!)[A,[A,B]] + …. Here [A, C] = 0, so it stops: e<sup>λA</sup>Be<sup>−λA</sup> = B + λC, i.e. e<sup>λA</sup>B = (B + λC)e<sup>λA</sup>. &nbsp;(94–96)</li>
+<li>Differentiate f, using that and the fact that C commutes with everything here: df/dλ = λC f. &nbsp;(97)</li>
+<li>Solve this scalar-like equation (C is a constant matrix commuting with f): f(λ) = exp(Cλ²/2). &nbsp;(99a)</li>
+<li>Put λ = 1: e<sup>A</sup>e<sup>B</sup>e<sup>−(A+B)</sup> = e<sup>C/2</sup> ⇒ e<sup>A</sup>e<sup>B</sup> = e<sup>A+B+C/2</sup>. ∎ &nbsp;(100)</li>
+</ol>
+<div class="box fact"><b class="t">Quantum mechanics</b> Position and momentum satisfy [x, p] = iħ, a constant that commutes with everything. With A = iax and B = ibp, C = [A, B] = −ab[x, p] = −iabħ, so e<sup>iax</sup>e<sup>ibp</sup> = e<sup>i(ax+bp)</sup>e<sup>−iabħ/2</sup>. This "displacement operator" identity is exactly Eq. (91), and it is behind coherent states of the harmonic oscillator.</div>
+<div class="lab"><h4>🔬 Lab 4: test the law of indices</h4>
+<div class="ctrl"><button class="alt" data-bc="heis">Heisenberg type ([A,B] central)</button><button class="alt" data-bc="comm">Commuting</button><button class="alt" data-bc="gen">General (non-commuting)</button></div>
+<div class="ctrl"><label>scale s <input type="range" id="bcS" min="0" max="2" step="0.01" value="1"><span id="bcSv"></span></label></div>
+<div class="grid2"><div><div class="small">A</div><div id="bcA" class="ctrl"></div></div><div><div class="small">B</div><div id="bcB" class="ctrl"></div></div></div>
+<div id="bcOut"></div>
+</div>
+</section>
+
+<section id="s12">
+<h2>12. Summary sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Item</th><th>Formula</th></tr>
+<tr><td>Diagonalizable</td><td>f(A) = P diag(f(λᵢ)) P⁻¹</td></tr>
+<tr><td>Any matrix</td><td>f(A) = Σ<sub>k&lt;m</sub> α<sub>k</sub>A<sup>k</sup>, with f<sup>(j)</sup>(λᵢ) = r<sup>(j)</sup>(λᵢ), j &lt; rᵢ</td></tr>
+<tr><td>Eigen-relation</td><td>Ax = λx ⇒ f(A)x = f(λ)x; eigenvalues of f(A) are f(λᵢ)</td></tr>
+<tr><td>Convergence</td><td>Σa<sub>k</sub>A<sup>k</sup> converges ⇔ all |λᵢ| &lt; R</td></tr>
+<tr><td>Roots</td><td>A<sup>1/k</sup> = PΛ<sup>1/k</sup>P⁻¹; k<sup>m</sup> of this type (distinct λ). Can be infinitely many, or none.</td></tr>
+<tr><td>Exponential</td><td>e<sup>A</sup> = ΣA<sup>k</sup>/k!, (e<sup>A</sup>)⁻¹ = e<sup>−A</sup>, d/dt e<sup>tA</sup> = Ae<sup>tA</sup></td></tr>
+<tr><td>Determinant</td><td>det e<sup>A</sup> = e<sup>Tr A</sup>; ln det A = Tr ln A</td></tr>
+<tr><td>Product</td><td>e<sup>A</sup>e<sup>B</sup> = e<sup>A+B</sup> if [A,B] = 0; = e<sup>A+B+[A,B]/2</sup> if [A,B] commutes with A, B</td></tr>
+<tr><td>Logarithm</td><td>ln A = P ln Λ P⁻¹; ln(−x) = ln x + iπ; not unique</td></tr>
+<tr><td>Trig/hyperbolic</td><td>sin A = (e<sup>iA</sup> − e<sup>−iA</sup>)/2i, cosh A = (e<sup>A</sup> + e<sup>−A</sup>)/2</td></tr>
+<tr><td>Nilpotent N (N<sup>k</sup> = 0)</td><td>e<sup>N</sup> = I + N + … + N<sup>k−1</sup>/(k−1)! exactly</td></tr>
+<tr><td>A² = I</td><td>e<sup>tA</sup> = I cosh t + A sinh t</td></tr>
+<tr><td>A² = −I</td><td>e<sup>tA</sup> = I cos t + A sin t</td></tr>
+</table></div>
+</section>
+
+<section id="s13">
+<h2>13. Book's Exercise 12: all problems solved</h2>
+<div class="prob"><div class="q">1. If AB = BA, show f(A) and g(B) commute (f, g power series).</div>
+<details><summary>Show solution</summary><p>AB = BA ⇒ A<sup>j</sup>B<sup>k</sup> = B<sup>k</sup>A<sup>j</sup> for all j, k (move each B past each A one at a time). Then f(A)g(B) = Σ<sub>j,k</sub>a<sub>j</sub>b<sub>k</sub>A<sup>j</sup>B<sup>k</sup> = Σb<sub>k</sub>a<sub>j</sub>B<sup>k</sup>A<sup>j</sup> = g(B)f(A). (The double series converges absolutely, so the terms may be rearranged.) ∎</p></details></div>
+<div class="prob"><div class="q">2. Prove e<sup>A</sup> is nonsingular even if A is singular, and (e<sup>A</sup>)⁻¹ = e<sup>−A</sup>.</div>
+<details><summary>Show solution</summary><p>det e<sup>A</sup> = e<sup>Tr A</sup> ≠ 0 (Example 12). So e<sup>A</sup> is nonsingular for every A. Since A and −A commute, e<sup>A</sup>e<sup>−A</sup> = e<sup>A−A</sup> = e<sup>0</sup> = I (Example 13 with C = 0). So (e<sup>A</sup>)⁻¹ = e<sup>−A</sup>. ∎ Example: A = [[0, 1], [0, 0]] is singular, e<sup>A</sup> = [[1, 1], [0, 1]] has det 1.</p></details></div>
+<div class="prob"><div class="q">3. Show a<sup>0</sup> = I for any nonzero scalar a (0 = null matrix).</div>
+<details><summary>Show solution</summary><p>a<sup>0</sup> = exp(0 · ln a) = exp(0) = I + 0 + 0²/2! + … = I. ∎ (ln a exists for a ≠ 0, possibly complex. It is multiplied by the zero matrix anyway.)</p></details></div>
+<div class="prob"><div class="q">4. A = matrix of Eq. (10.19). Approximate exp A and cosh A using terms up to A⁵. Compare with Example 10.</div>
+<details><summary>Show solution</summary><p>A = [[3, 1, −1], [2, 2, −1], [2, 2, 0]]. Summing I + A + A²/2 + A³/6 + A⁴/24 + A⁵/120:</p>
+<div class="eq">exp A ≈ <table class="mx"><tr><td>16.717</td><td>4.550</td><td>−7.000</td></tr><tr><td>14.000</td><td>7.267</td><td>−7.000</td></tr><tr><td>18.900</td><td>9.100</td><td>−6.733</td></tr></table>, &nbsp; exact (73) at t = 1: <table class="mx"><tr><td>17.496</td><td>4.671</td><td>−7.389</td></tr><tr><td>14.778</td><td>7.389</td><td>−7.389</td></tr><tr><td>20.215</td><td>9.342</td><td>−7.389</td></tr></table></div>
+<p>cosh A ≈ I + A²/2 + A⁴/24 = [[8.208, 2.125, −3.333], [6.667, 3.667, −3.333], [9.083, 4.250, −3.000]], vs exact [[8.797, 2.219, −3.627], [7.254, 3.762, −3.627], [10.069, 4.438, −3.492]].</p>
+<p>The errors are about 5–10%, because the eigenvalue 2 makes the terms 2<sup>k</sup>/k! fall off slowly. More terms are needed. Use Lab 3 (Eq. 10.19, exp, t = 1) for the exact values.</p></details></div>
+<div class="prob"><div class="q">5. ln(I + A) for A = [[3/8, 1/8, 1/8], [0, 1/3, 0], [1/8, 1/24, 3/8]], and compare with A − A²/2 + A³/3 − A⁴/4.</div>
+<details><summary>Show solution</summary><p>Eigenvalues of A: <b>1/2, 1/3, 1/4</b> (all |λ| &lt; 1, so the series converges). So I + A has eigenvalues 3/2, 4/3, 5/4.</p>
+<p>Exact (diagonalize, or Lab 3 with "Exercise 5"):</p>
+<div class="eq">ln(I + A) ≈ <table class="mx"><tr><td>0.3143</td><td>0.0912</td><td>0.0912</td></tr><tr><td>0</td><td>0.2877</td><td>0</td></tr><tr><td>0.0912</td><td>0.0266</td><td>0.3143</td></tr></table>, &nbsp; 4-term series: <table class="mx"><tr><td>0.3120</td><td>0.0890</td><td>0.0890</td></tr><tr><td>0</td><td>0.2870</td><td>0</td></tr><tr><td>0.0890</td><td>0.0250</td><td>0.3120</td></tr></table></div>
+<p>Exactly: (1,1) = (3,3) = ½(ln 3/2 + ln 5/4) = ½ ln(15/8); (1,3) = (3,1) = ½(ln 3/2 − ln 5/4) = ½ ln(6/5) ≈ 0.0912; (2,2) = ln(4/3) ≈ 0.2877. The 4-term series is already within about 0.002. The slowest term is (1/2)⁵/5 ≈ 0.006 from λ = ½.</p></details></div>
+<div class="prob"><div class="q">6. Obtain e<sup>−At</sup> for Eq. (10.19) and show e<sup>−At</sup>e<sup>At</sup> = I.</div>
+<details><summary>Show solution</summary><p>Replace t by −t in (73):</p>
+<div class="eq">e<sup>−At</sup> = <table class="mx"><tr><td>−2te<sup>−2t</sup> + e<sup>−t</sup></td><td>e<sup>−2t</sup> − e<sup>−t</sup></td><td>te<sup>−2t</sup></td></tr><tr><td>−2te<sup>−2t</sup></td><td>e<sup>−2t</sup></td><td>te<sup>−2t</sup></td></tr><tr><td>(−4t − 2)e<sup>−2t</sup> + 2e<sup>−t</sup></td><td>2e<sup>−2t</sup> − 2e<sup>−t</sup></td><td>(1 + 2t)e<sup>−2t</sup></td></tr></table></div>
+<p>Check entry (1,1) of the product, row 1 of e<sup>−At</sup> times column 1 of e<sup>At</sup>: (−2te<sup>−2t</sup> + e<sup>−t</sup>)(2te<sup>2t</sup> + e<sup>t</sup>) + (e<sup>−2t</sup> − e<sup>−t</sup>)(2te<sup>2t</sup>) + te<sup>−2t</sup>((4t − 2)e<sup>2t</sup> + 2e<sup>t</sup>)<br>
+= −4t² − 2te<sup>−t</sup> + 2te<sup>t</sup> + 1 + 2t − 2te<sup>t</sup> + 4t² − 2t + 2te<sup>−t</sup> = <b>1</b> ✓. The other entries work the same way. (The general reason: −At and At commute, so the product is e<sup>0</sup> = I.)</p></details></div>
+<div class="prob"><div class="q">7. B = matrix of Eq. (81). Show exp B = A (Eq. 76).</div>
+<details><summary>Show solution</summary><p>B = (ln 2)I + N with N = [[0, −1, 0], [0, 0, 0], [½, −5/4, 0]]. I commutes with N, so e<sup>B</sup> = 2·e<sup>N</sup>.</p>
+<p>N² = [[0, 0, 0], [0, 0, 0], [0, −½, 0]] and N³ = 0. So e<sup>N</sup> = I + N + N²/2 = [[1, −1, 0], [0, 1, 0], [½, −5/4 − ¼, 1]] = [[1, −1, 0], [0, 1, 0], [½, −3/2, 1]].</p>
+<p>e<sup>B</sup> = 2e<sup>N</sup> = [[2, −2, 0], [0, 2, 0], [1, −3, 2]] = A ✓. ∎</p></details></div>
+<div class="prob"><div class="q">8. A = [[1, 1, 1], [0, 1, 1], [0, 0, 1]]. Find A<sup>k</sup>, e<sup>A</sup> and ln A. Sum Σ A<sup>k</sup>/k! exactly.</div>
+<details><summary>Show solution</summary><p>A = I + N, N = [[0, 1, 1], [0, 0, 1], [0, 0, 0]], N² = [[0, 0, 1], [0, 0, 0], [0, 0, 0]], N³ = 0.</p>
+<p><b>A<sup>k</sup></b> = (I + N)<sup>k</sup> = I + kN + C(k,2)N² = <b>[[1, k, k(k+1)/2], [0, 1, k], [0, 0, 1]]</b>. Entry (1,3) = k + k(k−1)/2 = k(k+1)/2. Check: A² = [[1, 2, 3], [0, 1, 2], [0, 0, 1]] ✓.</p>
+<p><b>Series:</b> Σ A<sup>k</sup>/k! has entries Σ1/k! = e, Σk/k! = e, and Σk(k+1)/(2·k!) = ½(Σk²/k! + Σk/k!) = ½(2e + e) = 3e/2. So <b>e<sup>A</sup> = e[[1, 1, 3/2], [0, 1, 1], [0, 0, 1]]</b>.</p>
+<p><b>Direct:</b> e<sup>A</sup> = e·e<sup>N</sup> = e(I + N + N²/2) = e[[1, 1, 1 + ½], [0, 1, 1], [0, 0, 1]] ✓ (same).</p>
+<p><b>ln A</b> = ln(I + N) = N − N²/2 = <b>[[0, 1, ½], [0, 0, 1], [0, 0, 0]]</b> (the series stops because N³ = 0).</p></details></div>
+<div class="prob"><div class="q">9. Write A<sup>−k</sup> for the matrix of Eq. (8) and show A<sup>k</sup>A<sup>−k</sup> = I.</div>
+<details><summary>Show solution</summary><p>A<sup>−k</sup> = ⅓[[2<sup>−k</sup> + 2, (2<sup>−k</sup> − 1)√2], [(2<sup>−k</sup> − 1)√2, 2<sup>1−k</sup> + 1]].</p><p>Write u = 2<sup>k</sup>, v = 2<sup>−k</sup>, uv = 1. Product (1,1) = (1/9)[(u + 2)(v + 2) + 2(u − 1)(v − 1)] = (1/9)[uv + 2u + 2v + 4 + 2uv − 2u − 2v + 2] = (1/9)(3 + 6) = 1 ✓.<br>(1,2) = (√2/9)[(u + 2)(v − 1) + (u − 1)(2v + 1)] = (√2/9)[uv − u + 2v − 2 + 2uv + u − 2v − 1] = (√2/9)(3uv − 3) = 0 ✓. The rest follow by symmetry. ∎</p></details></div>
+<div class="prob"><div class="q">10. Show e<sup>λA</sup>Be<sup>−λA</sup> = B + λ[A, B] + (λ²/2!)[A,[A,B]] + (λ³/3!)[A,[A,[A,B]]] + ….</div>
+<details><summary>Show solution</summary><p>Let F(λ) = e<sup>λA</sup>Be<sup>−λA</sup>. Then F(0) = B and F′(λ) = Ae<sup>λA</sup>Be<sup>−λA</sup> − e<sup>λA</sup>Be<sup>−λA</sup>A = [A, F(λ)].</p><p>Repeating: F″ = [A, F′] = [A, [A, F]], …, F<sup>(n)</sup>(0) = [A, [A, … [A, B]…]] (n commutators). Taylor's series F(λ) = ΣF<sup>(n)</sup>(0)λⁿ/n! gives the result. ∎ (In quantum mechanics this is how e<sup>iHt</sup> O e<sup>−iHt</sup>, the Heisenberg picture, is expanded.)</p></details></div>
+</section>
+
+<section id="s14">
+<h2>14. Practice set (CSIR-NET / GATE style)</h2>
+<div class="prob"><div class="q">P1. Find e<sup>tA</sup> for A = [[0, 1], [−1, 0]]. <span class="tag">rotation</span></div>
+<details><summary>Show solution</summary><p>A² = −I ⇒ e<sup>tA</sup> = I cos t + A sin t = [[cos t, sin t], [−sin t, cos t]].</p></details></div>
+<div class="prob"><div class="q">P2. A 3×3 matrix has eigenvalues 1, 2, 3. Find det(e<sup>A</sup>) and Tr(e<sup>A</sup>). <span class="tag">eigenvalues</span></div>
+<details><summary>Show solution</summary><p>det e<sup>A</sup> = e<sup>6</sup>. Tr e<sup>A</sup> = e + e² + e³.</p></details></div>
+<div class="prob"><div class="q">P3. σ<sub>x</sub> = [[0, 1], [1, 0]]. Find e<sup>iθσ<sub>x</sub></sup>. <span class="tag">Pauli</span></div>
+<details><summary>Show solution</summary><p>σ<sub>x</sub>² = I ⇒ e<sup>iθσ<sub>x</sub></sup> = I cos θ + iσ<sub>x</sub> sin θ = [[cos θ, i sin θ], [i sin θ, cos θ]]. It is unitary. In general e<sup>iθ n̂·σ</sup> = I cos θ + i(n̂·σ) sin θ.</p></details></div>
+<div class="prob"><div class="q">P4. Evaluate e<sup>A</sup> for A = [[2, 1], [0, 2]]. <span class="tag">defective</span></div>
+<details><summary>Show solution</summary><p>A = 2I + N with N² = 0 and 2I commuting with N ⇒ e<sup>A</sup> = e²(I + N) = e²[[1, 1], [0, 1]]. Or by CH: f(2) = e² = 2α₁ + α₀, f′(2) = e² = α₁ ⇒ α₀ = −e², same answer.</p></details></div>
+<div class="prob"><div class="q">P5. For which s does I + sM + s²M² + … converge, if M has eigenvalues 2 and −0.5? <span class="tag">convergence</span></div>
+<details><summary>Show solution</summary><p>Need |2s| &lt; 1 and |0.5s| &lt; 1 ⇒ <b>|s| &lt; 1/2</b>.</p></details></div>
+<div class="prob"><div class="q">P6. Find sin A for A = diag(π/2, π), and sin B for B = PAP⁻¹ (P any invertible matrix). <span class="tag">trig</span></div>
+<details><summary>Show solution</summary><p>sin A = diag(1, 0). sin B = P diag(1, 0) P⁻¹, a projector onto the first eigenvector. Note (sin B)² = sin B.</p></details></div>
+<div class="prob"><div class="q">P7. Find all square roots of diag(4, 9). <span class="tag">roots</span></div>
+<details><summary>Show solution</summary><p>The eigenvalues are distinct, so every root commutes with A and is therefore diagonal: diag(±2, ±3), <b>4 roots</b>. (Contrast: the 2×2 identity has infinitely many.)</p></details></div>
+<div class="prob"><div class="q">P8. Compute A<sup>100</sup> for A = [[1, 1], [0, 2]]. <span class="tag">CH method</span></div>
+<details><summary>Show solution</summary><p>λ = 1, 2. r(λ) = α₁λ + α₀: 1 = α₁ + α₀, 2¹⁰⁰ = 2α₁ + α₀ ⇒ α₁ = 2¹⁰⁰ − 1, α₀ = 2 − 2¹⁰⁰. A¹⁰⁰ = [[1, 2¹⁰⁰ − 1], [0, 2¹⁰⁰]].</p></details></div>
+<div class="prob"><div class="q">P9. Show that if H is hermitian, U = e<sup>iH</sup> is unitary, and det U = e<sup>i Tr H</sup>. <span class="tag">QM</span></div>
+<details><summary>Show solution</summary><p>U† = e<sup>−iH†</sup> = e<sup>−iH</sup>, and iH commutes with −iH ⇒ U†U = e<sup>0</sup> = I. det U = e<sup>Tr(iH)</sup> = e<sup>i Tr H</sup>, which has modulus 1 since Tr H is real.</p></details></div>
+<div class="prob"><div class="q">P10. Solve ẋ = Ax with A = [[0, 1], [1, 0]], x(0) = (1, 0). <span class="tag">ODE</span></div>
+<details><summary>Show solution</summary><p>A² = I ⇒ e<sup>tA</sup> = I cosh t + A sinh t ⇒ x(t) = (cosh t, sinh t). It moves along the hyperbola x² − y² = 1.</p></details></div>
+<div class="prob"><div class="q">P11. A is real antisymmetric 3×3. Show e<sup>A</sup> is a rotation (orthogonal with det 1). <span class="tag">groups</span></div>
+<details><summary>Show solution</summary><p>(e<sup>A</sup>)ᵀ = e<sup>Aᵀ</sup> = e<sup>−A</sup> = (e<sup>A</sup>)⁻¹ ⇒ orthogonal. det e<sup>A</sup> = e<sup>Tr A</sup> = e<sup>0</sup> = 1 ⇒ a proper rotation. (Rodrigues' formula: e<sup>θK</sup> = I + K sin θ + K²(1 − cos θ) for a unit axis generator K.)</p></details></div>
+<div class="prob"><div class="q">P12. If A² = A (projector), find e<sup>tA</sup>. <span class="tag">projector</span></div>
+<details><summary>Show solution</summary><p>A<sup>k</sup> = A for k ≥ 1 ⇒ e<sup>tA</sup> = I + A(t + t²/2! + …) = I + (e<sup>t</sup> − 1)A.</p></details></div>
+</section>
+
+<section id="s15" class="quiz">
+<h2>15. Self-test quiz</h2>
+<div id="quiz"></div>
+<p><b>Score: <span id="qScore">0</span> / <span id="qTot">0</span></b></p>
+</section>
+
+<section id="s16">
+<h2>16. Interesting facts</h2>
+<div class="box fact"><b class="t">"Nineteen dubious ways"</b> A famous 1978 paper by Moler and Van Loan, "Nineteen Dubious Ways to Compute the Exponential of a Matrix", showed that every simple method has hidden numerical traps. Diagonalization fails for nearly defective matrices, and plain Taylor series lose accuracy through cancellation. Modern software uses "scaling and squaring": e<sup>A</sup> = (e<sup>A/2ˢ</sup>)<sup>2ˢ</sup>, which is what the labs here use.</div>
+<div class="box fact"><b class="t">Lie groups and Lie algebras</b> Every continuous symmetry group (rotations, Lorentz, SU(2), SU(3) of QCD) is reached by exponentiating a small set of matrices, its "generators". The commutators [Jᵢ, Jⱼ] = iε<sub>ijk</sub>J<sub>k</sub> of angular momentum are exactly the BCH data of Section 11.</div>
+<div class="box fact"><b class="t">Trotter formula</b> Even when [A, B] ≠ 0, e<sup>A+B</sup> = lim<sub>n→∞</sub>(e<sup>A/n</sup>e<sup>B/n</sup>)ⁿ. This is the basis of Feynman's path integral and of quantum simulation algorithms.</div>
+<div class="box fact"><b class="t">Square roots in quantum computing</b> The "√NOT" gate is a square root of the Pauli-X matrix: ½[[1 + i, 1 − i], [1 − i, 1 + i]]. Squaring it gives X. Matrix roots are a real engineering topic.</div>
+<div class="box fact"><b class="t">Sylvester's formula</b> For distinct eigenvalues, the Cayley–Hamilton method is the same as f(A) = Σ f(λᵢ)Pᵢ with the projectors Pᵢ = Πⱼ≠ᵢ(A − λⱼI)/(λᵢ − λⱼ) of Section 10. James Joseph Sylvester introduced it in 1883.</div>
+</section>
+</div>
+<script>
+/* ---------- small linear-algebra toolkit ---------- */
+const $=id=>document.getElementById(id);
+const cssv=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const eye=n=>Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0));
+const zeros=n=>Array.from({length:n},()=>Array(n).fill(0));
+const clone=M=>M.map(r=>r.slice());
+const mul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>s+v*B[k][j],0)));
+const add=(A,B)=>A.map((r,i)=>r.map((v,j)=>v+B[i][j]));
+const sub=(A,B)=>A.map((r,i)=>r.map((v,j)=>v-B[i][j]));
+const scl=(k,A)=>A.map(r=>r.map(v=>k*v));
+const trc=A=>A.reduce((s,r,i)=>s+r[i],0);
+const T=A=>A[0].map((_,j)=>A.map(r=>r[j]));
+const maxAbs=A=>Math.max(...A.flat().map(Math.abs));
+const mv=(A,x)=>A.map(r=>r.reduce((s,v,k)=>s+v*x[k],0));
+const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
+const nrm=a=>Math.sqrt(dot(a,a));
+const neg=s=>String(s).replace(/-/g,'−');
+function fmt(x,dec=3){
+  if(!isFinite(x))return '∞';
+  if(Math.abs(x)<1e-9)return '0';
+  const r=Math.round(x); if(Math.abs(x-r)<1e-7*Math.max(1,Math.abs(x)))return neg(r);
+  for(let q=2;q<=12;q++){const p=Math.round(x*q);if(Math.abs(x*q-p)<1e-7*q)return neg(p)+'/'+q;}
+  return neg(+x.toFixed(dec));
+}
+function mxH(M,heat,scale){
+  const s=scale||Math.max(1e-12,maxAbs(M));
+  return '<table class="mx">'+M.map(r=>'<tr>'+r.map(v=>{
+    let st='';
+    if(heat){const a=Math.min(1,Math.abs(v)/s)*0.55;if(Math.abs(v)>1e-9)st=` style="background:${v>0?`rgba(47,111,223,${a})`:`rgba(201,42,42,${a})`}"`;}
+    return `<td${st}>${fmt(v)}</td>`;}).join('')+'</tr>').join('')+'</table>';
+}
+function rank(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol)continue;
+    [A[r],A[p]]=[A[p],A[r]];
+    for(let i=r+1;i<n;i++){const f=A[i][c]/A[r][c];for(let j=c;j<m;j++)A[i][j]-=f*A[r][j];}
+    r++;
+  }
+  return r;
+}
+function nullspace(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  const piv=[];let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol){for(let i=r;i<n;i++)A[i][c]=0;continue;}
+    [A[r],A[p]]=[A[p],A[r]];
+    const d=A[r][c];for(let j=0;j<m;j++)A[r][j]/=d;
+    for(let i=0;i<n;i++)if(i!==r){const f=A[i][c];for(let j=0;j<m;j++)A[i][j]-=f*A[r][j];}
+    piv.push(c);r++;
+  }
+  const basis=[];
+  for(let f=0;f<m;f++){if(piv.includes(f))continue;
+    const v=Array(m).fill(0);v[f]=1;piv.forEach((c,i)=>{v[c]=-A[i][f];});basis.push(v);}
+  return basis;
+}
+function inv(M){
+  const n=M.length,A=M.map((r,i)=>r.concat(eye(n)[i]));
+  for(let c=0;c<n;c++){
+    let p=c;for(let i=c+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<1e-12)return null;
+    [A[c],A[p]]=[A[p],A[c]];const d=A[c][c];for(let j=0;j<2*n;j++)A[c][j]/=d;
+    for(let i=0;i<n;i++)if(i!==c){const f=A[i][c];for(let j=0;j<2*n;j++)A[i][j]-=f*A[c][j];}
+  }
+  return A.map(r=>r.slice(n));
+}
+/* Faddeev–LeVerrier: det(λI−A)=Σ c[k] λ^k, c[n]=1 */
+function charCoeffs(A){
+  const n=A.length,c=Array(n+1).fill(0);c[n]=1;let M=zeros(n);
+  for(let k=1;k<=n;k++){M=add(mul(A,M),scl(c[n-k+1],eye(n)));c[n-k]=-trc(mul(A,M))/k;}
+  return c;
+}
+/* complex helpers + Durand–Kerner roots of monic poly (c indexed by power) */
+const cm=(a,b)=>[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]];
+const cd=(a,b)=>{const d=b[0]*b[0]+b[1]*b[1];return[(a[0]*b[0]+a[1]*b[1])/d,(a[1]*b[0]-a[0]*b[1])/d];};
+function polyRoots(c){
+  const n=c.length-1;if(n===1)return[[-c[0],0]];
+  let z=Array.from({length:n},(_,k)=>{let w=[1,0];for(let i=0;i<=k;i++)w=cm(w,[0.4,0.9]);return w;});
+  const R=1+Math.max(...c.slice(0,n).map(Math.abs));z=z.map(w=>[w[0]*R,w[1]*R]);
+  const ev=x=>{let s=[1,0];for(let k=n-1;k>=0;k--)s=[s[0]*x[0]-s[1]*x[1]+c[k],s[0]*x[1]+s[1]*x[0]];return s;};
+  for(let it=0;it<2000;it++){
+    let delta=0;
+    z=z.map((zi,i)=>{let den=[1,0];z.forEach((zj,j)=>{if(j!==i)den=cm(den,[zi[0]-zj[0],zi[1]-zj[1]]);});
+      if(Math.hypot(den[0],den[1])<1e-300)den=[1e-12,0];
+      const q=cd(ev(zi),den);delta=Math.max(delta,Math.hypot(q[0],q[1]));return[zi[0]-q[0],zi[1]-q[1]];});
+    if(delta<1e-14)break;
+  }
+  return z;
+}
+function snap(x){for(const q of [1,2,3,4,6,12]){const r=Math.round(x*q)/q;if(Math.abs(x-r)<2e-4)return r;}return x;}
+function eigGroups(A){
+  const z=polyRoots(charCoeffs(A)),used=Array(z.length).fill(false),G=[];
+  const tol=2e-3*Math.max(1,maxAbs(A));
+  for(let i=0;i<z.length;i++){if(used[i])continue;const cl=[z[i]];used[i]=true;
+    for(let j=i+1;j<z.length;j++)if(!used[j]&&Math.hypot(z[j][0]-z[i][0],z[j][1]-z[i][1])<tol){cl.push(z[j]);used[j]=true;}
+    let re=cl.reduce((s,w)=>s+w[0],0)/cl.length,im=cl.reduce((s,w)=>s+w[1],0)/cl.length;
+    if(Math.abs(im)<1e-6)im=0;re=snap(re);if(im)im=snap(im);
+    G.push({re,im,m:cl.length});}
+  G.sort((a,b)=>b.re-a.re||b.im-a.im);return G;
+}
+const powM=(M,k)=>{let R=eye(M.length);for(let i=0;i<k;i++)R=mul(R,M);return R;};
+const lamF=a=>a===0?'λ':(a>0?`(λ − ${fmt(a)})`:`(λ + ${fmt(-a)})`);
+const supN=k=>k===1?'':String(k).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+function minimalPoly(A){
+  const G=eigGroups(A),n=A.length;
+  if(G.some(g=>g.im!==0))return{G,complex:true};
+  const sc=Math.max(1,maxAbs(A));
+  let tups=[[]];G.forEach(g=>{const nt=[];tups.forEach(t=>{for(let r=1;r<=g.m;r++)nt.push(t.concat(r));});tups=nt;});
+  tups.sort((a,b)=>a.reduce((s,v)=>s+v,0)-b.reduce((s,v)=>s+v,0));
+  const tried=[];
+  for(const t of tups){
+    let P=eye(n);G.forEach((g,i)=>{P=mul(P,powM(sub(A,scl(g.re,eye(n))),t[i]));});
+    const deg=t.reduce((s,v)=>s+v,0),zero=maxAbs(P)<1e-6*Math.pow(sc,deg);
+    tried.push({t,P,zero});if(zero)return{G,r:t,tried};
+  }
+  return{G,r:G.map(g=>g.m),tried};
+}
+function expandRoots(rs){let p=[1];rs.forEach(a=>{const q=Array(p.length+1).fill(0);p.forEach((v,i)=>{q[i]+=v;q[i+1]-=a*v;});p=q;});return p;}
+function polyStr(p,v,mat){
+  const d=p.length-1;let s='';
+  p.forEach((c,i)=>{if(Math.abs(c)<1e-9)return;const k=d-i;const a=Math.abs(c);
+    const coef=(a===1&&k>0)?'':fmt(a);const term=k===0?(mat?coef+'I':fmt(a)):(k===1?coef+v:coef+v+supN(k));
+    s+=(s===''?(c<0?'−':''):(c<0?' − ':' + '))+term;});
+  return s||'0';
+}
+function makeEditor(id,M,cb){
+  const box=$(id);let n=M.length;
+  function build(M){n=M.length;box.innerHTML='<div style="display:grid;grid-template-columns:repeat('+n+',58px);gap:4px">'+M.flat().map((v,i)=>`<input type="number" step="any" data-i="${i}" value="${v}" style="width:58px">`).join('')+'</div>';
+    box.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',cb));}
+  build(M);
+  return{get(){const v=[...box.querySelectorAll('input')].map(i=>parseFloat(i.value)||0);return Array.from({length:n},(_,i)=>v.slice(i*n,i*n+n));},
+         set(M){build(M);cb();}};
+}
+function arrow(ctx,x0,y0,x1,y1,col,w=2.5,dash){
+  ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;if(dash)ctx.setLineDash(dash);
+  ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();ctx.setLineDash([]);
+  const a=Math.atan2(y1-y0,x1-x0),L=Math.hypot(x1-x0,y1-y0);
+  if(L>6){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-10*Math.cos(a-0.4),y1-10*Math.sin(a-0.4));ctx.lineTo(x1-10*Math.cos(a+0.4),y1-10*Math.sin(a+0.4));ctx.fill();}
+  ctx.restore();
+}
+function canvasPt(cv,e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height];}
+
+/* ---------- extra helpers ---------- */
+function expm(A){const n=A.length,nm=maxAbs(A)*n;const s=Math.max(0,Math.ceil(Math.log2(nm+1e-12))+1);const B=scl(Math.pow(2,-s),A);
+  let R=eye(n),Tm=eye(n);for(let k=1;k<22;k++){Tm=scl(1/k,mul(Tm,B));R=add(R,Tm);}for(let i=0;i<s;i++)R=mul(R,R);return R;}
+function mpow(A,k){if(k<0){const Ai=inv(A);return Ai?mpow(Ai,-k):null;}let R=eye(A.length),B=clone(A);while(k>0){if(k&1)R=mul(R,B);B=mul(B,B);k>>=1;}return R;}
+const S2=Math.SQRT2;
+function eigSym2(A){const [[a,b],[c,d]]=A,t=a+d,disc=(a-d)*(a-d)+4*b*c;if(disc<0)return null;const s=Math.sqrt(disc),ls=[(t+s)/2,(t-s)/2];
+  return ls.map(l=>{let v=Math.hypot(b,l-a)>1e-9?[b,l-a]:(Math.hypot(l-d,c)>1e-9?[l-d,c]:(Math.abs(l-a)<1e-9?[1,0]:[0,1]));const m=nrm(v);return{l,v:[v[0]/m,v[1]/m]};});}
+function fromEig(E,fl){const P=[[E[0].v[0],E[1].v[0]],[E[0].v[1],E[1].v[1]]],Pi=inv(P);return mul(mul(P,[[fl[0],0],[0,fl[1]]]),Pi);}
+function plane(cv,ext){const ctx=cv.getContext('2d'),W=cv.width,H=cv.height,s=(W/2-10)/ext;ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle=cssv('--line');ctx.lineWidth=1;for(let i=-Math.floor(ext);i<=ext;i++){ctx.beginPath();ctx.moveTo(W/2+i*s,0);ctx.lineTo(W/2+i*s,H);ctx.moveTo(0,H/2-i*s);ctx.lineTo(W,H/2-i*s);ctx.stroke();}
+  ctx.strokeStyle=cssv('--muted');ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.moveTo(W/2,0);ctx.lineTo(W/2,H);ctx.stroke();
+  return{ctx,X:x=>W/2+x*s,Y:y=>H/2-y*s,s,W,H};}
+function m2s(M,d=4){return M.map(r=>'['+r.map(v=>fmt(v,d)).join(', ')+']').join('\n');}
+
+/* ---------- Lab 1: powers and roots ---------- */
+const PW={ex1:[[4/3,S2/3],[S2/3,5/3]],ex3:[[1.5,0.5],[0.5,1.5]],sk:[[1.5,0.5],[0,0.75]]};
+let pwA=PW.ex1,pwSigns=null;
+document.querySelectorAll('[data-pw]').forEach(b=>b.onclick=()=>{pwA=PW[b.dataset.pw];pwSigns=null;drawP();});
+document.querySelectorAll('[data-sg]').forEach(b=>b.onclick=()=>{pwSigns=b.dataset.sg;$('pP').value=0.5;drawP();});
+$('pP').addEventListener('input',()=>{pwSigns=null;drawP();});
+$('pPlay').onclick=()=>{pwSigns=null;const t0=performance.now();(function f(now){const t=Math.min(1,(now-t0)/2500);$('pP').value=2*t;drawP();if(t<1)requestAnimationFrame(f);})(t0);};
+function drawP(){
+  const p=+$('pP').value,E=eigSym2(pwA);$('pPv').textContent=pwSigns?'½ (chosen signs)':p.toFixed(2);
+  const sg=pwSigns?[pwSigns[0]==='+'?1:-1,pwSigns[1]==='+'?1:-1]:[1,1];
+  const fl=E.map((e,i)=>sg[i]*Math.pow(e.l,p)),M=fromEig(E,fl);
+  const G=plane($('cvP'),3.2),{ctx,X,Y}=G,cols=[cssv('--acc2'),cssv('--acc3')];
+  E.forEach((e,i)=>{ctx.save();ctx.setLineDash([7,5]);ctx.strokeStyle=cols[i];ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(X(-5*e.v[0]),Y(-5*e.v[1]));ctx.lineTo(X(5*e.v[0]),Y(5*e.v[1]));ctx.stroke();ctx.restore();
+    const w=mv(M,e.v);arrow(ctx,X(0),Y(0),X(w[0]),Y(w[1]),cols[i],3.5);ctx.fillStyle=cols[i];ctx.font='bold 13px sans-serif';ctx.fillText('λ='+fmt(e.l,3)+' → '+fmt(fl[i],3),X(w[0])+6,Y(w[1])-6);});
+  ctx.strokeStyle=cssv('--muted');ctx.setLineDash([3,4]);ctx.beginPath();for(let k=0;k<=100;k++){const th=k/50*Math.PI;k?ctx.lineTo(X(Math.cos(th)),Y(Math.sin(th))):ctx.moveTo(X(1),Y(0));}ctx.stroke();ctx.setLineDash([]);
+  ctx.strokeStyle=cssv('--ink');ctx.lineWidth=2.5;ctx.beginPath();for(let k=0;k<=120;k++){const th=k/60*Math.PI,w=mv(M,[Math.cos(th),Math.sin(th)]);k?ctx.lineTo(X(w[0]),Y(w[1])):ctx.moveTo(X(w[0]),Y(w[1]));}ctx.stroke();
+  const pt=mv(M,[1,0]);ctx.fillStyle=cssv('--acc');ctx.beginPath();ctx.arc(X(pt[0]),Y(pt[1]),5,0,7);ctx.fill();
+  let o=`A = \n${m2s(pwA)}\nλ = ${fmt(E[0].l,4)}, ${fmt(E[1].l,4)}\n\n`;
+  o+=pwSigns?`Square root with signs (${pwSigns[0]},${pwSigns[1]}):\nB = P·diag(${fmt(fl[0],4)}, ${fmt(fl[1],4)})·P⁻¹ =\n${m2s(M)}\nB² =\n${m2s(mul(M,M))}   ← equals A ✓`:`A^p, p = ${p.toFixed(2)}:\n${m2s(M)}\n\nThe eigen-directions never move;\nonly the stretch λ^p changes.`;
+  if(!pwSigns&&Math.abs(p-Math.round(p))<1e-9){const D=mpow(pwA,Math.round(p));if(D)o+=`\n\ndirect product A^${Math.round(p)} =\n${m2s(D)} ✓`;}
+  $('pOut').textContent=o;
+}
+
+/* ---------- Lab 2: series ---------- */
+const SM={a:[[0.6,0.3],[0.2,0.5]],b:[[0,1],[-1,0]],c:[[0.5,100],[0,0.5]],d:[[3/8,1/8,1/8],[0,1/3,0],[1/8,1/24,3/8]]};
+['sSer','sM','sS'].forEach(k=>$(k).addEventListener('input',drawSer));
+function drawSer(){
+  const ser=$('sSer').value,M=SM[$('sM').value],s=+$('sS').value,X=scl(s,M),n=X.length,I=eye(n);$('sSv').textContent=s.toFixed(2);
+  const G=eigGroups(X),rho=Math.max(...G.map(g=>Math.hypot(g.re,g.im)));
+  const errs=[];let S=ser==='geo'?eye(n):(ser==='exp'?eye(n):zeros(n)),Tm=eye(n),ref=ser==='exp'?expm(X):null;
+  for(let N=1;N<=60;N++){
+    if(ser==='geo'){Tm=mul(Tm,X);S=add(S,Tm);errs.push(maxAbs(sub(mul(sub(I,X),S),I)));}
+    else if(ser==='exp'){Tm=scl(1/N,mul(Tm,X));S=add(S,Tm);errs.push(maxAbs(sub(S,ref))/Math.max(1,maxAbs(ref)));}
+    else{Tm=mul(Tm,X);S=add(S,scl((N%2?1:-1)/N,Tm));const e=maxAbs(S)>1e6?Infinity:maxAbs(sub(expm(S),add(I,X)));errs.push(e);}
+  }
+  const cv=$('cvSer'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,L=40,lo=-16,hi=8;
+  const Xp=N=>L+(N-1)/59*(W-L-10),Yp=e=>{let v=Math.log10(Math.max(e,1e-16));v=Math.min(hi,Math.max(lo,isFinite(v)?v:hi));return 10+(hi-v)/(hi-lo)*(H-30);};
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);ctx.font='11px sans-serif';
+  for(let v=lo;v<=hi;v+=4){ctx.strokeStyle=cssv('--line');ctx.beginPath();ctx.moveTo(L,Yp(Math.pow(10,v)));ctx.lineTo(W,Yp(Math.pow(10,v)));ctx.stroke();ctx.fillStyle=cssv('--muted');ctx.fillText('1e'+v,2,Yp(Math.pow(10,v))+4);}
+  ctx.fillText('N = number of terms →',W-150,H-4);
+  const conv=ser==='exp'||rho<1;ctx.strokeStyle=conv?cssv('--acc3'):cssv('--warn');ctx.lineWidth=2.5;ctx.beginPath();errs.forEach((e,i)=>{i?ctx.lineTo(Xp(i+1),Yp(e)):ctx.moveTo(Xp(1),Yp(e));});ctx.stroke();
+  const R=ser==='exp'?'∞':'1';
+  $('serOut').textContent=`X = s·M, eigenvalues of X: ${G.map(g=>g.im?`${fmt(g.re,3)}±${fmt(Math.abs(g.im),3)}i`:fmt(g.re,3)).join(', ')}
+spectral radius ρ(X) = ${fmt(rho,4)}    radius of convergence R = ${R}
+→ ${conv?'CONVERGES (ρ < R)':(ser!=='exp'&&Math.abs(rho-1)<1e-9?'ON THE BOUNDARY (ρ = R): the theorem says nothing here, so check directly':'DIVERGES (ρ > R)')}
+error after 10 terms: ${errs[9].toExponential(2)}   after 60 terms: ${isFinite(errs[59])?errs[59].toExponential(2):'∞'}
+${ser==='geo'?'(error measured as ‖(I−X)S_N − I‖)':ser==='log'?'(error measured as ‖exp(S_N) − (I+X)‖)':'(error relative to e^X)'}`;
+}
+
+/* ---------- Flow lab ---------- */
+const FL={rot:[0,-1,1,0],spiral:[-0.25,-1,1,-0.25],saddle:[1,0,0,-1],node:[-0.5,0.3,0.1,-1],shear:[0,1,0,0],boost:[0,1,1,0]};
+let flE=null,flKey='';
+document.querySelectorAll('[data-fl]').forEach(b=>b.onclick=()=>{const v=FL[b.dataset.fl];['fA','fB','fC','fD'].forEach((k,i)=>$(k).value=v[i]);$('fT').value=0;drawF();});
+['fA','fB','fC','fD','fT'].forEach(k=>$(k).addEventListener('input',drawF));
+let fRun=false;$('fPlay').onclick=()=>{fRun=!fRun;$('fPlay').textContent=fRun?'❚❚ Pause':'▶ Play';if(fRun){let last=performance.now();(function f(now){if(!fRun)return;let t=+$('fT').value+(now-last)/1000*0.6;last=now;if(t>3)t=-3;$('fT').value=t;drawF();requestAnimationFrame(f);})(last);}};
+function drawF(){
+  const A=[[+$('fA').value,+$('fB').value],[+$('fC').value,+$('fD').value]],t=+$('fT').value;
+  ['fA','fB','fC','fD'].forEach(k=>$(k+'v').textContent=fmt(+$(k).value,2));$('fTv').textContent=t.toFixed(2);
+  const key=JSON.stringify(A);if(key!==flKey){flKey=key;flE=[];for(let i=0;i<=120;i++)flE.push(expm(scl(-3+i*0.05,A)));}
+  const G=plane($('cvF'),4.2),{ctx,X,Y}=G;
+  ctx.strokeStyle=cssv('--line');ctx.lineWidth=1;
+  for(let i=-4;i<=4;i++)for(let j=-4;j<=4;j++){const v=mv(A,[i,j]),m=Math.hypot(...v);if(m<1e-9)continue;const k=0.35/Math.max(1,m);ctx.beginPath();ctx.moveTo(X(i),Y(j));ctx.lineTo(X(i+v[0]*k),Y(j+v[1]*k));ctx.stroke();}
+  const starts=[];for(let k=0;k<12;k++){const th=k/12*2*Math.PI;starts.push([2.2*Math.cos(th),2.2*Math.sin(th)]);}starts.push([0.6,0.3],[-0.4,0.8],[1,-1.2]);
+  const col=cssv('--acc');
+  starts.forEach(x0=>{ctx.strokeStyle=col;ctx.globalAlpha=0.45;ctx.lineWidth=1.5;ctx.beginPath();let pen=false;flE.forEach(E=>{const p=mv(E,x0);if(Math.max(Math.abs(p[0]),Math.abs(p[1]))>6){pen=false;return;}pen?ctx.lineTo(X(p[0]),Y(p[1])):ctx.moveTo(X(p[0]),Y(p[1]));pen=true;});ctx.stroke();ctx.globalAlpha=1;});
+  const Et=expm(scl(t,A));
+  const sq=[[0,0],[1,0],[1,1],[0,1]].map(p=>mv(Et,p));ctx.fillStyle=cssv('--acc4');ctx.globalAlpha=0.2;ctx.beginPath();sq.forEach((p,i)=>i?ctx.lineTo(X(p[0]),Y(p[1])):ctx.moveTo(X(p[0]),Y(p[1])));ctx.closePath();ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle=cssv('--acc4');ctx.lineWidth=2;ctx.stroke();
+  starts.forEach(x0=>{const p=mv(Et,x0);ctx.fillStyle=cssv('--acc2');ctx.beginPath();ctx.arc(X(p[0]),Y(p[1]),5,0,7);ctx.fill();});
+  const tr=A[0][0]+A[1][1],dt=Et[0][0]*Et[1][1]-Et[0][1]*Et[1][0];
+  $('fOut').textContent=`A = [[${fmt(A[0][0],2)}, ${fmt(A[0][1],2)}], [${fmt(A[1][0],2)}, ${fmt(A[1][1],2)}]]   Tr A = ${fmt(tr,3)}
+e^(tA) at t = ${t.toFixed(2)}:
+${m2s(Et)}
+
+area of purple square = det e^(tA) = ${dt.toFixed(4)}
+e^(t·TrA)                         = ${Math.exp(t*tr).toFixed(4)}  ✓
+${Math.abs(tr)<1e-9?'Tr A = 0 ⇒ area preserved for all t':''}`;
+}
+
+/* ---------- Lab 3: Cayley–Hamilton calculator ---------- */
+const HM={e8:[[4/3,S2/3],[S2/3,5/3]],e18:[[1.5,0.5],[0.5,1.5]],e1019:[[3,1,-1],[2,2,-1],[2,2,0]],e76:[[2,-2,0],[0,2,0],[1,-3,2]],x8:[[1,1,1],[0,1,1],[0,0,1]],x5:[[11/8,1/8,1/8],[0,4/3,0],[1/8,1/24,11/8]],e6:[[-23.5,53,30],[-12,26.5,15],[2,-3.5,-2]]};
+['hM','hF','hT'].forEach(k=>$(k).addEventListener('input',labH));
+const fall=(k,j)=>{let r=1;for(let i=0;i<j;i++)r*=(k-i);return r;};
+function fDer(F,t){
+  if(F==='exp')return(l,d)=>Math.pow(t,d)*Math.exp(t*l);
+  if(F==='ln')return(l,d)=>d===0?Math.log(l):Math.pow(-1,d-1)*fall(d-1,d-1)/Math.pow(l,d);
+  if(F==='sqrt'||F==='pow'){const p=F==='sqrt'?0.5:t;return(l,d)=>fall(p,d)*Math.pow(l,p-d);}
+  if(F==='sin')return(l,d)=>Math.pow(t,d)*Math.sin(t*l+d*Math.PI/2);
+  if(F==='cos')return(l,d)=>Math.pow(t,d)*Math.cos(t*l+d*Math.PI/2);
+  if(F==='cosh')return(l,d)=>Math.pow(t,d)*(d%2?Math.sinh(t*l):Math.cosh(t*l));
+}
+function hermite(A,f){
+  const R=minimalPoly(A);if(R.complex)return{err:'complex eigenvalues: not handled here'};
+  const m=R.r.reduce((s,v)=>s+v,0),rows=[],rhs=[],conds=[];
+  R.G.forEach((g,gi)=>{for(let j=0;j<R.r[gi];j++){rows.push(Array.from({length:m},(_,k)=>k<j?0:fall(k,j)*Math.pow(g.re,k-j)));const v=f(g.re,j);rhs.push(v);conds.push({l:g.re,j,v});}});
+  if(rhs.some(v=>!isFinite(v)))return{err:'f is not defined at an eigenvalue (e.g. ln 0, ln of a negative number, or √ of a negative number)'};
+  const Mi=inv(rows);if(!Mi)return{err:'singular system'};
+  const al=mv(Mi,rhs);let F=zeros(A.length),Ak=eye(A.length);al.forEach(a=>{F=add(F,scl(a,Ak));Ak=mul(Ak,A);});
+  return{R,m,al,F,conds};
+}
+function labH(){
+  const A=HM[$('hM').value],Fn=$('hF').value,t=+$('hT').value,f=fDer(Fn,t),H=hermite(A,f);
+  if(H.err){$('hOutC').innerHTML=`<p class="bad">${H.err}</p>`;return;}
+  const fname={exp:`exp(${t}λ)`,ln:'ln λ',sqrt:'√λ',pow:`λ^${t}`,sin:`sin(${t}λ)`,cos:`cos(${t}λ)`,cosh:`cosh(${t}λ)`}[Fn];
+  const mp=H.R.G.map((g,i)=>lamF(g.re)+supN(H.R.r[i])).join('');
+  let h=`<p>A = ${mxH(A)} &nbsp; minimal polynomial ${mp}, m = ${H.m} ⇒ r(λ) = ${Array.from({length:H.m},(_,k)=>'α'+'₀₁₂₃'[k]+(k?'λ'+supN(k):'')).reverse().join(' + ')}</p>`;
+  h+='<p><b>Conditions</b> (f = '+fname+'):</p><ul>'+H.conds.map(c=>`<li>${c.j?['','f′','f″','f‴'][c.j]:'f'}(${fmt(c.l,4)}) = ${['','r′','r″','r‴'][c.j]||'r'}(${fmt(c.l,4)}) &nbsp;:&nbsp; ${fmt(c.v,5)} = ${Array.from({length:H.m},(_,k)=>k<c.j?null:`${fmt(fall(k,c.j)*Math.pow(c.l,k-c.j),4)}·α${'₀₁₂₃'[k]}`).filter(Boolean).join(' + ')}</li>`).join('')+'</ul>';
+  h+=`<p>α = (${H.al.map(a=>fmt(a,5)).join(', ')}) &nbsp;(α₀, α₁, …)</p><p><b>f(A)</b> = ${mxH(H.F)}</p>`;
+  let chk='';
+  if(Fn==='exp'){const D=expm(scl(t,A));chk=`direct series e^(tA) = ${mxH(D)} &nbsp; max diff ${maxAbs(sub(D,H.F)).toExponential(1)}`;}
+  else if(Fn==='ln'){const D=expm(H.F);chk=`e^(f(A)) = ${mxH(D)} &nbsp; should equal A: diff ${maxAbs(sub(D,A)).toExponential(1)}`;}
+  else if(Fn==='sqrt'){const D=mul(H.F,H.F);chk=`(f(A))² = ${mxH(D)} &nbsp; should equal A: diff ${maxAbs(sub(D,A)).toExponential(1)}`;}
+  else if(Fn==='pow'){if(Math.abs(t-Math.round(t))<1e-12){const D=mpow(A,Math.round(t));chk=D?`direct A^${Math.round(t)} = ${mxH(D)} &nbsp; diff ${maxAbs(sub(D,H.F)).toExponential(1)}`:'';}else{const L=hermite(A,fDer('ln',1));if(!L.err){const D=expm(scl(t,L.F));chk=`exp(p·ln A) = ${mxH(D)} &nbsp; diff ${maxAbs(sub(D,H.F)).toExponential(1)}`;}}}
+  else if(Fn==='cosh'){const D=scl(0.5,add(expm(scl(t,A)),expm(scl(-t,A))));chk=`(e^(tA)+e^(−tA))/2 = ${mxH(D)} &nbsp; diff ${maxAbs(sub(D,H.F)).toExponential(1)}`;}
+  else{const S=hermite(A,fDer('sin',t)).F,C=hermite(A,fDer('cos',t)).F,D=add(mul(S,S),mul(C,C));chk=`check sin²(tA) + cos²(tA) = ${mxH(D)} &nbsp; (should be I)`;}
+  h+=`<p class="small"><b>Check:</b> ${chk}</p>`;
+  $('hOutC').innerHTML=h;
+}
+
+/* ---------- Lab 4: BCH ---------- */
+const BC={heis:[[[0,1,0],[0,0,0],[0,0,0]],[[0,0,0],[0,0,1],[0,0,0]]],comm:[[[1,0,0],[0,2,0],[0,0,0.5]],[[0.3,0,0],[0,-1,0],[0,0,1]]],gen:[[[0,1,0],[0,0,0],[0,0,0]],[[0,0,0],[1,0,0],[0,0,0]]]};
+const edBA=makeEditor('bcA',BC.heis[0],labBC),edBB=makeEditor('bcB',BC.heis[1],labBC);
+document.querySelectorAll('[data-bc]').forEach(b=>b.onclick=()=>{const v=BC[b.dataset.bc];edBA.set(v[0]);edBB.set(v[1]);});
+$('bcS').addEventListener('input',labBC);
+function labBC(){
+  const s=+$('bcS').value;$('bcSv').textContent=s.toFixed(2);
+  const A=scl(s,edBA.get()),B=scl(s,edBB.get()),C=sub(mul(A,B),mul(B,A));
+  const P=mul(expm(A),expm(B)),Q=expm(add(A,B)),R=expm(add(add(A,B),scl(0.5,C)));
+  const cA=maxAbs(sub(mul(A,C),mul(C,A))),cB=maxAbs(sub(mul(B,C),mul(C,B))),d1=maxAbs(sub(P,Q)),d2=maxAbs(sub(P,R));
+  $('bcOut').innerHTML=`<div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+  <div class="small">C = [A,B]<br>${mxH(C)}</div><div class="small">e^A e^B<br>${mxH(P)}</div><div class="small">e^(A+B)<br>${mxH(Q)}</div><div class="small">e^(A+B+C/2)<br>${mxH(R)}</div></div>
+  <p>‖[A,B]‖ = ${fmt(maxAbs(C),4)}, &nbsp; ‖[A,C]‖ = ${fmt(cA,4)}, &nbsp; ‖[B,C]‖ = ${fmt(cB,4)}</p>
+  <p>‖e^A e^B − e^(A+B)‖ = <b class="${d1<1e-9?'ok':'bad'}">${d1.toExponential(2)}</b> &nbsp; ${d1<1e-9?'law of indices holds':'law of indices FAILS'}</p>
+  <p>‖e^A e^B − e^(A+B+C/2)‖ = <b class="${d2<1e-9?'ok':'bad'}">${d2.toExponential(2)}</b> &nbsp; ${cA<1e-12&&cB<1e-12?'(C commutes with A and B ⇒ Eq. 91 is exact)':'(C does not commute with A, B ⇒ higher BCH terms needed)'}</p>`;
+}
+
+/* ---------- Quiz ---------- */
+const QZ=[
+ {q:'If A has eigenvalues 1 and 3, the eigenvalues of e^A are…',o:['e and e³','1 and 3','e and 3e','e⁴'],a:0,e:'f(A) has eigenvalues f(λ).'},
+ {q:'det(e^A) equals…',o:['e^(Tr A)','e^(det A)','Tr(e^A)','1 always'],a:0,e:'Example 12.'},
+ {q:'e^A e^B = e^(A+B) is guaranteed when…',o:['AB = BA','A and B are hermitian','det A = det B','always'],a:0,e:'Otherwise the commutator terms appear.'},
+ {q:'Σ A^k converges iff…',o:['all |λ| < 1','all entries < 1','det A < 1','Tr A < 1'],a:0,e:'Radius of convergence of the geometric series is 1.'},
+ {q:'For N = [[0,1],[0,0]], e^N equals…',o:['[[1,1],[0,1]]','[[e,1],[0,e]]','[[e,e],[0,e]]','I'],a:0,e:'N² = 0, so the series stops: I + N.'},
+ {q:'If A² = −I, e^(tA) = …',o:['I cos t + A sin t','I cosh t + A sinh t','I + tA','e^(−t)I'],a:0,e:'Same algebra as e^(it) = cos t + i sin t.'},
+ {q:'How many square roots does diag(4, 9) have?',o:['4','2','infinitely many','1'],a:0,e:'Distinct eigenvalues: diag(±2, ±3).'},
+ {q:'For a defective 3×3 matrix with eigenvalue 2 (twice) and 1, e^(tA) contains terms like…',o:['t e^(2t)','e^(4t)','sin 2t','only e^t and e^(2t)'],a:0,e:'The derivative condition introduces t·e^(2t).'},
+ {q:'In the Cayley–Hamilton method for a 2×2 matrix with distinct eigenvalues, f(A) = …',o:['α₁A + α₀I','α₂A² + α₁A + α₀I','α₀I only','Σ f(λ)A'],a:0,e:'Minimal polynomial degree 2 ⇒ remainder degree ≤ 1.'},
+ {q:'If A is real antisymmetric, e^A is…',o:['orthogonal with det 1','symmetric','singular','nilpotent'],a:0,e:'(e^A)ᵀ = e^(−A) = (e^A)⁻¹, det = e^0 = 1.'}
+];
+(function(){let sc=0;$('qTot').textContent=QZ.length;
+ $('quiz').innerHTML=QZ.map((x,i)=>{const ord=x.o.map((t,j)=>({t,j})).sort(()=>Math.random()-0.5);
+  return `<div class="qq" data-q="${i}"><b>Q${i+1}.</b> ${x.q}${ord.map(o=>`<label class="opt"><input type="radio" name="q${i}" value="${o.j}"> ${o.t}</label>`).join('')}<div class="fb"></div></div>`;}).join('');
+ document.querySelectorAll('#quiz .qq').forEach(div=>{const i=+div.dataset.q;let done=false;
+  div.querySelectorAll('input').forEach(inp=>inp.addEventListener('change',()=>{if(done)return;done=true;const ok=+inp.value===QZ[i].a;if(ok)sc++;$('qScore').textContent=sc;
+    div.querySelector('.fb').innerHTML=`<span class="${ok?'ok':'bad'}">${ok?'✓ Correct.':'✗ Answer: '+QZ[i].o[QZ[i].a]+'.'}</span> ${QZ[i].e}`;
+    div.querySelectorAll('input').forEach(x=>x.disabled=true);}));});})();
+
+function drawAll(){drawP();drawSer();drawF();}
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+$('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawAll();};})();
+drawAll();labH();labBC();
+</script>
+</body>
+</html>

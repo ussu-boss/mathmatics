@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:110px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:85px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:collapse;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;margin:3px 4px;width:auto}
+.mx.det{border-radius:0}
+.mx td{border:0;padding:1px 8px;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.verdict{font-weight:700;font-size:1.05rem;margin:6px 0}
+.sys{font-family:"Cambria Math",Cambria,"Times New Roman",serif;display:inline-block;text-align:left;line-height:1.5}
+</style>
+<title>Kronecker Sum and Product</title>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>13. Kronecker Sum and Product of Matrices</h1>
+<p>Direct sum A ⊕ B (block diagonal) · Direct product A ⊗ B · Double-index labelling · Mixed-product rule (A⊗B)(C⊗D) = AC⊗BD · Eigenvalues λᵢμⱼ and eigenvectors xᵢ⊗yⱼ &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 138–145</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">Direct sum</a><a href="#s2">Direct product</a><a href="#s3">Index lab</a><a href="#s4">Rules</a><a href="#s5">Eigenvalues</a><a href="#s6">Physics</a><a href="#s7">Fractal lab</a><a href="#s8">Summary</a><a href="#s9">Exercise 13</a><a href="#s10">Practice</a><a href="#s11">Quiz</a><a href="#s12">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>There are two ways to build a big matrix out of small ones:</p>
+<div class="grid2">
+<div class="box def"><b class="t">Direct sum A ⊕ B (size m + n)</b> Put A and B on the diagonal, zeros elsewhere. They <b>do not talk to each other</b>. Use it for a system that splits into independent parts, like the energy levels of two separate atoms listed together, or a matrix broken into symmetry blocks.</div>
+<div class="box thm"><b class="t">Direct product A ⊗ B (size mn)</b> Replace every entry aᵢⱼ of A by the whole block aᵢⱼB. Use it for <b>combined</b> systems where every state of one part pairs with every state of the other: two spins, two particles, a 2D grid built from two 1D grids.</div>
+</div>
+<div class="flow"><span>dimensions add: ⊕</span><b>vs</b><span>dimensions multiply: ⊗</span><b>→</b><span>eigenvalues: union (⊕), products λμ (⊗), sums λ + μ (A⊗I + I⊗B)</span></div>
+<div class="box tip"><b class="t">Needed from earlier</b> Partitioned (block) matrices and block multiplication (Section 6). Eigenvalues and eigenvectors (Section 9). Trace and determinant.</div>
+<div class="box warnb"><b class="t">Name warning</b> Joshi uses "Kronecker sum" for the block-diagonal <b>direct sum</b> A ⊕ B. Many modern books (and NET questions) use "Kronecker sum" for <b>A ⊗ Iₙ + Iₘ ⊗ B</b>, which is a different matrix of size mn. Both appear on this page (Section 5), so check which one a question means.</div>
+</section>
+
+<section id="s1">
+<h2>1. The direct (Kronecker) sum (Eqs. 1–8)</h2>
+<div class="box def"><b class="t">Definition</b> For square A (m×m) and B (n×n):
+<div class="eq">C = A ⊕ B = <table class="mx"><tr><td>A</td><td>0₁</td></tr><tr><td>0₂</td><td>B</td></tr></table> &nbsp; (order m + n) &nbsp;&nbsp;(1)</div>
+0₁ is m×n and 0₂ is n×m, both zero. It extends to any number of matrices.</div>
+<h3>Example 1 (book)</h3>
+<p>A = (a) (1×1), B = [[b, c], [d, e]] (2×2), C = [[f, g, h], [i, j, k], [x, y, z]] (3×3). Then A ⊕ B ⊕ C is 6×6:</p>
+<div class="eq"><table class="mx"><tr><td><b>a</b></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td><b>b</b></td><td><b>c</b></td><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td><b>d</b></td><td><b>e</b></td><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td>0</td><td>0</td><td><b>f</b></td><td><b>g</b></td><td><b>h</b></td></tr><tr><td>0</td><td>0</td><td>0</td><td><b>i</b></td><td><b>j</b></td><td><b>k</b></td></tr><tr><td>0</td><td>0</td><td>0</td><td><b>x</b></td><td><b>y</b></td><td><b>z</b></td></tr></table> &nbsp;(3)</div>
+<p>A matrix like this, with square blocks on the diagonal and zeros elsewhere, is in <b>block diagonal form</b>.</p>
+<h3>Properties for M = A₁ ⊕ A₂ ⊕ … ⊕ A<sub>k</sub> (Eq. 5)</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Quantity</th><th>Rule</th><th>Why</th></tr>
+<tr><td>det M</td><td>(det A₁)(det A₂)…(det A<sub>k</sub>)</td><td>expand along the blocks: a block-triangular determinant</td></tr>
+<tr><td>Tr M</td><td>Tr A₁ + … + Tr A<sub>k</sub></td><td>the diagonal is just the diagonals placed one after another</td></tr>
+<tr><td>M⁻¹</td><td>A₁⁻¹ ⊕ … ⊕ A<sub>k</sub>⁻¹</td><td>multiply blockwise (Example 2)</td></tr>
+<tr><td>eigenvalues</td><td>all eigenvalues of A₁, then of A₂, …</td><td>det(M − λI) = Π det(Aᵢ − λI)</td></tr>
+<tr><td>eigenvectors</td><td>(x, 0) for A's eigenvector x; (0, y) for B's</td><td>padding with zeros</td></tr>
+<tr><td>f(M)</td><td>f(A₁) ⊕ … ⊕ f(A<sub>k</sub>)</td><td>powers are blockwise, e.g. e<sup>A⊕B</sup> = e<sup>A</sup> ⊕ e<sup>B</sup></td></tr>
+<tr><td>rank</td><td>sum of ranks</td><td></td></tr>
+</table></div>
+<h3>Example 2 (book): (A₁ ⊕ B₁)(A₂ ⊕ B₂) = (A₁A₂) ⊕ (B₁B₂) &nbsp;(6)</h3>
+<p>A₁, A₂ are m×m and B₁, B₂ are n×n. Multiply as partitioned matrices (Section 6):</p>
+<div class="eq"><table class="mx"><tr><td>A₁</td><td>0</td></tr><tr><td>0</td><td>B₁</td></tr></table><table class="mx"><tr><td>A₂</td><td>0</td></tr><tr><td>0</td><td>B₂</td></tr></table> = <table class="mx"><tr><td>A₁A₂ + 0·0</td><td>A₁·0 + 0·B₂</td></tr><tr><td>0·A₂ + B₁·0</td><td>0·0 + B₁B₂</td></tr></table> = <table class="mx"><tr><td>A₁A₂</td><td>0</td></tr><tr><td>0</td><td>B₁B₂</td></tr></table> &nbsp;(7, 8)</div>
+<p>The blocks never mix. That is the whole point of a direct sum.</p>
+<div class="box fact"><b class="t">The reverse direction is the useful one</b> In physics you usually start with a big matrix (a Hamiltonian, say) and look for a basis in which it <b>becomes</b> a direct sum. Symmetry does this for you: states with different angular momentum ℓ, or different parity, never mix. So H = H<sub>ℓ=0</sub> ⊕ H<sub>ℓ=1</sub> ⊕ …, and each small block can be diagonalized separately.</div>
+</section>
+
+<section id="s2">
+<h2>2. The direct (Kronecker) product (Eqs. 9–17)</h2>
+<div class="box def"><b class="t">Definition</b> A = [a<sub>lm</sub>] is L×M and B = [b<sub>pq</sub>] is P×Q. Then
+<div class="eq">A ⊗ B = <table class="mx"><tr><td>a₁₁B</td><td>a₁₂B</td><td>…</td><td>a₁<sub>M</sub>B</td></tr><tr><td>a₂₁B</td><td>a₂₂B</td><td>…</td><td>a₂<sub>M</sub>B</td></tr><tr><td>⋮</td><td></td><td></td><td>⋮</td></tr><tr><td>a<sub>L1</sub>B</td><td>a<sub>L2</sub>B</td><td>…</td><td>a<sub>LM</sub>B</td></tr></table> &nbsp; of order (LP) × (MQ) &nbsp;&nbsp;(9)</div>
+Each "entry" a<sub>lm</sub>B is a full P×Q block. &nbsp;(10)<br>
+<b>No size restrictions:</b> A and B can be any shapes, even rectangular.</div>
+<h3>Labelling the entries with double indices (Eqs. 11–17)</h3>
+<p>A row of C is labelled by a pair (l p): l picks the block row (a row of A), p picks the row inside the block (a row of B). Columns are labelled (m q) the same way.</p>
+<div class="eq">c<sub>(lp),(mq)</sub> = a<sub>lm</sub> b<sub>pq</sub> &nbsp;&nbsp;(11)</div>
+<p>To convert to ordinary single indices (1-based):</p>
+<div class="eq">i = (l − 1)P + p, &nbsp;&nbsp; j = (m − 1)Q + q &nbsp;&nbsp;(16)</div>
+<p>So the <b>first index of each pair changes slowest</b>, like the tens digit of a two-digit number.</p>
+<h3>Example 3 (book): A (3×2) ⊗ B (2×3) = 6×6</h3>
+<p>A = [[a, b], [c, d], [e, f]], B = [[r, s, t], [x, y, z]]:</p>
+<div class="tbl-wrap"><table style="width:auto;text-align:center">
+<tr><th></th><th>(11)</th><th>(12)</th><th>(13)</th><th>(21)</th><th>(22)</th><th>(23)</th></tr>
+<tr><th>(11)</th><td>ar</td><td>as</td><td>at</td><td>br</td><td>bs</td><td>bt</td></tr>
+<tr><th>(12)</th><td>ax</td><td>ay</td><td>az</td><td>bx</td><td>by</td><td>bz</td></tr>
+<tr><th>(21)</th><td>cr</td><td>cs</td><td>ct</td><td>dr</td><td>ds</td><td>dt</td></tr>
+<tr><th>(22)</th><td>cx</td><td>cy</td><td>cz</td><td>dx</td><td>dy</td><td>dz</td></tr>
+<tr><th>(31)</th><td>er</td><td>es</td><td>et</td><td>fr</td><td>fs</td><td>ft</td></tr>
+<tr><th>(32)</th><td>ex</td><td>ey</td><td>ez</td><td>fx</td><td>fy</td><td><b>fz</b></td></tr>
+</table></div>
+<p><b>Read one entry:</b> c<sub>(31),(22)</sub> = a₃₂ b₁₂ = f·s = fs. &nbsp;(15) &nbsp; With (16): l = 3, p = 1, P = 2 ⇒ i = (3 − 1)·2 + 1 = 5; m = 2, q = 2, Q = 3 ⇒ j = (2 − 1)·3 + 2 = 5. So fs is the (5, 5) entry ✓.</p>
+<p><b>Rows and columns are labelled by different schemes.</b> The third row is "(21)" and the third column is "(13)". Row (21) = row 2 of A multiplied by row 1 of B. Column (13) = column 1 of A multiplied by column 3 of B.</p>
+<div class="box tip"><b class="t">Special case</b> If one factor is 1×1, i.e. a scalar k, then k ⊗ B = kB. Ordinary scalar multiplication is a direct product.</div>
+</section>
+
+<section id="s3">
+<h2>3. 🔬 Index lab: where does each entry come from?</h2>
+<p>Click (or hover) any cell of A ⊗ B. The lab highlights the a<sub>lm</sub> and b<sub>pq</sub> that were multiplied, and shows the double index (lp),(mq) and the single index (i, j) from Eq. (16). Change the shapes to see that there are no size restrictions.</p>
+<div class="lab">
+<div class="ctrl"><label>A rows L <input type="number" id="iL" value="3" min="1" max="4" style="width:52px"></label><label>A cols M <input type="number" id="iM" value="2" min="1" max="4" style="width:52px"></label><label>B rows P <input type="number" id="iP" value="2" min="1" max="4" style="width:52px"></label><label>B cols Q <input type="number" id="iQ" value="3" min="1" max="4" style="width:52px"></label>
+<label><input type="checkbox" id="iSym" checked> show letters (Example 3)</label></div>
+<div id="iOut" style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start"></div>
+<div class="readout out" id="iInfo">Click a cell of A ⊗ B.</div>
+</div>
+</section>
+
+<section id="s4">
+<h2>4. Rules of the direct product (Eqs. 18–28, Examples 4, 5)</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Rule</th><th>Formula</th></tr>
+<tr><td>Associative &nbsp;(18)</td><td>(A ⊗ B) ⊗ C = A ⊗ (B ⊗ C) = A ⊗ B ⊗ C</td></tr>
+<tr><td>Distributive &nbsp;(19)</td><td>A ⊗ (B + C) = A ⊗ B + A ⊗ C, &nbsp;(A + B) ⊗ C = A ⊗ C + B ⊗ C</td></tr>
+<tr><td>Scalars</td><td>(kA) ⊗ B = A ⊗ (kB) = k(A ⊗ B)</td></tr>
+<tr><td><b>Mixed product</b> &nbsp;(20)</td><td><b>(A ⊗ B)(C ⊗ D) = (AC) ⊗ (BD)</b>, whenever AC and BD exist</td></tr>
+<tr><td>Transpose / dagger</td><td>(A ⊗ B)ᵀ = Aᵀ ⊗ Bᵀ, &nbsp; (A ⊗ B)† = A† ⊗ B† (the order is <b>not</b> reversed)</td></tr>
+<tr><td>Inverse</td><td>(A ⊗ B)⁻¹ = A⁻¹ ⊗ B⁻¹ (again no reversal)</td></tr>
+<tr><td>Trace</td><td>Tr(A ⊗ B) = (Tr A)(Tr B)</td></tr>
+<tr><td>Determinant (A: m×m, B: n×n)</td><td>det(A ⊗ B) = (det A)<sup>n</sup> (det B)<sup>m</sup> &nbsp; ← note the swapped exponents</td></tr>
+<tr><td>Rank</td><td>rank(A ⊗ B) = rank A · rank B</td></tr>
+<tr><td>Not commutative</td><td>A ⊗ B ≠ B ⊗ A in general, but B ⊗ A = S(A ⊗ B)Sᵀ for a fixed permutation matrix S (the "perfect shuffle"). So they have the same eigenvalues.</td></tr>
+<tr><td>Types preserved</td><td>A, B hermitian / unitary / orthogonal / symmetric / positive definite ⇒ so is A ⊗ B</td></tr>
+</table></div>
+<h3>Example 4 (book): proof of the mixed-product rule (20)</h3>
+<ol>
+<li>A is L×M, B is P×Q, C is M×N, D is Q×R, so AC and BD exist.</li>
+<li>A ⊗ B = [a<sub>lm</sub>B] has M block columns, each Q wide. C ⊗ D = [c<sub>mn</sub>D] has M block rows, each Q tall. The partitions match, so we can multiply block by block. &nbsp;(22)</li>
+<li>Block (l, n) of the product: Σ<sub>m</sub> (a<sub>lm</sub>B)(c<sub>mn</sub>D) = (Σ<sub>m</sub> a<sub>lm</sub>c<sub>mn</sub>) BD = (AC)<sub>ln</sub> BD. &nbsp;(23)</li>
+<li>A matrix whose (l, n) block is (AC)<sub>ln</sub>BD is, by definition, (AC) ⊗ (BD). ∎ &nbsp;(24)</li>
+</ol>
+<p><b>Consequences of (20)</b> (each takes one line):</p>
+<ul>
+<li>(A ⊗ B)(A⁻¹ ⊗ B⁻¹) = I ⊗ I = I ⇒ inverse rule.</li>
+<li>A ⊗ B = (A ⊗ I)(I ⊗ B) = (I ⊗ B)(A ⊗ I): A ⊗ I and I ⊗ B <b>always commute</b>.</li>
+<li>(A ⊗ B)<sup>k</sup> = A<sup>k</sup> ⊗ B<sup>k</sup>.</li>
+<li>Unitary U, V ⇒ (U ⊗ V)†(U ⊗ V) = U†U ⊗ V†V = I ⊗ I = I.</li>
+</ul>
+<h3>Example 5 (book): (AB)<sup>[k]</sup> = A<sup>[k]</sup>B<sup>[k]</sup>, where A<sup>[k]</sup> = A ⊗ A ⊗ … ⊗ A (k times)</h3>
+<p>A<sup>[k]</sup> is m<sup>k</sup> × n<sup>k</sup> if A is m×n. &nbsp;(25)</p>
+<ol>
+<li><b>k = 2:</b> put B → A, C → B, D → B in (20): (A ⊗ A)(B ⊗ B) = AB ⊗ AB, i.e. A<sup>[2]</sup>B<sup>[2]</sup> = (AB)<sup>[2]</sup>. &nbsp;(27)</li>
+<li><b>Induction:</b> assume (AB)<sup>[k−1]</sup> = A<sup>[k−1]</sup>B<sup>[k−1]</sup>. Then (AB)<sup>[k]</sup> = (AB)<sup>[k−1]</sup> ⊗ (AB) = (A<sup>[k−1]</sup>B<sup>[k−1]</sup>) ⊗ (AB) = (A<sup>[k−1]</sup> ⊗ A)(B<sup>[k−1]</sup> ⊗ B) = A<sup>[k]</sup>B<sup>[k]</sup>, using (20) backwards. ∎ &nbsp;(29)</li>
+</ol>
+</section>
+
+<section id="s5">
+<h2>5. Eigenvalues and eigenvectors (Example 6)</h2>
+<div class="box thm"><b class="t">Theorem (Example 6)</b> If Axᵢ = λᵢxᵢ (A is M×M) and Byⱼ = μⱼyⱼ (B is N×N), then
+<div class="eq">(A ⊗ B)(xᵢ ⊗ yⱼ) = λᵢμⱼ (xᵢ ⊗ yⱼ) &nbsp;&nbsp;(33)</div>
+So A ⊗ B has the MN eigenvalues <b>λᵢμⱼ</b>, with eigenvectors <b>xᵢ ⊗ yⱼ</b>.<br>
+<b>Proof:</b> by (20), (A ⊗ B)(xᵢ ⊗ yⱼ) = (Axᵢ) ⊗ (Byⱼ) = (λᵢxᵢ) ⊗ (μⱼyⱼ) = λᵢμⱼ(xᵢ ⊗ yⱼ). ∎ &nbsp;(31, 32)</div>
+<p>(Vectors are just n×1 matrices, so x ⊗ y = (x₁y, x₂y, …)ᵀ.)</p>
+<div class="box thm"><b class="t">The other "Kronecker sum": A ⊗ I<sub>N</sub> + I<sub>M</sub> ⊗ B</b>
+The same eigenvectors xᵢ ⊗ yⱼ give
+<div class="eq">(A ⊗ I + I ⊗ B)(xᵢ ⊗ yⱼ) = (λᵢ + μⱼ)(xᵢ ⊗ yⱼ)</div>
+So the eigenvalues <b>add</b>. Since A ⊗ I and I ⊗ B commute, e<sup>A⊗I + I⊗B</sup> = e<sup>A</sup> ⊗ e<sup>B</sup>.<br>
+This is how energies of <b>independent subsystems add</b>: H = H₁ ⊗ I + I ⊗ H₂ has energies E₁ + E₂.</div>
+<div class="tbl-wrap"><table>
+<tr><th>Construction</th><th>Size</th><th>Eigenvalues</th><th>Eigenvectors</th></tr>
+<tr><td>A ⊕ B (direct sum)</td><td>M + N</td><td>{λᵢ} ∪ {μⱼ}</td><td>(xᵢ, 0), (0, yⱼ)</td></tr>
+<tr><td>A ⊗ B (direct product)</td><td>MN</td><td>λᵢμⱼ</td><td>xᵢ ⊗ yⱼ</td></tr>
+<tr><td>A ⊗ I + I ⊗ B</td><td>MN</td><td>λᵢ + μⱼ</td><td>xᵢ ⊗ yⱼ</td></tr>
+<tr><td>f(A) ⊗ g(B)</td><td>MN</td><td>f(λᵢ)g(μⱼ)</td><td>xᵢ ⊗ yⱼ</td></tr>
+</table></div>
+<p><b>Consequences:</b> Tr(A ⊗ B) = Σᵢⱼλᵢμⱼ = (Σλᵢ)(Σμⱼ) = Tr A · Tr B. And det(A ⊗ B) = Πᵢⱼλᵢμⱼ = (Πλᵢ)<sup>N</sup>(Πμⱼ)<sup>M</sup> = (det A)<sup>N</sup>(det B)<sup>M</sup>.</p>
+<div class="lab"><h4>🔬 Lab 2: eigenvalue tables for ⊗, ⊕ and the Kronecker sum</h4>
+<p class="small">Choose two 2×2 matrices. The lab builds A ⊗ B, A ⊕ B and A ⊗ I + I ⊗ B, computes their eigenvalues directly, and compares them with the tables of λᵢμⱼ and λᵢ + μⱼ.</p>
+<div class="ctrl"><button class="alt" data-ev="ex5">Exercise 5: B, C</button><button class="alt" data-ev="pauli">σz, σx</button><button class="alt" data-ev="gen">General</button></div>
+<div class="grid2"><div><div class="small">A</div><div id="evA" class="ctrl"></div></div><div><div class="small">B</div><div id="evB" class="ctrl"></div></div></div>
+<div id="evOut"></div>
+</div>
+</section>
+
+<section id="s6">
+<h2>6. Where physics uses this</h2>
+<h3>(a) Two spins (two qubits)</h3>
+<p>One spin-½ lives in ℂ², with basis |↑⟩ = (1, 0), |↓⟩ = (0, 1). Two spins live in ℂ² ⊗ ℂ² = ℂ⁴, with basis |↑↑⟩ = (1, 0) ⊗ (1, 0) = (1, 0, 0, 0), |↑↓⟩ = (0, 1, 0, 0), |↓↑⟩ = (0, 0, 1, 0), |↓↓⟩ = (0, 0, 0, 1).</p>
+<ul>
+<li>"σ<sub>z</sub> acting on spin 1 only" is <b>σ<sub>z</sub> ⊗ I</b> = diag(1, 1, −1, −1).</li>
+<li>Total S<sub>z</sub> (in units of ħ/2) = σ<sub>z</sub> ⊗ I + I ⊗ σ<sub>z</sub> = diag(2, 0, 0, −2). That is a Kronecker sum, so the eigenvalues add: ±1 ± 1.</li>
+<li>Heisenberg coupling σ⃗₁·σ⃗₂ = σ<sub>x</sub>⊗σ<sub>x</sub> + σ<sub>y</sub>⊗σ<sub>y</sub> + σ<sub>z</sub>⊗σ<sub>z</sub> has eigenvalue +1 on the triplet (3 states) and −3 on the singlet.</li>
+</ul>
+<h3>(b) Entanglement: not every vector is a product</h3>
+<p>A product vector x ⊗ y = (x₁y₁, x₁y₂, x₂y₁, x₂y₂) always satisfies <b>c₁c₄ = c₂c₃</b>. The singlet (0, 1, −1, 0)/√2 has c₁c₄ = 0 but c₂c₃ = −½. So it is <b>not</b> a product of two single-spin states: it is <b>entangled</b>. In matrix language: arrange c as the 2×2 matrix [[c₁, c₂], [c₃, c₄]]. The state is a product ⇔ this matrix has rank 1.</p>
+<h3>(c) 2D grids and separable equations</h3>
+<p>If T is the 1D second-difference matrix (n×n), the 2D Laplacian on an n×n grid is <b>T ⊗ I + I ⊗ T</b>. Its eigenvalues are sums λᵢ + λⱼ and its eigenvectors are products. This is the matrix version of "separation of variables", like ψ(x, y) = X(x)Y(y) with E = E<sub>x</sub> + E<sub>y</sub> for a particle in a 2D box.</p>
+<h3>(d) Group theory</h3>
+<p>If D₁(g) and D₂(g) represent a group, so does D₁(g) ⊗ D₂(g). By (20), (D₁(g) ⊗ D₂(g))(D₁(h) ⊗ D₂(h)) = D₁(gh) ⊗ D₂(gh). Splitting it into a direct sum of irreducible blocks is the Clebsch–Gordan series, e.g. ½ ⊗ ½ = 0 ⊕ 1 for angular momentum. That one formula uses both of this section's operations.</p>
+</section>
+
+<section id="s7">
+<h2>7. 🔬 Fractal lab: repeated Kronecker products</h2>
+<p>Take a small 0/1 pattern A and form A<sup>[k]</sup> = A ⊗ A ⊗ … ⊗ A. Each product replaces every 1 by a copy of A and every 0 by a block of zeros, so self-similar fractals appear. The Sierpinski triangle and carpet are Kronecker powers! The size grows like m<sup>k</sup>, just as Eq. (25) says.</p>
+<div class="lab">
+<div class="grid2">
+<div><canvas id="cvK" width="480" height="480"></canvas></div>
+<div>
+<div class="ctrl"><button class="alt" data-kf="tri">Sierpinski triangle [[1,0],[1,1]]</button><button class="alt" data-kf="car">Carpet 3×3</button><button class="alt" data-kf="had">Hadamard [[1,1],[1,−1]]</button><button class="alt" data-kf="cross">Cross</button></div>
+<div class="ctrl"><label>k <input type="range" id="kK" min="1" max="6" step="1" value="4"><span id="kKv"></span></label></div>
+<div id="kIn" class="ctrl"></div>
+<p class="small">Click the cells of the base pattern to toggle them (2×2 or 3×3 shown). Colours: blue = +, red = −, blank = 0.</p>
+<div class="readout out" id="kOut"></div>
+</div></div></div>
+</section>
+
+<section id="s8">
+<h2>8. Summary sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Item</th><th>Direct sum A ⊕ B</th><th>Direct product A ⊗ B</th></tr>
+<tr><td>Shape</td><td>block diagonal, (m+n)×(m+n), square only</td><td>blocks a<sub>ij</sub>B, (LP)×(MQ), any shapes</td></tr>
+<tr><td>Product rule</td><td>(A₁⊕B₁)(A₂⊕B₂) = A₁A₂ ⊕ B₁B₂</td><td>(A⊗B)(C⊗D) = AC ⊗ BD</td></tr>
+<tr><td>Trace</td><td>Tr A + Tr B</td><td>Tr A · Tr B</td></tr>
+<tr><td>Determinant</td><td>det A · det B</td><td>(det A)<sup>n</sup>(det B)<sup>m</sup></td></tr>
+<tr><td>Inverse</td><td>A⁻¹ ⊕ B⁻¹</td><td>A⁻¹ ⊗ B⁻¹</td></tr>
+<tr><td>Eigenvalues</td><td>λᵢ and μⱼ (union)</td><td>λᵢμⱼ</td></tr>
+<tr><td>Eigenvectors</td><td>(x, 0), (0, y)</td><td>x ⊗ y</td></tr>
+<tr><td>Index (1-based)</td><td>—</td><td>c<sub>ij</sub> = a<sub>lm</sub>b<sub>pq</sub>, i = (l−1)P + p, j = (m−1)Q + q</td></tr>
+</table></div>
+<p>Kronecker sum (modern meaning) A ⊗ I + I ⊗ B: eigenvalues λᵢ + μⱼ, and e<sup>A⊗I+I⊗B</sup> = e<sup>A</sup> ⊗ e<sup>B</sup>.</p>
+</section>
+
+<section id="s9">
+<h2>9. Book's Exercise 13: all problems solved</h2>
+<div class="prob"><div class="q">1. Obtain the direct sums: (a) [[2, −3], [5, 1]], [[9, 3, 1], [0, −5, 4], [2, 4, 6]] and [[1, 2], [−3, 4]]; (b) [[a², ab], [bc, c²]] and [[c − a, b²], [b², a − c]]; (c) [[2, 3, 1], [−1, 0, 5], [4, 9, 6]] and a 4×4 matrix.</div>
+<details><summary>Show solution</summary>
+<p>(a) Order 2 + 3 + 2 = 7:</p>
+<div class="eq"><table class="mx">
+<tr><td>2</td><td>−3</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>5</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>0</td><td>0</td><td>9</td><td>3</td><td>1</td><td>0</td><td>0</td></tr>
+<tr><td>0</td><td>0</td><td>0</td><td>−5</td><td>4</td><td>0</td><td>0</td></tr>
+<tr><td>0</td><td>0</td><td>2</td><td>4</td><td>6</td><td>0</td><td>0</td></tr>
+<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>2</td></tr>
+<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>−3</td><td>4</td></tr></table></div>
+<p>Check: det = (2 + 15)·(9(−30 − 16) − 3(0 − 8) + 1(0 + 10))·(4 + 6) = 17·(−414 + 24 + 10)·10 = 17·(−380)·10 = −64600.</p>
+<p>(b) Order 4: [[a², ab, 0, 0], [bc, c², 0, 0], [0, 0, c − a, b²], [0, 0, b², a − c]].</p>
+<p>(c) Order 3 + 4 = 7: the 3×3 block [[2, 3, 1], [−1, 0, 5], [4, 9, 6]] in the top-left, the 4×4 block [[1, 2, 3, −4], [5, 6, −7, 8], [9, −10, 11, 12], [−13, 14, 15, 16]] in the bottom-right, zeros elsewhere.</p></details></div>
+
+<div class="prob"><div class="q">2. Prove Eqs. (5): det, trace and inverse of a direct sum.</div>
+<details><summary>Show solution</summary>
+<p><b>Trace:</b> the diagonal of M is the diagonal of A₁, then of A₂, …. So Tr M = ΣTr Aᵢ.</p>
+<p><b>Determinant:</b> write A ⊕ B = (A ⊕ I)(I ⊕ B) (Example 2). det(A ⊕ I) = det A: expand along the last rows, each of which has a single 1 on the diagonal. Similarly det(I ⊕ B) = det B. The product rule for determinants gives det(A ⊕ B) = det A · det B. Repeat for more blocks.</p>
+<p><b>Inverse:</b> by Example 2, (A₁ ⊕ … ⊕ A<sub>k</sub>)(A₁⁻¹ ⊕ … ⊕ A<sub>k</sub>⁻¹) = I ⊕ … ⊕ I = I. ∎</p></details></div>
+
+<div class="prob"><div class="q">3. A₁ = [[1, 3], [2, 4]], A₂ = [[−2, 0], [5, 2]], B₁ = [[1, 5, −6], [2, 0, −1], [3, 0, −4]], B₂ = [[4, −2, 0], [0, 1, 5], [−3, 0, 2]]. Verify (A₁ ⊕ B₁)(A₂ ⊕ B₂) = A₁A₂ ⊕ B₁B₂.</div>
+<details><summary>Show solution</summary>
+<p>A₁A₂ = [[1·(−2) + 3·5, 0 + 3·2], [2·(−2) + 4·5, 0 + 4·2]] = <b>[[13, 6], [16, 8]]</b>.</p>
+<p>B₁B₂: row 1 = (4 + 0 + 18, −2 + 5 + 0, 0 + 25 − 12) = (22, 3, 13); row 2 = (8 + 0 + 3, −4 + 0 + 0, 0 + 0 − 2) = (11, −4, −2); row 3 = (12 + 0 + 12, −6 + 0 + 0, 0 + 0 − 8) = (24, −6, −8). So <b>B₁B₂ = [[22, 3, 13], [11, −4, −2], [24, −6, −8]]</b>.</p>
+<p>Multiplying the two 5×5 block-diagonal matrices directly gives exactly the block diagonal [[13, 6], [16, 8]] ⊕ [[22, 3, 13], [11, −4, −2], [24, −6, −8]]. In the off-diagonal blocks every term contains a zero block. ✓ (Checked numerically.)</p></details></div>
+
+<div class="prob"><div class="q">4. Direct products: (a) [[2, 3, 1], [−1, 0, 4]] ⊗ [[1, −1, 1], [2, 0, 2], [2, −1, 0]]; (b) the same in the opposite order; (c) [[a², ab], [bc, c²]] ⊗ [[b², bd], [cd, c²]].</div>
+<details><summary>Show solution</summary>
+<p>(a) (2×3) ⊗ (3×3) = 6×9:</p>
+<div class="eq"><table class="mx">
+<tr><td>2</td><td>−2</td><td>2</td><td>3</td><td>−3</td><td>3</td><td>1</td><td>−1</td><td>1</td></tr>
+<tr><td>4</td><td>0</td><td>4</td><td>6</td><td>0</td><td>6</td><td>2</td><td>0</td><td>2</td></tr>
+<tr><td>4</td><td>−2</td><td>0</td><td>6</td><td>−3</td><td>0</td><td>2</td><td>−1</td><td>0</td></tr>
+<tr><td>−1</td><td>1</td><td>−1</td><td>0</td><td>0</td><td>0</td><td>4</td><td>−4</td><td>4</td></tr>
+<tr><td>−2</td><td>0</td><td>−2</td><td>0</td><td>0</td><td>0</td><td>8</td><td>0</td><td>8</td></tr>
+<tr><td>−2</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>8</td><td>−4</td><td>0</td></tr></table></div>
+<p>(b) (3×3) ⊗ (2×3): 3·2 = 6 rows and 3·3 = 9 columns, so again 6×9, but with the entries arranged differently:</p>
+<div class="eq"><table class="mx">
+<tr><td>2</td><td>3</td><td>1</td><td>−2</td><td>−3</td><td>−1</td><td>2</td><td>3</td><td>1</td></tr>
+<tr><td>−1</td><td>0</td><td>4</td><td>1</td><td>0</td><td>−4</td><td>−1</td><td>0</td><td>4</td></tr>
+<tr><td>4</td><td>6</td><td>2</td><td>0</td><td>0</td><td>0</td><td>4</td><td>6</td><td>2</td></tr>
+<tr><td>−2</td><td>0</td><td>8</td><td>0</td><td>0</td><td>0</td><td>−2</td><td>0</td><td>8</td></tr>
+<tr><td>4</td><td>6</td><td>2</td><td>−2</td><td>−3</td><td>−1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>−2</td><td>0</td><td>8</td><td>1</td><td>0</td><td>−4</td><td>0</td><td>0</td><td>0</td></tr></table></div>
+<p>(a) and (b) contain the same 54 numbers in a different arrangement: A ⊗ B ≠ B ⊗ A.</p>
+<p>(c) 4×4:</p>
+<div class="eq"><table class="mx">
+<tr><td>a²b²</td><td>a²bd</td><td>ab³</td><td>ab²d</td></tr>
+<tr><td>a²cd</td><td>a²c²</td><td>abcd</td><td>abc²</td></tr>
+<tr><td>b³c</td><td>b²cd</td><td>b²c²</td><td>bc²d</td></tr>
+<tr><td>bc²d</td><td>bc³</td><td>c³d</td><td>c⁴</td></tr></table></div>
+<p>Check: det(first) = a²c² − ab²c = ac(ac − b²), det(second) = b²c² − bcd² = bc(bc − d²). The rule det(A ⊗ B) = (det A)²(det B)² holds for 2×2 ⊗ 2×2.</p><p class="small"><b>Note on the book's answer key (p. 281):</b> its rows 3 and 4 for 4(c) are garbled (it prints row 3 as b³c, b²cd, bc²d, bc³). Row 3 is bc × (first row of B) followed by c² × (first row of B) = b³c, b²cd, b²c², bc²d, as above. The matrix shown here is the correct one.</p></details></div>
+
+<div class="prob"><div class="q">5. A = [[0, 3/2, 0, 1/2], [3/2, 0, 1/2, 0], [0, 1/2, 0, 3/2], [1/2, 0, 3/2, 0]]. Find its eigenvalues and eigenvectors. Show A = B ⊗ C with B = [[3/2, 1/2], [1/2, 3/2]] and C = [[0, 1], [1, 0]], and verify Example 6.</div>
+<details><summary>Show solution</summary>
+<p><b>A = B ⊗ C:</b> B ⊗ C = [[(3/2)C, (1/2)C], [(1/2)C, (3/2)C]]. With C = [[0, 1], [1, 0]] this is exactly A ✓.</p>
+<p><b>B:</b> μ = 2 with (1, 1)/√2; μ = 1 with (1, −1)/√2. &nbsp; <b>C:</b> ν = 1 with (1, 1)/√2; ν = −1 with (1, −1)/√2.</p>
+<div class="tbl-wrap"><table>
+<tr><th>λ = μν</th><th>eigenvector x ⊗ y</th><th>check: A·v (first entry)</th></tr>
+<tr><td>2·1 = 2</td><td>(1, 1) ⊗ (1, 1) = (1, 1, 1, 1)/2</td><td>(3/2 + 1/2)/2 = 2·(1/2) ✓</td></tr>
+<tr><td>2·(−1) = −2</td><td>(1, 1) ⊗ (1, −1) = (1, −1, 1, −1)/2</td><td>(−3/2 − 1/2)/2 = −2·(1/2) ✓</td></tr>
+<tr><td>1·1 = 1</td><td>(1, −1) ⊗ (1, 1) = (1, 1, −1, −1)/2</td><td>(3/2 − 1/2)/2 = 1·(1/2) ✓</td></tr>
+<tr><td>1·(−1) = −1</td><td>(1, −1) ⊗ (1, −1) = (1, −1, −1, 1)/2</td><td>(−3/2 + 1/2)/2 = −1·(1/2) ✓</td></tr>
+</table></div>
+<p>Eigenvalues of A: <b>2, −2, 1, −1</b>. Check: Tr A = 0 = 2 − 2 + 1 − 1 ✓, and Tr B·Tr C = 3·0 = 0 ✓.</p></details></div>
+
+<div class="prob"><div class="q">6. For B, C of Exercise 5, find C ⊗ B and compare with A = B ⊗ C.</div>
+<details><summary>Show solution</summary>
+<p>C ⊗ B = [[0·B, 1·B], [1·B, 0·B]] = <b>[[0, 0, 3/2, 1/2], [0, 0, 1/2, 3/2], [3/2, 1/2, 0, 0], [1/2, 3/2, 0, 0]]</b>.</p>
+<p>This is different from A = B ⊗ C, but it has the <b>same eigenvalues</b> 2, −2, 1, −1 (with eigenvectors y ⊗ x instead of x ⊗ y). The two are related by the permutation S that swaps the 2nd and 3rd basis vectors, i.e. the index order (lp) ↔ (pl): C ⊗ B = S(B ⊗ C)S with S = [[1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1]]. Check: swapping rows 2 and 3 and then columns 2 and 3 of A gives C ⊗ B ✓.</p></details></div>
+</section>
+
+<section id="s10">
+<h2>10. Practice set (CSIR-NET / GATE style)</h2>
+<div class="prob"><div class="q">P1. A is 3×3 with eigenvalues 1, 2, 3 and B is 2×2 with eigenvalues 1, −1. Find Tr(A ⊗ B), det(A ⊗ B) and the eigenvalues of A ⊗ I₂ + I₃ ⊗ B. <span class="tag">eigen</span></div>
+<details><summary>Show solution</summary><p>Tr = 6·0 = 0. det = (det A)²(det B)³ = 36·(−1) = −36. Kronecker sum eigenvalues: λ ± 1 = 0, 2, 1, 3, 2, 4.</p></details></div>
+<div class="prob"><div class="q">P2. Find the eigenvalues of σ<sub>x</sub> ⊗ σ<sub>x</sub>. <span class="tag">Pauli</span></div>
+<details><summary>Show solution</summary><p>σ<sub>x</sub> has ±1, so the products are ±1·±1: <b>1, 1, −1, −1</b>. The matrix is the anti-diagonal of 1's: [[0, 0, 0, 1], [0, 0, 1, 0], [0, 1, 0, 0], [1, 0, 0, 0]].</p></details></div>
+<div class="prob"><div class="q">P3. Is (1, 2, 2, 4) a product vector x ⊗ y? What about (1, 0, 0, 1)? <span class="tag">entanglement</span></div>
+<details><summary>Show solution</summary><p>(1, 2, 2, 4): c₁c₄ = 4 = c₂c₃ ⇒ yes, (1, 2) ⊗ (1, 2). (1, 0, 0, 1): 1 ≠ 0 ⇒ no. It is the (unnormalized) Bell state |00⟩ + |11⟩, which is entangled.</p></details></div>
+<div class="prob"><div class="q">P4. What is the size of I₂ ⊗ A ⊗ I₃ if A is 4×4? Where does entry (1,1) of A appear? <span class="tag">indices</span></div>
+<details><summary>Show solution</summary><p>2·4·3 = 24, so 24×24. I₂ ⊗ (A ⊗ I₃) = (A ⊗ I₃) ⊕ (A ⊗ I₃). Entry a₁₁ appears 6 times: on the diagonal at positions 1, 2, 3 and 13, 14, 15.</p></details></div>
+<div class="prob"><div class="q">P5. Show (A ⊗ B)ᵀ = Aᵀ ⊗ Bᵀ, not Bᵀ ⊗ Aᵀ. <span class="tag">proof</span></div>
+<details><summary>Show solution</summary><p>[(A ⊗ B)ᵀ]<sub>(mq),(lp)</sub> = (A ⊗ B)<sub>(lp),(mq)</sub> = a<sub>lm</sub>b<sub>pq</sub> = (Aᵀ)<sub>ml</sub>(Bᵀ)<sub>qp</sub> = (Aᵀ ⊗ Bᵀ)<sub>(mq),(lp)</sub>. The factor order is kept because the index pairs keep their order.</p></details></div>
+<div class="prob"><div class="q">P6. A, B are unitary. Show A ⊗ B is unitary. <span class="tag">types</span></div>
+<details><summary>Show solution</summary><p>(A ⊗ B)†(A ⊗ B) = (A† ⊗ B†)(A ⊗ B) = A†A ⊗ B†B = I ⊗ I = I, by the mixed-product rule.</p></details></div>
+<div class="prob"><div class="q">P7. Find e<sup>t(σ<sub>z</sub>⊗I + I⊗σ<sub>z</sub>)</sup>. <span class="tag">Kronecker sum</span></div>
+<details><summary>Show solution</summary><p>= e<sup>tσ<sub>z</sub></sup> ⊗ e<sup>tσ<sub>z</sub></sup> = diag(e<sup>t</sup>, e<sup>−t</sup>) ⊗ diag(e<sup>t</sup>, e<sup>−t</sup>) = diag(e<sup>2t</sup>, 1, 1, e<sup>−2t</sup>).</p></details></div>
+<div class="prob"><div class="q">P8. rank of [[1, 2], [2, 4]] ⊗ [[1, 0, 1], [0, 1, 1], [1, 1, 2]]? <span class="tag">rank</span></div>
+<details><summary>Show solution</summary><p>rank of the first factor is 1. In the second, row 3 = row 1 + row 2, so its rank is 2. Product: <b>2</b>.</p></details></div>
+<div class="prob"><div class="q">P9. Eigenvalues of σ⃗₁·σ⃗₂ = σ<sub>x</sub>⊗σ<sub>x</sub> + σ<sub>y</sub>⊗σ<sub>y</sub> + σ<sub>z</sub>⊗σ<sub>z</sub>? <span class="tag">spin</span></div>
+<details><summary>Show solution</summary><p>As a 4×4 matrix it is [[1, 0, 0, 0], [0, −1, 2, 0], [0, 2, −1, 0], [0, 0, 0, 1]]. The middle block [[−1, 2], [2, −1]] has eigenvalues 1 and −3. So: <b>1 (three times: the triplet), −3 (once: the singlet (0, 1, −1, 0)/√2)</b>. Tr = 0 ✓ (1 + 1 + 1 − 3).</p></details></div>
+<div class="prob"><div class="q">P10. If A is m×m and B is n×n, det(A ⊕ B) and det(A ⊗ B) for A = 2I₂, B = 3I₃? <span class="tag">det</span></div>
+<details><summary>Show solution</summary><p>det(A ⊕ B) = 4·27 = 108. A ⊗ B = 6I₆ ⇒ det = 6⁶ = 46656 = (det A)³(det B)² = 4³·27² = 64·729 ✓.</p></details></div>
+</section>
+
+<section id="s11" class="quiz">
+<h2>11. Self-test quiz</h2>
+<div id="quiz"></div>
+<p><b>Score: <span id="qScore">0</span> / <span id="qTot">0</span></b></p>
+</section>
+
+<section id="s12">
+<h2>12. Interesting facts</h2>
+<div class="box fact"><b class="t">Who was first?</b> The product is named after Leopold Kronecker, but it was used earlier by Johann Georg Zehfuss (1858), who also found det(A ⊗ B) = (det A)ⁿ(det B)ᵐ. Some people call it the Zehfuss product.</div>
+<div class="box fact"><b class="t">Why quantum computers are hard to simulate</b> n qubits live in ℂ² ⊗ ℂ² ⊗ … ⊗ ℂ², which has dimension 2ⁿ. 50 qubits already need about 10¹⁵ complex numbers. The Kronecker product makes dimensions multiply, and that exponential growth is the source of both the power and the difficulty.</div>
+<div class="box fact"><b class="t">Hadamard matrices and the fast Fourier idea</b> H<sup>[k]</sup> = H ⊗ H ⊗ … ⊗ H (H = [[1, 1], [1, −1]]) is the Walsh–Hadamard transform used in signal processing and in quantum algorithms. Because of the mixed-product rule it can be applied in N log N steps instead of N², the same trick that makes the FFT fast.</div>
+<div class="box fact"><b class="t">vec trick</b> The matrix equation AXB = C is equivalent to (Bᵀ ⊗ A) vec(X) = vec(C), where vec stacks the columns. This turns Sylvester and Lyapunov equations into ordinary linear systems.</div>
+</section>
+</div>
+<script>
+/* ---------- small linear-algebra toolkit ---------- */
+const $=id=>document.getElementById(id);
+const cssv=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const eye=n=>Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0));
+const zeros=n=>Array.from({length:n},()=>Array(n).fill(0));
+const clone=M=>M.map(r=>r.slice());
+const mul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>s+v*B[k][j],0)));
+const add=(A,B)=>A.map((r,i)=>r.map((v,j)=>v+B[i][j]));
+const sub=(A,B)=>A.map((r,i)=>r.map((v,j)=>v-B[i][j]));
+const scl=(k,A)=>A.map(r=>r.map(v=>k*v));
+const trc=A=>A.reduce((s,r,i)=>s+r[i],0);
+const T=A=>A[0].map((_,j)=>A.map(r=>r[j]));
+const maxAbs=A=>Math.max(...A.flat().map(Math.abs));
+const mv=(A,x)=>A.map(r=>r.reduce((s,v,k)=>s+v*x[k],0));
+const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
+const nrm=a=>Math.sqrt(dot(a,a));
+const neg=s=>String(s).replace(/-/g,'−');
+function fmt(x,dec=3){
+  if(!isFinite(x))return '∞';
+  if(Math.abs(x)<1e-9)return '0';
+  const r=Math.round(x); if(Math.abs(x-r)<1e-7*Math.max(1,Math.abs(x)))return neg(r);
+  for(let q=2;q<=12;q++){const p=Math.round(x*q);if(Math.abs(x*q-p)<1e-7*q)return neg(p)+'/'+q;}
+  return neg(+x.toFixed(dec));
+}
+function mxH(M,heat,scale){
+  const s=scale||Math.max(1e-12,maxAbs(M));
+  return '<table class="mx">'+M.map(r=>'<tr>'+r.map(v=>{
+    let st='';
+    if(heat){const a=Math.min(1,Math.abs(v)/s)*0.55;if(Math.abs(v)>1e-9)st=` style="background:${v>0?`rgba(47,111,223,${a})`:`rgba(201,42,42,${a})`}"`;}
+    return `<td${st}>${fmt(v)}</td>`;}).join('')+'</tr>').join('')+'</table>';
+}
+function rank(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol)continue;
+    [A[r],A[p]]=[A[p],A[r]];
+    for(let i=r+1;i<n;i++){const f=A[i][c]/A[r][c];for(let j=c;j<m;j++)A[i][j]-=f*A[r][j];}
+    r++;
+  }
+  return r;
+}
+function nullspace(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  const piv=[];let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol){for(let i=r;i<n;i++)A[i][c]=0;continue;}
+    [A[r],A[p]]=[A[p],A[r]];
+    const d=A[r][c];for(let j=0;j<m;j++)A[r][j]/=d;
+    for(let i=0;i<n;i++)if(i!==r){const f=A[i][c];for(let j=0;j<m;j++)A[i][j]-=f*A[r][j];}
+    piv.push(c);r++;
+  }
+  const basis=[];
+  for(let f=0;f<m;f++){if(piv.includes(f))continue;
+    const v=Array(m).fill(0);v[f]=1;piv.forEach((c,i)=>{v[c]=-A[i][f];});basis.push(v);}
+  return basis;
+}
+function inv(M){
+  const n=M.length,A=M.map((r,i)=>r.concat(eye(n)[i]));
+  for(let c=0;c<n;c++){
+    let p=c;for(let i=c+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<1e-12)return null;
+    [A[c],A[p]]=[A[p],A[c]];const d=A[c][c];for(let j=0;j<2*n;j++)A[c][j]/=d;
+    for(let i=0;i<n;i++)if(i!==c){const f=A[i][c];for(let j=0;j<2*n;j++)A[i][j]-=f*A[c][j];}
+  }
+  return A.map(r=>r.slice(n));
+}
+/* Faddeev–LeVerrier: det(λI−A)=Σ c[k] λ^k, c[n]=1 */
+function charCoeffs(A){
+  const n=A.length,c=Array(n+1).fill(0);c[n]=1;let M=zeros(n);
+  for(let k=1;k<=n;k++){M=add(mul(A,M),scl(c[n-k+1],eye(n)));c[n-k]=-trc(mul(A,M))/k;}
+  return c;
+}
+/* complex helpers + Durand–Kerner roots of monic poly (c indexed by power) */
+const cm=(a,b)=>[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]];
+const cd=(a,b)=>{const d=b[0]*b[0]+b[1]*b[1];return[(a[0]*b[0]+a[1]*b[1])/d,(a[1]*b[0]-a[0]*b[1])/d];};
+function polyRoots(c){
+  const n=c.length-1;if(n===1)return[[-c[0],0]];
+  let z=Array.from({length:n},(_,k)=>{let w=[1,0];for(let i=0;i<=k;i++)w=cm(w,[0.4,0.9]);return w;});
+  const R=1+Math.max(...c.slice(0,n).map(Math.abs));z=z.map(w=>[w[0]*R,w[1]*R]);
+  const ev=x=>{let s=[1,0];for(let k=n-1;k>=0;k--)s=[s[0]*x[0]-s[1]*x[1]+c[k],s[0]*x[1]+s[1]*x[0]];return s;};
+  for(let it=0;it<2000;it++){
+    let delta=0;
+    z=z.map((zi,i)=>{let den=[1,0];z.forEach((zj,j)=>{if(j!==i)den=cm(den,[zi[0]-zj[0],zi[1]-zj[1]]);});
+      if(Math.hypot(den[0],den[1])<1e-300)den=[1e-12,0];
+      const q=cd(ev(zi),den);delta=Math.max(delta,Math.hypot(q[0],q[1]));return[zi[0]-q[0],zi[1]-q[1]];});
+    if(delta<1e-14)break;
+  }
+  return z;
+}
+function snap(x){for(const q of [1,2,3,4,6,12]){const r=Math.round(x*q)/q;if(Math.abs(x-r)<2e-4)return r;}return x;}
+function eigGroups(A){
+  const z=polyRoots(charCoeffs(A)),used=Array(z.length).fill(false),G=[];
+  const tol=2e-3*Math.max(1,maxAbs(A));
+  for(let i=0;i<z.length;i++){if(used[i])continue;const cl=[z[i]];used[i]=true;
+    for(let j=i+1;j<z.length;j++)if(!used[j]&&Math.hypot(z[j][0]-z[i][0],z[j][1]-z[i][1])<tol){cl.push(z[j]);used[j]=true;}
+    let re=cl.reduce((s,w)=>s+w[0],0)/cl.length,im=cl.reduce((s,w)=>s+w[1],0)/cl.length;
+    if(Math.abs(im)<1e-6)im=0;re=snap(re);if(im)im=snap(im);
+    G.push({re,im,m:cl.length});}
+  G.sort((a,b)=>b.re-a.re||b.im-a.im);return G;
+}
+const powM=(M,k)=>{let R=eye(M.length);for(let i=0;i<k;i++)R=mul(R,M);return R;};
+const lamF=a=>a===0?'λ':(a>0?`(λ − ${fmt(a)})`:`(λ + ${fmt(-a)})`);
+const supN=k=>k===1?'':String(k).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+function minimalPoly(A){
+  const G=eigGroups(A),n=A.length;
+  if(G.some(g=>g.im!==0))return{G,complex:true};
+  const sc=Math.max(1,maxAbs(A));
+  let tups=[[]];G.forEach(g=>{const nt=[];tups.forEach(t=>{for(let r=1;r<=g.m;r++)nt.push(t.concat(r));});tups=nt;});
+  tups.sort((a,b)=>a.reduce((s,v)=>s+v,0)-b.reduce((s,v)=>s+v,0));
+  const tried=[];
+  for(const t of tups){
+    let P=eye(n);G.forEach((g,i)=>{P=mul(P,powM(sub(A,scl(g.re,eye(n))),t[i]));});
+    const deg=t.reduce((s,v)=>s+v,0),zero=maxAbs(P)<1e-6*Math.pow(sc,deg);
+    tried.push({t,P,zero});if(zero)return{G,r:t,tried};
+  }
+  return{G,r:G.map(g=>g.m),tried};
+}
+function expandRoots(rs){let p=[1];rs.forEach(a=>{const q=Array(p.length+1).fill(0);p.forEach((v,i)=>{q[i]+=v;q[i+1]-=a*v;});p=q;});return p;}
+function polyStr(p,v,mat){
+  const d=p.length-1;let s='';
+  p.forEach((c,i)=>{if(Math.abs(c)<1e-9)return;const k=d-i;const a=Math.abs(c);
+    const coef=(a===1&&k>0)?'':fmt(a);const term=k===0?(mat?coef+'I':fmt(a)):(k===1?coef+v:coef+v+supN(k));
+    s+=(s===''?(c<0?'−':''):(c<0?' − ':' + '))+term;});
+  return s||'0';
+}
+function makeEditor(id,M,cb){
+  const box=$(id);let n=M.length;
+  function build(M){n=M.length;box.innerHTML='<div style="display:grid;grid-template-columns:repeat('+n+',58px);gap:4px">'+M.flat().map((v,i)=>`<input type="number" step="any" data-i="${i}" value="${v}" style="width:58px">`).join('')+'</div>';
+    box.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',cb));}
+  build(M);
+  return{get(){const v=[...box.querySelectorAll('input')].map(i=>parseFloat(i.value)||0);return Array.from({length:n},(_,i)=>v.slice(i*n,i*n+n));},
+         set(M){build(M);cb();}};
+}
+function arrow(ctx,x0,y0,x1,y1,col,w=2.5,dash){
+  ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;if(dash)ctx.setLineDash(dash);
+  ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();ctx.setLineDash([]);
+  const a=Math.atan2(y1-y0,x1-x0),L=Math.hypot(x1-x0,y1-y0);
+  if(L>6){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-10*Math.cos(a-0.4),y1-10*Math.sin(a-0.4));ctx.lineTo(x1-10*Math.cos(a+0.4),y1-10*Math.sin(a+0.4));ctx.fill();}
+  ctx.restore();
+}
+function canvasPt(cv,e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height];}
+
+/* ---------- Kronecker helpers ---------- */
+function kron(A,B){const L=A.length,M=A[0].length,P=B.length,Q=B[0].length,C=[];
+  for(let i=0;i<L*P;i++){C.push([]);for(let j=0;j<M*Q;j++)C[i].push(A[Math.floor(i/P)][Math.floor(j/Q)]*B[i%P][j%Q]);}return C;}
+function dsum(A,B){const m=A.length,n=B.length,C=zeros(m+n);A.forEach((r,i)=>r.forEach((v,j)=>C[i][j]=v));B.forEach((r,i)=>r.forEach((v,j)=>C[m+i][m+j]=v));return C;}
+const cplx=g=>g.im?`${fmt(g.re,3)}${g.im>0?'+':'−'}${fmt(Math.abs(g.im),3)}i`:fmt(g.re,3);
+function eigList(A){const G=eigGroups(A),L=[];G.forEach(g=>{for(let k=0;k<g.m;k++)L.push({re:g.re,im:g.im});});return L;}
+const sortC=L=>L.slice().sort((a,b)=>b.re-a.re||b.im-a.im);
+
+/* ---------- Index lab ---------- */
+const SUBS='₀₁₂₃₄₅₆₇₈₉';
+['iL','iM','iP','iQ','iSym'].forEach(k=>$(k).addEventListener('input',buildIdx));
+let idxA,idxB;
+function buildIdx(){
+  const cl=(v,lo,hi)=>Math.max(lo,Math.min(hi,parseInt(v)||1));
+  const L=cl($('iL').value,1,4),M=cl($('iM').value,1,4),P=cl($('iP').value,1,4),Q=cl($('iQ').value,1,4),sym=$('iSym').checked;
+  const ex=L===3&&M===2&&P===2&&Q===3;
+  idxA=Array.from({length:L},(_,l)=>Array.from({length:M},(_,m)=>sym?(ex?'abcdef'[l*2+m]:'a'+SUBS[l+1]+SUBS[m+1]):String(((l*7+m*3)%5)-1)));
+  idxB=Array.from({length:P},(_,p)=>Array.from({length:Q},(_,q)=>sym?(ex?['rst','xyz'][p][q]:'b'+SUBS[p+1]+SUBS[q+1]):String(((p*5+q*2)%4)+1)));
+  const cell=(id,t,extra='')=>`<td id="${id}" style="border:1px solid var(--line);padding:4px 8px;min-width:30px;text-align:center;cursor:pointer;${extra}">${t}</td>`;
+  const tA='<div><div class="small">A ('+L+'×'+M+')</div><table style="width:auto;border-collapse:collapse">'+idxA.map((r,l)=>'<tr>'+r.map((v,m)=>cell(`ia_${l}_${m}`,v)).join('')+'</tr>').join('')+'</table></div>';
+  const tB='<div><div class="small">B ('+P+'×'+Q+')</div><table style="width:auto;border-collapse:collapse">'+idxB.map((r,p)=>'<tr>'+r.map((v,q)=>cell(`ib_${p}_${q}`,v)).join('')+'</tr>').join('')+'</table></div>';
+  let tC='<div style="overflow-x:auto"><div class="small">A ⊗ B ('+(L*P)+'×'+(M*Q)+')</div><table style="width:auto;border-collapse:collapse"><tr><th></th>';
+  for(let j=0;j<M*Q;j++)tC+=`<th class="small" style="padding:2px 6px">(${Math.floor(j/Q)+1}${j%Q+1})</th>`;tC+='</tr>';
+  for(let i=0;i<L*P;i++){tC+=`<tr><th class="small" style="padding:2px 6px">(${Math.floor(i/P)+1}${i%P+1})</th>`;
+    for(let j=0;j<M*Q;j++){const l=Math.floor(i/P),p=i%P,m=Math.floor(j/Q),q=j%Q;
+      const a=idxA[l][m],b=idxB[p][q],t=sym?a+b:fmt(+a*+b);
+      const bd=`${p===0?'border-top:2px solid var(--muted);':''}${q===0?'border-left:2px solid var(--muted);':''}`;
+      tC+=cell(`ic_${i}_${j}`,t,bd).replace('<td ',`<td data-i="${i}" data-j="${j}" `);}
+    tC+='</tr>';}
+  tC+='</table></div>';
+  $('iOut').innerHTML=tA+tB+tC;
+  $('iOut').querySelectorAll('[data-i]').forEach(td=>{td.addEventListener('mouseenter',()=>pickIdx(+td.dataset.i,+td.dataset.j));td.addEventListener('click',()=>pickIdx(+td.dataset.i,+td.dataset.j));});
+  pickIdx(Math.min(4,L*P-1),Math.min(4,M*Q-1));
+}
+function pickIdx(i,j){
+  const P=idxB.length,Q=idxB[0].length,l=Math.floor(i/P),p=i%P,m=Math.floor(j/Q),q=j%Q;
+  $('iOut').querySelectorAll('td').forEach(td=>{td.style.background='';td.style.fontWeight='';});
+  const hb='rgba(47,111,223,.18)';
+  $('iOut').querySelectorAll('[data-i]').forEach(td=>{const ii=+td.dataset.i,jj=+td.dataset.j;if(Math.floor(ii/P)===l&&Math.floor(jj/Q)===m)td.style.background=hb;});
+  const c=$(`ic_${i}_${j}`),a=$(`ia_${l}_${m}`),b=$(`ib_${p}_${q}`);
+  [c,a,b].forEach(e=>{e.style.background='rgba(232,89,12,.4)';e.style.fontWeight='700';});
+  $('iInfo').textContent=`Selected entry: row (${l+1}${p+1}), column (${m+1}${q+1})
+  = a(${l+1},${m+1}) × b(${p+1},${q+1}) = ${idxA[l][m]} × ${idxB[p][q]}
+Single indices (Eq. 16):
+  i = (l−1)P + p = (${l+1}−1)·${P} + ${p+1} = ${i+1}
+  j = (m−1)Q + q = (${m+1}−1)·${Q} + ${q+1} = ${j+1}
+The blue block is a(${l+1},${m+1})·B: block row ${l+1}, block column ${m+1}.`;
+}
+
+/* ---------- Eigen lab ---------- */
+const EV={ex5:[[[1.5,0.5],[0.5,1.5]],[[0,1],[1,0]]],pauli:[[[1,0],[0,-1]],[[0,1],[1,0]]],gen:[[[2,1],[0,3]],[[1,2],[2,1]]]};
+const edEA=makeEditor('evA',EV.ex5[0],labEV),edEB=makeEditor('evB',EV.ex5[1],labEV);
+document.querySelectorAll('[data-ev]').forEach(b=>b.onclick=()=>{const v=EV[b.dataset.ev];edEA.set(v[0]);edEB.set(v[1]);});
+function labEV(){
+  const A=edEA.get(),B=edEB.get(),la=eigList(A),lb=eigList(B),I2=eye(2);
+  const K=kron(A,B),S=dsum(A,B),KS=add(kron(A,I2),kron(I2,B));
+  const cm2=(x,y)=>({re:x.re*y.re-x.im*y.im,im:x.re*y.im+x.im*y.re}),ca=(x,y)=>({re:x.re+y.re,im:x.im+y.im});
+  const prod=[],sum=[];la.forEach(x=>lb.forEach(y=>{prod.push(cm2(x,y));sum.push(ca(x,y));}));
+  const tbl=(op,f)=>'<table style="width:auto"><tr><th>'+op+'</th>'+lb.map(y=>`<th>μ = ${cplx(y)}</th>`).join('')+'</tr>'+la.map(x=>`<tr><th>λ = ${cplx(x)}</th>`+lb.map(y=>`<td>${cplx(f(x,y))}</td>`).join('')+'</tr>').join('')+'</table>';
+  const same=(L1,L2)=>{const a=sortC(L1),b=sortC(L2);return a.length===b.length&&a.every((x,i)=>Math.hypot(x.re-b[i].re,x.im-b[i].im)<1e-6);};
+  const eK=eigList(K),eS=eigList(S),eKS=eigList(KS);
+  $('evOut').innerHTML=`<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+  <div class="small">A ⊗ B<br>${mxH(K,true)}</div><div class="small">A ⊕ B<br>${mxH(S,true)}</div><div class="small">A⊗I + I⊗B<br>${mxH(KS,true)}</div></div>
+  <div class="grid2"><div><p><b>Predicted λᵢμⱼ</b></p>${tbl('×',cm2)}<p>direct eigenvalues of A⊗B: ${sortC(eK).map(cplx).join(', ')} <span class="${same(eK,prod)?'ok':'bad'}">${same(eK,prod)?'✓ match':'✗'}</span></p></div>
+  <div><p><b>Predicted λᵢ + μⱼ</b></p>${tbl('+',ca)}<p>direct eigenvalues of A⊗I + I⊗B: ${sortC(eKS).map(cplx).join(', ')} <span class="${same(eKS,sum)?'ok':'bad'}">${same(eKS,sum)?'✓ match':'✗'}</span></p></div></div>
+  <p>A ⊕ B eigenvalues: ${sortC(eS).map(cplx).join(', ')} = eigenvalues of A (${la.map(cplx).join(', ')}) together with those of B (${lb.map(cplx).join(', ')}) <span class="${same(eS,la.concat(lb))?'ok':'bad'}">${same(eS,la.concat(lb))?'✓':'✗'}</span></p>
+  <p class="small">Tr(A⊗B) = ${fmt(trc(K),4)} = Tr A·Tr B = ${fmt(trc(A)*trc(B),4)}; &nbsp; det(A⊗B) = ${fmt(det(K),4)} = (det A)²(det B)² = ${fmt(Math.pow(det(A),2)*Math.pow(det(B),2),4)}; &nbsp; det(A⊕B) = ${fmt(det(S),4)} = det A·det B = ${fmt(det(A)*det(B),4)}</p>`;
+}
+function det(M){const n=M.length,A=clone(M);let d=1;for(let c=0;c<n;c++){let p=c;for(let i=c+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;if(Math.abs(A[p][c])<1e-14)return 0;if(p!==c){[A[c],A[p]]=[A[p],A[c]];d=-d;}d*=A[c][c];for(let i=c+1;i<n;i++){const f=A[i][c]/A[c][c];for(let j=c;j<n;j++)A[i][j]-=f*A[c][j];}}return d;}
+
+/* ---------- Fractal lab ---------- */
+const KF={tri:[[1,0],[1,1]],car:[[1,1,1],[1,0,1],[1,1,1]],had:[[1,1],[1,-1]],cross:[[0,1,0],[1,1,1],[0,1,0]]};
+let kBase=KF.tri;
+document.querySelectorAll('[data-kf]').forEach(b=>b.onclick=()=>{kBase=clone(KF[b.dataset.kf]);buildKIn();drawK();});
+$('kK').addEventListener('input',drawK);
+function buildKIn(){const n=kBase.length;$('kIn').innerHTML='<div style="display:grid;grid-template-columns:repeat('+n+',38px);gap:3px">'+kBase.flat().map((v,i)=>`<button class="alt" data-kc="${i}" style="width:38px;height:38px;padding:0">${v===0?'0':(v>0?'+1':'−1')}</button>`).join('')+'</div>';
+  $('kIn').querySelectorAll('[data-kc]').forEach(b=>b.onclick=()=>{const i=+b.dataset.kc,r=Math.floor(i/n),c=i%n,v=kBase[r][c];kBase[r][c]=v===1?-1:(v===-1?0:1);buildKIn();drawK();});}
+function drawK(){
+  const n=kBase.length;let k=+$('kK').value;while(Math.pow(n,k)>729)k--;$('kKv').textContent=k;
+  let M=kBase;for(let i=1;i<k;i++)M=kron(M,kBase);
+  const N=M.length,cv=$('cvK'),ctx=cv.getContext('2d'),W=cv.width;ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,W);
+  const s=W/N,pos=cssv('--acc'),negc=cssv('--warn');
+  for(let i=0;i<N;i++)for(let j=0;j<N;j++){const v=M[i][j];if(!v)continue;ctx.fillStyle=v>0?pos:negc;ctx.fillRect(j*s,i*s,Math.ceil(s),Math.ceil(s));}
+  let nz=0,sm=0;M.forEach(r=>r.forEach(v=>{if(v)nz++;sm+=v;}));
+  const nb=kBase.flat().filter(v=>v).length;
+  $('kOut').textContent=`A^[${k}] = A ⊗ A ⊗ … (${k} times)
+size ${n}^${k} × ${n}^${k} = ${N} × ${N}
+nonzero cells: ${nz} = (${nb})^${k}
+sum of entries: ${sm} = (${kBase.flat().reduce((a,b)=>a+b,0)})^${k}
+Tr = ${trc(M)} = (Tr A)^${k} = ${Math.pow(trc(kBase),k)}`;
+}
+
+/* ---------- Quiz ---------- */
+const QZ=[
+ {q:'If A is 2×3 and B is 4×5, A ⊗ B is…',o:['8×15','6×20','2×5','not defined'],a:0,e:'(LP)×(MQ) = (2·4)×(3·5).'},
+ {q:'Tr(A ⊗ B) = …',o:['Tr A · Tr B','Tr A + Tr B','Tr(AB)','0'],a:0,e:'Sum of λᵢμⱼ = (Σλ)(Σμ).'},
+ {q:'A is 2×2, B is 3×3. det(A ⊗ B) = …',o:['(det A)³ (det B)²','(det A)² (det B)³','det A · det B','(det A det B)⁶'],a:0,e:'Exponents swap: (det A)ⁿ(det B)ᵐ with n = size of B.'},
+ {q:'det(A ⊕ B) = …',o:['det A · det B','det A + det B','(det A)ⁿ(det B)ᵐ','0'],a:0,e:'Block diagonal.'},
+ {q:'Eigenvalues of A ⊗ I + I ⊗ B are…',o:['λᵢ + μⱼ','λᵢμⱼ','λᵢ and μⱼ','λᵢ − μⱼ'],a:0,e:'Kronecker sum: eigenvalues add.'},
+ {q:'(A ⊗ B)(C ⊗ D) = …',o:['AC ⊗ BD','AD ⊗ BC','CA ⊗ DB','AB ⊗ CD'],a:0,e:'Mixed-product rule (20).'},
+ {q:'(A ⊗ B)⁻¹ = …',o:['A⁻¹ ⊗ B⁻¹','B⁻¹ ⊗ A⁻¹','(AB)⁻¹','A⁻¹B⁻¹'],a:0,e:'No reversal of order, unlike (AB)⁻¹.'},
+ {q:'The two-qubit state (|00⟩ + |11⟩)/√2 is…',o:['entangled (not a product)','a product state','not normalized','an eigenvector of σz⊗I only with eigenvalue 0'],a:0,e:'c₁c₄ = ½ ≠ c₂c₃ = 0.'},
+ {q:'Entry (C)₅,₅ of a (3×2)⊗(2×3) product corresponds to…',o:['a₃₂ b₁₂','a₂₂ b₂₂','a₃₁ b₂₁','a₂₃ b₁₂'],a:0,e:'i = 5 ⇒ l = 3, p = 1; j = 5 ⇒ m = 2, q = 2.'}
+];
+(function(){let sc=0;$('qTot').textContent=QZ.length;
+ $('quiz').innerHTML=QZ.map((x,i)=>{const ord=x.o.map((t,j)=>({t,j})).sort(()=>Math.random()-0.5);
+  return `<div class="qq" data-q="${i}"><b>Q${i+1}.</b> ${x.q}${ord.map(o=>`<label class="opt"><input type="radio" name="q${i}" value="${o.j}"> ${o.t}</label>`).join('')}<div class="fb"></div></div>`;}).join('');
+ document.querySelectorAll('#quiz .qq').forEach(div=>{const i=+div.dataset.q;let done=false;
+  div.querySelectorAll('input').forEach(inp=>inp.addEventListener('change',()=>{if(done)return;done=true;const ok=+inp.value===QZ[i].a;if(ok)sc++;$('qScore').textContent=sc;
+    div.querySelector('.fb').innerHTML=`<span class="${ok?'ok':'bad'}">${ok?'✓ Correct.':'✗ Answer: '+QZ[i].o[QZ[i].a]+'.'}</span> ${QZ[i].e}`;
+    div.querySelectorAll('input').forEach(x=>x.disabled=true);}));});})();
+
+function drawAll(){drawK();}
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+$('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawAll();};})();
+buildIdx();labEV();buildKIn();drawK();
+</script>
+</body>
+</html>

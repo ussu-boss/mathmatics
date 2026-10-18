@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Special Matrices II</title>
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+h4{margin-bottom:4px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:120px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:90px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:separate;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;padding:1px 3px;margin:3px 4px;width:auto}
+.mx td{border:0!important;padding:1px 8px!important;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>5. Special Matrices II</h1>
+<p>Inverse matrix · Orthogonal matrix · Unitary matrix · Inverse, orthogonal and unitary transformations · Change of basis · Similarity transformation &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 47–61</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">Inverse</a><a href="#s2">Adjoint method</a><a href="#s3">Inverse rules</a><a href="#s4">Inverse transformation</a><a href="#s5">Orthogonal</a><a href="#s6">Orthogonal 2×2 / 3×3</a><a href="#s7">Unitary</a><a href="#s8">Norm-preserving</a><a href="#s9">Change of basis</a><a href="#s10">Similarity</a><a href="#s11">Example 8</a><a href="#s12">Summary table</a><a href="#s13">Calculator</a><a href="#s14">Exercise 5</a><a href="#s15">Practice</a><a href="#s16">Quiz</a><a href="#s17">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<!-- 0 -->
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>This section is about matrices that can be <b>undone</b>. A matrix moves vectors around. Sometimes you can move them back exactly (the matrix has an <b>inverse</b>). Two families can be undone very cheaply:</p>
+<ul>
+<li><b>Orthogonal</b> (real): the inverse is just the transpose, <span class="m">A⁻¹ = Aᵀ</span>. These are rotations and reflections.</li>
+<li><b>Unitary</b> (complex): the inverse is the conjugate transpose, <span class="m">U⁻¹ = U†</span>. They keep the length of complex vectors fixed. This is why they run quantum mechanics.</li>
+</ul>
+<div class="flow"><span>Inverse A⁻¹</span><b>→</b><span>adjoint ÷ det</span><b>→</b><span>(AB)⁻¹ = B⁻¹A⁻¹</span><b>→</b><span>Orthogonal AᵀA = I</span><b>→</b><span>Unitary U†U = I</span><b>→</b><span>Keep lengths</span><b>→</b><span>Change of basis x′ = P⁻¹x</span><b>→</b><span>Similarity B = P⁻¹AP</span></div>
+<div class="box tip"><b class="t">What you need from earlier sections</b>
+Transpose <span class="m">Ãᵢⱼ = Aⱼᵢ</span> (the book writes Ã, here written Aᵀ), hermitian conjugate <span class="m">A† = (A*)ᵀ</span>, cofactor <span class="m">Aⁱʲ</span>, and the "alien cofactor" result of Section 4: <span class="m">∑ₖ aᵢₖ Aʲᵏ = (det A) δᵢⱼ</span>. Expanding a row against its own cofactors gives det A. Expanding it against another row's cofactors gives 0.</div>
+</section>
+
+<!-- 1 -->
+<section id="s1">
+<h2>1. The inverse matrix</h2>
+<div class="box def"><b class="t">Definition (Eq. 1–2)</b>
+A matrix A is <b>nonsingular</b> if there is a matrix B with
+<div class="eq">AB = I,&nbsp;&nbsp; BA = I.</div>
+Then B is the <b>inverse</b> of A, written <span class="m">B = A⁻¹</span>, and A is also the inverse of B (<span class="m">A = B⁻¹</span>). If no such B exists, A is <b>singular</b>.</div>
+<h3>Facts that come straight from the definition</h3>
+<ol>
+<li><b>Only square matrices have inverses</b> (for finite matrices, Appendix II). A 2×3 matrix can have a "one-sided" inverse at most, never a full one.</li>
+<li><b>One side is enough (finite square matrices):</b> <span class="m">AB = I ⇔ BA = I</span>. So you only need to check one product.</li>
+<li><b>Determinant test.</b> Take det of AB = I: <span class="m">(det A)(det B) = 1</span> (Eq. 3). If det A = 0 there is no number det B that works, so A is singular. Conversely if det A ≠ 0 the adjoint formula below builds the inverse. So:
+<div class="eq">A⁻¹ exists ⇔ det A ≠ 0,&nbsp;&nbsp;&nbsp; and then det(A⁻¹) = 1 / det A.</div></li>
+<li><b>The inverse is unique</b> (Eq. 13–14). If AB = I and AC = I, then BA = I too, so <span class="m">C = (BA)C = B(AC) = B</span>.</li>
+<li><b>Every matrix commutes with its own inverse:</b> <span class="m">AA⁻¹ = A⁻¹A = I</span> (Eq. 12).</li>
+</ol>
+<div class="box warnb"><b class="t">Infinite matrices are different</b>
+For infinite matrices (Section 14 of the book, matrix mechanics), AB = I does <i>not</i> imply BA = I. Example: the "shift" matrix that pushes every component one place down has a left inverse but no right inverse. That is why the book insists on <i>both</i> equations in the definition.</div>
+<div class="box fact"><b class="t">Picture</b>
+det A is the factor by which A scales areas (volumes in 3D). If det A = 0, A squashes the plane onto a line (or a point), and information is lost. Many different vectors land on the same point, so no matrix can send them back. That is exactly "singular".</div>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+<h2>2. Finding the inverse: the adjoint method (Eqs. 4–7)</h2>
+<div class="box thm"><b class="t">Recipe</b>
+<ol>
+<li><b>Cofactor matrix</b> A<sub>c</sub>: replace every element aᵢⱼ by its cofactor <span class="m">Aⁱʲ = (−1)^{i+j} × (minor)</span>.</li>
+<li><b>Adjoint</b> (also called adjugate): transpose it, <span class="m">adj A = Ã<sub>c</sub></span>. Its (i, j) element is the cofactor Aʲⁱ (note the swapped indices).</li>
+<li><b>Divide by the determinant:</b>
+<div class="eq">A⁻¹ = adj A / det A,&nbsp;&nbsp;&nbsp; equivalently&nbsp; A · adj A = (det A) I &nbsp;(Eq. 6b)</div></li>
+</ol></div>
+<h3>Why it works (Eq. 7)</h3>
+<p>Element (i, j) of <span class="m">A · adj A</span> is <span class="m">∑ₖ aᵢₖ Aʲᵏ</span>. This is row i of A expanded against the cofactors of row j. If i = j you get det A. If i ≠ j you get the determinant of a matrix with two equal rows, which is 0. So <span class="m">A · adj A = (det A) I</span>, and dividing by det A gives I.</p>
+
+<h3>The 2×2 shortcut (learn this by heart)</h3>
+<div class="eq"><span class="M" data-m="a b; c d"></span><sup>−1</sup> = <span style="font-size:.9em">1/(ad − bc)</span> <span class="M" data-m="d −b; −c a"></span></div>
+<p>Swap the diagonal entries, change the sign of the off-diagonal entries, then divide by the determinant.</p>
+
+<h3>Book Example 1 (step by step)</h3>
+<div class="prob">
+<div class="q">Find the inverse of A = <span class="M" data-m="−3 1 −1; 15 −6 5; −5 2 −2"></span>.</div>
+<p><b>Step 1, det.</b> Expand along row 1: <br>
+−3[(−6)(−2) − 5·2] − 1[15(−2) − 5(−5)] + (−1)[15·2 − (−6)(−5)] = −3(2) − 1(−5) − 1(0) = −6 + 5 = <b>−1</b>. It is nonzero, so the inverse exists.</p>
+<p><b>Step 2, cofactors</b> (Eq. 9):</p>
+<p>A¹¹ = +[(−6)(−2) − 5·2] = 2, &nbsp;A¹² = −[15(−2) − 5(−5)] = 5, &nbsp;A¹³ = +[30 − 30] = 0<br>
+A²¹ = −[1(−2) − (−1)(2)] = 0, &nbsp;A²² = +[6 − 5] = 1, &nbsp;A²³ = −[−6 + 5] = 1<br>
+A³¹ = +[5 − 6] = −1, &nbsp;A³² = −[−15 + 15] = 0, &nbsp;A³³ = +[18 − 15] = 3</p>
+<div class="eq">A<sub>c</sub> = <span class="M" data-m="2 5 0; 0 1 1; −1 0 3"></span> &nbsp;⇒&nbsp; adj A = <span class="M" data-m="2 0 −1; 5 1 0; 0 1 3"></span></div>
+<p><b>Step 3, divide by det = −1:</b></p>
+<div class="eq">A⁻¹ = <span class="M" data-m="−2 0 1; −5 −1 0; 0 −1 −3"></span></div>
+<p><b>Check</b>, row 1 of A times column 1 of A⁻¹: (−3)(−2) + 1(−5) + (−1)(0) = 1 ✓. Row 1 times column 2: 0 − 1 + 1 = 0 ✓.</p>
+</div>
+
+<h3>Other ways to get an inverse (all give the same answer)</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Method</th><th>When to use</th><th>Idea</th></tr>
+<tr><td>Adjoint ÷ det</td><td>2×2, 3×3, symbolic entries</td><td>Above</td></tr>
+<tr><td>Gauss–Jordan</td><td>4×4 and larger, numbers</td><td>Row-reduce [A | I] to [I | A⁻¹]</td></tr>
+<tr><td>Cayley–Hamilton / polynomial</td><td>A satisfies a polynomial, e.g. A² − 3A + 2I = 0</td><td>A(3I − A) = 2I ⇒ A⁻¹ = (3I − A)/2</td></tr>
+<tr><td>Structure</td><td>Orthogonal / unitary / diagonal / block</td><td>Aᵀ, U†, 1/dᵢ, invert blocks</td></tr>
+<tr><td>Series (Neumann)</td><td>A nilpotent or small</td><td>(I − A)⁻¹ = I + A + A² + … (finite sum if Aᵏ = 0)</td></tr>
+</table></div>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+<h2>3. Rules for inverses (all exam-relevant)</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Rule</th><th>Reason in one line</th></tr>
+<tr><td class="m">(AB)⁻¹ = B⁻¹A⁻¹ &nbsp;(reverse order!)</td><td>(AB)(B⁻¹A⁻¹) = A(BB⁻¹)A⁻¹ = AA⁻¹ = I</td></tr>
+<tr><td class="m">(ABC…X)⁻¹ = X⁻¹…C⁻¹B⁻¹A⁻¹ &nbsp;(Eq. 17)</td><td>Same peeling from the middle (Example 2)</td></tr>
+<tr><td class="m">(A⁻¹)⁻¹ = A</td><td>The relation is mutual</td></tr>
+<tr><td class="m">(kA)⁻¹ = (1/k) A⁻¹, k ≠ 0</td><td>(kA)(A⁻¹/k) = I</td></tr>
+<tr><td class="m">(Aᵀ)⁻¹ = (A⁻¹)ᵀ</td><td>Transpose AA⁻¹ = I: (A⁻¹)ᵀAᵀ = I</td></tr>
+<tr><td class="m">(A*)⁻¹ = (A⁻¹)*,&nbsp; (A†)⁻¹ = (A⁻¹)†</td><td>Conjugate / conjugate-transpose AA⁻¹ = I</td></tr>
+<tr><td class="m">det(A⁻¹) = 1/det A</td><td>(det A)(det A⁻¹) = det I = 1</td></tr>
+<tr><td class="m">(Aⁿ)⁻¹ = (A⁻¹)ⁿ =: A⁻ⁿ</td><td>Reverse-order rule with all factors equal</td></tr>
+<tr><td class="m">adj(A) = (det A) A⁻¹,&nbsp; det(adj A) = (det A)ⁿ⁻¹</td><td>Take det of A · adj A = (det A) I</td></tr>
+<tr><td class="m">Diagonal: diag(d₁,…,dₙ)⁻¹ = diag(1/d₁,…,1/dₙ)</td><td>Multiply directly</td></tr>
+<tr><td class="m">Triangular ⇒ inverse is triangular of the same type</td><td>Back substitution</td></tr>
+<tr><td class="m">Symmetric ⇒ inverse symmetric; hermitian ⇒ inverse hermitian</td><td>(A⁻¹)ᵀ = (Aᵀ)⁻¹ = A⁻¹</td></tr>
+<tr><td class="m">If AB = BA then AB⁻¹ = B⁻¹A</td><td>Multiply AB = BA by B⁻¹ on both sides (Ex. 11)</td></tr>
+</table></div>
+<div class="box warnb"><b class="t">Common traps</b>
+<ul>
+<li><span class="m">(A + B)⁻¹ ≠ A⁻¹ + B⁻¹</span> in general. Even for numbers, 1/(2+3) ≠ 1/2 + 1/3.</li>
+<li><span class="m">(AB)⁻¹ ≠ A⁻¹B⁻¹</span> unless A and B commute. Think of putting on socks and then shoes: to undo it you take the shoes off first.</li>
+<li>Cancelling: from AB = AC you may conclude B = C <b>only if A is nonsingular</b>. With AB = 0 and A ≠ 0, B ≠ 0 is possible (both singular, Ex. 4).</li>
+</ul></div>
+<h3>Book Example 3</h3>
+<div class="prob"><div class="q">If A, I − A and I − A⁻¹ are nonsingular, show that (I − A)⁻¹ + (I − A⁻¹)⁻¹ = I.</div>
+<p>Write <span class="m">I − A⁻¹ = A⁻¹(A − I)</span>. Then by the reverse-order rule
+<span class="m">(I − A⁻¹)⁻¹ = (A − I)⁻¹A = −(I − A)⁻¹A</span>. Adding:</p>
+<div class="eq">(I − A)⁻¹ − (I − A)⁻¹A = (I − A)⁻¹(I − A) = I. ∎</div>
+<p class="small">Check with numbers: A = 2 (a 1×1 matrix): 1/(1−2) + 1/(1−½) = −1 + 2 = 1 ✓.</p>
+</div>
+</section>
+
+<!-- 4 -->
+<section id="s4">
+<h2>4. Inverse transformation (Eqs. 21–28)</h2>
+<p>A linear transformation <span class="m">y = Ax</span> (both vectors of size n) can be undone if A is nonsingular. Multiply by B = A⁻¹ on the left:</p>
+<div class="eq">x = A⁻¹y, &nbsp;&nbsp; xᵢ = ∑ⱼ bᵢⱼ yⱼ</div>
+<p>The inverse map is also linear. If det A = 0, the map squashes space flat and cannot be undone.</p>
+
+<div class="lab"><h4>🔬 Lab 1: transform the plane, then undo it</h4>
+<div class="ctrl">
+<label>a <input type="range" id="L1a" min="-2" max="2" step="0.05" value="1.2"><span id="L1av"></span></label>
+<label>b <input type="range" id="L1b" min="-2" max="2" step="0.05" value="0.6"><span id="L1bv"></span></label>
+<label>c <input type="range" id="L1c" min="-2" max="2" step="0.05" value="-0.4"><span id="L1cv"></span></label>
+<label>d <input type="range" id="L1d" min="-2" max="2" step="0.05" value="0.9"><span id="L1dv"></span></label>
+</div>
+<div class="ctrl"><button id="L1go">▶ Apply A</button><button id="L1back" class="alt">◀ Apply A⁻¹ (undo)</button><button id="L1sing" class="alt">Make it singular</button></div>
+<div class="grid2">
+<canvas id="L1can" width="460" height="360"></canvas>
+<div><div class="readout" id="L1out"></div>
+<p class="small">The grey grid and the square are the input. Pressing ▶ morphs them into their images under A. The orange parallelogram's area equals |det A|. Drag c toward 2b·…, or press "Make it singular", to see the parallelogram collapse onto a line. Then A⁻¹ does not exist, because points that were different now sit on top of each other.</p></div></div>
+</div>
+
+<h3>Book Example 4</h3>
+<div class="prob"><div class="q">Invert u = −2x − 2y + 7z, v = 4x + 3y − 12z, w = −x + 2z.</div>
+<div class="eq"><span class="M" data-m="u; v; w"></span> = <span class="M" data-m="−2 −2 7; 4 3 −12; −1 0 2"></span><span class="M" data-m="x; y; z"></span></div>
+<p>det = −2(6 − 0) + 2(8 − 12) + 7(0 + 3) = −12 − 8 + 21 = <b>1</b>. Cofactors (row by row):<br>
+A¹¹ = 6, A¹² = 4, A¹³ = 3; A²¹ = 4, A²² = 3, A²³ = 2; A³¹ = 3, A³² = 4, A³³ = 2.<br>
+adj A is the transpose of this. Here it happens to equal the matrix below, and det = 1, so:</p>
+<div class="eq">A⁻¹ = <span class="M" data-m="6 4 3; 4 3 4; 3 2 2"></span> &nbsp;⇒&nbsp; x = 6u + 4v + 3w,&nbsp; y = 4u + 3v + 4w,&nbsp; z = 3u + 2v + 2w.</div>
+<p class="small">Check: put x = 1, y = z = 0. Then u = −2, v = 4, w = −1, and 6u + 4v + 3w = −12 + 16 − 3 = 1 ✓.</p>
+</div>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+<h2>5. Orthogonal matrix (Eqs. 29–34)</h2>
+<div class="box def"><b class="t">Definition</b>
+A is <b>orthogonal</b> if <span class="m">AᵀA = I</span> and <span class="m">AAᵀ = I</span>. For a finite square matrix one implies the other. Equivalently (Eq. 30):
+<div class="eq">A⁻¹ = Aᵀ</div></div>
+<h3>Consequences</h3>
+<ol>
+<li><b>det A = ±1.</b> det(AᵀA) = (det A)² = 1. So an orthogonal matrix is always nonsingular.<br>
+&nbsp;&nbsp;+1 → <b>proper</b> (a pure rotation), −1 → <b>improper</b> (a rotation combined with a reflection).</li>
+<li><b>Rows are orthonormal</b> (Eq. 31a): <span class="m">∑ₖ aᵢₖ aⱼₖ = δᵢⱼ</span>. Each row has length 1, and two different rows are perpendicular.</li>
+<li><b>Columns are orthonormal</b> (Eq. 31b): <span class="m">∑ₖ aₖᵢ aₖⱼ = δᵢⱼ</span>.</li>
+<li>So an n×n real orthogonal matrix is the same thing as a set of n orthonormal vectors written as columns (or as rows).</li>
+<li>Products and inverses of orthogonal matrices are orthogonal: (AB)ᵀ(AB) = BᵀAᵀAB = I. Orthogonal matrices form a group, O(n). Those with det = +1 form SO(n).</li>
+<li>Every eigenvalue has |λ| = 1. A real orthogonal matrix of odd order with det +1 always has λ = 1 as an eigenvalue: the rotation axis.</li>
+</ol>
+<div class="box warnb"><b class="t">The book's convention</b>
+"Orthogonal" can also be defined for complex entries, e.g. <span class="M" data-m="i −√2; √2 i"></span> satisfies AᵀA = I. Check: [[i, √2],[−√2, i]]·[[i, −√2],[√2, i]] gives (1,1) = −1 + 2 = 1, (1,2) = −i√2 + i√2 = 0. But in the book (and in exams), <b>"orthogonal" means real orthogonal</b> unless stated otherwise. A complex orthogonal matrix does <i>not</i> keep lengths fixed. For complex vectors the right notion is <i>unitary</i>.</div>
+
+<h3>Book Example 5</h3>
+<div class="prob"><div class="q">Show A = <span class="M" data-m="1/√3 1/√6 1/√2; 1/√3 −2/√6 0; 1/√3 1/√6 −1/√2"></span> is orthogonal and find A⁻¹.</div>
+<p><b>Fast way: check the columns.</b><br>
+Column 1 = (1, 1, 1)/√3, length² = 3/3 = 1.<br>
+Column 2 = (1, −2, 1)/√6, length² = 6/6 = 1.<br>
+Column 3 = (1, 0, −1)/√2, length² = 2/2 = 1.<br>
+Dot products: c₁·c₂ ∝ 1 − 2 + 1 = 0, c₁·c₃ ∝ 1 + 0 − 1 = 0, c₂·c₃ ∝ 1 + 0 − 1 = 0. The columns are orthonormal, so AᵀA = I ✓.</p>
+<div class="eq">A⁻¹ = Aᵀ = <span class="M" data-m="1/√3 1/√3 1/√3; 1/√6 −2/√6 1/√6; 1/√2 0 −1/√2"></span></div>
+<p class="small">No cofactors needed. That is the whole point of orthogonal matrices. (Here det A = +1, so it is a pure rotation; see Exercise 5.1.)</p>
+</div>
+
+<h3>Independent parameters: n(n − 1)/2</h3>
+<p>A real n×n matrix has n² entries. The conditions <span class="m">∑ₖ aᵢₖ aⱼₖ = δᵢⱼ</span> do not change when i and j are swapped, so only the pairs i ≤ j count. That gives <span class="m">1 + 2 + … + n = n(n + 1)/2</span> independent conditions. So</p>
+<div class="eq">free parameters = n² − n(n + 1)/2 = n(n − 1)/2</div>
+<div class="tbl-wrap"><table><tr><th>n</th><th>1</th><th>2</th><th>3</th><th>4</th><th>n</th></tr>
+<tr><td>n(n−1)/2</td><td>0</td><td>1 (an angle θ)</td><td>3 (Euler angles α, β, γ)</td><td>6</td><td>number of planes you can rotate in</td></tr></table></div>
+<div class="box fact"><b class="t">Physical meaning</b>
+n(n−1)/2 is the number of coordinate planes (xy, yz, zx, …). Each plane gives one independent rotation angle. In 3D there are 3 planes and 3 angles, and also 3 components of angular momentum Lₓ, L_y, L_z. In 4D spacetime there are 6 planes, which is why there are 6 Lorentz generators (3 rotations + 3 boosts).</div>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+<h2>6. The most general orthogonal matrices of order 2 and 3</h2>
+<h3>Book Example 6: order 2</h3>
+<p>Start with <span class="M" data-m="a b; c d"></span>. The rows must be orthonormal:</p>
+<div class="eq">a² + b² = 1,&nbsp;&nbsp; c² + d² = 1,&nbsp;&nbsp; ac + bd = 0</div>
+<p>The first two give a = cos θ, b = sin θ, c = cos φ, d = sin φ. The third gives cos(θ − φ) = 0, so φ = θ ± π/2. Result (Eq. 38):</p>
+<div class="eq">A = <span class="M" data-m="cos θ|sin θ; ∓sin θ|±cos θ"></span></div>
+<div class="tbl-wrap"><table>
+<tr><th>Sign</th><th>Matrix</th><th>det</th><th>Geometry</th></tr>
+<tr><td>upper</td><td><span class="M" data-m="cos θ|sin θ; −sin θ|cos θ"></span></td><td>+1</td><td>Rotation (by −θ acting on vectors, or rotation of the axes by +θ)</td></tr>
+<tr><td>lower</td><td><span class="M" data-m="cos θ|sin θ; sin θ|−cos θ"></span></td><td>−1</td><td>Reflection in the line at angle θ/2 to the x-axis</td></tr>
+</table></div>
+<p>There is only one parameter θ, which matches n(n−1)/2 = 1.</p>
+
+<div class="lab"><h4>🔬 Lab 2: every 2×2 orthogonal matrix, rotation or mirror</h4>
+<div class="ctrl"><label>θ <input type="range" id="L2t" min="0" max="360" step="1" value="35"><span id="L2tv"></span>°</label>
+<label><input type="radio" name="L2s" value="1" checked> det = +1 (rotation)</label>
+<label><input type="radio" name="L2s" value="-1"> det = −1 (reflection)</label></div>
+<div class="grid2"><canvas id="L2cv" width="440" height="380"></canvas>
+<div class="readout" id="L2out"></div></div>
+<p class="small">Here the matrix is applied to vectors. The two coloured arrows are its columns, the images of e₁ and e₂. They always stay on the unit circle and perpendicular to each other. Watch the letter <b>F</b>: under a rotation it stays readable. Under a reflection it flips into its mirror image, and no rotation can undo that. That is why det = −1 matrices are never continuously connected to I.</p></div>
+
+<h3>Order 3 (Exercise 12): Euler angles</h3>
+<p>The most general 3×3 orthogonal matrix with det +1 needs 3 angles (Eq. 14.10 of the book):</p>
+<div class="eq" style="font-size:.95em"><span class="M" data-m="cαcβcγ−sαsγ −cαcβsγ−sαcγ cαsβ; sαcβcγ+cαsγ −sαcβsγ+cαcγ sαsβ; −sβcγ sβsγ cβ"></span><br><span class="small">c = cos, s = sin</span></div>
+<div class="lab"><h4>🔬 Lab 3 (3D): a rotated orthonormal frame. Drag to turn the view.</h4>
+<div class="ctrl">
+<label>α <input type="range" id="L3a" min="0" max="360" value="30"><span id="L3av"></span>°</label>
+<label>β <input type="range" id="L3b" min="0" max="180" value="40"><span id="L3bv"></span>°</label>
+<label>γ <input type="range" id="L3g" min="0" max="360" value="20"><span id="L3gv"></span>°</label>
+<label><input type="checkbox" id="L3ref"> also reflect (det = −1)</label>
+</div>
+<div class="grid2"><canvas id="L3cv" width="460" height="400"></canvas>
+<div class="readout" id="L3out"></div></div>
+<p class="small">Faint axes are the original x, y, z. Bold arrows are the three columns of R (red, green, blue). They stay unit length and mutually perpendicular for <i>every</i> choice of angles, which is what "orthogonal" means. The column dot products shown on the right are always 0 and 1. Ticking "reflect" multiplies by −I: the frame turns left-handed and det becomes −1.</p></div>
+</section>
+
+<!-- 7 -->
+<section id="s7">
+<h2>7. Unitary matrix (Eqs. 39–50)</h2>
+<div class="box def"><b class="t">Definition</b>
+U is <b>unitary</b> if <span class="m">UU† = I</span> and <span class="m">U†U = I</span>. For finite square U one implies the other. Equivalently (Eq. 41):
+<div class="eq">U⁻¹ = U† = (U*)ᵀ</div></div>
+<ol>
+<li><b>|det U| = 1</b> (Eq. 40): det(U†) = (det U)*, so |det U|² = 1 and det U = e^{iφ}, a point on the unit circle.</li>
+<li>Rows (and columns) are orthonormal in the <b>complex</b> sense: <span class="m">∑ₖ uᵢₖ u*ⱼₖ = δᵢⱼ</span> (Eq. 42).</li>
+<li><b>A real unitary matrix is orthogonal.</b> Unitary is the complex version of orthogonal.</li>
+<li>Eigenvalues lie on the unit circle, |λ| = 1. Eigenvectors for different eigenvalues are orthogonal.</li>
+<li>Products and inverses of unitary matrices are unitary. They form the group U(n). Those with det = 1 form SU(n).</li>
+</ol>
+
+<h3>Independent parameters: n²</h3>
+<p>There are 2n² real numbers (each entry has a real and an imaginary part). Conditions with i ≤ j:</p>
+<ul>
+<li>i = j: <span class="m">∑ₖ |uᵢₖ|² = 1</span>. These are real, giving <b>n</b> real conditions.</li>
+<li>i &lt; j: <span class="m">∑ₖ uᵢₖ u*ⱼₖ = 0</span>. These are complex, n(n−1)/2 equations × 2 = <b>n(n−1)</b> real conditions.</li>
+</ul>
+<div class="eq">free real parameters = 2n² − [n + n(n−1)] = 2n² − n² = n²</div>
+<div class="tbl-wrap"><table><tr><th>Group</th><th>Real parameters</th><th>n = 2</th><th>n = 3</th></tr>
+<tr><td>O(n), SO(n): real orthogonal</td><td>n(n−1)/2</td><td>1</td><td>3</td></tr>
+<tr><td>U(n): unitary</td><td>n²</td><td>4</td><td>9</td></tr>
+<tr><td>SU(n): unitary, det = 1</td><td>n² − 1</td><td>3 (spin, Pauli matrices)</td><td>8 (quark colour, Gell-Mann matrices)</td></tr>
+<tr><td>Complex orthogonal O(n, ℂ)</td><td>n(n−1) real</td><td>2</td><td>6</td></tr>
+<tr><td>Hermitian n×n (for comparison)</td><td>n²</td><td>4</td><td>9</td></tr>
+</table></div>
+<p class="small">Unitary and hermitian matrices both have n² parameters, and that is no accident: every unitary matrix is U = e^{iH} with H hermitian.</p>
+
+<h3>Book Example 7: the most general 2×2 unitary matrix</h3>
+<p>Conditions from UU† = I: <span class="m">|a|² + |b|² = 1, &nbsp;|c|² + |d|² = 1, &nbsp;ac* + bd* = 0</span>. Choose a = cos θ e^{iα}, b = sin θ e^{iβ}. The third condition gives c*/d* = −b/a, and the remaining conditions fix c and d up to a common phase e^{iγ}:</p>
+<div class="eq">U = <span class="M" data-m="cos θ·e^{iα}|sin θ·e^{iβ}; −sin θ·e^{i(γ−β)}|cos θ·e^{i(γ−α)}"></span>, &nbsp;&nbsp; det U = e^{iγ}</div>
+<p>There are four real parameters θ, α, β, γ, which matches n² = 4. Setting γ = 0 gives det U = 1, the SU(2) matrices that describe spin-½ rotations.</p>
+
+<div class="lab"><h4>🔬 Lab 4: play with the general 2×2 unitary matrix</h4>
+<div class="ctrl">
+<label>θ <input type="range" id="L4t" min="0" max="180" value="30"><span id="L4tv"></span>°</label>
+<label>α <input type="range" id="L4a" min="0" max="360" value="40"><span id="L4av"></span>°</label>
+<label>β <input type="range" id="L4b" min="0" max="360" value="110"><span id="L4bv"></span>°</label>
+<label>γ <input type="range" id="L4g" min="0" max="360" value="70"><span id="L4gv"></span>°</label>
+</div>
+<div class="grid2"><canvas id="L4cv" width="460" height="330"></canvas><div class="readout" id="L4out"></div></div>
+<p class="small">Left: the four entries drawn as phasors (arrows in the complex plane). Each pair in a row has |·|² adding to 1. Middle: det U = e^{iγ} always lies on the unit circle. Right: a quantum state ψ = (0.8, 0.6i) and Uψ. The bars are the probabilities |ψ₁|², |ψ₂|². They move around, but the <b>total stays exactly 1</b>. A unitary matrix keeps total probability fixed.</p></div>
+</section>
+
+<!-- 8 -->
+<section id="s8">
+<h2>8. Orthogonal and unitary transformations keep lengths (Eqs. 51–54)</h2>
+<div class="box thm"><b class="t">Theorem</b>
+A square matrix A is <b>unitary ⇔ ‖Ax‖ = ‖x‖ for every vector x</b>.<br>
+(⇒) <span class="m">‖Ax‖² = (Ax)†(Ax) = x†A†Ax = x†x = ‖x‖²</span> (Eq. 52).<br>
+(⇐) If x†(A†A − I)x = 0 for all x, then the hermitian matrix A†A − I is zero, so A†A = I.<br>
+For real A and real x: <b>orthogonal ⇔ length preserving</b>: <span class="m">∑ yᵢ² = ∑ xᵢ²</span> (Eq. 54).</div>
+<p>Because they keep lengths, they also keep inner products and angles: <span class="m">(Ax)†(Ay) = x†y</span>. They are rigid motions that fix the origin, and they never stretch or squash anything.</p>
+<div class="lab"><h4>🔬 Lab 5: circle in, circle out?</h4>
+<div class="ctrl">
+<button class="alt" data-L5="rot">Rotation 40°</button>
+<button class="alt" data-L5="ref">Reflection</button>
+<button class="alt" data-L5="shear">Shear</button>
+<button class="alt" data-L5="stretch">Stretch</button>
+<button class="alt" data-L5="ex8">Book Ex. 8 matrix</button>
+<button class="alt" data-L5="sing">Singular</button>
+</div>
+<div class="grid2"><canvas id="L5cv" width="440" height="380"></canvas><div class="readout" id="L5out"></div></div>
+<p class="small">24 unit vectors (the blue circle) are sent through the matrix (orange). Orthogonal matrices give back the same circle, with each arrow simply moved to another spot on it. Any other matrix turns the circle into an ellipse. The ratio ‖Ax‖/‖x‖ then ranges between the two singular values.</p></div>
+</section>
+
+<!-- 9 -->
+<section id="s9">
+<h2>9. Change of basis (Eqs. 55–62, Fig. 1)</h2>
+<p>Let e = {e₁,…,eₙ} be a basis and e′ = {e′₁,…,e′ₙ} another basis of the same space. Each new basis vector is a combination of the old ones: <span class="m">e′ = Pe</span>. Then also e = Qe′ with QP = I (Eq. 58). So:</p>
+<div class="box thm"><b class="t">A matrix that turns one basis into another is always nonsingular.</b></div>
+<p><b>Components transform the opposite way.</b> The vector itself does not move. Only its description changes. If the axes turn by +θ, the vector looks as if it turned by −θ relative to the new axes:</p>
+<div class="eq">x′ = P⁻¹x,&nbsp;&nbsp;&nbsp; x = Px′ &nbsp;&nbsp;(Eq. 59)</div>
+<p class="small">Convention used here (as in the book's Fig. 1): the columns of P are the new basis vectors written in old components. With the index form of Eq. 55a, e′ᵢ = ∑ⱼ pᵢⱼ eⱼ, the rows play that role. That only swaps P and Pᵀ, and for rotations it changes nothing important.</p>
+<div class="lab"><h4>🔬 Lab 6: same arrow, two coordinate systems</h4>
+<div class="ctrl">
+<label>Rotate basis by θ <input type="range" id="L6t" min="-180" max="180" value="30"><span id="L6tv"></span>°</label>
+<label>x₁ <input type="range" id="L6x" min="-3" max="3" step="0.1" value="2.2"></label>
+<label>x₂ <input type="range" id="L6y" min="-3" max="3" step="0.1" value="1.2"></label>
+</div>
+<div class="grid2"><canvas id="L6cv" width="440" height="380"></canvas><div class="readout" id="L6out"></div></div>
+<p class="small">Grey axes: the old basis e. Coloured axes: the new basis e′ = Pe (rotation by θ). The black arrow x never moves. Its dashed projections onto the new axes are the new components x′. They match P⁻¹x, the old components rotated by −θ.</p></div>
+</section>
+
+<!-- 10 -->
+<section id="s10">
+<h2>10. Similarity transformation (Eqs. 63–67)</h2>
+<p>Suppose in the old basis the matrix A sends y to x: <span class="m">x = Ay</span>. What matrix does the same job in the new basis? Using x = Px′ and y = Py′:</p>
+<div class="eq">Px′ = APy′ ⇒ x′ = (P⁻¹AP) y′ &nbsp;⇒&nbsp; <b>B = P⁻¹AP</b>,&nbsp;&nbsp; A = PBP⁻¹</div>
+<p>A and B are <b>similar</b>. They are the <i>same</i> linear map described in two coordinate systems.</p>
+<h3>What similarity preserves</h3>
+<ul>
+<li><b>Form of every matrix equation</b> (Eqs. 64–66). From ABC + DE = F you get A′B′C′ + D′E′ = F′, where X′ = P⁻¹XP. You insert I = PP⁻¹ between the factors. This is how physicists "go to a convenient basis" to simplify a problem.</li>
+<li><b>Determinant</b>: det(P⁻¹AP) = det A.</li>
+<li><b>Trace</b>: tr(P⁻¹AP) = tr(APP⁻¹) = tr A.</li>
+<li><b>Eigenvalues, characteristic polynomial, rank, powers</b>: (P⁻¹AP)ᵏ = P⁻¹AᵏP.</li>
+<li>Commuting: if P⁻¹AP and P⁻¹BP are both diagonal, then A and B commute (Ex. 9).</li>
+</ul>
+<div class="tbl-wrap"><table>
+<tr><th>Name</th><th>Condition on P</th><th>Formula</th><th>Extra preserved property</th></tr>
+<tr><td>Similarity</td><td>nonsingular</td><td>B = P⁻¹AP</td><td>det, trace, eigenvalues</td></tr>
+<tr><td>Unitary transformation</td><td>P⁻¹ = P†</td><td>B = P†AP</td><td>hermitian stays hermitian, unitary stays unitary</td></tr>
+<tr><td>Orthogonal transformation</td><td>P real, P⁻¹ = Pᵀ</td><td>B = PᵀAP</td><td>symmetric stays symmetric</td></tr>
+</table></div>
+<div class="box warnb"><b class="t">Don't confuse with congruence</b>
+<span class="m">B = PᵀAP</span> with a <i>general</i> P is a <b>congruence</b> (used for quadratic forms). It equals a similarity only when Pᵀ = P⁻¹, i.e. P is orthogonal.</div>
+<div class="lab"><h4>🔬 Lab 7: similarity changes the numbers, not the invariants</h4>
+<div class="ctrl">
+<label>A = <input type="text" id="L7A" value="2 1; 0 3" size="12"></label>
+<label>P: rotation θ <input type="range" id="L7t" min="-180" max="180" value="25"></label>
+<label>shear k <input type="range" id="L7k" min="-2" max="2" step="0.1" value="0.5"></label>
+</div>
+<div class="readout out" id="L7out"></div>
+<p class="small">P = (rotation by θ)·(shear k), which is always nonsingular. Every entry of B = P⁻¹AP changes as you move the sliders, but trace, determinant and eigenvalues never change.</p></div>
+</section>
+
+<!-- 11 -->
+<section id="s11">
+<h2>11. Book Example 8: rotate by 45° and double</h2>
+<div class="prob"><div class="q">Find the matrix A that rotates 2D vectors by 45° and doubles their length. Show A⁴ = −16I.</div>
+<p><b>Step 1, rotation C.</b> If x = l(cos θ, sin θ), then the rotated vector is z = l(cos(θ+45°), sin(θ+45°)):<br>
+z₁ = (x₁ − x₂)/√2, &nbsp;z₂ = (x₁ + x₂)/√2, so <span class="m">C = (1/√2)</span><span class="M" data-m="1 −1; 1 1"></span>.</p>
+<p><b>Step 2, doubling</b> is the matrix 2I. They commute, so</p>
+<div class="eq">A = 2IC = √2 <span class="M" data-m="1 −1; 1 1"></span></div>
+<p><b>Step 3, powers.</b> A² = 2<span class="M" data-m="1 −1; 1 1"></span>² = 2<span class="M" data-m="0 −2; 2 0"></span> = <span class="M" data-m="0 −4; 4 0"></span>, &nbsp;A⁴ = (A²)² = <span class="M" data-m="−16 0; 0 −16"></span> = −16I ✓</p>
+<p><b>Without multiplying:</b> A⁴ rotates by 4 × 45° = 180°, which is −I, and scales by 2⁴ = 16. So A⁴ = −16I. Also A⁸ = 256I.</p>
+<p class="small">Note that A is <i>not</i> orthogonal: AᵀA = 4I. It is 2 × (an orthogonal matrix). Matrices with AᵀA = k²I are rotations combined with a uniform scaling.</p>
+</div>
+<div class="lab"><h4>🔬 Lab 8: powers of A spiral outward</h4>
+<div class="ctrl"><button id="L8n">Next power</button><button id="L8r" class="alt">Reset</button><span class="readout" id="L8out"></span></div>
+<canvas id="L8cv" width="460" height="380"></canvas>
+<p class="small">Each press applies A once more to e₁: the arrow turns 45° and its length doubles. The canvas uses a <b>logarithmic radius</b> so the arrows stay on screen. At n = 4 the arrow points exactly backwards with length 16.</p></div>
+</section>
+
+<!-- 12 -->
+<section id="s12">
+<h2>12. All cases side by side</h2>
+<div class="tbl-wrap"><table>
+<tr><th></th><th>Nonsingular</th><th>Orthogonal (real)</th><th>Unitary</th></tr>
+<tr><td>Defining condition</td><td>AA⁻¹ = A⁻¹A = I</td><td>AᵀA = AAᵀ = I</td><td>U†U = UU† = I</td></tr>
+<tr><td>Inverse</td><td>adj A / det A</td><td>Aᵀ</td><td>U†</td></tr>
+<tr><td>Determinant</td><td>≠ 0</td><td>±1</td><td>e^{iφ}</td></tr>
+<tr><td>Eigenvalues</td><td>≠ 0</td><td>|λ| = 1 (±1 or conjugate pairs e^{±iθ})</td><td>|λ| = 1</td></tr>
+<tr><td>Rows / columns</td><td>linearly independent</td><td>orthonormal (real)</td><td>orthonormal (complex)</td></tr>
+<tr><td>Real parameters (n×n)</td><td>n² (real) / 2n² (complex)</td><td>n(n−1)/2</td><td>n²</td></tr>
+<tr><td>Preserves</td><td>dimension (nothing lost)</td><td>lengths, angles (real)</td><td>norms, inner products (complex)</td></tr>
+<tr><td>Physics</td><td>invertible coordinate changes</td><td>rotations, reflections</td><td>quantum time evolution, symmetry operations</td></tr>
+</table></div>
+<h3>Relations between the special matrices</h3>
+<ul>
+<li>Real + unitary ⇔ orthogonal.</li>
+<li>Hermitian + unitary ⇒ U² = I. Examples: Pauli matrices, reflections. Eigenvalues are ±1.</li>
+<li>Symmetric + orthogonal ⇒ A² = I. Example: the Householder reflector I − 2xxᵀ/xᵀx (Ex. 14).</li>
+<li>Triangular + unitary ⇒ diagonal (Ex. 16).</li>
+<li>Hermitian, anti-hermitian and unitary matrices are all <b>normal</b> (AA† = A†A, Ex. 17).</li>
+<li>Cayley transform: H hermitian ⇒ (H − iI)(H + iI)⁻¹ unitary (Ex. 18). A skew-symmetric matrix S gives an orthogonal one, (I − S)(I + S)⁻¹.</li>
+<li>Exponential map: H hermitian ⇒ e^{iH} unitary. S real antisymmetric ⇒ e^{S} orthogonal with det +1.</li>
+</ul>
+</section>
+
+<!-- 13 -->
+<section id="s13">
+<h2>13. 🧮 Inverse calculator with steps</h2>
+<p>Type a square matrix, one row per line, entries separated by spaces. You can use integers, fractions like <code>3/4</code>, decimals, or <code>sqrt(2)</code>. With integers and fractions the answer is exact.</p>
+<textarea id="calcIn">-3 1 -1
+15 -6 5
+-5 2 -2</textarea>
+<div class="ctrl"><button id="calcGo">Compute inverse</button>
+<button class="alt" data-ex="-2 -2 7&#10;4 3 -12&#10;-1 0 2">Book Ex. 4</button>
+<button class="alt" data-ex="1 0 1 1&#10;-1 2 3 4&#10;6 -2 1 0&#10;3 0 1 -1">Ex. 5.2(d)</button>
+<button class="alt" data-ex="9 8 7&#10;6 5 4&#10;3 2 1">Singular</button>
+<button class="alt" data-ex="1/sqrt(3) 1/sqrt(6) 1/sqrt(2)&#10;1/sqrt(3) -2/sqrt(6) 0&#10;1/sqrt(3) 1/sqrt(6) -1/sqrt(2)">Book Ex. 5 (orthogonal)</button></div>
+<div class="out" id="calcOut"></div>
+</section>
+
+<!-- 14 -->
+<section id="s14">
+<h2>14. Book's Exercise 5: all problems solved</h2>
+
+<div class="prob"><div class="q">1. Work out the inverse of A of Eq. (32) by cofactors and check that it equals Aᵀ (Eq. 33).</div>
+<details><summary>Show solution</summary>
+<p>A = <span class="M" data-m="1/√3 1/√6 1/√2; 1/√3 −2/√6 0; 1/√3 1/√6 −1/√2"></span>.</p>
+<p><b>det A</b> by expanding along row 2 (a₂₃ = 0, so only two terms):<br>
+A²¹ = −[(1/√6)(−1/√2) − (1/√2)(1/√6)] = −(−2/√12) = 1/√3<br>
+A²² = +[(1/√3)(−1/√2) − (1/√2)(1/√3)] = −2/√6<br>
+det = a₂₁A²¹ + a₂₂A²² = (1/√3)(1/√3) + (−2/√6)(−2/√6) = 1/3 + 4/6 = <b>1</b>.</p>
+<p class="small">Cross-check with the triple product: (1,−2,1)×(1,0,−1) = (2, 2, 2), and (1,1,1)·(2,2,2) = 6. Divide by √3·√6·√2 = 6 to get det = +1 ✓.</p>
+<p>All nine cofactors (for an orthogonal matrix with det +1, each cofactor Aⁱʲ equals aᵢⱼ itself):<br>
+A¹¹ = (−2/√6)(−1/√2) − 0 = 2/√12 = 1/√3 = a₁₁ ✓,&nbsp; A¹² = −[(1/√3)(−1/√2) − 0] = 1/√6 = a₁₂ ✓,&nbsp; A¹³ = (1/√3)(1/√6) − (−2/√6)(1/√3) = 3/√18 = 1/√2 = a₁₃ ✓, and so on.</p>
+<p>So the cofactor matrix is A itself, adj A = Aᵀ, and A⁻¹ = adj A / 1 = <b>Aᵀ</b>, the same as Eq. (33) ✓.</p>
+<p class="small">General fact: for orthogonal A, adj A = (det A)·A⁻¹ = (det A)·Aᵀ, so each cofactor is Aⁱʲ = (det A)·aᵢⱼ.</p>
+</details></div>
+
+<div class="prob"><div class="q">2. Find the inverse of:
+(a) <span class="M" data-m="2 0 −1; 1 5 −1; 0 1 3"></span> &nbsp;(b) <span class="M" data-m="0 −1 3; 4 2 −2; 1 1 1"></span> &nbsp;(c) <span class="M" data-m="9 8 7; 6 5 4; 3 2 1"></span> &nbsp;(d) <span class="M" data-m="1 0 1 1; −1 2 3 4; 6 −2 1 0; 3 0 1 −1"></span></div>
+<details><summary>Show solution</summary>
+<p><b>(a)</b> det = 2(15 + 1) − 0 + (−1)(1 − 0) = 31.<br>
+Cofactors: A¹¹ = 16, A¹² = −3, A¹³ = 1; A²¹ = −1, A²² = 6, A²³ = −2; A³¹ = 5, A³² = 1, A³³ = 10.</p>
+<div class="eq">A⁻¹ = (1/31)<span class="M" data-m="16 −1 5; −3 6 1; 1 −2 10"></span></div>
+<p class="small">Check: row 1 · column 1 = (32 + 0 − 1)/31 = 1 ✓.</p>
+<p><b>(b)</b> det = 0·(2 + 2) − (−1)(4 + 2) + 3(4 − 2) = 6 + 6 = 12.<br>
+Cofactors: A¹¹ = 4, A¹² = −6, A¹³ = 2; A²¹ = 4, A²² = −3, A²³ = −1; A³¹ = −4, A³² = 12, A³³ = 4.</p>
+<div class="eq">A⁻¹ = (1/12)<span class="M" data-m="4 4 −4; −6 −3 12; 2 −1 4"></span> = <span class="M" data-m="1/3 1/3 −1/3; −1/2 −1/4 1; 1/6 −1/12 1/3"></span></div>
+<p><b>(c)</b> R₁ − R₂ = (3, 3, 3) = R₂ − R₃, so R₁ − 2R₂ + R₃ = 0. The rows are linearly dependent and det = 9(5 − 8) − 8(6 − 12) + 7(12 − 15) = −27 + 48 − 21 = <b>0</b>. The matrix is <b>singular and has no inverse.</b></p>
+<p><b>(d)</b> Gauss–Jordan (or the calculator above) gives det = 4 and</p>
+<div class="eq">A⁻¹ = (1/4)<span class="M" data-m="−16 4 4 0; −31 8 6 1; 34 −8 −8 2; −14 4 4 −2"></span></div>
+<p class="small">Check: row 1 of A · column 1 = (−16 + 0 + 34 − 14)/4 = 4/4 = 1 ✓; row 4 · column 1 = (−48 + 0 + 34 + 14)/4 = 0 ✓.</p>
+</details></div>
+
+<div class="prob"><div class="q">3. If A is nonsingular, show det(A⁻¹) = 1/det A.</div>
+<details><summary>Show solution</summary><p>AA⁻¹ = I ⇒ det(A)·det(A⁻¹) = det I = 1. Since det A ≠ 0, det(A⁻¹) = 1/det A. ∎</p></details></div>
+
+<div class="prob"><div class="q">4. If AB = 0, show that either A and B are both singular or one of them is a zero matrix.</div>
+<details><summary>Show solution</summary>
+<p>Suppose A is nonsingular. Multiply by A⁻¹: B = A⁻¹·0 = 0. Similarly, if B is nonsingular then A = 0·B⁻¹ = 0. So if <i>neither</i> is the zero matrix, neither can be nonsingular, and both are singular. ∎</p>
+<p class="small">Example of the second case: A = <span class="M" data-m="1 0; 0 0"></span>, B = <span class="M" data-m="0 0; 0 1"></span>. Both are nonzero, AB = 0, and both are singular.</p></details></div>
+
+<div class="prob"><div class="q">5. Find the inverse of A = <span class="M" data-m="cosh x|sinh x; sinh x|cosh x"></span> and show Aⁿ = <span class="M" data-m="cosh nx|sinh nx; sinh nx|cosh nx"></span> for all integers n.</div>
+<details><summary>Show solution</summary>
+<p>det A = cosh²x − sinh²x = 1. By the 2×2 rule: A⁻¹ = <span class="M" data-m="cosh x|−sinh x; −sinh x|cosh x"></span> = A(−x), because cosh is even and sinh is odd.</p>
+<p><b>Induction for n ≥ 0.</b> n = 0 gives I ✓. If Aⁿ = A(nx), then</p>
+<p>Aⁿ⁺¹ = A(nx)A(x) = <span class="M" data-m="cosh nx cosh x + sinh nx sinh x &nbsp; cosh nx sinh x + sinh nx cosh x; sinh nx cosh x + cosh nx sinh x &nbsp; sinh nx sinh x + cosh nx cosh x"></span> = A((n+1)x),</p>
+<p>using cosh(u+v) = cosh u cosh v + sinh u sinh v and sinh(u+v) = sinh u cosh v + cosh u sinh v.</p>
+<p><b>Negative n:</b> A⁻ⁿ = (A⁻¹)ⁿ = A(−x)ⁿ = A(−nx), by the same result with x → −x. ∎</p>
+<p class="small">Physics: this is a Lorentz boost in 1+1 dimensions with rapidity x. Rapidities simply add.</p></details></div>
+
+<div class="prob"><div class="q">6. If AXB = I (all n×n), show A, X, B are nonsingular and X⁻¹ = BA.</div>
+<details><summary>Show solution</summary>
+<p>det A · det X · det B = 1, so none of the determinants is 0, and all three are nonsingular. Multiply on the left by A⁻¹ and on the right by B⁻¹: X = A⁻¹B⁻¹. Then X⁻¹ = (A⁻¹B⁻¹)⁻¹ = (B⁻¹)⁻¹(A⁻¹)⁻¹ = <b>BA</b>. ∎</p></details></div>
+
+<div class="prob"><div class="q">7. Show [A, B⁻¹] = −B⁻¹[A, B]B⁻¹.</div>
+<details><summary>Show solution</summary>
+<p>Right side: −B⁻¹(AB − BA)B⁻¹ = −B⁻¹A(BB⁻¹) + (B⁻¹B)AB⁻¹ = −B⁻¹A + AB⁻¹ = [A, B⁻¹]. ∎</p>
+<p class="small">Corollary (Ex. 11): if [A, B] = 0 then [A, B⁻¹] = 0.</p></details></div>
+
+<div class="prob"><div class="q">8. When is M = <span class="M" data-m="q p p; p q p; p p q"></span> nonsingular? Show the inverse has the same form.</div>
+<details><summary>Show solution</summary>
+<p>Add all columns to the first: every entry of column 1 becomes q + 2p. Take that out, then subtract row 1 from rows 2 and 3:</p>
+<div class="eq">det M = (q + 2p) · det<span class="M" data-m="1 p p; 0 q−p 0; 0 0 q−p"></span> = (q + 2p)(q − p)²</div>
+<p><b>Nonsingular ⇔ q ≠ p and q ≠ −2p.</b></p>
+<p>Write M = (q − p)I + pJ, where J is the all-ones matrix (J² = 3J). Try M⁻¹ = rI + sJ. Then</p>
+<p>MM⁻¹ = r(q − p)I + [s(q − p) + rp + 3ps]J = I ⇒ r = 1/(q − p) and s(q + 2p) = −rp.</p>
+<div class="eq">M⁻¹ = <span class="M" data-m="u v v; v u v; v v u"></span>,&nbsp; u = (q + p)/[(q − p)(q + 2p)],&nbsp; v = −p/[(q − p)(q + 2p)]</div>
+<p>It has the same form: equal diagonal entries and equal off-diagonal entries. ∎</p>
+<p class="small">Check: qu + 2pv = (q² + pq − 2p²)/[(q − p)(q + 2p)] = 1 ✓.</p></details></div>
+
+<div class="prob"><div class="q">9. If P⁻¹AP and P⁻¹BP are both diagonal, prove AB = BA.</div>
+<details><summary>Show solution</summary>
+<p>Let D₁ = P⁻¹AP and D₂ = P⁻¹BP. Diagonal matrices commute: D₁D₂ = D₂D₁. Now A = PD₁P⁻¹ and B = PD₂P⁻¹, so AB = PD₁P⁻¹PD₂P⁻¹ = PD₁D₂P⁻¹ = PD₂D₁P⁻¹ = BA. ∎</p>
+<p class="small">Physics: observables that can be diagonalised together (sharing an eigenbasis) commute. The converse is the "common eigenvectors" theorem proved later in the book.</p></details></div>
+
+<div class="prob"><div class="q">10. Verify (a) (A*)⁻¹ = (A⁻¹)*, (b) (Aᵀ)⁻¹ = (A⁻¹)ᵀ, (c) (A†)⁻¹ = (A⁻¹)†.</div>
+<details><summary>Show solution</summary>
+<p>Start from AA⁻¹ = A⁻¹A = I.<br>
+(a) Complex-conjugate it: A*(A⁻¹)* = I, so (A⁻¹)* is the inverse of A*.<br>
+(b) Transpose it: (AB)ᵀ = BᵀAᵀ gives (A⁻¹)ᵀAᵀ = Iᵀ = I, so (A⁻¹)ᵀ is the inverse of Aᵀ.<br>
+(c) Combine (a) and (b): (A†)⁻¹ = ((A*)ᵀ)⁻¹ = ((A*)⁻¹)ᵀ = ((A⁻¹)*)ᵀ = (A⁻¹)†. ∎</p></details></div>
+
+<div class="prob"><div class="q">11. If A commutes with B, show A commutes with B⁻¹.</div>
+<details><summary>Show solution</summary>
+<p>AB = BA. Multiply on the left and the right by B⁻¹: B⁻¹(AB)B⁻¹ = B⁻¹(BA)B⁻¹ ⇒ B⁻¹A = AB⁻¹. ∎ (Or use Ex. 7 with [A, B] = 0.)</p></details></div>
+
+<div class="prob"><div class="q">12. Show the Euler-angle matrix R(α, β, γ) (Section 6 above) is orthogonal.</div>
+<details><summary>Show solution</summary>
+<p><b>Smart way:</b> R = R_z(α)·R_y(β)·R_z(γ), where</p>
+<p>R_z(φ) = <span class="M" data-m="cos φ|−sin φ|0; sin φ|cos φ|0; 0|0|1"></span>, &nbsp; R_y(β) = <span class="M" data-m="cos β|0|sin β; 0|1|0; −sin β|0|cos β"></span>.</p>
+<p>Each factor is clearly orthogonal (its columns are orthonormal by cos² + sin² = 1), and a product of orthogonal matrices is orthogonal. det = 1·1·1 = +1.</p>
+<p><b>Direct check of one condition</b>, column 3 = (cα sβ, sα sβ, cβ): length² = s²β(c²α + s²α) + c²β = 1 ✓. Column 1 · column 3 = cαsβ(cαcβcγ − sαsγ) + sαsβ(sαcβcγ + cαsγ) − cβsβcγ = sβcβcγ(c²α + s²α) − sβcβcγ + sβsγ(−cαsα + sαcα) = 0 ✓. The other conditions work the same way (Lab 3 shows them numerically for any angles).</p>
+<p class="small">Multiplying out R_z(α)R_y(β)R_z(γ) gives exactly the book's matrix. Its 3 parameters match n(n−1)/2 = 3.</p></details></div>
+
+<div class="prob"><div class="q">13. For which real a, b is <span class="M" data-m="a+b b−a; a−b a+b"></span> orthogonal?</div>
+<details><summary>Show solution</summary>
+<p>Column lengths: (a+b)² + (a−b)² = 2a² + 2b² = 1 (both columns give the same equation). Column dot product: (a+b)(b−a) + (a−b)(a+b) = (a+b)[(b−a) + (a−b)] = 0, which holds automatically.</p>
+<div class="eq">Condition: a² + b² = ½</div>
+<p class="small">The matrix has the form [[c, −s],[s, c]] with c = a + b, s = a − b, and c² + s² = 2(a² + b²) = 1. So it is a rotation by the angle ψ with cos ψ = a + b, sin ψ = a − b.</p></details></div>
+
+<div class="prob"><div class="q">14. If x is a nonzero real column vector, show H = I − (2/xᵀx) xxᵀ is symmetric and orthogonal.</div>
+<details><summary>Show solution</summary>
+<p><b>Symmetric:</b> (xxᵀ)ᵀ = (xᵀ)ᵀxᵀ = xxᵀ and Iᵀ = I, so Hᵀ = H.</p>
+<p><b>Orthogonal:</b> let k = xᵀx (a positive number). Then</p>
+<p>HᵀH = H² = I − (4/k)xxᵀ + (4/k²)x(xᵀx)xᵀ = I − (4/k)xxᵀ + (4/k)xxᵀ = I. ∎</p>
+<p class="small">Meaning: H is the reflection in the plane perpendicular to x (the Householder reflector). It sends x → −x and leaves vectors perpendicular to x unchanged, so det H = −1. Example: x = (1, 1, 0)ᵀ gives H = <span class="M" data-m="0 −1 0; −1 0 0; 0 0 1"></span>.</p></details></div>
+
+<div class="prob"><div class="q">15. Show the six matrices of Exercise 3.9 are orthogonal, find their inverses, and verify D⁻¹ = B⁻¹A⁻¹.</div>
+<details><summary>Show solution</summary>
+<p>I, A = <span class="M" data-m="1 0; 0 −1"></span>, B = ½<span class="M" data-m="−1 √3; √3 1"></span>, C = ½<span class="M" data-m="−1 −√3; −√3 1"></span>, D = ½<span class="M" data-m="−1 √3; −√3 −1"></span>, F = ½<span class="M" data-m="−1 −√3; √3 −1"></span>.</p>
+<p>Each column has length² = ¼(1 + 3) = 1 (or 1 for A and I), and the two columns are perpendicular (e.g. for B: ¼(−√3 + √3) = 0). So all six are orthogonal.</p>
+<ul>
+<li>I, A, B, C are symmetric orthogonal (det = −1 for A, B, C). So X⁻¹ = Xᵀ = X: <b>A⁻¹ = A, B⁻¹ = B, C⁻¹ = C</b>. They are reflections, which are their own inverses.</li>
+<li>D and F are rotations by ∓120° (det = +1): <b>D⁻¹ = Dᵀ = F, F⁻¹ = Fᵀ = D</b>.</li>
+</ul>
+<p><b>Verification:</b> From Ex. 3.9, D = AB. So D⁻¹ = B⁻¹A⁻¹ = BA, and Ex. 3.9 says BA = F. Indeed D⁻¹ = Dᵀ = ½<span class="M" data-m="−1 −√3; √3 −1"></span> = F ✓.</p>
+<p class="small">These 6 matrices are the symmetry group of an equilateral triangle (C₃ᵥ): 3 rotations (I, D, F) and 3 mirrors (A, B, C).</p></details></div>
+
+<div class="prob"><div class="q">16. Show a unitary triangular matrix must be diagonal.</div>
+<details><summary>Show solution</summary>
+<p>Let U be upper triangular and unitary. Then U⁻¹ is upper triangular (inverses of triangular matrices are triangular of the same type). But U⁻¹ = U† is <i>lower</i> triangular. A matrix that is both upper and lower triangular is diagonal. So U† is diagonal, and hence U is diagonal. ∎</p>
+<p class="small">Moreover |uᵢᵢ| = 1, so U = diag(e^{iφ₁}, …, e^{iφₙ}).</p>
+<p class="small">Column-by-column version: column 1 is (u₁₁, 0, …). Length 1 gives |u₁₁| = 1. Row 1 has length 1, so |u₁₁|² + |u₁₂|² + … = 1 forces u₁₂ = … = u₁ₙ = 0. Repeat for the next row.</p></details></div>
+
+<div class="prob"><div class="q">17. Show hermitian and unitary matrices commute with their own hermitian conjugates.</div>
+<details><summary>Show solution</summary>
+<p>Hermitian: H† = H, so HH† = H² = H†H.<br>Unitary: UU† = I = U†U. ∎</p>
+<p class="small">Such matrices (AA† = A†A) are called <b>normal</b>. Normal matrices are exactly the ones that can be diagonalised by a unitary matrix.</p></details></div>
+
+<div class="prob"><div class="q">18. If H is hermitian, show U = (H − iI)(H + iI)⁻¹ is unitary.</div>
+<details><summary>Show solution</summary>
+<p>(H + iI) is invertible: the eigenvalues of H are real, so H + iI has eigenvalues λ + i ≠ 0.<br>
+Also, H − iI and (H + iI)⁻¹ commute, because both are functions of H.</p>
+<p>U† = [(H + iI)⁻¹]†(H − iI)† = (H† − iI)⁻¹(H† + iI) = (H − iI)⁻¹(H + iI).</p>
+<p>U†U = (H − iI)⁻¹(H + iI)(H − iI)(H + iI)⁻¹. The middle factors commute, so this equals (H − iI)⁻¹(H − iI)(H + iI)(H + iI)⁻¹ = I. ∎</p>
+<p class="small">For a single real number h this reads u = (h − i)/(h + i), and |h − i| = |h + i| gives |u| = 1. This is the <b>Cayley transform</b>, which maps the real line onto the unit circle.</p></details></div>
+</section>
+
+<!-- 15 -->
+<section id="s15">
+<h2>15. Practice set (CSIR-NET / GATE style)</h2>
+
+<div class="prob"><div class="q">P1. Find the inverse of <span class="M" data-m="1 2; 3 4"></span>.<span class="tag">basic</span></div>
+<details><summary>Show solution</summary><p>det = 4 − 6 = −2. Inverse = (−1/2)<span class="M" data-m="4 −2; −3 1"></span> = <span class="M" data-m="−2 1; 3/2 −1/2"></span>.</p></details></div>
+
+<div class="prob"><div class="q">P2. A satisfies A² − 3A + 2I = 0. Find A⁻¹.<span class="tag">trick</span></div>
+<details><summary>Show solution</summary><p>Rearrange: A(3I − A) = 2I ⇒ A⁻¹ = (3I − A)/2. (The constant term 2 ≠ 0 guarantees that A is invertible.)</p></details></div>
+
+<div class="prob"><div class="q">P3. Number of independent real parameters of: (i) a real orthogonal 4×4 matrix, (ii) a 3×3 unitary matrix, (iii) an SU(2) matrix, (iv) a 3×3 complex orthogonal matrix.<span class="tag">NET favourite</span></div>
+<details><summary>Show solution</summary><p>(i) n(n−1)/2 = 6. (ii) n² = 9. (iii) n² − 1 = 3. (iv) There are 2n² real numbers and the AᵀA = I conditions are complex: n(n+1)/2 × 2 = n(n+1) real conditions. That leaves 2n² − n(n+1) = n(n−1) = 6.</p></details></div>
+
+<div class="prob"><div class="q">P4. Find a, b, c so that <span class="M" data-m="0 2b c; a b −c; a −b c"></span> is orthogonal.<span class="tag">classic</span></div>
+<details><summary>Show solution</summary><p>Columns (0, a, a), (2b, b, −b), (c, −c, c). Their dot products are automatically 0: ab − ab = 0, −ac + ac = 0, 2bc − bc − bc = 0. Unit length: 2a² = 1, 6b² = 1, 3c² = 1 ⇒ <b>a = ±1/√2, b = ±1/√6, c = ±1/√3</b>.</p></details></div>
+
+<div class="prob"><div class="q">P5. Is U = (1/√2)<span class="M" data-m="1 i; i 1"></span> unitary? Find det U and U⁻¹.</div>
+<details><summary>Show solution</summary><p>U† = (1/√2)<span class="M" data-m="1 −i; −i 1"></span>. UU† = ½<span class="M" data-m="1+1 −i+i; i−i 1+1"></span> = I ✓. det U = (1 − i²)/2 = 1. U⁻¹ = U† = (1/√2)<span class="M" data-m="1 −i; −i 1"></span>. (This is the beam-splitter matrix of optics.)</p></details></div>
+
+<div class="prob"><div class="q">P6. If A is real orthogonal with det A = −1, show det(I + A) = 0. What does this mean?<span class="tag">proof</span></div>
+<details><summary>Show solution</summary><p>det(I + A) = det(AᵀA + A) = det((Aᵀ + I)A) = det(Aᵀ + I)·det A = det((A + I)ᵀ)·(−1) = −det(I + A). So det(I + A) = 0. Meaning: −1 is an eigenvalue. Every improper orthogonal matrix reverses some direction (the normal to the mirror).</p></details></div>
+
+<div class="prob"><div class="q">P7. A is nilpotent with A³ = 0. Find (I − A)⁻¹.</div>
+<details><summary>Show solution</summary><p>(I − A)(I + A + A²) = I − A³ = I. So (I − A)⁻¹ = I + A + A². Example: A = <span class="M" data-m="0 1 2; 0 0 3; 0 0 0"></span> gives (I − A)⁻¹ = <span class="M" data-m="1 1 5; 0 1 3; 0 0 1"></span>.</p></details></div>
+
+<div class="prob"><div class="q">P8. Inverse of <span class="M" data-m="1 a b; 0 1 c; 0 0 1"></span>.</div>
+<details><summary>Show solution</summary><p>Upper triangular with det 1, so the inverse is upper triangular. Back-substitution gives <span class="M" data-m="1 −a ac−b; 0 1 −c; 0 0 1"></span>. Check (1,3): 1·(ac − b) + a(−c) + b·1 = 0 ✓.</p></details></div>
+
+<div class="prob"><div class="q">P9. B = P⁻¹AP with A = <span class="M" data-m="2 1; 0 3"></span>. Find tr B, det B, and the eigenvalues of B.</div>
+<details><summary>Show solution</summary><p>Similarity keeps them: tr B = 5, det B = 6, eigenvalues 2 and 3, whatever nonsingular P you use.</p></details></div>
+
+<div class="prob"><div class="q">P10. Cayley transform of H = σₓ = <span class="M" data-m="0 1; 1 0"></span>: compute U = (H − iI)(H + iI)⁻¹.</div>
+<details><summary>Show solution</summary><p>H + iI = <span class="M" data-m="i 1; 1 i"></span>, det = −2, inverse = (−½)<span class="M" data-m="i −1; −1 i"></span>.<br>
+U = <span class="M" data-m="−i 1; 1 −i"></span>(−½)<span class="M" data-m="i −1; −1 i"></span> = (−½)<span class="M" data-m="0 2i; 2i 0"></span> = <span class="M" data-m="0 −i; −i 0"></span> = −iσₓ. Unitary ✓, with det = 0 − (−i)(−i) = 1.</p></details></div>
+
+<div class="prob"><div class="q">P11. The eigenvalues of a 3×3 real orthogonal matrix with det +1 are 1, e^{iθ}, e^{−iθ}. Its trace is 2. Find θ.</div>
+<details><summary>Show solution</summary><p>tr = 1 + 2cos θ = 2 ⇒ cos θ = ½ ⇒ θ = 60°. The trace of a 3D rotation always equals 1 + 2cos(rotation angle).</p></details></div>
+
+<div class="prob"><div class="q">P12. True or false: (a) Every orthogonal matrix is diagonalisable over ℝ. (b) If U is unitary, so is Uᵀ. (c) The sum of two orthogonal matrices is orthogonal. (d) A matrix with det = 1 is orthogonal.</div>
+<details><summary>Show solution</summary><p>(a) False: a 90° rotation has eigenvalues ±i, so it is diagonalisable only over ℂ. (b) True: (Uᵀ)† = U*, and U*Uᵀ = (UU†)* = I* = I. (c) False: I + I = 2I. (d) False: e.g. <span class="M" data-m="2 0; 0 1/2"></span>.</p></details></div>
+
+<div class="prob"><div class="q">P13. A rotation R_z(θ) acts on vectors. Write R_z(θ)⁻¹ and R_z(θ)ⁿ.</div>
+<details><summary>Show solution</summary><p>R(θ)⁻¹ = R(θ)ᵀ = R(−θ), and R(θ)ⁿ = R(nθ). For example, R(2π/n)ⁿ = I.</p></details></div>
+
+<div class="prob"><div class="q">P14. Find the Householder matrix that reflects (3, 4) onto the x-axis, i.e. to (5, 0).</div>
+<details><summary>Show solution</summary><p>Take x = (3, 4) − (5, 0) = (−2, 4), so xᵀx = 20. H = I − (2/20)<span class="M" data-m="4 −8; −8 16"></span> = <span class="M" data-m="3/5 4/5; 4/5 −3/5"></span>. Check: H(3, 4) = (9/5 + 16/5, 12/5 − 12/5) = (5, 0) ✓, and det H = −1.</p></details></div>
+
+<div class="prob"><div class="q">P15. If A and B are orthogonal and det A = −det B, show det(A + B) = 0.<span class="tag">hard</span></div>
+<details><summary>Show solution</summary><p>A + B = A(Bᵀ + Aᵀ)B = A(A + B)ᵀB. So det(A + B) = det A · det(A + B) · det B = −(det A)²·det(A + B) = −det(A + B). Hence det(A + B) = 0.</p></details></div>
+
+<div class="prob"><div class="q">P16. Show that if A is nonsingular and symmetric, A⁻¹ is symmetric. Is the inverse of an antisymmetric matrix antisymmetric?</div>
+<details><summary>Show solution</summary><p>(A⁻¹)ᵀ = (Aᵀ)⁻¹ = A⁻¹. For antisymmetric A: (A⁻¹)ᵀ = (Aᵀ)⁻¹ = (−A)⁻¹ = −A⁻¹, so yes, whenever it exists. Note that an odd-order antisymmetric matrix has det 0 and is never invertible.</p></details></div>
+</section>
+
+<!-- 16 -->
+<section id="s16" class="quiz">
+<h2>16. Self-test quiz</h2>
+<div id="quizBox"></div>
+<button id="quizCheck">Check answers</button> <span id="quizScore" class="readout"></span>
+</section>
+
+<!-- 17 -->
+<section id="s17">
+<h2>17. Interesting facts</h2>
+<div class="box fact"><b class="t">Nobody computes inverses in practice</b> Numerical software almost never forms A⁻¹. To solve Ax = b it factorises A (LU, QR) instead, which is faster and more accurate. The adjoint formula takes about n! operations; Gauss–Jordan takes about n³.</div>
+<div class="box fact"><b class="t">Quantum mechanics is unitary</b> Time evolution |ψ(t)⟩ = e^{−iHt/ħ}|ψ(0)⟩ is unitary because H is hermitian. That is exactly why total probability stays 1, the length-preservation theorem of Section 8.</div>
+<div class="box fact"><b class="t">Quantum gates</b> Every gate in a quantum computer (Hadamard, CNOT, phase …) is a unitary matrix. Computation without measurement is reversible because unitaries have inverses.</div>
+<div class="box fact"><b class="t">Mirrors cannot be rotated away</b> The orthogonal matrices with det = +1 and those with det = −1 form two separate pieces. You cannot slide continuously from one to the other, because det would have to pass through 0. That is why your left glove never turns into a right glove by rotating it.</div>
+<div class="box fact"><b class="t">SU(2) and spin</b> The 3-parameter SU(2) matrices of Example 7 (with γ = 0) cover the 3D rotations twice: U and −U give the same rotation. That is why an electron must be rotated by 720° to come back to its original state.</div>
+<div class="box fact"><b class="t">Similarity = same physics, different coordinates</b> Diagonalising a Hamiltonian, going to normal modes, or choosing principal axes of the inertia tensor are all similarity (usually orthogonal or unitary) transformations chosen to make the matrix diagonal.</div>
+</section>
+
+</div>
+
+<script>
+/* ---------- theme ---------- */
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+document.getElementById('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawAll();};})();
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+
+/* ---------- matrix renderer ---------- */
+function renderM(){document.querySelectorAll('.M[data-m]').forEach(el=>{let s=el.getAttribute('data-m');
+  // cells: "|" or nbsp separate entries that contain spaces; otherwise whitespace
+  let rows=s.split(';').map(r=>{r=r.trim();return r.includes('|')?r.split(/\s*\|\s*/):r.includes(' ')?r.split(/\s* \s*/):r.split(/\s+/);});
+  el.innerHTML='<table class="mx">'+rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</table>';});}
+renderM();
+
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);
+function f(x,d=3){if(Math.abs(x)<1e-10)x=0;return (+x.toFixed(d)).toString();}
+function setupCanvas(c){const dpr=window.devicePixelRatio||1;const w=c.width,h=c.height;if(!c._w){c._w=w;c._h=h;c.width=w*dpr;c.height=h*dpr;c.style.width='100%';c.style.maxWidth=w+'px';}const g=c.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);return [g,c._w,c._h];}
+function arrow(g,x1,y1,x2,y2,col,w=2.5){g.strokeStyle=col;g.fillStyle=col;g.lineWidth=w;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();const a=Math.atan2(y2-y1,x2-x1),L=Math.min(10,Math.hypot(x2-x1,y2-y1)*.4);if(L<2)return;g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-L*Math.cos(a-.4),y2-L*Math.sin(a-.4));g.lineTo(x2-L*Math.cos(a+.4),y2-L*Math.sin(a+.4));g.closePath();g.fill();}
+function clear(g,w,h){g.fillStyle=css('--card');g.fillRect(0,0,w,h);}
+function mm2(A,B){return [[A[0][0]*B[0][0]+A[0][1]*B[1][0],A[0][0]*B[0][1]+A[0][1]*B[1][1]],[A[1][0]*B[0][0]+A[1][1]*B[1][0],A[1][0]*B[0][1]+A[1][1]*B[1][1]]];}
+function inv2(A){const d=A[0][0]*A[1][1]-A[0][1]*A[1][0];return [[A[1][1]/d,-A[0][1]/d],[-A[1][0]/d,A[0][0]/d]];}
+function mstr(A){return A.map(r=>'[ '+r.map(x=>f(x).padStart(7)).join(' ')+' ]').join('\n');}
+
+/* ---------- Lab 1 ---------- */
+let L1t=0,L1target=0,L1anim=null;
+function L1M(){return [[+$('L1a').value,+$('L1b').value],[+$('L1c').value,+$('L1d').value]];}
+function drawL1(){const [g,w,h]=setupCanvas($('L1can'));clear(g,w,h);const A=L1M(),t=L1t;const M=[[1+(A[0][0]-1)*t,A[0][1]*t],[A[1][0]*t,1+(A[1][1]-1)*t]];
+ const s=45,ox=w/2,oy=h/2;const P=(x,y)=>[ox+s*(M[0][0]*x+M[0][1]*y),oy-s*(M[1][0]*x+M[1][1]*y)];
+ g.strokeStyle=css('--line');g.lineWidth=1;for(let i=-6;i<=6;i++){g.beginPath();g.moveTo(ox+i*s,0);g.lineTo(ox+i*s,h);g.stroke();g.beginPath();g.moveTo(0,oy-i*s);g.lineTo(w,oy-i*s);g.stroke();}
+ g.strokeStyle=css('--acc');g.globalAlpha=.45;for(let i=-5;i<=5;i++){let a=P(i,-5),b=P(i,5);g.beginPath();g.moveTo(...a);g.lineTo(...b);g.stroke();a=P(-5,i);b=P(5,i);g.beginPath();g.moveTo(...a);g.lineTo(...b);g.stroke();}g.globalAlpha=1;
+ g.fillStyle=css('--acc2');g.globalAlpha=.35;g.beginPath();[[0,0],[1,0],[1,1],[0,1]].forEach((p,i)=>{const q=P(...p);i?g.lineTo(...q):g.moveTo(...q)});g.fill();g.globalAlpha=1;
+ arrow(g,ox,oy,...P(1,0),'#e03131');arrow(g,ox,oy,...P(0,1),'#2f9e44');
+ const d=A[0][0]*A[1][1]-A[0][1]*A[1][0];let s2='A =\n'+mstr(A)+'\n\ndet A = '+f(d)+'\n\n';
+ s2+=Math.abs(d)<0.02?'det ≈ 0 → SINGULAR.\nThe plane is squashed onto a line;\nno A⁻¹ exists.':'A⁻¹ = (1/det)·adj A =\n'+mstr(inv2(A))+'\n\nA·A⁻¹ =\n'+mstr(mm2(A,inv2(A)));
+ s2+='\n\ncurrent morph t = '+f(t,2);$('L1out').textContent=s2;
+ ['a','b','c','d'].forEach(k=>$('L1'+k+'v').textContent=f(+$('L1'+k).value,2));}
+function L1run(to){L1target=to;cancelAnimationFrame(L1anim);const step=()=>{const dt=.025*(L1target>L1t?1:-1);if(Math.abs(L1target-L1t)<.03){L1t=L1target;drawL1();return;}L1t+=dt;drawL1();L1anim=requestAnimationFrame(step);};step();}
+['L1a','L1b','L1c','L1d'].forEach(id=>$(id).oninput=drawL1);
+$('L1go').onclick=()=>L1run(1);
+$('L1back').onclick=()=>{const A=L1M(),d=A[0][0]*A[1][1]-A[0][1]*A[1][0];if(Math.abs(d)<0.02){$('L1out').textContent+='\n\n✗ Cannot undo: det = 0.';return;}L1run(0);};
+$('L1sing').onclick=()=>{$('L1a').value=1;$('L1b').value=0.5;$('L1c').value=2;$('L1d').value=1;L1t=0;L1run(1);};
+
+/* ---------- Lab 2 ---------- */
+function drawL2(){const [g,w,h]=setupCanvas($('L2cv'));clear(g,w,h);const th=+$('L2t').value*Math.PI/180;const sg=+document.querySelector('input[name=L2s]:checked').value;
+ const c=Math.cos(th),s=Math.sin(th);const A=sg>0?[[c,s],[-s,c]]:[[c,s],[s,-c]];
+ const S=120,ox=w/2,oy=h/2;const P=(x,y)=>[ox+S*(A[0][0]*x+A[0][1]*y),oy-S*(A[1][0]*x+A[1][1]*y)];const P0=(x,y)=>[ox+S*x,oy-S*y];
+ g.strokeStyle=css('--line');g.lineWidth=1;g.beginPath();g.moveTo(0,oy);g.lineTo(w,oy);g.moveTo(ox,0);g.lineTo(ox,h);g.stroke();
+ g.beginPath();g.arc(ox,oy,S,0,7);g.stroke();
+ const F=[[0.15,-0.1],[0.15,0.8],[0.6,0.8],null,[0.15,0.42],[0.48,0.42]];
+ const drawF=(T,col,wd)=>{g.strokeStyle=col;g.lineWidth=wd;g.beginPath();let st=true;F.forEach(p=>{if(!p){st=true;return;}const q=T(...p);st?g.moveTo(...q):g.lineTo(...q);st=false;});g.stroke();};
+ drawF(P0,css('--muted'),2);g.globalAlpha=1;drawF(P,css('--acc2'),4);
+ if(sg<0){const a=th/2;g.setLineDash([6,5]);g.strokeStyle=css('--acc4');g.lineWidth=1.5;g.beginPath();g.moveTo(ox-200*Math.cos(a),oy+200*Math.sin(a));g.lineTo(ox+200*Math.cos(a),oy-200*Math.sin(a));g.stroke();g.setLineDash([]);}
+ arrow(g,ox,oy,...P(1,0),'#e03131',3);arrow(g,ox,oy,...P(0,1),'#2f9e44',3);
+ g.fillStyle=css('--ink');g.font='13px sans-serif';g.fillText('col 1 = Ae₁',P(1,0)[0]+5,P(1,0)[1]);g.fillText('col 2 = Ae₂',P(0,1)[0]+5,P(0,1)[1]);
+ const AtA=mm2([[A[0][0],A[1][0]],[A[0][1],A[1][1]]],A);
+ $('L2tv').textContent=$('L2t').value;
+ $('L2out').textContent='A =\n'+mstr(A)+'\n\ndet A = '+f(A[0][0]*A[1][1]-A[0][1]*A[1][0])+'\n\nAᵀA =\n'+mstr(AtA)+'\n\nA⁻¹ = Aᵀ =\n'+mstr([[A[0][0],A[1][0]],[A[0][1],A[1][1]]])+'\n\n|col1| = '+f(Math.hypot(A[0][0],A[1][0]))+', |col2| = '+f(Math.hypot(A[0][1],A[1][1]))+'\ncol1·col2 = '+f(A[0][0]*A[0][1]+A[1][0]*A[1][1])+(sg<0?'\n\nMirror line at θ/2 = '+f(+$('L2t').value/2,1)+'° (dashed)':'\n\nActs on vectors as rotation by −θ\n(clockwise '+$('L2t').value+'°)');}
+$('L2t').oninput=drawL2;document.querySelectorAll('input[name=L2s]').forEach(r=>r.onchange=drawL2);
+
+/* ---------- Lab 3 (3D) ---------- */
+let v3={yaw:-0.6,pitch:0.35};
+function eulerR(a,b,c){const ca=Math.cos(a),sa=Math.sin(a),cb=Math.cos(b),sb=Math.sin(b),cg=Math.cos(c),sg=Math.sin(c);
+ return [[ca*cb*cg-sa*sg,-ca*cb*sg-sa*cg,ca*sb],[sa*cb*cg+ca*sg,-sa*cb*sg+ca*cg,sa*sb],[-sb*cg,sb*sg,cb]];}
+function drawL3(){const [g,w,h]=setupCanvas($('L3cv'));clear(g,w,h);const d2r=Math.PI/180;
+ let R=eulerR($('L3a').value*d2r,$('L3b').value*d2r,$('L3g').value*d2r);if($('L3ref').checked)R=R.map(r=>r.map(x=>-x));
+ const cy=Math.cos(v3.yaw),sy=Math.sin(v3.yaw),cp=Math.cos(v3.pitch),sp=Math.sin(v3.pitch);const S=130,ox=w/2,oy=h/2+10;
+ const proj=(x,y,z)=>{const X=cy*x-sy*y,Y=sy*x+cy*y;const Z2=z*cp-Y*sp,D=Y*cp+z*sp;return [ox+S*X,oy-S*Z2,D];};
+ g.strokeStyle=css('--line');g.lineWidth=1;
+ for(let k=0;k<6;k++){const ph=k*Math.PI/6;g.beginPath();for(let t=0;t<=64;t++){const u=t/64*2*Math.PI;const p=proj(Math.cos(u)*Math.cos(ph),Math.cos(u)*Math.sin(ph),Math.sin(u));t?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]);}g.stroke();}
+ for(let k=-2;k<=2;k++){const z=k/3,r=Math.sqrt(1-z*z);g.beginPath();for(let t=0;t<=64;t++){const u=t/64*2*Math.PI;const p=proj(r*Math.cos(u),r*Math.sin(u),z);t?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]);}g.stroke();}
+ const o=proj(0,0,0);const names=['x','y','z'];const cols=['#e03131','#2f9e44','#1c7ed6'];
+ g.globalAlpha=.35;for(let i=0;i<3;i++){const e=[0,0,0];e[i]=1.25;const p=proj(...e);arrow(g,o[0],o[1],p[0],p[1],cols[i],1.5);g.fillStyle=cols[i];g.fillText(names[i],p[0]+4,p[1]);}g.globalAlpha=1;
+ const items=[0,1,2].map(i=>{const v=[R[0][i],R[1][i],R[2][i]];return {i,p:proj(...v)};}).sort((a,b)=>a.p[2]-b.p[2]);
+ g.font='bold 13px sans-serif';items.forEach(it=>{arrow(g,o[0],o[1],it.p[0],it.p[1],cols[it.i],3.5);g.fillStyle=cols[it.i];g.fillText(names[it.i]+"'",it.p[0]+5,it.p[1]-3);});
+ const col=i=>[R[0][i],R[1][i],R[2][i]],dot=(u,v)=>u[0]*v[0]+u[1]*v[1]+u[2]*v[2];
+ const det=R[0][0]*(R[1][1]*R[2][2]-R[1][2]*R[2][1])-R[0][1]*(R[1][0]*R[2][2]-R[1][2]*R[2][0])+R[0][2]*(R[1][0]*R[2][1]-R[1][1]*R[2][0]);
+ ['a','b','g'].forEach(k=>$('L3'+k+'v').textContent=$('L3'+k).value);
+ $('L3out').textContent='R =\n'+mstr(R)+'\n\nc1·c1 = '+f(dot(col(0),col(0)))+'   c2·c2 = '+f(dot(col(1),col(1)))+'   c3·c3 = '+f(dot(col(2),col(2)))+'\nc1·c2 = '+f(dot(col(0),col(1)))+'   c1·c3 = '+f(dot(col(0),col(2)))+'   c2·c3 = '+f(dot(col(1),col(2)))+'\n\ndet R = '+f(det)+'\ntrace = '+f(R[0][0]+R[1][1]+R[2][2])+(det>0?'\nrotation angle = acos((tr−1)/2) = '+f(Math.acos(Math.max(-1,Math.min(1,(R[0][0]+R[1][1]+R[2][2]-1)/2)))*180/Math.PI,1)+'°':'\n(improper: rotation + inversion)')+'\n\nR⁻¹ = Rᵀ: no cofactors needed.';}
+(function(){const c=$('L3cv');let drag=null;c.addEventListener('pointerdown',e=>{drag=[e.clientX,e.clientY];c.setPointerCapture(e.pointerId);});c.addEventListener('pointermove',e=>{if(!drag)return;v3.yaw+=(e.clientX-drag[0])*.01;v3.pitch=Math.max(-1.5,Math.min(1.5,v3.pitch+(e.clientY-drag[1])*.01));drag=[e.clientX,e.clientY];drawL3();});c.addEventListener('pointerup',()=>drag=null);})();
+['L3a','L3b','L3g','L3ref'].forEach(id=>$(id).oninput=drawL3);
+
+/* ---------- Lab 4 (unitary) ---------- */
+const C=(re,im)=>({re,im}),cexp=(t,r=1)=>C(r*Math.cos(t),r*Math.sin(t)),cmul=(a,b)=>C(a.re*b.re-a.im*b.im,a.re*b.im+a.im*b.re),cadd=(a,b)=>C(a.re+b.re,a.im+b.im),cabs2=a=>a.re*a.re+a.im*a.im,cconj=a=>C(a.re,-a.im);
+function cs(z){return f(z.re)+(z.im<0?' − ':' + ')+f(Math.abs(z.im))+'i';}
+function drawL4(){const d=Math.PI/180;const th=$('L4t').value*d,al=$('L4a').value*d,be=$('L4b').value*d,ga=$('L4g').value*d;
+ const U=[[cexp(al,Math.cos(th)),cexp(be,Math.sin(th))],[cexp(ga-be+Math.PI,Math.sin(th)),cexp(ga-al,Math.cos(th))]];
+ const [g,w,h]=setupCanvas($('L4cv'));clear(g,w,h);g.font='12px sans-serif';
+ const cols=[['#e03131','#f08c00'],['#1c7ed6','#2f9e44']];
+ const R=42;const pos=[[[50,60],[140,60]],[[50,175],[140,175]]];
+ for(let i=0;i<2;i++)for(let j=0;j<2;j++){const [x,y]=pos[i][j];g.strokeStyle=css('--line');g.lineWidth=1;g.beginPath();g.arc(x,y,R,0,7);g.stroke();g.beginPath();g.moveTo(x-R,y);g.lineTo(x+R,y);g.moveTo(x,y-R);g.lineTo(x,y+R);g.stroke();arrow(g,x,y,x+R*U[i][j].re,y-R*U[i][j].im,cols[i][j],2.5);g.fillStyle=css('--muted');g.fillText('u'+(i+1)+(j+1),x-R,y-R+4);}
+ const det=cadd(cmul(U[0][0],U[1][1]),cmul(C(-1,0),cmul(U[0][1],U[1][0])));
+ const dx=95,dy=275;g.strokeStyle=css('--line');g.beginPath();g.arc(dx,dy,36,0,7);g.stroke();arrow(g,dx,dy,dx+36*det.re,dy-36*det.im,css('--acc4'),3);g.fillStyle=css('--ink');g.fillText('det U on unit circle',dx-58,dy+50);
+ const psi=[C(0.8,0),C(0,0.6)];const out=[cadd(cmul(U[0][0],psi[0]),cmul(U[0][1],psi[1])),cadd(cmul(U[1][0],psi[0]),cmul(U[1][1],psi[1]))];
+ const bx=230,by=290,bh=220;const bars=[[cabs2(psi[0]),'|ψ₁|²','#868e96'],[cabs2(psi[1]),'|ψ₂|²','#868e96'],[cabs2(out[0]),'|(Uψ)₁|²',css('--acc')],[cabs2(out[1]),'|(Uψ)₂|²',css('--acc2')]];
+ bars.forEach((b,k)=>{const x=bx+k*55+(k>1?15:0);g.fillStyle=b[2];g.fillRect(x,by-bh*b[0],36,bh*b[0]);g.fillStyle=css('--ink');g.fillText(f(b[0],2),x+4,by-bh*b[0]-4);g.save();g.translate(x+12,by+6);g.fillText(b[1],-12,10);g.restore();});
+ g.strokeStyle=css('--line');g.beginPath();g.moveTo(bx-5,by);g.lineTo(bx+240,by);g.stroke();
+ g.fillStyle=css('--ink');g.fillText('before: sum = '+f(bars[0][0]+bars[1][0],4),bx,30);g.fillText('after:  sum = '+f(bars[2][0]+bars[3][0],4),bx,48);
+ const Ud=[[cconj(U[0][0]),cconj(U[1][0])],[cconj(U[0][1]),cconj(U[1][1])]];
+ const P=[[0,1].map(j=>cadd(cmul(Ud[0][0],U[0][j]),cmul(Ud[0][1],U[1][j]))),[0,1].map(j=>cadd(cmul(Ud[1][0],U[0][j]),cmul(Ud[1][1],U[1][j])))];
+ ['t','a','b','g'].forEach(k=>$('L4'+k+'v').textContent=$('L4'+k).value);
+ $('L4out').textContent='U =\n [ '+cs(U[0][0])+' , '+cs(U[0][1])+' ]\n [ '+cs(U[1][0])+' , '+cs(U[1][1])+' ]\n\nU†U =\n [ '+cs(P[0][0])+' , '+cs(P[0][1])+' ]\n [ '+cs(P[1][0])+' , '+cs(P[1][1])+' ]\n\ndet U = '+cs(det)+'\n|det U| = '+f(Math.sqrt(cabs2(det)))+'   arg = γ = '+$('L4g').value+'°\n\n|u11|²+|u12|² = '+f(cabs2(U[0][0])+cabs2(U[0][1]))+'\nrow1·row2* = '+cs(cadd(cmul(U[0][0],cconj(U[1][0])),cmul(U[0][1],cconj(U[1][1]))))+'\n\nψ = (0.8, 0.6i)\nUψ = ('+cs(out[0])+', '+cs(out[1])+')';}
+['L4t','L4a','L4b','L4g'].forEach(id=>$(id).oninput=drawL4);
+
+/* ---------- Lab 5 ---------- */
+let L5A=[[Math.cos(.7),-Math.sin(.7)],[Math.sin(.7),Math.cos(.7)]],L5name='Rotation 40°';
+const L5P={rot:['Rotation 40°',[[Math.cos(.698),-Math.sin(.698)],[Math.sin(.698),Math.cos(.698)]]],ref:['Reflection in y = x·tan30°',[[Math.cos(1.047),Math.sin(1.047)],[Math.sin(1.047),-Math.cos(1.047)]]],shear:['Shear',[[1,0.8],[0,1]]],stretch:['Stretch',[[1.6,0],[0,0.6]]],ex8:['Book Ex. 8: √2[[1,−1],[1,1]]',[[1.41421,-1.41421],[1.41421,1.41421]]],sing:['Singular',[[1,0.5],[0.6,0.3]]]};
+document.querySelectorAll('[data-L5]').forEach(b=>b.onclick=()=>{[L5name,L5A]=L5P[b.dataset.l5];drawL5();});
+function drawL5(){const [g,w,h]=setupCanvas($('L5cv'));clear(g,w,h);const A=L5A,S=75,ox=w/2,oy=h/2;
+ g.strokeStyle=css('--line');g.lineWidth=1;g.beginPath();g.moveTo(0,oy);g.lineTo(w,oy);g.moveTo(ox,0);g.lineTo(ox,h);g.stroke();
+ let mn=1e9,mx=0;for(let k=0;k<24;k++){const t=k/24*2*Math.PI,x=Math.cos(t),y=Math.sin(t);const X=A[0][0]*x+A[0][1]*y,Y=A[1][0]*x+A[1][1]*y;const r=Math.hypot(X,Y);mn=Math.min(mn,r);mx=Math.max(mx,r);
+  g.globalAlpha=.35;arrow(g,ox,oy,ox+S*x,oy-S*y,css('--acc'),1.5);g.globalAlpha=1;arrow(g,ox,oy,ox+S*X,oy-S*Y,k==0?'#e03131':css('--acc2'),k==0?3:1.8);}
+ g.strokeStyle=css('--acc');g.beginPath();g.arc(ox,oy,S,0,7);g.stroke();
+ const AtA=mm2([[A[0][0],A[1][0]],[A[0][1],A[1][1]]],A);const orth=Math.abs(AtA[0][0]-1)<1e-3&&Math.abs(AtA[1][1]-1)<1e-3&&Math.abs(AtA[0][1])<1e-3;
+ $('L5out').innerHTML=L5name+'\n\nA =\n'+mstr(A)+'\n\nAᵀA =\n'+mstr(AtA)+'\n\nmin ‖Ax‖/‖x‖ = '+f(mn)+'\nmax ‖Ax‖/‖x‖ = '+f(mx)+'\n\n'+(orth?'<span class="ok">Orthogonal: every length preserved.</span>':'<span class="bad">Not orthogonal: the circle becomes an ellipse.</span>')+'\n\n(red arrow = image of e₁)';$('L5out').style.whiteSpace='pre-wrap';}
+
+/* ---------- Lab 6 ---------- */
+function drawL6(){const [g,w,h]=setupCanvas($('L6cv'));clear(g,w,h);const th=$('L6t').value*Math.PI/180,x=[+$('L6x').value,+$('L6y').value];
+ const S=55,ox=w/2,oy=h/2;const c=Math.cos(th),s=Math.sin(th);const P=[[c,-s],[s,c]];const Pi=[[c,s],[-s,c]];const xp=[Pi[0][0]*x[0]+Pi[0][1]*x[1],Pi[1][0]*x[0]+Pi[1][1]*x[1]];
+ g.strokeStyle=css('--line');g.lineWidth=1;for(let i=-4;i<=4;i++){g.beginPath();g.moveTo(ox+i*S,0);g.lineTo(ox+i*S,h);g.stroke();g.beginPath();g.moveTo(0,oy-i*S);g.lineTo(w,oy-i*S);g.stroke();}
+ g.strokeStyle=css('--muted');g.lineWidth=1.5;g.beginPath();g.moveTo(0,oy);g.lineTo(w,oy);g.moveTo(ox,0);g.lineTo(ox,h);g.stroke();
+ g.strokeStyle=css('--acc4');g.globalAlpha=.25;g.lineWidth=1;for(let i=-5;i<=5;i++){g.beginPath();g.moveTo(ox+S*(i*c-6*-s),oy-S*(i*s+6*c));g.lineTo(ox+S*(i*c+6*-s),oy-S*(i*s-6*c));g.stroke();g.beginPath();g.moveTo(ox+S*(-6*c+i*-s),oy-S*(-6*s+i*c));g.lineTo(ox+S*(6*c+i*-s),oy-S*(6*s+i*c));g.stroke();}g.globalAlpha=1;
+ arrow(g,ox,oy,ox+S*c*3.5,oy-S*s*3.5,'#e03131',2);arrow(g,ox,oy,ox-S*s*3.5,oy-S*c*3.5,'#2f9e44',2);
+ g.fillStyle='#e03131';g.font='14px sans-serif';g.fillText("e₁'",ox+S*c*3.5+4,oy-S*s*3.5);g.fillStyle='#2f9e44';g.fillText("e₂'",ox-S*s*3.5+4,oy-S*c*3.5);
+ const tip=[ox+S*x[0],oy-S*x[1]];g.setLineDash([5,4]);g.strokeStyle='#e03131';g.beginPath();g.moveTo(...tip);g.lineTo(ox+S*xp[0]*c,oy-S*xp[0]*s);g.stroke();g.strokeStyle='#2f9e44';g.beginPath();g.moveTo(...tip);g.lineTo(ox-S*xp[1]*s,oy-S*xp[1]*c);g.stroke();g.setLineDash([]);
+ arrow(g,ox,oy,...tip,css('--ink'),3.5);g.fillStyle=css('--ink');g.fillText('x',tip[0]+6,tip[1]-4);
+ $('L6tv').textContent=$('L6t').value;
+ $('L6out').textContent='Old components  x  = ('+f(x[0],2)+', '+f(x[1],2)+')\n\nP (columns = new basis vectors) =\n'+mstr(P)+'\n\nP⁻¹ = Pᵀ =\n'+mstr(Pi)+"\n\nNew components x' = P⁻¹x\n  = ("+f(xp[0],3)+', '+f(xp[1],3)+')\n\nCheck x = Px\' = ('+f(P[0][0]*xp[0]+P[0][1]*xp[1],3)+', '+f(P[1][0]*xp[0]+P[1][1]*xp[1],3)+')\n\n|x| = '+f(Math.hypot(...x))+"   |x'| = "+f(Math.hypot(...xp))+'\n(orthogonal P keeps the length)';}
+['L6t','L6x','L6y'].forEach(id=>$(id).oninput=drawL6);
+
+/* ---------- Lab 7 ---------- */
+function drawL7(){let A;try{A=$('L7A').value.split(';').map(r=>r.trim().split(/[\s,]+/).map(Number));if(A.length!==2||A.some(r=>r.length!==2||r.some(isNaN)))throw 0;}catch(e){$('L7out').textContent='Enter a 2×2 matrix like: 2 1; 0 3';return;}
+ const th=$('L7t').value*Math.PI/180,k=+$('L7k').value;const Rm=[[Math.cos(th),-Math.sin(th)],[Math.sin(th),Math.cos(th)]];const P=mm2(Rm,[[1,k],[0,1]]);const B=mm2(mm2(inv2(P),A),P);
+ const ev=M=>{const t=M[0][0]+M[1][1],d=M[0][0]*M[1][1]-M[0][1]*M[1][0],D=t*t-4*d;return D>=0?f((t+Math.sqrt(D))/2)+', '+f((t-Math.sqrt(D))/2):f(t/2)+' ± '+f(Math.sqrt(-D)/2)+'i';};
+ const tr=M=>f(M[0][0]+M[1][1]),dt=M=>f(M[0][0]*M[1][1]-M[0][1]*M[1][0]);
+ $('L7out').textContent='P =\n'+mstr(P)+'\n\nA =\n'+mstr(A)+'          B = P⁻¹AP =\n'+mstr(B)+'\n\n            A          B\ntrace   '+tr(A).padStart(8)+'   '+tr(B).padStart(8)+'\ndet     '+dt(A).padStart(8)+'   '+dt(B).padStart(8)+'\neigen   '+ev(A)+'   |   '+ev(B);}
+['L7A','L7t','L7k'].forEach(id=>$(id).oninput=drawL7);
+
+/* ---------- Lab 8 ---------- */
+let L8n=0;
+function drawL8(){const [g,w,h]=setupCanvas($('L8cv'));clear(g,w,h);const ox=w/2,oy=h/2;const sc=r=>22+38*Math.log2(r+1)/1.2;
+ g.strokeStyle=css('--line');g.lineWidth=1;g.beginPath();g.moveTo(0,oy);g.lineTo(w,oy);g.moveTo(ox,0);g.lineTo(ox,h);g.stroke();
+ for(let k=0;k<=L8n;k++){const L=Math.pow(2,k),a=k*Math.PI/4,r=Math.min(sc(L),175);g.globalAlpha=k==L8n?1:.35;arrow(g,ox,oy,ox+r*Math.cos(a),oy-r*Math.sin(a),k==L8n?css('--acc2'):css('--acc'),k==L8n?3.5:2);g.fillStyle=css('--ink');g.font='12px sans-serif';g.fillText('A^'+k+'e₁  |'+L+'|',ox+(r+6)*Math.cos(a)-12,oy-(r+6)*Math.sin(a));}g.globalAlpha=1;
+ const n=L8n,L=Math.pow(Math.SQRT2,n);let M=[[1,0],[0,1]];const A=[[Math.SQRT2,-Math.SQRT2],[Math.SQRT2,Math.SQRT2]];for(let i=0;i<n;i++)M=mm2(M,A);
+ $('L8out').textContent='  n = '+n+'   Aⁿ = ['+M.map(r=>r.map(x=>f(x,2)).join(', ')).join(' ; ')+']   angle '+(45*n)+'°, length 2^'+n+' = '+Math.pow(2,n);}
+$('L8n').onclick=()=>{if(L8n<8)L8n++;drawL8();};$('L8r').onclick=()=>{L8n=0;drawL8();};
+
+/* ---------- Calculator ---------- */
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;}
+class Fr{constructor(n,d=1){if(d<0){n=-n;d=-d;}const g=gcd(n,d);this.n=n/g;this.d=d/g;}
+ add(o){return new Fr(this.n*o.d+o.n*this.d,this.d*o.d)}sub(o){return new Fr(this.n*o.d-o.n*this.d,this.d*o.d)}mul(o){return new Fr(this.n*o.n,this.d*o.d)}div(o){return new Fr(this.n*o.d,this.d*o.n)}
+ isZ(){return this.n===0}toString(){return this.d===1?''+this.n:this.n+'/'+this.d}val(){return this.n/this.d}}
+const Num={add:(a,b)=>a+b,sub:(a,b)=>a-b,mul:(a,b)=>a*b,div:(a,b)=>a/b,isZ:a=>Math.abs(a)<1e-12,str:a=>f(a,5)};
+const FrO={add:(a,b)=>a.add(b),sub:(a,b)=>a.sub(b),mul:(a,b)=>a.mul(b),div:(a,b)=>a.div(b),isZ:a=>a.isZ(),str:a=>a.toString()};
+function parseEntry(s){if(/^-?\d+$/.test(s))return new Fr(+s);if(/^-?\d+\/\d+$/.test(s)){const[a,b]=s.split('/');return new Fr(+a,+b);}
+ if(!/^[0-9+\-*/().\ssqrtpi]+$/.test(s))throw 'Bad entry: '+s;const v=Function('"use strict";const sqrt=Math.sqrt,pi=Math.PI;return ('+s+')')();if(!isFinite(v))throw 'Bad entry: '+s;return v;}
+function calc(){const out=$('calcOut');try{const rows=$('calcIn').value.trim().split('\n').map(r=>r.trim().split(/[\s,]+/).filter(Boolean));const n=rows.length;if(rows.some(r=>r.length!==n))throw 'Matrix must be square ('+n+' rows).';
+ let M=rows.map(r=>r.map(parseEntry));const exact=M.every(r=>r.every(x=>x instanceof Fr));const O=exact?FrO:Num;const one=exact?new Fr(1):1,zero=exact?new Fr(0):0;if(!exact)M=M.map(r=>r.map(x=>x instanceof Fr?x.val():x));
+ const S=A=>A.map(r=>'[ '+r.map(x=>O.str(x).padStart(exact?7:10)).join(' ')+' ]').join('\n');
+ const neg=x=>O.sub(zero,x);
+ const det=A=>{const k=A.length;if(k===1)return A[0][0];let s=zero;for(let j=0;j<k;j++){const mi=A.slice(1).map(r=>r.filter((_,c)=>c!==j));const t=O.mul(A[0][j],det(mi));s=j%2?O.sub(s,t):O.add(s,t);}return s;};
+ let txt='Mode: '+(exact?'exact fractions':'decimal')+'\n\nA =\n'+S(M)+'\n\n';const D=det(M);txt+='det A = '+O.str(D)+'\n';
+ if(O.isZ(D)){txt+='\ndet A = 0  →  A is SINGULAR, no inverse exists.\n(Its rows are linearly dependent.)';out.textContent=txt;return;}
+ if(n<=4){const Cf=M.map((r,i)=>r.map((_,j)=>{if(n===1)return one;const mi=M.filter((_,a)=>a!==i).map(rr=>rr.filter((_,b)=>b!==j));const v=det(mi);return (i+j)%2?neg(v):v;}));
+  const adj=Cf[0].map((_,j)=>Cf.map(r=>r[j]));txt+='\nStep 1 – cofactor matrix A_c =\n'+S(Cf)+'\n\nStep 2 – adjoint = transpose of A_c =\n'+S(adj)+'\n\nStep 3 – A⁻¹ = adj A / det A  (divide by '+O.str(D)+') =\n'+S(adj.map(r=>r.map(x=>O.div(x,D))))+'\n';}
+ const G=M.map((r,i)=>[...r,...r.map((_,j)=>i===j?one:zero)]);let log='';
+ for(let c=0;c<n;c++){let p=c;if(exact){while(p<n&&O.isZ(G[p][c]))p++;}else{for(let r=c+1;r<n;r++)if(Math.abs(G[r][c])>Math.abs(G[p][c]))p=r;}
+  if(p!==c){[G[p],G[c]]=[G[c],G[p]];log+='R'+(c+1)+' ↔ R'+(p+1)+'\n';}const pv=G[c][c];if(!(exact?pv.n===1&&pv.d===1:Math.abs(pv-1)<1e-12)){G[c]=G[c].map(x=>O.div(x,pv));log+='R'+(c+1)+' → R'+(c+1)+' ÷ ('+O.str(pv)+')\n';}
+  for(let r=0;r<n;r++)if(r!==c&&!O.isZ(G[r][c])){const fct=G[r][c];G[r]=G[r].map((x,k)=>O.sub(x,O.mul(fct,G[c][k])));log+='R'+(r+1)+' → R'+(r+1)+' − ('+O.str(fct)+')·R'+(c+1)+'\n';}}
+ const Inv=G.map(r=>r.slice(n));txt+='\nGauss–Jordan check ([A | I] → [I | A⁻¹]):\n'+log+'\nA⁻¹ =\n'+S(Inv)+'\n';
+ const At=M[0].map((_,j)=>M.map(r=>r[j]));const AtA=At.map(r=>M[0].map((_,j)=>r.reduce((s,x,k)=>O.add(s,O.mul(x,M[k][j])),zero)));
+ const isI=AtA.every((r,i)=>r.every((x,j)=>O.isZ(O.sub(x,i===j?one:zero))));const isSym=M.every((r,i)=>r.every((x,j)=>O.isZ(O.sub(x,M[j][i]))));
+ txt+='\nAᵀA =\n'+S(AtA)+'\n→ '+(isI?'ORTHOGONAL: A⁻¹ = Aᵀ (det = '+O.str(D)+')':'not orthogonal')+(isSym?'\n→ symmetric, so A⁻¹ is symmetric too':'');out.textContent=txt;}catch(e){out.textContent='Error: '+e;}}
+$('calcGo').onclick=calc;document.querySelectorAll('[data-ex]').forEach(b=>b.onclick=()=>{$('calcIn').value=b.dataset.ex;calc();});
+
+/* ---------- Quiz ---------- */
+const Q=[
+['The determinant of a real orthogonal matrix can be',['any nonzero real','±1 only','1 only','e^{iφ}'],1,'det(AᵀA) = (det A)² = 1.'],
+['Number of independent real parameters in a 3×3 unitary matrix:',['3','6','8','9'],3,'n² = 9 (8 if det = 1, i.e. SU(3)).'],
+['(ABC)⁻¹ equals',['A⁻¹B⁻¹C⁻¹','C⁻¹B⁻¹A⁻¹','C⁻¹A⁻¹B⁻¹','(CBA)'],1,'Reverse order.'],
+['If A is unitary, then A⁻¹ =',['Aᵀ','A*','A†','A'],2,'Definition U†U = I.'],
+['Under B = P⁻¹AP which is NOT necessarily preserved?',['trace','determinant','eigenvalues','the (1,1) element'],3,'Only the invariants are preserved; individual entries change.'],
+['A real unitary matrix is',['hermitian','orthogonal','diagonal','singular'],1,'U† = Uᵀ when U is real, so UᵀU = I.'],
+['For the change of basis e′ = Pe, the components of a fixed vector transform as',['x′ = Px','x′ = Pᵀx','x′ = P⁻¹x','x′ = x'],2,'Eq. 59: components move opposite to the axes.'],
+['Which matrix is orthogonal?',['[[1,1],[0,1]]','[[0,1],[1,0]]','[[2,0],[0,1/2]]','[[1,1],[1,−1]]'],1,'Swap matrix: columns e₂, e₁ are orthonormal. (The last one needs a factor 1/√2.)'],
+['A matrix A with A² − 5A + 6I = 0. A⁻¹ =',['(5I − A)/6','(A − 5I)/6','6(5I − A)','does not exist'],0,'A(5I − A) = 6I.'],
+['A 2×2 orthogonal matrix with det −1 represents',['a rotation','a reflection','a shear','a projection'],1,'Lower-sign case of Eq. 38.']];
+(function(){const box=$('quizBox');box.innerHTML=Q.map((q,i)=>'<div class="qq"><b>'+(i+1)+'. '+q[0]+'</b>'+q[1].map((o,j)=>'<label class="opt"><input type="radio" name="q'+i+'" value="'+j+'"> '+o+'</label>').join('')+'<div class="small" id="qf'+i+'"></div></div>').join('');
+$('quizCheck').onclick=()=>{let s=0;Q.forEach((q,i)=>{const c=document.querySelector('input[name=q'+i+']:checked');const ok=c&&+c.value===q[2];if(ok)s++;$('qf'+i).innerHTML=(ok?'<span class="ok">✓ Correct.</span> ':'<span class="bad">✗ Answer: '+q[1][q[2]]+'.</span> ')+q[3];});$('quizScore').textContent='Score: '+s+' / '+Q.length;};})();
+
+function drawAll(){drawL1();drawL2();drawL3();drawL4();drawL5();drawL6();drawL7();drawL8();}
+drawAll();calc();
+</script>
+</body>
+</html>

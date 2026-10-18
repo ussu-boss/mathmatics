@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14.3 Contour Integrals — Boas Ch. 14</title>
+<script>try{var t=localStorage.getItem('boas-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{
+  --bg:#f6f7fb;--card:#ffffff;--fg:#1c2333;--muted:#596379;--line:#dde2ec;
+  --accent:#2f6bff;--accent2:#e8590c;--accent3:#0b9b6e;--accent4:#a33ec9;--warn:#c92a2a;
+  --defbg:#edf3ff;--thmbg:#eefaf4;--warnbg:#fff3ee;--factbg:#f8f0ff;--notebg:#f4f6fa;
+  --canvas:#ffffff;--grid:#e9ecf3;--axis:#7d879b;--code:#eef1f7;--shadow:0 1px 3px rgba(20,30,60,.08),0 4px 18px rgba(20,30,60,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1219;--card:#161b25;--fg:#e4e8f0;--muted:#9aa3b6;--line:#2a3141;
+    --accent:#6f9cff;--accent2:#ff922b;--accent3:#3ad8a6;--accent4:#d77cf2;--warn:#ff6b6b;
+    --defbg:#162238;--thmbg:#122a21;--warnbg:#2d1a16;--factbg:#23192e;--notebg:#1b212c;
+    --canvas:#11161f;--grid:#202834;--axis:#717b8f;--code:#1f2532;--shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1219;--card:#161b25;--fg:#e4e8f0;--muted:#9aa3b6;--line:#2a3141;
+  --accent:#6f9cff;--accent2:#ff922b;--accent3:#3ad8a6;--accent4:#d77cf2;--warn:#ff6b6b;
+  --defbg:#162238;--thmbg:#122a21;--warnbg:#2d1a16;--factbg:#23192e;--notebg:#1b212c;
+  --canvas:#11161f;--grid:#202834;--axis:#717b8f;--code:#1f2532;--shadow:none;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--fg);font:16.5px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+header.top{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center;padding:8px 16px;flex-wrap:wrap}
+header.top .brand{font-weight:700;font-size:15px;white-space:nowrap}
+header.top .brand small{color:var(--muted);font-weight:500}
+header.top .sp{flex:1}
+header.top select,header.top button,header.top a.btn{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 10px;text-decoration:none;cursor:pointer;max-width:100%}
+header.top select{max-width:260px}
+.layout{display:flex;gap:28px;max-width:1280px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:64px;align-self:flex-start;width:240px;flex:none;max-height:calc(100vh - 80px);overflow:auto;padding:18px 0;font-size:14px}
+nav.toc b{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:3px 10px;border-left:2px solid var(--line)}
+nav.toc a:hover,nav.toc a.on{color:var(--accent);border-left-color:var(--accent)}
+main{flex:1;min-width:0;max-width:940px;padding:10px 0 80px}
+@media (max-width:1100px){nav.toc{display:none}}
+h1{font-size:2rem;line-height:1.2;margin:26px 0 6px}
+h1 .num{color:var(--accent)}
+.subtitle{color:var(--muted);margin:0 0 18px}
+h2{font-size:1.45rem;margin:44px 0 12px;padding-top:6px;border-top:1px solid var(--line)}
+h3{font-size:1.15rem;margin:26px 0 8px}
+h4{font-size:1rem;margin:18px 0 6px}
+p{margin:10px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:16px 0;box-shadow:var(--shadow)}
+.box{border-radius:12px;padding:12px 16px;margin:16px 0;border:1px solid var(--line);border-left-width:5px}
+.box>.tag{display:inline-block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.box.def{background:var(--defbg);border-left-color:var(--accent)}.box.def>.tag{color:var(--accent)}
+.box.thm{background:var(--thmbg);border-left-color:var(--accent3)}.box.thm>.tag{color:var(--accent3)}
+.box.warn{background:var(--warnbg);border-left-color:var(--warn)}.box.warn>.tag{color:var(--warn)}
+.box.fact{background:var(--factbg);border-left-color:var(--accent4)}.box.fact>.tag{color:var(--accent4)}
+.box.note{background:var(--notebg);border-left-color:var(--axis)}.box.note>.tag{color:var(--muted)}
+.ex{border:1px solid var(--line);border-radius:12px;margin:18px 0;background:var(--card);overflow:hidden}
+.ex>.hd{background:var(--notebg);padding:8px 16px;font-weight:600;border-bottom:1px solid var(--line)}
+.ex>.bd{padding:6px 16px 10px}
+ol.steps{padding-left:22px;margin:8px 0}ol.steps>li{margin:6px 0}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}
+.katex{font-size:1.06em}
+table.t{border-collapse:collapse;width:100%;margin:12px 0;font-size:15px;display:block;overflow-x:auto}
+table.t th,table.t td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+table.t th{background:var(--notebg)}
+details.sol{margin:8px 0 4px;border:1px dashed var(--line);border-radius:10px;padding:2px 12px}
+details.sol>summary{cursor:pointer;color:var(--accent);font-weight:600;padding:6px 0;list-style:none}
+details.sol>summary::-webkit-details-marker{display:none}
+details.sol>summary::before{content:"▶ ";font-size:11px}
+details.sol[open]>summary::before{content:"▼ "}
+details.sol[open]{background:var(--card)}
+.prob{border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin:12px 0;background:var(--card)}
+.prob>.q{margin:4px 0}
+.prob>.q>b:first-child{color:var(--accent2)}
+.lvl{font-size:11px;font-weight:700;border-radius:20px;padding:1px 8px;margin-left:6px;vertical-align:middle;border:1px solid currentColor}
+.lvl.e{color:var(--accent3)}.lvl.m{color:var(--accent)}.lvl.h{color:var(--accent2)}.lvl.x{color:var(--warn)}
+.widget{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:18px 0;box-shadow:var(--shadow)}
+.widget>.wt{font-weight:700;margin-bottom:4px}
+.widget>.wd{color:var(--muted);font-size:14px;margin-bottom:8px}
+.widget canvas{width:100%;display:block;border-radius:10px;border:1px solid var(--line);background:var(--canvas)}
+.ctrls{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:10px 0;font-size:14.5px}
+.ctrls label{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.ctrls input[type=range]{width:150px;accent-color:var(--accent)}
+.ctrls output{min-width:46px;font-variant-numeric:tabular-nums;color:var(--accent);font-weight:600}
+.ctrls select,.ctrls input[type=text],.ctrls input[type=number],.ctrls button{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 9px}
+.ctrls input[type=text]{min-width:200px}
+.ctrls input[type=number]{width:80px}
+.ctrls button{cursor:pointer}
+.ctrls button.pri{background:var(--accent);color:#fff;border-color:var(--accent)}
+.readout{font-size:15px;background:var(--notebg);border-radius:10px;padding:8px 12px;margin-top:10px;overflow-x:auto;line-height:1.9}
+.readout .k{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+.pill{display:inline-block;background:var(--code);border-radius:6px;padding:0 6px;font-family:Consolas,monospace;font-size:.92em}
+.mcq{border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin:12px 0;background:var(--card)}
+.mcq .opts{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.mcq .opts button{font:inherit;font-size:15px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 12px;cursor:pointer}
+.mcq .opts button.ok{background:var(--thmbg);border-color:var(--accent3)}
+.mcq .opts button.bad{background:var(--warnbg);border-color:var(--warn)}
+.mcq .fb{font-size:14.5px;color:var(--muted)}
+.lead{font-size:1.07rem}
+.small{font-size:14px;color:var(--muted)}
+.center{text-align:center}
+.hl{color:var(--accent2);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13.5px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:14px;height:4px;border-radius:2px;vertical-align:middle;margin-right:5px}
+.pagenav{display:flex;justify-content:space-between;gap:12px;margin-top:50px;flex-wrap:wrap}
+.pagenav a{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 14px;text-decoration:none;max-width:48%}
+.pagenav a small{display:block;color:var(--muted)}
+.summary li{margin:4px 0}
+kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
+
+</style>
+</head>
+<body>
+<header class="top">
+  <span class="brand">Boas · Ch. 14 Functions of a Complex Variable <small>| Section 14.3</small></span>
+  <span class="sp"></span>
+  <select id="chapSel" aria-label="Go to section"><option value="14.0_Functions_of_a_Complex_Variable_Index.html">14.0 Chapter 14 Index</option>
+<option value="14.1_Introduction.html">14.1 Introduction</option>
+<option value="14.2_Analytic_Functions.html">14.2 Analytic Functions</option>
+<option value="14.3_Contour_Integrals.html" selected>14.3 Contour Integrals</option>
+<option value="14.4_Laurent_Series.html">14.4 Laurent Series</option>
+<option value="14.5_The_Residue_Theorem.html">14.5 The Residue Theorem</option>
+<option value="14.6_Methods_of_Finding_Residues.html">14.6 Methods of Finding Residues</option>
+<option value="14.7_Evaluation_of_Definite_Integrals_by_Residues.html">14.7 Evaluation of Definite Integrals by Use of the Residue Theorem</option>
+<option value="14.8_Point_at_Infinity_Residues_at_Infinity.html">14.8 The Point at Infinity; Residues at Infinity</option>
+<option value="14.9_Mapping.html">14.9 Mapping</option>
+<option value="14.10_Applications_of_Conformal_Mapping.html">14.10 Some Applications of Conformal Mapping</option>
+<option value="14.11_Miscellaneous_Problems.html">14.11 Miscellaneous Problems</option></select>
+  <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
+</header>
+<div class="layout">
+<nav class="toc" id="toc"></nav>
+<main>
+<h1><span class="num">14.3</span> Contour Integrals</h1>
+<p class="subtitle">Boas, Chapter 14, Section 3 · integrating $f(z)$ along paths, path independence, Cauchy's theorem (Theorem V), Cauchy's integral formula (Theorem VI) and its derivatives, and their surprising consequences.</p>
+
+<div class="box note"><span class="tag">Goals</span>
+<ul class="summary">
+<li>Evaluate $\int_Cf(z)\,dz$ directly by parametrising the path, or with an antiderivative when allowed.</li>
+<li>Know exactly when an integral is path-independent and when a closed integral vanishes.</li>
+<li>Use Cauchy's integral formula and its derivative form to evaluate closed integrals in seconds.</li>
+<li>Understand the one integral everything rests on: $\oint\frac{dz}{z-a}=2\pi i$.</li>
+<li>Solve all 24 of Boas's Section 3 problems (all checked by numerical integration).</li>
+</ul></div>
+
+<h2 id="def">1. What a contour integral is</h2>
+<p>A <b>contour integral</b> is a line integral in the complex plane. With $f=u+iv$ and $dz=dx+i\,dy$ (Boas 3.2):</p>
+$$\int_Cf(z)\,dz=\int_C(u+iv)(dx+i\,dy)=\int_C(u\,dx-v\,dy)+i\int_C(v\,dx+u\,dy).$$
+<p>So it is two real line integrals of the kind in vector analysis (Chapter 6).</p>
+<h3>Working method: parametrise</h3>
+<p>If the path is $z=z(t)$, $a\le t\le b$, then</p>
+$$\boxed{\int_Cf(z)\,dz=\int_a^bf\big(z(t)\big)\,z'(t)\,dt}$$
+<table class="t">
+<tr><th>Path</th><th>Parametrisation</th><th>$dz$</th></tr>
+<tr><td>straight segment from $p$ to $q$</td><td>$z=p+(q-p)t$, $0\le t\le1$</td><td>$(q-p)\,dt$</td></tr>
+<tr><td>horizontal line $y=c$</td><td>$z=x+ic$</td><td>$dx$</td></tr>
+<tr><td>vertical line $x=c$</td><td>$z=c+iy$</td><td>$i\,dy$</td></tr>
+<tr><td>circle, centre $a$, radius $\rho$ (counter-clockwise)</td><td>$z=a+\rho e^{i\theta}$, $0\le\theta\le2\pi$</td><td>$i\rho e^{i\theta}d\theta$</td></tr>
+<tr><td>ray at angle $\alpha$</td><td>$z=te^{i\alpha}$, $t\ge0$</td><td>$e^{i\alpha}dt$</td></tr>
+</table>
+<h3>The most important integral in the chapter</h3>
+<p>On the circle $z=a+\rho e^{i\theta}$:</p>
+$$\oint(z-a)^n\,dz=\int_0^{2\pi}\rho^ne^{in\theta}\,i\rho e^{i\theta}\,d\theta=i\rho^{n+1}\int_0^{2\pi}e^{i(n+1)\theta}d\theta=\begin{cases}2\pi i,&n=-1\\0,&n\ne-1\end{cases}$$
+<p>(This is Boas Problem 5.1.) Every power of $(z-a)$ integrates to zero around $a$, <b>except $\frac{1}{z-a}$</b>, which gives $2\pi i$ for every radius. This one fact is the seed of Cauchy's formula and of the residue theorem.</p>
+<h3>The ML estimate (bound on any contour integral)</h3>
+$$\left|\int_Cf(z)\,dz\right|\le M\cdot L,\qquad M=\max_C|f|,\quad L=\text{length of }C .$$
+<p>It is used constantly in 14.7 to show that integrals over big semicircles vanish.</p>
+
+<h2 id="indep">2. Path independence and antiderivatives</h2>
+<div class="box thm"><span class="tag">When can you just use an antiderivative?</span>
+<p>If $f$ is analytic in a simply connected region containing the path, and $F'=f$ there, then</p>
+$$\int_{z_1}^{z_2}f(z)\,dz=F(z_2)-F(z_1),$$
+<p>independent of the path. Example (Boas 3.2): $\int_0^{1+i}(z^2-z)\,dz=\left[\frac{z^3}3-\frac{z^2}2\right]_0^{1+i}=-\frac23-\frac i3$ along <b>any</b> path.</p></div>
+<div class="box warn"><span class="tag">When you can NOT</span>
+<ul>
+<li><b>$f$ not analytic</b> (contains $\bar z$, $|z|$, …): the value depends on the path. Boas 3.12: $\int_0^{1+2i}|z|^2dz$ is $\frac53(1+2i)$ along the straight line but $\frac{13}3+\frac83i$ along the broken line.</li>
+<li><b>The region has a hole</b> (a singularity) between two paths: e.g. $\int\frac{dz}{z}$ from $1$ to $-1$ gives $i\pi$ along the upper semicircle and $-i\pi$ along the lower one. Their difference, $2\pi i$, is the closed integral around $0$.</li>
+</ul></div>
+
+<div class="widget" id="w-path">
+<div class="wt">Interactive 1 — Does the integral depend on the path?</div>
+<div class="wd">The path goes from $A$ to $B$ through two draggable control points (orange). The integral is computed numerically. For an analytic $f$ it does not change as you reshape the path, <b>unless</b> you drag the path across a singularity (black dot). For non-analytic $f$ it changes with every move.</div>
+<div class="ctrls"><label>$f(z)=$ <select id="pa-f"><option value="z^2 - z">z² − z (analytic, entire)</option><option value="abs(z)^2">|z|² (not analytic)</option><option value="conj(z)">z̄ (not analytic)</option><option value="1/z">1/z (singular at 0)</option><option value="exp(z)">e^z</option><option value="1/(z^2+1)">1/(z²+1) (singular at ±i)</option></select></label>
+<button id="pa-reset">reset path</button></div>
+<canvas id="cv-path"></canvas>
+<div class="readout" id="pa-out"></div>
+</div>
+
+<h2 id="cauchy">3. Cauchy's theorem (Theorem V)</h2>
+<div class="box thm"><span class="tag">Theorem V — Cauchy's theorem</span>
+<p>Let $C$ be a simple closed curve (it does not cross itself; finitely many corners are allowed). If $f(z)$ is analytic <b>on and inside</b> $C$, then</p>
+$$\oint_Cf(z)\,dz=0.\qquad(3.1)$$</div>
+<p><b>Proof</b> (assuming $f'$ is continuous). By Green's theorem in the plane (3.3), $\oint_C(P\,dx+Q\,dy)=\iint\left(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\right)dx\,dy$. Applied to the two real integrals in (3.2):</p>
+$$\oint(u\,dx-v\,dy)=\iint\left(-v_x-u_y\right)dx\,dy=0,\qquad\oint(v\,dx+u\,dy)=\iint\left(u_x-v_y\right)dx\,dy=0,$$
+<p>because both integrands vanish by the Cauchy–Riemann equations. $\blacksquare$ (Boas Problem 13 is the converse view: path independence needs CR, just as curl-free fields need $\partial F_y/\partial x=\partial F_x/\partial y$.)</p>
+<h3>Deformation of contours</h3>
+<p>A consequence used constantly: you may <b>deform a contour freely</b> as long as you do not pass it across a singular point; the integral does not change. In particular, an integral around a big complicated curve enclosing one singularity equals the integral around a tiny circle about it (Boas eq. 3.6).</p>
+
+<h2 id="formula">4. Cauchy's integral formula (Theorem VI)</h2>
+<div class="box thm"><span class="tag">Theorem VI</span>
+<p>If $f$ is analytic on and inside a simple closed curve $C$ and $a$ is a point <b>inside</b> $C$, then</p>
+$$\boxed{f(a)=\frac{1}{2\pi i}\oint_C\frac{f(z)}{z-a}\,dz}\qquad(3.9)$$
+<p>or, renaming variables, $f(z)=\frac1{2\pi i}\oint_C\frac{f(w)}{w-z}\,dw$ (3.10). If $a$ is <b>outside</b> $C$, the integral is $0$ (Cauchy's theorem).</p></div>
+<p><b>Proof.</b> $\phi(z)=\frac{f(z)}{z-a}$ is analytic except at $a$. Cut out a small circle $C'$ of radius $\rho$ about $a$ and join it to $C$ by a cut (Boas Fig. 3.1). Cauchy's theorem on the region between gives $\oint_C\phi\,dz=\oint_{C'}\phi\,dz$ (both counter-clockwise). On $C'$, $z=a+\rho e^{i\theta}$:</p>
+$$\oint_{C'}\frac{f(z)}{z-a}dz=\int_0^{2\pi}\frac{f(a+\rho e^{i\theta})}{\rho e^{i\theta}}\,i\rho e^{i\theta}d\theta=i\int_0^{2\pi}f(a+\rho e^{i\theta})\,d\theta\xrightarrow{\rho\to0}2\pi i\,f(a).\ \blacksquare$$
+<div class="box fact"><span class="tag">Meaning</span>
+<ul>
+<li>The values of an analytic function <b>inside</b> a curve are completely determined by its values <b>on</b> the curve. (A real smooth function has no such property.)</li>
+<li><b>Mean-value property:</b> taking $C$ to be a circle, $f(a)=\frac1{2\pi}\int_0^{2\pi}f(a+\rho e^{i\theta})d\theta$. The value at the centre is the average over the circle. The same holds for harmonic $u$ and $v$, so they cannot have a maximum or minimum inside a region.</li>
+</ul></div>
+<h3>Derivatives (Boas Problem 21)</h3>
+<p>Differentiating (3.10) with respect to $z$ under the integral sign, $n$ times:</p>
+$$\boxed{f^{(n)}(a)=\frac{n!}{2\pi i}\oint_C\frac{f(z)\,dz}{(z-a)^{n+1}}}$$
+<p>This proves Theorem III (an analytic function has derivatives of all orders), and it evaluates integrals with higher-power denominators.</p>
+<h3>How to use the formulas: the checklist</h3>
+<ol>
+<li>Write the integrand as $\dfrac{g(z)}{(z-a)^{n+1}}$ with $g$ analytic inside $C$. Pull out constants: $\frac{1}{2z-\pi}=\frac12\cdot\frac1{z-\pi/2}$, $\frac1{2\ln2-z}=-\frac{1}{z-2\ln2}$.</li>
+<li>Check whether $a$ is <b>inside</b> $C$. If not, the answer is $0$.</li>
+<li>Answer: $\dfrac{2\pi i}{n!}\,g^{(n)}(a)$.</li>
+</ol>
+
+<div class="widget" id="w-cif">
+<div class="wt">Interactive 2 — Cauchy's integral formula live</div>
+<div class="wd">Choose $g$ and the power $n+1$, drag the point $a$, and drag the contour (centre and radius handle). The integral $\oint_C\frac{g(z)}{(z-a)^{n+1}}dz$ is computed numerically around the circle and compared with $\frac{2\pi i}{n!}g^{(n)}(a)$ when $a$ is inside, or $0$ when it is outside.</div>
+<div class="ctrls"><label>$g(z)=$ <select id="cf-g"><option value="exp(3z)">e^{3z}</option><option value="sin(2z)">sin 2z</option><option value="cosh(z)">cosh z</option><option value="z^2+1">z² + 1</option><option value="1/(z-2)">1/(z − 2) (pole at 2!)</option></select></label>
+<label>power $n+1$ <input type="range" id="cf-n" min="1" max="5" value="1"><output></output></label></div>
+<canvas id="cv-cif"></canvas>
+<div class="readout" id="cf-out"></div>
+</div>
+
+<h2 id="consequences">5. Big consequences (useful for exams)</h2>
+<table class="t">
+<tr><th>Result</th><th>Statement</th><th>Why</th></tr>
+<tr><td>Cauchy estimate</td><td>$|f^{(n)}(a)|\le\dfrac{n!\,M}{\rho^n}$ if $|f|\le M$ on $|z-a|=\rho$</td><td>ML estimate on the derivative formula</td></tr>
+<tr><td>Liouville's theorem</td><td>a bounded entire function is constant</td><td>let $\rho\to\infty$ in the estimate with $n=1$</td></tr>
+<tr><td>Fundamental theorem of algebra</td><td>every non-constant polynomial has a zero</td><td>otherwise $1/p(z)$ is bounded and entire, so constant</td></tr>
+<tr><td>Maximum modulus principle</td><td>$|f|$ has no maximum inside a region (unless $f$ is constant)</td><td>the mean-value property</td></tr>
+<tr><td>Morera's theorem (converse)</td><td>$f$ continuous with $\oint f\,dz=0$ for every closed $C$ means $f$ is analytic</td><td>an antiderivative exists</td></tr>
+</table>
+<p class="small">E.g. $\sin z$ is entire and non-constant, so by Liouville it must be unbounded, as we saw in Chapter 2: $\sin(iy)=i\sinh y$.</p>
+
+<h2 id="boas">6. Boas Problems, Section 3 — solutions</h2>
+<p class="small">Every answer below was confirmed by numerical integration along the stated path.</p>
+<details class="sol"><summary>Show solutions 1–12 (direct integration)</summary>
+<table class="t">
+<tr><th>#</th><th>Integral</th><th>Working</th><th>Answer</th></tr>
+<tr><td>1</td><td>$\int_i^{i+1}z\,dz$, horizontal</td><td>$z=x+i$, $dz=dx$: $\int_0^1(x+i)dx=\frac12+i$</td><td>$\frac12+i$</td></tr>
+<tr><td>2</td><td>$\int_0^{1+i}(z^2-z)dz$</td><td>(a) $z=(1+i)t$: $\int_0^1[(1+i)^2t^2-(1+i)t](1+i)dt=\frac{(1+i)^3}{3}-\frac{(1+i)^2}{2}$. (b) along $0\to1$ then $1\to1+i$: same total</td><td>$-\frac23-\frac i3$ (both paths)</td></tr>
+<tr><td>3</td><td>$\oint z^2dz$, rectangle / semicircle</td><td>direct sums of the four (or two) pieces cancel</td><td>$0$ (both)</td></tr>
+<tr><td>4</td><td>$\int_0^{i\infty}\frac{dz}{1-z^2}$</td><td>$z=iy$: $\int_0^\infty\frac{i\,dy}{1+y^2}$</td><td>$\frac{i\pi}{2}$</td></tr>
+<tr><td>5</td><td>$\int_{i\pi}^{\infty+i\pi}e^{-z}dz$</td><td>$z=x+i\pi$: $\int_0^\infty e^{-x}e^{-i\pi}dx=-1$</td><td>$-1$</td></tr>
+<tr><td>6</td><td>$\int_1^iz\,dz$, arc / broken line</td><td>(a) $z=e^{i\theta}$: $\int_0^{\pi/2}ie^{2i\theta}d\theta=\frac{e^{i\pi}-1}{2}$. (b) $1\to1+i\to i$: $\int_0^1(1+iy)i\,dy+\int_1^0(x+i)dx=(i-\frac12)+(-\frac12-i)$</td><td>$-1$ (both)</td></tr>
+<tr><td>7</td><td>$\int\frac{dz}{8i+z^2}$ along $y=x$</td><td>$z=te^{i\pi/4}$, $z^2=it^2$: $\frac{e^{i\pi/4}}{i}\int_0^\infty\frac{dt}{t^2+8}=e^{-i\pi/4}\frac{\pi}{2\sqrt8}$</td><td>$\frac{\pi}{8}(1-i)$</td></tr>
+<tr><td>8</td><td>$\int_{2\pi}^{2\pi+i\infty}e^{2iz}dz$</td><td>$\left[\frac{e^{2iz}}{2i}\right]$; at the top $e^{2iz}\to0$</td><td>$-\frac1{2i}=\frac i2$</td></tr>
+<tr><td>9</td><td>$\int_{1+2i}^{\infty+2i}\frac{dz}{(x-2i)^2}$</td><td>on $y=2$: $dz=dx$, $\int_1^\infty\frac{dx}{(x-2i)^2}=\left[\frac{-1}{x-2i}\right]_1^\infty$</td><td>$\frac{1}{1-2i}=\frac{1+2i}{5}$</td></tr>
+<tr><td>10</td><td>$\int_2^{2+i\infty}ze^{iz}dz$</td><td>antiderivative $e^{iz}(1-iz)$ (check by differentiating); $\to0$ at the top</td><td>$-e^{2i}(1-2i)=(2i-1)e^{2i}\approx-1.402-1.742i$</td></tr>
+<tr><td>11</td><td>$\oint(\bar z-3)dz$, quarter-disk boundary</td><td>$\bar z$ is not analytic, so Cauchy does not apply. Use $\oint\bar z\,dz=2i\times$(area) (from Green's theorem); $\oint3\,dz=0$</td><td>$2i\cdot\pi=2\pi i$</td></tr>
+<tr><td>12</td><td>$\int_0^{1+2i}|z|^2dz$</td><td>(a) $z=(1+2i)t$, $|z|^2=5t^2$: $\frac53(1+2i)$. (b) $\int_0^2iy^2dy+\int_0^1(x^2+4)dx$</td><td>(a) $\frac53+\frac{10}3i$, (b) $\frac{13}3+\frac83i$: different, since not analytic</td></tr>
+</table>
+<p><b>Why $\oint\bar z\,dz=2i\cdot$Area</b> (useful fact): $\oint(x-iy)(dx+i\,dy)=\oint(x\,dx+y\,dy)+i\oint(x\,dy-y\,dx)=0+i\cdot2A$.</p></details>
+<details class="sol"><summary>Show solutions 13–16 (theory)</summary>
+<p><b>13.</b> $\oint f\,dz=\oint(u\,dx-v\,dy)+i\oint(v\,dx+u\,dy)$. The first is zero for every $C$ iff $\frac{\partial(-v)}{\partial x}=\frac{\partial u}{\partial y}$, i.e. $u_y=-v_x$. The second iff $\frac{\partial u}{\partial x}=\frac{\partial v}{\partial y}$. These are the CR equations.</p>
+<p><b>14.</b> $z^{n-m-1}$ ($n>m$) is analytic, so $\oint_{|z|=1}z^{n-m-1}dz=0$. With $z=e^{ix}$, $dz=ie^{ix}dx$: $\ i\int_0^{2\pi}e^{i(n-m)x}dx=0$, i.e. $\int_0^{2\pi}e^{inx}e^{-imx}dx=0$.</p>
+<p><b>15.</b> $z=e^{i\theta}$ gives $d\theta=\frac{dz}{iz}$, so $\int_0^{2\pi}e^{i\theta}f(e^{i\theta})d\theta=\oint zf(z)\frac{dz}{iz}=\frac1i\oint f(z)dz=0$.</p>
+<p><b>16.</b> Similarly $\int_0^{2\pi}e^{2i\theta}f(e^{i\theta})d\theta=\frac1i\oint zf(z)dz=0$ (since $zf$ is analytic in $|z|\le1$).</p></details>
+<details class="sol"><summary>Show solutions 17–24 (Cauchy's formula and its derivatives)</summary>
+<table class="t">
+<tr><th>#</th><th>Integral</th><th>$a$; inside?</th><th>Answer</th></tr>
+<tr><td>17</td><td>$\oint\frac{\sin z}{2z-\pi}dz=\frac12\oint\frac{\sin z}{z-\pi/2}dz$</td><td>$\frac\pi2\approx1.57$: (a) $|z|=1$ outside; (b) $|z|=2$ inside</td><td>(a) $0$; (b) $\frac12\cdot2\pi i\sin\frac\pi2=\pi i$</td></tr>
+<tr><td>18</td><td>$\oint\frac{\sin2z}{6z-\pi}dz=\frac16\oint\frac{\sin2z}{z-\pi/6}dz$</td><td>$\frac\pi6$ inside $|z|=3$</td><td>$\frac{2\pi i}6\sin\frac\pi3=\frac{\sqrt3\pi i}6$</td></tr>
+<tr><td>19</td><td>$\oint\frac{e^{3z}}{z-\ln2}dz$</td><td>$\ln2=0.69$, inside the square</td><td>$2\pi ie^{3\ln2}=16\pi i$</td></tr>
+<tr><td>20</td><td>$\oint\frac{\cosh z}{2\ln2-z}dz=-\oint\frac{\cosh z}{z-2\ln2}dz$</td><td>$2\ln2=1.39$: (a) outside; (b) inside</td><td>(a) $0$; (b) $-2\pi i\cosh(2\ln2)=-2\pi i\cdot\frac{17}{8}=-\frac{17\pi i}{4}$</td></tr>
+<tr><td>22</td><td>$\oint\frac{\sin2z}{(6z-\pi)^3}=\frac1{216}\oint\frac{\sin2z}{(z-\pi/6)^3}$</td><td>inside</td><td>$\frac1{216}\cdot\frac{2\pi i}{2!}(-4\sin\frac\pi3)=-\frac{\sqrt3\pi i}{108}$</td></tr>
+<tr><td>23</td><td>$\oint\frac{e^{3z}}{(z-\ln2)^4}$</td><td>inside</td><td>$\frac{2\pi i}{3!}\cdot27e^{3\ln2}=\frac{2\pi i}{6}\cdot216=72\pi i$</td></tr>
+<tr><td>24</td><td>$\oint\frac{\cosh z}{(2\ln2-z)^5}=-\oint\frac{\cosh z}{(z-2\ln2)^5}$</td><td>inside $|z|=2$</td><td>$-\frac{2\pi i}{4!}\cosh(2\ln2)=-\frac{17\pi i}{96}$</td></tr>
+</table>
+<p><b>21</b> is the derivation of $f^{(n)}(a)=\frac{n!}{2\pi i}\oint\frac{f\,dz}{(z-a)^{n+1}}$ (Section 4). Note $\cosh(2\ln2)=\frac{4+\frac14}{2}=\frac{17}8$.</p></details>
+
+<h2 id="practice">7. Extra practice (exam level)</h2>
+<div class="prob"><div class="q"><b>P1.</b> $\oint_{|z|=2}\dfrac{e^z}{z^3}dz$. <span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{2\pi i}{2!}(e^z)''\big|_0=\pi i$.</p></details></div>
+<div class="prob"><div class="q"><b>P2.</b> $\oint_{|z-i|=1}\dfrac{dz}{z^2+1}$. <span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{1}{(z-i)(z+i)}$: only $z=i$ is inside. With $g=\frac1{z+i}$: $2\pi i\cdot\frac1{2i}=\pi$.</p></details></div>
+<div class="prob"><div class="q"><b>P3.</b> $\oint_{|z|=3}\dfrac{dz}{z^2+1}$. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>Both $\pm i$ are inside. Partial fractions: $\frac1{z^2+1}=\frac1{2i}\left(\frac{1}{z-i}-\frac1{z+i}\right)$, so the integral is $\frac1{2i}(2\pi i-2\pi i)=0$. (Equivalently, deform $C$ to a huge circle where $|f|\sim1/R^2$ and use the ML estimate.)</p></details></div>
+<div class="prob"><div class="q"><b>P4.</b> Use the ML estimate to bound $\left|\int_{C_R}\frac{dz}{z^2+4}\right|$ on the upper semicircle $|z|=R>2$, and show it tends to $0$. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>On $|z|=R$: $|z^2+4|\ge R^2-4$, so $M\le\frac1{R^2-4}$ and $L=\pi R$. Hence $|\int|\le\frac{\pi R}{R^2-4}\to0$.</p></details></div>
+<div class="prob"><div class="q"><b>P5.</b> Evaluate $\oint_{|z|=1}\dfrac{\cos z}{z^{2n+1}}dz$. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{2\pi i}{(2n)!}\cos^{(2n)}(0)=\frac{2\pi i(-1)^n}{(2n)!}$.</p></details></div>
+<div class="prob"><div class="q"><b>P6.</b> (NET) If $f$ is entire and $|f(z)|\le5$ for all $z$, then $f'(i)=$? <span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$0$: by Liouville $f$ is constant.</p></details></div>
+<div class="prob"><div class="q"><b>P7.</b> Show $\displaystyle\frac1{2\pi}\int_0^{2\pi}e^{\cos\theta}\cos(\sin\theta)\,d\theta=1$. <span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>Mean-value property for $f=e^z$ on $|z|=1$: $e^0=\frac1{2\pi}\int_0^{2\pi}e^{e^{i\theta}}d\theta$. The real part of $e^{e^{i\theta}}=e^{\cos\theta}e^{i\sin\theta}$ is $e^{\cos\theta}\cos(\sin\theta)$. So the average is $1$.</p></details></div>
+
+<h2 id="quiz">8. Quick self-test</h2>
+<div class="mcq" data-ans="1" data-ok="$n=-1$ is the only power that survives." data-no="Compute $\oint(z-a)^n dz$ on a circle."><p>1. $\oint_{|z|=5}\frac{dz}{z-2}=$</p><div class="opts"><button>$0$</button><button>$2\pi i$</button><button>$\pi i$</button><button>depends on the radius</button></div><div class="fb"></div></div>
+<div class="mcq" data-ans="3" data-ok="$z=3$ is outside $|z|=2$, so Cauchy's theorem gives $0$." data-no="Is the singular point inside the contour?"><p>2. $\oint_{|z|=2}\frac{e^z}{z-3}dz=$</p><div class="opts"><button>$2\pi ie^3$</button><button>$e^3$</button><button>$\pi ie^3$</button><button>$0$</button></div><div class="fb"></div></div>
+<div class="mcq" data-ans="0" data-ok="$\bar z$ is not analytic: the value depends on the path." data-no="Is the integrand analytic?"><p>3. $\int_0^{1+i}\bar z\,dz$ is</p><div class="opts"><button>path dependent</button><button>always $1$</button><button>always $0$</button></div><div class="fb"></div></div>
+
+<h2 id="summary">9. Summary</h2>
+<div class="card"><ul class="summary">
+<li>$\int_Cf\,dz=\int f(z(t))z'(t)\,dt$. With an analytic $f$ in a simply connected region, use an antiderivative (the result is path-independent).</li>
+<li>$\oint(z-a)^ndz=2\pi i$ for $n=-1$, and $0$ otherwise.</li>
+<li>Cauchy: $\oint_Cf\,dz=0$ if $f$ is analytic on and inside $C$. Deform contours freely around singularities.</li>
+<li>$f^{(n)}(a)=\frac{n!}{2\pi i}\oint\frac{f\,dz}{(z-a)^{n+1}}$ for $a$ inside, and $0$ if $a$ is outside.</li>
+</ul></div>
+
+
+<div class="pagenav"><a href="14.2_Analytic_Functions.html"><small>← Previous</small>14.2 Analytic Functions</a><a href="14.4_Laurent_Series.html" style="text-align:right"><small>Next →</small>14.4 Laurent Series</a></div>
+</main>
+</div>
+<script>
+"use strict";
+/* ===== shared helpers for all Chapter 2 pages ===== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const PI = Math.PI, TAU = 2 * Math.PI;
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function onReady(fn) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
+
+/* ---------- number formatting ---------- */
+function fnum(x, d = 4) {
+  if (Number.isNaN(x)) return 'undefined';
+  if (!isFinite(x)) return x > 0 ? '∞' : '−∞';
+  if (Math.abs(x) >= 1e7) return x.toExponential(3).replace('-', '−');
+  let s = (+x.toFixed(d)).toString();
+  if (s === '-0') s = '0';
+  return s.replace('-', '−');
+}
+/* ---------- complex arithmetic, numbers are [re, im] ---------- */
+const Cx = {
+  c: (a, b = 0) => [a, b],
+  I: [0, 1],
+  add: (a, b) => [a[0] + b[0], a[1] + b[1]],
+  sub: (a, b) => [a[0] - b[0], a[1] - b[1]],
+  mul: (a, b) => [a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]],
+  div: (a, b) => { const d = b[0] * b[0] + b[1] * b[1]; return [(a[0] * b[0] + a[1] * b[1]) / d, (a[1] * b[0] - a[0] * b[1]) / d]; },
+  scale: (a, k) => [a[0] * k, a[1] * k],
+  conj: a => [a[0], -a[1]],
+  neg: a => [-a[0], -a[1]],
+  abs: a => Math.hypot(a[0], a[1]),
+  abs2: a => a[0] * a[0] + a[1] * a[1],
+  arg: a => Math.atan2(a[1], a[0]),
+  arg2pi: a => { let t = Math.atan2(a[1], a[0]); return t < 0 ? t + TAU : t; },
+  polar: (r, t) => [r * Math.cos(t), r * Math.sin(t)],
+  exp: a => { const e = Math.exp(a[0]); return [e * Math.cos(a[1]), e * Math.sin(a[1])]; },
+  log: (a, n = 0) => [Math.log(Math.hypot(a[0], a[1])), Math.atan2(a[1], a[0]) + TAU * n],
+  ipow(a, n) { let r = [1, 0], b = a, k = Math.abs(n); while (k) { if (k & 1) r = Cx.mul(r, b); b = Cx.mul(b, b); k >>= 1; } return n < 0 ? Cx.div([1, 0], r) : r; },
+  pow(a, b, n = 0) {
+    if (b[1] === 0 && Number.isInteger(b[0]) && Math.abs(b[0]) <= 4096) return Cx.ipow(a, b[0]);
+    if (a[0] === 0 && a[1] === 0) return b[0] > 0 ? [0, 0] : [NaN, NaN];
+    return Cx.exp(Cx.mul(b, Cx.log(a, n)));
+  },
+  sqrt: a => Cx.polar(Math.sqrt(Math.hypot(a[0], a[1])), Math.atan2(a[1], a[0]) / 2),
+  sin: a => [Math.sin(a[0]) * Math.cosh(a[1]), Math.cos(a[0]) * Math.sinh(a[1])],
+  cos: a => [Math.cos(a[0]) * Math.cosh(a[1]), -Math.sin(a[0]) * Math.sinh(a[1])],
+  tan: a => Cx.div(Cx.sin(a), Cx.cos(a)),
+  sinh: a => [Math.sinh(a[0]) * Math.cos(a[1]), Math.cosh(a[0]) * Math.sin(a[1])],
+  cosh: a => [Math.cosh(a[0]) * Math.cos(a[1]), Math.sinh(a[0]) * Math.sin(a[1])],
+  tanh: a => Cx.div(Cx.sinh(a), Cx.cosh(a)),
+  // principal branches
+  asin: z => Cx.mul([0, -1], Cx.log(Cx.add(Cx.mul([0, 1], z), Cx.sqrt(Cx.sub([1, 0], Cx.mul(z, z)))))),
+  acos: z => Cx.sub([PI / 2, 0], Cx.asin(z)),
+  atan: z => Cx.mul([0, -0.5], Cx.log(Cx.div(Cx.add([1, 0], Cx.mul([0, 1], z)), Cx.sub([1, 0], Cx.mul([0, 1], z))))),
+  asinh: z => Cx.log(Cx.add(z, Cx.sqrt(Cx.add(Cx.mul(z, z), [1, 0])))),
+  acosh: z => Cx.log(Cx.add(z, Cx.mul(Cx.sqrt(Cx.add(z, [1, 0])), Cx.sqrt(Cx.sub(z, [1, 0]))))),
+  atanh: z => Cx.scale(Cx.log(Cx.div(Cx.add([1, 0], z), Cx.sub([1, 0], z))), 0.5),
+  eq: (a, b, e = 1e-9) => Math.abs(a[0] - b[0]) < e && Math.abs(a[1] - b[1]) < e,
+  fmt(z, d = 4) {
+    if (!isFinite(z[0]) || !isFinite(z[1])) return 'undefined';
+    const eps = 0.5 * Math.pow(10, -d);
+    const R = Math.abs(z[0]) < eps ? 0 : z[0], I = Math.abs(z[1]) < eps ? 0 : z[1];
+    if (I === 0) return fnum(R, d);
+    const ai = Math.abs(I), ip = (Math.abs(ai - 1) < eps ? '' : fnum(ai, d)) + 'i';
+    if (R === 0) return (I < 0 ? '−' : '') + ip;
+    return fnum(R, d) + (I < 0 ? ' − ' : ' + ') + ip;
+  },
+  tex(z, d = 4) { return Cx.fmt(z, d).replace(/−/g, '-').replace('undefined', '\\text{undefined}'); },
+  polarTex(z, d = 3) {
+    const r = Cx.abs(z), t = Cx.arg(z);
+    return fnum(r, d).replace('−', '-') + '\\,e^{' + fnum(t, d).replace('−', '-') + 'i}';
+  }
+};
+/* angle as a nice multiple of pi if possible */
+function piFrac(t, maxDen = 12) {
+  const q = t / PI;
+  for (let den = 1; den <= maxDen; den++) {
+    const num = Math.round(q * den);
+    if (Math.abs(q * den - num) < 1e-9) {
+      if (num === 0) return '0';
+      const g = gcd(Math.abs(num), den), a = num / g, b = den / g;
+      const s = a < 0 ? '-' : '', A = Math.abs(a);
+      const top = (A === 1 ? '' : A) + '\\pi';
+      return b === 1 ? s + top : s + '\\frac{' + top + '}{' + b + '}';
+    }
+  }
+  return fnum(t, 4).replace('−', '-');
+}
+function gcd(a, b) { while (b) [a, b] = [b, a % b]; return a; }
+/* coefficient of i in TeX: 1 -> '', -1 -> '-' */
+function icoef(v, d = 3) { const s = fnum(v, d).replace('−', '-'); return s === '1' ? '' : s === '-1' ? '-' : s; }
+/* KaTeX render into element (falls back to plain text if KaTeX could not load) */
+function tex(el, s, disp = false) {
+  if (typeof el === 'string') el = $(el);
+  if (!el) return;
+  if (window.katex) { try { katex.render(s, el, { displayMode: disp, throwOnError: false }); return; } catch (e) { } }
+  el.textContent = s;
+}
+/* render a string that mixes text and $...$ math into an element */
+function texMix(el, s) {
+  if (typeof el === 'string') el = $(el);
+  el.innerHTML = '';
+  s.split(/(\$\$[^$]+\$\$|\$[^$]+\$)/).forEach(part => {
+    if (!part) return;
+    const span = document.createElement('span');
+    if (part.startsWith('$$')) tex(span, part.slice(2, -2), true);
+    else if (part.startsWith('$')) tex(span, part.slice(1, -1));
+    else span.innerHTML = part;
+    el.appendChild(span);
+  });
+}
+
+/* ---------- expression parser for complex expressions ---------- */
+const Parser = (() => {
+  const F = {
+    sin: Cx.sin, cos: Cx.cos, tan: Cx.tan, sinh: Cx.sinh, cosh: Cx.cosh, tanh: Cx.tanh,
+    sec: z => Cx.div([1, 0], Cx.cos(z)), csc: z => Cx.div([1, 0], Cx.sin(z)), cot: z => Cx.div(Cx.cos(z), Cx.sin(z)),
+    sech: z => Cx.div([1, 0], Cx.cosh(z)), csch: z => Cx.div([1, 0], Cx.sinh(z)), coth: z => Cx.div(Cx.cosh(z), Cx.sinh(z)),
+    exp: Cx.exp, ln: z => Cx.log(z), log: z => Cx.log(z), sqrt: Cx.sqrt, conj: Cx.conj,
+    abs: z => [Cx.abs(z), 0], arg: z => [Cx.arg(z), 0], re: z => [z[0], 0], im: z => [z[1], 0],
+    asin: Cx.asin, acos: Cx.acos, atan: Cx.atan, asinh: Cx.asinh, acosh: Cx.acosh, atanh: Cx.atanh,
+    arcsin: Cx.asin, arccos: Cx.acos, arctan: Cx.atan, arcsinh: Cx.asinh, arccosh: Cx.acosh, arctanh: Cx.atanh
+  };
+  function tokenize(s) {
+    s = s.replace(/−/g, '-').replace(/×|·/g, '*').replace(/÷/g, '/').replace(/π/g, 'pi').replace(/√/g, 'sqrt').replace(/\*\*/g, '^');
+    const out = []; let i = 0;
+    while (i < s.length) {
+      const c = s[i];
+      if (/\s/.test(c)) { i++; continue; }
+      if (/[0-9.]/.test(c)) { let j = i; while (j < s.length && /[0-9.]/.test(s[j])) j++; if (s[j] === 'e' && /[-+0-9]/.test(s[j + 1] || '') && /[0-9]/.test(s[j + 1] === '-' || s[j + 1] === '+' ? s[j + 2] : s[j + 1])) { j += 2; while (j < s.length && /[0-9]/.test(s[j])) j++; } out.push({ t: 'n', v: parseFloat(s.slice(i, j)) }); i = j; continue; }
+      if (/[a-zA-Z_]/.test(c)) { let j = i; while (j < s.length && /[a-zA-Z_0-9]/.test(s[j])) j++; out.push({ t: 'id', v: s.slice(i, j).toLowerCase() }); i = j; continue; }
+      if ('+-*/^(),'.includes(c)) { out.push({ t: 'op', v: c }); i++; continue; }
+      throw new Error('Unexpected character "' + c + '"');
+    }
+    return out;
+  }
+  function compile(src) {
+    const tk = tokenize(src); let p = 0;
+    const peek = () => tk[p], next = () => tk[p++];
+    const isOp = v => tk[p] && tk[p].t === 'op' && tk[p].v === v;
+    function expr() { let a = term(); while (isOp('+') || isOp('-')) { const o = next().v, b = term(), A = a; a = o === '+' ? e => Cx.add(A(e), b(e)) : e => Cx.sub(A(e), b(e)); } return a; }
+    function term() {
+      let a = unary();
+      for (; ;) {
+        if (isOp('*') || isOp('/')) { const o = next().v, b = unary(), A = a; a = o === '*' ? e => Cx.mul(A(e), b(e)) : e => Cx.div(A(e), b(e)); }
+        else if (peek() && (peek().t === 'n' || peek().t === 'id' || isOp('('))) { const b = power(), A = a; a = e => Cx.mul(A(e), b(e)); }
+        else break;
+      }
+      return a;
+    }
+    function unary() { if (isOp('-')) { next(); const a = unary(); return e => Cx.neg(a(e)); } if (isOp('+')) { next(); return unary(); } return power(); }
+    function power() { const a = primary(); if (isOp('^')) { next(); const b = unary(); return e => Cx.pow(a(e), b(e)); } return a; }
+    function primary() {
+      const t = next();
+      if (!t) throw new Error('Expression ended too early');
+      if (t.t === 'n') { const v = [t.v, 0]; return () => v; }
+      if (t.t === 'op' && t.v === '(') { const a = expr(); if (!isOp(')')) throw new Error('Missing ")"'); next(); return a; }
+      if (t.t === 'id') {
+        if (F[t.v]) {
+          if (!isOp('(')) throw new Error(t.v + ' needs brackets, e.g. ' + t.v + '(1+i)');
+          next(); const a = expr(); if (!isOp(')')) throw new Error('Missing ")"'); next(); const f = F[t.v]; return e => f(a(e));
+        }
+        if (t.v === 'i' || t.v === 'j') return () => [0, 1];
+        if (t.v === 'pi') return () => [PI, 0];
+        if (t.v === 'e') return () => [Math.E, 0];
+        const name = t.v; return e => { if (e && name in e) return e[name]; throw new Error('Unknown name "' + name + '"'); };
+      }
+      throw new Error('Unexpected "' + t.v + '"');
+    }
+    const f = expr(); if (p < tk.length) throw new Error('Unexpected "' + tk[p].v + '"');
+    return f;
+  }
+  return { compile, eval: (s, env) => compile(s)(env || {}) };
+})();
+
+/* ---------- contour integration: ∫ f(z) dz along z = path(t), t in [a,b] (composite Simpson) ---------- */
+function contourInt(f, path, a, b, N = 2000) {
+  if (N % 2) N++;
+  const h = (b - a) / N, d = h * 1e-3;
+  let s = [0, 0];
+  for (let k = 0; k <= N; k++) {
+    const t = a + k * h, z = path(t), dz = Cx.scale(Cx.sub(path(t + d), path(t - d)), 1 / (2 * d));
+    const w = k === 0 || k === N ? 1 : (k % 2 ? 4 : 2);
+    s = Cx.add(s, Cx.scale(Cx.mul(f(z), dz), w));
+  }
+  return Cx.scale(s, h / 3);
+}
+const circlePath = (c, r) => t => Cx.add(c, Cx.polar(r, t));
+
+/* ---------- colours ---------- */
+function hsl2rgb(h, s, l) { // h in [0,1)
+  const a = s * Math.min(l, 1 - l);
+  const f = n => { const k = (n + h * 12) % 12; return l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)); };
+  return [f(0) * 255, f(8) * 255, f(4) * 255];
+}
+function phaseRGB(t, light = 0.5) { let h = (t / TAU) % 1; if (h < 0) h += 1; return hsl2rgb(h, 0.85, light); }
+function heatRGB(u) { // 0..1 -> perceptual blue->teal->yellow
+  u = Math.max(0, Math.min(1, u));
+  const st = [[48, 18, 120], [33, 102, 172], [32, 164, 160], [110, 200, 90], [240, 220, 60]];
+  const x = u * (st.length - 1), i = Math.min(st.length - 2, Math.floor(x)), f = x - i;
+  return st[i].map((v, k) => v + (st[i + 1][k] - v) * f);
+}
+const rgbs = c => `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`;
+
+/* ---------- redraw registry (resize + theme change) ---------- */
+const _views = [];
+let _rzT = 0;
+window.addEventListener('resize', () => { clearTimeout(_rzT); _rzT = setTimeout(() => _views.forEach(v => v.resize()), 120); });
+function redrawAll() { _views.forEach(v => v.redraw()); }
+
+/* ---------- 2-D complex plane ---------- */
+class Plane {
+  constructor(cv, o = {}) {
+    this.cv = typeof cv === 'string' ? $(cv) : cv; this.ctx = this.cv.getContext('2d');
+    this.cx = o.cx ?? 0; this.cy = o.cy ?? 0; this.span = o.span ?? 3; this.aspect = o.aspect ?? 0.7;
+    this.gridOn = o.grid !== false; this.snap = o.snap ?? 0.05; this.axisLabels = o.axisLabels ?? ['Re', 'Im'];
+    this.draw = o.draw || (() => { }); this.drags = []; this.onClick = o.onClick || null; this.active = null;
+    this._bind(); _views.push(this); this.resize();
+  }
+  resize() {
+    const dpr = window.devicePixelRatio || 1, w = this.cv.clientWidth || 600, h = Math.round(w * this.aspect);
+    this.cv.style.height = h + 'px'; this.cv.width = Math.round(w * dpr); this.cv.height = Math.round(h * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); this.W = w; this.H = h; this.dpr = dpr; this.redraw();
+  }
+  get k() { return this.W / (2 * this.span); }
+  X(x) { return this.W / 2 + (x - this.cx) * this.k; }
+  Y(y) { return this.H / 2 - (y - this.cy) * this.k; }
+  wx(px) { return (px - this.W / 2) / this.k + this.cx; }
+  wy(py) { return -(py - this.H / 2) / this.k + this.cy; }
+  get x0() { return this.wx(0); } get x1() { return this.wx(this.W); }
+  get y0() { return this.wy(this.H); } get y1() { return this.wy(0); }
+  redraw() { if (!this.W) return; const c = this.ctx; c.save(); c.fillStyle = cssv('--canvas'); c.fillRect(0, 0, this.W, this.H); c.restore(); if (this.gridOn) this.grid(); this.draw(this); }
+  step() { const raw = 55 / this.k, p = Math.pow(10, Math.floor(Math.log10(raw))); for (const m of [1, 2, 5, 10]) if (m * p >= raw) return m * p; return 10 * p; }
+  grid() {
+    const c = this.ctx, s = this.step(); c.save(); c.lineWidth = 1; c.strokeStyle = cssv('--grid');
+    c.beginPath();
+    for (let x = Math.ceil(this.x0 / s) * s; x <= this.x1; x += s) { const X = Math.round(this.X(x)) + .5; c.moveTo(X, 0); c.lineTo(X, this.H); }
+    for (let y = Math.ceil(this.y0 / s) * s; y <= this.y1; y += s) { const Y = Math.round(this.Y(y)) + .5; c.moveTo(0, Y); c.lineTo(this.W, Y); }
+    c.stroke();
+    c.strokeStyle = cssv('--axis'); c.lineWidth = 1.3; c.beginPath();
+    const ox = this.X(0), oy = this.Y(0); c.moveTo(0, oy); c.lineTo(this.W, oy); c.moveTo(ox, 0); c.lineTo(ox, this.H); c.stroke();
+    c.fillStyle = cssv('--muted'); c.font = '11px system-ui,sans-serif';
+    const lx = Math.min(Math.max(ox, 4), this.W - 30), ly = Math.min(Math.max(oy, 12), this.H - 4);
+    c.textAlign = 'center';
+    for (let x = Math.ceil(this.x0 / s) * s; x <= this.x1; x += s) { if (Math.abs(x) < s / 2) continue; c.fillText(fnum(x, 3), this.X(x), ly + 13 > this.H ? ly - 4 : ly + 13); }
+    c.textAlign = 'left';
+    for (let y = Math.ceil(this.y0 / s) * s; y <= this.y1; y += s) { if (Math.abs(y) < s / 2) continue; c.fillText(fnum(y, 3) + (this.axisLabels[1] === 'Im' ? 'i' : ''), lx + 4, this.Y(y) + 4); }
+    c.font = '600 12px system-ui,sans-serif'; c.fillStyle = cssv('--axis');
+    if (this.axisLabels[0]) { c.textAlign = 'right'; c.fillText(this.axisLabels[0], this.W - 6, Math.min(Math.max(oy - 6, 14), this.H - 6)); }
+    if (this.axisLabels[1]) { c.textAlign = 'left'; c.fillText(this.axisLabels[1], Math.min(Math.max(ox + 6, 6), this.W - 30), 14); }
+    c.restore();
+  }
+  col(v) { return v && v.startsWith('--') ? cssv(v) : (v || cssv('--accent')); }
+  line(a, b, o = {}) { const c = this.ctx; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; if (o.dash) c.setLineDash(o.dash); c.globalAlpha = o.alpha ?? 1; c.beginPath(); c.moveTo(this.X(a[0]), this.Y(a[1])); c.lineTo(this.X(b[0]), this.Y(b[1])); c.stroke(); c.restore(); }
+  lineInf(p, d, o = {}) { const L = 1e4; this.line([p[0] - d[0] * L, p[1] - d[1] * L], [p[0] + d[0] * L, p[1] + d[1] * L], o); }
+  arrow(a, b, o = {}) {
+    const c = this.ctx, x0 = this.X(a[0]), y0 = this.Y(a[1]), x1 = this.X(b[0]), y1 = this.Y(b[1]), L = Math.hypot(x1 - x0, y1 - y0);
+    c.save(); c.strokeStyle = c.fillStyle = this.col(o.color); c.lineWidth = o.width || 2.5; c.globalAlpha = o.alpha ?? 1; if (o.dash) c.setLineDash(o.dash);
+    if (L < 1) { c.restore(); return; }
+    const h = Math.min(o.head || 11, L * 0.5), ux = (x1 - x0) / L, uy = (y1 - y0) / L;
+    c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1 - ux * h * 0.8, y1 - uy * h * 0.8); c.stroke(); c.setLineDash([]);
+    c.beginPath(); c.moveTo(x1, y1); c.lineTo(x1 - ux * h - uy * h * 0.45, y1 - uy * h + ux * h * 0.45); c.lineTo(x1 - ux * h + uy * h * 0.45, y1 - uy * h - ux * h * 0.45); c.closePath(); c.fill(); c.restore();
+  }
+  dot(z, o = {}) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(o.color); c.globalAlpha = o.alpha ?? 1;
+    c.beginPath(); c.arc(this.X(z[0]), this.Y(z[1]), o.r || 5, 0, TAU);
+    if (o.hollow) { c.strokeStyle = c.fillStyle; c.lineWidth = 2; c.stroke(); } else c.fill();
+    if (o.ring) { c.strokeStyle = cssv('--canvas'); c.lineWidth = 2; c.stroke(); }
+    c.restore(); if (o.label) this.label(z, o.label, o);
+  }
+  label(z, s, o = {}) {
+    const c = this.ctx; c.save(); c.font = o.font || '600 13px system-ui,sans-serif'; c.fillStyle = this.col(o.lcolor || o.color);
+    c.textAlign = o.align || 'left'; const X = this.X(z[0]) + (o.dx ?? 8), Y = this.Y(z[1]) + (o.dy ?? -8);
+    if (o.bg !== false) { const w = c.measureText(s).width, ax = c.textAlign === 'center' ? X - w / 2 : c.textAlign === 'right' ? X - w : X; c.globalAlpha = 0.75; c.fillStyle = cssv('--canvas'); c.fillRect(ax - 2, Y - 12, w + 4, 16); c.globalAlpha = 1; c.fillStyle = this.col(o.lcolor || o.color); }
+    c.fillText(s, X, Y); c.restore();
+  }
+  text(px, py, s, o = {}) { const c = this.ctx; c.save(); c.font = o.font || '600 13px system-ui,sans-serif'; c.fillStyle = this.col(o.color || '--fg'); c.textAlign = o.align || 'left'; c.fillText(s, px, py); c.restore(); }
+  circle(ctr, r, o = {}) {
+    const c = this.ctx; c.save(); c.beginPath(); c.arc(this.X(ctr[0]), this.Y(ctr[1]), Math.abs(r) * this.k, 0, TAU);
+    if (o.fill) { c.fillStyle = this.col(o.fill); c.globalAlpha = o.fillAlpha ?? 0.15; c.fill(); c.globalAlpha = 1; }
+    if (o.color !== 'none') { c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; if (o.dash) c.setLineDash(o.dash); c.stroke(); }
+    c.restore();
+  }
+  path(pts, o = {}) {
+    const c = this.ctx; if (!pts.length) return; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; c.globalAlpha = o.alpha ?? 1; if (o.dash) c.setLineDash(o.dash);
+    c.beginPath(); let pen = false;
+    for (const p of pts) { if (!p || !isFinite(p[0]) || !isFinite(p[1]) || Math.abs(p[0]) > 1e6 || Math.abs(p[1]) > 1e6) { pen = false; continue; } const X = this.X(p[0]), Y = this.Y(p[1]); if (pen) c.lineTo(X, Y); else { c.moveTo(X, Y); pen = true; } }
+    if (o.close) c.closePath();
+    if (o.fill) { c.fillStyle = this.col(o.fill); c.globalAlpha = o.fillAlpha ?? 0.15; c.fill(); c.globalAlpha = o.alpha ?? 1; }
+    if (o.color !== 'none') c.stroke(); c.restore();
+  }
+  angleArc(t0, t1, rpx, o = {}, ctr = [0, 0]) {
+    const c = this.ctx; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 1.8; c.beginPath();
+    c.arc(this.X(ctr[0]), this.Y(ctr[1]), rpx, -t0, -t1, t1 > t0); c.stroke(); c.restore();
+  }
+  /* shade region where test(x,y) is true */
+  region(test, color, alpha = 0.22, res = 3) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(color); c.globalAlpha = alpha;
+    for (let py = 0; py < this.H; py += res) for (let px = 0; px < this.W; px += res) if (test(this.wx(px + res / 2), this.wy(py + res / 2))) c.fillRect(px, py, res, res);
+    c.restore();
+  }
+  /* implicit curve F(x,y)=0 by marching squares (sign changes) */
+  implicit(Fn, o = {}, res = 3) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(o.color); const nx = Math.ceil(this.W / res) + 1, ny = Math.ceil(this.H / res) + 1; const v = new Float64Array(nx * ny);
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) v[j * nx + i] = Fn(this.wx(i * res), this.wy(j * res));
+    for (let j = 0; j < ny - 1; j++) for (let i = 0; i < nx - 1; i++) { const a = v[j * nx + i], b = v[j * nx + i + 1], d = v[(j + 1) * nx + i]; if (!isFinite(a) || !isFinite(b) || !isFinite(d)) continue; if ((a > 0) !== (b > 0) || (a > 0) !== (d > 0)) { if (o.maxJump && (Math.abs(a - b) > o.maxJump || Math.abs(a - d) > o.maxJump)) continue; c.fillRect(i * res - (o.width || 2) / 2 + res / 2, j * res - (o.width || 2) / 2 + res / 2, o.width || 2.4, o.width || 2.4); } }
+    c.restore();
+  }
+  /* domain colouring of w=f(z) : hue = arg w, brightness bands = log|w| */
+  domain(f, o = {}) {
+    const res = o.res || 2, c = this.ctx, w = Math.ceil(this.W / res), h = Math.ceil(this.H / res);
+    const img = c.createImageData(w, h), d = img.data;
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+      const z = [this.wx(i * res + res / 2), this.wy(j * res + res / 2)], v = f(z), k = (j * w + i) * 4;
+      if (!isFinite(v[0]) || !isFinite(v[1])) { d[k] = d[k + 1] = d[k + 2] = 255; d[k + 3] = 255; continue; }
+      const m = Math.hypot(v[0], v[1]); let L = 0.5;
+      if (o.bands !== false) { const fr = (Math.log2(m) % 1 + 1) % 1; L = 0.32 + 0.3 * fr; }
+      const rgb = phaseRGB(Math.atan2(v[1], v[0]), L); d[k] = rgb[0]; d[k + 1] = rgb[1]; d[k + 2] = rgb[2]; d[k + 3] = 255;
+    }
+    const tmp = document.createElement('canvas'); tmp.width = w; tmp.height = h; tmp.getContext('2d').putImageData(img, 0, 0);
+    c.save(); c.imageSmoothingEnabled = true; c.globalAlpha = o.alpha ?? 1; c.drawImage(tmp, 0, 0, this.W, this.H); c.restore();
+  }
+  addDrag(get, set, o = {}) { this.drags.push({ get, set, r: o.r || 16 }); this.cv.style.touchAction = 'none'; this.cv.style.cursor = 'grab'; }
+  _bind() {
+    const pos = e => { const b = this.cv.getBoundingClientRect(); return [e.clientX - b.left, e.clientY - b.top]; };
+    const snapv = v => this.snap ? Math.round(v / this.snap) * this.snap : v;
+    this.cv.addEventListener('pointerdown', e => {
+      const [px, py] = pos(e); let best = null, bd = 1e9;
+      for (const d of this.drags) { const z = d.get(); const dd = Math.hypot(this.X(z[0]) - px, this.Y(z[1]) - py); if (dd < d.r && dd < bd) { bd = dd; best = d; } }
+      if (best) { this.active = best; this.cv.setPointerCapture(e.pointerId); this.cv.style.cursor = 'grabbing'; e.preventDefault(); }
+      else if (this.onClick) { this.onClick([snapv(this.wx(px)), snapv(this.wy(py))]); this.redraw(); }
+    });
+    this.cv.addEventListener('pointermove', e => {
+      if (!this.active) return; const [px, py] = pos(e);
+      this.active.set([snapv(this.wx(px)), snapv(this.wy(py))]); this.redraw(); if (this.onchange) this.onchange();
+    });
+    const up = () => { if (this.active) { this.active = null; this.cv.style.cursor = this.drags.length ? 'grab' : ''; } };
+    this.cv.addEventListener('pointerup', up); this.cv.addEventListener('pointercancel', up);
+  }
+}
+
+/* ---------- simple 2-D function graph (real x, real y) ---------- */
+class Graph extends Plane {
+  constructor(cv, o = {}) { super(cv, Object.assign({ axisLabels: o.axisLabels || ['x', 'y'], snap: 0 }, o)); }
+  fn(f, o = {}) { const pts = []; const n = o.n || 600; for (let i = 0; i <= n; i++) { const x = this.x0 + (this.x1 - this.x0) * i / n; const y = f(x); pts.push(isFinite(y) && Math.abs(y) < 1e5 ? [x, y] : null); } this.path(pts, o); }
+}
+
+/* ---------- rotatable 3-D surface z = h(x,y) ---------- */
+class Surf3D {
+  constructor(cv, o = {}) {
+    this.cv = typeof cv === 'string' ? $(cv) : cv; this.ctx = this.cv.getContext('2d');
+    Object.assign(this, { xr: [-2, 2], yr: [-2, 2], zr: [0, 4], n: 46, yaw: -0.65, pitch: 0.55, zoom: 1, aspect: 0.72, zs: 0.9, labels: ['x', 'y', 'z'], wire: true }, o);
+    this.h = o.h; this.color = o.color || null; this.extra = o.extra || null;
+    this._bind(); _views.push(this); this.build(); this.resize();
+  }
+  setFn(h, color) { this.h = h; if (color !== undefined) this.color = color; this.build(); this.redraw(); }
+  build() {
+    const n = this.n, V = [];
+    for (let j = 0; j <= n; j++) for (let i = 0; i <= n; i++) {
+      let x, y, hv, u = 0, v = 0;
+      if (this.param) { // parametric surface (u,v) -> [x, y, height]
+        u = this.ur[0] + (this.ur[1] - this.ur[0]) * i / n; v = this.vr[0] + (this.vr[1] - this.vr[0]) * j / n;
+        [x, y, hv] = this.param(u, v);
+      } else { x = this.xr[0] + (this.xr[1] - this.xr[0]) * i / n; y = this.yr[0] + (this.yr[1] - this.yr[0]) * j / n; hv = this.h(x, y); }
+      if (!isFinite(hv)) hv = this.zr[1]; const hc = Math.max(this.zr[0], Math.min(this.zr[1], hv));
+      V.push({ x, y, u, v, h: hc, raw: hv, X: 2 * (x - this.xr[0]) / (this.xr[1] - this.xr[0]) - 1, Y: 2 * (y - this.yr[0]) / (this.yr[1] - this.yr[0]) - 1, Z: (2 * (hc - this.zr[0]) / (this.zr[1] - this.zr[0]) - 1) * this.zs });
+    }
+    this.V = V;
+  }
+  resize() {
+    const dpr = window.devicePixelRatio || 1, w = this.cv.clientWidth || 600, h = Math.round(w * this.aspect);
+    this.cv.style.height = h + 'px'; this.cv.width = Math.round(w * dpr); this.cv.height = Math.round(h * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); this.W = w; this.H = h; this.redraw();
+  }
+  proj(X, Y, Z) {
+    const cy = Math.cos(this.yaw), sy = Math.sin(this.yaw), cp = Math.cos(this.pitch), sp = Math.sin(this.pitch);
+    const x1 = X * cy - Y * sy, y1 = X * sy + Y * cy, y2 = y1 * cp - Z * sp, z2 = y1 * sp + Z * cp;
+    const f = 4 / (4 + y2), S = Math.min(this.W, this.H / 0.9) * 0.34 * this.zoom;
+    return [this.W / 2 + x1 * f * S, this.H / 2 + 10 - z2 * f * S, y2];
+  }
+  redraw() {
+    if (!this.W) return; const c = this.ctx, n = this.n, V = this.V;
+    c.save(); c.fillStyle = cssv('--canvas'); c.fillRect(0, 0, this.W, this.H);
+    const P = V.map(v => this.proj(v.X, v.Y, v.Z));
+    // base box
+    const bz = -this.zs, tz = this.zs, corners = [[-1, -1], [1, -1], [1, 1], [-1, 1]];
+    c.strokeStyle = cssv('--axis'); c.lineWidth = 1; c.globalAlpha = 0.55; c.beginPath();
+    corners.forEach((q, i) => { const a = this.proj(q[0], q[1], bz), b = this.proj(corners[(i + 1) % 4][0], corners[(i + 1) % 4][1], bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); });
+    c.stroke(); c.globalAlpha = 1;
+    // grid on floor
+    c.strokeStyle = cssv('--grid'); c.beginPath();
+    for (let t = -1; t <= 1.001; t += 0.25) { let a = this.proj(t, -1, bz), b = this.proj(t, 1, bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); a = this.proj(-1, t, bz); b = this.proj(1, t, bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); }
+    c.stroke();
+    const quads = [];
+    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
+      const a = j * (n + 1) + i, b = a + 1, d = a + n + 1, e = d + 1;
+      quads.push([a, b, e, d, (P[a][2] + P[b][2] + P[d][2] + P[e][2]) / 4]);
+    }
+    quads.sort((p, q) => q[4] - p[4]);
+    const L = [0.35, -0.45, 0.82], ll = Math.hypot(...L);
+    const wire = cssv('--canvas');
+    for (const q of quads) {
+      const A = V[q[0]], B = V[q[1]], E = V[q[2]], D = V[q[3]];
+      const ux = B.X - A.X, uy = B.Y - A.Y, uz = B.Z - A.Z, vx = D.X - A.X, vy = D.Y - A.Y, vz = D.Z - A.Z;
+      let nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx; const nl = Math.hypot(nx, ny, nz) || 1;
+      const lam = Math.abs((nx * L[0] + ny * L[1] + nz * L[2]) / (nl * ll)), sh = 0.5 + 0.5 * lam;
+      let rgb;
+      if (this.color) rgb = this.color((A.x + E.x) / 2, (A.y + E.y) / 2, (A.raw + E.raw) / 2, (A.u + E.u) / 2, (A.v + E.v) / 2);
+      else rgb = heatRGB(((A.h + B.h + D.h + E.h) / 4 - this.zr[0]) / (this.zr[1] - this.zr[0]));
+      c.fillStyle = rgbs(rgb.map(v => v * sh));
+      c.beginPath(); [q[0], q[1], q[2], q[3]].forEach((k, m) => m ? c.lineTo(P[k][0], P[k][1]) : c.moveTo(P[k][0], P[k][1])); c.closePath(); c.fill();
+      if (this.wire) { c.strokeStyle = wire; c.globalAlpha = 0.18; c.lineWidth = 0.6; c.stroke(); c.globalAlpha = 1; } else { c.strokeStyle = c.fillStyle; c.lineWidth = 0.5; c.stroke(); }
+    }
+    if (this.extra) this.extra(this);
+    // axis labels
+    c.fillStyle = cssv('--fg'); c.font = '600 13px system-ui,sans-serif'; c.textAlign = 'center';
+    let p = this.proj(1.18, -1, bz); c.fillText(this.labels[0] + ' →', p[0], p[1]);
+    p = this.proj(-1, 1.18, bz); c.fillText(this.labels[1] + ' →', p[0], p[1]);
+    p = this.proj(-1, -1, tz + 0.15); c.fillText(this.labels[2], p[0], p[1]);
+    c.font = '11px system-ui,sans-serif'; c.fillStyle = cssv('--muted');
+    p = this.proj(-1, -1, bz); c.fillText('(' + fnum(this.xr[0], 2) + ',' + fnum(this.yr[0], 2) + ')', p[0], p[1] + 14);
+    p = this.proj(1, -1, bz); c.fillText(fnum(this.xr[1], 2), p[0], p[1] + 14);
+    p = this.proj(-1, 1, bz); c.fillText(fnum(this.yr[1], 2), p[0], p[1] + 14);
+    const zt = this.proj(-1, -1, tz); c.textAlign = 'right'; c.fillText(fnum(this.zr[1], 2), zt[0] - 6, zt[1]);
+    c.strokeStyle = cssv('--axis'); c.globalAlpha = 0.5; c.beginPath(); const z0 = this.proj(-1, -1, bz); c.moveTo(z0[0], z0[1]); c.lineTo(zt[0], zt[1]); c.stroke();
+    c.restore();
+  }
+  pt3(x, y, h) { // world -> screen
+    return this.proj(2 * (x - this.xr[0]) / (this.xr[1] - this.xr[0]) - 1, 2 * (y - this.yr[0]) / (this.yr[1] - this.yr[0]) - 1, (2 * (Math.max(this.zr[0], Math.min(this.zr[1], h)) - this.zr[0]) / (this.zr[1] - this.zr[0]) - 1) * this.zs);
+  }
+  _bind() {
+    let drag = null; this.cv.style.touchAction = 'none'; this.cv.style.cursor = 'grab';
+    this.cv.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY, this.yaw, this.pitch]; this.cv.setPointerCapture(e.pointerId); this.cv.style.cursor = 'grabbing'; });
+    this.cv.addEventListener('pointermove', e => { if (!drag) return; this.yaw = drag[2] - (e.clientX - drag[0]) * 0.01; this.pitch = Math.max(-0.2, Math.min(1.5, drag[3] + (e.clientY - drag[1]) * 0.01)); this.redraw(); });
+    const up = () => { drag = null; this.cv.style.cursor = 'grab'; };
+    this.cv.addEventListener('pointerup', up); this.cv.addEventListener('pointercancel', up);
+  }
+}
+
+/* ---------- animation helper ---------- */
+function animator(step) { // step(dtSeconds) ; returns {play,pause,toggle,running}
+  let on = false, last = 0;
+  const tick = t => { if (!on) return; const dt = last ? Math.min(0.05, (t - last) / 1000) : 0; last = t; step(dt); requestAnimationFrame(tick); };
+  return { get running() { return on; }, play() { if (!on) { on = true; last = 0; requestAnimationFrame(tick); } }, pause() { on = false; }, toggle() { on ? this.pause() : this.play(); return on; } };
+}
+/* ---------- slider wiring: updates <output> next to each range ---------- */
+function val(id) { const el = document.getElementById(id); return el.type === 'checkbox' ? el.checked : (el.type === 'range' || el.type === 'number' ? +el.value : el.value); }
+function watch(ids, cb, fmtMap = {}) {
+  ids.forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    const out = el.parentElement.querySelector('output');
+    const upd = () => { if (out) out.textContent = fmtMap[id] ? fmtMap[id](+el.value) : fnum(+el.value, 3); };
+    upd(); el.addEventListener('input', () => { upd(); cb(); }); el.addEventListener('change', () => { upd(); cb(); });
+  });
+}
+
+/* ---------- page chrome: TOC, theme, MCQs, chapter nav ---------- */
+onReady(() => {
+  const toc = $('#toc'); if (toc) {
+    toc.innerHTML = '<b>On this page</b>';
+    $$('main h2').forEach((h, i) => { if (!h.id) h.id = 's' + (i + 1); const a = document.createElement('a'); a.href = '#' + h.id; a.textContent = h.textContent; toc.appendChild(a); });
+    const links = $$('a', toc), hs = $$('main h2');
+    const spy = () => { let k = 0; hs.forEach((h, i) => { if (h.getBoundingClientRect().top < 120) k = i; }); links.forEach((a, i) => a.classList.toggle('on', i === k)); };
+    window.addEventListener('scroll', spy, { passive: true }); spy();
+  }
+  if (window.renderMathInElement) renderMathInElement(document.body, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '\\[', right: '\\]', display: true }, { left: '$', right: '$', display: false }, { left: '\\(', right: '\\)', display: false }], ignoredClasses: ['nomath'], throwOnError: false });
+  $$('.mcq').forEach(q => {
+    const ans = +q.dataset.ans, fb = $('.fb', q), bs = $$('.opts button', q);
+    bs.forEach((b, i) => b.addEventListener('click', () => {
+      bs.forEach(x => x.classList.remove('ok', 'bad'));
+      b.classList.add(i === ans ? 'ok' : 'bad');
+      if (fb) { fb.style.display = 'block'; const msg = i === ans ? (q.dataset.ok || 'Correct!') : (q.dataset.no || 'Not quite — think again.'); texMix(fb, (i === ans ? '✔ ' : '✘ ') + msg); }
+    }));
+    if (fb) fb.style.display = 'none';
+  });
+  const tb = $('#themeBtn');
+  if (tb) tb.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const nx = cur === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', nx);
+    try { localStorage.setItem('boas-theme', nx); } catch (e) { }
+    redrawAll();
+  });
+  const sel = $('#chapSel'); if (sel) sel.addEventListener('change', () => { location.href = sel.value; });
+});
+try { const t = localStorage.getItem('boas-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) { }
+
+</script>
+<script>
+
+onReady(() => {
+  const comp = src => { const g = Parser.compile(src); return q => g({ z: q }); };
+  /* ---------- Interactive 1: path dependence ---------- */
+  const A = [-1, -0.5], B = [1.5, 1];
+  let c1 = [-0.5, 1.2], c2 = [1, 1.6];
+  const sing = { 'z^2 - z': [], 'abs(z)^2': [], 'conj(z)': [], '1/z': [[0, 0]], 'exp(z)': [], '1/(z^2+1)': [[0, 1], [0, -1]] };
+  const pathPts = () => [A, c1, c2, B];
+  const integ = () => { const f = comp(val('pa-f')), P = pathPts(); let s = [0, 0]; for (let k = 0; k < 3; k++) { const p = P[k], q = P[k + 1]; s = Cx.add(s, contourInt(f, t => Cx.add(p, Cx.scale(Cx.sub(q, p), t)), 0, 1, 1200)); } return s; };
+  const PA = new Plane('#cv-path', { span: 2.6, cx: 0.25, cy: 0.4, aspect: 0.62, snap: 0.05, draw: p => {
+    (sing[val('pa-f')] || []).forEach(s => p.dot(s, { r: 6, color: '--fg', label: 'singular', lcolor: '--fg' }));
+    const P = pathPts(); for (let k = 0; k < 3; k++) p.arrow(P[k], P[k + 1], { color: '--accent', width: 2.5 });
+    p.dot(A, { r: 6, color: '--accent3', label: 'A' }); p.dot(B, { r: 6, color: '--accent3', label: 'B' });
+    p.dot(c1, { r: 7, color: '--accent2' }); p.dot(c2, { r: 7, color: '--accent2' });
+  }});
+  PA.addDrag(() => c1, v => { c1 = v; paOut(); }); PA.addDrag(() => c2, v => { c2 = v; paOut(); });
+  const paOut = () => { const I = integ(), k = val('pa-f'); let s = `$\\int_A^B f\\,dz=${Cx.tex(I, 5)}$`; if (k === 'z^2 - z') { const F = q => Cx.sub(Cx.scale(Cx.ipow(q, 3), 1 / 3), Cx.scale(Cx.mul(q, q), 0.5)); s += ` &nbsp; antiderivative: $F(B)-F(A)=${Cx.tex(Cx.sub(F(B), F(A)), 5)}$ ✔ path-independent`; } if (k === 'exp(z)') s += ` &nbsp; $e^B-e^A=${Cx.tex(Cx.sub(Cx.exp(B), Cx.exp(A)), 5)}$ ✔`; if (k === '1/z' || k === '1/(z^2+1)') s += ' &nbsp; Drag the path across a black dot: the value jumps by $\\pm2\\pi i\\times$(residue).'; if (k === 'abs(z)^2' || k === 'conj(z)') s += ' &nbsp; <b>Changes with every move: not analytic.</b>'; texMix('#pa-out', s); };
+  $('#pa-f').addEventListener('change', () => { PA.redraw(); paOut(); }); $('#pa-reset').onclick = () => { c1 = [-0.5, 1.2]; c2 = [1, 1.6]; PA.redraw(); paOut(); };
+  paOut();
+
+  /* ---------- Interactive 2: Cauchy integral formula ---------- */
+  let a = [0.5, 0.3], cc = [0, 0], rh = [1.6, 0];
+  const deriv = (g, z, n) => { if (n === 0) return g(z); // numeric derivative via Cauchy formula on a small circle
+    const r = 0.3; const I = contourInt(q => Cx.div(g(q), Cx.ipow(Cx.sub(q, z), n + 1)), circlePath(z, r), 0, TAU, 800); let f = 1; for (let k = 2; k <= n; k++) f *= k; return Cx.scale(Cx.div(I, [0, TAU]), f); };
+  const CF = new Plane('#cv-cif', { span: 3, aspect: 0.62, snap: 0.05, draw: p => {
+    const R = Cx.abs(Cx.sub(rh, cc)), inside = Cx.abs(Cx.sub(a, cc)) < R;
+    p.circle(cc, R, { color: '--accent', width: 2.5, fill: '--accent', fillAlpha: 0.06 });
+    for (let k = 0; k < 4; k++) { const t = k * PI / 2 + 0.3; p.arrow(Cx.add(cc, Cx.polar(R, t)), Cx.add(cc, Cx.polar(R, t + 0.25)), { color: '--accent', width: 2.5 }); }
+    if (val('cf-g') === '1/(z-2)') p.dot([2, 0], { r: 6, color: '--fg', label: 'pole of g' });
+    p.dot(a, { r: 8, color: inside ? '--accent3' : '--warn', label: 'a (drag)' }); p.dot(cc, { r: 5, color: '--accent' }); p.dot(rh, { r: 6, color: '--accent2', label: 'radius' });
+  }});
+  CF.addDrag(() => a, v => { a = v; cfOut(); }); CF.addDrag(() => cc, v => { const d = Cx.sub(rh, cc); cc = v; rh = Cx.add(cc, d); cfOut(); }); CF.addDrag(() => rh, v => { rh = v; cfOut(); });
+  const cfOut = () => {
+    const g = comp(val('cf-g')), m = val('cf-n'), n = m - 1, R = Cx.abs(Cx.sub(rh, cc)), inside = Cx.abs(Cx.sub(a, cc)) < R;
+    if (Math.abs(Cx.abs(Cx.sub(a, cc)) - R) < 0.04) { texMix('#cf-out', '$a$ is on the contour: the integral is not defined. Move it off.'); return; }
+    const I = contourInt(q => Cx.div(g(q), Cx.ipow(Cx.sub(q, a), m)), circlePath(cc, R), 0, TAU, 3000);
+    let fac = 1; for (let k = 2; k <= n; k++) fac *= k;
+    const pred = inside ? Cx.scale(Cx.mul([0, TAU], deriv(g, a, n)), 1 / fac) : [0, 0];
+    const poleIn = val('cf-g') === '1/(z-2)' && Cx.abs(Cx.sub([2, 0], cc)) < R;
+    texMix('#cf-out', `Numerical $\\oint_C\\frac{g(z)}{(z-a)^{${m}}}dz=${Cx.tex(I, 5)}$<br>Cauchy: ${inside ? `$\\frac{2\\pi i}{${n}!}g^{(${n})}(a)=${Cx.tex(pred, 5)}$` : '$a$ is outside $C$, so the integral is $0$'}` + (poleIn ? '<br><b style="color:var(--warn)">g itself has a pole inside C, so g is not analytic inside and the formula does not apply. The difference is the extra residue at 2 (Section 14.5).</b>' : (Cx.abs(Cx.sub(I, pred)) < 1e-4 * (1 + Cx.abs(I)) ? ' ✔ match' : '')));
+  };
+  $('#cf-g').addEventListener('change', () => { CF.redraw(); cfOut(); }); watch(['cf-n'], cfOut);
+  cfOut();
+});
+
+</script>
+</body>
+</html>

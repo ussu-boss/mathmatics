@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:110px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:85px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:collapse;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;margin:3px 4px;width:auto}
+.mx.det{border-radius:0}
+.mx td{border:0;padding:1px 8px;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.verdict{font-weight:700;font-size:1.05rem;margin:6px 0}
+.sys{font-family:"Cambria Math",Cambria,"Times New Roman",serif;display:inline-block;text-align:left;line-height:1.5}
+</style>
+<title>The Fundamental Tensor</title>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>18. The Fundamental (Metric) Tensor</h1>
+<p>ds² = g<sub>ij</sub>dx<sup>i</sup>dx<sup>j</sup> · Riemannian and Euclidean spaces · Metrics of the plane, of space and of the sphere · Contravariant metric g<sup>ij</sup> · Associate tensors · Raising and lowering indices · Order of indices · Length and angle &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 188–195</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">ds²</a><a href="#s2">Examples</a><a href="#s3">Metric lab</a><a href="#s4">g^ij</a><a href="#s5">Raise/lower</a><a href="#s6">Order of indices</a><a href="#s7">Length &amp; angle</a><a href="#s8">Vector lab</a><a href="#s9">Summary</a><a href="#s10">Exercise 18</a><a href="#s11">Practice</a><a href="#s12">Quiz</a><a href="#s13">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>Coordinates are just labels. Polar coordinates (r, θ) say nothing by themselves about distances: a step dθ is a short distance near the origin and a long one far away. The <b>metric tensor</b> g<sub>ij</sub> is the dictionary that turns coordinate steps into real distances:</p>
+<div class="eq">ds² = g<sub>ij</sub> dx<sup>i</sup> dx<sup>j</sup></div>
+<p>Once you have g<sub>ij</sub> you can measure everything: lengths, angles, areas and volumes. You can also convert any contravariant index into a covariant one and back. This is why it is called the <b>fundamental</b> tensor.</p>
+<div class="flow"><span>coordinates x<sup>i</sup></span><b>→</b><span>ds² = g<sub>ij</sub>dx<sup>i</sup>dx<sup>j</sup></span><b>→</b><span>g<sup>ij</sup> = inverse matrix</span><b>→</b><span>A<sub>i</sub> = g<sub>ij</sub>A<sup>j</sup>, A<sup>i</sup> = g<sup>ij</sup>A<sub>j</sub></span><b>→</b><span>|A|², cos θ, √g dV</span></div>
+<div class="box tip"><b class="t">Needed from earlier</b> Quadratic forms (Section 11). Contravariant and covariant vectors (Section 15). Contraction and inner products (Section 16). Conjugate symmetric tensors: B<sup>ij</sup> = inverse of A<sub>ij</sub> (Section 17). Exercise 17.1: only the symmetric part of g<sub>ij</sub> matters.</div>
+</section>
+
+<section id="s1">
+<h2>1. The metric and Riemannian space (Eqs. 1, 17)</h2>
+<div class="box def"><b class="t">Definition</b> If the squared distance between neighbouring points x<sup>i</sup> and x<sup>i</sup> + dx<sup>i</sup> is a quadratic form
+<div class="eq">ds² = g<sub>ij</sub> dx<sup>i</sup> dx<sup>j</sup> &nbsp;&nbsp;(1)</div>
+with g = det(g<sub>ij</sub>) ≠ 0, the space is a <b>Riemannian space</b>. The g<sub>ij</sub> may depend on position. If they are all <b>independent of x<sup>i</sup></b>, the space is called <b>Euclidean</b> (in the book's sense).</div>
+<ul>
+<li><b>Symmetric by choice:</b> ds² sees only g<sub>ij</sub> + g<sub>ji</sub> (Exercise 17.1), so one takes g<sub>ij</sub> = g<sub>ji</sub>. &nbsp;(17) &nbsp; Then g<sub>ij</sub> is a symmetric covariant tensor of rank two: the <b>fundamental</b> or <b>metric tensor</b>. In N dimensions it has N(N+1)/2 independent components.</li>
+<li><b>Orthogonal coordinates:</b> g<sub>ij</sub> = 0 for i ≠ j. Then ds² = h₁²(dx¹)² + h₂²(dx²)² + …, with <b>scale factors</b> h<sub>i</sub> = √g<sub>ii</sub>.</li>
+<li><b>Cartesian coordinates:</b> g<sub>ii</sub> = 1 and g<sub>ij</sub> = 0 (i ≠ j), i.e. g<sub>ij</sub> = δ<sub>ij</sub>.</li>
+</ul>
+<div class="box warnb"><b class="t">A note on the word "Euclidean"</b> Joshi calls a space Euclidean when the g<sub>ij</sub> are constants in the chosen coordinates. The flat plane in <b>polar</b> coordinates has g<sub>22</sub> = r², which is not constant, yet the plane is obviously flat. Whether a space is truly curved is decided by the curvature tensor (Section 24), not by the look of g<sub>ij</sub> in one coordinate system. The sphere's surface is genuinely curved: no coordinates can make its metric constant.</div>
+<div class="box fact"><b class="t">Volume element</b> The area or volume of a small coordinate cell is dV = √|g| dx¹dx²…dx<sup>N</sup>. Polar: r dr dθ. Spherical: r² sin θ dr dθ dφ. This is the √g used later in div and ∇² (Exercise 15.8).</div>
+</section>
+
+<section id="s2">
+<h2>2. Worked examples (Examples 1–5)</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Space / coordinates</th><th>ds²</th><th>g<sub>ij</sub></th><th>g = det</th></tr>
+<tr><td>Plane, Cartesian (x, y) — Ex. 1</td><td>dx² + dy²</td><td>diag(1, 1)</td><td>1</td></tr>
+<tr><td>Plane, polar (r, θ) — Ex. 2</td><td>dr² + r²dθ²</td><td>diag(1, r²)</td><td>r²</td></tr>
+<tr><td>Space, spherical (r, θ, φ) — Ex. 3(a)</td><td>dr² + r²dθ² + r²sin²θ dφ²</td><td>diag(1, r², r²sin²θ)</td><td>r⁴sin²θ</td></tr>
+<tr><td>Sphere r = a, (θ, φ) — Ex. 3(b)</td><td>a²(dθ² + sin²θ dφ²)</td><td>diag(a², a²sin²θ)</td><td>a⁴sin²θ</td></tr>
+<tr><td>Space, cylindrical (ρ, φ, z)</td><td>dρ² + ρ²dφ² + dz²</td><td>diag(1, ρ², 1)</td><td>ρ²</td></tr>
+<tr><td>Plane, oblique axes at angle α (Exercise 4)</td><td>(dx¹)² + (dx²)² + 2cos α dx¹dx²</td><td>[[1, cos α], [cos α, 1]]</td><td>sin²α</td></tr>
+<tr><td>Space, (u, v, w) of Example 4</td><td>see below</td><td>non-diagonal</td><td>4u²v²w²</td></tr>
+</table></div>
+<h3>Example 2: polar coordinates, the picture (Fig. 9)</h3>
+<p>From P = (r, θ) go to R = (r + dr, θ + dθ). The step has a radial part PQ = dr and a sideways part QR = (r + dr)dθ ≈ r dθ (dropping second-order terms). PQR is a right angle, so by Pythagoras PR² = dr² + r²dθ². The factor r² in g<sub>22</sub> says that the same dθ covers more ground farther out.</p>
+<h3>Example 4: a non-orthogonal system</h3>
+<p>x = vw, y = uw, z = uv. &nbsp;(14) &nbsp; Then dx = w dv + v dw, dy = w du + u dw, dz = v du + u dv. Squaring and adding:</p>
+<div class="eq">ds² = (v² + w²)du² + (w² + u²)dv² + (u² + v²)dw² + 2uv du dv + 2vw dv dw + 2uw du dw &nbsp;&nbsp;(15)</div>
+<div class="eq">[g<sub>ij</sub>] = <table class="mx"><tr><td>v² + w²</td><td>uv</td><td>uw</td></tr><tr><td>uv</td><td>w² + u²</td><td>vw</td></tr><tr><td>uw</td><td>vw</td><td>u² + v²</td></tr></table>, &nbsp; g = 4u²v²w² &nbsp;&nbsp;(16)</div>
+<p><b>Short cut:</b> g<sub>ij</sub> = (∂x/∂q<sup>i</sup>)·(∂x/∂q<sup>j</sup>), the dot products of the tangent vectors. In matrix form <b>g = JᵀJ</b> with J = ∂(x, y, z)/∂(u, v, w), so g = (det J)². Here det J = 2uvw, so g = 4u²v²w² ✓. The off-diagonal terms uv, vw, uw ≠ 0 mean the coordinate lines are not perpendicular.</p>
+<h3>Example 5: g<sup>ij</sup> in spherical coordinates</h3>
+<p>For a diagonal metric the inverse is just the reciprocals:</p>
+<div class="eq">g<sup>11</sup> = 1, &nbsp; g<sup>22</sup> = 1/r², &nbsp; g<sup>33</sup> = 1/(r²sin²θ), &nbsp; g<sup>ij</sup> = 0 (i ≠ j) &nbsp;&nbsp;(20)</div>
+<p class="small">For Example 4, g<sup>ij</sup> is no longer simple: e.g. g<sup>11</sup> = (u² + v² + w²)/(4v²w²) and g<sup>12</sup> = (w² − u² − v²)/(4uvw²).</p>
+</section>
+
+<section id="s3">
+<h2>3. 🔬 Metric lab: the same tiny circle, seen in coordinates</h2>
+<p>Left: the real plane (or sphere) with its coordinate grid. Right: the <b>coordinate plane</b> (q¹, q²), where the grid is square. Drag the point P (on either side). Around P, the set of points at real distance ε is a small <b>circle</b> on the left. In coordinates it becomes the <b>ellipse</b> g<sub>ij</sub>dq<sup>i</sup>dq<sup>j</sup> = ε² on the right. The shape of that ellipse <b>is</b> the metric at P: its axes are the eigenvectors of g<sub>ij</sub> and its semi-axes are ε/√λ.</p>
+<div class="lab">
+<div class="ctrl"><label>coordinates <select id="mSys"><option value="polar">plane, polar (r, θ)</option><option value="obl">plane, oblique axes (angle α)</option><option value="para">plane, parabolic (σ, τ)</option><option value="ell">plane, elliptic (μ, ν)</option><option value="sph">sphere surface (θ, φ)</option></select></label>
+<label id="mAl">α <input type="range" id="mA" min="20" max="160" step="1" value="60"><span id="mAv"></span></label>
+<label>ε <input type="range" id="mE" min="0.05" max="0.4" step="0.01" value="0.2"><span id="mEv"></span></label></div>
+<div class="grid2">
+<div><div class="small" style="text-align:center">real space</div><canvas id="cvMx" width="440" height="440"></canvas></div>
+<div><div class="small" style="text-align:center">coordinate plane (q¹ across, q² up)</div><canvas id="cvMq" width="440" height="440"></canvas></div>
+</div>
+<div class="readout out" id="mOut"></div>
+</div>
+</section>
+
+<section id="s4">
+<h2>4. The contravariant metric tensor g<sup>ij</sup> (Eqs. 18–20)</h2>
+<p>g<sub>ij</sub> is symmetric with g ≠ 0, so by Section 17 it has a conjugate:</p>
+<div class="eq">g<sup>ij</sup> = g<sup>ji</sup> = (cofactor of g<sub>ij</sub>)/g, &nbsp;&nbsp; g<sub>ij</sub>g<sup>jk</sup> = δ<sup>k</sup><sub>i</sub> &nbsp;&nbsp;(18, 19)</div>
+<ul>
+<li>As matrices, <b>[g<sup>ij</sup>] = [g<sub>ij</sub>]⁻¹</b>.</li>
+<li>g<sub>ij</sub> and g<sup>ij</sup> are best thought of as the covariant and contravariant components of the <b>same</b> tensor, the metric.</li>
+<li>Mixed components: g<sub>i</sub><sup>k</sup> = g<sup>k</sup><sub>i</sub> = δ<sup>k</sup><sub>i</sub> (27). The mixed metric is the Kronecker delta.</li>
+<li>Exercise 8 consequence: if you "lower" δ, you get δ<sub>jk</sub> ≡ g<sub>jl</sub>δ<sup>l</sup><sub>k</sub> = g<sub>jk</sub>, the metric itself. It equals the identity matrix only in Cartesian coordinates.</li>
+</ul>
+</section>
+
+<section id="s5">
+<h2>5. Associate tensors: raising and lowering indices (Eqs. 21–27)</h2>
+<div class="box def"><b class="t">Lowering and raising</b>
+<div class="eq">A<sub>j</sub> = g<sub>ij</sub>A<sup>i</sup> &nbsp;(lower), &nbsp;&nbsp;&nbsp; A<sup>k</sup> = g<sup>jk</sup>A<sub>j</sub> &nbsp;(raise) &nbsp;&nbsp;(21, 22)</div>
+A<sup>i</sup> and A<sub>i</sub> are the contravariant and covariant components of <b>one and the same vector</b>. They are called <b>associate</b> tensors. Raising undoes lowering: A<sub>j</sub>g<sup>jk</sup> = A<sup>i</sup>g<sub>ij</sub>g<sup>jk</sup> = A<sup>i</sup>δ<sup>k</sup><sub>i</sub> = A<sup>k</sup>.</div>
+<p>This is the precise version of the picture in Section 15: contravariant components lie along the coordinate directions and covariant components are perpendicular projections. In polar coordinates: A<sub>r</sub> = A<sup>r</sup>, A<sub>θ</sub> = r²A<sup>θ</sup>.</p>
+<h3>A rank-2 tensor has four associates</h3>
+<div class="eq">A<sup>ij</sup>g<sub>jk</sub> = A<sup>i</sup><sub>·k</sub> (lower the second), &nbsp; A<sup>ij</sup>g<sub>ik</sub> = A<sub>k</sub><sup>·j</sup> (lower the first), &nbsp; A<sup>ij</sup>g<sub>ik</sub>g<sub>jl</sub> = A<sub>kl</sub> &nbsp;&nbsp;(23)</div>
+<p>The dot marks the empty place so you can see <b>which</b> index was moved. In matrix language, with G = [g<sub>ij</sub>]: A<sup>i</sup><sub>·k</sub> = (AG), A<sub>k</sub><sup>·j</sup> = (GA), A<sub>kl</sub> = (GAG). Inverse relations (26): A<sup>i</sup><sub>·k</sub>g<sup>kj</sup> = A<sup>ij</sup>, A<sub>k</sub><sup>·i</sup>g<sup>kj</sup> = A<sup>ji</sup>, A<sub>ij</sub>g<sup>ik</sup>g<sup>jl</sup> = A<sup>kl</sup>.</p>
+</section>
+
+<section id="s6">
+<h2>6. The order of indices matters (Eqs. 24–32)</h2>
+<div class="eq">A<sup>i</sup><sub>·j</sub> = A<sup>ik</sup>g<sub>kj</sub>, &nbsp;&nbsp; A<sub>j</sub><sup>·i</sup> = A<sup>ki</sup>g<sub>kj</sub> &nbsp;&nbsp;(24)</div>
+<p>These are different, <b>A<sup>i</sup><sub>·j</sub> ≠ A<sub>j</sub><sup>·i</sup></b> (25), unless A<sup>ik</sup> is symmetric. So for a non-symmetric tensor, writing A<sup>i</sup><sub>j</sub> without saying which slot came first is ambiguous. In matrix language this is AG versus (GA)ᵀ = GᵀAᵀ = GAᵀ.</p>
+<p>For a rank-4 tensor A<sup>ijkl</sup>, lowering the first, second, third or fourth index gives four different mixed tensors (28a–d), e.g. A<sub>i</sub><sup>·jkl</sup> = A<sup>pjkl</sup>g<sub>pi</sub> and A<sup>i</sup><sub>·j</sub><sup>·kl</sup> = A<sup>ipkl</sup>g<sub>pj</sub>. Swapping i and j in the second one does <b>not</b> give the first (29, 30) unless A is symmetric in its first two indices. Lowering two indices gives six forms (31), and lowering all four gives the single covariant A<sub>ijkl</sub> = A<sup>pqrs</sup>g<sub>pi</sub>g<sub>qj</sub>g<sub>rk</sub>g<sub>sl</sub> (32).</p>
+<div class="box thm"><b class="t">Rule</b> Keep track of the <b>left-to-right position</b> of every index, whether it is up or down. Upper indices among themselves, lower indices among themselves, and the relative order of upper and lower indices are all significant.</div>
+<h3>Example 6: you may move a dummy pair up/down freely</h3>
+<p>A<sup>ij</sup>B<sub>ij</sub> = A<sub>ij</sub>B<sup>ij</sup>. &nbsp;(33) &nbsp; Proof: write A<sup>ij</sup> = A<sub>kl</sub>g<sup>ki</sup>g<sup>lj</sup> and B<sub>ij</sub> = B<sup>mn</sup>g<sub>mi</sub>g<sub>nj</sub> (34). Multiply: g<sup>ki</sup>g<sub>mi</sub> = δ<sup>k</sup><sub>m</sub> and g<sup>lj</sup>g<sub>nj</sub> = δ<sup>l</sup><sub>n</sub>, leaving A<sub>kl</sub>B<sup>kl</sup>. ∎ In general, in any contraction you can swap the heights of the two members of a dummy pair (the "see-saw" rule).</p>
+<h3>Example 7: in Cartesian coordinates the distinction vanishes</h3>
+<p>A<sub>i</sub> = g<sub>ij</sub>A<sup>j</sup> and g<sub>ij</sub> = δ<sub>ij</sub> give A<sub>i</sub> = A<sup>i</sup>. &nbsp;(35, 36) &nbsp; The same holds for every index of every tensor (Exercise 7). That is why elementary physics never needed upper and lower indices.</p>
+</section>
+
+<section id="s7">
+<h2>7. Length of a vector and angle between vectors (Eqs. 37–39)</h2>
+<div class="eq">A² = A<sub>i</sub>A<sup>i</sup> = g<sub>ij</sub>A<sup>i</sup>A<sup>j</sup> = g<sup>ij</sup>A<sub>i</sub>A<sub>j</sub> &nbsp;&nbsp;(37)</div>
+<div class="eq">AB cos θ = A<sub>i</sub>B<sup>i</sup> = g<sub>ij</sub>A<sup>i</sup>B<sup>j</sup> = g<sup>ij</sup>A<sub>i</sub>B<sub>j</sub>, &nbsp;&nbsp; cos θ = A<sub>i</sub>B<sup>i</sup> / √(A<sub>j</sub>A<sup>j</sup> · B<sub>k</sub>B<sup>k</sup>) &nbsp;&nbsp;(38, 39)</div>
+<p>All of these are full contractions, i.e. <b>scalars</b>: the same number in every coordinate system, exactly as a length or an angle should be.</p>
+<div class="box tip"><b class="t">Example: angle between coordinate lines</b> The tangent vectors of the q¹ and q² lines are A = (1, 0) and B = (0, 1) in contravariant components. Then cos θ₁₂ = g₁₂/√(g₁₁g₂₂). Orthogonal coordinates ⇔ g₁₂ = 0. For oblique axes, cos θ₁₂ = cos α ✓.</div>
+</section>
+
+<section id="s8">
+<h2>8. 🔬 Vector lab: raising, lowering, lengths and angles with oblique axes</h2>
+<p>Two vectors A (blue) and B (orange) in the plane, with axes at angle α. The lab shows their contravariant components (parallelogram rule), lowers them with g<sub>ij</sub>, raises them back with g<sup>ij</sup>, and computes |A|, |B| and the angle by Eqs. (37)–(39). Drag the tips. All the scalar results stay the same when you change α, even though every component changes.</p>
+<div class="lab">
+<div class="grid2">
+<div><canvas id="cvV" width="460" height="460"></canvas></div>
+<div>
+<div class="ctrl"><label>axis angle α <input type="range" id="vA" min="25" max="155" step="1" value="65"><span id="vAv"></span></label></div>
+<div class="readout out" id="vOut"></div>
+</div></div>
+<h4 style="margin-top:12px">Order of indices for a non-symmetric A<sup>ij</sup> (same oblique metric)</h4>
+<div class="ctrl"><label>A<sup>11</sup> <input type="number" id="o11" value="1" step="0.5" style="width:60px"></label><label>A<sup>12</sup> <input type="number" id="o12" value="2" step="0.5" style="width:60px"></label><label>A<sup>21</sup> <input type="number" id="o21" value="-1" step="0.5" style="width:60px"></label><label>A<sup>22</sup> <input type="number" id="o22" value="3" step="0.5" style="width:60px"></label></div>
+<div id="oOut"></div>
+</div>
+</section>
+
+<section id="s9">
+<h2>9. Summary sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Item</th><th>Formula</th></tr>
+<tr><td>Line element</td><td>ds² = g<sub>ij</sub>dx<sup>i</sup>dx<sup>j</sup>, g<sub>ij</sub> = g<sub>ji</sub>, g = det(g<sub>ij</sub>) ≠ 0</td></tr>
+<tr><td>From a map x(q)</td><td>g<sub>ij</sub> = (∂x/∂q<sup>i</sup>)·(∂x/∂q<sup>j</sup>), g = (det J)²</td></tr>
+<tr><td>Orthogonal / Cartesian</td><td>g<sub>ij</sub> = 0 (i ≠ j) / g<sub>ij</sub> = δ<sub>ij</sub></td></tr>
+<tr><td>Contravariant metric</td><td>[g<sup>ij</sup>] = [g<sub>ij</sub>]⁻¹, g<sub>ij</sub>g<sup>jk</sup> = δ<sup>k</sup><sub>i</sub></td></tr>
+<tr><td>Lower / raise</td><td>A<sub>i</sub> = g<sub>ij</sub>A<sup>j</sup>, A<sup>i</sup> = g<sup>ij</sup>A<sub>j</sub></td></tr>
+<tr><td>Rank-2 associates</td><td>A<sup>ij</sup>, A<sup>i</sup><sub>·j</sub>, A<sub>i</sub><sup>·j</sup>, A<sub>ij</sub>; A<sup>i</sup><sub>·j</sub> ≠ A<sub>j</sub><sup>·i</sup> unless A symmetric</td></tr>
+<tr><td>See-saw</td><td>A<sup>ij</sup>B<sub>ij</sub> = A<sub>ij</sub>B<sup>ij</sup></td></tr>
+<tr><td>Length, angle</td><td>A² = g<sub>ij</sub>A<sup>i</sup>A<sup>j</sup>; cos θ = A<sub>i</sub>B<sup>i</sup>/(AB)</td></tr>
+<tr><td>Volume</td><td>dV = √|g| dx¹…dx<sup>N</sup></td></tr>
+<tr><td>Spherical</td><td>g<sub>ij</sub> = diag(1, r², r²sin²θ), g<sup>ij</sup> = diag(1, r⁻², (r sin θ)⁻²), √g = r²sin θ</td></tr>
+</table></div>
+</section>
+
+<section id="s10">
+<h2>10. Book's Exercise 18: all problems solved</h2>
+<div class="prob"><div class="q">1. Obtain Eqs. (26) from Eqs. (24).</div>
+<details><summary>Show solution</summary><p>Multiply A<sup>i</sup><sub>·k</sub> = A<sup>il</sup>g<sub>lk</sub> by g<sup>kj</sup>: A<sup>i</sup><sub>·k</sub>g<sup>kj</sup> = A<sup>il</sup>g<sub>lk</sub>g<sup>kj</sup> = A<sup>il</sup>δ<sub>l</sub><sup>j</sup> = A<sup>ij</sup> ✓.</p><p>Multiply A<sub>k</sub><sup>·i</sup> = A<sup>li</sup>g<sub>lk</sub> by g<sup>kj</sup>: A<sup>li</sup>δ<sub>l</sub><sup>j</sup> = A<sup>ji</sup> ✓.</p><p>Multiply A<sub>ij</sub> = A<sup>pq</sup>g<sub>pi</sub>g<sub>qj</sub> by g<sup>ik</sup>g<sup>jl</sup>: A<sup>pq</sup>δ<sub>p</sub><sup>k</sup>δ<sub>q</sub><sup>l</sup> = A<sup>kl</sup> ✓. ∎</p></details></div>
+<div class="prob"><div class="q">2. Using Exercise 15.4, show that the covariant components of velocity in spherical polar coordinates are ṙ, r²θ̇, r²sin²θ φ̇.</div>
+<details><summary>Show solution</summary><p>Contravariant velocity: v<sup>i</sup> = (ṙ, θ̇, φ̇). Lower with g<sub>ij</sub> = diag(1, r², r²sin²θ): v<sub>i</sub> = g<sub>ij</sub>v<sup>j</sup> = (ṙ, r²θ̇, r²sin²θ φ̇). ∎</p><p>Check: v<sub>i</sub>v<sup>i</sup> = ṙ² + r²θ̇² + r²sin²θ φ̇², the familiar speed squared ✓. (In mechanics, m v<sub>i</sub> is the canonical momentum p<sub>i</sub> = ∂T/∂q̇<sup>i</sup>, e.g. p<sub>φ</sub> = mr²sin²θ φ̇ = L<sub>z</sub>.)</p></details></div>
+<div class="prob"><div class="q">3. Using the covariant components of the gradient (Exercise 15.6), find its contravariant components in spherical coordinates.</div>
+<details><summary>Show solution</summary><p>(∇f)<sub>i</sub> = (∂f/∂r, ∂f/∂θ, ∂f/∂φ). Raise with g<sup>ij</sup> = diag(1, 1/r², 1/(r²sin²θ)):</p><div class="eq">(∇f)<sup>i</sup> = (∂f/∂r, &nbsp;(1/r²)∂f/∂θ, &nbsp;(1/(r²sin²θ))∂f/∂φ)</div><p>This is the book's answer. (Physical components = (∂f/∂r, (1/r)∂f/∂θ, (1/(r sin θ))∂f/∂φ).)</p></details></div>
+<div class="prob"><div class="q">4. Let z¹ and z² be plane oblique coordinates with angle α between the axes. Determine g<sub>ij</sub> and g<sup>ij</sup>.</div>
+<details><summary>Show solution</summary><p>Basis vectors e₁ = (1, 0), e₂ = (cos α, sin α). Position = z¹e₁ + z²e₂, so ds² = |dz¹e₁ + dz²e₂|² = (dz¹)² + (dz²)² + 2cos α dz¹dz² (law of cosines).</p><div class="eq">[g<sub>ij</sub>] = <table class="mx"><tr><td>1</td><td>cos α</td></tr><tr><td>cos α</td><td>1</td></tr></table>, &nbsp; g = sin²α, &nbsp; [g<sup>ij</sup>] = (1/sin²α)<table class="mx"><tr><td>1</td><td>−cos α</td></tr><tr><td>−cos α</td><td>1</td></tr></table> = cosec²α [[1, −cos α], [−cos α, 1]]</div><p>Matches the book's answer. At α = 90° both become the identity.</p></details></div>
+<div class="prob"><div class="q">5. Show that in an orthogonal coordinate system a covariant component of a tensor is related only to the corresponding contravariant component.</div>
+<details><summary>Show solution</summary><p>Orthogonal ⇒ g<sub>ij</sub> = 0 for i ≠ j, so A<sub>i</sub> = g<sub>ij</sub>A<sup>j</sup> = g<sub>ii</sub>A<sup>i</sup> (no sum): only the same-numbered component appears. Likewise A<sup>i</sup> = A<sub>i</sub>/g<sub>ii</sub>, and for higher rank A<sub>ij</sub> = g<sub>ii</sub>g<sub>jj</sub>A<sup>ij</sup> (no sum). ∎ In a non-orthogonal system each A<sub>i</sub> mixes several A<sup>j</sup> (see the vector lab).</p></details></div>
+<div class="prob"><div class="q">6. The contravariant components of acceleration in spherical coordinates are given in Eqs. (15.50). Obtain the covariant components.</div>
+<details><summary>Show solution</summary><p>Use the corrected (15.50) (see the Chapter 15 page: a<sup>θ</sup> contains +2ṙθ̇/r). Lower with diag(1, r², r²sin²θ):</p>
+<div class="eq">a<sub>r</sub> = r̈ − rθ̇² − r sin²θ φ̇²<br>a<sub>θ</sub> = r²θ̈ + 2rṙθ̇ − r²sin θ cos θ φ̇² = d(r²θ̇)/dt − r²sin θ cos θ φ̇²<br>a<sub>φ</sub> = r²sin²θ φ̈ + 2r sin²θ ṙφ̇ + 2r²sin θ cos θ θ̇φ̇ = d(r²sin²θ φ̇)/dt</div>
+<p>Checked symbolically. The last form shows that if there is no φ-force, a<sub>φ</sub> = 0 ⇒ r²sin²θ φ̇ = const: conservation of L<sub>z</sub>.</p></details></div>
+<div class="prob"><div class="q">7. Show that in a Cartesian coordinate system the distinction between the contravariant, covariant and mixed components of a tensor vanishes.</div>
+<details><summary>Show solution</summary><p>g<sub>ij</sub> = g<sup>ij</sup> = δ<sub>ij</sub>. Every lowering or raising is A<sub>…i…</sub> = δ<sub>ij</sub>A<sup>…j…</sup> = A<sup>…i…</sup>: the components keep their values. Apply this to each index in turn: A<sup>ij</sup> = A<sup>i</sup><sub>·j</sub> = A<sub>i</sub><sup>·j</sup> = A<sub>ij</sub> numerically. ∎ This is the basis of Section 19 (Cartesian tensors).</p></details></div>
+<div class="prob"><div class="q">8. Define δ<sub>jk</sub> by lowering the upper index of δ<sup>j</sup><sub>k</sub>. In 3D, obtain its components in (a) Cartesian, (b) spherical, (c) the (u, v, w) coordinates of Example 4.</div>
+<details><summary>Show solution</summary><p>δ<sub>jk</sub> ≡ g<sub>jl</sub>δ<sup>l</sup><sub>k</sub> = g<sub>jk</sub>. So "lowered δ" is just the metric:</p><ul><li>(a) Cartesian: diag(1, 1, 1), a genuine Kronecker delta.</li><li>(b) Spherical: diag(1, r², r²sin²θ).</li><li>(c) Example 4: the matrix (16a), [[v² + w², uv, uw], [uv, w² + u², vw], [uw, vw, u² + v²]].</li></ul><p>So δ<sub>jk</sub> is a Kronecker delta only in Cartesian coordinates. The mixed δ<sup>j</sup><sub>k</sub> is the true isotropic tensor (Section 16).</p></details></div>
+<div class="prob"><div class="q">9. Show that A<sub>ijk</sub>B<sup>ijk</sup> = A<sub>i</sub><sup>·j</sup><sub>·k</sub>B<sup>i</sup><sub>·j</sub><sup>·k</sup> = A<sub>ij</sub><sup>··k</sup>B<sup>ij</sup><sub>··k</sub> (and similar forms).</div>
+<details><summary>Show solution</summary><p>Apply the see-saw step of Example 6 to one dummy pair at a time. For the middle index: A<sub>ijk</sub>B<sup>ijk</sup> = A<sub>ijk</sub>g<sup>jl</sup>B<sup>i</sup><sub>·l</sub><sup>·k</sup>, since B<sup>ijk</sup> = g<sup>jl</sup>B<sup>i</sup><sub>·l</sub><sup>·k</sup>. And A<sub>ijk</sub>g<sup>jl</sup> = A<sub>i</sub><sup>·l</sup><sub>·k</sub>, so the product is A<sub>i</sub><sup>·l</sup><sub>·k</sub>B<sup>i</sup><sub>·l</sub><sup>·k</sup> ✓. Doing the same for the last index gives the third form. Any dummy pair can be see-sawed independently, as long as each index keeps its left-to-right <b>position</b>. ∎</p></details></div>
+</section>
+
+<section id="s11">
+<h2>11. Practice set (CSIR-NET / GATE style)</h2>
+<div class="prob"><div class="q">P1. Find g<sub>ij</sub>, g and the area element for parabolic coordinates x = στ, y = (τ² − σ²)/2. <span class="tag">metric</span></div>
+<details><summary>Show solution</summary><p>∂r/∂σ = (τ, −σ), ∂r/∂τ = (σ, τ). Dot products: g<sub>σσ</sub> = g<sub>ττ</sub> = σ² + τ², g<sub>στ</sub> = τσ − στ = 0. Orthogonal, g = (σ² + τ²)², dA = (σ² + τ²)dσ dτ.</p></details></div>
+<div class="prob"><div class="q">P2. Find the length of the circle of latitude θ = θ₀ on a sphere of radius a. <span class="tag">length</span></div>
+<details><summary>Show solution</summary><p>dθ = 0 ⇒ ds = a sin θ₀ dφ ⇒ L = 2πa sin θ₀.</p></details></div>
+<div class="prob"><div class="q">P3. Area of the sphere from the metric. <span class="tag">area</span></div>
+<details><summary>Show solution</summary><p>√g = a²sin θ ⇒ A = ∫₀^π∫₀^{2π} a²sin θ dφ dθ = 4πa².</p></details></div>
+<div class="prob"><div class="q">P4. In polar coordinates, A<sup>i</sup> = (2, 1/r). Find A<sub>i</sub> and |A|. <span class="tag">lower</span></div>
+<details><summary>Show solution</summary><p>A<sub>i</sub> = (2, r²·(1/r)) = (2, r). |A|² = A<sub>i</sub>A<sup>i</sup> = 4 + 1 = 5 ⇒ |A| = √5, independent of r.</p></details></div>
+<div class="prob"><div class="q">P5. With oblique axes at 60°, find the angle between A<sup>i</sup> = (1, 0) and B<sup>i</sup> = (1, 1). <span class="tag">angle</span></div>
+<details><summary>Show solution</summary><p>g = [[1, ½], [½, 1]]. A·B = g<sub>ij</sub>A<sup>i</sup>B<sup>j</sup> = 1 + ½ = 3/2. |A|² = 1, |B|² = 1 + 1 + 2·½ = 3. cos θ = (3/2)/√3 = √3/2 ⇒ θ = 30° (B bisects the two axes ✓).</p></details></div>
+<div class="prob"><div class="q">P6. Show g<sub>ij</sub>g<sup>ij</sup> = N. <span class="tag">trace</span></div>
+<details><summary>Show solution</summary><p>g<sub>ij</sub>g<sup>ij</sup> = g<sub>ij</sub>g<sup>ji</sup> = δ<sup>i</sup><sub>i</sub> = N.</p></details></div>
+<div class="prob"><div class="q">P7. The Minkowski metric is η = diag(1, −1, −1, −1). Lower the 4-momentum p<sup>μ</sup> = (E/c, p<sub>x</sub>, p<sub>y</sub>, p<sub>z</sub>) and compute p<sub>μ</sub>p<sup>μ</sup>. <span class="tag">relativity</span></div>
+<details><summary>Show solution</summary><p>p<sub>μ</sub> = (E/c, −p<sub>x</sub>, −p<sub>y</sub>, −p<sub>z</sub>). p<sub>μ</sub>p<sup>μ</sup> = E²/c² − |p|² = m²c², an invariant. (Section 20.)</p></details></div>
+<div class="prob"><div class="q">P8. Is the metric ds² = dθ² + sin²θ dφ² Euclidean in the book's sense? Is the surface flat? <span class="tag">concept</span></div>
+<details><summary>Show solution</summary><p>Not Euclidean in the book's sense (g<sub>22</sub> depends on θ), and the unit sphere is genuinely curved: its Gaussian curvature is 1, and no coordinate change can make g constant. Contrast: the polar plane dr² + r²dθ² also has a non-constant g but is flat.</p></details></div>
+</section>
+
+<section id="s12" class="quiz">
+<h2>12. Self-test quiz</h2>
+<div id="quiz"></div>
+<p><b>Score: <span id="qScore">0</span> / <span id="qTot">0</span></b></p>
+</section>
+
+<section id="s13">
+<h2>13. Interesting facts</h2>
+<div class="box fact"><b class="t">Riemann's lecture (1854)</b> Bernhard Riemann introduced ds² = g<sub>ij</sub>dx<sup>i</sup>dx<sup>j</sup> in his habilitation lecture "On the hypotheses which lie at the foundations of geometry". Gauss, then 77, chose that topic from the three Riemann offered and was reportedly deeply impressed. Sixty years later it became the language of Einstein's gravity, where g<sub>μν</sub> <b>is</b> the gravitational field.</div>
+<div class="box fact"><b class="t">Maps of the Earth</b> Every flat map distorts distances because the sphere's metric cannot be made constant (Gauss's Theorema Egregium). The Mercator projection keeps angles (its metric is a multiple of dx² + dy²) but blows up areas near the poles. Compare the metric lab's sphere mode, where the coordinate ellipse stretches near the poles.</div>
+<div class="box fact"><b class="t">GPS</b> Satellite clocks run faster by about 38 μs per day, because the spacetime metric g<sub>00</sub> depends on height in Earth's gravity. Without metric-tensor corrections, GPS positions would drift by about 10 km per day.</div>
+</section>
+</div>
+<script>
+/* ---------- small linear-algebra toolkit ---------- */
+const $=id=>document.getElementById(id);
+const cssv=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const eye=n=>Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0));
+const zeros=n=>Array.from({length:n},()=>Array(n).fill(0));
+const clone=M=>M.map(r=>r.slice());
+const mul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>s+v*B[k][j],0)));
+const add=(A,B)=>A.map((r,i)=>r.map((v,j)=>v+B[i][j]));
+const sub=(A,B)=>A.map((r,i)=>r.map((v,j)=>v-B[i][j]));
+const scl=(k,A)=>A.map(r=>r.map(v=>k*v));
+const trc=A=>A.reduce((s,r,i)=>s+r[i],0);
+const T=A=>A[0].map((_,j)=>A.map(r=>r[j]));
+const maxAbs=A=>Math.max(...A.flat().map(Math.abs));
+const mv=(A,x)=>A.map(r=>r.reduce((s,v,k)=>s+v*x[k],0));
+const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
+const nrm=a=>Math.sqrt(dot(a,a));
+const neg=s=>String(s).replace(/-/g,'−');
+function fmt(x,dec=3){
+  if(!isFinite(x))return '∞';
+  if(Math.abs(x)<1e-9)return '0';
+  const r=Math.round(x); if(Math.abs(x-r)<1e-7*Math.max(1,Math.abs(x)))return neg(r);
+  for(let q=2;q<=12;q++){const p=Math.round(x*q);if(Math.abs(x*q-p)<1e-7*q)return neg(p)+'/'+q;}
+  return neg(+x.toFixed(dec));
+}
+function mxH(M,heat,scale){
+  const s=scale||Math.max(1e-12,maxAbs(M));
+  return '<table class="mx">'+M.map(r=>'<tr>'+r.map(v=>{
+    let st='';
+    if(heat){const a=Math.min(1,Math.abs(v)/s)*0.55;if(Math.abs(v)>1e-9)st=` style="background:${v>0?`rgba(47,111,223,${a})`:`rgba(201,42,42,${a})`}"`;}
+    return `<td${st}>${fmt(v)}</td>`;}).join('')+'</tr>').join('')+'</table>';
+}
+function rank(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol)continue;
+    [A[r],A[p]]=[A[p],A[r]];
+    for(let i=r+1;i<n;i++){const f=A[i][c]/A[r][c];for(let j=c;j<m;j++)A[i][j]-=f*A[r][j];}
+    r++;
+  }
+  return r;
+}
+function nullspace(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  const piv=[];let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol){for(let i=r;i<n;i++)A[i][c]=0;continue;}
+    [A[r],A[p]]=[A[p],A[r]];
+    const d=A[r][c];for(let j=0;j<m;j++)A[r][j]/=d;
+    for(let i=0;i<n;i++)if(i!==r){const f=A[i][c];for(let j=0;j<m;j++)A[i][j]-=f*A[r][j];}
+    piv.push(c);r++;
+  }
+  const basis=[];
+  for(let f=0;f<m;f++){if(piv.includes(f))continue;
+    const v=Array(m).fill(0);v[f]=1;piv.forEach((c,i)=>{v[c]=-A[i][f];});basis.push(v);}
+  return basis;
+}
+function inv(M){
+  const n=M.length,A=M.map((r,i)=>r.concat(eye(n)[i]));
+  for(let c=0;c<n;c++){
+    let p=c;for(let i=c+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<1e-12)return null;
+    [A[c],A[p]]=[A[p],A[c]];const d=A[c][c];for(let j=0;j<2*n;j++)A[c][j]/=d;
+    for(let i=0;i<n;i++)if(i!==c){const f=A[i][c];for(let j=0;j<2*n;j++)A[i][j]-=f*A[c][j];}
+  }
+  return A.map(r=>r.slice(n));
+}
+/* Faddeev–LeVerrier: det(λI−A)=Σ c[k] λ^k, c[n]=1 */
+function charCoeffs(A){
+  const n=A.length,c=Array(n+1).fill(0);c[n]=1;let M=zeros(n);
+  for(let k=1;k<=n;k++){M=add(mul(A,M),scl(c[n-k+1],eye(n)));c[n-k]=-trc(mul(A,M))/k;}
+  return c;
+}
+/* complex helpers + Durand–Kerner roots of monic poly (c indexed by power) */
+const cm=(a,b)=>[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]];
+const cd=(a,b)=>{const d=b[0]*b[0]+b[1]*b[1];return[(a[0]*b[0]+a[1]*b[1])/d,(a[1]*b[0]-a[0]*b[1])/d];};
+function polyRoots(c){
+  const n=c.length-1;if(n===1)return[[-c[0],0]];
+  let z=Array.from({length:n},(_,k)=>{let w=[1,0];for(let i=0;i<=k;i++)w=cm(w,[0.4,0.9]);return w;});
+  const R=1+Math.max(...c.slice(0,n).map(Math.abs));z=z.map(w=>[w[0]*R,w[1]*R]);
+  const ev=x=>{let s=[1,0];for(let k=n-1;k>=0;k--)s=[s[0]*x[0]-s[1]*x[1]+c[k],s[0]*x[1]+s[1]*x[0]];return s;};
+  for(let it=0;it<2000;it++){
+    let delta=0;
+    z=z.map((zi,i)=>{let den=[1,0];z.forEach((zj,j)=>{if(j!==i)den=cm(den,[zi[0]-zj[0],zi[1]-zj[1]]);});
+      if(Math.hypot(den[0],den[1])<1e-300)den=[1e-12,0];
+      const q=cd(ev(zi),den);delta=Math.max(delta,Math.hypot(q[0],q[1]));return[zi[0]-q[0],zi[1]-q[1]];});
+    if(delta<1e-14)break;
+  }
+  return z;
+}
+function snap(x){for(const q of [1,2,3,4,6,12]){const r=Math.round(x*q)/q;if(Math.abs(x-r)<2e-4)return r;}return x;}
+function eigGroups(A){
+  const z=polyRoots(charCoeffs(A)),used=Array(z.length).fill(false),G=[];
+  const tol=2e-3*Math.max(1,maxAbs(A));
+  for(let i=0;i<z.length;i++){if(used[i])continue;const cl=[z[i]];used[i]=true;
+    for(let j=i+1;j<z.length;j++)if(!used[j]&&Math.hypot(z[j][0]-z[i][0],z[j][1]-z[i][1])<tol){cl.push(z[j]);used[j]=true;}
+    let re=cl.reduce((s,w)=>s+w[0],0)/cl.length,im=cl.reduce((s,w)=>s+w[1],0)/cl.length;
+    if(Math.abs(im)<1e-6)im=0;re=snap(re);if(im)im=snap(im);
+    G.push({re,im,m:cl.length});}
+  G.sort((a,b)=>b.re-a.re||b.im-a.im);return G;
+}
+const powM=(M,k)=>{let R=eye(M.length);for(let i=0;i<k;i++)R=mul(R,M);return R;};
+const lamF=a=>a===0?'λ':(a>0?`(λ − ${fmt(a)})`:`(λ + ${fmt(-a)})`);
+const supN=k=>k===1?'':String(k).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+function minimalPoly(A){
+  const G=eigGroups(A),n=A.length;
+  if(G.some(g=>g.im!==0))return{G,complex:true};
+  const sc=Math.max(1,maxAbs(A));
+  let tups=[[]];G.forEach(g=>{const nt=[];tups.forEach(t=>{for(let r=1;r<=g.m;r++)nt.push(t.concat(r));});tups=nt;});
+  tups.sort((a,b)=>a.reduce((s,v)=>s+v,0)-b.reduce((s,v)=>s+v,0));
+  const tried=[];
+  for(const t of tups){
+    let P=eye(n);G.forEach((g,i)=>{P=mul(P,powM(sub(A,scl(g.re,eye(n))),t[i]));});
+    const deg=t.reduce((s,v)=>s+v,0),zero=maxAbs(P)<1e-6*Math.pow(sc,deg);
+    tried.push({t,P,zero});if(zero)return{G,r:t,tried};
+  }
+  return{G,r:G.map(g=>g.m),tried};
+}
+function expandRoots(rs){let p=[1];rs.forEach(a=>{const q=Array(p.length+1).fill(0);p.forEach((v,i)=>{q[i]+=v;q[i+1]-=a*v;});p=q;});return p;}
+function polyStr(p,v,mat){
+  const d=p.length-1;let s='';
+  p.forEach((c,i)=>{if(Math.abs(c)<1e-9)return;const k=d-i;const a=Math.abs(c);
+    const coef=(a===1&&k>0)?'':fmt(a);const term=k===0?(mat?coef+'I':fmt(a)):(k===1?coef+v:coef+v+supN(k));
+    s+=(s===''?(c<0?'−':''):(c<0?' − ':' + '))+term;});
+  return s||'0';
+}
+function makeEditor(id,M,cb){
+  const box=$(id);let n=M.length;
+  function build(M){n=M.length;box.innerHTML='<div style="display:grid;grid-template-columns:repeat('+n+',58px);gap:4px">'+M.flat().map((v,i)=>`<input type="number" step="any" data-i="${i}" value="${v}" style="width:58px">`).join('')+'</div>';
+    box.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',cb));}
+  build(M);
+  return{get(){const v=[...box.querySelectorAll('input')].map(i=>parseFloat(i.value)||0);return Array.from({length:n},(_,i)=>v.slice(i*n,i*n+n));},
+         set(M){build(M);cb();}};
+}
+function arrow(ctx,x0,y0,x1,y1,col,w=2.5,dash){
+  ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;if(dash)ctx.setLineDash(dash);
+  ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();ctx.setLineDash([]);
+  const a=Math.atan2(y1-y0,x1-x0),L=Math.hypot(x1-x0,y1-y0);
+  if(L>6){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-10*Math.cos(a-0.4),y1-10*Math.sin(a-0.4));ctx.lineTo(x1-10*Math.cos(a+0.4),y1-10*Math.sin(a+0.4));ctx.fill();}
+  ctx.restore();
+}
+function canvasPt(cv,e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height];}
+
+/* ---------- Metric lab ---------- */
+const SYS={
+ polar:{n:['r','θ'],q1:[0.15,2.2],q2:[0,2*Math.PI],X:q=>[q[0]*Math.cos(q[1]),q[0]*Math.sin(q[1])],ext:2.4,P:[1.3,0.7]},
+ obl:{n:['z¹','z²'],q1:[-1.8,1.8],q2:[-1.8,1.8],X:q=>{const a=+$('mA').value*Math.PI/180;return[q[0]+q[1]*Math.cos(a),q[1]*Math.sin(a)];},ext:2.6,P:[0.6,0.5]},
+ para:{n:['σ','τ'],q1:[-1.5,1.5],q2:[0,1.6],X:q=>[q[0]*q[1],(q[1]*q[1]-q[0]*q[0])/2],ext:1.6,P:[0.7,0.9]},
+ ell:{n:['μ','ν'],q1:[0.05,1.4],q2:[0,2*Math.PI],X:q=>[Math.cosh(q[0])*Math.cos(q[1]),Math.sinh(q[0])*Math.sin(q[1])],ext:2.3,P:[0.6,1.0]},
+ sph:{n:['θ','φ'],q1:[0.02,Math.PI-0.02],q2:[0,2*Math.PI],X3:q=>[Math.sin(q[0])*Math.cos(q[1]),Math.sin(q[0])*Math.sin(q[1]),Math.cos(q[0])],P:[0.9,0.6]}
+};
+let mKey='polar',mQ=SYS.polar.P.slice();
+const view={yaw:0.97,pitch:0.45};
+function pr3(p,s,W,H){const c=Math.cos(view.yaw),sn=Math.sin(view.yaw),cp=Math.cos(view.pitch),sp=Math.sin(view.pitch);const x=c*p[0]-sn*p[1],y1=sn*p[0]+c*p[1];return{p:[W/2+s*x,H/2-s*(cp*p[2]-sp*y1)],depth:cp*y1+sp*p[2]};}
+function jac(S,q){const h=1e-5,f=S.X3||S.X,a=f([q[0]+h,q[1]]),b=f([q[0]-h,q[1]]),c=f([q[0],q[1]+h]),d=f([q[0],q[1]-h]);return[a.map((v,i)=>(v-b[i])/(2*h)),c.map((v,i)=>(v-d[i])/(2*h))];}
+function metric(S,q){const [e1,e2]=jac(S,q);return[[dot(e1,e1),dot(e1,e2)],[dot(e2,e1),dot(e2,e2)]];}
+function invPlane(S,x,q0){let q=q0.slice();for(let it=0;it<40;it++){const X=S.X(q),r=[x[0]-X[0],x[1]-X[1]];if(Math.hypot(...r)<1e-10)break;const [e1,e2]=jac(S,q),d=e1[0]*e2[1]-e1[1]*e2[0];if(Math.abs(d)<1e-12)break;
+  q=[q[0]+(r[0]*e2[1]-r[1]*e2[0])/d,q[1]+(e1[0]*r[1]-e1[1]*r[0])/d];}return q;}
+function clampQ(S,q){return[Math.max(S.q1[0],Math.min(S.q1[1],q[0])),Math.max(S.q2[0],Math.min(S.q2[1],q[1]))];}
+$('mSys').addEventListener('change',()=>{mKey=$('mSys').value;mQ=SYS[mKey].P.slice();$('mAl').style.display=mKey==='obl'?'':'none';drawM();});
+['mA','mE'].forEach(k=>$(k).addEventListener('input',drawM));
+let mGx=null,mGq=null;
+function qCanvas(){const S=SYS[mKey],cv=$('cvMq'),W=cv.width,H=cv.height,pad=30;return{W,H,X:a=>pad+(a-S.q1[0])/(S.q1[1]-S.q1[0])*(W-2*pad),Y:b=>H-pad-(b-S.q2[0])/(S.q2[1]-S.q2[0])*(H-2*pad),
+  inv:(px,py)=>[S.q1[0]+(px-pad)/(W-2*pad)*(S.q1[1]-S.q1[0]),S.q2[0]+(H-pad-py)/(H-2*pad)*(S.q2[1]-S.q2[0])]};}
+function drawM(){
+  const S=SYS[mKey],eps=+$('mE').value;$('mAv').textContent=$('mA').value+'°';$('mEv').textContent=eps.toFixed(2);
+  const g=metric(S,mQ),gi=inv(g),gd=g[0][0]*g[1][1]-g[0][1]*g[1][0];
+  /* real space */
+  const cx=$('cvMx'),c=cx.getContext('2d'),W=cx.width,H=cx.height;c.fillStyle=cssv('--card');c.fillRect(0,0,W,H);
+  const lines=[];for(let k=0;k<=10;k++){const a=S.q1[0]+(S.q1[1]-S.q1[0])*k/10,b=S.q2[0]+(S.q2[1]-S.q2[0])*k/10,l1=[],l2=[];for(let m=0;m<=80;m++){const t=m/80;l1.push([a,S.q2[0]+(S.q2[1]-S.q2[0])*t]);l2.push([S.q1[0]+(S.q1[1]-S.q1[0])*t,b]);}lines.push({pts:l1,c:'--acc2'},{pts:l2,c:'--acc3'});}
+  let ring=[];
+  if(S.X3){const s=W/2-25,P=p=>pr3(p,s,W,H);
+    c.strokeStyle=cssv('--muted');c.beginPath();c.arc(W/2,H/2,s,0,7);c.stroke();
+    lines.forEach(L=>{c.strokeStyle=cssv(L.c);c.globalAlpha=0.55;c.lineWidth=1.2;c.beginPath();let pen=false;L.pts.forEach(q=>{const r=P(S.X3(q));if(r.depth<0){pen=false;return;}pen?c.lineTo(...r.p):c.moveTo(...r.p);pen=true;});c.stroke();});c.globalAlpha=1;
+    const p0=S.X3(mQ),[e1,e2]=jac(S,mQ),u1=e1.map(v=>v/nrm(e1)),u2v=[p0[1]*u1[2]-p0[2]*u1[1],p0[2]*u1[0]-p0[0]*u1[2],p0[0]*u1[1]-p0[1]*u1[0]];
+    for(let k=0;k<=72;k++){const t=k/72*2*Math.PI,pt=p0.map((v,i)=>v*Math.cos(eps)+Math.sin(eps)*(Math.cos(t)*u1[i]+Math.sin(t)*u2v[i]));ring.push({x:pt,q:[Math.acos(Math.max(-1,Math.min(1,pt[2]))),(Math.atan2(pt[1],pt[0])+2*Math.PI)%(2*Math.PI)]});}
+    c.strokeStyle=cssv('--acc');c.lineWidth=2.5;c.beginPath();ring.forEach((r,i)=>{const p=P(r.x).p;i?c.lineTo(...p):c.moveTo(...p);});c.stroke();
+    const pp=P(p0).p;c.fillStyle=cssv('--ink');c.beginPath();c.arc(...pp,6,0,7);c.fill();
+    mGx={inv:(px,py)=>{const s2=W/2-25,x=(px-W/2)/s2,y=-(py-H/2)/s2;if(x*x+y*y>=1)return null;const d=Math.sqrt(1-x*x-y*y);
+      const cy=Math.cos(view.yaw),sy=Math.sin(view.yaw),cp=Math.cos(view.pitch),sp=Math.sin(view.pitch);
+      const y1=cp*d-sp*y,z=sp*d+cp*y;const p=[cy*x+sy*y1,-sy*x+cy*y1,z];return[Math.acos(Math.max(-1,Math.min(1,p[2]))),(Math.atan2(p[1],p[0])+2*Math.PI)%(2*Math.PI)];}};
+  }else{const s=(W/2-10)/S.ext,X=v=>W/2+v*s,Y=v=>H/2-v*s;
+    lines.forEach(L=>{c.strokeStyle=cssv(L.c);c.globalAlpha=0.55;c.lineWidth=1.2;c.beginPath();L.pts.forEach((q,i)=>{const p=S.X(q);i?c.lineTo(X(p[0]),Y(p[1])):c.moveTo(X(p[0]),Y(p[1]));});c.stroke();});c.globalAlpha=1;
+    const p0=S.X(mQ);let qq=mQ.slice();for(let k=0;k<=72;k++){const t=k/72*2*Math.PI,x=[p0[0]+eps*Math.cos(t),p0[1]+eps*Math.sin(t)];qq=invPlane(S,x,qq);ring.push({x,q:qq.slice()});}
+    c.strokeStyle=cssv('--acc');c.lineWidth=2.5;c.beginPath();ring.forEach((r,i)=>{i?c.lineTo(X(r.x[0]),Y(r.x[1])):c.moveTo(X(r.x[0]),Y(r.x[1]));});c.stroke();
+    const [e1,e2]=jac(S,mQ);[[e1,'∂r/∂'+S.n[0],'--acc2'],[e2,'∂r/∂'+S.n[1],'--acc3']].forEach(([e,n,col])=>{const k=0.35/Math.max(0.35,nrm(e))*1.0;arrow(c,X(p0[0]),Y(p0[1]),X(p0[0]+k*e[0]),Y(p0[1]+k*e[1]),cssv(col),2.5);});
+    c.fillStyle=cssv('--ink');c.beginPath();c.arc(X(p0[0]),Y(p0[1]),6,0,7);c.fill();
+    mGx={inv:(px,py)=>invPlane(S,[(px-W/2)/s,(H/2-py)/s],mQ)};}
+  /* coordinate plane */
+  const Q=qCanvas(),cq=$('cvMq').getContext('2d');cq.fillStyle=cssv('--card');cq.fillRect(0,0,Q.W,Q.H);
+  for(let k=0;k<=10;k++){const a=S.q1[0]+(S.q1[1]-S.q1[0])*k/10,b=S.q2[0]+(S.q2[1]-S.q2[0])*k/10;cq.strokeStyle=cssv('--acc2');cq.globalAlpha=0.5;cq.beginPath();cq.moveTo(Q.X(a),Q.Y(S.q2[0]));cq.lineTo(Q.X(a),Q.Y(S.q2[1]));cq.stroke();cq.strokeStyle=cssv('--acc3');cq.beginPath();cq.moveTo(Q.X(S.q1[0]),Q.Y(b));cq.lineTo(Q.X(S.q1[1]),Q.Y(b));cq.stroke();}cq.globalAlpha=1;
+  cq.fillStyle=cssv('--muted');cq.font='13px sans-serif';cq.fillText(S.n[0]+' →',Q.W-40,Q.H-8);cq.fillText(S.n[1]+' ↑',6,16);
+  cq.strokeStyle=cssv('--acc');cq.lineWidth=2.5;cq.beginPath();let pen=false,last=null;ring.forEach(r=>{let q=r.q.slice();if(last&&Math.abs(q[1]-last[1])>Math.PI){pen=false;}last=q;const p=[Q.X(q[0]),Q.Y(q[1])];pen?cq.lineTo(...p):cq.moveTo(...p);pen=true;});cq.stroke();
+  const E=eig2(g);cq.strokeStyle=cssv('--acc4');cq.setLineDash([5,4]);cq.lineWidth=1.8;cq.beginPath();for(let k=0;k<=72;k++){const t=k/72*2*Math.PI,a=eps/Math.sqrt(E.l[0]),b=eps/Math.sqrt(E.l[1]),d=[a*Math.cos(t)*E.v[0][0]+b*Math.sin(t)*E.v[1][0],a*Math.cos(t)*E.v[0][1]+b*Math.sin(t)*E.v[1][1]];const p=[Q.X(mQ[0]+d[0]),Q.Y(mQ[1]+d[1])];k?cq.lineTo(...p):cq.moveTo(...p);}cq.stroke();cq.setLineDash([]);
+  cq.fillStyle=cssv('--ink');cq.beginPath();cq.arc(Q.X(mQ[0]),Q.Y(mQ[1]),6,0,7);cq.fill();
+  mGq=Q;
+  const m=M=>'['+M.map(r=>'['+r.map(v=>fmt(v,4)).join(', ')+']').join(', ')+']';
+  $('mOut').textContent=`P: ${S.n[0]} = ${fmt(mQ[0],3)}, ${S.n[1]} = ${fmt(mQ[1],3)}
+g_ij = ${m(g)}     g = det = ${fmt(gd,4)},  √g = ${fmt(Math.sqrt(Math.abs(gd)),4)}
+g^ij = ${m(gi)}
+scale factors h₁ = √g₁₁ = ${fmt(Math.sqrt(g[0][0]),4)},  h₂ = √g₂₂ = ${fmt(Math.sqrt(g[1][1]),4)}
+angle between coordinate lines: cos = g₁₂/√(g₁₁g₂₂) = ${fmt(g[0][1]/Math.sqrt(g[0][0]*g[1][1]),4)}  ⇒ ${(Math.acos(Math.max(-1,Math.min(1,g[0][1]/Math.sqrt(g[0][0]*g[1][1]))))*180/Math.PI).toFixed(1)}°
+
+blue solid: exact image of the real ε-circle; purple dashed: g_ij dqⁱdqʲ = ε² (first order)`;
+}
+function eig2(M){const a=M[0][0],b=M[0][1],d=M[1][1],t=(a+d)/2,r=Math.hypot((a-d)/2,b),th=0.5*Math.atan2(2*b,a-d);return{l:[t+r,t-r],v:[[Math.cos(th),Math.sin(th)],[-Math.sin(th),Math.cos(th)]]};}
+(function(){const cx=$('cvMx'),cq=$('cvMq');let dx=null,dq=false;
+ cx.addEventListener('pointerdown',e=>{dx={x:e.clientX,y:e.clientY,moved:false};cx.setPointerCapture(e.pointerId);const [px,py]=canvasPt(cx,e);const q=mGx&&mGx.inv(px,py);if(q){mQ=clampQ(SYS[mKey],q);drawM();dx.onP=true;}});
+ cx.addEventListener('pointermove',e=>{if(!dx)return;const [px,py]=canvasPt(cx,e);if(SYS[mKey].X3&&!dx.onP){view.yaw+=(e.clientX-dx.x)*0.01;view.pitch=Math.max(-1.4,Math.min(1.4,view.pitch+(e.clientY-dx.y)*0.01));dx.x=e.clientX;dx.y=e.clientY;drawM();return;}const q=mGx&&mGx.inv(px,py);if(q){mQ=clampQ(SYS[mKey],q);drawM();}});
+ cx.addEventListener('pointerup',()=>dx=null);
+ const setq=e=>{const [px,py]=canvasPt(cq,e);mQ=clampQ(SYS[mKey],mGq.inv(px,py));drawM();};
+ cq.addEventListener('pointerdown',e=>{dq=true;cq.setPointerCapture(e.pointerId);setq(e);});cq.addEventListener('pointermove',e=>{if(dq)setq(e);});cq.addEventListener('pointerup',()=>dq=false);})();
+
+/* ---------- Vector lab ---------- */
+let vA=[1.5,0.6],vB=[0.3,1.4],vDrag=null,vS=null;
+$('vA').addEventListener('input',drawV);['o11','o12','o21','o22'].forEach(k=>$(k).addEventListener('input',drawV));
+function drawV(){
+  const al=+$('vA').value*Math.PI/180;$('vAv').textContent=$('vA').value+'°';
+  const e1=[1,0],e2=[Math.cos(al),Math.sin(al)],G=[[1,Math.cos(al)],[Math.cos(al),1]],Gi=inv(G);
+  const contra=v=>{const d=Math.sin(al);return[(v[0]*e2[1]-v[1]*e2[0])/d,(e1[0]*v[1]-e1[1]*v[0])/d];};
+  const Ac=contra(vA),Bc=contra(vB),Al=mv(G,Ac),Bl=mv(G,Bc),Ar=mv(Gi,Al);
+  const cv=$('cvV'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,s=W/2/2.4,X=x=>W/2+x*s,Y=y=>H/2-y*s;vS={s,W,H};
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle=cssv('--line');ctx.lineWidth=1;for(let k=-4;k<=4;k++){[[e1,e2],[e2,e1]].forEach(([a,b])=>{ctx.beginPath();ctx.moveTo(X(k*0.5*b[0]-3*a[0]),Y(k*0.5*b[1]-3*a[1]));ctx.lineTo(X(k*0.5*b[0]+3*a[0]),Y(k*0.5*b[1]+3*a[1]));ctx.stroke();});}
+  [[e1,'x¹'],[e2,'x²']].forEach(([e,n])=>{ctx.strokeStyle=cssv('--ink');ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(X(-3*e[0]),Y(-3*e[1]));ctx.lineTo(X(3*e[0]),Y(3*e[1]));ctx.stroke();ctx.fillStyle=cssv('--ink');ctx.font='bold 13px sans-serif';ctx.fillText(n,X(2.2*e[0])+4,Y(2.2*e[1])-4);});
+  const p1=[Ac[0]*e1[0],Ac[0]*e1[1]];ctx.save();ctx.setLineDash([5,4]);ctx.strokeStyle=cssv('--acc');ctx.beginPath();ctx.moveTo(X(p1[0]),Y(p1[1]));ctx.lineTo(X(vA[0]),Y(vA[1]));ctx.stroke();ctx.restore();
+  [[vA,'A',cssv('--acc')],[vB,'B',cssv('--acc2')]].forEach(([v,n,col])=>{arrow(ctx,X(0),Y(0),X(v[0]),Y(v[1]),col,3.5);ctx.fillStyle=col;ctx.beginPath();ctx.arc(X(v[0]),Y(v[1]),6,0,7);ctx.fill();ctx.font='bold 14px sans-serif';ctx.fillText(n,X(v[0])+8,Y(v[1])-6);});
+  const AA=dot(Al,Ac),BB=dot(Bl,Bc),AB=dot(Al,Bc),cosT=AB/Math.sqrt(AA*BB),geo=Math.abs(Math.atan2(vA[0]*vB[1]-vA[1]*vB[0],dot(vA,vB)))*180/Math.PI;
+  const v=x=>'('+x.map(y=>fmt(y,4)).join(', ')+')';
+  $('vOut').textContent=`g_ij = [[1, ${fmt(Math.cos(al),3)}], [${fmt(Math.cos(al),3)}, 1]]
+g^ij = [[${fmt(Gi[0][0],3)}, ${fmt(Gi[0][1],3)}], [${fmt(Gi[1][0],3)}, ${fmt(Gi[1][1],3)}]]
+
+A^i = ${v(Ac)}   lower → A_i = g_ij A^j = ${v(Al)}
+raise again: g^ij A_j = ${v(Ar)}  ✓ back to A^i
+B^i = ${v(Bc)}   B_i = ${v(Bl)}
+
+|A|² = A_i A^i = ${fmt(AA,4)}   (true |A|² = ${fmt(dot(vA,vA),4)})
+|B|² = B_i B^i = ${fmt(BB,4)}
+A_i B^i = ${fmt(AB,4)} = g^ij A_i B_j = ${fmt(dot(mv(Gi,Al),Bl),4)}
+cos θ = ${fmt(cosT,4)}  ⇒ θ = ${(Math.acos(Math.max(-1,Math.min(1,cosT)))*180/Math.PI).toFixed(2)}°  (measured on screen: ${geo.toFixed(2)}°)`;
+  const A2=[[+$('o11').value,+$('o12').value],[+$('o21').value,+$('o22').value]],X1=mul(A2,G),Y1=mul(T(A2),G),L=mul(mul(G,A2),G),same=maxAbs(sub(X1,Y1))<1e-9;
+  $('oOut').innerHTML=`<div style="display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start"><div class="small">A<sup>ij</sup><br>${mxH(A2)}</div><div class="small">A<sup>i</sup><sub>·j</sub> = A<sup>ik</sup>g<sub>kj</sub><br>${mxH(X1)}</div><div class="small">A<sub>j</sub><sup>·i</sup> = A<sup>ki</sup>g<sub>kj</sub> (shown as [i][j])<br>${mxH(Y1)}</div><div class="small">A<sub>ij</sub> = g<sub>ik</sub>A<sup>kl</sup>g<sub>lj</sub><br>${mxH(L)}</div></div>
+  <p class="${same?'ok':'bad'}">${same?'A^i_·j = A_j^·i here, because A^ij is symmetric (A^12 = A^21).':'A^i_·j ≠ A_j^·i: for a non-symmetric tensor the order of indices matters (Eq. 25).'}</p>`;
+}
+(function(){const cv=$('cvV');const pick=e=>{const [px,py]=canvasPt(cv,e);return[(px-vS.W/2)/vS.s,(vS.H/2-py)/vS.s];};
+ cv.addEventListener('pointerdown',e=>{const p=pick(e);vDrag=Math.hypot(p[0]-vA[0],p[1]-vA[1])<Math.hypot(p[0]-vB[0],p[1]-vB[1])?'A':'B';cv.setPointerCapture(e.pointerId);if(vDrag==='A')vA=p;else vB=p;drawV();});
+ cv.addEventListener('pointermove',e=>{if(!vDrag)return;const p=pick(e);if(vDrag==='A')vA=p;else vB=p;drawV();});cv.addEventListener('pointerup',()=>vDrag=null);})();
+
+/* ---------- Quiz ---------- */
+const QZ=[
+ {q:'In polar coordinates g₂₂ equals…',o:['r²','1','r','sin²θ'],a:0,e:'ds² = dr² + r²dθ².'},
+ {q:'[g^ij] as a matrix is…',o:['the inverse of [g_ij]','the transpose of [g_ij]','equal to [g_ij]','the identity'],a:0,e:'Eq. (19).'},
+ {q:'Lowering the index of A^i gives…',o:['A_i = g_ij A^j','A_i = g^ij A_j','A_i = A^i always','A_i = δ_ij A^j'],a:0,e:'Associate tensors.'},
+ {q:'In spherical coordinates the covariant velocity component v_φ is…',o:['r² sin²θ φ̇','φ̇','r sinθ φ̇','φ̇/(r² sin²θ)'],a:0,e:'v_φ = g_φφ v^φ (Exercise 2).'},
+ {q:'A^i_·j = A_j^·i holds when…',o:['A^ij is symmetric','always','never','g is diagonal'],a:0,e:'Eq. (25).'},
+ {q:'For oblique axes at angle α, det g equals…',o:['sin²α','cos²α','1','sin α'],a:0,e:'1 − cos²α.'},
+ {q:'Lowering the index of δ^i_j gives…',o:['g_ij','δ_ij always','g^ij','N'],a:0,e:'Exercise 8.'},
+ {q:'The volume element in spherical coordinates is…',o:['r² sinθ dr dθ dφ','r dr dθ dφ','dr dθ dφ','r² dr dθ dφ'],a:0,e:'√g = r² sinθ.'},
+ {q:'A^ij B_ij equals…',o:['A_ij B^ij','A^ij B^ij','A_ij B_ij','zero'],a:0,e:'Example 6: see-saw a dummy pair.'},
+ {q:'In Cartesian coordinates g_ij equals…',o:['δ_ij','0','r²','depends on the vector'],a:0,e:'So upper = lower components (Example 7).'}
+];
+(function(){let sc=0;$('qTot').textContent=QZ.length;
+ $('quiz').innerHTML=QZ.map((x,i)=>{const ord=x.o.map((t,j)=>({t,j})).sort(()=>Math.random()-0.5);
+  return `<div class="qq" data-q="${i}"><b>Q${i+1}.</b> ${x.q}${ord.map(o=>`<label class="opt"><input type="radio" name="q${i}" value="${o.j}"> ${o.t}</label>`).join('')}<div class="fb"></div></div>`;}).join('');
+ document.querySelectorAll('#quiz .qq').forEach(div=>{const i=+div.dataset.q;let done=false;
+  div.querySelectorAll('input').forEach(inp=>inp.addEventListener('change',()=>{if(done)return;done=true;const ok=+inp.value===QZ[i].a;if(ok)sc++;$('qScore').textContent=sc;
+    div.querySelector('.fb').innerHTML=`<span class="${ok?'ok':'bad'}">${ok?'✓ Correct.':'✗ Answer: '+QZ[i].o[QZ[i].a]+'.'}</span> ${QZ[i].e}`;
+    div.querySelectorAll('input').forEach(x=>x.disabled=true);}));});})();
+
+function drawAll(){drawM();drawV();}
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+$('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawAll();};})();
+$('mAl').style.display='none';drawAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:110px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:85px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:collapse;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;margin:3px 4px;width:auto}
+.mx.det{border-radius:0}
+.mx td{border:0;padding:1px 8px;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.verdict{font-weight:700;font-size:1.05rem;margin:6px 0}
+.sys{font-family:"Cambria Math",Cambria,"Times New Roman",serif;display:inline-block;text-align:left;line-height:1.5}
+</style>
+<title>Algebra of Tensors</title>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>16. The Algebra of Tensors</h1>
+<p>Equality and null tensor · Addition and subtraction · Outer product · Inner product · Contraction · Symmetric and antisymmetric tensors · Kronecker delta as an isotropic tensor · Fully antisymmetric tensor ε · Rules for checking index equations &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 173–183</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">Equality, sum</a><a href="#s2">Outer product</a><a href="#s3">Inner product</a><a href="#s4">Contraction</a><a href="#s5">Tensor-test lab</a><a href="#s6">Symmetry</a><a href="#s7">Symmetry lab</a><a href="#s8">δ</a><a href="#s9">ε</a><a href="#s10">ε lab</a><a href="#s11">Index rules</a><a href="#s12">Summary</a><a href="#s13">Exercise 16</a><a href="#s14">Practice</a><a href="#s15">Quiz</a><a href="#s16">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>Section 15 defined a tensor by its transformation law. This section asks: <b>which operations on tensors give tensors again?</b> The answer is a short list. Anything outside it is suspect.</p>
+<div class="tbl-wrap"><table>
+<tr><th>Operation</th><th>Example</th><th>Rank of result</th><th>Tensor?</th></tr>
+<tr><td>Addition / subtraction (same type only)</td><td>A<sup>i</sup><sub>j</sub> + B<sup>i</sup><sub>j</sub></td><td>same</td><td class="ok">yes</td></tr>
+<tr><td>Outer product</td><td>A<sup>ij</sup><sub>k</sub>B<sup>p</sup><sub>q</sub></td><td>sum of ranks (3 + 2 = 5)</td><td class="ok">yes</td></tr>
+<tr><td>Contraction (one upper = one lower, summed)</td><td>A<sup>ijk</sup><sub>im</sub></td><td>rank − 2</td><td class="ok">yes</td></tr>
+<tr><td>Inner product = outer product + contraction</td><td>A<sup>ij</sup><sub>k</sub>B<sup>k</sup><sub>q</sub></td><td>sum − 2</td><td class="ok">yes</td></tr>
+<tr><td>Summing two upper (or two lower) indices</td><td>A<sup>ij</sup><sub>k</sub>B<sup>j</sup><sub>q</sub></td><td>—</td><td class="bad">no</td></tr>
+<tr><td>Adding different types</td><td>A<sup>i</sup> + B<sub>i</sub></td><td>—</td><td class="bad">no</td></tr>
+</table></div>
+<div class="box tip"><b class="t">Needed from Section 15</b> Transformation law (15.41): one factor ∂x̄/∂x per upper index, one factor ∂x/∂x̄ per lower index. Identity (15.23): (∂x<sup>k</sup>/∂x̄<sup>γ</sup>)(∂x̄<sup>γ</sup>/∂x<sup>p</sup>) = δ<sup>k</sup><sub>p</sub>. Summation convention.</div>
+</section>
+
+<section id="s1">
+<h2>1. Equality, null tensor, addition, subtraction (Eqs. 1–7)</h2>
+<ul>
+<li><b>Same type</b>: two tensors with the same contravariant rank and the same covariant rank.</li>
+<li><b>Equality</b>: same type, and every component equal: A<sup>i₁…i<sub>p</sub></sup><sub>j₁…j<sub>q</sub></sub> = B<sup>i₁…i<sub>p</sub></sup><sub>j₁…j<sub>q</sub></sub>. &nbsp;(1)</li>
+<li><b>Null tensor</b>: all N<sup>r</sup> components are 0. By (15.41), if every component is zero in one system it is zero in all systems. Every term on the right side contains a zero component.</li>
+<li><b>Sum</b> C = A + B, component by component, only for the same type. &nbsp;(2)</li>
+</ul>
+<p><b>Proof that the sum is a tensor:</b> A and B transform with <b>the same</b> chain of Jacobian factors, because they are the same type. Adding (3) and (15.41) term by term, the common factors come out: C̄ = (∂x̄/∂x)…(∂x/∂x̄)…(A + B) = (factors)·C. &nbsp;(4–6) &nbsp; The same works for the difference D = A − B. &nbsp;(7)</p>
+<div class="box warnb"><b class="t">Why the types must match</b> A<sup>i</sup> + B<sub>i</sub>: the first part transforms with ∂x̄/∂x and the second with ∂x/∂x̄. No common factor can be taken out, so the sum transforms like nothing. That is why "A<sup>i</sup> = B<sub>i</sub>" is not a valid tensor equation (except in Cartesian coordinates, where the two kinds coincide).</div>
+<div class="box fact"><b class="t">Consequence: the most useful fact in physics</b> If A = B holds in one frame (both tensors), then A − B is a null tensor, so A = B in every frame. So once you have proved a tensor equation in a convenient coordinate system, it is proved in all of them.</div>
+</section>
+
+<section id="s2">
+<h2>2. Outer (Kronecker) product (Eqs. 8–12)</h2>
+<div class="box def"><b class="t">Definition</b> Multiply <b>every</b> component of one tensor by <b>every</b> component of the other, using <b>distinct</b> indices:
+<div class="eq">C<sup>ijp</sup><sub>kq</sub> = A<sup>ij</sup><sub>k</sub> B<sup>p</sup><sub>q</sub> &nbsp;&nbsp;(10)</div>
+Contravariant rank = sum of contravariant ranks (2 + 1 = 3). Covariant rank = sum of covariant ranks (1 + 1 = 2). Total rank 5, N⁵ components.</div>
+<p><b>Proof:</b> multiply the transformation laws (8a) and (8b). The product of the two Jacobian chains is exactly the chain for a tensor with upper indices i, j, p and lower indices k, q:</p>
+<div class="eq">C̄<sup>αβρ</sup><sub>γσ</sub> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)(∂x̄<sup>β</sup>/∂x<sup>j</sup>)(∂x̄<sup>ρ</sup>/∂x<sup>p</sup>)(∂x<sup>k</sup>/∂x̄<sup>γ</sup>)(∂x<sup>q</sup>/∂x̄<sup>σ</sup>) C<sup>ijp</sup><sub>kq</sub> &nbsp;&nbsp;(11)</div>
+<p><b>Example 1:</b> the outer product of A<sup>i</sup><sub>j</sub>, B<sub>k</sub> and C<sup>lm</sup><sub>np</sub>, written with all-different indices, is <b>D<sup>ilm</sup><sub>jknp</sub> = A<sup>i</sup><sub>j</sub>B<sub>k</sub>C<sup>lm</sup><sub>np</sub></b>, a tensor of rank 7 (contravariant 3, covariant 4). &nbsp;(12)</p>
+<div class="box warnb"><b class="t">Use distinct indices</b> Writing the outer product of A<sup>i</sup><sub>j</sub>, B<sub>k</sub>, C<sup>lm</sup><sub>np</sub> as A<sup>i</sup><sub>j</sub>B<sub>k</sub>C<sup>lm</sup><sub>kp</sub> would be <b>wrong</b>: the repeated k would mean a sum, which is no longer an outer product.</div>
+<p><b>Link to Section 13:</b> for two vectors, the outer product A<sup>i</sup>B<sup>j</sup> is the N×N matrix abᵀ, i.e. the Kronecker product a ⊗ b arranged as a matrix. A rank-2 tensor built this way always has matrix rank 1.</p>
+</section>
+
+<section id="s3">
+<h2>3. Inner product (Eqs. 13–18, Example 2)</h2>
+<div class="box def"><b class="t">Definition</b> Take an outer product, but set <b>one upper index of one tensor equal to one lower index of the other</b> and sum:
+<div class="eq">C<sup>ij</sup><sub>q</sub> = A<sup>ij</sup><sub>k</sub> B<sup>k</sup><sub>q</sub> &nbsp;&nbsp;(17)</div>
+Rank = (3 + 2) − 2 = 3. N³ functions.</div>
+<h3>Proof, step by step</h3>
+<ol>
+<li>In the outer-product law (9), put ρ = γ and sum over γ. &nbsp;(13)</li>
+<li>The two Jacobian factors attached to γ are (∂x<sup>k</sup>/∂x̄<sup>γ</sup>)(∂x̄<sup>γ</sup>/∂x<sup>p</sup>) = δ<sup>k</sup><sub>p</sub> by (15.23). &nbsp;(14)</li>
+<li>The δ kills the sum over p, leaving only p = k. &nbsp;(15)</li>
+<li>What remains is exactly the law for a tensor with upper i, j and lower q. ∎ &nbsp;(16)</li>
+</ol>
+<p>There are several inner products of the same pair: A<sup>ij</sup><sub>k</sub>B<sup>p</sup><sub>i</sub>, A<sup>ij</sup><sub>k</sub>B<sup>p</sup><sub>j</sub>, A<sup>ij</sup><sub>k</sub>B<sup>k</sup><sub>q</sub>, and the double contractions A<sup>ij</sup><sub>k</sub>B<sup>k</sup><sub>i</sub>, A<sup>ij</sup><sub>k</sub>B<sup>k</sup><sub>j</sub> (each a contravariant vector).</p>
+<h3>Example 2: A<sup>ij</sup><sub>k</sub>B<sup>j</sup><sub>q</sub> is NOT a tensor</h3>
+<p>Here j is summed but it is <b>upper in both</b>. In the transformation the two j-factors are (∂x̄<sup>α</sup>/∂x<sup>j</sup>)… paired with (∂x̄<sup>ρ</sup>/∂x<sup>p</sup>). Setting ρ = α gives (∂x̄<sup>α</sup>/∂x<sup>i</sup>)(∂x̄<sup>α</sup>/∂x<sup>p</sup>) summed over α. That is <b>not</b> δ<sup>i</sup><sub>p</sub>; in matrix language it is (JᵀJ)<sub>ip</sub>, which equals δ only when J is orthogonal. So the result does not transform like a tensor. &nbsp;(18)</p>
+<div class="box thm"><b class="t">The rule</b> In an inner product, <b>one contravariant index must be paired with one covariant index</b>. No index may occur more than twice: A<sup>ik</sup><sub>k</sub>B<sup>k</sup><sub>q</sub> is meaningless (k appears 3 times; Exercise 3 has 4).</div>
+</section>
+
+<section id="s4">
+<h2>4. Contraction (Eqs. 19–21)</h2>
+<div class="box def"><b class="t">Definition</b> In a <b>single</b> tensor, set one upper index equal to one lower index and sum. Example with A<sup>ijk</sup><sub>lm</sub> (rank 5, N⁵ components):
+<div class="eq">A<sup>ijk</sup><sub>im</sub> = A<sup>1jk</sup><sub>1m</sub> + A<sup>2jk</sup><sub>2m</sub> + … + A<sup>Njk</sup><sub>Nm</sub> &nbsp;&nbsp;(19)</div>
+The result is a tensor of contravariant rank 2 and covariant rank 1 (N³ components). Each contraction lowers the total rank by 2.</div>
+<p><b>Proof:</b> in (20) put ρ = α and sum: (∂x̄<sup>α</sup>/∂x<sup>i</sup>)(∂x<sup>l</sup>/∂x̄<sup>α</sup>) = δ<sup>l</sup><sub>i</sub>, so one pair of factors disappears and the rest is the rank-3 law. &nbsp;(21)</p>
+<ul>
+<li>A tensor can be contracted in several ways: A<sup>ijk</sup><sub>im</sub>, A<sup>ijk</sup><sub>jm</sub>, A<sup>ijk</sup><sub>lk</sub>, ….</li>
+<li>Repeated contraction: A<sup>ijk</sup><sub>lm</sub> → A<sup>ijk</sup><sub>im</sub> (rank 3) → A<sup>ijk</sup><sub>ij</sub> (rank 1, a contravariant vector).</li>
+<li><b>Inner product = outer product, then contraction:</b> A<sup>ij</sup><sub>k</sub>B<sup>k</sup><sub>q</sub> = contraction of D<sup>ijp</sup><sub>kq</sub> = A<sup>ij</sup><sub>k</sub>B<sup>p</sup><sub>q</sub> over p and k.</li>
+<li><b>Fully contracted tensors are scalars.</b> A<sup>i</sup><sub>i</sub> is the <b>trace</b> of a mixed tensor, invariant in every frame. That is why the trace of a matrix is invariant under similarity transformations (Section 15, Ā = JAJ⁻¹).</li>
+</ul>
+<div class="box warnb"><b class="t">Equating two similar indices is not a contraction</b> D<sup>iip</sup><sub>kq</sub> (two upper indices equal and summed) and D<sup>ijp</sup><sub>kk</sub> (two lower) are <b>not</b> tensors (Exercise 4). For a matrix this is the difference between Tr(A) = A<sup>i</sup><sub>i</sub> (invariant) and Σᵢ A<sub>ii</sub> for a covariant A<sub>ij</sub>, which changes under non-orthogonal transformations.</div>
+</section>
+
+<section id="s5">
+<h2>5. 🔬 Tensor-test lab: is your expression a tensor?</h2>
+<p>Type an index expression. Write a factor as name, then <code>^upper</code> and/or <code>_lower</code>: <code>A^ij_k B^k_q</code>. Available: any letter for a random tensor, <code>δ^i_j</code> (Kronecker delta), <code>ε_ijk</code> (Levi-Civita, N = 3).</p>
+<p>The lab picks a random coordinate change (a linear one, so the Jacobian J = ∂x̄/∂x is a constant matrix). Then it computes the expression <b>two ways</b>:</p>
+<ol><li>transform every factor to the barred system first, then evaluate the expression there;</li>
+<li>evaluate in the unbarred system, then transform the <b>result</b> with the tensor law for its free indices.</li></ol>
+<p>If the two agree, the expression behaves as a tensor. Switch to "rotation only" to see why Cartesian tensors (Section 19) ignore the upper/lower distinction.</p>
+<div class="lab">
+<div class="ctrl"><label>expression <input type="text" id="tX" value="A^ij_k B^k_q" style="width:260px"></label><label>N <select id="tN"><option>2</option><option selected>3</option></select></label>
+<label>coordinate change <select id="tMode"><option value="gen">general linear (J arbitrary)</option><option value="rot">rotation only (J orthogonal)</option><option value="vol">volume-preserving (det J = 1)</option></select></label>
+<button id="tGo">Test</button><button id="tNew" class="alt">new random J and tensors</button></div>
+<div class="ctrl small">Presets: <button class="alt" data-tt="A^ij_k B^p_q">outer A^ij_k B^p_q</button><button class="alt" data-tt="A^ij_k B^k_q">inner (Eq. 17)</button><button class="alt" data-tt="A^ij_k B^j_q">Example 2 ✗</button><button class="alt" data-tt="A^ijk_im">contraction (19)</button><button class="alt" data-tt="A^ii">A^ii ✗</button><button class="alt" data-tt="A^i_i">trace A^i_i</button><button class="alt" data-tt="A_ij B^i B^j">quadratic form</button><button class="alt" data-tt="A^ij B_i B_j">A^ij B_i B_j</button><button class="alt" data-tt="δ^i_j A^j">δ^i_j A^j</button><button class="alt" data-tt="ε_ijk A^j B^k">ε_ijk A^j B^k</button><button class="alt" data-tt="A^i + B_i">A^i + B_i ✗</button></div>
+<div id="tOut"></div>
+</div>
+</section>
+
+<section id="s6">
+<h2>6. Symmetric and antisymmetric tensors (Eqs. 22–32)</h2>
+<div class="box def"><b class="t">Definitions</b>
+<b>Symmetric:</b> A<sup>ij</sup> = A<sup>ji</sup>, or A<sub>ij</sub> = A<sub>ji</sub>, for all i, j. &nbsp;(22, 23)<br>
+<b>Antisymmetric</b> (skew): A<sup>ij</sup> = −A<sup>ji</sup>, or A<sub>ij</sub> = −A<sub>ji</sub>. &nbsp;(24) &nbsp; Then the diagonal is zero: A<sup>ii</sup> = −A<sup>ii</sup> ⇒ A<sup>ii</sup> = 0 (no sum).</div>
+<h3>Example 3: symmetry is an intrinsic property</h3>
+<ol>
+<li>Ā<sup>αβ</sup> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)(∂x̄<sup>β</sup>/∂x<sup>j</sup>)A<sup>ij</sup>. &nbsp;(25)</li>
+<li>Swap α ↔ β: Ā<sup>βα</sup> = (∂x̄<sup>β</sup>/∂x<sup>i</sup>)(∂x̄<sup>α</sup>/∂x<sup>j</sup>)A<sup>ij</sup>. &nbsp;(26)</li>
+<li>Rename the dummies i ↔ j and use A<sup>ji</sup> = A<sup>ij</sup>: Ā<sup>βα</sup> = (∂x̄<sup>β</sup>/∂x<sup>j</sup>)(∂x̄<sup>α</sup>/∂x<sup>i</sup>)A<sup>ij</sup>, the same as (25). &nbsp;(27)</li>
+<li>So Ā<sup>αβ</sup> = Ā<sup>βα</sup> in every system. ∎ &nbsp;(28) &nbsp; The same works for antisymmetry. In matrix form: (JAJᵀ)ᵀ = JAᵀJᵀ = JAJᵀ.</li>
+</ol>
+<h3>Higher rank: symmetry is about a <b>pair of similar indices</b></h3>
+<p>A<sup>ijk</sup><sub>lmp</sub> is symmetric in the first two upper indices if A<sup>ijk</sup><sub>lmp</sub> = A<sup>jik</sup><sub>lmp</sub> (29), and in the first and third lower indices if A<sup>ijk</sup><sub>lmp</sub> = A<sup>ijk</sup><sub>pml</sub> (30). Say "symmetric in the first two upper <b>positions</b>": the letters themselves can be renamed.</p>
+<h3>Example 4: symmetry between an upper and a lower index means nothing</h3>
+<p>Suppose A<sup>i</sup><sub>j</sub> = A<sup>j</sup><sub>i</sub> (as numbers) in the x-system. Then</p>
+<div class="eq">Ā<sup>α</sup><sub>β</sub> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)(∂x<sup>j</sup>/∂x̄<sup>β</sup>)A<sup>i</sup><sub>j</sub>, &nbsp;&nbsp; Ā<sup>β</sup><sub>α</sub> = (∂x̄<sup>β</sup>/∂x<sup>j</sup>)(∂x<sup>i</sup>/∂x̄<sup>α</sup>)A<sup>i</sup><sub>j</sub> &nbsp;(31, 32)</div>
+<p>The Jacobian factors are different kinds, so in general Ā<sup>α</sup><sub>β</sub> ≠ Ā<sup>β</sup><sub>α</sub>. In matrix language: JAJ⁻¹ need not be symmetric when A is (unless J is orthogonal).</p>
+<div class="box thm"><b class="t">Rule</b> Symmetry or antisymmetry between two <b>similar</b> indices (both upper or both lower) is <b>intrinsic</b>, true in every frame. Between <b>dissimilar</b> indices it is only an <b>accidental</b> property of one coordinate system.</div>
+<h3>Every rank-2 tensor splits into symmetric + antisymmetric (Exercise 6)</h3>
+<div class="eq">A<sup>ij</sup> = ½(A<sup>ij</sup> + A<sup>ji</sup>) + ½(A<sup>ij</sup> − A<sup>ji</sup>) = S<sup>ij</sup> + K<sup>ij</sup></div>
+<p>Both parts are tensors (sums of tensors of the same type), and the split is unique. Number of independent components in N dimensions: symmetric N(N+1)/2, antisymmetric N(N−1)/2. In 3D: 6 + 3 = 9. In 4D: 10 + 6 = 16. The electromagnetic field tensor F<sub>μν</sub> is antisymmetric with 6 components, which are <b>E</b> and <b>B</b>.</p>
+<p><b>Exercise 7:</b> A<sup>ij</sup> antisymmetric ⇒ A<sup>ij</sup>B<sub>i</sub>B<sub>j</sub> = 0. A symmetric times an antisymmetric pair always gives zero when fully contracted.</p>
+</section>
+
+<section id="s7">
+<h2>7. 🔬 Symmetry lab: what survives a change of coordinates?</h2>
+<p>Start with a symmetric 3×3 array. Treat it once as a contravariant tensor A<sup>ij</sup> (transforms as JAJᵀ) and once as a mixed tensor A<sup>i</sup><sub>j</sub> (transforms as JAJ⁻¹). Slide "shear" to make J non-orthogonal. The heat maps show the asymmetry Ā − Āᵀ. It stays exactly zero for A<sup>ij</sup>, but becomes nonzero for A<sup>i</sup><sub>j</sub> as soon as J stops being a rotation.</p>
+<div class="lab">
+<div class="ctrl"><label>rotation angle <input type="range" id="sR" min="0" max="180" step="1" value="35"><span id="sRv"></span></label><label>shear <input type="range" id="sS" min="0" max="1.5" step="0.01" value="0.6"><span id="sSv"></span></label><label><input type="radio" name="sType" value="sym" checked> start symmetric</label><label><input type="radio" name="sType" value="anti"> start antisymmetric</label></div>
+<div id="sOut"></div>
+</div>
+</section>
+
+<section id="s8">
+<h2>8. The Kronecker delta is a tensor, and an isotropic one (Eqs. 33–34)</h2>
+<p>Treat δ<sup>i</sup><sub>j</sub> as a mixed tensor and transform it:</p>
+<div class="eq">δ̄<sup>α</sup><sub>β</sub> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)(∂x<sup>j</sup>/∂x̄<sup>β</sup>)δ<sup>i</sup><sub>j</sub> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)(∂x<sup>i</sup>/∂x̄<sup>β</sup>) = ∂x̄<sup>α</sup>/∂x̄<sup>β</sup> = δ<sup>α</sup><sub>β</sub> &nbsp;&nbsp;(33)</div>
+<p>So δ<sup>i</sup><sub>j</sub> has the <b>same components (1 and 0) in every coordinate system</b>. A tensor with this property is called <b>isotropic</b>. In matrix language, JIJ⁻¹ = I.</p>
+<div class="box warnb"><b class="t">Only the mixed form</b> δ<sup>i</sup><sub>j</sub> is isotropic under all transformations. The "δ<sub>ij</sub>" with both indices down would transform as JᵀJ (or KᵀIK), which is I only for orthogonal J. In general coordinates its role is taken by the metric tensor g<sub>ij</sub> (Section 18).</div>
+</section>
+
+<section id="s9">
+<h2>9. The fully antisymmetric (Levi-Civita) tensor ε (Eqs. 35–39)</h2>
+<div class="box def"><b class="t">Definition</b> In N dimensions, ε<sub>i₁i₂…i<sub>N</sub></sub> has N indices (N<sup>N</sup> components):
+<ul style="margin:4px 0"><li>+1 if (i₁ … i<sub>N</sub>) is an <b>even</b> permutation of (1 2 … N),</li><li>−1 if it is an <b>odd</b> permutation,</li><li>0 if any two indices are equal.</li></ul>
+Only N! components are nonzero.</div>
+<p>In 3D (x, y, z): ε<sub>xyz</sub> = ε<sub>yzx</sub> = ε<sub>zxy</sub> = 1 (cyclic), ε<sub>xzy</sub> = ε<sub>zyx</sub> = ε<sub>yxz</sub> = −1 (anticyclic); the other 21 components are 0. &nbsp;(35)</p>
+<h3>Example 5(a): the cross product</h3>
+<div class="eq">(u × v)<sub>i</sub> = ε<sub>ijk</sub>u<sub>j</sub>v<sub>k</sub> &nbsp;&nbsp;(37)</div>
+<p>Check i = x: the only nonzero terms are j, k = (y, z) with ε<sub>xyz</sub> = 1 and (z, y) with ε<sub>xzy</sub> = −1, giving u<sub>y</sub>v<sub>z</sub> − u<sub>z</sub>v<sub>y</sub> ✓. &nbsp;(36)</p>
+<h3>Example 5(b): angular momentum in quantum mechanics</h3>
+<div class="eq">[L<sub>x</sub>, L<sub>y</sub>] = iħL<sub>z</sub>, [L<sub>y</sub>, L<sub>z</sub>] = iħL<sub>x</sub>, [L<sub>z</sub>, L<sub>x</sub>] = iħL<sub>y</sub> &nbsp; ⇔ &nbsp; <b>[L<sub>i</sub>, L<sub>j</sub>] = iħ ε<sub>ijk</sub> L<sub>k</sub></b> &nbsp;&nbsp;(38, 39)</div>
+<p>(Compare the Pauli matrices: [σ<sub>i</sub>, σ<sub>j</sub>] = 2iε<sub>ijk</sub>σ<sub>k</sub>, Section 14.)</p>
+<h3>The identities you will need again and again</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Identity (3D, Cartesian)</th><th>Use</th></tr>
+<tr><td><b>ε<sub>ijk</sub>ε<sub>imn</sub> = δ<sub>jm</sub>δ<sub>kn</sub> − δ<sub>jn</sub>δ<sub>km</sub></b></td><td>a × (b × c) = b(a·c) − c(a·b) ("BAC−CAB"), ∇×(∇×A)</td></tr>
+<tr><td>ε<sub>ijk</sub>ε<sub>ijn</sub> = 2δ<sub>kn</sub></td><td>contract once more</td></tr>
+<tr><td>ε<sub>ijk</sub>ε<sub>ijk</sub> = 6 = 3!</td><td>number of nonzero components</td></tr>
+<tr><td>ε<sub>ijk</sub>a<sub>i</sub>b<sub>j</sub>c<sub>k</sub> = det[a b c] = a·(b × c)</td><td>triple product (Exercise 8), volume of the parallelepiped</td></tr>
+<tr><td>ε<sub>ijk</sub>a<sub>j</sub>a<sub>k</sub> = 0</td><td>a × a = 0 (Exercise 9)</td></tr>
+<tr><td>ε<sub>ijk</sub>S<sub>jk</sub> = 0 for symmetric S</td><td>antisymmetric × symmetric contracts to zero</td></tr>
+<tr><td>det A = ε<sub>ijk</sub>A<sub>1i</sub>A<sub>2j</sub>A<sub>3k</sub></td><td>the Leibniz formula for determinants</td></tr>
+</table></div>
+<div class="box warnb"><b class="t">Is ε really a tensor?</b> Under a general change of coordinates, ε<sub>ijk</sub> with the fixed values ±1, 0 picks up a factor det(J). It is a <b>tensor density</b> (or "pseudotensor"), not a true tensor. It behaves as a true tensor under transformations with det J = 1, e.g. proper rotations. Under a reflection (det = −1) it flips sign, which is why u × v is an <b>axial</b> vector. The book's footnote says the index positions in (37) are justified only in Cartesian coordinates. Test it in Lab 5: ε_ijk A^j B^k passes for "rotation" and "volume-preserving" but fails for "general".</div>
+</section>
+
+<section id="s10">
+<h2>10. 🔬 ε lab: permutations, cross product, triple product</h2>
+<div class="grid2">
+<div class="lab"><h4>(a) The 27 components of ε<sub>ijk</sub></h4>
+<p class="small">Three 3×3 slices for i = x, y, z. Blue = +1 (cyclic), red = −1, blank = 0. Click a cell to see its permutation and how many swaps it takes.</p>
+<div id="epsGrid"></div><div class="readout out" id="epsInfo">Click a cell.</div>
+</div>
+<div class="lab"><h4>(b) Triple product = volume (drag to rotate)</h4>
+<p class="small">ε<sub>ijk</sub>a<sub>i</sub>b<sub>j</sub>c<sub>k</sub> = det[a b c]. The sign is + for a right-handed triple and − for a left-handed one. Make c coplanar with a and b and the volume becomes 0.</p>
+<canvas id="cvT" width="440" height="380"></canvas>
+<div class="ctrl"><label>c tilt <input type="range" id="tcT" min="-90" max="90" step="1" value="60"><span id="tcTv"></span></label><label>c turn <input type="range" id="tcP" min="0" max="360" step="1" value="40"><span id="tcPv"></span></label></div>
+<div class="readout out" id="tOut3"></div>
+</div></div>
+<div class="lab"><h4>(c) Check the ε–δ identity numerically</h4>
+<p class="small">The lab evaluates ε<sub>ijk</sub>ε<sub>imn</sub> for every j, k, m, n (81 cases) and compares with δ<sub>jm</sub>δ<sub>kn</sub> − δ<sub>jn</sub>δ<sub>km</sub>.</p>
+<button id="edGo">Run check</button><div class="readout out" id="edOut"></div>
+</div>
+</section>
+
+<section id="s11">
+<h2>11. Rules for checking index equations</h2>
+<ol>
+<li><b>A free index must match in every term</b> of the equation, at the same height (upper in every term or lower in every term).</li>
+<li><b>A dummy index is checked term by term.</b> It may occur in some terms only, but where it occurs it must appear exactly twice: once upper, once lower.</li>
+<li><b>No index more than twice</b> in any term.</li>
+<li>In ∂x<sup>i</sup>/∂x̄<sup>α</sup>, i counts as an upper (contravariant) index and α, sitting in the denominator, counts as a lower (covariant) index.</li>
+</ol>
+<div class="box tip"><b class="t">Worked check</b> Ā<sup>α</sup><sub>β</sub> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)(∂x<sup>j</sup>/∂x̄<sup>β</sup>)A<sup>i</sup><sub>j</sub>. Free indices: α (up on both sides ✓), β (down on both sides; it sits in a denominator on the right ✓). Dummies: i (down in a denominator, up in A ✓), j (up in a numerator, down in A ✓). The equation is well formed.</div>
+<p class="small">Note: in Eqs. (37) and (39) the book writes every index down. That is allowed only because Cartesian coordinates do not distinguish upper from lower (Section 19).</p>
+</section>
+
+<section id="s12">
+<h2>12. Summary sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Concept</th><th>Rule</th></tr>
+<tr><td>Sum / difference</td><td>same type only; result same type</td></tr>
+<tr><td>Outer product</td><td>distinct indices; ranks add (upper + upper, lower + lower)</td></tr>
+<tr><td>Contraction</td><td>one upper = one lower, summed; rank − 2; A<sup>i</sup><sub>i</sub> = trace, a scalar</td></tr>
+<tr><td>Inner product</td><td>outer product + contraction; pair upper with lower</td></tr>
+<tr><td>Not a tensor</td><td>summing two upper or two lower indices; adding different types</td></tr>
+<tr><td>Symmetric / antisymmetric</td><td>intrinsic for similar indices; accidental for dissimilar ones</td></tr>
+<tr><td>Decomposition</td><td>A<sup>ij</sup> = S<sup>ij</sup> + K<sup>ij</sup>; N(N+1)/2 + N(N−1)/2 components</td></tr>
+<tr><td>δ<sup>i</sup><sub>j</sub></td><td>mixed rank-2 isotropic tensor, δ<sup>i</sup><sub>i</sub> = N</td></tr>
+<tr><td>ε<sub>ijk</sub></td><td>+1 even, −1 odd, 0 repeated; N! nonzero; (u×v)<sub>i</sub> = ε<sub>ijk</sub>u<sub>j</sub>v<sub>k</sub></td></tr>
+<tr><td>ε–δ identity</td><td>ε<sub>ijk</sub>ε<sub>imn</sub> = δ<sub>jm</sub>δ<sub>kn</sub> − δ<sub>jn</sub>δ<sub>km</sub></td></tr>
+</table></div>
+</section>
+
+<section id="s13">
+<h2>13. Book's Exercise 16: all problems solved</h2>
+<div class="prob"><div class="q">1. If A<sup>i</sup><sub>j</sub> is a mixed tensor of rank two, show that A<sup>i</sup><sub>i</sub> is also a tensor.</div>
+<details><summary>Show solution</summary><p>Ā<sup>α</sup><sub>α</sub> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)(∂x<sup>j</sup>/∂x̄<sup>α</sup>)A<sup>i</sup><sub>j</sub> = δ<sup>j</sup><sub>i</sub>A<sup>i</sup><sub>j</sub> = A<sup>i</sup><sub>i</sub>, using (15.23). The trace is the same number in every system: a <b>scalar</b>, i.e. a tensor of rank 0. ∎</p></details></div>
+<div class="prob"><div class="q">2. In N dimensions, how many different expressions are represented by A<sup>ip</sup><sub>j</sub>B<sup>k</sup><sub>ir</sub>C<sup>rt</sup><sub>sk</sub>? How many terms does each contain?</div>
+<details><summary>Show solution</summary><p>Count the indices: i (up in A, down in B), k (up in B, down in C), r (down in B, up in C) each appear twice, so they are <b>dummies</b> (3 of them). p, j, t, s appear once: <b>free</b> (4 of them).</p><p>Number of expressions = N⁴ (one for each choice of p, j, t, s). Each is a sum over i, k, r: <b>N³ terms</b>. The result is a tensor D<sup>pt</sup><sub>js</sub> of rank 4. (Book's answer: N⁴ expressions, N³ terms each.)</p></details></div>
+<div class="prob"><div class="q">3. If A<sup>ij</sup><sub>k</sub> and B<sup>pq</sup><sub>l</sub> are tensors, show that A<sup>ij</sup><sub>k</sub>B<sup>pj</sup><sub>l</sub> (summed over the two upper j's) is not a tensor.</div>
+<details><summary>Show solution</summary><p>In the transformation of the outer product, the factors carrying the two j positions are (∂x̄<sup>β</sup>/∂x<sup>j</sup>) and (∂x̄<sup>ρ</sup>/∂x<sup>q</sup>). Setting ρ = β and summing gives Σ<sub>β</sub>(∂x̄<sup>β</sup>/∂x<sup>j</sup>)(∂x̄<sup>β</sup>/∂x<sup>q</sup>) = (JᵀJ)<sub>jq</sub>, not δ<sub>jq</sub>. So the factors do not collapse and the N⁴ functions (free i, k, p, l) do not obey the tensor law. ∎ (Same mechanism as Example 2. Test "A^ij_k B^pj_l" in Lab 5.)</p></details></div>
+<div class="prob"><div class="q">4. If A<sup>ij</sup><sub>kl</sub> is a tensor, show that A<sup>ii</sup><sub>kl</sub> and A<sup>ij</sup><sub>kk</sub> are not tensors.</div>
+<details><summary>Show solution</summary><p>A<sup>ii</sup><sub>kl</sub>: contracting two <b>upper</b> indices leaves the factor Σ<sub>α</sub>(∂x̄<sup>α</sup>/∂x<sup>i</sup>)(∂x̄<sup>α</sup>/∂x<sup>j</sup>) = (JᵀJ)<sub>ij</sub> in the transformation, which is not δ. Likewise A<sup>ij</sup><sub>kk</sub> leaves (KKᵀ) for two lower indices. Neither transforms as a rank-2 tensor under a general change of coordinates. (Both pass under rotations, where JᵀJ = I.) ∎</p></details></div>
+<div class="prob"><div class="q">5. If A<sup>ijk</sup><sub>lm</sub> is a tensor, show that A<sup>ijk</sup><sub>jk</sub>, A<sup>ijk</sup><sub>kj</sub>, A<sup>ijm</sup><sub>lm</sub>… (each with two contractions) are contravariant vectors.</div>
+<details><summary>Show solution</summary><p>Each expression contracts <b>twice</b>, each time pairing one upper with one lower index. Each contraction removes one upper and one lower index (rank − 2), so 5 → 3 → 1, leaving one free upper index. By the contraction theorem (21), applied twice, each is a contravariant vector. Example: A<sup>ijk</sup><sub>jk</sub>: pairs (j up, j down) and (k up, k down) ⇒ free i up ⇒ contravariant vector. ∎</p></details></div>
+<div class="prob"><div class="q">6. Show that any covariant or contravariant tensor of rank two can be written as the sum of a symmetric and an antisymmetric tensor of the same type.</div>
+<details><summary>Show solution</summary><p>A<sup>ij</sup> = S<sup>ij</sup> + K<sup>ij</sup> with S<sup>ij</sup> = ½(A<sup>ij</sup> + A<sup>ji</sup>) and K<sup>ij</sup> = ½(A<sup>ij</sup> − A<sup>ji</sup>). S<sup>ji</sup> = S<sup>ij</sup> and K<sup>ji</sup> = −K<sup>ij</sup> by inspection. A<sup>ji</sup> is a tensor of the same type (just a renaming of positions), so S and K, being sums of same-type tensors, are tensors.</p><p><b>Uniqueness:</b> if A = S + K = S′ + K′, then S − S′ = K′ − K is both symmetric and antisymmetric, hence zero. ∎ Same for A<sub>ij</sub>. (Not for a mixed A<sup>i</sup><sub>j</sub>, where symmetry has no invariant meaning.)</p></details></div>
+<div class="prob"><div class="q">7. If A<sup>ij</sup> is antisymmetric and B<sub>i</sub> is a vector, show A<sup>ij</sup>B<sub>i</sub>B<sub>j</sub> = 0.</div>
+<details><summary>Show solution</summary><p>Let X = A<sup>ij</sup>B<sub>i</sub>B<sub>j</sub>. Rename the dummies i ↔ j: X = A<sup>ji</sup>B<sub>j</sub>B<sub>i</sub> = −A<sup>ij</sup>B<sub>i</sub>B<sub>j</sub> = −X (numbers commute). So X = 0. ∎ Example: the quadratic form of an antisymmetric matrix is zero (Section 11).</p></details></div>
+<div class="prob"><div class="q">8. Show that (a × b)·c = ε<sub>ijk</sub>a<sub>i</sub>b<sub>j</sub>c<sub>k</sub> (Cartesian components).</div>
+<details><summary>Show solution</summary><p>(a × b)<sub>k</sub> = ε<sub>kij</sub>a<sub>i</sub>b<sub>j</sub> by (37), with the indices renamed. Dot with c: (a × b)·c = ε<sub>kij</sub>a<sub>i</sub>b<sub>j</sub>c<sub>k</sub>. A cyclic shift does not change ε: ε<sub>kij</sub> = ε<sub>ijk</sub>. Hence = ε<sub>ijk</sub>a<sub>i</sub>b<sub>j</sub>c<sub>k</sub>, which written out is the 3×3 determinant with rows a, b, c. ∎</p></details></div>
+<div class="prob"><div class="q">9. If a<sub>i</sub> is any vector, show that ε<sub>ijk</sub>a<sub>j</sub>a<sub>k</sub> = 0.</div>
+<details><summary>Show solution</summary><p>Let X<sub>i</sub> = ε<sub>ijk</sub>a<sub>j</sub>a<sub>k</sub>. Rename j ↔ k: X<sub>i</sub> = ε<sub>ikj</sub>a<sub>k</sub>a<sub>j</sub> = −ε<sub>ijk</sub>a<sub>j</sub>a<sub>k</sub> = −X<sub>i</sub>. So X<sub>i</sub> = 0, i.e. <b>a × a = 0</b>. Same mechanism as Exercise 7: antisymmetric ε contracted with the symmetric a<sub>j</sub>a<sub>k</sub>. ∎</p></details></div>
+</section>
+
+<section id="s14">
+<h2>14. Practice set (CSIR-NET / GATE style)</h2>
+<div class="prob"><div class="q">P1. Rank and type of A<sup>ij</sup><sub>kl</sub>B<sup>k</sup><sub>m</sub>C<sup>m</sup>? <span class="tag">rank</span></div>
+<details><summary>Show solution</summary><p>Dummies k, m. Free i, j (up), l (down): contravariant rank 2, covariant rank 1, total 3.</p></details></div>
+<div class="prob"><div class="q">P2. In 4D, how many independent components does an antisymmetric A<sub>μν</sub> have? A symmetric one? <span class="tag">count</span></div>
+<details><summary>Show solution</summary><p>Antisymmetric: 4·3/2 = 6 (E and B). Symmetric: 4·5/2 = 10 (e.g. the metric or the stress-energy tensor).</p></details></div>
+<div class="prob"><div class="q">P3. Evaluate ε<sub>ijk</sub>ε<sub>ijk</sub> and ε<sub>ijk</sub>δ<sub>jk</sub>. <span class="tag">ε</span></div>
+<details><summary>Show solution</summary><p>ε<sub>ijk</sub>ε<sub>ijk</sub> = 6. ε<sub>ijk</sub>δ<sub>jk</sub> = ε<sub>ijj</sub> = 0 (repeated index).</p></details></div>
+<div class="prob"><div class="q">P4. Using ε, prove a × (b × c) = b(a·c) − c(a·b). <span class="tag">identity</span></div>
+<details><summary>Show solution</summary><p>[a × (b × c)]<sub>i</sub> = ε<sub>ijk</sub>a<sub>j</sub>ε<sub>kmn</sub>b<sub>m</sub>c<sub>n</sub> = ε<sub>kij</sub>ε<sub>kmn</sub>a<sub>j</sub>b<sub>m</sub>c<sub>n</sub> = (δ<sub>im</sub>δ<sub>jn</sub> − δ<sub>in</sub>δ<sub>jm</sub>)a<sub>j</sub>b<sub>m</sub>c<sub>n</sub> = b<sub>i</sub>(a·c) − c<sub>i</sub>(a·b). ∎</p></details></div>
+<div class="prob"><div class="q">P5. S<sub>ij</sub> symmetric, K<sup>ij</sup> antisymmetric. Find S<sub>ij</sub>K<sup>ij</sup>. <span class="tag">sym×anti</span></div>
+<details><summary>Show solution</summary><p>0. Rename i ↔ j: S<sub>ji</sub>K<sup>ji</sup> = S<sub>ij</sub>(−K<sup>ij</sup>).</p></details></div>
+<div class="prob"><div class="q">P6. Is A<sub>i</sub>B<sub>i</sub> (both lower, summed) a scalar under general coordinate changes? <span class="tag">trap</span></div>
+<details><summary>Show solution</summary><p>No. It transforms with KᵀK. It is a scalar only under orthogonal transformations. The invariant is A<sub>i</sub>B<sup>i</sup>, or g<sup>ij</sup>A<sub>i</sub>B<sub>j</sub> (Section 18).</p></details></div>
+<div class="prob"><div class="q">P7. Show that ε<sub>ijk</sub>∂<sub>j</sub>∂<sub>k</sub>φ = 0, i.e. curl grad φ = 0. <span class="tag">vector calculus</span></div>
+<details><summary>Show solution</summary><p>∂<sub>j</sub>∂<sub>k</sub>φ is symmetric in j, k (mixed partials commute), and ε is antisymmetric in j, k, so the contraction vanishes. Similarly div curl A = ε<sub>ijk</sub>∂<sub>i</sub>∂<sub>j</sub>A<sub>k</sub> = 0.</p></details></div>
+<div class="prob"><div class="q">P8. A<sup>i</sup><sub>j</sub> has eigenvalues 1, 2, 3 in some frame. What is A<sup>i</sup><sub>j</sub>A<sup>j</sup><sub>i</sub>? <span class="tag">invariants</span></div>
+<details><summary>Show solution</summary><p>It is Tr(A²) = 1 + 4 + 9 = 14, the same in every frame (a double contraction is a scalar).</p></details></div>
+<div class="prob"><div class="q">P9. Write det A for a 3×3 matrix with ε, and show det A = det Aᵀ. <span class="tag">det</span></div>
+<details><summary>Show solution</summary><p>det A = ε<sub>ijk</sub>A<sub>1i</sub>A<sub>2j</sub>A<sub>3k</sub>, or symmetrically det A = (1/6)ε<sub>ijk</sub>ε<sub>lmn</sub>A<sub>il</sub>A<sub>jm</sub>A<sub>kn</sub>. The second form is unchanged when A ↔ Aᵀ (swap the roles of the two ε's).</p></details></div>
+<div class="prob"><div class="q">P10. How many independent components does a tensor A<sub>ijk</sub> have in 3D if it is fully antisymmetric? Fully symmetric? <span class="tag">count</span></div>
+<details><summary>Show solution</summary><p>Fully antisymmetric: C(3,3) = 1 (it must be a multiple of ε<sub>ijk</sub>). Fully symmetric: C(3+2, 3) = 10.</p></details></div>
+</section>
+
+<section id="s15" class="quiz">
+<h2>15. Self-test quiz</h2>
+<div id="quiz"></div>
+<p><b>Score: <span id="qScore">0</span> / <span id="qTot">0</span></b></p>
+</section>
+
+<section id="s16">
+<h2>16. Interesting facts</h2>
+<div class="box fact"><b class="t">Levi-Civita</b> Tullio Levi-Civita (1873–1941) developed tensor calculus with his teacher Ricci. Einstein, struggling with general relativity, wrote that he admired "the elegance of your method of computation". He also said, half joking, that tensor calculus was one of only two things he had learned from Italians, the other being spaghetti.</div>
+<div class="box fact"><b class="t">Penrose graphical notation</b> Roger Penrose drew tensors as boxes with legs (one leg per index) and contraction as joining legs. The same diagrams are now used for "tensor networks", which simulate quantum many-body systems and neural networks. Modern libraries even have a function called <code>einsum</code> that evaluates Einstein-summation strings like the one in Lab 5.</div>
+<div class="box fact"><b class="t">Why trace and determinant are invariant</b> Tr A = A<sup>i</sup><sub>i</sub> is a contraction, and det A can be written as ε…ε…A A A (Practice 9) with the ε's carrying compensating density factors. Every invariant of a matrix can be built from contractions. That is how physicists find quantities like E² − B² and E·B, the two invariants of the electromagnetic field.</div>
+<div class="box fact"><b class="t">Mirror test for axial vectors</b> In a mirror, a velocity flips its perpendicular component, but angular momentum L = r × p (built with ε) behaves the opposite way. The weak interaction "notices" the difference: parity violation (Wu experiment, 1957).</div>
+</section>
+</div>
+<script>
+/* ---------- small linear-algebra toolkit ---------- */
+const $=id=>document.getElementById(id);
+const cssv=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const eye=n=>Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0));
+const zeros=n=>Array.from({length:n},()=>Array(n).fill(0));
+const clone=M=>M.map(r=>r.slice());
+const mul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>s+v*B[k][j],0)));
+const add=(A,B)=>A.map((r,i)=>r.map((v,j)=>v+B[i][j]));
+const sub=(A,B)=>A.map((r,i)=>r.map((v,j)=>v-B[i][j]));
+const scl=(k,A)=>A.map(r=>r.map(v=>k*v));
+const trc=A=>A.reduce((s,r,i)=>s+r[i],0);
+const T=A=>A[0].map((_,j)=>A.map(r=>r[j]));
+const maxAbs=A=>Math.max(...A.flat().map(Math.abs));
+const mv=(A,x)=>A.map(r=>r.reduce((s,v,k)=>s+v*x[k],0));
+const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
+const nrm=a=>Math.sqrt(dot(a,a));
+const neg=s=>String(s).replace(/-/g,'−');
+function fmt(x,dec=3){
+  if(!isFinite(x))return '∞';
+  if(Math.abs(x)<1e-9)return '0';
+  const r=Math.round(x); if(Math.abs(x-r)<1e-7*Math.max(1,Math.abs(x)))return neg(r);
+  for(let q=2;q<=12;q++){const p=Math.round(x*q);if(Math.abs(x*q-p)<1e-7*q)return neg(p)+'/'+q;}
+  return neg(+x.toFixed(dec));
+}
+function mxH(M,heat,scale){
+  const s=scale||Math.max(1e-12,maxAbs(M));
+  return '<table class="mx">'+M.map(r=>'<tr>'+r.map(v=>{
+    let st='';
+    if(heat){const a=Math.min(1,Math.abs(v)/s)*0.55;if(Math.abs(v)>1e-9)st=` style="background:${v>0?`rgba(47,111,223,${a})`:`rgba(201,42,42,${a})`}"`;}
+    return `<td${st}>${fmt(v)}</td>`;}).join('')+'</tr>').join('')+'</table>';
+}
+function rank(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol)continue;
+    [A[r],A[p]]=[A[p],A[r]];
+    for(let i=r+1;i<n;i++){const f=A[i][c]/A[r][c];for(let j=c;j<m;j++)A[i][j]-=f*A[r][j];}
+    r++;
+  }
+  return r;
+}
+function nullspace(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  const piv=[];let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol){for(let i=r;i<n;i++)A[i][c]=0;continue;}
+    [A[r],A[p]]=[A[p],A[r]];
+    const d=A[r][c];for(let j=0;j<m;j++)A[r][j]/=d;
+    for(let i=0;i<n;i++)if(i!==r){const f=A[i][c];for(let j=0;j<m;j++)A[i][j]-=f*A[r][j];}
+    piv.push(c);r++;
+  }
+  const basis=[];
+  for(let f=0;f<m;f++){if(piv.includes(f))continue;
+    const v=Array(m).fill(0);v[f]=1;piv.forEach((c,i)=>{v[c]=-A[i][f];});basis.push(v);}
+  return basis;
+}
+function inv(M){
+  const n=M.length,A=M.map((r,i)=>r.concat(eye(n)[i]));
+  for(let c=0;c<n;c++){
+    let p=c;for(let i=c+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<1e-12)return null;
+    [A[c],A[p]]=[A[p],A[c]];const d=A[c][c];for(let j=0;j<2*n;j++)A[c][j]/=d;
+    for(let i=0;i<n;i++)if(i!==c){const f=A[i][c];for(let j=0;j<2*n;j++)A[i][j]-=f*A[c][j];}
+  }
+  return A.map(r=>r.slice(n));
+}
+/* Faddeev–LeVerrier: det(λI−A)=Σ c[k] λ^k, c[n]=1 */
+function charCoeffs(A){
+  const n=A.length,c=Array(n+1).fill(0);c[n]=1;let M=zeros(n);
+  for(let k=1;k<=n;k++){M=add(mul(A,M),scl(c[n-k+1],eye(n)));c[n-k]=-trc(mul(A,M))/k;}
+  return c;
+}
+/* complex helpers + Durand–Kerner roots of monic poly (c indexed by power) */
+const cm=(a,b)=>[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]];
+const cd=(a,b)=>{const d=b[0]*b[0]+b[1]*b[1];return[(a[0]*b[0]+a[1]*b[1])/d,(a[1]*b[0]-a[0]*b[1])/d];};
+function polyRoots(c){
+  const n=c.length-1;if(n===1)return[[-c[0],0]];
+  let z=Array.from({length:n},(_,k)=>{let w=[1,0];for(let i=0;i<=k;i++)w=cm(w,[0.4,0.9]);return w;});
+  const R=1+Math.max(...c.slice(0,n).map(Math.abs));z=z.map(w=>[w[0]*R,w[1]*R]);
+  const ev=x=>{let s=[1,0];for(let k=n-1;k>=0;k--)s=[s[0]*x[0]-s[1]*x[1]+c[k],s[0]*x[1]+s[1]*x[0]];return s;};
+  for(let it=0;it<2000;it++){
+    let delta=0;
+    z=z.map((zi,i)=>{let den=[1,0];z.forEach((zj,j)=>{if(j!==i)den=cm(den,[zi[0]-zj[0],zi[1]-zj[1]]);});
+      if(Math.hypot(den[0],den[1])<1e-300)den=[1e-12,0];
+      const q=cd(ev(zi),den);delta=Math.max(delta,Math.hypot(q[0],q[1]));return[zi[0]-q[0],zi[1]-q[1]];});
+    if(delta<1e-14)break;
+  }
+  return z;
+}
+function snap(x){for(const q of [1,2,3,4,6,12]){const r=Math.round(x*q)/q;if(Math.abs(x-r)<2e-4)return r;}return x;}
+function eigGroups(A){
+  const z=polyRoots(charCoeffs(A)),used=Array(z.length).fill(false),G=[];
+  const tol=2e-3*Math.max(1,maxAbs(A));
+  for(let i=0;i<z.length;i++){if(used[i])continue;const cl=[z[i]];used[i]=true;
+    for(let j=i+1;j<z.length;j++)if(!used[j]&&Math.hypot(z[j][0]-z[i][0],z[j][1]-z[i][1])<tol){cl.push(z[j]);used[j]=true;}
+    let re=cl.reduce((s,w)=>s+w[0],0)/cl.length,im=cl.reduce((s,w)=>s+w[1],0)/cl.length;
+    if(Math.abs(im)<1e-6)im=0;re=snap(re);if(im)im=snap(im);
+    G.push({re,im,m:cl.length});}
+  G.sort((a,b)=>b.re-a.re||b.im-a.im);return G;
+}
+const powM=(M,k)=>{let R=eye(M.length);for(let i=0;i<k;i++)R=mul(R,M);return R;};
+const lamF=a=>a===0?'λ':(a>0?`(λ − ${fmt(a)})`:`(λ + ${fmt(-a)})`);
+const supN=k=>k===1?'':String(k).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+function minimalPoly(A){
+  const G=eigGroups(A),n=A.length;
+  if(G.some(g=>g.im!==0))return{G,complex:true};
+  const sc=Math.max(1,maxAbs(A));
+  let tups=[[]];G.forEach(g=>{const nt=[];tups.forEach(t=>{for(let r=1;r<=g.m;r++)nt.push(t.concat(r));});tups=nt;});
+  tups.sort((a,b)=>a.reduce((s,v)=>s+v,0)-b.reduce((s,v)=>s+v,0));
+  const tried=[];
+  for(const t of tups){
+    let P=eye(n);G.forEach((g,i)=>{P=mul(P,powM(sub(A,scl(g.re,eye(n))),t[i]));});
+    const deg=t.reduce((s,v)=>s+v,0),zero=maxAbs(P)<1e-6*Math.pow(sc,deg);
+    tried.push({t,P,zero});if(zero)return{G,r:t,tried};
+  }
+  return{G,r:G.map(g=>g.m),tried};
+}
+function expandRoots(rs){let p=[1];rs.forEach(a=>{const q=Array(p.length+1).fill(0);p.forEach((v,i)=>{q[i]+=v;q[i+1]-=a*v;});p=q;});return p;}
+function polyStr(p,v,mat){
+  const d=p.length-1;let s='';
+  p.forEach((c,i)=>{if(Math.abs(c)<1e-9)return;const k=d-i;const a=Math.abs(c);
+    const coef=(a===1&&k>0)?'':fmt(a);const term=k===0?(mat?coef+'I':fmt(a)):(k===1?coef+v:coef+v+supN(k));
+    s+=(s===''?(c<0?'−':''):(c<0?' − ':' + '))+term;});
+  return s||'0';
+}
+function makeEditor(id,M,cb){
+  const box=$(id);let n=M.length;
+  function build(M){n=M.length;box.innerHTML='<div style="display:grid;grid-template-columns:repeat('+n+',58px);gap:4px">'+M.flat().map((v,i)=>`<input type="number" step="any" data-i="${i}" value="${v}" style="width:58px">`).join('')+'</div>';
+    box.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',cb));}
+  build(M);
+  return{get(){const v=[...box.querySelectorAll('input')].map(i=>parseFloat(i.value)||0);return Array.from({length:n},(_,i)=>v.slice(i*n,i*n+n));},
+         set(M){build(M);cb();}};
+}
+function arrow(ctx,x0,y0,x1,y1,col,w=2.5,dash){
+  ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;if(dash)ctx.setLineDash(dash);
+  ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();ctx.setLineDash([]);
+  const a=Math.atan2(y1-y0,x1-x0),L=Math.hypot(x1-x0,y1-y0);
+  if(L>6){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-10*Math.cos(a-0.4),y1-10*Math.sin(a-0.4));ctx.lineTo(x1-10*Math.cos(a+0.4),y1-10*Math.sin(a+0.4));ctx.fill();}
+  ctx.restore();
+}
+function canvasPt(cv,e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height];}
+
+/* ---------- tensor engine ---------- */
+function permSign(a){const b=a.slice();let s=1;for(let i=0;i<b.length;i++){for(let j=i+1;j<b.length;j++){if(b[i]===b[j])return 0;if(b[i]>b[j])s=-s;}}return s;}
+function randJ(N,mode){
+  const rnd=()=>Array.from({length:N},()=>Array.from({length:N},()=>Math.round((Math.random()*2-1)*10)/10));
+  if(mode==='rot'){let Q=[];const M=rnd();for(let c=0;c<N;c++){let v=M.map(r=>r[c]+(c===0?0.3:0));Q.forEach(q=>{const d=dot(v,q);v=v.map((x,i)=>x-d*q[i]);});const n=nrm(v);Q.push(v.map(x=>x/n));}
+    let R=T(Q);if(detN(R)<0)R=R.map(r=>{const s=r.slice();s[0]=-s[0];return s;});return R;}
+  let J;do{J=add(rnd(),scl(1.2,eye(N)));}while(Math.abs(detN(J))<0.4);
+  if(mode==='vol'){let d=detN(J);if(d<0){J[0]=J[0].map(x=>-x);d=-d;}J=scl(Math.pow(d,-1/N),J);}
+  return J;}
+function detN(M){const n=M.length,A=clone(M);let d=1;for(let c=0;c<n;c++){let p=c;for(let i=c+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;if(Math.abs(A[p][c])<1e-14)return 0;if(p!==c){[A[c],A[p]]=[A[p],A[c]];d=-d;}d*=A[c][c];for(let i=c+1;i<n;i++){const f=A[i][c]/A[c][c];for(let j=c;j<n;j++)A[i][j]-=f*A[c][j];}}return d;}
+function applyAxis(d,r,N,ax,M){const out=new Float64Array(d.length),str=Math.pow(N,r-1-ax);
+  for(let k=0;k<d.length;k++){const a=Math.floor(k/str)%N,base=k-a*str;let s=0;for(let i=0;i<N;i++)s+=M[a][i]*d[base+i*str];out[k]=s;}return out;}
+function transformT(d,heights,N,J,K){let x=d;const KT=T(K);heights.forEach((h,ax)=>{x=applyAxis(x,heights.length,N,ax,h==='u'?J:KT);});return x;}
+let tStore={},tJ=null,tK=null;
+function parseTerm(str){const facs=[];for(const tok of str.trim().split(/\s+/).filter(Boolean)){
+  const m=tok.match(/^([A-Za-zδε])((?:[\^_][a-z]+)*)$/);if(!m)throw 'Cannot read "'+tok+'". Use forms like A^ij_k, B_i, δ^i_j, ε_ijk.';
+  const idx=[];(m[2].match(/[\^_][a-z]+/g)||[]).forEach(seg=>seg.slice(1).split('').forEach(c=>idx.push({n:c,h:seg[0]==='^'?'u':'d'})));
+  facs.push({nm:m[1],idx});}return facs;}
+function baseVals(f,N,frame){
+  const r=f.idx.length,sz=Math.pow(N,r);
+  if(f.nm==='δ'){if(r!==2)throw 'δ needs two indices';const d=new Float64Array(sz);for(let i=0;i<N;i++)d[i*N+i]=1;return d;}
+  if(f.nm==='ε'){if(r!==N)throw 'ε needs exactly N = '+N+' indices';const d=new Float64Array(sz);for(let k=0;k<sz;k++){const a=[];let q=k;for(let i=0;i<r;i++){a.unshift(q%N);q=Math.floor(q/N);}d[k]=permSign(a);}return d;}
+  const sig=f.nm+':'+f.idx.map(x=>x.h).join('')+':'+N;
+  if(!tStore[sig])tStore[sig]=Float64Array.from({length:sz},()=>Math.round((Math.random()*6-3)*10)/10);
+  const d=tStore[sig];return frame==='bar'?transformT(d,f.idx.map(x=>x.h),N,tJ,tK):d;}
+function evalTerm(facs,N,frame,notes){
+  const cnt={},first={},order=[];facs.forEach(f=>f.idx.forEach(x=>{if(!(x.n in cnt)){cnt[x.n]=0;first[x.n]=[];order.push(x.n);}cnt[x.n]++;first[x.n].push(x.h);}));
+  order.forEach(n=>{if(cnt[n]>2)throw 'Index '+n+' appears '+cnt[n]+' times in one term: not allowed.';});
+  const free=order.filter(n=>cnt[n]===1),dum=order.filter(n=>cnt[n]===2);
+  if(notes)dum.forEach(n=>{if(first[n][0]===first[n][1])notes.push(`dummy index <b>${n}</b> is ${first[n][0]==='u'?'upper':'lower'} both times (should be one upper, one lower)`);});
+  const vals=facs.map(f=>baseVals(f,N,frame)),all=free.concat(dum),res=new Float64Array(Math.pow(N,free.length)),as={};
+  const rec=k=>{if(k===all.length){let p=1;facs.forEach((f,fi)=>{let q=0;f.idx.forEach(x=>{q=q*N+as[x.n];});p*=vals[fi][q];});let o=0;free.forEach(n=>{o=o*N+as[n];});res[o]+=p;return;}for(let v=0;v<N;v++){as[all[k]]=v;rec(k+1);}};
+  rec(0);return{res,free,heights:free.map(n=>first[n][0])};}
+function runTest(){
+  const N=+$('tN').value,src=$('tX').value;if(!tJ||tJ.length!==N||tJ.mode!==$('tMode').value){tJ=randJ(N,$('tMode').value);tJ.mode=$('tMode').value;tK=inv(tJ);}
+  try{
+    const terms=src.split('+').map(parseTerm),notes=[];
+    const U=terms.map(t=>evalTerm(t,N,'un',notes)),B=terms.map(t=>evalTerm(t,N,'bar',null));
+    const fs=U.map(u=>u.free.slice().sort().join(''));if(fs.some(f=>f!==fs[0]))throw 'The terms have different free indices: the equation is not even well formed.';
+    U.forEach((u,i)=>{if(i&&u.heights.join('')!==U[0].heights.join(''))notes.push('the terms have free indices at different heights (different tensor types are being added)');});
+    const perm=(u)=>{const ref=U[0].free;if(u.free.join('')===ref.join(''))return u.res;const r=ref.length,out=new Float64Array(u.res.length);for(let k=0;k<out.length;k++){const a={};let q=k;for(let i=r-1;i>=0;i--){a[ref[i]]=q%N;q=Math.floor(q/N);}let s=0;u.free.forEach(n=>{s=s*N+a[n];});out[k]=u.res[s];}return out;};
+    const sum=arr=>{const o=new Float64Array(arr[0].length);arr.forEach(a=>a.forEach((v,i)=>o[i]+=v));return o;};
+    const R=sum(U.map(perm)),Rb=sum(B.map(perm)),h=U[0].heights,Rt=transformT(R,h,N,tJ,tK);
+    let diff=0,scale=1e-12;Rb.forEach((v,i)=>{diff=Math.max(diff,Math.abs(v-Rt[i]));scale=Math.max(scale,Math.abs(v));});
+    const ok=diff<1e-8*Math.max(1,scale),free=U[0].free;
+    const typ=free.length?free.map((n,i)=>(h[i]==='u'?'^':'_')+n).join(' '):'(none: a scalar)';
+    const show=(d)=>{if(free.length===0)return fmt(d[0],4);if(free.length===1)return '('+Array.from(d).map(v=>fmt(v,3)).join(', ')+')';if(free.length===2)return mxH(Array.from({length:N},(_,i)=>Array.from(d.slice(i*N,i*N+N))));return '['+Array.from(d.slice(0,Math.min(9,d.length))).map(v=>fmt(v,3)).join(', ')+(d.length>9?', …':'')+'] ('+d.length+' components)';};
+    $('tOut').innerHTML=`<p>free indices: <b>${typ}</b> &nbsp; ⇒ claimed type: contravariant rank ${h.filter(x=>x==='u').length}, covariant rank ${h.filter(x=>x==='d').length}</p>
+    ${notes.length?'<p class="small">⚠ '+notes.join('<br>⚠ ')+'</p>':''}
+    <p class="small">J = ∂x̄/∂x = ${mxH(tJ)} &nbsp; det J = ${fmt(detN(tJ),4)}${$('tMode').value==='rot'?' (orthogonal: K = Jᵀ)':''}</p>
+    <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center"><div class="small">(1) evaluated in barred frame:<br>${show(Rb)}</div><div class="small">(2) unbarred result, then transformed:<br>${show(Rt)}</div></div>
+    <p class="verdict ${ok?'ok':'bad'}">${ok?'✓ They agree: the expression transforms as a tensor':'✗ They differ (max difference '+diff.toExponential(2)+'): NOT a tensor under this coordinate change'}</p>`;
+  }catch(e){$('tOut').innerHTML=`<p class="bad">${e}</p>`;}
+}
+$('tGo').onclick=runTest;['tN','tMode'].forEach(k=>$(k).addEventListener('change',()=>{tJ=null;runTest();}));
+$('tNew').onclick=()=>{tJ=null;tStore={};runTest();};$('tX').addEventListener('keydown',e=>{if(e.key==='Enter')runTest();});
+document.querySelectorAll('[data-tt]').forEach(b=>b.onclick=()=>{$('tX').value=b.dataset.tt;runTest();});
+
+/* ---------- symmetry lab ---------- */
+const symA=[[2,1,-1],[1,0.5,3],[-1,3,-2]],antiA=[[0,1.5,-1],[-1.5,0,2],[1,-2,0]];
+['sR','sS'].forEach(k=>$(k).addEventListener('input',labSym));document.querySelectorAll('[name=sType]').forEach(r=>r.addEventListener('change',labSym));
+function labSym(){
+  const th=+$('sR').value*Math.PI/180,sh=+$('sS').value;$('sRv').textContent=$('sR').value+'°';$('sSv').textContent=sh.toFixed(2);
+  const A=document.querySelector('[name=sType]:checked').value==='sym'?symA:antiA,sgn=A===symA?-1:1;
+  const R=[[Math.cos(th),-Math.sin(th),0],[Math.sin(th),Math.cos(th),0],[0,0,1]],S=[[1,sh,0],[0,1,0],[0,0,1]],J=mul(R,S),Ji=inv(J);
+  const C=mul(mul(J,A),T(J)),M=mul(mul(J,A),Ji),dC=add(C,scl(sgn,T(C))),dM=add(M,scl(sgn,T(M))),word=A===symA?'Ā − Āᵀ':'Ā + Āᵀ';
+  $('sOut').innerHTML=`<div style="display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start">
+  <div class="small">original A (as numbers)<br>${mxH(A,true)}</div><div class="small">J = R(θ)·shear<br>${mxH(J)}</div></div>
+  <div class="grid2"><div><p><b>as A<sup>ij</sup>:</b> Ā = JAJᵀ</p>${mxH(C,true)}<p class="small">${word} =</p>${mxH(dC,true,1)}<p class="${maxAbs(dC)<1e-9?'ok':'bad'}">${maxAbs(dC)<1e-9?'✓ property kept (intrinsic)':'✗ lost'}</p></div>
+  <div><p><b>as A<sup>i</sup><sub>j</sub>:</b> Ā = JAJ⁻¹</p>${mxH(M,true)}<p class="small">${word} =</p>${mxH(dM,true,1)}<p class="${maxAbs(dM)<1e-9?'ok':'bad'}">${maxAbs(dM)<1e-9?'✓ kept (only because J is orthogonal now)':'✗ lost: symmetry between an upper and a lower index is accidental'}</p></div></div>`;
+}
+
+/* ---------- ε grid ---------- */
+const XYZ=['x','y','z'];
+(function(){let h='<div style="display:flex;flex-wrap:wrap;gap:14px">';
+  for(let i=0;i<3;i++){h+=`<div><div class="small" style="text-align:center">i = ${XYZ[i]}</div><table style="width:auto;border-collapse:collapse"><tr><th></th>${XYZ.map(k=>`<th class="small">k=${k}</th>`).join('')}</tr>`;
+    for(let j=0;j<3;j++){h+=`<tr><th class="small">j=${XYZ[j]}</th>`;for(let k=0;k<3;k++){const s=permSign([i,j,k]);h+=`<td data-e="${i}${j}${k}" style="cursor:pointer;width:34px;text-align:center;border:1px solid var(--line);${s?`background:${s>0?'rgba(47,111,223,.35)':'rgba(201,42,42,.35)'}`:''}">${s>0?'+1':s<0?'−1':''}</td>`;}h+='</tr>';}
+    h+='</table></div>';}
+  $('epsGrid').innerHTML=h+'</div>';
+  $('epsGrid').querySelectorAll('[data-e]').forEach(td=>td.onclick=()=>{const a=td.dataset.e.split('').map(Number),s=permSign(a);
+    let sw=0;const b=a.slice();if(s){for(let i=0;i<3;i++)for(let j=0;j<2;j++)if(b[j]>b[j+1]){[b[j],b[j+1]]=[b[j+1],b[j]];sw++;}}
+    $('epsInfo').textContent=`ε_${a.map(x=>XYZ[x]).join('')} = ${s}\n`+(s?`(${a.map(x=>XYZ[x]).join(' ')}) → (x y z) takes ${sw} swap(s): ${sw%2?'odd':'even'} permutation`:'two indices are equal ⇒ 0');});})();
+
+/* ---------- triple product ---------- */
+const tv={yaw:0.6,pitch:0.3};
+['tcT','tcP'].forEach(k=>$(k).addEventListener('input',drawT3));
+(function(){const cv=$('cvT');let d=null;cv.addEventListener('pointerdown',e=>{d=[e.clientX,e.clientY];cv.setPointerCapture(e.pointerId);});
+ cv.addEventListener('pointermove',e=>{if(!d)return;tv.yaw+=(e.clientX-d[0])*0.01;tv.pitch=Math.max(-1.5,Math.min(1.5,tv.pitch+(e.clientY-d[1])*0.01));d=[e.clientX,e.clientY];drawT3();});cv.addEventListener('pointerup',()=>d=null);})();
+function pr3(p,s,W,H){const c=Math.cos(tv.yaw),sn=Math.sin(tv.yaw),cp=Math.cos(tv.pitch),sp=Math.sin(tv.pitch);const q=[p[0]-0.9,p[1]-0.6,p[2]-0.4],x=c*q[0]-sn*q[1],y1=sn*q[0]+c*q[1];return[W/2+s*x,H/2-s*(cp*q[2]-sp*y1)];}
+function drawT3(){
+  const t=+$('tcT').value*Math.PI/180,p=+$('tcP').value*Math.PI/180;$('tcTv').textContent=$('tcT').value+'°';$('tcPv').textContent=$('tcP').value+'°';
+  const a=[1.4,0,0],b=[0.4,1.2,0],c=[1.1*Math.cos(t)*Math.cos(p),1.1*Math.cos(t)*Math.sin(p),1.1*Math.sin(t)];
+  const cv=$('cvT'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,P=q=>pr3(q,120,W,H);
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);
+  const V=[[0,0,0],a,b,c,add([a],[b])[0],add([a],[c])[0],add([b],[c])[0],add(add([a],[b]),[c])[0]];
+  const E=[[0,1],[0,2],[0,3],[1,4],[1,5],[2,4],[2,6],[3,5],[3,6],[4,7],[5,7],[6,7]];
+  const vol=a[0]*(b[1]*c[2]-b[2]*c[1])-a[1]*(b[0]*c[2]-b[2]*c[0])+a[2]*(b[0]*c[1]-b[1]*c[0]);
+  ctx.fillStyle=vol>=0?'rgba(47,111,223,.12)':'rgba(201,42,42,.12)';
+  [[0,1,4,2],[3,5,7,6],[0,1,5,3],[2,4,7,6],[0,2,6,3],[1,4,7,5]].forEach(f=>{ctx.beginPath();f.forEach((k,i)=>{const q=P(V[k]);i?ctx.lineTo(...q):ctx.moveTo(...q);});ctx.closePath();ctx.fill();});
+  ctx.strokeStyle=cssv('--muted');ctx.lineWidth=1;E.forEach(([i,j])=>{const q1=P(V[i]),q2=P(V[j]);ctx.beginPath();ctx.moveTo(...q1);ctx.lineTo(...q2);ctx.stroke();});
+  const o=P([0,0,0]);[[a,'a','#c92a2a'],[b,'b','#2b9348'],[c,'c','#2f6fdf']].forEach(([v,n,col])=>{const q=P(v);arrow(ctx,o[0],o[1],q[0],q[1],col,3.5);ctx.fillStyle=col;ctx.font='bold 14px sans-serif';ctx.fillText(n,q[0]+5,q[1]-5);});
+  let terms=[];for(let i=0;i<3;i++)for(let j=0;j<3;j++)for(let k=0;k<3;k++){const s=permSign([i,j,k]);if(s)terms.push(`${s>0?'+':'−'}a${XYZ[i]}b${XYZ[j]}c${XYZ[k]}`);}
+  $('tOut3').textContent=`a = (1.4, 0, 0), b = (0.4, 1.2, 0)
+c = (${c.map(x=>fmt(x,3)).join(', ')})
+ε_ijk a_i b_j c_k = ${terms.join(' ')}
+             = ${fmt(vol,4)}
+${Math.abs(vol)<0.02?'≈ 0: a, b, c are (nearly) coplanar':vol>0?'> 0: right-handed triple':'< 0: left-handed triple (c below the a-b plane)'}`;
+}
+
+/* ---------- ε-δ check ---------- */
+$('edGo').onclick=()=>{const d=(x,y)=>x===y?1:0;let bad=0,ex=[];
+  for(let j=0;j<3;j++)for(let k=0;k<3;k++)for(let m=0;m<3;m++)for(let n=0;n<3;n++){let L=0;for(let i=0;i<3;i++)L+=permSign([i,j,k])*permSign([i,m,n]);const R=d(j,m)*d(k,n)-d(j,n)*d(k,m);if(L!==R)bad++;if(L!==0&&ex.length<6)ex.push(`j=${XYZ[j]} k=${XYZ[k]} m=${XYZ[m]} n=${XYZ[n]}: ε_ijk ε_imn = ${L}, δδ − δδ = ${R}`);}
+  let two=0;for(let k=0;k<3;k++)for(let n=0;n<3;n++){let s=0;for(let i=0;i<3;i++)for(let j=0;j<3;j++)s+=permSign([i,j,k])*permSign([i,j,n]);if(s!==2*d(k,n))two++;}
+  let six=0;for(let i=0;i<3;i++)for(let j=0;j<3;j++)for(let k=0;k<3;k++)six+=permSign([i,j,k])**2;
+  $('edOut').textContent=`81 cases checked, mismatches: ${bad}  ${bad?'✗':'✓'}\nsome nonzero cases:\n  ${ex.join('\n  ')}\nε_ijk ε_ijn = 2δ_kn: mismatches ${two} ✓\nε_ijk ε_ijk = ${six} ✓`;};
+
+/* ---------- Quiz ---------- */
+const QZ=[
+ {q:'Rank of the outer product of A^ij_k and B^p_q is…',o:['5','3','6','1'],a:0,e:'Ranks add: 3 + 2.'},
+ {q:'Contracting A^ijk_lm once gives a tensor of rank…',o:['3','4','5','1'],a:0,e:'Each contraction lowers the rank by 2.'},
+ {q:'Which is NOT a tensor in general?',o:['A^ij_k B^j_q','A^ij_k B^k_q','A^i_i','A^ij B_j'],a:0,e:'Two upper j’s are summed (Example 2).'},
+ {q:'A^i + B_i is…',o:['not a tensor','a contravariant vector','a covariant vector','a scalar'],a:0,e:'Only same-type tensors can be added.'},
+ {q:'If A^ij is symmetric in one frame, then in every frame it is…',o:['symmetric','antisymmetric','diagonal','undefined'],a:0,e:'Example 3: intrinsic for similar indices.'},
+ {q:'Symmetry of a mixed tensor A^i_j (A^i_j = A^j_i) is…',o:['not invariant in general','always invariant','impossible','the same as tracelessness'],a:0,e:'Example 4.'},
+ {q:'ε_xzy equals…',o:['−1','+1','0','3'],a:0,e:'One swap from xyz: odd.'},
+ {q:'ε_ijk ε_imn = …',o:['δ_jm δ_kn − δ_jn δ_km','δ_jk δ_mn','2δ_jm','6'],a:0,e:'The contracted ε–δ identity.'},
+ {q:'Number of independent components of an antisymmetric rank-2 tensor in 3D:',o:['3','6','9','1'],a:0,e:'N(N−1)/2.'},
+ {q:'δ^i_j is called isotropic because…',o:['its components are the same in every coordinate system','it is symmetric','its trace is N','it is diagonal'],a:0,e:'Eq. (33).'}
+];
+(function(){let sc=0;$('qTot').textContent=QZ.length;
+ $('quiz').innerHTML=QZ.map((x,i)=>{const ord=x.o.map((t,j)=>({t,j})).sort(()=>Math.random()-0.5);
+  return `<div class="qq" data-q="${i}"><b>Q${i+1}.</b> ${x.q}${ord.map(o=>`<label class="opt"><input type="radio" name="q${i}" value="${o.j}"> ${o.t}</label>`).join('')}<div class="fb"></div></div>`;}).join('');
+ document.querySelectorAll('#quiz .qq').forEach(div=>{const i=+div.dataset.q;let done=false;
+  div.querySelectorAll('input').forEach(inp=>inp.addEventListener('change',()=>{if(done)return;done=true;const ok=+inp.value===QZ[i].a;if(ok)sc++;$('qScore').textContent=sc;
+    div.querySelector('.fb').innerHTML=`<span class="${ok?'ok':'bad'}">${ok?'✓ Correct.':'✗ Answer: '+QZ[i].o[QZ[i].a]+'.'}</span> ${QZ[i].e}`;
+    div.querySelectorAll('input').forEach(x=>x.disabled=true);}));});})();
+
+function drawAll(){drawT3();}
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+$('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawAll();};})();
+runTest();labSym();drawT3();$('edGo').click();
+</script>
+</body>
+</html>

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:110px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:85px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:collapse;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;margin:3px 4px;width:auto}
+.mx.det{border-radius:0}
+.mx td{border:0;padding:1px 8px;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.verdict{font-weight:700;font-size:1.05rem;margin:6px 0}
+.sys{font-family:"Cambria Math",Cambria,"Times New Roman",serif;display:inline-block;text-align:left;line-height:1.5}
+</style>
+<title>Bilinear and Quadratic Forms</title>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>11. Bilinear and Quadratic Forms</h1>
+<p>Bilinear form x†Ay · Quadratic form x†Ax · Symmetric part S = ½(A + Ã) · Hermitian forms · Principal axis transformation · Conics and quadric surfaces · Positive definite forms &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 115–121</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">Bilinear &amp; quadratic</a><a href="#s2">Symmetric part</a><a href="#s3">Hermitian forms</a><a href="#s4">Surface lab</a><a href="#s5">Principal axes (2D)</a><a href="#s6">Quadrics (3D)</a><a href="#s7">Definiteness</a><a href="#s8">Summary</a><a href="#s9">Exercise 11</a><a href="#s10">Practice</a><a href="#s11">Quiz</a><a href="#s12">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>A <b>quadratic form</b> is a polynomial where every term has degree exactly 2, such as 8x² + 2√2 xy + 7y². Any such polynomial can be written as <b>xᵀAx</b> with a symmetric matrix A. Once it is in that form, the eigenvalues and eigenvectors of A tell you everything:</p>
+<ul>
+<li>what shape the curve or surface xᵀAx = c has (ellipse, hyperbola, ellipsoid, hyperboloid, …),</li>
+<li>the <b>directions</b> of its axes (the eigenvectors),</li>
+<li>the <b>lengths</b> of its axes (√(c/λ)),</li>
+<li>whether the form is always positive (all λ &gt; 0). In physics this is the question of whether energy has a minimum, i.e. whether there is a stable equilibrium.</li>
+</ul>
+<div class="flow"><span>polynomial</span><b>→</b><span>xᵀSx, S symmetric</span><b>→</b><span>rotate: y = Pᵀx</span><b>→</b><span>λ₁y₁² + λ₂y₂² + λ₃y₃²</span><b>→</b><span>read the shape</span></div>
+<div class="box tip"><b class="t">Needed from earlier</b> x† = conjugate transpose (for real x it is just the transpose x̃ = xᵀ). A real symmetric matrix has real eigenvalues and orthonormal eigenvectors, so it is diagonalized by an <b>orthogonal</b> P: PᵀAP = Λ (Section 10). Orthogonal matrices are rotations (or reflections).</div>
+</section>
+
+<section id="s1">
+<h2>1. Bilinear form and quadratic form (Eqs. 1–5)</h2>
+<div class="box def"><b class="t">Definitions</b>
+With x = {x<sub>i</sub>}, y = {y<sub>i</sub>} and A = [a<sub>ij</sub>] (n×n):
+<div class="eq">Bilinear form: &nbsp; B = Σ<sub>i,j</sub> a<sub>ij</sub> x<sub>i</sub>* y<sub>j</sub> = x†Ay &nbsp;&nbsp;(1, 3)</div>
+<div class="eq">Quadratic form: &nbsp; Q = Σ<sub>i,j</sub> a<sub>ij</sub> x<sub>i</sub>* x<sub>j</sub> = x†Ax &nbsp;&nbsp;(4)</div>
+The value of either one is a single <b>number</b>: (1×n)(n×n)(n×1) = 1×1.</div>
+<ul>
+<li><b>"Bilinear"</b>: B is linear in y, and linear in x apart from complex conjugation. Doubling y doubles B.</li>
+<li><b>"Quadratic"</b>: every term has degree 2 in the components of x. Doubling x multiplies Q by 4 (if x is real).</li>
+<li>For n = 2 with real x: xᵀAx = a₁₁x₁² + (a₁₂ + a₂₁)x₁x₂ + a₂₂x₂². Only the <b>sum</b> a₁₂ + a₂₁ matters.</li>
+</ul>
+<h3>Worked Example 1 (book)</h3>
+<div class="eq">x = (1+i, 3, 2i)ᵀ, &nbsp; y = (2−i, 0, 2+2i)ᵀ, &nbsp; A = <table class="mx"><tr><td>3+i</td><td>0</td><td>9</td></tr><tr><td>6i</td><td>2+3i</td><td>0</td></tr><tr><td>−i</td><td>2i</td><td>1−i</td></tr></table></div>
+<p><b>Step 1:</b> x† = (1−i, 3, −2i), the conjugate row.</p>
+<p><b>Step 2 (bilinear):</b> Ay = ((3+i)(2−i) + 9(2+2i), 6i(2−i), −i(2−i) + (1−i)(2+2i)) = (7 − i + 18 + 18i, 6 + 12i, −1 − 2i + 4) = (25 + 17i, 6 + 12i, 3 − 2i).<br>
+B = (1−i)(25+17i) + 3(6+12i) + (−2i)(3−2i) = (42 − 8i) + (18 + 36i) + (−4 − 6i) = <b>56 + 22i</b>. &nbsp;(5a)</p>
+<p><b>Step 3 (quadratic):</b> Ax = ((3+i)(1+i) + 9(2i), 6i(1+i) + 3(2+3i), −i(1+i) + 6i + (1−i)(2i)) = (2 + 22i, 0 + 15i, 3 + 7i).<br>
+Q = (1−i)(2+22i) + 3(15i) + (−2i)(3+7i) = (24 + 20i) + 45i + (14 − 6i) = <b>38 + 59i</b>. &nbsp;(5b)</p>
+<p class="small">Q is complex here because A is not hermitian. Compare with Section 3.</p>
+</section>
+
+<section id="s2">
+<h2>2. Every real quadratic form has a symmetric matrix (Eqs. 6–11)</h2>
+<p>For real x and real A, Q = xᵀAx is a number, so it equals its own transpose:</p>
+<div class="eq">xᵀAx = (xᵀAx)ᵀ = xᵀÃx &nbsp;&nbsp;(6) &nbsp; ⇒ &nbsp; xᵀAx = ½(xᵀAx + xᵀÃx) = xᵀSx, &nbsp; <b>S = ½(A + Ã)</b> &nbsp;(7, 8)</div>
+<p>So we can always <b>replace A by its symmetric part S</b>. The antisymmetric part K = ½(A − Ã) adds nothing, because xᵀKx = 0 for every x. (Proof: xᵀKx is a number, so it equals its transpose xᵀK̃x = −xᵀKx. A number equal to its own negative is 0.)</p>
+<div class="box tip"><b class="t">Fast recipe: polynomial ↔ symmetric matrix</b>
+<ul style="margin:4px 0">
+<li><b>Diagonal</b> entry s<sub>ii</sub> = coefficient of x<sub>i</sub>².</li>
+<li><b>Off-diagonal</b> s<sub>ij</sub> = s<sub>ji</sub> = <b>half</b> the coefficient of x<sub>i</sub>x<sub>j</sub>.</li>
+</ul>
+Example: 8x² + 2√2 xy + 7y² ↔ [[8, √2], [√2, 7]]. &nbsp; 3x² + 3y² − 4z² − 18xy ↔ [[3, −9, 0], [−9, 3, 0], [0, 0, −4]].</div>
+<h3>Worked Example 2 (book)</h3>
+<p>A = [[3, −1, 5], [4, 2, −6], [9, 2, 4]].</p>
+<ul>
+<li>x₁²: 3, &nbsp;x₂²: 2, &nbsp;x₃²: 4</li>
+<li>x₁x₂: a₁₂ + a₂₁ = −1 + 4 = 3; &nbsp; x₂x₃: −6 + 2 = −4; &nbsp; x₃x₁: 5 + 9 = 14</li>
+</ul>
+<div class="eq">xᵀAx = 3x₁² + 2x₂² + 4x₃² + 3x₁x₂ − 4x₂x₃ + 14x₃x₁ &nbsp;&nbsp;(9)</div>
+<div class="eq">S = ½(A + Ã) = <table class="mx"><tr><td>3</td><td>3/2</td><td>7</td></tr><tr><td>3/2</td><td>2</td><td>−2</td></tr><tr><td>7</td><td>−2</td><td>4</td></tr></table> &nbsp; gives the same polynomial (11).</div>
+<div class="lab"><h4>🔬 Lab 1: polynomial ↔ matrix converter</h4>
+<p class="small">Type the coefficients of a quadratic form in x, y, z. The lab builds S. Or edit any (non-symmetric) A below: the lab shows its polynomial and its symmetric part.</p>
+<div class="ctrl"><label>x² <input type="number" id="c_xx" value="3" style="width:64px"></label><label>y² <input type="number" id="c_yy" value="2" style="width:64px"></label><label>z² <input type="number" id="c_zz" value="4" style="width:64px"></label><label>xy <input type="number" id="c_xy" value="3" style="width:64px"></label><label>yz <input type="number" id="c_yz" value="-4" style="width:64px"></label><label>zx <input type="number" id="c_zx" value="14" style="width:64px"></label></div>
+<div id="l1a"></div>
+<p class="small" style="margin-top:12px">Any matrix A (try the non-symmetric matrix from Example 2):</p>
+<div id="l1In" class="ctrl"></div>
+<div id="l1b"></div>
+</div>
+</section>
+
+<section id="s3">
+<h2>3. Hermitian forms (Examples 3, 4)</h2>
+<div class="box def"><b class="t">Definition</b> If H is hermitian (H† = H), then Q = x†Hx is called a <b>hermitian form</b>. x may be real or complex.</div>
+<div class="box thm"><b class="t">Theorem (Example 3): a hermitian form is always real</b>
+Q is a 1×1 matrix, so Q† = Q*. &nbsp;(13)<br>
+Also Q† = (x†Hx)† = x†H†(x†)† = x†Hx = Q. &nbsp;(14)<br>
+So Q* = Q, i.e. Q is real. ∎</div>
+<p><b>Converse (Exercise 5):</b> if x†Hx is real for every x, then H is hermitian. <b>Antihermitian (Exercise 7):</b> if A† = −A, the same steps give Q* = −Q, so Q is purely imaginary or 0.</p>
+<p><b>Why physics cares:</b> in quantum mechanics the expectation value ⟨ψ|H|ψ⟩ = ψ†Hψ is a hermitian form. It is real because observables are hermitian.</p>
+<h3>Worked Example 4 (book)</h3>
+<div class="eq">H = <table class="mx"><tr><td>a</td><td>p − iq</td><td>r − is</td></tr><tr><td>p + iq</td><td>b</td><td>u − iv</td></tr><tr><td>r + is</td><td>u + iv</td><td>c</td></tr></table> &nbsp; (a, b, c, p, q, r, s, u, v real)</div>
+<p>Multiply out x†Hx. The diagonal terms give a|x₁|² + b|x₂|² + c|x₃|². Each off-diagonal pair gives a term plus its own complex conjugate, e.g. (p − iq)x₁*x₂ + (p + iq)x₂*x₁ = 2 Re[(p − iq)x₁*x₂]. So</p>
+<div class="eq">x†Hx = a|x₁|² + b|x₂|² + c|x₃|² + 2 Re[(p − iq)x₁*x₂ + (u − iv)x₂*x₃ + (r − is)x₁*x₃] &nbsp;(16)</div>
+<p>This is real for every x. ✓</p>
+<div class="tbl-wrap"><table><tr><th>Matrix</th><th>x†Ax is…</th></tr>
+<tr><td>Hermitian</td><td>always real</td></tr><tr><td>Antihermitian</td><td>purely imaginary or 0</td></tr><tr><td>Real symmetric, x real</td><td>real</td></tr><tr><td>Real antisymmetric, x real</td><td>always 0</td></tr><tr><td>General</td><td>complex (Example 1)</td></tr></table></div>
+</section>
+
+<section id="s4">
+<h2>4. 🔬 Feel a quadratic form: the surface z = Q(x, y)</h2>
+<p>Plot z = ax² + 2hxy + by² over the plane. Drag to rotate. The shape depends only on the <b>signs of the eigenvalues</b> of [[a, h], [h, b]]:</p>
+<ul><li>both λ &gt; 0: a <b>bowl</b> (positive definite: Q &gt; 0 except at 0)</li><li>both λ &lt; 0: an upside-down bowl (negative definite)</li><li>opposite signs: a <b>saddle</b> (indefinite)</li><li>one λ = 0: a <b>trough</b> (semidefinite). Q = 0 along a whole line.</li></ul>
+<p>The coloured arrows on the floor are the eigenvectors. Along one the surface rises fastest (λ<sub>max</sub>), along the other slowest (λ<sub>min</sub>). On the unit circle, Q always stays between λ<sub>min</sub> and λ<sub>max</sub>.</p>
+<div class="lab">
+<div class="grid2">
+<div><canvas id="cvS" width="480" height="440"></canvas></div>
+<div>
+<div class="ctrl"><button class="alt" data-sf="bowl">Bowl</button><button class="alt" data-sf="saddle">Saddle</button><button class="alt" data-sf="trough">Trough (Ex 9 type)</button><button class="alt" data-sf="ex5">Example 5</button><button class="alt" data-sf="neg">Cap</button></div>
+<div class="ctrl"><label>a <input type="range" id="sA" min="-3" max="3" step="0.05" value="1.5"><span id="sAv"></span></label><label>h <input type="range" id="sH" min="-3" max="3" step="0.05" value="0.6"><span id="sHv"></span></label><label>b <input type="range" id="sB" min="-3" max="3" step="0.05" value="0.8"><span id="sBv"></span></label></div>
+<canvas id="cvQ" width="440" height="150"></canvas>
+<div class="small">Q(cos θ, sin θ) for θ from 0 to 2π, with dashed lines at λ<sub>min</sub> and λ<sub>max</sub>.</div>
+<div class="readout out" id="sOut"></div>
+</div></div></div>
+</section>
+
+<section id="s5">
+<h2>5. Principal axis transformation in 2D (Eqs. 17–30)</h2>
+<p>Take A = [[a, h], [h, b]] real symmetric and x = (x₁, x₂)ᵀ real. The equation</p>
+<div class="eq">xᵀAx = c &nbsp; ⇔ &nbsp; ax₁² + 2hx₁x₂ + bx₂² = c &nbsp;&nbsp;(18, 19)</div>
+<p>is a conic section. The cross term 2hx₁x₂ means its axes are <b>tilted</b> relative to the coordinate axes.</p>
+<h3>Steps</h3>
+<ol>
+<li>A is real symmetric, so there is an orthogonal P (columns = normalized eigenvectors) with PᵀAP = Λ = diag(λ₁, λ₂). &nbsp;(20)</li>
+<li>Insert PPᵀ = I: xᵀAx = xᵀP(PᵀAP)Pᵀx = (Pᵀx)ᵀΛ(Pᵀx). &nbsp;(21)</li>
+<li>New coordinates <b>y = Pᵀx = P⁻¹x</b> (a rotation). &nbsp;(22)</li>
+<li>The equation becomes <b>λ₁y₁² + λ₂y₂² = c</b>, with no cross term: &nbsp;(23a)
+<div class="eq">y₁²/(c/λ₁) + y₂²/(c/λ₂) = 1 &nbsp;&nbsp;(23b)</div></li>
+</ol>
+<h3>All the cases</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Signs</th><th>Curve</th></tr>
+<tr><td>c, λ₁, λ₂ all the same sign</td><td><b>ellipse</b>, semi-axes √(c/λ₁) and √(c/λ₂) (a circle if λ₁ = λ₂)</td></tr>
+<tr><td>λ₁, λ₂ opposite signs, c ≠ 0</td><td><b>hyperbola</b></td></tr>
+<tr><td>λ₁, λ₂ opposite signs, c = 0</td><td>pair of crossing straight lines (the asymptotes)</td></tr>
+<tr><td>λ₁, λ₂ same sign, c opposite sign</td><td>imaginary curve (no real points)</td></tr>
+<tr><td>λ₁, λ₂ same sign, c = 0</td><td>a single point (the origin)</td></tr>
+<tr><td>one λ = 0, other has the sign of c</td><td>pair of parallel lines</td></tr>
+<tr><td>one λ = 0, c = 0</td><td>a single (double) line</td></tr>
+<tr><td>one λ = 0, other opposite to c</td><td>no real curve</td></tr>
+</table></div>
+<div class="box fact"><b class="t">Shortcut without eigenvalues</b> λ₁λ₂ = det A = ab − h² and λ₁ + λ₂ = a + b. So for c &gt; 0: <b>ab − h² &gt; 0</b> (and a &gt; 0) gives an ellipse, <b>ab − h² &lt; 0</b> gives a hyperbola, <b>ab − h² = 0</b> gives parallel lines. This is the familiar "h² − ab" test from coordinate geometry. The tilt angle satisfies tan 2θ = 2h/(a − b).</div>
+<h3>Worked Example 5 (book): 8x² + 2√2 xy + 7y² = 3</h3>
+<ol>
+<li>A = [[8, √2], [√2, 7]]. &nbsp;(26)</li>
+<li>Characteristic equation: λ² − 15λ + (56 − 2) = λ² − 15λ + 54 = (λ − 9)(λ − 6) = 0 ⇒ λ = 9, 6.</li>
+<li>λ = 9: (8 − 9)x + √2 y = 0 ⇒ y = x/√2 ⇒ normalized (√(2/3), 1/√3).<br>λ = 6: 2x + √2 y = 0 ⇒ (1/√3, −√(2/3)). &nbsp;(27)</li>
+<li>P = [[√(2/3), 1/√3], [1/√3, −√(2/3)]], &nbsp; y = Pᵀx. &nbsp;(28, 29)</li>
+<li>9x′² + 6y′² = 3 ⇒ <b>3x′² + 2y′² = 1</b>, an ellipse. &nbsp;(30)</li>
+<li>Semi-axes: along x′, 1/√3 ≈ 0.577 (minor); along y′, <b>1/√2 ≈ 0.707 (major)</b>.</li>
+<li>The major axis is along the eigenvector (1/√3, −√(2/3)) with slope −√2. So it makes the angle <b>tan⁻¹(−√2) ≈ −54.7°</b> with the x-axis.</li>
+</ol>
+<div class="box tip"><b class="t">Rule to remember</b> The <b>larger</b> eigenvalue gives the <b>shorter</b> axis, because the semi-axis length is √(c/λ).</div>
+<div class="lab"><h4>🔬 Lab 2: rotate a conic to its principal axes</h4>
+<p class="small">Set ax² + 2hxy + by² = c. The dashed lines are the eigenvectors (principal axes). Slide "rotate" to turn the whole picture by −θ: the conic straightens out and the cross term disappears.</p>
+<div class="grid2">
+<div><canvas id="cvC" width="480" height="480"></canvas></div>
+<div>
+<div class="ctrl"><button class="alt" data-cn="ex5">Example 5</button><button class="alt" data-cn="hyp">Hyperbola</button><button class="alt" data-cn="lines">Crossing lines</button><button class="alt" data-cn="par">Parallel lines</button><button class="alt" data-cn="circ">Circle</button></div>
+<div class="ctrl"><label>a <input type="range" id="kA" min="-9" max="9" step="0.1" value="8"><span id="kAv"></span></label><label>h <input type="range" id="kH" min="-6" max="6" step="any" value="1.41"><span id="kHv"></span></label></div>
+<div class="ctrl"><label>b <input type="range" id="kB" min="-9" max="9" step="0.1" value="7"><span id="kBv"></span></label><label>c <input type="range" id="kC" min="-6" max="6" step="0.1" value="3"><span id="kCv"></span></label></div>
+<div class="ctrl"><label>rotate to principal axes <input type="range" id="kR" min="0" max="1" step="0.01" value="0" style="width:150px"></label><button id="kPlay">▶</button></div>
+<div class="readout out" id="kOut"></div>
+</div></div></div>
+</section>
+
+<section id="s6">
+<h2>6. Quadric surfaces in 3D (Eqs. 31–42)</h2>
+<p>For x = (x₁, x₂, x₃)ᵀ and real symmetric A (3×3), xᵀAx = c is a surface. Let U be the orthogonal matrix of eigenvectors and y = Uᵀx. Then &nbsp;(31–33)</p>
+<div class="eq">y₁²/(c/λ₁) + y₂²/(c/λ₂) + y₃²/(c/λ₃) = 1 &nbsp;&nbsp;(34)</div>
+<div class="tbl-wrap"><table>
+<tr><th>How many of c/λ₁, c/λ₂, c/λ₃ are positive</th><th>Surface</th></tr>
+<tr><td>3</td><td><b>ellipsoid</b>, full axis lengths 2√(c/λ<sub>i</sub>) (a sphere if all λ are equal)</td></tr>
+<tr><td>2 (one negative)</td><td><b>hyperboloid of one sheet</b> (a cooling-tower shape, connected)</td></tr>
+<tr><td>1 (two negative)</td><td><b>hyperboloid of two sheets</b> (two separate bowls)</td></tr>
+<tr><td>0</td><td>no real surface</td></tr>
+<tr><td>a λ = 0</td><td><b>cylinder</b> (elliptic or hyperbolic) or a pair of planes, depending on the other two</td></tr>
+<tr><td>c = 0</td><td>a cone (mixed signs) or just the origin</td></tr>
+</table></div>
+<p>In the first three cases the principal axes lie along the eigenvectors y₁, y₂, y₃.</p>
+<h3>Worked Example 6 (book): 3x² + 3y² − 4z² − 18xy + 12 = 0</h3>
+<ol>
+<li>Rewrite as −3x² − 3y² + 4z² + 18xy = 12, i.e. xᵀAx = 12 with A = [[−3, 9, 0], [9, −3, 0], [0, 0, 4]]. &nbsp;(36, 37)</li>
+<li>The z-part is already separate, so λ = 4 with eigenvector (0, 0, 1). The 2×2 block [[−3, 9], [9, −3]] has λ = −3 ± 9, i.e. 6 with (1, 1)/√2 and −12 with (1, −1)/√2. &nbsp;(38)</li>
+<li>P = [[1/√2, 0, 1/√2], [1/√2, 0, −1/√2], [0, 1, 0]] (columns for λ = 6, 4, −12). &nbsp;(39)</li>
+<li>6x′² + 4y′² − 12z′² = 12 ⇒ <b>x′²/2 + y′²/3 − z′²/1 = 1</b>. &nbsp;(41)</li>
+<li>Two positive and one negative ⇒ <b>hyperboloid of one sheet</b>. Its axis (the direction it opens along) is z′ ∥ (1, −1, 0)/√2. The waist ellipse has semi-axes √2 and √3.</li>
+</ol>
+<p>Direction cosines (42): x′ = (1/√2, 1/√2, 0), y′ = (0, 0, 1), z′ = (1/√2, −1/√2, 0).</p>
+<div class="lab"><h4>🔬 Lab 3: quadric surface viewer (drag to rotate)</h4>
+<p class="small">The lab diagonalizes the symmetric matrix and draws xᵀAx = c in its principal frame. Thick coloured arrows show the principal axes (eigenvectors). Change c, or flip its sign, and watch one sheet become two sheets.</p>
+<div class="grid2">
+<div><canvas id="cvH" width="480" height="480"></canvas></div>
+<div>
+<div class="ctrl"><button class="alt" data-qd="ex6">Example 6</button><button class="alt" data-qd="ell">Ellipsoid</button><button class="alt" data-qd="two">Two sheets</button><button class="alt" data-qd="e8a">Ex 8(a)</button><button class="alt" data-qd="e8b">Ex 8(b)</button><button class="alt" data-qd="cyl">Cylinder</button><button class="alt" data-qd="cone">Cone (c=0)</button></div>
+<div id="hIn" class="ctrl"></div>
+<div class="ctrl"><label>c <input type="range" id="hC" min="-20" max="20" step="0.5" value="12"><span id="hCv"></span></label><button id="hSpin" class="alt">⟳ Auto-rotate</button></div>
+<div class="readout out" id="hOut"></div>
+<p class="small">If the matrix you type is not symmetric, the lab uses its symmetric part ½(A + Aᵀ), as in Section 2.</p>
+</div></div></div>
+</section>
+
+<section id="s7">
+<h2>7. Positive definite forms (Exercise 6 and beyond)</h2>
+<div class="box def"><b class="t">Definitions</b> A real symmetric S (or its form xᵀSx) is
+<b>positive definite</b> if xᵀSx &gt; 0 for every x ≠ 0;
+<b>positive semidefinite</b> if xᵀSx ≥ 0 for every x;
+<b>indefinite</b> if xᵀSx takes both signs.</div>
+<div class="box thm"><b class="t">Theorem</b> For <b>real symmetric</b> (or hermitian) S: &nbsp; S is positive definite ⇔ every eigenvalue of S is positive.<br>
+<b>Proof:</b> with y = Pᵀx (P orthogonal, so y ≠ 0 ⇔ x ≠ 0), xᵀSx = λ₁y₁² + … + λₙyₙ². This is &gt; 0 for every y ≠ 0 ⇔ every λᵢ &gt; 0. (For ⇒, take y = eᵢ.)</div>
+<div class="box warnb"><b class="t">Why the book says "the converse is not necessarily true"</b> For a <b>non-symmetric</b> A, the eigenvalues of A itself do not control xᵀAx. Only the eigenvalues of S = ½(A + Aᵀ) do.
+<ul style="margin:4px 0">
+<li>A = [[1, 1], [−1, 1]]: xᵀAx = x² + y² &gt; 0 for every x ≠ 0, but the eigenvalues of A are 1 ± i, which are not positive. So "positive form ⇒ positive eigenvalues" fails.</li>
+<li>Even the forward direction can fail for non-symmetric A: A = [[1, 10], [0, 1]] has eigenvalues 1, 1, yet xᵀAx = x² + 10xy + y² = −8 at (1, −1).</li>
+</ul>
+The safe rule: <b>first symmetrize, then look at the eigenvalues.</b></div>
+<h3>Quick tests for positive definiteness (symmetric S)</h3>
+<ul>
+<li><b>Sylvester's criterion:</b> all leading principal minors are &gt; 0. For [[a, h], [h, b]]: a &gt; 0 and ab − h² &gt; 0.</li>
+<li>All eigenvalues &gt; 0.</li>
+<li>S = BᵀB with B invertible (e.g. a Cholesky factorization).</li>
+<li>Necessary (not sufficient): every diagonal entry is &gt; 0, and tr S &gt; 0.</li>
+</ul>
+<h3>Extremes on the unit sphere (Rayleigh quotient)</h3>
+<p>For |x| = 1: λ<sub>min</sub> ≤ xᵀSx ≤ λ<sub>max</sub>. The extremes are reached at the corresponding eigenvectors, because xᵀSx = Σλᵢyᵢ² with Σyᵢ² = 1 is a weighted average of the λ's. This is a favourite NET question: "the maximum of 2x² + 2xy + 2y² on x² + y² = 1" is the largest eigenvalue of [[2, 1], [1, 2]], i.e. 3.</p>
+<h3>Physics</h3>
+<ul>
+<li><b>Kinetic energy</b> T = ½ q̇ᵀMq̇ is a positive definite form (mass matrix M).</li>
+<li><b>Potential near equilibrium:</b> V ≈ ½ qᵀKq. The equilibrium is stable ⇔ K is positive definite. A saddle (indefinite K) means unstable.</li>
+<li><b>Moment of inertia</b> about the unit direction n is I(n) = nᵀIn. The surface xᵀIx = 1 is the <b>inertia ellipsoid</b>, and its principal axes are the principal axes of the body.</li>
+<li><b>Exercise 9:</b> V = (x−y)² + (y−z)² + (z−x)² is semidefinite (λ = 0, 3, 3). It stays at 0 along the line (1, 1, 1) and grows quadratically away from it.</li>
+</ul>
+</section>
+
+<section id="s8">
+<h2>8. Summary sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Idea</th><th>Formula</th></tr>
+<tr><td>Bilinear form</td><td>B = x†Ay = Σ a<sub>ij</sub>x<sub>i</sub>*y<sub>j</sub></td></tr>
+<tr><td>Quadratic form</td><td>Q = x†Ax = Σ a<sub>ij</sub>x<sub>i</sub>*x<sub>j</sub></td></tr>
+<tr><td>Real form → symmetric</td><td>xᵀAx = xᵀSx, S = ½(A + Ã); s<sub>ij</sub> = ½ × coefficient of x<sub>i</sub>x<sub>j</sub></td></tr>
+<tr><td>Antisymmetric K</td><td>xᵀKx = 0</td></tr>
+<tr><td>Hermitian form</td><td>x†Hx is real; antihermitian gives imaginary values</td></tr>
+<tr><td>Principal axes</td><td>y = Pᵀx ⇒ xᵀAx = Σλᵢyᵢ²; axes along eigenvectors, semi-axes √(c/λᵢ)</td></tr>
+<tr><td>2D conic (c &gt; 0)</td><td>ab − h² &gt; 0 (a &gt; 0): ellipse; &lt; 0: hyperbola; = 0: parallel lines</td></tr>
+<tr><td>3D quadric</td><td>+++ ellipsoid; ++− one sheet; +−− two sheets (signs of c/λ)</td></tr>
+<tr><td>Positive definite</td><td>all λ(S) &gt; 0 ⇔ all leading minors &gt; 0</td></tr>
+<tr><td>Rayleigh</td><td>λ<sub>min</sub> ≤ xᵀSx/xᵀx ≤ λ<sub>max</sub></td></tr>
+</table></div>
+</section>
+
+<section id="s9">
+<h2>9. Book's Exercise 11: all problems solved</h2>
+<div class="prob"><div class="q">1. For any matrix A and vector x, show that x̃Ax = x̃Ãx.</div>
+<details><summary>Show solution</summary><p>x̃Ax is a 1×1 matrix (a number), so it equals its own transpose. Using (ABC)ᵀ = CᵀBᵀAᵀ and (x̃)ᵀ = x: (x̃Ax)ᵀ = x̃ Ã x. Hence x̃Ax = x̃Ãx. ∎</p></details></div>
+
+<div class="prob"><div class="q">2. Write (a₁x₁ + a₂x₂ + … + aₙxₙ)² as x̃Ax with A symmetric. What is the rank of A?</div>
+<details><summary>Show solution</summary><p>Let a = (a₁, …, aₙ)ᵀ. Then a₁x₁ + … + aₙxₙ = aᵀx, and its square is (aᵀx)(aᵀx) = (xᵀa)(aᵀx) = xᵀ(aaᵀ)x.</p><p><b>A = aaᵀ</b>, i.e. a<sub>ij</sub> = a<sub>i</sub>a<sub>j</sub>, which is symmetric. Every column is a multiple of a, so <b>rank A = 1</b> (if a ≠ 0). Its eigenvalues are |a|² (eigenvector a) and 0 (n − 1 times).</p></details></div>
+
+<div class="prob"><div class="q">3. u₁, …, u<sub>k</sub>, x are n-vectors. Show (ũ₁x)² + … + (ũ<sub>k</sub>x)² = x̃UŨx, where U (n×k) has i-th column uᵢ.</div>
+<details><summary>Show solution</summary><p>Ũx is the k-vector whose i-th entry is ũᵢx (row i of Ũ is ũᵢ). Then |Ũx|² = (Ũx)ᵀ(Ũx) = x̃UŨx = Σᵢ(ũᵢx)². ∎ Since UŨ is a sum of the rank-1 matrices uᵢũᵢ, this generalizes Exercise 2. The matrix UŨ is positive semidefinite.</p></details></div>
+
+<div class="prob"><div class="q">4. A real symmetric, Ax = λx, Ay = μy, λ ≠ μ. Show x̃Ay = 0 and x ⊥ y.</div>
+<details><summary>Show solution</summary><p>x̃Ay = x̃(μy) = μ x̃y. Also x̃Ay = (Ãx)ᵀy = (Ax)ᵀy = λ x̃y, since à = A. Subtracting: (λ − μ)x̃y = 0 ⇒ x̃y = 0 (as λ ≠ μ). Then x̃Ay = μ·0 = 0. ∎</p></details></div>
+
+<div class="prob"><div class="q">5. If x†Hx is real for every x, show H is hermitian.</div>
+<details><summary>Show solution</summary><p>Let K = H − H†. If x†Hx is real, then x†Hx = (x†Hx)* = (x†Hx)† = x†H†x, so x†Kx = 0 for <b>all</b> complex x.</p><p>Take x = eⱼ: k<sub>jj</sub> = 0. Take x = eⱼ + e<sub>l</sub>: k<sub>jl</sub> + k<sub>lj</sub> = 0. Take x = eⱼ + i e<sub>l</sub>: i k<sub>jl</sub> − i k<sub>lj</sub> = 0 ⇒ k<sub>jl</sub> = k<sub>lj</sub>. Together k<sub>jl</sub> = 0, so K = 0, i.e. H = H†. ∎</p><p class="small">The complex x are essential. For real x only, every real matrix with a real form would count, e.g. [[0, 1], [−1, 0]] gives 0, but it is not symmetric.</p></details></div>
+
+<div class="prob"><div class="q">6. Show x†Ax &gt; 0 for every x ≠ 0 if every eigenvalue of A is positive. Show the converse is not necessarily true.</div>
+<details><summary>Show solution</summary><p><b>For A hermitian (the intended case):</b> A = UΛU†, so x†Ax = y†Λy = Σλᵢ|yᵢ|² with y = U†x ≠ 0. If every λᵢ &gt; 0, this is &gt; 0. ∎</p><p><b>Converse fails for non-hermitian A:</b> A = [[1, 1], [−1, 1]] gives xᵀAx = x₁² + x₂² &gt; 0 for every real x ≠ 0, but its eigenvalues 1 ± i are not positive (not even real). For real symmetric A the converse does hold (take x = eigenvector). See Section 7 for the full picture.</p></details></div>
+
+<div class="prob"><div class="q">7. A antihermitian ⇒ x†Ax purely imaginary or zero.</div>
+<details><summary>Show solution</summary><p>Q = x†Ax ⇒ Q* = Q† = x†A†x = −x†Ax = −Q. So Re Q = 0. ∎ (Alternatively, A = iH with H hermitian, so Q = i·(real).)</p></details></div>
+
+<div class="prob"><div class="q">8. Interpret x̃Ax = c geometrically for (a) A = [[0, 1, 1], [1, 0, 1], [1, 1, 0]], c = 4; (b) A = [[2.6, −0.2, 0.2], [0.2, 2.1, 0.4], [0.4, 0.2, 2.8]], c = 15.</div>
+<details><summary>Show solution (a)</summary><p>The form is 2(xy + yz + zx) = 4. A = J − I (J = all ones). The eigenvalues of J are 3, 0, 0, so A has <b>2, −1, −1</b>. Eigenvector for 2: (1, 1, 1)/√3. For −1: any vector ⊥ (1, 1, 1).</p><p>Principal form: 2y₁² − y₂² − y₃² = 4 ⇒ y₁²/2 − y₂²/4 − y₃²/4 = 1. One positive, two negative ⇒ <b>hyperboloid of two sheets</b>. It is a surface of revolution about the line x = y = z, with vertices at distance √2 from the origin along (1, 1, 1)/√3, i.e. at ±(√2/√3)(1, 1, 1). Check: at (a, a, a), 2·3a² = 4 ⇒ a² = 2/3 ✓.</p></details>
+<details><summary>Show solution (b)</summary><p>A is <b>not</b> symmetric, so use S = ½(A + Ã) = [[2.6, 0, 0.3], [0, 2.1, 0.3], [0.3, 0.3, 2.8]]. Its eigenvalues are approximately <b>1.969, 2.451, 3.080</b>, all positive. With c = 15 &gt; 0 the surface is an <b>ellipsoid</b>.</p><p>Semi-axes √(15/λ): ≈ <b>2.760, 2.474, 2.207</b>, along the eigenvectors ≈ (−0.19, −0.90, 0.39), (−0.84, 0.35, 0.42), (0.51, 0.25, 0.82). It is nearly a sphere of radius ≈ 2.4, slightly squashed. (Load "Ex 8(b)" in Lab 3.)</p><p class="small">The printed numbers do not give tidy eigenvalues for any symmetric reading. That is a sign of a misprint, but the geometric answer (ellipsoid) is the same either way, because all the eigenvalues stay close to 2–3.</p></details></div>
+
+<div class="prob"><div class="q">9. V(r) = (x−y)² + (y−z)² + (z−x)². Show there is a line along which V is constant, and that V increases as the particle moves away from it.</div>
+<details><summary>Show solution</summary><p>Expand: V = 2x² + 2y² + 2z² − 2xy − 2yz − 2zx = rᵀKr with K = [[2, −1, −1], [−1, 2, −1], [−1, −1, 2]] = 3I − J.</p><p>The eigenvalues of J are 3, 0, 0, so K has <b>0, 3, 3</b>. For λ = 0 the eigenvector is (1, 1, 1)/√3. For λ = 3, any vector ⊥ (1, 1, 1).</p><p>In principal coordinates, V = 0·y₁² + 3y₂² + 3y₃² = 3(y₂² + y₃²) = <b>3 d²</b>, where d = distance from the line x = y = z.</p><p>On the line (d = 0), V = 0 is constant. Moving away, V = 3d² grows with distance. This is a "trough" potential (positive semidefinite). ∎</p></details></div>
+</section>
+
+<section id="s10">
+<h2>10. Practice set (CSIR-NET / GATE style)</h2>
+<div class="prob"><div class="q">P1. Write the symmetric matrix of Q = x² + 4y² + 9z² − 4xy + 6yz − 2zx. <span class="tag">matrix</span></div>
+<details><summary>Show solution</summary><p>S = [[1, −2, −1], [−2, 4, 3], [−1, 3, 9]] (off-diagonal entries are half the cross coefficients).</p></details></div>
+<div class="prob"><div class="q">P2. Classify 5x² − 4xy + 8y² = 36 and find its semi-axes. <span class="tag">conic</span></div>
+<details><summary>Show solution</summary><p>A = [[5, −2], [−2, 8]], λ² − 13λ + 36 = 0 ⇒ λ = 4, 9. Both positive with c = 36 ⇒ ellipse: 4X² + 9Y² = 36 ⇒ X²/9 + Y²/4 = 1, semi-axes <b>3 and 2</b>. The major axis (λ = 4) is along (2, 1)/√5.</p></details></div>
+<div class="prob"><div class="q">P3. Classify x² + 4xy + y² = 3. <span class="tag">conic</span></div>
+<details><summary>Show solution</summary><p>A = [[1, 2], [2, 1]], λ = 3, −1 (opposite signs) ⇒ <b>hyperbola</b>: 3X² − Y² = 3 ⇒ X² − Y²/3 = 1, axes along (1, 1)/√2 and (1, −1)/√2. Check: ab − h² = 1 − 4 &lt; 0 ✓.</p></details></div>
+<div class="prob"><div class="q">P4. Maximum and minimum of 3x² + 2xy + 3y² on x² + y² = 1? <span class="tag">Rayleigh</span></div>
+<details><summary>Show solution</summary><p>Eigenvalues of [[3, 1], [1, 3]]: 4 and 2. <b>max 4</b> at (1, 1)/√2, <b>min 2</b> at (1, −1)/√2.</p></details></div>
+<div class="prob"><div class="q">P5. For which k is x² + 2kxy + 4y² positive definite? <span class="tag">definite</span></div>
+<details><summary>Show solution</summary><p>Leading minors: 1 &gt; 0 and 4 − k² &gt; 0 ⇒ <b>|k| &lt; 2</b>. At k = ±2 it is semidefinite: (x ± 2y)².</p></details></div>
+<div class="prob"><div class="q">P6. Is S = [[2, −1, 0], [−1, 2, −1], [0, −1, 2]] positive definite? <span class="tag">Sylvester</span></div>
+<details><summary>Show solution</summary><p>Minors: 2, 4 − 1 = 3, det = 2·3 − (−1)(−2) = 4. All positive ⇒ <b>yes</b>. (Eigenvalues 2 − √2, 2, 2 + √2.)</p></details></div>
+<div class="prob"><div class="q">P7. Identify the surface 2x² + 2y² + 2z² + 2xy + 2yz + 2zx = 4. <span class="tag">quadric</span></div>
+<details><summary>Show solution</summary><p>S = I + J: eigenvalues 1 + 3 = 4 and 1, 1. 4y₁² + y₂² + y₃² = 4 ⇒ an <b>ellipsoid of revolution</b> about (1, 1, 1): semi-axis 1 along (1, 1, 1)/√3 and 2 in the perpendicular directions (an oblate spheroid).</p></details></div>
+<div class="prob"><div class="q">P8. Evaluate x†Hx for H = [[1, i], [−i, 2]], x = (1, i)ᵀ. <span class="tag">hermitian</span></div>
+<details><summary>Show solution</summary><p>Hx = (1 + i·i, −i + 2i) = (0, i). x† = (1, −i). x†Hx = 0 + (−i)(i) = <b>1</b>, which is real ✓.</p></details></div>
+<div class="prob"><div class="q">P9. Show that xᵀAx = 0 for every real x ⇔ A is antisymmetric. <span class="tag">proof</span></div>
+<details><summary>Show solution</summary><p>xᵀAx = xᵀSx with S = ½(A + Aᵀ). Zero for all x ⇔ S = 0 (polarize: (x + y)ᵀS(x + y) − xᵀSx − yᵀSy = 2xᵀSy = 0 for all x, y) ⇔ Aᵀ = −A.</p></details></div>
+<div class="prob"><div class="q">P10. Rank and signature of Q = x² + y² + z² + 2xy + 2yz + 2zx = (x + y + z)². <span class="tag">rank</span></div>
+<details><summary>Show solution</summary><p>Matrix J (all ones): eigenvalues 3, 0, 0 ⇒ rank 1, one positive square. Q = 3y₁² with y₁ = (x + y + z)/√3. Positive semidefinite.</p></details></div>
+<div class="prob"><div class="q">P11. Find the angle through which the axes must be rotated to remove the xy term from 3x² + 2√3 xy + y² = 2. <span class="tag">rotation</span></div>
+<details><summary>Show solution</summary><p>tan 2θ = 2h/(a − b) = 2√3/(3 − 1) = √3 ⇒ 2θ = 60° ⇒ <b>θ = 30°</b>. Eigenvalues 4, 0 ⇒ 4X² = 2: a pair of parallel lines X = ±1/√2.</p></details></div>
+<div class="prob"><div class="q">P12. V(x, y) = x² + 3xy + y². Is (0, 0) a stable equilibrium? <span class="tag">physics</span></div>
+<details><summary>Show solution</summary><p>Matrix [[1, 3/2], [3/2, 1]], det = 1 − 9/4 &lt; 0 ⇒ indefinite (λ = 5/2, −1/2) ⇒ a saddle ⇒ <b>unstable</b>. The particle escapes along (1, −1).</p></details></div>
+</section>
+
+<section id="s11" class="quiz">
+<h2>11. Self-test quiz</h2>
+<div id="quiz"></div>
+<p><b>Score: <span id="qScore">0</span> / <span id="qTot">0</span></b></p>
+</section>
+
+<section id="s12">
+<h2>12. Interesting facts</h2>
+<div class="box fact"><b class="t">Sylvester's law of inertia (1852)</b> However you diagonalize a real quadratic form, by any invertible change of variables and not just rotations, the number of positive, negative and zero coefficients never changes. Sylvester called this triple the "inertia" of the form. Only the rotation method also keeps the axis <b>lengths</b>.</div>
+<div class="box fact"><b class="t">The name "principal axes"</b> comes from rigid-body mechanics: Euler found that every body has three perpendicular axes about which it can spin without wobbling. They are the eigenvectors of the inertia tensor, i.e. the principal axes of the inertia ellipsoid.</div>
+<div class="box fact"><b class="t">Cooling towers</b> are hyperboloids of one sheet. The surface is "doubly ruled": two families of straight lines lie completely inside it. So it can be built from straight steel beams, yet it is curved and strong.</div>
+<div class="box fact"><b class="t">Special relativity</b> uses the indefinite form x² + y² + z² − c²t² (signature +++−). The light cone is the "cone" case c = 0 of Section 6. Lorentz transformations are exactly the linear maps that preserve this form, just as rotations preserve x² + y² + z².</div>
+<div class="box fact"><b class="t">The Hessian test</b> for maxima and minima of f(x, y) is this chapter in disguise: near a critical point f ≈ f₀ + ½ xᵀHx, so a positive definite Hessian gives a minimum and an indefinite one a saddle.</div>
+</section>
+</div>
+<script>
+/* ---------- small linear-algebra toolkit ---------- */
+const $=id=>document.getElementById(id);
+const cssv=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const eye=n=>Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0));
+const zeros=n=>Array.from({length:n},()=>Array(n).fill(0));
+const clone=M=>M.map(r=>r.slice());
+const mul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>s+v*B[k][j],0)));
+const add=(A,B)=>A.map((r,i)=>r.map((v,j)=>v+B[i][j]));
+const sub=(A,B)=>A.map((r,i)=>r.map((v,j)=>v-B[i][j]));
+const scl=(k,A)=>A.map(r=>r.map(v=>k*v));
+const trc=A=>A.reduce((s,r,i)=>s+r[i],0);
+const T=A=>A[0].map((_,j)=>A.map(r=>r[j]));
+const maxAbs=A=>Math.max(...A.flat().map(Math.abs));
+const mv=(A,x)=>A.map(r=>r.reduce((s,v,k)=>s+v*x[k],0));
+const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
+const nrm=a=>Math.sqrt(dot(a,a));
+const neg=s=>String(s).replace(/-/g,'−');
+function fmt(x,dec=3){
+  if(!isFinite(x))return '∞';
+  if(Math.abs(x)<1e-9)return '0';
+  const r=Math.round(x); if(Math.abs(x-r)<1e-7*Math.max(1,Math.abs(x)))return neg(r);
+  for(let q=2;q<=12;q++){const p=Math.round(x*q);if(Math.abs(x*q-p)<1e-7*q)return neg(p)+'/'+q;}
+  return neg(+x.toFixed(dec));
+}
+function mxH(M,heat,scale){
+  const s=scale||Math.max(1e-12,maxAbs(M));
+  return '<table class="mx">'+M.map(r=>'<tr>'+r.map(v=>{
+    let st='';
+    if(heat){const a=Math.min(1,Math.abs(v)/s)*0.55;if(Math.abs(v)>1e-9)st=` style="background:${v>0?`rgba(47,111,223,${a})`:`rgba(201,42,42,${a})`}"`;}
+    return `<td${st}>${fmt(v)}</td>`;}).join('')+'</tr>').join('')+'</table>';
+}
+function rank(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol)continue;
+    [A[r],A[p]]=[A[p],A[r]];
+    for(let i=r+1;i<n;i++){const f=A[i][c]/A[r][c];for(let j=c;j<m;j++)A[i][j]-=f*A[r][j];}
+    r++;
+  }
+  return r;
+}
+function nullspace(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  const piv=[];let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol){for(let i=r;i<n;i++)A[i][c]=0;continue;}
+    [A[r],A[p]]=[A[p],A[r]];
+    const d=A[r][c];for(let j=0;j<m;j++)A[r][j]/=d;
+    for(let i=0;i<n;i++)if(i!==r){const f=A[i][c];for(let j=0;j<m;j++)A[i][j]-=f*A[r][j];}
+    piv.push(c);r++;
+  }
+  const basis=[];
+  for(let f=0;f<m;f++){if(piv.includes(f))continue;
+    const v=Array(m).fill(0);v[f]=1;piv.forEach((c,i)=>{v[c]=-A[i][f];});basis.push(v);}
+  return basis;
+}
+function inv(M){
+  const n=M.length,A=M.map((r,i)=>r.concat(eye(n)[i]));
+  for(let c=0;c<n;c++){
+    let p=c;for(let i=c+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<1e-12)return null;
+    [A[c],A[p]]=[A[p],A[c]];const d=A[c][c];for(let j=0;j<2*n;j++)A[c][j]/=d;
+    for(let i=0;i<n;i++)if(i!==c){const f=A[i][c];for(let j=0;j<2*n;j++)A[i][j]-=f*A[c][j];}
+  }
+  return A.map(r=>r.slice(n));
+}
+/* Faddeev–LeVerrier: det(λI−A)=Σ c[k] λ^k, c[n]=1 */
+function charCoeffs(A){
+  const n=A.length,c=Array(n+1).fill(0);c[n]=1;let M=zeros(n);
+  for(let k=1;k<=n;k++){M=add(mul(A,M),scl(c[n-k+1],eye(n)));c[n-k]=-trc(mul(A,M))/k;}
+  return c;
+}
+/* complex helpers + Durand–Kerner roots of monic poly (c indexed by power) */
+const cm=(a,b)=>[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]];
+const cd=(a,b)=>{const d=b[0]*b[0]+b[1]*b[1];return[(a[0]*b[0]+a[1]*b[1])/d,(a[1]*b[0]-a[0]*b[1])/d];};
+function polyRoots(c){
+  const n=c.length-1;if(n===1)return[[-c[0],0]];
+  let z=Array.from({length:n},(_,k)=>{let w=[1,0];for(let i=0;i<=k;i++)w=cm(w,[0.4,0.9]);return w;});
+  const R=1+Math.max(...c.slice(0,n).map(Math.abs));z=z.map(w=>[w[0]*R,w[1]*R]);
+  const ev=x=>{let s=[1,0];for(let k=n-1;k>=0;k--)s=[s[0]*x[0]-s[1]*x[1]+c[k],s[0]*x[1]+s[1]*x[0]];return s;};
+  for(let it=0;it<2000;it++){
+    let delta=0;
+    z=z.map((zi,i)=>{let den=[1,0];z.forEach((zj,j)=>{if(j!==i)den=cm(den,[zi[0]-zj[0],zi[1]-zj[1]]);});
+      if(Math.hypot(den[0],den[1])<1e-300)den=[1e-12,0];
+      const q=cd(ev(zi),den);delta=Math.max(delta,Math.hypot(q[0],q[1]));return[zi[0]-q[0],zi[1]-q[1]];});
+    if(delta<1e-14)break;
+  }
+  return z;
+}
+function snap(x){for(const q of [1,2,3,4,6,12]){const r=Math.round(x*q)/q;if(Math.abs(x-r)<2e-4)return r;}return x;}
+function eigGroups(A){
+  const z=polyRoots(charCoeffs(A)),used=Array(z.length).fill(false),G=[];
+  const tol=2e-3*Math.max(1,maxAbs(A));
+  for(let i=0;i<z.length;i++){if(used[i])continue;const cl=[z[i]];used[i]=true;
+    for(let j=i+1;j<z.length;j++)if(!used[j]&&Math.hypot(z[j][0]-z[i][0],z[j][1]-z[i][1])<tol){cl.push(z[j]);used[j]=true;}
+    let re=cl.reduce((s,w)=>s+w[0],0)/cl.length,im=cl.reduce((s,w)=>s+w[1],0)/cl.length;
+    if(Math.abs(im)<1e-6)im=0;re=snap(re);if(im)im=snap(im);
+    G.push({re,im,m:cl.length});}
+  G.sort((a,b)=>b.re-a.re||b.im-a.im);return G;
+}
+const powM=(M,k)=>{let R=eye(M.length);for(let i=0;i<k;i++)R=mul(R,M);return R;};
+const lamF=a=>a===0?'λ':(a>0?`(λ − ${fmt(a)})`:`(λ + ${fmt(-a)})`);
+const supN=k=>k===1?'':String(k).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+function minimalPoly(A){
+  const G=eigGroups(A),n=A.length;
+  if(G.some(g=>g.im!==0))return{G,complex:true};
+  const sc=Math.max(1,maxAbs(A));
+  let tups=[[]];G.forEach(g=>{const nt=[];tups.forEach(t=>{for(let r=1;r<=g.m;r++)nt.push(t.concat(r));});tups=nt;});
+  tups.sort((a,b)=>a.reduce((s,v)=>s+v,0)-b.reduce((s,v)=>s+v,0));
+  const tried=[];
+  for(const t of tups){
+    let P=eye(n);G.forEach((g,i)=>{P=mul(P,powM(sub(A,scl(g.re,eye(n))),t[i]));});
+    const deg=t.reduce((s,v)=>s+v,0),zero=maxAbs(P)<1e-6*Math.pow(sc,deg);
+    tried.push({t,P,zero});if(zero)return{G,r:t,tried};
+  }
+  return{G,r:G.map(g=>g.m),tried};
+}
+function expandRoots(rs){let p=[1];rs.forEach(a=>{const q=Array(p.length+1).fill(0);p.forEach((v,i)=>{q[i]+=v;q[i+1]-=a*v;});p=q;});return p;}
+function polyStr(p,v,mat){
+  const d=p.length-1;let s='';
+  p.forEach((c,i)=>{if(Math.abs(c)<1e-9)return;const k=d-i;const a=Math.abs(c);
+    const coef=(a===1&&k>0)?'':fmt(a);const term=k===0?(mat?coef+'I':fmt(a)):(k===1?coef+v:coef+v+supN(k));
+    s+=(s===''?(c<0?'−':''):(c<0?' − ':' + '))+term;});
+  return s||'0';
+}
+function makeEditor(id,M,cb){
+  const box=$(id);let n=M.length;
+  function build(M){n=M.length;box.innerHTML='<div style="display:grid;grid-template-columns:repeat('+n+',58px);gap:4px">'+M.flat().map((v,i)=>`<input type="number" step="any" data-i="${i}" value="${v}" style="width:58px">`).join('')+'</div>';
+    box.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',cb));}
+  build(M);
+  return{get(){const v=[...box.querySelectorAll('input')].map(i=>parseFloat(i.value)||0);return Array.from({length:n},(_,i)=>v.slice(i*n,i*n+n));},
+         set(M){build(M);cb();}};
+}
+function arrow(ctx,x0,y0,x1,y1,col,w=2.5,dash){
+  ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;if(dash)ctx.setLineDash(dash);
+  ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();ctx.setLineDash([]);
+  const a=Math.atan2(y1-y0,x1-x0),L=Math.hypot(x1-x0,y1-y0);
+  if(L>6){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-10*Math.cos(a-0.4),y1-10*Math.sin(a-0.4));ctx.lineTo(x1-10*Math.cos(a+0.4),y1-10*Math.sin(a+0.4));ctx.fill();}
+  ctx.restore();
+}
+function canvasPt(cv,e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height];}
+
+/* ---------- Jacobi eigen-solver for real symmetric matrices ---------- */
+function jacobi(S){
+  const n=S.length;let A=clone(S),V=eye(n);
+  for(let sweep=0;sweep<60;sweep++){
+    let off=0;for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)off+=A[i][j]*A[i][j];
+    if(off<1e-22)break;
+    for(let p=0;p<n;p++)for(let q=p+1;q<n;q++){
+      if(Math.abs(A[p][q])<1e-15)continue;
+      const th=(A[q][q]-A[p][p])/(2*A[p][q]),t=Math.sign(th||1)/(Math.abs(th)+Math.sqrt(th*th+1)),c=1/Math.sqrt(t*t+1),s=t*c;
+      for(let k=0;k<n;k++){const akp=A[k][p],akq=A[k][q];A[k][p]=c*akp-s*akq;A[k][q]=s*akp+c*akq;}
+      for(let k=0;k<n;k++){const apk=A[p][k],aqk=A[q][k];A[p][k]=c*apk-s*aqk;A[q][k]=s*apk+c*aqk;}
+      for(let k=0;k<n;k++){const vkp=V[k][p],vkq=V[k][q];V[k][p]=c*vkp-s*vkq;V[k][q]=s*vkp+c*vkq;}
+    }
+  }
+  const out=A.map((r,i)=>({l:r[i],v:V.map(row=>row[i])}));
+  out.sort((a,b)=>b.l-a.l);
+  out.forEach(o=>{const k=o.v.reduce((m,x,i)=>Math.abs(x)>Math.abs(o.v[m])?i:m,0);if(o.v[k]<0)o.v=o.v.map(x=>-x);});
+  return out;
+}
+const symPart=A=>scl(0.5,add(A,T(A)));
+function formStr(S,vars){let s='';const n=S.length;
+  const term=(c,t)=>{if(Math.abs(c)<1e-12)return;const a=Math.abs(c);s+=(s===''?(c<0?'−':''):(c<0?' − ':' + '))+(Math.abs(a-1)<1e-12?'':fmt(a))+t;};
+  for(let i=0;i<n;i++)term(S[i][i],vars[i]+'²');
+  for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)term(S[i][j]+S[j][i],vars[i]+vars[j]);
+  return s||'0';}
+
+/* ---------- Lab 1: converter ---------- */
+const l1keys=['c_xx','c_yy','c_zz','c_xy','c_yz','c_zx'];
+l1keys.forEach(k=>$(k).addEventListener('input',lab1a));
+function lab1a(){
+  const [xx,yy,zz,xy,yz,zx]=l1keys.map(k=>+$(k).value||0);
+  const S=[[xx,xy/2,zx/2],[xy/2,yy,yz/2],[zx/2,yz/2,zz]],E=jacobi(S);
+  $('l1a').innerHTML=`<p>Q = ${formStr(S,['x','y','z'])} &nbsp; ⇒ &nbsp; S = ${mxH(S)} &nbsp; eigenvalues: ${E.map(e=>fmt(e.l,3)).join(', ')} &nbsp; → <b>${defName(E.map(e=>e.l))}</b></p>`;
+}
+function defName(ls){const p=ls.filter(l=>l>1e-9).length,m=ls.filter(l=>l<-1e-9).length,n=ls.length;
+  if(p===n)return 'positive definite';if(m===n)return 'negative definite';if(p&&m)return 'indefinite';if(p)return 'positive semidefinite';if(m)return 'negative semidefinite';return 'zero form';}
+const ed1=makeEditor('l1In',[[3,-1,5],[4,2,-6],[9,2,4]],lab1b);
+function lab1b(){const A=ed1.get(),S=symPart(A),K=scl(0.5,sub(A,T(A)));
+  $('l1b').innerHTML=`<p>xᵀAx = ${formStr(A,['x₁','x₂','x₃'])}</p><div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center"><div class="small">S = ½(A+Ã)<br>${mxH(S)}</div><b>+</b><div class="small">K = ½(A−Ã) (contributes 0)<br>${mxH(K)}</div></div><p>xᵀSx = ${formStr(S,['x₁','x₂','x₃'])} &nbsp;<span class="ok">same ✓</span></p>`;}
+
+/* ---------- Surface lab ---------- */
+let sYaw=-0.7,sPitch=0.55;
+const SF={bowl:[1.5,0.6,0.8],saddle:[1,1.2,-0.5],trough:[1,1,1],ex5:[8/3,Math.SQRT2/3,7/3],neg:[-1.2,0.3,-0.8]};
+document.querySelectorAll('[data-sf]').forEach(b=>b.onclick=()=>{const v=SF[b.dataset.sf];['sA','sH','sB'].forEach((k,i)=>$(k).value=v[i]);drawS();});
+['sA','sH','sB'].forEach(k=>$(k).addEventListener('input',drawS));
+function pr3(p,yaw,pitch,s,W,H,cy){const c=Math.cos(yaw),sn=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
+  const x=c*p[0]-sn*p[1],y1=sn*p[0]+c*p[1];return[W/2+s*x,(cy||H/2)-s*(cp*p[2]-sp*y1)];}
+function drawS(){
+  const cv=$('cvS'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  const a=+$('sA').value,h=+$('sH').value,b=+$('sB').value;
+  [['sA',a],['sH',h],['sB',b]].forEach(([k,v])=>$(k+'v').textContent=fmt(v,2));
+  const Q=(x,y)=>a*x*x+2*h*x*y+b*y*y,R=1.5,N=24;
+  let zm=0;for(let i=0;i<=N;i++)for(let j=0;j<=N;j++)zm=Math.max(zm,Math.abs(Q(-R+2*R*i/N,-R+2*R*j/N)));
+  const zs=zm>1e-9?1.3/zm:1,s=105,P=p=>pr3([p[0],p[1],p[2]*zs],sYaw,sPitch,s,W,H,H/2+20);
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle=cssv('--line');ctx.lineWidth=1;
+  for(let i=0;i<=6;i++){const t=-R+2*R*i/6;let p=P([t,-R,0]),q=P([t,R,0]);ctx.beginPath();ctx.moveTo(...p);ctx.lineTo(...q);ctx.stroke();p=P([-R,t,0]);q=P([R,t,0]);ctx.beginPath();ctx.moveTo(...p);ctx.lineTo(...q);ctx.stroke();}
+  const E=jacobi([[a,h],[h,b]]),cols=[cssv('--acc2'),cssv('--acc3')];
+  E.forEach((e,i)=>{const o=P([0,0,0]),t=P([e.v[0]*1.4,e.v[1]*1.4,0]),t2=P([-e.v[0]*1.4,-e.v[1]*1.4,0]);ctx.save();ctx.setLineDash([5,4]);ctx.strokeStyle=cols[i];ctx.beginPath();ctx.moveTo(...t2);ctx.lineTo(...o);ctx.stroke();ctx.restore();arrow(ctx,o[0],o[1],t[0],t[1],cols[i],3);
+    const path=[];for(let k=-20;k<=20;k++){const u=k/20*1.5;path.push(P([u*e.v[0],u*e.v[1],Q(u*e.v[0],u*e.v[1])]));}ctx.strokeStyle=cols[i];ctx.lineWidth=3;ctx.beginPath();path.forEach((p,k)=>k?ctx.lineTo(...p):ctx.moveTo(...p));ctx.stroke();});
+  for(let pass=0;pass<2;pass++)for(let i=0;i<=N;i++){ctx.beginPath();for(let j=0;j<=N;j++){const u=-R+2*R*i/N,v=-R+2*R*j/N,x=pass?v:u,y=pass?u:v,z=Q(x,y),p=P([x,y,z]);j?ctx.lineTo(...p):ctx.moveTo(...p);}
+    ctx.strokeStyle=cssv('--acc');ctx.globalAlpha=0.45;ctx.lineWidth=1;ctx.stroke();ctx.globalAlpha=1;}
+  // theta plot
+  const c2=$('cvQ'),g=c2.getContext('2d'),w2=c2.width,h2=c2.height;g.fillStyle=cssv('--card');g.fillRect(0,0,w2,h2);
+  const lmax=E[0].l,lmin=E[1].l,top=Math.max(Math.abs(lmax),Math.abs(lmin),0.5)*1.2,Y=v=>h2/2-v/top*(h2/2-10);
+  g.strokeStyle=cssv('--line');g.beginPath();g.moveTo(0,Y(0));g.lineTo(w2,Y(0));g.stroke();
+  [[lmax,cols[0]],[lmin,cols[1]]].forEach(([l,c])=>{g.save();g.setLineDash([5,4]);g.strokeStyle=c;g.beginPath();g.moveTo(0,Y(l));g.lineTo(w2,Y(l));g.stroke();g.restore();g.fillStyle=c;g.font='12px sans-serif';g.fillText('λ = '+fmt(l,3),4,Y(l)-3);});
+  g.strokeStyle=cssv('--acc4');g.lineWidth=2;g.beginPath();for(let k=0;k<=200;k++){const th=k/200*2*Math.PI,x=k/200*w2,y=Y(Q(Math.cos(th),Math.sin(th)));k?g.lineTo(x,y):g.moveTo(x,y);}g.stroke();
+  const ang=Math.atan2(E[0].v[1],E[0].v[0])*180/Math.PI;
+  $('sOut').textContent=`Q = ${formStr([[a,h],[h,b]],['x','y'])}
+matrix [[${fmt(a,2)}, ${fmt(h,2)}], [${fmt(h,2)}, ${fmt(b,2)}]]
+λ_max = ${fmt(lmax,4)} along (${fmt(E[0].v[0],3)}, ${fmt(E[0].v[1],3)})  [${ang.toFixed(1)}°]
+λ_min = ${fmt(lmin,4)} along (${fmt(E[1].v[0],3)}, ${fmt(E[1].v[1],3)})
+det = ab − h² = ${fmt(a*b-h*h,4)}
+→ ${defName([lmax,lmin]).toUpperCase()}${defName([lmax,lmin])==='indefinite'?' (saddle)':''}`;
+}
+(function(){const cv=$('cvS');let d=null;cv.addEventListener('pointerdown',e=>{d=[e.clientX,e.clientY];cv.setPointerCapture(e.pointerId);});
+ cv.addEventListener('pointermove',e=>{if(!d)return;sYaw+=(e.clientX-d[0])*0.01;sPitch=Math.max(-0.2,Math.min(1.5,sPitch+(e.clientY-d[1])*0.01));d=[e.clientX,e.clientY];drawS();});
+ cv.addEventListener('pointerup',()=>d=null);})();
+
+/* ---------- Conic lab ---------- */
+const CN={ex5:[8,1.41,7,3],hyp:[1,2,1,3],lines:[1,2,1,0],par:[1,2,4,4],circ:[2,0,2,4]};
+document.querySelectorAll('[data-cn]').forEach(b=>b.onclick=()=>{const v=CN[b.dataset.cn];['kA','kH','kB','kC'].forEach((k,i)=>$(k).value=v[i]);if(b.dataset.cn==='ex5')$('kH').value=Math.SQRT2;$('kR').value=0;drawC();});
+['kA','kH','kB','kC','kR'].forEach(k=>$(k).addEventListener('input',drawC));
+$('kPlay').onclick=()=>{const t0=performance.now(),st=+$('kR').value>0.5?1:0;(function f(now){let t=Math.min(1,(now-t0)/1800);$('kR').value=st?1-t:t;drawC();if(t<1)requestAnimationFrame(f);})(t0);};
+function conicName(l1,l2,c){const z=x=>Math.abs(x)<1e-9;
+  if(z(l1)&&z(l2))return c===0?'whole plane (0 = 0)':'no curve';
+  if(z(l1)||z(l2)){const l=z(l1)?l2:l1;if(z(c))return 'a single (double) straight line';return l*c>0?'pair of parallel straight lines':'no real curve';}
+  if(l1*l2>0){if(z(c))return 'a single point (origin)';return l1*c>0?(Math.abs(l1-l2)<1e-9?'CIRCLE':'ELLIPSE'):'imaginary ellipse (no real points)';}
+  return z(c)?'pair of crossing straight lines':'HYPERBOLA';}
+function drawC(){
+  const cv=$('cvC'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  const a=+$('kA').value,h=+$('kH').value,b=+$('kB').value,c=+$('kC').value,t=+$('kR').value;
+  [['kA',a],['kH',h],['kB',b],['kC',c]].forEach(([k,v])=>$(k+'v').textContent=fmt(v,2));
+  const E=jacobi([[a,h],[h,b]]),th=Math.atan2(E[0].v[1],E[0].v[0]);let thn=th;if(thn>Math.PI/2)thn-=Math.PI;if(thn<-Math.PI/2)thn+=Math.PI;
+  const rot=thn*t,cr=Math.cos(rot),sr=Math.sin(rot);
+  const toX=(u,v)=>[cr*u-sr*v,sr*u+cr*v];   // display -> original
+  const toD=(x,y)=>[cr*x+sr*y,-sr*x+cr*y];  // original -> display
+  let ext=1.5;[E[0].l,E[1].l].forEach(l=>{if(Math.abs(l)>1e-9&&c/l>0)ext=Math.max(ext,Math.sqrt(c/l)*1.6);});ext=Math.min(ext,8);
+  const s=(W/2-10)/ext,X=u=>W/2+u*s,Y=v=>H/2-v*s;
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle=cssv('--line');ctx.lineWidth=1;
+  const step=ext>4?2:(ext>2?1:0.5);
+  for(let k=-Math.ceil(ext/step)*step;k<=ext;k+=step){[[[k,-ext*2],[k,ext*2]],[[-ext*2,k],[ext*2,k]]].forEach(([p,q])=>{const P1=toD(...p),Q1=toD(...q);ctx.beginPath();ctx.moveTo(X(P1[0]),Y(P1[1]));ctx.lineTo(X(Q1[0]),Y(Q1[1]));ctx.stroke();});}
+  ctx.strokeStyle=cssv('--muted');[[[-ext*2,0],[ext*2,0],'x'],[[0,-ext*2],[0,ext*2],'y']].forEach(([p,q,n])=>{const P1=toD(...p),Q1=toD(...q);ctx.beginPath();ctx.moveTo(X(P1[0]),Y(P1[1]));ctx.lineTo(X(Q1[0]),Y(Q1[1]));ctx.stroke();const L=toD(n==='x'?ext*0.92:0.15,n==='x'?0.15:ext*0.92);ctx.fillStyle=cssv('--muted');ctx.font='13px sans-serif';ctx.fillText(n,X(L[0]),Y(L[1]));});
+  const cols=[cssv('--acc2'),cssv('--acc3')];
+  E.forEach((e,i)=>{const p=toD(e.v[0]*ext*2,e.v[1]*ext*2);ctx.save();ctx.setLineDash([7,5]);ctx.strokeStyle=cols[i];ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(X(-p[0]),Y(-p[1]));ctx.lineTo(X(p[0]),Y(p[1]));ctx.stroke();ctx.restore();
+    const L=toD(e.v[0]*ext*0.8,e.v[1]*ext*0.8);ctx.fillStyle=cols[i];ctx.font='bold 13px sans-serif';ctx.fillText((i?'y₂':'y₁')+' (λ='+fmt(e.l,2)+')',X(L[0])+4,Y(L[1])-4);});
+  // marching squares
+  const N=160,F=(u,v)=>{const [x,y]=toX(u,v);return a*x*x+2*h*x*y+b*y*y-c;},g=[];
+  for(let i=0;i<=N;i++){g.push([]);for(let j=0;j<=N;j++)g[i].push(F(-ext+2*ext*i/N,-ext+2*ext*j/N));}
+  ctx.strokeStyle=cssv('--acc');ctx.lineWidth=2.6;ctx.beginPath();
+  const lerp=(p,q,fp,fq)=>{const t=fp/(fp-fq);return[p[0]+(q[0]-p[0])*t,p[1]+(q[1]-p[1])*t];};
+  for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+    const P=[[i,j],[i+1,j],[i+1,j+1],[i,j+1]].map(([ii,jj])=>[-ext+2*ext*ii/N,-ext+2*ext*jj/N]),f=[g[i][j],g[i+1][j],g[i+1][j+1],g[i][j+1]],pts=[];
+    for(let k=0;k<4;k++){const k2=(k+1)%4;if((f[k]>0)!==(f[k2]>0))pts.push(lerp(P[k],P[k2],f[k],f[k2]));}
+    for(let k=0;k+1<pts.length;k+=2){ctx.moveTo(X(pts[k][0]),Y(pts[k][1]));ctx.lineTo(X(pts[k+1][0]),Y(pts[k+1][1]));}
+  }
+  ctx.stroke();
+  const name=conicName(E[0].l,E[1].l,c);let ax='';
+  E.forEach((e,i)=>{if(Math.abs(e.l)>1e-9&&c/e.l>0)ax+=`semi-axis along y${'₁₂'[i]}: √(c/λ) = ${fmt(Math.sqrt(c/e.l),4)}\n`;});
+  $('kOut').textContent=`${formStr([[a,h],[h,b]],['x','y'])} = ${fmt(c,2)}
+λ₁ = ${fmt(E[0].l,4)}, eigvec (${fmt(E[0].v[0],3)}, ${fmt(E[0].v[1],3)})
+λ₂ = ${fmt(E[1].l,4)}, eigvec (${fmt(E[1].v[0],3)}, ${fmt(E[1].v[1],3)})
+ab − h² = ${fmt(a*b-h*h,4)}
+tilt of y₁ axis: ${(thn*180/Math.PI).toFixed(2)}°
+
+In principal axes:
+  ${fmt(E[0].l,3)}·y₁² + ${fmt(E[1].l,3)}·y₂² = ${fmt(c,2)}
+${ax}→ ${name}
+rotation shown: ${(rot*180/Math.PI).toFixed(1)}° of ${(thn*180/Math.PI).toFixed(1)}°`;
+}
+
+/* ---------- Quadric lab ---------- */
+let hYaw=0.7,hPitch=0.35,hSpin=false;
+const QD={ex6:[[[-3,9,0],[9,-3,0],[0,0,4]],12],ell:[[[3,1,0],[1,3,0],[0,0,6]],12],two:[[[-1,0,0],[0,-2,0],[0,0,3]],3],e8a:[[[0,1,1],[1,0,1],[1,1,0]],4],e8b:[[[2.6,-0.2,0.2],[0.2,2.1,0.4],[0.4,0.2,2.8]],15],cyl:[[[2,1,0],[1,2,0],[0,0,0]],6],cone:[[[1,0,0],[0,1,0],[0,0,-2]],0]};
+const edH=makeEditor('hIn',QD.ex6[0],drawH);
+document.querySelectorAll('[data-qd]').forEach(b=>b.onclick=()=>{const v=QD[b.dataset.qd];$('hC').value=v[1];edH.set(v[0]);});
+$('hC').addEventListener('input',drawH);
+$('hSpin').onclick=()=>{hSpin=!hSpin;if(hSpin)requestAnimationFrame(function f(){if(!hSpin)return;hYaw+=0.01;drawH();requestAnimationFrame(f);});};
+function drawH(){
+  const cv=$('cvH'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,A=edH.get(),S=symPart(A),c=+$('hC').value;
+  $('hCv').textContent=fmt(c,2);
+  const E=jacobi(S),lam=E.map(e=>e.l),U=E.map(e=>e.v),z=x=>Math.abs(x)<1e-9;
+  let ext=3;lam.forEach(l=>{if(!z(l)&&c/l>0)ext=Math.max(ext,Math.sqrt(c/l)*1.5);});ext=Math.min(ext,7);
+  const s=(W/2-20)/ext,P=y=>{const x=[0,1,2].map(k=>y[0]*U[0][k]+y[1]*U[1][k]+y[2]*U[2][k]);return{x,p:pr3(x,hYaw,hPitch,s,W,H)};};
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);
+  [['x','#c92a2a'],['y','#2b9348'],['z','#2f6fdf']].forEach(([n,col],i)=>{const e=[0,0,0];e[i]=ext;const q=pr3(e,hYaw,hPitch,s,W,H),o=pr3([0,0,0],hYaw,hPitch,s,W,H);ctx.strokeStyle=col;ctx.globalAlpha=0.5;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(...o);ctx.lineTo(...q);ctx.stroke();ctx.globalAlpha=1;ctx.fillStyle=col;ctx.font='13px sans-serif';ctx.fillText(n,q[0]+3,q[1]);});
+  const curves=[];const lim=ext*1.25;
+  const fam=(F,u0,u1,v0,v1,nu,nv)=>{for(let i=0;i<=nu;i++){const c1=[];for(let j=0;j<=60;j++)c1.push(F(u0+(u1-u0)*i/nu,v0+(v1-v0)*j/60));curves.push(c1);}
+    for(let j=0;j<=nv;j++){const c1=[];for(let i=0;i<=60;i++)c1.push(F(u0+(u1-u0)*i/60,v0+(v1-v0)*j/nv));curves.push(c1);}};
+  const A2=lam.map(l=>z(l)?null:c/l),pos=[0,1,2].filter(i=>A2[i]!==null&&A2[i]>0),neg=[0,1,2].filter(i=>A2[i]!==null&&A2[i]<0),zer=[0,1,2].filter(i=>A2[i]===null);
+  const put=(o)=>{const y=[0,0,0];for(const k in o)y[k]=o[k];return y;};
+  const TP=2*Math.PI;let name='';
+  if(z(c)){
+    const nz=[0,1,2].filter(i=>!z(lam[i])),ps=nz.filter(i=>lam[i]>0),ng=nz.filter(i=>lam[i]<0);
+    if(nz.length===3&&ps.length&&ng.length){const k=ps.length===1?ps[0]:ng[0],[i,j]=nz.filter(q=>q!==k);name='CONE (c = 0) with axis along y'+(k+1);
+      fam((r,t)=>put({[k]:r,[i]:r*Math.sqrt(Math.abs(lam[k]/lam[i]))*Math.cos(t),[j]:r*Math.sqrt(Math.abs(lam[k]/lam[j]))*Math.sin(t)}),-ext,ext,0,TP,8,24);}
+    else name=nz.length===3?'only the origin (definite form, c = 0)':'degenerate: planes/line (not drawn)';
+  }else if(!zer.length){
+    if(pos.length===3){name='ELLIPSOID';const r=pos.map(i=>Math.sqrt(A2[i]));fam((u,v)=>put({0:r[0]*Math.cos(u)*Math.cos(v),1:r[1]*Math.cos(u)*Math.sin(v),2:r[2]*Math.sin(u)}),-Math.PI/2,Math.PI/2,0,TP,10,16);}
+    else if(pos.length===2){const [i,j]=pos,k=neg[0],a=Math.sqrt(A2[i]),b=Math.sqrt(A2[j]),cc=Math.sqrt(-A2[k]);name='HYPERBOLOID OF ONE SHEET (axis y'+(k+1)+')';
+      const um=Math.asinh(ext/cc);fam((u,t)=>put({[i]:a*Math.cosh(u)*Math.cos(t),[j]:b*Math.cosh(u)*Math.sin(t),[k]:cc*Math.sinh(u)}),-um,um,0,TP,10,20);}
+    else if(pos.length===1){const i=pos[0],[j,k]=neg,a=Math.sqrt(A2[i]),b=Math.sqrt(-A2[j]),cc=Math.sqrt(-A2[k]);name='HYPERBOLOID OF TWO SHEETS (axis y'+(i+1)+')';
+      const um=Math.acosh(Math.max(1.0001,ext/a));[1,-1].forEach(sg=>fam((u,t)=>put({[i]:sg*a*Math.cosh(u),[j]:b*Math.sinh(u)*Math.cos(t),[k]:cc*Math.sinh(u)*Math.sin(t)}),0,um,0,TP,8,20));}
+    else name='NO REAL SURFACE (all c/λ < 0)';
+  }else if(zer.length===1){const k=zer[0],[i,j]=[0,1,2].filter(q=>q!==k);
+    if(A2[i]>0&&A2[j]>0){name='ELLIPTIC CYLINDER (axis y'+(k+1)+')';const a=Math.sqrt(A2[i]),b=Math.sqrt(A2[j]);fam((w,t)=>put({[i]:a*Math.cos(t),[j]:b*Math.sin(t),[k]:w}),-ext,ext,0,TP,8,24);}
+    else if(A2[i]*A2[j]<0){const p=A2[i]>0?i:j,q=p===i?j:i,a=Math.sqrt(A2[p]),b=Math.sqrt(-A2[q]),um=Math.acosh(Math.max(1.0001,ext/a));name='HYPERBOLIC CYLINDER';[1,-1].forEach(sg=>fam((w,u)=>put({[p]:sg*a*Math.cosh(u),[q]:b*Math.sinh(u),[k]:w}),-ext,ext,-um,um,8,12));}
+    else name='NO REAL SURFACE';}
+  else if(zer.length===2){const i=[0,1,2].find(q=>!zer.includes(q));if(A2[i]>0){name='PAIR OF PARALLEL PLANES';const [j,k]=zer;[1,-1].forEach(sg=>fam((u,v)=>put({[i]:sg*Math.sqrt(A2[i]),[j]:u,[k]:v}),-ext,ext,-ext,ext,8,8));}else name='NO REAL SURFACE';}
+  ctx.strokeStyle=cssv('--acc');ctx.lineWidth=1;ctx.globalAlpha=0.55;
+  curves.forEach(cu=>{ctx.beginPath();let pen=false;cu.forEach(y=>{const {x,p}=P(y);if(Math.max(...x.map(Math.abs))>lim||!isFinite(p[0])){pen=false;return;}pen?ctx.lineTo(...p):ctx.moveTo(...p);pen=true;});ctx.stroke();});
+  ctx.globalAlpha=1;
+  const cols=['#e8590c','#9c36b5','#2b9348'];
+  E.forEach((e,i)=>{const L=(!z(e.l)&&c/e.l>0)?Math.sqrt(c/e.l):ext*0.6;const o=pr3([0,0,0],hYaw,hPitch,s,W,H),t=pr3(e.v.map(x=>x*L),hYaw,hPitch,s,W,H);arrow(ctx,o[0],o[1],t[0],t[1],cols[i],3.5);ctx.fillStyle=cols[i];ctx.font='bold 13px sans-serif';ctx.fillText('y'+(i+1),t[0]+5,t[1]-5);});
+  let info=`S = ½(A+Aᵀ) = ${JSON.stringify(S.map(r=>r.map(v=>+v.toFixed(3))))}\nc = ${fmt(c,2)}\n\n`;
+  E.forEach((e,i)=>{info+=`λ${i+1} = ${fmt(e.l,4)}  u${i+1} = (${e.v.map(x=>fmt(x,3)).join(', ')})`+(!z(e.l)&&!z(c)?`  c/λ = ${fmt(c/e.l,3)}${c/e.l>0?'  semi-axis '+fmt(Math.sqrt(c/e.l),3):''}`:'')+'\n';});
+  info+=`\nIn principal axes: ${E.map((e,i)=>fmt(e.l,3)+'·y'+(i+1)+'²').join(' + ')} = ${fmt(c,2)}\n→ ${name}`;
+  $('hOut').textContent=info;
+}
+(function(){const cv=$('cvH');let d=null;cv.addEventListener('pointerdown',e=>{d=[e.clientX,e.clientY];cv.setPointerCapture(e.pointerId);});
+ cv.addEventListener('pointermove',e=>{if(!d)return;hYaw+=(e.clientX-d[0])*0.01;hPitch=Math.max(-1.5,Math.min(1.5,hPitch+(e.clientY-d[1])*0.01));d=[e.clientX,e.clientY];drawH();});
+ cv.addEventListener('pointerup',()=>d=null);})();
+
+/* ---------- Quiz ---------- */
+const QZ=[
+ {q:'The symmetric matrix of 4x² − 6xy + y² is…',o:['[[4,−3],[−3,1]]','[[4,−6],[−6,1]]','[[4,−6],[0,1]]','[[4,3],[3,1]]'],a:0,e:'Off-diagonal = half the cross coefficient.'},
+ {q:'xᵀKx for a real antisymmetric K and real x equals…',o:['0','|x|²','tr K','depends on x'],a:0,e:'It equals its own negative.'},
+ {q:'x†Hx with H hermitian is always…',o:['real','imaginary','positive','zero'],a:0,e:'Q* = Q† = Q.'},
+ {q:'5x² + 4xy + 2y² = 6 is…',o:['an ellipse','a hyperbola','a parabola','a pair of lines'],a:0,e:'ab − h² = 10 − 4 = 6 > 0, a > 0, c > 0.'},
+ {q:'Eigenvalues of A are 2, 3, −1 and c = 6. xᵀAx = c is a…',o:['hyperboloid of one sheet','hyperboloid of two sheets','ellipsoid','cone'],a:0,e:'Two positive, one negative c/λ.'},
+ {q:'For xᵀAx = c with eigenvalues λ₁ > λ₂ > 0, c > 0, the longest semi-axis is…',o:['√(c/λ₂)','√(c/λ₁)','c/λ₁','λ₁/c'],a:0,e:'Semi-axis = √(c/λ): smaller λ, longer axis.'},
+ {q:'Maximum of xᵀSx on |x| = 1 is…',o:['the largest eigenvalue of S','tr S','det S','the largest entry of S'],a:0,e:'Rayleigh quotient.'},
+ {q:'[[1, 3],[3, 1]] is…',o:['indefinite','positive definite','positive semidefinite','negative definite'],a:0,e:'det = 1 − 9 < 0 ⇒ eigenvalues of opposite sign (4, −2).'},
+ {q:'(a₁x₁+…+aₙxₙ)² = xᵀAx. The rank of A is…',o:['1','n','n−1','2'],a:0,e:'A = aaᵀ.'}
+];
+(function(){let sc=0;$('qTot').textContent=QZ.length;
+ $('quiz').innerHTML=QZ.map((x,i)=>{const ord=x.o.map((t,j)=>({t,j})).sort(()=>Math.random()-0.5);
+  return `<div class="qq" data-q="${i}"><b>Q${i+1}.</b> ${x.q}${ord.map(o=>`<label class="opt"><input type="radio" name="q${i}" value="${o.j}"> ${o.t}</label>`).join('')}<div class="fb"></div></div>`;}).join('');
+ document.querySelectorAll('#quiz .qq').forEach(div=>{const i=+div.dataset.q;let done=false;
+  div.querySelectorAll('input').forEach(inp=>inp.addEventListener('change',()=>{if(done)return;done=true;const ok=+inp.value===QZ[i].a;if(ok)sc++;$('qScore').textContent=sc;
+    div.querySelector('.fb').innerHTML=`<span class="${ok?'ok':'bad'}">${ok?'✓ Correct.':'✗ Answer: '+QZ[i].o[QZ[i].a]+'.'}</span> ${QZ[i].e}`;
+    div.querySelectorAll('input').forEach(x=>x.disabled=true);}));});})();
+
+function drawAll(){drawS();drawC();drawH();}
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+$('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawAll();};})();
+lab1a();lab1b();drawAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,917 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2.16 Some Applications — Boas Ch. 2</title>
+<script>try{var t=localStorage.getItem('boas-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{
+  --bg:#f6f7fb;--card:#ffffff;--fg:#1c2333;--muted:#596379;--line:#dde2ec;
+  --accent:#2f6bff;--accent2:#e8590c;--accent3:#0b9b6e;--accent4:#a33ec9;--warn:#c92a2a;
+  --defbg:#edf3ff;--thmbg:#eefaf4;--warnbg:#fff3ee;--factbg:#f8f0ff;--notebg:#f4f6fa;
+  --canvas:#ffffff;--grid:#e9ecf3;--axis:#7d879b;--code:#eef1f7;--shadow:0 1px 3px rgba(20,30,60,.08),0 4px 18px rgba(20,30,60,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1219;--card:#161b25;--fg:#e4e8f0;--muted:#9aa3b6;--line:#2a3141;
+    --accent:#6f9cff;--accent2:#ff922b;--accent3:#3ad8a6;--accent4:#d77cf2;--warn:#ff6b6b;
+    --defbg:#162238;--thmbg:#122a21;--warnbg:#2d1a16;--factbg:#23192e;--notebg:#1b212c;
+    --canvas:#11161f;--grid:#202834;--axis:#717b8f;--code:#1f2532;--shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1219;--card:#161b25;--fg:#e4e8f0;--muted:#9aa3b6;--line:#2a3141;
+  --accent:#6f9cff;--accent2:#ff922b;--accent3:#3ad8a6;--accent4:#d77cf2;--warn:#ff6b6b;
+  --defbg:#162238;--thmbg:#122a21;--warnbg:#2d1a16;--factbg:#23192e;--notebg:#1b212c;
+  --canvas:#11161f;--grid:#202834;--axis:#717b8f;--code:#1f2532;--shadow:none;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--fg);font:16.5px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+header.top{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center;padding:8px 16px;flex-wrap:wrap}
+header.top .brand{font-weight:700;font-size:15px;white-space:nowrap}
+header.top .brand small{color:var(--muted);font-weight:500}
+header.top .sp{flex:1}
+header.top select,header.top button,header.top a.btn{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 10px;text-decoration:none;cursor:pointer;max-width:100%}
+header.top select{max-width:260px}
+.layout{display:flex;gap:28px;max-width:1280px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:64px;align-self:flex-start;width:240px;flex:none;max-height:calc(100vh - 80px);overflow:auto;padding:18px 0;font-size:14px}
+nav.toc b{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:3px 10px;border-left:2px solid var(--line)}
+nav.toc a:hover,nav.toc a.on{color:var(--accent);border-left-color:var(--accent)}
+main{flex:1;min-width:0;max-width:940px;padding:10px 0 80px}
+@media (max-width:1100px){nav.toc{display:none}}
+h1{font-size:2rem;line-height:1.2;margin:26px 0 6px}
+h1 .num{color:var(--accent)}
+.subtitle{color:var(--muted);margin:0 0 18px}
+h2{font-size:1.45rem;margin:44px 0 12px;padding-top:6px;border-top:1px solid var(--line)}
+h3{font-size:1.15rem;margin:26px 0 8px}
+h4{font-size:1rem;margin:18px 0 6px}
+p{margin:10px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:16px 0;box-shadow:var(--shadow)}
+.box{border-radius:12px;padding:12px 16px;margin:16px 0;border:1px solid var(--line);border-left-width:5px}
+.box>.tag{display:inline-block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.box.def{background:var(--defbg);border-left-color:var(--accent)}.box.def>.tag{color:var(--accent)}
+.box.thm{background:var(--thmbg);border-left-color:var(--accent3)}.box.thm>.tag{color:var(--accent3)}
+.box.warn{background:var(--warnbg);border-left-color:var(--warn)}.box.warn>.tag{color:var(--warn)}
+.box.fact{background:var(--factbg);border-left-color:var(--accent4)}.box.fact>.tag{color:var(--accent4)}
+.box.note{background:var(--notebg);border-left-color:var(--axis)}.box.note>.tag{color:var(--muted)}
+.ex{border:1px solid var(--line);border-radius:12px;margin:18px 0;background:var(--card);overflow:hidden}
+.ex>.hd{background:var(--notebg);padding:8px 16px;font-weight:600;border-bottom:1px solid var(--line)}
+.ex>.bd{padding:6px 16px 10px}
+ol.steps{padding-left:22px;margin:8px 0}ol.steps>li{margin:6px 0}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}
+.katex{font-size:1.06em}
+table.t{border-collapse:collapse;width:100%;margin:12px 0;font-size:15px;display:block;overflow-x:auto}
+table.t th,table.t td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+table.t th{background:var(--notebg)}
+details.sol{margin:8px 0 4px;border:1px dashed var(--line);border-radius:10px;padding:2px 12px}
+details.sol>summary{cursor:pointer;color:var(--accent);font-weight:600;padding:6px 0;list-style:none}
+details.sol>summary::-webkit-details-marker{display:none}
+details.sol>summary::before{content:"▶ ";font-size:11px}
+details.sol[open]>summary::before{content:"▼ "}
+details.sol[open]{background:var(--card)}
+.prob{border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin:12px 0;background:var(--card)}
+.prob>.q{margin:4px 0}
+.prob>.q>b:first-child{color:var(--accent2)}
+.lvl{font-size:11px;font-weight:700;border-radius:20px;padding:1px 8px;margin-left:6px;vertical-align:middle;border:1px solid currentColor}
+.lvl.e{color:var(--accent3)}.lvl.m{color:var(--accent)}.lvl.h{color:var(--accent2)}.lvl.x{color:var(--warn)}
+.widget{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:18px 0;box-shadow:var(--shadow)}
+.widget>.wt{font-weight:700;margin-bottom:4px}
+.widget>.wd{color:var(--muted);font-size:14px;margin-bottom:8px}
+.widget canvas{width:100%;display:block;border-radius:10px;border:1px solid var(--line);background:var(--canvas)}
+.ctrls{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:10px 0;font-size:14.5px}
+.ctrls label{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.ctrls input[type=range]{width:150px;accent-color:var(--accent)}
+.ctrls output{min-width:46px;font-variant-numeric:tabular-nums;color:var(--accent);font-weight:600}
+.ctrls select,.ctrls input[type=text],.ctrls input[type=number],.ctrls button{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 9px}
+.ctrls input[type=text]{min-width:200px}
+.ctrls input[type=number]{width:80px}
+.ctrls button{cursor:pointer}
+.ctrls button.pri{background:var(--accent);color:#fff;border-color:var(--accent)}
+.readout{font-size:15px;background:var(--notebg);border-radius:10px;padding:8px 12px;margin-top:10px;overflow-x:auto;line-height:1.9}
+.readout .k{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+.pill{display:inline-block;background:var(--code);border-radius:6px;padding:0 6px;font-family:Consolas,monospace;font-size:.92em}
+.mcq{border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin:12px 0;background:var(--card)}
+.mcq .opts{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.mcq .opts button{font:inherit;font-size:15px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 12px;cursor:pointer}
+.mcq .opts button.ok{background:var(--thmbg);border-color:var(--accent3)}
+.mcq .opts button.bad{background:var(--warnbg);border-color:var(--warn)}
+.mcq .fb{font-size:14.5px;color:var(--muted)}
+.lead{font-size:1.07rem}
+.small{font-size:14px;color:var(--muted)}
+.center{text-align:center}
+.hl{color:var(--accent2);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13.5px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:14px;height:4px;border-radius:2px;vertical-align:middle;margin-right:5px}
+.pagenav{display:flex;justify-content:space-between;gap:12px;margin-top:50px;flex-wrap:wrap}
+.pagenav a{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 14px;text-decoration:none;max-width:48%}
+.pagenav a small{display:block;color:var(--muted)}
+.summary li{margin:4px 0}
+kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
+
+</style>
+</head>
+<body>
+<header class="top">
+  <span class="brand">Boas · Ch. 2 Complex Numbers <small>| Section 2.16</small></span>
+  <span class="sp"></span>
+  <select id="chapSel" aria-label="Go to section"><option value="2.0_Complex_Numbers_Index.html">2.0 Chapter 2 Index</option>
+<option value="2.1_Introduction.html">2.1 Introduction</option>
+<option value="2.2_Real_and_Imaginary_Parts.html">2.2 Real and Imaginary Parts of a Complex Number</option>
+<option value="2.3_The_Complex_Plane.html">2.3 The Complex Plane</option>
+<option value="2.4_Terminology_and_Notation.html">2.4 Terminology and Notation</option>
+<option value="2.5_Complex_Algebra.html">2.5 Complex Algebra</option>
+<option value="2.6_Complex_Infinite_Series.html">2.6 Complex Infinite Series</option>
+<option value="2.7_Complex_Power_Series_Disk_of_Convergence.html">2.7 Complex Power Series; Disk of Convergence</option>
+<option value="2.8_Elementary_Functions_of_Complex_Numbers.html">2.8 Elementary Functions of Complex Numbers</option>
+<option value="2.9_Eulers_Formula.html">2.9 Euler&#x27;s Formula</option>
+<option value="2.10_Powers_and_Roots_of_Complex_Numbers.html">2.10 Powers and Roots of Complex Numbers</option>
+<option value="2.11_Exponential_and_Trigonometric_Functions.html">2.11 The Exponential and Trigonometric Functions</option>
+<option value="2.12_Hyperbolic_Functions.html">2.12 Hyperbolic Functions</option>
+<option value="2.13_Logarithms.html">2.13 Logarithms</option>
+<option value="2.14_Complex_Roots_and_Powers.html">2.14 Complex Roots and Powers</option>
+<option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
+<option value="2.16_Some_Applications.html" selected>2.16 Some Applications</option>
+<option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
+</header>
+<div class="layout">
+<nav class="toc" id="toc"></nav>
+<main>
+<h1><span class="num">2.16</span> Some Applications</h1>
+<p class="subtitle">Boas, Chapter 2, Section 16 · motion of a particle, a.c. circuits and complex impedance, adding many light waves (optics), and simple harmonic motion: complex numbers doing real physics.</p>
+
+<div class="box note"><span class="tag">Goals</span>
+<ul class="summary">
+<li>Describe a motion $z(t)$: path, speed $|\dot z|$, and acceleration $|\ddot z|$, especially circular motion.</li>
+<li>Use complex impedance $Z=R+i\left(\omega L-\frac1{\omega C}\right)$ to solve a.c. circuits like d.c. ones: series, parallel, resonance, phase.</li>
+<li>Sum phase-shifted waves with a geometric series and get the $N$-slit interference formula.</li>
+<li>Represent oscillations as $\operatorname{Re}$ or $\operatorname{Im}$ of $y_0e^{i\omega t}$.</li>
+<li>Solve all 13 of Boas's Section 16 problems.</li>
+</ul></div>
+
+<h2 id="motion">1. Motion of a particle</h2>
+<p>A position $z(t)=x(t)+iy(t)$ describes a path in the plane. As in Section 2.5F, the speed is $v=|dz/dt|$ and the acceleration magnitude is $a=|d^2z/dt^2|$.</p>
+<div class="ex"><div class="hd">Boas example — $z=1+3e^{2it}$</div><div class="bd"><ol class="steps">
+<li>$|z-1|=|3e^{2it}|=3$. Recall that $|z-1|$ is the distance from $z$ to the point $1$, so the particle moves on the circle of radius 3 centred at $(1,0)$ (16.1).</li>
+<li>$\dfrac{dz}{dt}=6ie^{2it}$, so $v=6$: constant speed.</li>
+<li>$\dfrac{d^2z}{dt^2}=-12e^{2it}=-4(z-1)$: magnitude 12, pointing to the centre ($=v^2/r=36/3$ ✔).</li></ol></div></div>
+<div class="box thm"><span class="tag">Multiplying by $i$ rotates by $90^\circ$ (Boas Problem 1)</span>
+<p>$iz=e^{i\pi/2}z$ has the same length as $z$ and an angle larger by $\pi/2$. For uniform circular motion $z=ae^{i\omega t}$:</p>
+$$\dot z=i\omega z\ \ (\perp z,\ \text{speed }v=a\omega),\qquad\ddot z=(i\omega)^2z=-\omega^2z\ \ (\text{towards the centre},\ |\ddot z|=a\omega^2=\frac{v^2}{a}).$$
+<p>So the centripetal acceleration $v^2/a$ comes out in one line.</p></div>
+
+<div class="widget" id="w-mo">
+<div class="wt">Interactive 1 — Particle motion with velocity and acceleration (Boas 16.1–16.5)</div>
+<div class="wd">Pick a motion. Green arrow: velocity $\dot z$. Orange arrow: acceleration $\ddot z$ (both scaled to fit). For circular motion the velocity is always $\perp$ to the radius and the acceleration points to the centre.</div>
+<div class="ctrls"><label>$z(t)=$ <select id="mo-f"><option value="0">1 + 3e^{2it} (text example)</option><option value="1">a e^{iωt}, a = 2, ω = 1 (Prob. 1)</option><option value="2">5e^{iωt}, ω = 0.6 (Prob. 2)</option><option value="3">(1+i)e^{it} (Prob. 3)</option><option value="4">(1+i)t − (2+i)(1−t) (Prob. 4)</option><option value="5">z₁t + z₂(1−t) (Prob. 5)</option></select></label>
+<button class="pri" id="mo-play">▶ Play</button><label>t <input type="range" id="mo-t" min="0" max="6.283" step="0.01" value="0.7"><output></output></label></div>
+<canvas id="cv-mo"></canvas>
+<div class="readout" id="mo-out"></div>
+</div>
+
+<h2 id="ac">2. Electricity: a.c. circuits and complex impedance</h2>
+<p>For a resistance $R$, inductance $L$ and capacitance $C$:</p>
+$$V_R=IR\ \ (16.2),\qquad V_L=L\frac{dI}{dt}\ \ (16.3),\qquad\frac{dV_C}{dt}=\frac IC\ \ (16.4).$$
+<p>With a real current $I=I_0\sin\omega t$ (16.5) in the series circuit of Fig. 16.1, the voltages are $V_R=RI_0\sin\omega t$, $V_L=\omega LI_0\cos\omega t$, $V_C=-\frac{1}{\omega C}I_0\cos\omega t$ (16.6–16.8). Their sum (16.9) is awkward to work with.</p>
+<h3>The complex method</h3>
+<p>Write $I=I_0e^{i\omega t}$ (16.10), with the understanding that the <b>physical current is $\operatorname{Im}I$</b> and the amplitude is $|I|=I_0$. Since $\frac{d}{dt}e^{i\omega t}=i\omega e^{i\omega t}$ and $\int e^{i\omega t}dt=\frac{e^{i\omega t}}{i\omega}$:</p>
+$$V_R=RI,\qquad V_L=i\omega L\,I,\qquad V_C=\frac{1}{i\omega C}I\qquad(16.11\text{–}16.13)$$
+$$V=V_R+V_L+V_C=\left[R+i\left(\omega L-\frac{1}{\omega C}\right)\right]I=ZI\qquad(16.14\text{–}16.16)$$
+<div class="box def"><span class="tag">Complex impedance</span>
+$$Z=R+i\left(\omega L-\frac1{\omega C}\right)\qquad(16.15)$$
+<p>$V=ZI$ looks like Ohm's law: $Z$ plays the role of $R$. Its parts:</p>
+<ul>
+<li>$|Z|=\sqrt{R^2+(\omega L-1/\omega C)^2}$ gives the ratio of the amplitudes: $V_0=|Z|I_0$.</li>
+<li>$\arg Z=\phi$ is the <b>phase</b> by which the voltage leads the current.</li>
+<li>Element impedances: $Z_R=R$, $Z_L=i\omega L$ ($+90^\circ$: voltage leads), $Z_C=\frac{1}{i\omega C}=-\frac{i}{\omega C}$ ($-90^\circ$: voltage lags).</li>
+</ul></div>
+<div class="box thm"><span class="tag">Combining impedances (same rules as resistors)</span>
+$$\text{series: }Z=Z_1+Z_2,\qquad\text{parallel: }\frac1Z=\frac1{Z_1}+\frac1{Z_2},\ \text{i.e. }Z=\frac{Z_1Z_2}{Z_1+Z_2}.$$
+<p><b>Resonance</b> means $Z$ is real (current and voltage in phase). For the series RLC circuit, $\omega L=\frac1{\omega C}$, so $\omega_0=\frac1{\sqrt{LC}}$, and there $|Z|$ is smallest and the current largest.</p></div>
+
+<div class="widget" id="w-ac">
+<div class="wt">Interactive 2 — RLC phasor lab</div>
+<div class="wd">Phasors are the complex numbers $V_R,V_L,V_C$ (shown at $t=0$, or rotating at frequency $\omega$ if you press Play). Their sum is $V=ZI$. Right: the resonance curve, current amplitude $|I|=V_0/|Z|$ against $\omega$, with your $\omega$ marked. Find the peak: it sits at $\omega_0=1/\sqrt{LC}$ for the series circuit.</div>
+<div class="ctrls"><label>circuit <select id="ac-c"><option value="series">R, L, C in series (Fig. 16.1)</option><option value="parallel">R, L, C all in parallel (Prob. 10)</option><option value="fig162">(R + L) ∥ C (Fig. 16.2, Prob. 8)</option></select></label>
+<label>$R$ <input type="range" id="ac-R" min="0.1" max="5" step="0.05" value="1"><output></output></label>
+<label>$L$ <input type="range" id="ac-L" min="0.1" max="3" step="0.05" value="1"><output></output></label>
+<label>$C$ <input type="range" id="ac-C" min="0.1" max="3" step="0.05" value="1"><output></output></label>
+<label>$\omega$ <input type="range" id="ac-w" min="0.1" max="4" step="0.01" value="1.5"><output></output></label>
+<button id="ac-play">▶ Rotate</button></div>
+<div class="grid2"><canvas id="cv-ac1"></canvas><canvas id="cv-ac2"></canvas></div>
+<div class="readout" id="ac-out"></div>
+</div>
+
+<h2 id="optics">3. Optics: adding $n$ waves with equal phase steps</h2>
+<p>Waves $\sin\omega t$, $\sin(\omega t+\delta)$, $\sin(\omega t+2\delta),\dots$ are the imaginary parts of $e^{i\omega t},\ e^{i(\omega t+\delta)},\dots$ (16.17). This is a geometric progression with first term $e^{i\omega t}$ and ratio $e^{i\delta}$. The sum of $n$ terms is (16.18)</p>
+$$\frac{e^{i\omega t}(1-e^{in\delta})}{1-e^{i\delta}} .$$
+<p>Factor out half-angles, as in Section 2.9: $1-e^{i\delta}=e^{i\delta/2}(e^{-i\delta/2}-e^{i\delta/2})=-2ie^{i\delta/2}\sin\frac\delta2$ (16.19), and likewise for $1-e^{in\delta}$. Then (16.20):</p>
+$$\sum_{k=0}^{n-1}e^{i(\omega t+k\delta)}=e^{i[\omega t+(n-1)\delta/2]}\,\frac{\sin(n\delta/2)}{\sin(\delta/2)}.$$
+<p>Taking the imaginary part, the total wave is</p>
+$$\boxed{\sin\left(\omega t+\frac{n-1}{2}\delta\right)\frac{\sin(n\delta/2)}{\sin(\delta/2)}}$$
+<p>a single wave with amplitude $\frac{\sin(n\delta/2)}{\sin(\delta/2)}$. The <b>intensity</b> (amplitude squared) $\frac{\sin^2(n\delta/2)}{\sin^2(\delta/2)}$ is the famous <b>$N$-slit diffraction grating</b> pattern: sharp principal maxima of height $n^2$ at $\delta=2\pi k$, with $n-2$ small subsidiary maxima in between.</p>
+<div class="widget" id="w-opt">
+<div class="wt">Interactive 3 — Phasor chain for $n$ waves and the grating intensity</div>
+<div class="wd">Left: $n$ unit phasors, each turned $\delta$ more than the last, placed head to tail. They form part of a regular polygon. The resultant (orange) has length $\left|\frac{\sin(n\delta/2)}{\sin(\delta/2)}\right|$. When $n\delta$ is a multiple of $2\pi$ (but $\delta$ is not), the chain closes into a polygon and the light cancels: a dark fringe. Right: the intensity against $\delta$.</div>
+<div class="ctrls"><label>$n$ waves <input type="range" id="op-n" min="2" max="20" value="6"><output></output></label><label>phase step $\delta$ <input type="range" id="op-d" min="-6.283" max="6.283" step="0.005" value="0.6"><output></output></label></div>
+<div class="grid2"><canvas id="cv-op1"></canvas><canvas id="cv-op2"></canvas></div>
+<div class="readout" id="op-out"></div>
+</div>
+
+<h2 id="shm">4. Simple harmonic motion</h2>
+<p>A mass $m$ on a spring (Fig. 16.3) with displacement $y$ feels the force $-ky$. Newton's law gives (16.21)</p>
+$$m\frac{d^2y}{dt^2}=-ky\qquad\text{or}\qquad\frac{d^2y}{dt^2}=-\omega^2y,\quad\omega^2=\frac km .$$
+<p>We want a function whose second derivative is a constant times itself. $e^{i\omega t}$, $e^{-i\omega t}$, $\cos\omega t$ and $\sin\omega t$ all work (Problem 13: e.g. $\frac{d^2}{dt^2}e^{i\omega t}=(i\omega)^2e^{i\omega t}=-\omega^2e^{i\omega t}$). We write (16.22)</p>
+$$y=y_0e^{i\omega t},$$
+<p>understanding that the physical displacement is the real (or imaginary) part. If $y_0=Ae^{i\phi}$ is complex, then $\operatorname{Re}y=A\cos(\omega t+\phi)$. The <b>modulus is the amplitude</b> and the <b>angle is the phase</b>. $\omega=\sqrt{k/m}$ is the angular frequency.</p>
+<div class="widget" id="w-shm">
+<div class="wt">Interactive 4 — The rotating phasor $y_0e^{i\omega t}$ and its shadow</div>
+<div class="wd">Drag the complex amplitude $y_0$ (its length is the amplitude $A$, its angle is the phase $\phi$). As time runs, the phasor rotates, and its real part (the shadow on the horizontal axis) is the actual oscillation, plotted on the right.</div>
+<div class="ctrls"><label>$\omega$ <input type="range" id="sh-w" min="0.2" max="3" step="0.05" value="1"><output></output></label><button class="pri" id="sh-play">▶ Play</button></div>
+<div class="grid2"><canvas id="cv-sh1"></canvas><canvas id="cv-sh2"></canvas></div>
+<div class="readout" id="sh-out"></div>
+</div>
+
+<h2 id="boas">5. Boas Problems, Section 16 — solutions</h2>
+<details class="sol"><summary>Show solutions 1–5 (motion)</summary>
+<p><b>1.</b> If $z=re^{i\theta}$, then $iz=re^{i(\theta+\pi/2)}$: the same length, turned by $90^\circ$. For $z=ae^{i\omega t}$: $\dot z=i\omega z$, which is perpendicular to the radius, with speed $|\dot z|=a\omega=v$. Next, $\ddot z=i\omega\dot z=-\omega^2z$: turned another $90^\circ$, so it points from $z$ to the centre, with magnitude $a\omega^2=\frac{(a\omega)^2}{a}=\frac{v^2}a$.</p>
+<p><b>2.</b> $z=5e^{i\omega t}$: circle of radius 5 about the origin, counter-clockwise if $\omega>0$. Speed $5\omega$, acceleration $5\omega^2$ (towards the centre).</p>
+<p><b>3.</b> $z=(1+i)e^{it}=\sqrt2e^{i(t+\pi/4)}$: circle of radius $\sqrt2$ starting at $1+i$, with speed $\sqrt2$ and acceleration $\sqrt2$.</p>
+<p><b>4.</b> $z=(1+i)t-(2+i)(1-t)=(3+2i)t-(2+i)$. At $t=0$ it is at $-2-i$, and at $t=1$ at $1+i$: a straight line through these points, traversed with constant velocity $\dot z=3+2i$. Speed $\sqrt{13}$, acceleration $0$.</p>
+<p><b>5.</b> $z=z_1t+z_2(1-t)=z_2+(z_1-z_2)t$: a straight line through $z_2$ ($t=0$) and $z_1$ ($t=1$). Speed $|z_1-z_2|$ (constant), acceleration $0$. (At $t=\frac12$ it is at the midpoint.)</p></details>
+<details class="sol"><summary>Show solutions 6–7 (series and parallel)</summary>
+<table class="t">
+<tr><th>#</th><th>$Z_1$, $Z_2$</th><th>Series $Z_1+Z_2$</th><th>Parallel $\frac{Z_1Z_2}{Z_1+Z_2}$</th></tr>
+<tr><td>6a</td><td>$2+3i$, $1-5i$</td><td>$3-2i$</td><td>$\frac{17-7i}{3-2i}=5+i$</td></tr>
+<tr><td>6b</td><td>$2\sqrt3e^{i\pi/6}=3+\sqrt3i$, $\ 2e^{2\pi i/3}=-1+\sqrt3i$</td><td>$2+2\sqrt3i=4e^{i\pi/3}$</td><td>$\frac{4\sqrt3e^{5\pi i/6}}{4e^{i\pi/3}}=\sqrt3e^{i\pi/2}=\sqrt3i$</td></tr>
+<tr><td>7a</td><td>$1-i$, $3i$</td><td>$1+2i$</td><td>$\frac{3+3i}{1+2i}=\frac95-\frac35i=1.8-0.6i$</td></tr>
+<tr><td>7b</td><td>$3.16\angle18.4^\circ\approx3+i$, $\ 4.47\angle63.4^\circ\approx2+4i$</td><td>$5+5i=7.07\angle45^\circ$</td><td>$\frac{2+14i}{5+5i}=1.6+1.2i=2\angle36.9^\circ$</td></tr>
+</table>
+<p class="small">For #7b, recognise $\sqrt{10}=3.16$ with $\arctan\frac13=18.4^\circ$, and $\sqrt{20}=4.47$ with $\arctan2=63.4^\circ$.</p></details>
+<details class="sol"><summary>Show solution 8 — Fig. 16.2: $(R+L)\parallel C$</summary>
+<p>$Z_1=R+i\omega L$ and $Z_2=\frac1{i\omega C}$, so</p>
+$$\frac1Z=\frac{1}{R+i\omega L}+i\omega C\quad\Longrightarrow\quad Z=\frac{R+i\omega L}{1-\omega^2LC+i\omega RC}.$$
+<p>Resonance: $Z$ is real iff $1/Z$ is real. $\operatorname{Im}\frac1Z=-\frac{\omega L}{R^2+\omega^2L^2}+\omega C=0$ gives $C(R^2+\omega^2L^2)=L$, so</p>
+$$\omega=\sqrt{\frac1{LC}-\frac{R^2}{L^2}}\qquad(\text{needs }R^2\lt L/C).$$
+<p>At resonance $Z=\frac{R^2+\omega^2L^2}{R}=\frac{L}{RC}$.</p></details>
+<details class="sol"><summary>Show solution 9 — series RLC (Fig. 16.1)</summary>
+<p>(a) $\arg Z=45^\circ$ means $\omega L-\frac1{\omega C}=R$, i.e. $LC\omega^2-RC\omega-1=0$. The positive root is</p>
+$$\omega=\frac{RC+\sqrt{R^2C^2+4LC}}{2LC}.$$
+<p>(b) Resonance ($Z$ real): $\omega L=\frac1{\omega C}$, so $\omega=\frac{1}{\sqrt{LC}}$.</p></details>
+<details class="sol"><summary>Show solution 10 — R, L, C all in parallel</summary>
+<p>$\frac1Z=\frac1R+\frac1{i\omega L}+i\omega C=\frac1R+i\left(\omega C-\frac1{\omega L}\right)$.</p>
+<p>(a) $\arg Z=-\arg\frac1Z=45^\circ$ means $\omega C-\frac1{\omega L}=-\frac1R$, i.e. $LC\omega^2+\frac LR\omega-1=0$, so</p>
+$$\omega=\frac{-\frac LR+\sqrt{\frac{L^2}{R^2}+4LC}}{2LC}.$$
+<p>(If instead $\arg Z=-45^\circ$, change the sign of the $\frac LR$ term.) (b) Resonance: $\omega C=\frac1{\omega L}$, so again $\omega=\frac1{\sqrt{LC}}$. There $Z=R$ is a <b>maximum</b> (the current drawn is smallest), the opposite of the series case.</p></details>
+<details class="sol"><summary>Show solution 11 — sums of odd multiples</summary>
+<p>$\displaystyle\sum_{k=1}^{n}e^{i(2k-1)\theta}=e^{i\theta}\frac{1-e^{2in\theta}}{1-e^{2i\theta}}=e^{i\theta}\frac{e^{in\theta}(-2i\sin n\theta)}{e^{i\theta}(-2i\sin\theta)}=e^{in\theta}\frac{\sin n\theta}{\sin\theta}.$</p>
+<p>Real part: $\dfrac{\cos n\theta\sin n\theta}{\sin\theta}=\dfrac{\sin2n\theta}{2\sin\theta}$ ✔. Imaginary part: $\dfrac{\sin^2n\theta}{\sin\theta}$ ✔.</p></details>
+<details class="sol"><summary>Show solution 12 — multiple reflections in a film</summary>
+<p>$\left(\sum r^{2n}\cos n\theta\right)^2+\left(\sum r^{2n}\sin n\theta\right)^2=|X|^2+|Y|^2$ with $X+iY=\sum_{n=0}^\infty r^{2n}e^{in\theta}$, which is $|X+iY|^2$ since $X$ and $Y$ are real.</p>
+<p>It is a geometric series with ratio $r^2e^{i\theta}$, $|r|\lt1$: $\frac{1}{1-r^2e^{i\theta}}$. So the expression equals</p>
+$$\frac{1}{|1-r^2e^{i\theta}|^2}=\frac{1}{1-2r^2\cos\theta+r^4}.$$
+<p>(This is the Airy function of a Fabry–Pérot interferometer.)</p></details>
+<details class="sol"><summary>Show solution 13 — SHM solutions</summary>
+<p>$\frac{d^2}{dt^2}e^{\pm i\omega t}=(\pm i\omega)^2e^{\pm i\omega t}=-\omega^2e^{\pm i\omega t}$. Also $\frac{d^2}{dt^2}\cos\omega t=-\omega^2\cos\omega t$ and $\frac{d^2}{dt^2}\sin\omega t=-\omega^2\sin\omega t$. All four satisfy $\ddot y=-\omega^2y$.</p></details>
+
+<h2 id="practice">6. More practice</h2>
+<div class="prob"><div class="q"><b>P1.</b> A series circuit has $R=3\,\Omega$, $\omega L=8\,\Omega$, $\frac{1}{\omega C}=4\,\Omega$, and $V_0=10$ V. Find $Z$, $|Z|$, the phase, and $I_0$. <span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$Z=3+4i$, $|Z|=5\,\Omega$, phase $\arctan\frac43=53.1^\circ$ (voltage leads), $I_0=10/5=2$ A.</p></details></div>
+<div class="prob"><div class="q"><b>P2.</b> Find the average power $\frac12\operatorname{Re}(V\bar I)$ in P1. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$V=ZI$, so $V\bar I=Z|I|^2$ and $P=\frac12|I|^2\operatorname{Re}Z=\frac12\cdot4\cdot3=6$ W. Only the resistor dissipates power.</p></details></div>
+<div class="prob"><div class="q"><b>P3.</b> Find the angles $\delta$ where the 4-slit intensity $\frac{\sin^2(2\delta)}{\sin^2(\delta/2)}$ is zero, for $0\lt\delta\lt2\pi$. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\sin2\delta=0$ with $\sin\frac\delta2\ne0$: $\delta=\frac\pi2,\pi,\frac{3\pi}2$. That is 3 zeros between principal maxima, and $n-2=2$ subsidiary maxima between them.</p></details></div>
+<div class="prob"><div class="q"><b>P4.</b> A damped oscillator $\ddot y+2\gamma\dot y+\omega_0^2y=0$. Try $y=e^{st}$ and find $s$ for $\gamma\lt\omega_0$. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$s^2+2\gamma s+\omega_0^2=0$, so $s=-\gamma\pm i\sqrt{\omega_0^2-\gamma^2}$. Hence $y=e^{-\gamma t}\left(Ae^{i\omega_1t}+Be^{-i\omega_1t}\right)$ with $\omega_1=\sqrt{\omega_0^2-\gamma^2}$: a decaying oscillation, i.e. a spiral $z(t)$ in the complex plane.</p></details></div>
+<div class="prob"><div class="q"><b>P5.</b> Show $\sum_{k=0}^{n-1}\cos(k\delta)=\dfrac{\sin(n\delta/2)}{\sin(\delta/2)}\cos\dfrac{(n-1)\delta}{2}$. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>Take the real part of (16.20) with $\omega t=0$.</p></details></div>
+<div class="prob"><div class="q"><b>P6.</b> (NET) At resonance in a series LCR circuit, the phase difference between current and voltage is: <span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>Zero: $Z=R$ is real.</p></details></div>
+
+<h2 id="summary">7. Summary</h2>
+<div class="card"><ul class="summary">
+<li>Motion: $v=|\dot z|$, $a=|\ddot z|$. Multiplying by $i$ turns by $90^\circ$, which gives the centripetal acceleration $v^2/a$.</li>
+<li>a.c.: $I=I_0e^{i\omega t}$, $V=ZI$, $Z=R+i(\omega L-\frac1{\omega C})$. Combine impedances like resistors. Resonance means $Z$ is real.</li>
+<li>Optics: a geometric series of phasors gives $\frac{\sin(n\delta/2)}{\sin(\delta/2)}$, and the intensity is the grating pattern.</li>
+<li>SHM: $y=\operatorname{Re}(y_0e^{i\omega t})$, with $|y_0|$ the amplitude and $\arg y_0$ the phase.</li>
+</ul></div>
+
+
+<div class="pagenav"><a href="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html"><small>← Previous</small>2.15 Inverse Trigonometric and Hyperbolic Functions</a><a href="2.17_Miscellaneous_Problems.html" style="text-align:right"><small>Next →</small>2.17 Miscellaneous Problems</a></div>
+</main>
+</div>
+<script>
+"use strict";
+/* ===== shared helpers for all Chapter 2 pages ===== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const PI = Math.PI, TAU = 2 * Math.PI;
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function onReady(fn) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
+
+/* ---------- number formatting ---------- */
+function fnum(x, d = 4) {
+  if (Number.isNaN(x)) return 'undefined';
+  if (!isFinite(x)) return x > 0 ? '∞' : '−∞';
+  if (Math.abs(x) >= 1e7) return x.toExponential(3).replace('-', '−');
+  let s = (+x.toFixed(d)).toString();
+  if (s === '-0') s = '0';
+  return s.replace('-', '−');
+}
+/* ---------- complex arithmetic, numbers are [re, im] ---------- */
+const Cx = {
+  c: (a, b = 0) => [a, b],
+  I: [0, 1],
+  add: (a, b) => [a[0] + b[0], a[1] + b[1]],
+  sub: (a, b) => [a[0] - b[0], a[1] - b[1]],
+  mul: (a, b) => [a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]],
+  div: (a, b) => { const d = b[0] * b[0] + b[1] * b[1]; return [(a[0] * b[0] + a[1] * b[1]) / d, (a[1] * b[0] - a[0] * b[1]) / d]; },
+  scale: (a, k) => [a[0] * k, a[1] * k],
+  conj: a => [a[0], -a[1]],
+  neg: a => [-a[0], -a[1]],
+  abs: a => Math.hypot(a[0], a[1]),
+  abs2: a => a[0] * a[0] + a[1] * a[1],
+  arg: a => Math.atan2(a[1], a[0]),
+  arg2pi: a => { let t = Math.atan2(a[1], a[0]); return t < 0 ? t + TAU : t; },
+  polar: (r, t) => [r * Math.cos(t), r * Math.sin(t)],
+  exp: a => { const e = Math.exp(a[0]); return [e * Math.cos(a[1]), e * Math.sin(a[1])]; },
+  log: (a, n = 0) => [Math.log(Math.hypot(a[0], a[1])), Math.atan2(a[1], a[0]) + TAU * n],
+  ipow(a, n) { let r = [1, 0], b = a, k = Math.abs(n); while (k) { if (k & 1) r = Cx.mul(r, b); b = Cx.mul(b, b); k >>= 1; } return n < 0 ? Cx.div([1, 0], r) : r; },
+  pow(a, b, n = 0) {
+    if (b[1] === 0 && Number.isInteger(b[0]) && Math.abs(b[0]) <= 4096) return Cx.ipow(a, b[0]);
+    if (a[0] === 0 && a[1] === 0) return b[0] > 0 ? [0, 0] : [NaN, NaN];
+    return Cx.exp(Cx.mul(b, Cx.log(a, n)));
+  },
+  sqrt: a => Cx.polar(Math.sqrt(Math.hypot(a[0], a[1])), Math.atan2(a[1], a[0]) / 2),
+  sin: a => [Math.sin(a[0]) * Math.cosh(a[1]), Math.cos(a[0]) * Math.sinh(a[1])],
+  cos: a => [Math.cos(a[0]) * Math.cosh(a[1]), -Math.sin(a[0]) * Math.sinh(a[1])],
+  tan: a => Cx.div(Cx.sin(a), Cx.cos(a)),
+  sinh: a => [Math.sinh(a[0]) * Math.cos(a[1]), Math.cosh(a[0]) * Math.sin(a[1])],
+  cosh: a => [Math.cosh(a[0]) * Math.cos(a[1]), Math.sinh(a[0]) * Math.sin(a[1])],
+  tanh: a => Cx.div(Cx.sinh(a), Cx.cosh(a)),
+  // principal branches
+  asin: z => Cx.mul([0, -1], Cx.log(Cx.add(Cx.mul([0, 1], z), Cx.sqrt(Cx.sub([1, 0], Cx.mul(z, z)))))),
+  acos: z => Cx.sub([PI / 2, 0], Cx.asin(z)),
+  atan: z => Cx.mul([0, -0.5], Cx.log(Cx.div(Cx.add([1, 0], Cx.mul([0, 1], z)), Cx.sub([1, 0], Cx.mul([0, 1], z))))),
+  asinh: z => Cx.log(Cx.add(z, Cx.sqrt(Cx.add(Cx.mul(z, z), [1, 0])))),
+  acosh: z => Cx.log(Cx.add(z, Cx.mul(Cx.sqrt(Cx.add(z, [1, 0])), Cx.sqrt(Cx.sub(z, [1, 0]))))),
+  atanh: z => Cx.scale(Cx.log(Cx.div(Cx.add([1, 0], z), Cx.sub([1, 0], z))), 0.5),
+  eq: (a, b, e = 1e-9) => Math.abs(a[0] - b[0]) < e && Math.abs(a[1] - b[1]) < e,
+  fmt(z, d = 4) {
+    if (!isFinite(z[0]) || !isFinite(z[1])) return 'undefined';
+    const eps = 0.5 * Math.pow(10, -d);
+    const R = Math.abs(z[0]) < eps ? 0 : z[0], I = Math.abs(z[1]) < eps ? 0 : z[1];
+    if (I === 0) return fnum(R, d);
+    const ai = Math.abs(I), ip = (Math.abs(ai - 1) < eps ? '' : fnum(ai, d)) + 'i';
+    if (R === 0) return (I < 0 ? '−' : '') + ip;
+    return fnum(R, d) + (I < 0 ? ' − ' : ' + ') + ip;
+  },
+  tex(z, d = 4) { return Cx.fmt(z, d).replace(/−/g, '-').replace('undefined', '\\text{undefined}'); },
+  polarTex(z, d = 3) {
+    const r = Cx.abs(z), t = Cx.arg(z);
+    return fnum(r, d).replace('−', '-') + '\\,e^{' + fnum(t, d).replace('−', '-') + 'i}';
+  }
+};
+/* angle as a nice multiple of pi if possible */
+function piFrac(t, maxDen = 12) {
+  const q = t / PI;
+  for (let den = 1; den <= maxDen; den++) {
+    const num = Math.round(q * den);
+    if (Math.abs(q * den - num) < 1e-9) {
+      if (num === 0) return '0';
+      const g = gcd(Math.abs(num), den), a = num / g, b = den / g;
+      const s = a < 0 ? '-' : '', A = Math.abs(a);
+      const top = (A === 1 ? '' : A) + '\\pi';
+      return b === 1 ? s + top : s + '\\frac{' + top + '}{' + b + '}';
+    }
+  }
+  return fnum(t, 4).replace('−', '-');
+}
+function gcd(a, b) { while (b) [a, b] = [b, a % b]; return a; }
+/* coefficient of i in TeX: 1 -> '', -1 -> '-' */
+function icoef(v, d = 3) { const s = fnum(v, d).replace('−', '-'); return s === '1' ? '' : s === '-1' ? '-' : s; }
+/* KaTeX render into element (falls back to plain text if KaTeX could not load) */
+function tex(el, s, disp = false) {
+  if (typeof el === 'string') el = $(el);
+  if (!el) return;
+  if (window.katex) { try { katex.render(s, el, { displayMode: disp, throwOnError: false }); return; } catch (e) { } }
+  el.textContent = s;
+}
+/* render a string that mixes text and $...$ math into an element */
+function texMix(el, s) {
+  if (typeof el === 'string') el = $(el);
+  el.innerHTML = '';
+  s.split(/(\$\$[^$]+\$\$|\$[^$]+\$)/).forEach(part => {
+    if (!part) return;
+    const span = document.createElement('span');
+    if (part.startsWith('$$')) tex(span, part.slice(2, -2), true);
+    else if (part.startsWith('$')) tex(span, part.slice(1, -1));
+    else span.innerHTML = part;
+    el.appendChild(span);
+  });
+}
+
+/* ---------- expression parser for complex expressions ---------- */
+const Parser = (() => {
+  const F = {
+    sin: Cx.sin, cos: Cx.cos, tan: Cx.tan, sinh: Cx.sinh, cosh: Cx.cosh, tanh: Cx.tanh,
+    sec: z => Cx.div([1, 0], Cx.cos(z)), csc: z => Cx.div([1, 0], Cx.sin(z)), cot: z => Cx.div(Cx.cos(z), Cx.sin(z)),
+    sech: z => Cx.div([1, 0], Cx.cosh(z)), csch: z => Cx.div([1, 0], Cx.sinh(z)), coth: z => Cx.div(Cx.cosh(z), Cx.sinh(z)),
+    exp: Cx.exp, ln: z => Cx.log(z), log: z => Cx.log(z), sqrt: Cx.sqrt, conj: Cx.conj,
+    abs: z => [Cx.abs(z), 0], arg: z => [Cx.arg(z), 0], re: z => [z[0], 0], im: z => [z[1], 0],
+    asin: Cx.asin, acos: Cx.acos, atan: Cx.atan, asinh: Cx.asinh, acosh: Cx.acosh, atanh: Cx.atanh,
+    arcsin: Cx.asin, arccos: Cx.acos, arctan: Cx.atan, arcsinh: Cx.asinh, arccosh: Cx.acosh, arctanh: Cx.atanh
+  };
+  function tokenize(s) {
+    s = s.replace(/−/g, '-').replace(/×|·/g, '*').replace(/÷/g, '/').replace(/π/g, 'pi').replace(/√/g, 'sqrt').replace(/\*\*/g, '^');
+    const out = []; let i = 0;
+    while (i < s.length) {
+      const c = s[i];
+      if (/\s/.test(c)) { i++; continue; }
+      if (/[0-9.]/.test(c)) { let j = i; while (j < s.length && /[0-9.]/.test(s[j])) j++; if (s[j] === 'e' && /[-+0-9]/.test(s[j + 1] || '') && /[0-9]/.test(s[j + 1] === '-' || s[j + 1] === '+' ? s[j + 2] : s[j + 1])) { j += 2; while (j < s.length && /[0-9]/.test(s[j])) j++; } out.push({ t: 'n', v: parseFloat(s.slice(i, j)) }); i = j; continue; }
+      if (/[a-zA-Z_]/.test(c)) { let j = i; while (j < s.length && /[a-zA-Z_0-9]/.test(s[j])) j++; out.push({ t: 'id', v: s.slice(i, j).toLowerCase() }); i = j; continue; }
+      if ('+-*/^(),'.includes(c)) { out.push({ t: 'op', v: c }); i++; continue; }
+      throw new Error('Unexpected character "' + c + '"');
+    }
+    return out;
+  }
+  function compile(src) {
+    const tk = tokenize(src); let p = 0;
+    const peek = () => tk[p], next = () => tk[p++];
+    const isOp = v => tk[p] && tk[p].t === 'op' && tk[p].v === v;
+    function expr() { let a = term(); while (isOp('+') || isOp('-')) { const o = next().v, b = term(), A = a; a = o === '+' ? e => Cx.add(A(e), b(e)) : e => Cx.sub(A(e), b(e)); } return a; }
+    function term() {
+      let a = unary();
+      for (; ;) {
+        if (isOp('*') || isOp('/')) { const o = next().v, b = unary(), A = a; a = o === '*' ? e => Cx.mul(A(e), b(e)) : e => Cx.div(A(e), b(e)); }
+        else if (peek() && (peek().t === 'n' || peek().t === 'id' || isOp('('))) { const b = power(), A = a; a = e => Cx.mul(A(e), b(e)); }
+        else break;
+      }
+      return a;
+    }
+    function unary() { if (isOp('-')) { next(); const a = unary(); return e => Cx.neg(a(e)); } if (isOp('+')) { next(); return unary(); } return power(); }
+    function power() { const a = primary(); if (isOp('^')) { next(); const b = unary(); return e => Cx.pow(a(e), b(e)); } return a; }
+    function primary() {
+      const t = next();
+      if (!t) throw new Error('Expression ended too early');
+      if (t.t === 'n') { const v = [t.v, 0]; return () => v; }
+      if (t.t === 'op' && t.v === '(') { const a = expr(); if (!isOp(')')) throw new Error('Missing ")"'); next(); return a; }
+      if (t.t === 'id') {
+        if (F[t.v]) {
+          if (!isOp('(')) throw new Error(t.v + ' needs brackets, e.g. ' + t.v + '(1+i)');
+          next(); const a = expr(); if (!isOp(')')) throw new Error('Missing ")"'); next(); const f = F[t.v]; return e => f(a(e));
+        }
+        if (t.v === 'i' || t.v === 'j') return () => [0, 1];
+        if (t.v === 'pi') return () => [PI, 0];
+        if (t.v === 'e') return () => [Math.E, 0];
+        const name = t.v; return e => { if (e && name in e) return e[name]; throw new Error('Unknown name "' + name + '"'); };
+      }
+      throw new Error('Unexpected "' + t.v + '"');
+    }
+    const f = expr(); if (p < tk.length) throw new Error('Unexpected "' + tk[p].v + '"');
+    return f;
+  }
+  return { compile, eval: (s, env) => compile(s)(env || {}) };
+})();
+
+/* ---------- contour integration: ∫ f(z) dz along z = path(t), t in [a,b] (composite Simpson) ---------- */
+function contourInt(f, path, a, b, N = 2000) {
+  if (N % 2) N++;
+  const h = (b - a) / N, d = h * 1e-3;
+  let s = [0, 0];
+  for (let k = 0; k <= N; k++) {
+    const t = a + k * h, z = path(t), dz = Cx.scale(Cx.sub(path(t + d), path(t - d)), 1 / (2 * d));
+    const w = k === 0 || k === N ? 1 : (k % 2 ? 4 : 2);
+    s = Cx.add(s, Cx.scale(Cx.mul(f(z), dz), w));
+  }
+  return Cx.scale(s, h / 3);
+}
+const circlePath = (c, r) => t => Cx.add(c, Cx.polar(r, t));
+
+/* ---------- colours ---------- */
+function hsl2rgb(h, s, l) { // h in [0,1)
+  const a = s * Math.min(l, 1 - l);
+  const f = n => { const k = (n + h * 12) % 12; return l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)); };
+  return [f(0) * 255, f(8) * 255, f(4) * 255];
+}
+function phaseRGB(t, light = 0.5) { let h = (t / TAU) % 1; if (h < 0) h += 1; return hsl2rgb(h, 0.85, light); }
+function heatRGB(u) { // 0..1 -> perceptual blue->teal->yellow
+  u = Math.max(0, Math.min(1, u));
+  const st = [[48, 18, 120], [33, 102, 172], [32, 164, 160], [110, 200, 90], [240, 220, 60]];
+  const x = u * (st.length - 1), i = Math.min(st.length - 2, Math.floor(x)), f = x - i;
+  return st[i].map((v, k) => v + (st[i + 1][k] - v) * f);
+}
+const rgbs = c => `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`;
+
+/* ---------- redraw registry (resize + theme change) ---------- */
+const _views = [];
+let _rzT = 0;
+window.addEventListener('resize', () => { clearTimeout(_rzT); _rzT = setTimeout(() => _views.forEach(v => v.resize()), 120); });
+function redrawAll() { _views.forEach(v => v.redraw()); }
+
+/* ---------- 2-D complex plane ---------- */
+class Plane {
+  constructor(cv, o = {}) {
+    this.cv = typeof cv === 'string' ? $(cv) : cv; this.ctx = this.cv.getContext('2d');
+    this.cx = o.cx ?? 0; this.cy = o.cy ?? 0; this.span = o.span ?? 3; this.aspect = o.aspect ?? 0.7;
+    this.gridOn = o.grid !== false; this.snap = o.snap ?? 0.05; this.axisLabels = o.axisLabels ?? ['Re', 'Im'];
+    this.draw = o.draw || (() => { }); this.drags = []; this.onClick = o.onClick || null; this.active = null;
+    this._bind(); _views.push(this); this.resize();
+  }
+  resize() {
+    const dpr = window.devicePixelRatio || 1, w = this.cv.clientWidth || 600, h = Math.round(w * this.aspect);
+    this.cv.style.height = h + 'px'; this.cv.width = Math.round(w * dpr); this.cv.height = Math.round(h * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); this.W = w; this.H = h; this.dpr = dpr; this.redraw();
+  }
+  get k() { return this.W / (2 * this.span); }
+  X(x) { return this.W / 2 + (x - this.cx) * this.k; }
+  Y(y) { return this.H / 2 - (y - this.cy) * this.k; }
+  wx(px) { return (px - this.W / 2) / this.k + this.cx; }
+  wy(py) { return -(py - this.H / 2) / this.k + this.cy; }
+  get x0() { return this.wx(0); } get x1() { return this.wx(this.W); }
+  get y0() { return this.wy(this.H); } get y1() { return this.wy(0); }
+  redraw() { if (!this.W) return; const c = this.ctx; c.save(); c.fillStyle = cssv('--canvas'); c.fillRect(0, 0, this.W, this.H); c.restore(); if (this.gridOn) this.grid(); this.draw(this); }
+  step() { const raw = 55 / this.k, p = Math.pow(10, Math.floor(Math.log10(raw))); for (const m of [1, 2, 5, 10]) if (m * p >= raw) return m * p; return 10 * p; }
+  grid() {
+    const c = this.ctx, s = this.step(); c.save(); c.lineWidth = 1; c.strokeStyle = cssv('--grid');
+    c.beginPath();
+    for (let x = Math.ceil(this.x0 / s) * s; x <= this.x1; x += s) { const X = Math.round(this.X(x)) + .5; c.moveTo(X, 0); c.lineTo(X, this.H); }
+    for (let y = Math.ceil(this.y0 / s) * s; y <= this.y1; y += s) { const Y = Math.round(this.Y(y)) + .5; c.moveTo(0, Y); c.lineTo(this.W, Y); }
+    c.stroke();
+    c.strokeStyle = cssv('--axis'); c.lineWidth = 1.3; c.beginPath();
+    const ox = this.X(0), oy = this.Y(0); c.moveTo(0, oy); c.lineTo(this.W, oy); c.moveTo(ox, 0); c.lineTo(ox, this.H); c.stroke();
+    c.fillStyle = cssv('--muted'); c.font = '11px system-ui,sans-serif';
+    const lx = Math.min(Math.max(ox, 4), this.W - 30), ly = Math.min(Math.max(oy, 12), this.H - 4);
+    c.textAlign = 'center';
+    for (let x = Math.ceil(this.x0 / s) * s; x <= this.x1; x += s) { if (Math.abs(x) < s / 2) continue; c.fillText(fnum(x, 3), this.X(x), ly + 13 > this.H ? ly - 4 : ly + 13); }
+    c.textAlign = 'left';
+    for (let y = Math.ceil(this.y0 / s) * s; y <= this.y1; y += s) { if (Math.abs(y) < s / 2) continue; c.fillText(fnum(y, 3) + (this.axisLabels[1] === 'Im' ? 'i' : ''), lx + 4, this.Y(y) + 4); }
+    c.font = '600 12px system-ui,sans-serif'; c.fillStyle = cssv('--axis');
+    if (this.axisLabels[0]) { c.textAlign = 'right'; c.fillText(this.axisLabels[0], this.W - 6, Math.min(Math.max(oy - 6, 14), this.H - 6)); }
+    if (this.axisLabels[1]) { c.textAlign = 'left'; c.fillText(this.axisLabels[1], Math.min(Math.max(ox + 6, 6), this.W - 30), 14); }
+    c.restore();
+  }
+  col(v) { return v && v.startsWith('--') ? cssv(v) : (v || cssv('--accent')); }
+  line(a, b, o = {}) { const c = this.ctx; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; if (o.dash) c.setLineDash(o.dash); c.globalAlpha = o.alpha ?? 1; c.beginPath(); c.moveTo(this.X(a[0]), this.Y(a[1])); c.lineTo(this.X(b[0]), this.Y(b[1])); c.stroke(); c.restore(); }
+  lineInf(p, d, o = {}) { const L = 1e4; this.line([p[0] - d[0] * L, p[1] - d[1] * L], [p[0] + d[0] * L, p[1] + d[1] * L], o); }
+  arrow(a, b, o = {}) {
+    const c = this.ctx, x0 = this.X(a[0]), y0 = this.Y(a[1]), x1 = this.X(b[0]), y1 = this.Y(b[1]), L = Math.hypot(x1 - x0, y1 - y0);
+    c.save(); c.strokeStyle = c.fillStyle = this.col(o.color); c.lineWidth = o.width || 2.5; c.globalAlpha = o.alpha ?? 1; if (o.dash) c.setLineDash(o.dash);
+    if (L < 1) { c.restore(); return; }
+    const h = Math.min(o.head || 11, L * 0.5), ux = (x1 - x0) / L, uy = (y1 - y0) / L;
+    c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1 - ux * h * 0.8, y1 - uy * h * 0.8); c.stroke(); c.setLineDash([]);
+    c.beginPath(); c.moveTo(x1, y1); c.lineTo(x1 - ux * h - uy * h * 0.45, y1 - uy * h + ux * h * 0.45); c.lineTo(x1 - ux * h + uy * h * 0.45, y1 - uy * h - ux * h * 0.45); c.closePath(); c.fill(); c.restore();
+  }
+  dot(z, o = {}) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(o.color); c.globalAlpha = o.alpha ?? 1;
+    c.beginPath(); c.arc(this.X(z[0]), this.Y(z[1]), o.r || 5, 0, TAU);
+    if (o.hollow) { c.strokeStyle = c.fillStyle; c.lineWidth = 2; c.stroke(); } else c.fill();
+    if (o.ring) { c.strokeStyle = cssv('--canvas'); c.lineWidth = 2; c.stroke(); }
+    c.restore(); if (o.label) this.label(z, o.label, o);
+  }
+  label(z, s, o = {}) {
+    const c = this.ctx; c.save(); c.font = o.font || '600 13px system-ui,sans-serif'; c.fillStyle = this.col(o.lcolor || o.color);
+    c.textAlign = o.align || 'left'; const X = this.X(z[0]) + (o.dx ?? 8), Y = this.Y(z[1]) + (o.dy ?? -8);
+    if (o.bg !== false) { const w = c.measureText(s).width, ax = c.textAlign === 'center' ? X - w / 2 : c.textAlign === 'right' ? X - w : X; c.globalAlpha = 0.75; c.fillStyle = cssv('--canvas'); c.fillRect(ax - 2, Y - 12, w + 4, 16); c.globalAlpha = 1; c.fillStyle = this.col(o.lcolor || o.color); }
+    c.fillText(s, X, Y); c.restore();
+  }
+  text(px, py, s, o = {}) { const c = this.ctx; c.save(); c.font = o.font || '600 13px system-ui,sans-serif'; c.fillStyle = this.col(o.color || '--fg'); c.textAlign = o.align || 'left'; c.fillText(s, px, py); c.restore(); }
+  circle(ctr, r, o = {}) {
+    const c = this.ctx; c.save(); c.beginPath(); c.arc(this.X(ctr[0]), this.Y(ctr[1]), Math.abs(r) * this.k, 0, TAU);
+    if (o.fill) { c.fillStyle = this.col(o.fill); c.globalAlpha = o.fillAlpha ?? 0.15; c.fill(); c.globalAlpha = 1; }
+    if (o.color !== 'none') { c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; if (o.dash) c.setLineDash(o.dash); c.stroke(); }
+    c.restore();
+  }
+  path(pts, o = {}) {
+    const c = this.ctx; if (!pts.length) return; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; c.globalAlpha = o.alpha ?? 1; if (o.dash) c.setLineDash(o.dash);
+    c.beginPath(); let pen = false;
+    for (const p of pts) { if (!p || !isFinite(p[0]) || !isFinite(p[1]) || Math.abs(p[0]) > 1e6 || Math.abs(p[1]) > 1e6) { pen = false; continue; } const X = this.X(p[0]), Y = this.Y(p[1]); if (pen) c.lineTo(X, Y); else { c.moveTo(X, Y); pen = true; } }
+    if (o.close) c.closePath();
+    if (o.fill) { c.fillStyle = this.col(o.fill); c.globalAlpha = o.fillAlpha ?? 0.15; c.fill(); c.globalAlpha = o.alpha ?? 1; }
+    if (o.color !== 'none') c.stroke(); c.restore();
+  }
+  angleArc(t0, t1, rpx, o = {}, ctr = [0, 0]) {
+    const c = this.ctx; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 1.8; c.beginPath();
+    c.arc(this.X(ctr[0]), this.Y(ctr[1]), rpx, -t0, -t1, t1 > t0); c.stroke(); c.restore();
+  }
+  /* shade region where test(x,y) is true */
+  region(test, color, alpha = 0.22, res = 3) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(color); c.globalAlpha = alpha;
+    for (let py = 0; py < this.H; py += res) for (let px = 0; px < this.W; px += res) if (test(this.wx(px + res / 2), this.wy(py + res / 2))) c.fillRect(px, py, res, res);
+    c.restore();
+  }
+  /* implicit curve F(x,y)=0 by marching squares (sign changes) */
+  implicit(Fn, o = {}, res = 3) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(o.color); const nx = Math.ceil(this.W / res) + 1, ny = Math.ceil(this.H / res) + 1; const v = new Float64Array(nx * ny);
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) v[j * nx + i] = Fn(this.wx(i * res), this.wy(j * res));
+    for (let j = 0; j < ny - 1; j++) for (let i = 0; i < nx - 1; i++) { const a = v[j * nx + i], b = v[j * nx + i + 1], d = v[(j + 1) * nx + i]; if (!isFinite(a) || !isFinite(b) || !isFinite(d)) continue; if ((a > 0) !== (b > 0) || (a > 0) !== (d > 0)) { if (o.maxJump && (Math.abs(a - b) > o.maxJump || Math.abs(a - d) > o.maxJump)) continue; c.fillRect(i * res - (o.width || 2) / 2 + res / 2, j * res - (o.width || 2) / 2 + res / 2, o.width || 2.4, o.width || 2.4); } }
+    c.restore();
+  }
+  /* domain colouring of w=f(z) : hue = arg w, brightness bands = log|w| */
+  domain(f, o = {}) {
+    const res = o.res || 2, c = this.ctx, w = Math.ceil(this.W / res), h = Math.ceil(this.H / res);
+    const img = c.createImageData(w, h), d = img.data;
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+      const z = [this.wx(i * res + res / 2), this.wy(j * res + res / 2)], v = f(z), k = (j * w + i) * 4;
+      if (!isFinite(v[0]) || !isFinite(v[1])) { d[k] = d[k + 1] = d[k + 2] = 255; d[k + 3] = 255; continue; }
+      const m = Math.hypot(v[0], v[1]); let L = 0.5;
+      if (o.bands !== false) { const fr = (Math.log2(m) % 1 + 1) % 1; L = 0.32 + 0.3 * fr; }
+      const rgb = phaseRGB(Math.atan2(v[1], v[0]), L); d[k] = rgb[0]; d[k + 1] = rgb[1]; d[k + 2] = rgb[2]; d[k + 3] = 255;
+    }
+    const tmp = document.createElement('canvas'); tmp.width = w; tmp.height = h; tmp.getContext('2d').putImageData(img, 0, 0);
+    c.save(); c.imageSmoothingEnabled = true; c.globalAlpha = o.alpha ?? 1; c.drawImage(tmp, 0, 0, this.W, this.H); c.restore();
+  }
+  addDrag(get, set, o = {}) { this.drags.push({ get, set, r: o.r || 16 }); this.cv.style.touchAction = 'none'; this.cv.style.cursor = 'grab'; }
+  _bind() {
+    const pos = e => { const b = this.cv.getBoundingClientRect(); return [e.clientX - b.left, e.clientY - b.top]; };
+    const snapv = v => this.snap ? Math.round(v / this.snap) * this.snap : v;
+    this.cv.addEventListener('pointerdown', e => {
+      const [px, py] = pos(e); let best = null, bd = 1e9;
+      for (const d of this.drags) { const z = d.get(); const dd = Math.hypot(this.X(z[0]) - px, this.Y(z[1]) - py); if (dd < d.r && dd < bd) { bd = dd; best = d; } }
+      if (best) { this.active = best; this.cv.setPointerCapture(e.pointerId); this.cv.style.cursor = 'grabbing'; e.preventDefault(); }
+      else if (this.onClick) { this.onClick([snapv(this.wx(px)), snapv(this.wy(py))]); this.redraw(); }
+    });
+    this.cv.addEventListener('pointermove', e => {
+      if (!this.active) return; const [px, py] = pos(e);
+      this.active.set([snapv(this.wx(px)), snapv(this.wy(py))]); this.redraw(); if (this.onchange) this.onchange();
+    });
+    const up = () => { if (this.active) { this.active = null; this.cv.style.cursor = this.drags.length ? 'grab' : ''; } };
+    this.cv.addEventListener('pointerup', up); this.cv.addEventListener('pointercancel', up);
+  }
+}
+
+/* ---------- simple 2-D function graph (real x, real y) ---------- */
+class Graph extends Plane {
+  constructor(cv, o = {}) { super(cv, Object.assign({ axisLabels: o.axisLabels || ['x', 'y'], snap: 0 }, o)); }
+  fn(f, o = {}) { const pts = []; const n = o.n || 600; for (let i = 0; i <= n; i++) { const x = this.x0 + (this.x1 - this.x0) * i / n; const y = f(x); pts.push(isFinite(y) && Math.abs(y) < 1e5 ? [x, y] : null); } this.path(pts, o); }
+}
+
+/* ---------- rotatable 3-D surface z = h(x,y) ---------- */
+class Surf3D {
+  constructor(cv, o = {}) {
+    this.cv = typeof cv === 'string' ? $(cv) : cv; this.ctx = this.cv.getContext('2d');
+    Object.assign(this, { xr: [-2, 2], yr: [-2, 2], zr: [0, 4], n: 46, yaw: -0.65, pitch: 0.55, zoom: 1, aspect: 0.72, zs: 0.9, labels: ['x', 'y', 'z'], wire: true }, o);
+    this.h = o.h; this.color = o.color || null; this.extra = o.extra || null;
+    this._bind(); _views.push(this); this.build(); this.resize();
+  }
+  setFn(h, color) { this.h = h; if (color !== undefined) this.color = color; this.build(); this.redraw(); }
+  build() {
+    const n = this.n, V = [];
+    for (let j = 0; j <= n; j++) for (let i = 0; i <= n; i++) {
+      let x, y, hv, u = 0, v = 0;
+      if (this.param) { // parametric surface (u,v) -> [x, y, height]
+        u = this.ur[0] + (this.ur[1] - this.ur[0]) * i / n; v = this.vr[0] + (this.vr[1] - this.vr[0]) * j / n;
+        [x, y, hv] = this.param(u, v);
+      } else { x = this.xr[0] + (this.xr[1] - this.xr[0]) * i / n; y = this.yr[0] + (this.yr[1] - this.yr[0]) * j / n; hv = this.h(x, y); }
+      if (!isFinite(hv)) hv = this.zr[1]; const hc = Math.max(this.zr[0], Math.min(this.zr[1], hv));
+      V.push({ x, y, u, v, h: hc, raw: hv, X: 2 * (x - this.xr[0]) / (this.xr[1] - this.xr[0]) - 1, Y: 2 * (y - this.yr[0]) / (this.yr[1] - this.yr[0]) - 1, Z: (2 * (hc - this.zr[0]) / (this.zr[1] - this.zr[0]) - 1) * this.zs });
+    }
+    this.V = V;
+  }
+  resize() {
+    const dpr = window.devicePixelRatio || 1, w = this.cv.clientWidth || 600, h = Math.round(w * this.aspect);
+    this.cv.style.height = h + 'px'; this.cv.width = Math.round(w * dpr); this.cv.height = Math.round(h * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); this.W = w; this.H = h; this.redraw();
+  }
+  proj(X, Y, Z) {
+    const cy = Math.cos(this.yaw), sy = Math.sin(this.yaw), cp = Math.cos(this.pitch), sp = Math.sin(this.pitch);
+    const x1 = X * cy - Y * sy, y1 = X * sy + Y * cy, y2 = y1 * cp - Z * sp, z2 = y1 * sp + Z * cp;
+    const f = 4 / (4 + y2), S = Math.min(this.W, this.H / 0.9) * 0.34 * this.zoom;
+    return [this.W / 2 + x1 * f * S, this.H / 2 + 10 - z2 * f * S, y2];
+  }
+  redraw() {
+    if (!this.W) return; const c = this.ctx, n = this.n, V = this.V;
+    c.save(); c.fillStyle = cssv('--canvas'); c.fillRect(0, 0, this.W, this.H);
+    const P = V.map(v => this.proj(v.X, v.Y, v.Z));
+    // base box
+    const bz = -this.zs, tz = this.zs, corners = [[-1, -1], [1, -1], [1, 1], [-1, 1]];
+    c.strokeStyle = cssv('--axis'); c.lineWidth = 1; c.globalAlpha = 0.55; c.beginPath();
+    corners.forEach((q, i) => { const a = this.proj(q[0], q[1], bz), b = this.proj(corners[(i + 1) % 4][0], corners[(i + 1) % 4][1], bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); });
+    c.stroke(); c.globalAlpha = 1;
+    // grid on floor
+    c.strokeStyle = cssv('--grid'); c.beginPath();
+    for (let t = -1; t <= 1.001; t += 0.25) { let a = this.proj(t, -1, bz), b = this.proj(t, 1, bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); a = this.proj(-1, t, bz); b = this.proj(1, t, bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); }
+    c.stroke();
+    const quads = [];
+    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
+      const a = j * (n + 1) + i, b = a + 1, d = a + n + 1, e = d + 1;
+      quads.push([a, b, e, d, (P[a][2] + P[b][2] + P[d][2] + P[e][2]) / 4]);
+    }
+    quads.sort((p, q) => q[4] - p[4]);
+    const L = [0.35, -0.45, 0.82], ll = Math.hypot(...L);
+    const wire = cssv('--canvas');
+    for (const q of quads) {
+      const A = V[q[0]], B = V[q[1]], E = V[q[2]], D = V[q[3]];
+      const ux = B.X - A.X, uy = B.Y - A.Y, uz = B.Z - A.Z, vx = D.X - A.X, vy = D.Y - A.Y, vz = D.Z - A.Z;
+      let nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx; const nl = Math.hypot(nx, ny, nz) || 1;
+      const lam = Math.abs((nx * L[0] + ny * L[1] + nz * L[2]) / (nl * ll)), sh = 0.5 + 0.5 * lam;
+      let rgb;
+      if (this.color) rgb = this.color((A.x + E.x) / 2, (A.y + E.y) / 2, (A.raw + E.raw) / 2, (A.u + E.u) / 2, (A.v + E.v) / 2);
+      else rgb = heatRGB(((A.h + B.h + D.h + E.h) / 4 - this.zr[0]) / (this.zr[1] - this.zr[0]));
+      c.fillStyle = rgbs(rgb.map(v => v * sh));
+      c.beginPath(); [q[0], q[1], q[2], q[3]].forEach((k, m) => m ? c.lineTo(P[k][0], P[k][1]) : c.moveTo(P[k][0], P[k][1])); c.closePath(); c.fill();
+      if (this.wire) { c.strokeStyle = wire; c.globalAlpha = 0.18; c.lineWidth = 0.6; c.stroke(); c.globalAlpha = 1; } else { c.strokeStyle = c.fillStyle; c.lineWidth = 0.5; c.stroke(); }
+    }
+    if (this.extra) this.extra(this);
+    // axis labels
+    c.fillStyle = cssv('--fg'); c.font = '600 13px system-ui,sans-serif'; c.textAlign = 'center';
+    let p = this.proj(1.18, -1, bz); c.fillText(this.labels[0] + ' →', p[0], p[1]);
+    p = this.proj(-1, 1.18, bz); c.fillText(this.labels[1] + ' →', p[0], p[1]);
+    p = this.proj(-1, -1, tz + 0.15); c.fillText(this.labels[2], p[0], p[1]);
+    c.font = '11px system-ui,sans-serif'; c.fillStyle = cssv('--muted');
+    p = this.proj(-1, -1, bz); c.fillText('(' + fnum(this.xr[0], 2) + ',' + fnum(this.yr[0], 2) + ')', p[0], p[1] + 14);
+    p = this.proj(1, -1, bz); c.fillText(fnum(this.xr[1], 2), p[0], p[1] + 14);
+    p = this.proj(-1, 1, bz); c.fillText(fnum(this.yr[1], 2), p[0], p[1] + 14);
+    const zt = this.proj(-1, -1, tz); c.textAlign = 'right'; c.fillText(fnum(this.zr[1], 2), zt[0] - 6, zt[1]);
+    c.strokeStyle = cssv('--axis'); c.globalAlpha = 0.5; c.beginPath(); const z0 = this.proj(-1, -1, bz); c.moveTo(z0[0], z0[1]); c.lineTo(zt[0], zt[1]); c.stroke();
+    c.restore();
+  }
+  pt3(x, y, h) { // world -> screen
+    return this.proj(2 * (x - this.xr[0]) / (this.xr[1] - this.xr[0]) - 1, 2 * (y - this.yr[0]) / (this.yr[1] - this.yr[0]) - 1, (2 * (Math.max(this.zr[0], Math.min(this.zr[1], h)) - this.zr[0]) / (this.zr[1] - this.zr[0]) - 1) * this.zs);
+  }
+  _bind() {
+    let drag = null; this.cv.style.touchAction = 'none'; this.cv.style.cursor = 'grab';
+    this.cv.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY, this.yaw, this.pitch]; this.cv.setPointerCapture(e.pointerId); this.cv.style.cursor = 'grabbing'; });
+    this.cv.addEventListener('pointermove', e => { if (!drag) return; this.yaw = drag[2] - (e.clientX - drag[0]) * 0.01; this.pitch = Math.max(-0.2, Math.min(1.5, drag[3] + (e.clientY - drag[1]) * 0.01)); this.redraw(); });
+    const up = () => { drag = null; this.cv.style.cursor = 'grab'; };
+    this.cv.addEventListener('pointerup', up); this.cv.addEventListener('pointercancel', up);
+  }
+}
+
+/* ---------- animation helper ---------- */
+function animator(step) { // step(dtSeconds) ; returns {play,pause,toggle,running}
+  let on = false, last = 0;
+  const tick = t => { if (!on) return; const dt = last ? Math.min(0.05, (t - last) / 1000) : 0; last = t; step(dt); requestAnimationFrame(tick); };
+  return { get running() { return on; }, play() { if (!on) { on = true; last = 0; requestAnimationFrame(tick); } }, pause() { on = false; }, toggle() { on ? this.pause() : this.play(); return on; } };
+}
+/* ---------- slider wiring: updates <output> next to each range ---------- */
+function val(id) { const el = document.getElementById(id); return el.type === 'checkbox' ? el.checked : (el.type === 'range' || el.type === 'number' ? +el.value : el.value); }
+function watch(ids, cb, fmtMap = {}) {
+  ids.forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    const out = el.parentElement.querySelector('output');
+    const upd = () => { if (out) out.textContent = fmtMap[id] ? fmtMap[id](+el.value) : fnum(+el.value, 3); };
+    upd(); el.addEventListener('input', () => { upd(); cb(); }); el.addEventListener('change', () => { upd(); cb(); });
+  });
+}
+
+/* ---------- page chrome: TOC, theme, MCQs, chapter nav ---------- */
+onReady(() => {
+  const toc = $('#toc'); if (toc) {
+    toc.innerHTML = '<b>On this page</b>';
+    $$('main h2').forEach((h, i) => { if (!h.id) h.id = 's' + (i + 1); const a = document.createElement('a'); a.href = '#' + h.id; a.textContent = h.textContent; toc.appendChild(a); });
+    const links = $$('a', toc), hs = $$('main h2');
+    const spy = () => { let k = 0; hs.forEach((h, i) => { if (h.getBoundingClientRect().top < 120) k = i; }); links.forEach((a, i) => a.classList.toggle('on', i === k)); };
+    window.addEventListener('scroll', spy, { passive: true }); spy();
+  }
+  if (window.renderMathInElement) renderMathInElement(document.body, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '\\[', right: '\\]', display: true }, { left: '$', right: '$', display: false }, { left: '\\(', right: '\\)', display: false }], ignoredClasses: ['nomath'], throwOnError: false });
+  $$('.mcq').forEach(q => {
+    const ans = +q.dataset.ans, fb = $('.fb', q), bs = $$('.opts button', q);
+    bs.forEach((b, i) => b.addEventListener('click', () => {
+      bs.forEach(x => x.classList.remove('ok', 'bad'));
+      b.classList.add(i === ans ? 'ok' : 'bad');
+      if (fb) { fb.style.display = 'block'; const msg = i === ans ? (q.dataset.ok || 'Correct!') : (q.dataset.no || 'Not quite — think again.'); texMix(fb, (i === ans ? '✔ ' : '✘ ') + msg); }
+    }));
+    if (fb) fb.style.display = 'none';
+  });
+  const tb = $('#themeBtn');
+  if (tb) tb.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const nx = cur === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', nx);
+    try { localStorage.setItem('boas-theme', nx); } catch (e) { }
+    redrawAll();
+  });
+  const sel = $('#chapSel'); if (sel) sel.addEventListener('change', () => { location.href = sel.value; });
+});
+try { const t = localStorage.getItem('boas-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) { }
+
+</script>
+<script>
+
+onReady(() => {
+  /* ---------- Interactive 1: motion ---------- */
+  const z1 = [1, 1.5], z2 = [-2, -0.5];
+  const MOT = [
+    { f: t => Cx.add([1, 0], Cx.polar(3, 2 * t)), T: PI, span: 5, cx: 1 },
+    { f: t => Cx.polar(2, t), T: TAU, span: 3.5, cx: 0 },
+    { f: t => Cx.polar(5, 0.6 * t), T: TAU / 0.6, span: 7, cx: 0 },
+    { f: t => Cx.mul([1, 1], Cx.polar(1, t)), T: TAU, span: 2.5, cx: 0 },
+    { f: t => Cx.sub(Cx.scale([1, 1], t), Cx.scale([2, 1], 1 - t)), T: 1.4, t0: -0.2, span: 3.5, cx: -0.5 },
+    { f: t => Cx.add(Cx.scale(z1, t), Cx.scale(z2, 1 - t)), T: 1.4, t0: -0.2, span: 3.5, cx: -0.5 }
+  ];
+  let mt = 0.4;
+  const M = () => MOT[+val('mo-f')];
+  const MO = new Plane('#cv-mo', { span: 5, aspect: 0.66, snap: 0, draw: p => {
+    const m = M(), t0 = m.t0 || 0, pts = []; for (let k = 0; k <= 300; k++) pts.push(m.f(t0 + m.T * k / 300));
+    p.path(pts, { color: '--accent', width: 2, alpha: 0.6 });
+    const t = t0 + m.T * mt, h = 1e-4, z = m.f(t), zp = m.f(t + h), zm = m.f(t - h);
+    const v = Cx.scale(Cx.sub(zp, zm), 1 / (2 * h)), a = Cx.scale(Cx.add(Cx.sub(zp, Cx.scale(z, 2)), zm), 1 / (h * h));
+    const sv = 1.6 / Math.max(1.6, Cx.abs(v)), sa = 1.6 / Math.max(1.6, Cx.abs(a));
+    if (+val('mo-f') <= 3) { const ctr = +val('mo-f') === 0 ? [1, 0] : [0, 0]; p.line(ctr, z, { color: '--muted', dash: [4, 4], width: 1 }); p.dot(ctr, { r: 3, color: '--muted' }); }
+    if (+val('mo-f') === 5) { p.dot(z1, { r: 5, color: '--accent4', label: 'z₁ (t=1)' }); p.dot(z2, { r: 5, color: '--accent4', label: 'z₂ (t=0)' }); }
+    p.arrow(z, Cx.add(z, Cx.scale(v, sv)), { color: '--accent3', width: 2.6 });
+    if (Cx.abs(a) > 1e-6) p.arrow(z, Cx.add(z, Cx.scale(a, sa)), { color: '--accent2', width: 2.6 });
+    p.dot(z, { r: 7, color: '--accent' });
+    texMix('#mo-out', `$t=${fnum(t, 2)}$: $z=${Cx.tex(z, 3)}$, &nbsp; <span style="color:var(--accent3)">$\\dot z=${Cx.tex(v, 3)}$, speed $${fnum(Cx.abs(v), 4)}$</span>, &nbsp; <span style="color:var(--accent2)">$|\\ddot z|=${fnum(Cx.abs(a), 4)}$</span>` + (Cx.abs(a) > 1e-6 ? ` &nbsp; (angle between $\\dot z$ and $\\ddot z$: $${fnum(Math.abs(((Cx.arg(a) - Cx.arg(v)) * 180 / PI + 540) % 360 - 180), 1)}^\\circ$)` : ' &nbsp; (straight line: no acceleration)'));
+  }});
+  $('#mo-f').addEventListener('change', () => { const m = M(); MO.span = m.span; MO.cx = m.cx; MO.redraw(); });
+  watch(['mo-t'], () => { mt = val('mo-t') / 6.283; MO.redraw(); });
+  const an = animator(dt => { mt = (mt + dt * 0.12) % 1; $('#mo-t').value = mt * 6.283; MO.redraw(); });
+  $('#mo-play').onclick = e => { e.currentTarget.textContent = an.toggle() ? '❚❚ Pause' : '▶ Play'; };
+  MO.redraw();
+
+  /* ---------- Interactive 2: AC ---------- */
+  let ph = 0;
+  const imp = (c, R, L, C, w) => {
+    const ZR = [R, 0], ZL = [0, w * L], ZC = [0, -1 / (w * C)];
+    if (c === 'series') return Cx.add(Cx.add(ZR, ZL), ZC);
+    if (c === 'parallel') return Cx.div([1, 0], Cx.add(Cx.add(Cx.div([1, 0], ZR), Cx.div([1, 0], ZL)), Cx.div([1, 0], ZC)));
+    const A = Cx.add(ZR, ZL); return Cx.div(Cx.mul(A, ZC), Cx.add(A, ZC));
+  };
+  const AC1 = new Plane('#cv-ac1', { span: 4, aspect: 0.95, snap: 0, axisLabels: ['Re', 'Im'], draw: p => {
+    const c = val('ac-c'), R = val('ac-R'), L = val('ac-L'), C = val('ac-C'), w = val('ac-w'), rot = Cx.polar(1, ph);
+    if (c === 'series') {
+      const I = Cx.mul([1, 0], rot), VR = Cx.scale(I, R), VL = Cx.mul([0, w * L], I), VC = Cx.mul([0, -1 / (w * C)], I), V = Cx.add(Cx.add(VR, VL), VC);
+      const m = Math.max(Cx.abs(VR) + Cx.abs(VL), Cx.abs(VC), Cx.abs(V), 1); if (Math.abs(p.span - m * 1.2) > 0.2) { p.span = m * 1.2; p.redraw(); return; }
+      p.arrow([0, 0], I, { color: '--muted', width: 2 }); p.label(I, 'I', { color: '--muted' });
+      p.arrow([0, 0], VR, { color: '--accent', width: 2.6 }); p.label(VR, 'V_R', { color: '--accent' });
+      p.arrow(VR, Cx.add(VR, VL), { color: '--accent3', width: 2.6 }); p.label(Cx.add(VR, VL), 'V_L', { color: '--accent3' });
+      p.arrow(Cx.add(VR, VL), V, { color: '--accent4', width: 2.6 }); p.label(V, 'V_C', { color: '--accent4', dx: 10, dy: 16 });
+      p.arrow([0, 0], V, { color: '--accent2', width: 3 }); p.label(Cx.scale(V, 0.5), 'V = ZI', { color: '--accent2', dx: -60 });
+    } else {
+      const V = rot, IR = Cx.scale(V, 1 / R), IL = Cx.div(V, [0, w * L]), IC = Cx.mul([0, w * C], V);
+      let I, parts; if (c === 'parallel') { I = Cx.add(Cx.add(IR, IL), IC); parts = [[IR, 'I_R', '--accent'], [IL, 'I_L', '--accent3'], [IC, 'I_C', '--accent4']]; }
+      else { const IRL = Cx.div(V, [R, w * L]); I = Cx.add(IRL, IC); parts = [[IRL, 'I_RL', '--accent'], [IC, 'I_C', '--accent4']]; }
+      const m = Math.max(1, Cx.abs(I), ...parts.map(q => Cx.abs(q[0]) * 1.5)); if (Math.abs(p.span - m * 1.3) > 0.2) { p.span = m * 1.3; p.redraw(); return; }
+      p.arrow([0, 0], V, { color: '--muted', width: 2 }); p.label(V, 'V', { color: '--muted' });
+      let s = [0, 0]; parts.forEach(([q, l, col]) => { p.arrow(s, Cx.add(s, q), { color: col, width: 2.6 }); p.label(Cx.add(s, q), l, { color: col }); s = Cx.add(s, q); });
+      p.arrow([0, 0], I, { color: '--accent2', width: 3 }); p.label(Cx.scale(I, 0.5), 'I total', { color: '--accent2', dx: -60 });
+    }
+  }});
+  const AC2 = new Graph('#cv-ac2', { span: 2.3, cx: 2.1, cy: 1.8, aspect: 0.95, axisLabels: ['ω', '|I| / V₀'], draw: g => {
+    const c = val('ac-c'), R = val('ac-R'), L = val('ac-L'), C = val('ac-C'), w = val('ac-w');
+    g.fn(x => x > 0.02 ? 1 / Cx.abs(imp(c, R, L, C, x)) : NaN, { color: '--accent', width: 2.4, n: 800 });
+    const w0 = 1 / Math.sqrt(L * C); g.line([w0, 0], [w0, 10], { color: '--accent3', dash: [5, 4], width: 1.3 }); g.label([w0, 3.6], 'ω₀ = 1/√(LC)', { color: '--accent3' });
+    g.dot([w, 1 / Cx.abs(imp(c, R, L, C, w))], { r: 6, color: '--accent2' });
+  }});
+  const acOut = () => {
+    const c = val('ac-c'), R = val('ac-R'), L = val('ac-L'), C = val('ac-C'), w = val('ac-w'), Z = imp(c, R, L, C, w);
+    let s = `$Z=${Cx.tex(Z, 3)}$, &nbsp; $|Z|=${fnum(Cx.abs(Z), 3)}$, &nbsp; phase $\\phi=\\arg Z=${fnum(Cx.arg(Z) * 180 / PI, 1)}^\\circ$ (${Cx.arg(Z) > 0.01 ? 'voltage leads: inductive' : Cx.arg(Z) < -0.01 ? 'voltage lags: capacitive' : 'in phase: <b>resonance</b>'})<br>`;
+    if (c === 'series') s += `Series: $Z=R+i(\\omega L-\\frac1{\\omega C})=${fnum(R, 2)}+i(${fnum(w * L, 3)}-${fnum(1 / (w * C), 3)})$. Resonance at $\\omega_0=1/\\sqrt{LC}=${fnum(1 / Math.sqrt(L * C), 3)}$, where $|I|$ peaks at $V_0/R$.`;
+    else if (c === 'parallel') s += `Parallel: $\\frac1Z=\\frac1R+i(\\omega C-\\frac1{\\omega L})$. At $\\omega_0=${fnum(1 / Math.sqrt(L * C), 3)}$, $Z=R$ is a <b>maximum</b>, so the current is a <b>minimum</b>.`;
+    else { const r2 = 1 / (L * C) - R * R / (L * L); s += `Fig. 16.2: resonance (Z real) at $\\omega=\\sqrt{\\frac1{LC}-\\frac{R^2}{L^2}}=${r2 > 0 ? fnum(Math.sqrt(r2), 3) : '\\text{none (}R^2>L/C)'}$` + (r2 > 0 ? `, where $Z=\\frac{L}{RC}=${fnum(L / (R * C), 3)}$` : '') + '.'; }
+    texMix('#ac-out', s);
+  };
+  const acAll = () => { AC1.redraw(); AC2.redraw(); acOut(); };
+  watch(['ac-R', 'ac-L', 'ac-C', 'ac-w'], acAll); $('#ac-c').addEventListener('change', acAll);
+  const acAn = animator(dt => { ph += dt * val('ac-w') * 1.5; AC1.redraw(); });
+  $('#ac-play').onclick = e => { e.currentTarget.textContent = acAn.toggle() ? '❚❚ Stop' : '▶ Rotate'; if (!acAn.running) { ph = 0; AC1.redraw(); } };
+  acAll();
+
+  /* ---------- Interactive 3: optics ---------- */
+  const OP1 = new Plane('#cv-op1', { span: 6, aspect: 0.95, snap: 0, draw: p => {
+    const n = val('op-n'), d = val('op-d'); let s = [0, 0];
+    for (let k = 0; k < n; k++) { const q = Cx.add(s, Cx.polar(1, k * d)); p.arrow(s, q, { color: '--accent', width: 2, head: 7 }); s = q; }
+    p.arrow([0, 0], s, { color: '--accent2', width: 3 });
+    const m = Math.max(2, n * 0.55 + 1); if (Math.abs(p.span - m) > 0.3) { p.span = m; p.cx = 0; p.redraw(); }
+  }});
+  const OP2 = new Graph('#cv-op2', { span: 7, cy: 0.5, aspect: 0.95, axisLabels: ['δ', 'I / n²'], draw: g => {
+    const n = val('op-n'), d = val('op-d'), I = x => { const s = Math.sin(x / 2); return Math.abs(s) < 1e-9 ? 1 : Math.pow(Math.sin(n * x / 2) / s, 2) / (n * n); };
+    g.fn(x => I(x) * 5, { color: '--accent', width: 2, n: 1500 }); g.dot([d, I(d) * 5], { r: 6, color: '--accent2' });
+    g.text(8, 16, 'intensity (scaled so a principal maximum = 5)', { color: '--muted', font: '12px system-ui' });
+  }});
+  const opOut = () => { const n = val('op-n'), d = val('op-d'), s = Math.sin(d / 2), A = Math.abs(s) < 1e-9 ? n : Math.sin(n * d / 2) / s; texMix('#op-out', `Amplitude $\\left|\\frac{\\sin(n\\delta/2)}{\\sin(\\delta/2)}\\right|=${fnum(Math.abs(A), 4)}$ (max $n=${n}$), &nbsp; intensity $${fnum(A * A, 3)}$ (max $n^2=${n * n}$). The resultant's phase is $\\frac{n-1}2\\delta=${fnum((n - 1) * d / 2, 3)}$.`); };
+  watch(['op-n', 'op-d'], () => { OP1.redraw(); OP2.redraw(); opOut(); }); opOut();
+
+  /* ---------- Interactive 4: SHM ---------- */
+  let y0 = [1.2, 0.8], st = 0;
+  const SH1 = new Plane('#cv-sh1', { span: 2.2, aspect: 0.95, snap: 0.05, draw: p => {
+    const w = val('sh-w'), Y = Cx.mul(y0, Cx.polar(1, w * st));
+    p.circle([0, 0], Cx.abs(y0), { color: '--grid', dash: [4, 4], width: 1 });
+    p.arrow([0, 0], y0, { color: '--accent', width: 1.5, alpha: 0.4 }); p.dot(y0, { r: 7, color: '--accent', label: 'y₀ (drag)' });
+    p.arrow([0, 0], Y, { color: '--accent2', width: 3 }); p.line(Y, [Y[0], 0], { color: '--accent3', dash: [4, 4], width: 1.2 }); p.dot([Y[0], 0], { r: 6, color: '--accent3', label: 'Re y' });
+  }});
+  SH1.addDrag(() => y0, v => { y0 = v; SH2.redraw(); shOut(); });
+  const SH2 = new Graph('#cv-sh2', { span: 6, cx: 6, aspect: 0.95, axisLabels: ['t', 'y'], draw: g => {
+    const w = val('sh-w'), A = Cx.abs(y0), f = Cx.arg(y0);
+    g.fn(t => A * Math.cos(w * t + f), { color: '--accent3', width: 2.4 }); g.dot([st % 12, A * Math.cos(w * (st % 12) + f)], { r: 6, color: '--accent2' });
+  }});
+  const shOut = () => texMix('#sh-out', `$y_0=${Cx.tex(y0, 2)}=${fnum(Cx.abs(y0), 3)}e^{${fnum(Cx.arg(y0), 3)}i}$ ⇒ $\\operatorname{Re}(y_0e^{i\\omega t})=${fnum(Cx.abs(y0), 3)}\\cos(${fnum(val('sh-w'), 2)}t${Cx.arg(y0) >= 0 ? '+' : ''}${fnum(Cx.arg(y0), 3)})$: amplitude $|y_0|$, phase $\\arg y_0$.`);
+  watch(['sh-w'], () => { SH1.redraw(); SH2.redraw(); shOut(); });
+  const shAn = animator(dt => { st += dt; SH1.redraw(); SH2.redraw(); });
+  $('#sh-play').onclick = e => { e.currentTarget.textContent = shAn.toggle() ? '❚❚ Pause' : '▶ Play'; };
+  shOut();
+});
+
+</script>
+</body>
+</html>

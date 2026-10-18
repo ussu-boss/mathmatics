@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:110px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:85px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:collapse;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;margin:3px 4px;width:auto}
+.mx.det{border-radius:0}
+.mx td{border:0;padding:1px 8px;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.verdict{font-weight:700;font-size:1.05rem;margin:6px 0}
+.sys{font-family:"Cambria Math",Cambria,"Times New Roman",serif;display:inline-block;text-align:left;line-height:1.5}
+</style>
+<title>Quotient Law</title>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>17. The Quotient Law</h1>
+<p>Testing tensor character without the transformation law · Proof of the quotient law · Why the probe must be arbitrary (Example 1) · Conjugate (reciprocal) symmetric tensors &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 184–187</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">Statement</a><a href="#s2">Proof</a><a href="#s3">Black-box lab</a><a href="#s4">Arbitrary!</a><a href="#s5">Conjugate tensors</a><a href="#s6">Conjugate lab</a><a href="#s7">Index fixer</a><a href="#s8">Summary</a><a href="#s9">Exercise 17</a><a href="#s10">Practice</a><a href="#s11">Quiz</a><a href="#s12">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>To prove that N³ numbers A(i, j, k) form a tensor, Section 15 says: check the transformation law. In practice this is often hard, because you may not even know the components in another frame. The <b>quotient law</b> is a shortcut:</p>
+<div class="box thm"><b class="t">Quotient law (one sentence)</b> If the <b>inner product</b> of a set of quantities with an <b>arbitrary tensor</b> is always a tensor, then the quantities themselves form a tensor.</div>
+<p>It is called a "quotient" law because it runs multiplication backwards. We know "tensor × tensor = tensor" (Section 16). Here we know "A × arbitrary tensor = tensor" and conclude that A = "tensor ÷ tensor" is a tensor.</p>
+<div class="flow"><span>A(i,j,k) B<sup>jk</sup> = C<sup>i</sup> for every B</span><b>→</b><span>[Ā·JJ − J·A]B = 0 for every B</span><b>→</b><span>bracket = 0</span><b>→</b><span>A = A<sup>i</sup><sub>jk</sub>, a tensor</span></div>
+<div class="box tip"><b class="t">Needed from earlier</b> Transformation laws (Section 15), the identity (∂x<sup>j</sup>/∂x̄<sup>β</sup>)(∂x̄<sup>β</sup>/∂x<sup>l</sup>) = δ<sup>j</sup><sub>l</sub>, inner products and the rule "pair an upper index with a lower one" (Section 16), cofactors and the inverse matrix (Section 4).</div>
+</section>
+
+<section id="s1">
+<h2>1. How the rule decides the index positions</h2>
+<p>Each slot of the unknown A gets the <b>opposite</b> height to the index it is contracted with, and a free slot gets the height of the free index on the other side of the equation.</p>
+<div class="tbl-wrap"><table>
+<tr><th>Known fact (for every arbitrary B)</th><th>Conclusion</th></tr>
+<tr><td>A(i, j, k) B<sup>jk</sup> = C<sup>i</sup></td><td>A<sup>i</sup><sub>jk</sub> is a tensor (contravariant 1, covariant 2)</td></tr>
+<tr><td>A(i, j) B<sup>j</sup> = C<sub>i</sub></td><td>A<sub>ij</sub> is a covariant tensor</td></tr>
+<tr><td>A(i, j) B<sub>i</sub> = C<sup>j</sup></td><td>A<sup>ij</sup> is a contravariant tensor</td></tr>
+<tr><td>A(i, j) B<sup>i</sup>C<sup>j</sup> = scalar, for arbitrary vectors B, C</td><td>A<sub>ij</sub> is a covariant tensor</td></tr>
+<tr><td>A(i, j) B<sup>k</sup> = C<sub>ij</sub><sup>k</sup> (outer product, Exercise 3)</td><td>A<sub>ij</sub> is a covariant tensor</td></tr>
+</table></div>
+</section>
+
+<section id="s2">
+<h2>2. Proof for the case A(i, j, k)B<sup>jk</sup> = C<sup>i</sup> (Eqs. 1–7)</h2>
+<ol>
+<li>In the unbarred frame: A(i, j, k)B<sup>jk</sup> = C<sup>i</sup> (1). In the barred frame, with whatever values Ā(α, β, γ) the quantity has there: Ā(α, β, γ)B̄<sup>βγ</sup> = C̄<sup>α</sup>. &nbsp;(2)</li>
+<li>B and C <b>are</b> tensors, so substitute their laws: B̄<sup>βγ</sup> = (∂x̄<sup>β</sup>/∂x<sup>j</sup>)(∂x̄<sup>γ</sup>/∂x<sup>k</sup>)B<sup>jk</sup> and C̄<sup>α</sup> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)C<sup>i</sup> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)A(i, j, k)B<sup>jk</sup>. &nbsp;(3)</li>
+<li>Bring everything to one side:
+<div class="eq">[ Ā(α, β, γ)(∂x̄<sup>β</sup>/∂x<sup>j</sup>)(∂x̄<sup>γ</sup>/∂x<sup>k</sup>) − (∂x̄<sup>α</sup>/∂x<sup>i</sup>)A(i, j, k) ] B<sup>jk</sup> = 0 &nbsp;&nbsp;(4)</div></li>
+<li><b>B is arbitrary</b>, i.e. its N² components can be chosen independently. Choose B with only B<sup>11</sup> = 1: the (j, k) = (1, 1) bracket vanishes. Do this for every (j, k): every bracket vanishes separately. &nbsp;(5)</li>
+<li>Multiply by (∂x<sup>j</sup>/∂x̄<sup>ρ</sup>)(∂x<sup>k</sup>/∂x̄<sup>σ</sup>) and sum over j, k. The δ's from (15.23) reduce the left side to Ā(α, ρ, σ):
+<div class="eq">Ā(α, ρ, σ) = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)(∂x<sup>j</sup>/∂x̄<sup>ρ</sup>)(∂x<sup>k</sup>/∂x̄<sup>σ</sup>) A(i, j, k) &nbsp;&nbsp;(6)</div></li>
+<li>This is exactly the transformation law of a mixed tensor A<sup>i</sup><sub>jk</sub>. ∎ &nbsp;(7)</li>
+</ol>
+<div class="box fact"><b class="t">Matrix version (rank 2)</b> If y = A x is a vector for <b>every</b> vector x, then in a new frame ȳ = Jy and x̄ = Jx, so Ā x̄ = J A x = J A J⁻¹ x̄ for every x̄. Hence Ā = JAJ⁻¹: A transforms as a mixed tensor (a linear operator). "Something that turns every vector into a vector is a tensor."</div>
+</section>
+
+<section id="s3">
+<h2>3. 🔬 Black-box lab: can you catch a fake tensor?</h2>
+<p>A machine gives you 3×3 numbers A(i, j) in every coordinate system. You don't know how it computes them. Your only tool is the quotient law: feed in a probe tensor B<sup>jk</sup>, compute the number s = A(j, k)B<sup>jk</sup> in the unbarred frame and s̄ = Ā(β, γ)B̄<sup>βγ</sup> in the barred frame, and check whether s̄ = s (a scalar must not change). Choose what the machine secretly does, then probe it.</p>
+<div class="ctrl"><label>machine <select id="bbM"><option value="true">honest covariant tensor A_jk</option><option value="contra">transforms like A^jk (wrong type)</option><option value="same">same numbers in every frame</option><option value="sym">correct only for its symmetric part (Example 1 trap)</option></select></label>
+<label>probes <select id="bbP"><option value="arb">arbitrary B^jk</option><option value="sym">symmetric B^jk only</option></select></label>
+<button id="bbGo">Probe 6 times</button><button id="bbNew" class="alt">new frame J</button></div>
+<p class="small">Try the trap machine with symmetric probes: it passes every test. Switch to arbitrary probes and it is caught at once. That is Example 1.</p>
+<div id="bbOut"></div>
+</div>
+</section>
+
+<section id="s4">
+<h2>4. Why the probe must be <i>arbitrary</i> (Example 1)</h2>
+<p>Suppose we only know that A(i, j, k)B<sup>jk</sup> = C<sup>i</sup> is a tensor for every <b>symmetric</b> tensor B<sup>jk</sup>. We still reach Eq. (4), now written as</p>
+<div class="eq">D(α, j, k) B<sup>jk</sup> = 0 &nbsp;&nbsp;(8)</div>
+<p>where D is the bracket in (4). But we can no longer conclude D = 0, because a symmetric B cannot be chosen freely: B<sup>jk</sup> = B<sup>kj</sup>. Each pair of terms D(α, j, k)B<sup>jk</sup> + D(α, k, j)B<sup>kj</sup> = [D(α, j, k) + D(α, k, j)]B<sup>jk</sup> involves the same B component, so only the sum is forced to vanish:</p>
+<div class="eq">D(α, j, k) + D(α, k, j) = 0</div>
+<p>Working this out as before (9, 10) gives the conclusion:</p>
+<div class="box thm"><b class="t">Example 1 result</b> A<sup>i</sup><sub>jk</sub> ≡ A(i, j, k) + A(i, k, j), the part of A <b>symmetric</b> in j, k, is a tensor. Nothing can be said about the antisymmetric part ½[A(i, j, k) − A(i, k, j)]: it never shows up in A B when B is symmetric.</div>
+<p><b>Plain picture:</b> a symmetric probe is "blind" to the antisymmetric part, just as a quadratic form xᵀAx only sees the symmetric part of A (Section 11). If the probe cannot see a part, it cannot test it.</p>
+<p><b>Physics example (Exercise 1):</b> ds² = g<sub>ij</sub>dx<sup>i</sup>dx<sup>j</sup> is invariant, and dx<sup>i</sup>dx<sup>j</sup> is symmetric. So we can only conclude that g<sub>ij</sub> + g<sub>ji</sub> is a tensor. That is why the metric is always <b>chosen</b> symmetric: any antisymmetric part would be invisible in ds² anyway.</p>
+</section>
+
+<section id="s5">
+<h2>5. Conjugate symmetric tensors (Eqs. 11–14)</h2>
+<p>Let A<sub>ij</sub> be a <b>symmetric</b> covariant tensor with det(A<sub>ij</sub>) ≠ 0. Define</p>
+<div class="eq">B<sup>ij</sup> = (cofactor of A<sub>ij</sub>) / det(A<sub>ij</sub>) &nbsp;&nbsp;(11)</div>
+<p>From the cofactor expansion of a determinant (Section 4, Eq. 5.6):</p>
+<div class="eq">A<sub>ij</sub>B<sup>ik</sup> = δ<sup>k</sup><sub>j</sub> &nbsp;&nbsp;(12)</div>
+<p>As matrices, <b>B = A⁻¹</b> (A is symmetric, so cofactors need no transposing).</p>
+<h3>Proof that B<sup>ij</sup> is a contravariant tensor</h3>
+<p>We cannot use (12) directly with the quotient law, because A<sub>ij</sub> is <b>symmetric</b>, not arbitrary. The trick is to introduce an arbitrary vector:</p>
+<ol>
+<li>Let C<sup>j</sup> be an arbitrary contravariant vector and D<sub>i</sub> = A<sub>ij</sub>C<sup>j</sup>. &nbsp;(13) &nbsp; This is an inner product of tensors, so D<sub>i</sub> is a covariant vector.</li>
+<li>Since det A ≠ 0, the map C → D is one-to-one: every D comes from exactly one C. So as C runs over all vectors, <b>D<sub>i</sub> is an arbitrary covariant vector</b>.</li>
+<li>D<sub>i</sub>B<sup>ik</sup> = A<sub>ij</sub>B<sup>ik</sup>C<sup>j</sup> = δ<sup>k</sup><sub>j</sub>C<sup>j</sup> = C<sup>k</sup>. &nbsp;(14)</li>
+<li>So "B times an arbitrary vector D gives a vector C". By the quotient law, B<sup>ik</sup> is a (contravariant) tensor. ∎</li>
+<li>Symmetry: cofactor of A<sub>ij</sub> = cofactor of A<sub>ji</sub> for a symmetric matrix ⇒ B<sup>ij</sup> = B<sup>ji</sup>.</li>
+</ol>
+<div class="box def"><b class="t">Conjugate (reciprocal) tensors</b> A<sub>ij</sub> and B<sup>ij</sup> related by (12) are called <b>conjugate</b>. As matrices they are inverses. A symmetric rank-2 tensor has a conjugate <b>if and only if its determinant is nonzero</b>. The relation is mutual: the conjugate of B<sup>ij</sup> is A<sub>ij</sub> again (Exercise 2).</div>
+<div class="box fact"><b class="t">Why this matters next</b> In Section 18 the metric tensor g<sub>ij</sub> (from ds² = g<sub>ij</sub>dx<sup>i</sup>dx<sup>j</sup>) and its conjugate g<sup>ij</sup> are used to <b>raise and lower indices</b>: A<sub>i</sub> = g<sub>ij</sub>A<sup>j</sup>, A<sup>i</sup> = g<sup>ij</sup>A<sub>j</sub>. This section is what guarantees that g<sup>ij</sup> is a tensor.</div>
+</section>
+
+<section id="s6">
+<h2>6. 🔬 Conjugate-tensor lab: a tensor and its inverse, seen as two ellipses</h2>
+<p>In 2D a symmetric positive-definite A<sub>ij</sub> defines the ellipse A<sub>ij</sub>x<sup>i</sup>x<sup>j</sup> = 1 (blue, drawn in the space of vectors x<sup>i</sup>). Its conjugate B<sup>ij</sup> defines B<sup>ij</sup>y<sub>i</sub>y<sub>j</sub> = 1 (orange, in the space of covectors y<sub>i</sub>). The two ellipses have the same axes with reciprocal lengths: a long axis of one is a short axis of the other.</p>
+<p>Now change coordinates with J (rotation + shear). A transforms as KᵀAK, B as JBJᵀ. Both pictures deform, yet the product A<sub>ij</sub>B<sup>jk</sup> stays exactly δ<sup>k</sup><sub>i</sub>: the conjugate of the transformed tensor is the transformed conjugate.</p>
+<div class="lab">
+<div class="grid2">
+<div><canvas id="cvC" width="460" height="460"></canvas></div>
+<div>
+<div class="ctrl"><label>a₁₁ <input type="range" id="cA" min="0.2" max="3" step="0.05" value="1.6"><span id="cAv"></span></label><label>a₁₂ <input type="range" id="cH" min="-1.5" max="1.5" step="0.05" value="0.5"><span id="cHv"></span></label><label>a₂₂ <input type="range" id="cB" min="0.2" max="3" step="0.05" value="0.6"><span id="cBv"></span></label></div>
+<div class="ctrl"><label>frame rotation <input type="range" id="cR" min="0" max="180" step="1" value="0"><span id="cRv"></span></label><label>frame shear <input type="range" id="cS" min="-1" max="1" step="0.01" value="0"><span id="cSv"></span></label></div>
+<div class="readout out" id="cOut"></div>
+</div></div></div>
+</section>
+
+<section id="s7">
+<h2>7. 🔬 Index fixer (the method of Exercise 4)</h2>
+<p>Write unknown quantities with slots in brackets, e.g. <code>A(i,j,k)</code>, and known tensors with ^ and _ as before, e.g. <code>B^j_k</code>. Separate terms with + or −, and the two sides with =. The fixer applies the quotient-law rules:</p>
+<ul>
+<li>a slot whose index is contracted with a known tensor gets the <b>opposite</b> height;</li>
+<li>a slot whose index is free gets the height that index has in the other terms;</li>
+<li>every term must have the <b>same set of free indices</b>. If not, the equation must first be rewritten with renamed indices.</li>
+</ul>
+<div class="lab">
+<div class="ctrl"><label>equation <input type="text" id="fxX" style="width:100%;min-width:300px" value="A(i,j,k) B^j_k + C(r,t) D_r = E(r,s,t) F^ri_st"></label></div>
+<div class="ctrl small">Presets: <button class="alt" data-fx="A(i,j,k) B^j_k + C(r,t) D_r = E(r,s,t) F^ri_st">4(a) as printed</button><button class="alt" data-fx="A(i,j,k) B^j_k + C(r,i) D_r = E(r,s,t) F^ri_st">4(a) with t→i</button><button class="alt" data-fx="A(i,j,k) B^l_ij - C(r,s,k,t) D_rs E^lt = F(l,i,j) G^j_kl">4(b) as printed</button><button class="alt" data-fx="A(i,j,k) B^l_ij - C(r,s,k,t) D_rs E^lt = F(m,l,j) G^j_km">4(b) renamed</button><button class="alt" data-fx="A(i,l,k,p) B^p_ij + C(j,k,l,m) D^im_j + E(i,j) F_k = 0">4(c) as printed</button><button class="alt" data-fx="A(i,l,k,p) B^p_ij + C(n,k,j,m) D^lm_n + E(l,j) F_k = 0">4(c) renamed</button></div>
+<button id="fxGo">Fix indices</button>
+<div id="fxOut"></div>
+</div>
+</section>
+
+<section id="s8">
+<h2>8. Summary sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Item</th><th>Statement</th></tr>
+<tr><td>Quotient law</td><td>inner (or outer) product of A with an <b>arbitrary</b> tensor is a tensor ⇒ A is a tensor</td></tr>
+<tr><td>Index heights of A</td><td>contracted slot: opposite height to its partner; free slot: same height as the free index of the result</td></tr>
+<tr><td>Key step of proof</td><td>[Ā(…)JJ… − J…A(…)]B = 0 for all B ⇒ bracket = 0</td></tr>
+<tr><td>Symmetric probe</td><td>only the part of A symmetric in the probed indices is shown to be a tensor (Example 1)</td></tr>
+<tr><td>Conjugate tensor</td><td>B<sup>ij</sup> = cofactor(A<sub>ij</sub>)/det A, A<sub>ij</sub>B<sup>ik</sup> = δ<sup>k</sup><sub>j</sub>; B = A⁻¹; exists ⇔ det A ≠ 0</td></tr>
+<tr><td>Trick for symmetric A</td><td>use D<sub>i</sub> = A<sub>ij</sub>C<sup>j</sup>, which is arbitrary when det A ≠ 0</td></tr>
+</table></div>
+</section>
+
+<section id="s9">
+<h2>9. Book's Exercise 17: all problems solved</h2>
+<div class="prob"><div class="q">1. The distance between x<sup>i</sup> and x<sup>i</sup> + dx<sup>i</sup> is ds² = g<sub>ij</sub>dx<sup>i</sup>dx<sup>j</sup>. Given that ds² is invariant and dx<sup>i</sup> is a contravariant vector, show that g<sub>ij</sub> + g<sub>ji</sub> is a symmetric covariant tensor of rank two.</div>
+<details><summary>Show solution</summary>
+<p>In the barred frame ḡ<sub>αβ</sub>dx̄<sup>α</sup>dx̄<sup>β</sup> = g<sub>ij</sub>dx<sup>i</sup>dx<sup>j</sup>. Substitute dx̄<sup>α</sup> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)dx<sup>i</sup>:</p>
+<div class="eq">[ ḡ<sub>αβ</sub>(∂x̄<sup>α</sup>/∂x<sup>i</sup>)(∂x̄<sup>β</sup>/∂x<sup>j</sup>) − g<sub>ij</sub> ] dx<sup>i</sup>dx<sup>j</sup> = 0 &nbsp; for all dx</div>
+<p>Call the bracket D<sub>ij</sub>. The product dx<sup>i</sup>dx<sup>j</sup> is <b>symmetric</b>, so (as in Example 1) only D<sub>ij</sub> + D<sub>ji</sub> = 0 follows. (Proof: put dx = e<sub>i</sub> to get D<sub>ii</sub> = 0, then dx = e<sub>i</sub> + e<sub>j</sub> to get D<sub>ij</sub> + D<sub>ji</sub> = 0.) That says</p>
+<div class="eq">ḡ<sub>αβ</sub> + ḡ<sub>βα</sub> = (∂x<sup>i</sup>/∂x̄<sup>α</sup>)(∂x<sup>j</sup>/∂x̄<sup>β</sup>)(g<sub>ij</sub> + g<sub>ji</sub>)</div>
+<p>(after multiplying by the inverse Jacobians). So h<sub>ij</sub> = g<sub>ij</sub> + g<sub>ji</sub> transforms as a covariant tensor, and it is obviously symmetric. ∎ Since ds² only sees this part, one simply takes g<sub>ij</sub> symmetric from the start.</p></details></div>
+
+<div class="prob"><div class="q">2. A<sub>ij</sub> is a symmetric covariant tensor, B<sup>ij</sup> = (cofactor of A<sub>ij</sub>)/det(A<sub>ij</sub>). Define E<sub>ij</sub> = (cofactor of B<sup>ij</sup>)/det(B<sup>ij</sup>). Show that E<sub>ij</sub> = A<sub>ij</sub>.</div>
+<details><summary>Show solution</summary>
+<p><b>Index proof (book's answer):</b> by the same cofactor rule applied to B, B<sup>ij</sup>E<sub>ik</sub> = δ<sup>j</sup><sub>k</sub>. Multiply (12), A<sub>ij</sub>B<sup>ik</sup> = δ<sup>k</sup><sub>j</sub>, by E<sub>ks</sub>:</p>
+<div class="eq">A<sub>ij</sub>B<sup>ik</sup>E<sub>ks</sub> = δ<sup>k</sup><sub>j</sub>E<sub>ks</sub> &nbsp;⇒&nbsp; A<sub>ij</sub>δ<sup>i</sup><sub>s</sub> = E<sub>js</sub> &nbsp;⇒&nbsp; A<sub>sj</sub> = E<sub>js</sub> = E<sub>sj</sub></div>
+<p>using B<sup>ik</sup>E<sub>ks</sub> = δ<sup>i</sup><sub>s</sub> (B and E are symmetric). ∎</p>
+<p><b>Matrix proof:</b> B = A⁻¹ and E = B⁻¹ = (A⁻¹)⁻¹ = A. The conjugate of the conjugate is the original.</p>
+<p>Numerical check: A = [[2, 1], [1, 3]], det = 5, B = (1/5)[[3, −1], [−1, 2]], det B = (6 − 1)/25 = 1/5, cofactors of B: [[2/5, 1/5], [1/5, 3/5]], so E = (cofactors)/(1/5) = [[2, 1], [1, 3]] = A ✓.</p></details></div>
+
+<div class="prob"><div class="q">3. If B<sup>k</sup> is an arbitrary tensor and A<sub>ij</sub>B<sup>k</sup> is a tensor, show that A<sub>ij</sub> is a tensor.</div>
+<details><summary>Show solution</summary>
+<p>Let C<sub>ij</sub><sup>k</sup> = A(i, j)B<sup>k</sup> (a tensor). In the barred frame Ā(α, β)B̄<sup>γ</sup> = C̄<sub>αβ</sub><sup>γ</sup> = (∂x<sup>i</sup>/∂x̄<sup>α</sup>)(∂x<sup>j</sup>/∂x̄<sup>β</sup>)(∂x̄<sup>γ</sup>/∂x<sup>k</sup>)A(i, j)B<sup>k</sup>. Using B̄<sup>γ</sup> = (∂x̄<sup>γ</sup>/∂x<sup>k</sup>)B<sup>k</sup>:</p>
+<div class="eq">[ Ā(α, β) − (∂x<sup>i</sup>/∂x̄<sup>α</sup>)(∂x<sup>j</sup>/∂x̄<sup>β</sup>)A(i, j) ] B̄<sup>γ</sup> = 0</div>
+<p>B is arbitrary, so choose some B̄<sup>γ</sup> ≠ 0: the bracket vanishes. That is the law of a covariant tensor A<sub>ij</sub>. ∎ (This is the quotient law for an <b>outer</b> product. Here a single nonzero B is enough, since no summation mixes the components.)</p></details></div>
+
+<div class="prob"><div class="q">4. Assuming all capital letters are tensors, rewrite in proper tensorial form: (a) A(i, j, k)B<sup>j</sup><sub>k</sub> + C(r, t)D<sub>r</sub> = E(r, s, t)F<sup>ri</sup><sub>st</sub>; (b) A(i, j, k)B<sup>l</sup><sub>ij</sub> − C(r, s, k, t)D<sub>rs</sub>E<sup>lt</sup> = F(l, i, j)G<sup>j</sup><sub>kl</sub>; (c) A(i, l, k, p)B<sup>p</sup><sub>ij</sub> + C(j, k, l, m)D<sup>im</sup><sub>j</sub> + E(i, j)F<sub>k</sub> = 0.</div>
+<details><summary>Show solution (a)</summary>
+<p>RHS: in F<sup>ri</sup><sub>st</sub>, r is up so E's r slot is down; s, t are down so E's s, t slots are up. The free index is i (up). So the RHS is E<sup>st</sup><sub>r</sub>F<sup>ri</sup><sub>st</sub>.</p>
+<p>Term 1: B<sup>j</sup><sub>k</sub> has j up and k down, so A's j is down and k is up. The free i must be up: A<sup>ik</sup><sub>j</sub>B<sup>j</sup><sub>k</sub>.</p>
+<p>Term 2: D<sub>r</sub> is down, so C's r is up. Its free index is t, but every term must carry the free index i, so rename t → i: C<sup>ri</sup>D<sub>r</sub>.</p>
+<div class="eq"><b>A<sup>ik</sup><sub>j</sub>B<sup>j</sup><sub>k</sub> + C<sup>ri</sup>D<sub>r</sub> = E<sup>st</sup><sub>r</sub>F<sup>ri</sup><sub>st</sub></b></div>
+<p>This is the book's answer.</p></details>
+<details><summary>Show solution (b)</summary>
+<p>Free indices as printed: term 1 → {k, l}, term 2 → {k, l}, but in term 3 the letter l appears twice (F's first slot and G's last), so it is a dummy there, and the free set is {i, k}. The sets do not match, so rename in term 3: dummy l → m, then free i → l: F(m, l, j)G<sup>j</sup><sub>km</sub>.</p>
+<ul><li>Term 3: G<sup>j</sup><sub>km</sub> ⇒ F's j down, m up; free k is <b>down</b> (from G), free l → F's slot.</li>
+<li>Term 2: D<sub>rs</sub> ⇒ C's r, s up; E<sup>lt</sup> ⇒ C's t down; free l is <b>up</b> (from E), free k must be down.</li>
+<li>Term 1: B<sup>l</sup><sub>ij</sub> ⇒ A's i, j up; l up ✓; A's k slot free ⇒ down.</li></ul>
+<div class="eq"><b>A<sup>ij</sup><sub>k</sub>B<sup>l</sup><sub>ij</sub> − C<sup>rs</sup><sub>kt</sub>D<sub>rs</sub>E<sup>lt</sup> = F<sup>ml</sup><sub>j</sub>G<sup>j</sup><sub>km</sub></b></div>
+<p>Free: l (up), k (down) in every term ✓.</p></details>
+<details><summary>Show solution (c)</summary>
+<p>Free sets as printed: term 1 → {j, k, l} (j down from B), term 2 → j is a dummy (C's j and D<sub>j</sub>), free {i, k, l} with i up (from D), term 3 → {i, j, k}. They don't match. One consistent renaming:</p>
+<ul><li>Term 2: dummy j → n, D's free i → l, C's free l → j: C(n, k, j, m)D<sup>lm</sup><sub>n</sub> ⇒ C<sup>n</sup><sub>kjm</sub> (n up pairs with D<sub>n</sub>; m down pairs with D<sup>m</sup>).</li>
+<li>Term 3: E(i, j) → E(l, j); F<sub>k</sub> has k down ⇒ k is down everywhere: E<sup>l</sup><sub>j</sub>F<sub>k</sub>.</li>
+<li>Term 1: B<sup>p</sup><sub>ij</sub> ⇒ A's p down, i up; free l up, k down: A<sup>il</sup><sub>kp</sub>.</li></ul>
+<div class="eq"><b>A<sup>il</sup><sub>kp</sub>B<sup>p</sup><sub>ij</sub> + C<sup>n</sup><sub>kjm</sub>D<sup>lm</sup><sub>n</sub> + E<sup>l</sup><sub>j</sub>F<sub>k</sub> = 0</b></div>
+<p>Free: l up; j, k down in every term ✓. (Other letter choices are equally correct; the heights are what matter.)</p></details></div>
+</section>
+
+<section id="s10">
+<h2>10. Practice set (CSIR-NET / GATE style)</h2>
+<div class="prob"><div class="q">P1. A(i, j)x<sup>i</sup>y<sub>j</sub> is a scalar for arbitrary vectors x<sup>i</sup>, y<sub>j</sub>. What type is A? <span class="tag">quotient</span></div>
+<details><summary>Show solution</summary><p>A<sub>i</sub><sup>j</sup>: covariant in i (pairs with x<sup>i</sup>), contravariant in j (pairs with y<sub>j</sub>). A mixed tensor.</p></details></div>
+<div class="prob"><div class="q">P2. A(i, j)x<sup>i</sup>x<sup>j</sup> is a scalar for every x. What can you conclude? <span class="tag">trap</span></div>
+<details><summary>Show solution</summary><p>Only that A(i, j) + A(j, i) is a covariant tensor (symmetric probe, as in Example 1 and Exercise 17.1). The antisymmetric part is undetermined.</p></details></div>
+<div class="prob"><div class="q">P3. In some frame g<sub>ij</sub> = diag(1, r²). Find its conjugate g<sup>ij</sup>. <span class="tag">conjugate</span></div>
+<details><summary>Show solution</summary><p>g<sup>ij</sup> = diag(1, 1/r²). Check g<sub>ij</sub>g<sup>jk</sup> = δ<sub>i</sub><sup>k</sup>.</p></details></div>
+<div class="prob"><div class="q">P4. A<sub>ij</sub> = [[1, 2], [2, 4]]. Does it have a conjugate tensor? <span class="tag">det</span></div>
+<details><summary>Show solution</summary><p>det = 4 − 4 = 0 ⇒ <b>no</b>. The map C<sup>j</sup> → A<sub>ij</sub>C<sup>j</sup> is not one-to-one, so the proof breaks down.</p></details></div>
+<div class="prob"><div class="q">P5. If A(i, j, k) B<sub>k</sub> = C<sup>ij</sup> for an arbitrary B<sub>k</sub>, write A in tensor form. <span class="tag">heights</span></div>
+<details><summary>Show solution</summary><p>A<sup>ijk</sup>: i, j free and up (as in C<sup>ij</sup>), k up (paired with the lower B<sub>k</sub>). Fully contravariant, rank 3.</p></details></div>
+<div class="prob"><div class="q">P6. Show σ<sub>ij</sub> in j<sub>i</sub> = σ<sub>ij</sub>E<sub>j</sub> is a tensor (Cartesian, E arbitrary). <span class="tag">physics</span></div>
+<details><summary>Show solution</summary><p>j and E are vectors and E can be any vector (we can apply any field). By the quotient law, σ<sub>ij</sub> is a rank-2 tensor. This is how material constants (conductivity, susceptibility, elasticity) are shown to be tensors.</p></details></div>
+<div class="prob"><div class="q">P7. The elastic energy density is u = ½c<sub>ijkl</sub>ε<sub>ij</sub>ε<sub>kl</sub>, with a symmetric strain ε<sub>ij</sub>. What does the quotient law guarantee about c<sub>ijkl</sub>? <span class="tag">symmetry</span></div>
+<details><summary>Show solution</summary><p>Only its part symmetric in (i, j), in (k, l) and under the swap (ij) ↔ (kl). So one assumes those symmetries, reducing 81 components to 21 independent elastic constants.</p></details></div>
+<div class="prob"><div class="q">P8. A<sub>ij</sub> symmetric, B<sup>ij</sup> its conjugate. Evaluate A<sub>ij</sub>B<sup>ij</sup> in N dimensions. <span class="tag">trace</span></div>
+<details><summary>Show solution</summary><p>A<sub>ij</sub>B<sup>ij</sup> = δ<sup>j</sup><sub>j</sub> = N (Tr(A A⁻¹) = Tr I).</p></details></div>
+</section>
+
+<section id="s11" class="quiz">
+<h2>11. Self-test quiz</h2>
+<div id="quiz"></div>
+<p><b>Score: <span id="qScore">0</span> / <span id="qTot">0</span></b></p>
+</section>
+
+<section id="s12">
+<h2>12. Interesting facts</h2>
+<div class="box fact"><b class="t">How material tensors are discovered</b> Nobody measures the conductivity of a crystal in a second coordinate system to check the transformation law. Instead, the experimenter applies fields in many directions and finds the response is linear. The quotient law then guarantees that the coefficients form a tensor, and crystal symmetry tells you which components vanish (Neumann's principle).</div>
+<div class="box fact"><b class="t">The name</b> In older books the "quotient law" was stated as "if C = A·B with B arbitrary, then A = C/B is a tensor", even though tensors cannot actually be divided. The division sign is only a memory aid.</div>
+<div class="box fact"><b class="t">Raising and lowering indices</b> The conjugate pair g<sub>ij</sub>, g<sup>ij</sup> from this section is what lets physicists move indices up and down freely: p<sub>μ</sub> = g<sub>μν</sub>p<sup>ν</sup> in relativity. In Euclidean Cartesian coordinates g<sub>ij</sub> = δ<sub>ij</sub>, which is why the difference was invisible in school physics.</div>
+</section>
+</div>
+<script>
+/* ---------- small linear-algebra toolkit ---------- */
+const $=id=>document.getElementById(id);
+const cssv=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const eye=n=>Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0));
+const zeros=n=>Array.from({length:n},()=>Array(n).fill(0));
+const clone=M=>M.map(r=>r.slice());
+const mul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>s+v*B[k][j],0)));
+const add=(A,B)=>A.map((r,i)=>r.map((v,j)=>v+B[i][j]));
+const sub=(A,B)=>A.map((r,i)=>r.map((v,j)=>v-B[i][j]));
+const scl=(k,A)=>A.map(r=>r.map(v=>k*v));
+const trc=A=>A.reduce((s,r,i)=>s+r[i],0);
+const T=A=>A[0].map((_,j)=>A.map(r=>r[j]));
+const maxAbs=A=>Math.max(...A.flat().map(Math.abs));
+const mv=(A,x)=>A.map(r=>r.reduce((s,v,k)=>s+v*x[k],0));
+const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
+const nrm=a=>Math.sqrt(dot(a,a));
+const neg=s=>String(s).replace(/-/g,'−');
+function fmt(x,dec=3){
+  if(!isFinite(x))return '∞';
+  if(Math.abs(x)<1e-9)return '0';
+  const r=Math.round(x); if(Math.abs(x-r)<1e-7*Math.max(1,Math.abs(x)))return neg(r);
+  for(let q=2;q<=12;q++){const p=Math.round(x*q);if(Math.abs(x*q-p)<1e-7*q)return neg(p)+'/'+q;}
+  return neg(+x.toFixed(dec));
+}
+function mxH(M,heat,scale){
+  const s=scale||Math.max(1e-12,maxAbs(M));
+  return '<table class="mx">'+M.map(r=>'<tr>'+r.map(v=>{
+    let st='';
+    if(heat){const a=Math.min(1,Math.abs(v)/s)*0.55;if(Math.abs(v)>1e-9)st=` style="background:${v>0?`rgba(47,111,223,${a})`:`rgba(201,42,42,${a})`}"`;}
+    return `<td${st}>${fmt(v)}</td>`;}).join('')+'</tr>').join('')+'</table>';
+}
+function rank(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol)continue;
+    [A[r],A[p]]=[A[p],A[r]];
+    for(let i=r+1;i<n;i++){const f=A[i][c]/A[r][c];for(let j=c;j<m;j++)A[i][j]-=f*A[r][j];}
+    r++;
+  }
+  return r;
+}
+function nullspace(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  const piv=[];let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol){for(let i=r;i<n;i++)A[i][c]=0;continue;}
+    [A[r],A[p]]=[A[p],A[r]];
+    const d=A[r][c];for(let j=0;j<m;j++)A[r][j]/=d;
+    for(let i=0;i<n;i++)if(i!==r){const f=A[i][c];for(let j=0;j<m;j++)A[i][j]-=f*A[r][j];}
+    piv.push(c);r++;
+  }
+  const basis=[];
+  for(let f=0;f<m;f++){if(piv.includes(f))continue;
+    const v=Array(m).fill(0);v[f]=1;piv.forEach((c,i)=>{v[c]=-A[i][f];});basis.push(v);}
+  return basis;
+}
+function inv(M){
+  const n=M.length,A=M.map((r,i)=>r.concat(eye(n)[i]));
+  for(let c=0;c<n;c++){
+    let p=c;for(let i=c+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<1e-12)return null;
+    [A[c],A[p]]=[A[p],A[c]];const d=A[c][c];for(let j=0;j<2*n;j++)A[c][j]/=d;
+    for(let i=0;i<n;i++)if(i!==c){const f=A[i][c];for(let j=0;j<2*n;j++)A[i][j]-=f*A[c][j];}
+  }
+  return A.map(r=>r.slice(n));
+}
+/* Faddeev–LeVerrier: det(λI−A)=Σ c[k] λ^k, c[n]=1 */
+function charCoeffs(A){
+  const n=A.length,c=Array(n+1).fill(0);c[n]=1;let M=zeros(n);
+  for(let k=1;k<=n;k++){M=add(mul(A,M),scl(c[n-k+1],eye(n)));c[n-k]=-trc(mul(A,M))/k;}
+  return c;
+}
+/* complex helpers + Durand–Kerner roots of monic poly (c indexed by power) */
+const cm=(a,b)=>[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]];
+const cd=(a,b)=>{const d=b[0]*b[0]+b[1]*b[1];return[(a[0]*b[0]+a[1]*b[1])/d,(a[1]*b[0]-a[0]*b[1])/d];};
+function polyRoots(c){
+  const n=c.length-1;if(n===1)return[[-c[0],0]];
+  let z=Array.from({length:n},(_,k)=>{let w=[1,0];for(let i=0;i<=k;i++)w=cm(w,[0.4,0.9]);return w;});
+  const R=1+Math.max(...c.slice(0,n).map(Math.abs));z=z.map(w=>[w[0]*R,w[1]*R]);
+  const ev=x=>{let s=[1,0];for(let k=n-1;k>=0;k--)s=[s[0]*x[0]-s[1]*x[1]+c[k],s[0]*x[1]+s[1]*x[0]];return s;};
+  for(let it=0;it<2000;it++){
+    let delta=0;
+    z=z.map((zi,i)=>{let den=[1,0];z.forEach((zj,j)=>{if(j!==i)den=cm(den,[zi[0]-zj[0],zi[1]-zj[1]]);});
+      if(Math.hypot(den[0],den[1])<1e-300)den=[1e-12,0];
+      const q=cd(ev(zi),den);delta=Math.max(delta,Math.hypot(q[0],q[1]));return[zi[0]-q[0],zi[1]-q[1]];});
+    if(delta<1e-14)break;
+  }
+  return z;
+}
+function snap(x){for(const q of [1,2,3,4,6,12]){const r=Math.round(x*q)/q;if(Math.abs(x-r)<2e-4)return r;}return x;}
+function eigGroups(A){
+  const z=polyRoots(charCoeffs(A)),used=Array(z.length).fill(false),G=[];
+  const tol=2e-3*Math.max(1,maxAbs(A));
+  for(let i=0;i<z.length;i++){if(used[i])continue;const cl=[z[i]];used[i]=true;
+    for(let j=i+1;j<z.length;j++)if(!used[j]&&Math.hypot(z[j][0]-z[i][0],z[j][1]-z[i][1])<tol){cl.push(z[j]);used[j]=true;}
+    let re=cl.reduce((s,w)=>s+w[0],0)/cl.length,im=cl.reduce((s,w)=>s+w[1],0)/cl.length;
+    if(Math.abs(im)<1e-6)im=0;re=snap(re);if(im)im=snap(im);
+    G.push({re,im,m:cl.length});}
+  G.sort((a,b)=>b.re-a.re||b.im-a.im);return G;
+}
+const powM=(M,k)=>{let R=eye(M.length);for(let i=0;i<k;i++)R=mul(R,M);return R;};
+const lamF=a=>a===0?'λ':(a>0?`(λ − ${fmt(a)})`:`(λ + ${fmt(-a)})`);
+const supN=k=>k===1?'':String(k).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+function minimalPoly(A){
+  const G=eigGroups(A),n=A.length;
+  if(G.some(g=>g.im!==0))return{G,complex:true};
+  const sc=Math.max(1,maxAbs(A));
+  let tups=[[]];G.forEach(g=>{const nt=[];tups.forEach(t=>{for(let r=1;r<=g.m;r++)nt.push(t.concat(r));});tups=nt;});
+  tups.sort((a,b)=>a.reduce((s,v)=>s+v,0)-b.reduce((s,v)=>s+v,0));
+  const tried=[];
+  for(const t of tups){
+    let P=eye(n);G.forEach((g,i)=>{P=mul(P,powM(sub(A,scl(g.re,eye(n))),t[i]));});
+    const deg=t.reduce((s,v)=>s+v,0),zero=maxAbs(P)<1e-6*Math.pow(sc,deg);
+    tried.push({t,P,zero});if(zero)return{G,r:t,tried};
+  }
+  return{G,r:G.map(g=>g.m),tried};
+}
+function expandRoots(rs){let p=[1];rs.forEach(a=>{const q=Array(p.length+1).fill(0);p.forEach((v,i)=>{q[i]+=v;q[i+1]-=a*v;});p=q;});return p;}
+function polyStr(p,v,mat){
+  const d=p.length-1;let s='';
+  p.forEach((c,i)=>{if(Math.abs(c)<1e-9)return;const k=d-i;const a=Math.abs(c);
+    const coef=(a===1&&k>0)?'':fmt(a);const term=k===0?(mat?coef+'I':fmt(a)):(k===1?coef+v:coef+v+supN(k));
+    s+=(s===''?(c<0?'−':''):(c<0?' − ':' + '))+term;});
+  return s||'0';
+}
+function makeEditor(id,M,cb){
+  const box=$(id);let n=M.length;
+  function build(M){n=M.length;box.innerHTML='<div style="display:grid;grid-template-columns:repeat('+n+',58px);gap:4px">'+M.flat().map((v,i)=>`<input type="number" step="any" data-i="${i}" value="${v}" style="width:58px">`).join('')+'</div>';
+    box.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',cb));}
+  build(M);
+  return{get(){const v=[...box.querySelectorAll('input')].map(i=>parseFloat(i.value)||0);return Array.from({length:n},(_,i)=>v.slice(i*n,i*n+n));},
+         set(M){build(M);cb();}};
+}
+function arrow(ctx,x0,y0,x1,y1,col,w=2.5,dash){
+  ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;if(dash)ctx.setLineDash(dash);
+  ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();ctx.setLineDash([]);
+  const a=Math.atan2(y1-y0,x1-x0),L=Math.hypot(x1-x0,y1-y0);
+  if(L>6){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-10*Math.cos(a-0.4),y1-10*Math.sin(a-0.4));ctx.lineTo(x1-10*Math.cos(a+0.4),y1-10*Math.sin(a+0.4));ctx.fill();}
+  ctx.restore();
+}
+function canvasPt(cv,e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height];}
+
+/* ---------- Black-box lab ---------- */
+let bbJ=null;
+function newJ(){let J;do{J=Array.from({length:3},(_,i)=>Array.from({length:3},(_,j)=>(i===j?1:0)+Math.round((Math.random()*1.6-0.8)*10)/10));}while(Math.abs(det3(J))<0.4);return J;}
+function det3(M){return M[0][0]*(M[1][1]*M[2][2]-M[1][2]*M[2][1])-M[0][1]*(M[1][0]*M[2][2]-M[1][2]*M[2][0])+M[0][2]*(M[1][0]*M[2][1]-M[1][1]*M[2][0]);}
+const bbA=[[2,1,-1],[3,0.5,2],[0,-2,1]];
+function machine(kind,J){const K=inv(J);
+  if(kind==='true')return mul(mul(T(K),bbA),K);
+  if(kind==='contra')return mul(mul(J,bbA),T(J));
+  if(kind==='same')return clone(bbA);
+  const S=scl(0.5,add(bbA,T(bbA))),Kp=scl(0.5,sub(bbA,T(bbA)));return add(mul(mul(T(K),S),K),Kp);}
+function bbRun(){
+  if(!bbJ)bbJ=newJ();const kind=$('bbM').value,sym=$('bbP').value==='sym',Ab=machine(kind,bbJ);
+  let rows='',pass=0;
+  for(let t=0;t<6;t++){let B=Array.from({length:3},()=>Array.from({length:3},()=>Math.round((Math.random()*4-2)*10)/10));if(sym)B=scl(0.5,add(B,T(B)));
+    const Bb=mul(mul(bbJ,B),T(bbJ));let s=0,sb=0;for(let j=0;j<3;j++)for(let k=0;k<3;k++){s+=bbA[j][k]*B[j][k];sb+=Ab[j][k]*Bb[j][k];}
+    const ok=Math.abs(s-sb)<1e-9*Math.max(1,Math.abs(s));if(ok)pass++;
+    rows+=`<tr><td>${t+1}</td><td>${fmt(s,5)}</td><td>${fmt(sb,5)}</td><td class="${ok?'ok':'bad'}">${ok?'✓ scalar':'✗ changed'}</td></tr>`;}
+  const verdict=pass===6?(kind==='true'?'Passed every test: by the quotient law it IS a tensor A_jk.':kind==='sym'?'Passed every test… but only because the probes were symmetric. The antisymmetric part was never tested (Example 1).':'Passed (unexpected)'):`Caught! It failed ${6-pass} of 6 tests: not a covariant tensor.`;
+  $('bbOut').innerHTML=`<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start"><div class="small">A (unbarred)<br>${mxH(bbA)}</div><div class="small">Ā produced by the machine<br>${mxH(Ab)}</div><div class="small">J = ∂x̄/∂x<br>${mxH(bbJ)}</div></div>
+  <table style="width:auto"><tr><th>probe</th><th>s = A(j,k)B^jk</th><th>s̄ = Ā B̄</th><th></th></tr>${rows}</table><p class="verdict ${pass===6?'ok':'bad'}">${verdict}</p>`;
+}
+$('bbGo').onclick=bbRun;$('bbNew').onclick=()=>{bbJ=null;bbRun();};['bbM','bbP'].forEach(k=>$(k).addEventListener('change',bbRun));
+
+/* ---------- Conjugate lab ---------- */
+['cA','cH','cB','cR','cS'].forEach(k=>$(k).addEventListener('input',drawC));
+function eig2s(M){const a=M[0][0],b=M[0][1],d=M[1][1],t=(a+d)/2,r=Math.hypot((a-d)/2,b),l1=t+r,l2=t-r,th=0.5*Math.atan2(2*b,a-d);return{l:[l1,l2],v:[[Math.cos(th),Math.sin(th)],[-Math.sin(th),Math.cos(th)]]};}
+function conicPts(M){const E=eig2s(M),[l1,l2]=E.l,[u,w]=E.v,curves=[];
+  const pt=(p,q)=>[p*u[0]+q*w[0],p*u[1]+q*w[1]];
+  if(l1>1e-6&&l2>1e-6){const c=[];for(let k=0;k<=120;k++){const t=k/120*2*Math.PI;c.push(pt(Math.cos(t)/Math.sqrt(l1),Math.sin(t)/Math.sqrt(l2)));}curves.push(c);}
+  else if(l1>1e-6&&l2<-1e-6){[1,-1].forEach(sg=>{const c=[];for(let k=-60;k<=60;k++){const t=k/60*2.6;c.push(pt(sg*Math.cosh(t)/Math.sqrt(l1),Math.sinh(t)/Math.sqrt(-l2)));}curves.push(c);});}
+  return{E,curves};}
+function drawC(){
+  const a=+$('cA').value,h=+$('cH').value,b=+$('cB').value,th=+$('cR').value*Math.PI/180,sh=+$('cS').value;
+  [['cA',a],['cH',h],['cB',b],['cS',sh]].forEach(([k,v])=>$(k+'v').textContent=fmt(v,2));$('cRv').textContent=$('cR').value+'°';
+  const A=[[a,h],[h,b]],dA=a*b-h*h,cv=$('cvC'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  const J=mul([[Math.cos(th),-Math.sin(th)],[Math.sin(th),Math.cos(th)]],[[1,sh],[0,1]]),K=inv(J);
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);
+  if(Math.abs(dA)<1e-3){$('cOut').textContent='det A ≈ 0: no conjugate tensor exists (B = A⁻¹ is undefined).\nThe curve Aᵢⱼxⁱxʲ = 1 degenerates into a pair of lines.';return;}
+  const B=inv(A),Ab=mul(mul(T(K),A),K),Bb=mul(mul(J,B),T(J)),P=mul(Ab,Bb),Bdir=inv(Ab);
+  const cA=conicPts(Ab),cB=conicPts(Bb);let ext=1.5;[cA,cB].forEach(c=>c.curves.forEach(cu=>cu.forEach(p=>{ext=Math.max(ext,Math.min(6,Math.abs(p[0])*1.1,),Math.min(6,Math.abs(p[1])*1.1));})));ext=Math.min(ext,4);
+  const s=(W/2-10)/ext,X=x=>W/2+x*s,Y=y=>H/2-y*s;
+  ctx.strokeStyle=cssv('--line');ctx.lineWidth=1;for(let i=-Math.floor(ext);i<=ext;i++){ctx.beginPath();ctx.moveTo(X(i),0);ctx.lineTo(X(i),H);ctx.moveTo(0,Y(i));ctx.lineTo(W,Y(i));ctx.stroke();}
+  ctx.strokeStyle=cssv('--muted');ctx.beginPath();ctx.moveTo(0,Y(0));ctx.lineTo(W,Y(0));ctx.moveTo(X(0),0);ctx.lineTo(X(0),H);ctx.stroke();
+  [[cA,cssv('--acc')],[cB,cssv('--acc2')]].forEach(([c,col])=>{ctx.strokeStyle=col;ctx.lineWidth=2.6;c.curves.forEach(cu=>{ctx.beginPath();let pen=false;cu.forEach(p=>{if(Math.max(Math.abs(p[0]),Math.abs(p[1]))>ext*1.2){pen=false;return;}pen?ctx.lineTo(X(p[0]),Y(p[1])):ctx.moveTo(X(p[0]),Y(p[1]));pen=true;});ctx.stroke();});});
+  ctx.font='13px sans-serif';ctx.fillStyle=cssv('--acc');ctx.fillText('Āᵢⱼ xⁱ xʲ = 1',8,18);ctx.fillStyle=cssv('--acc2');ctx.fillText('B̄ⁱʲ yᵢ yⱼ = 1 (conjugate)',8,36);
+  const m=M=>'['+M.map(r=>'['+r.map(v=>fmt(v,3)).join(', ')+']').join(', ')+']';
+  $('cOut').textContent=`A (original frame) = ${m(A)}, det = ${fmt(dA,4)}
+B = cofactor/det = ${m(B)}
+
+new frame: J = ${m(J)}
+Ā = KᵀAK = ${m(Ab)}
+B̄ = JBJᵀ = ${m(Bb)}
+(Ā⁻¹ computed directly = ${m(Bdir)})
+
+Āᵢⱼ B̄ʲᵏ = ${m(P)}  = δ ✓
+Tr(ĀB̄) = ${fmt(P[0][0]+P[1][1],4)} = N
+${dA>0&&a>0?'both curves are ellipses: long axis of one ↔ short axis of the other':'indefinite A: both curves are hyperbolas'}`;
+}
+
+/* ---------- Index fixer ---------- */
+const SUPS=(arr,h)=>arr.length?(h==='u'?'<sup>':'<sub>')+arr.join('')+(h==='u'?'</sup>':'</sub>'):'';
+function fixRun(){
+  const src=$('fxX').value.trim();let html='';
+  try{
+    const sides=src.split('=');if(sides.length>2)throw 'More than one = sign.';
+    const terms=[];sides.forEach((sd,si)=>{      sd.split(/(?=[+\-−])/).forEach(raw=>{let t=raw.trim(),sign='+';if(/^[+\-−]/.test(t)){sign=t[0]==='+'?'+':'−';t=t.slice(1).trim();}if(!t)return;if(t==='0'){terms.push({side:si,sign,zero:true,facs:[]});return;}
+        const facs=t.split(/\s+/).map(tok=>{let m=tok.match(/^([A-Za-z])\(([a-z](?:,[a-z])*)\)$/);if(m)return{nm:m[1],unk:true,slots:m[2].split(','),h:[]};
+          m=tok.match(/^([A-Za-zδε])((?:[\^_][a-z]+)*)$/);if(!m)throw 'Cannot read "'+tok+'"';const idx=[];(m[2].match(/[\^_][a-z]+/g)||[]).forEach(seg=>seg.slice(1).split('').forEach(c=>idx.push({n:c,h:seg[0]==='^'?'u':'d'})));return{nm:m[1],unk:false,idx};});
+        terms.push({side:si,sign,facs});});});
+    const notes=[],freeSets=[],freeH={};
+    terms.forEach((T,ti)=>{if(T.zero)return;const occ={};
+      T.facs.forEach((f,fi)=>{if(f.unk)f.slots.forEach((n,si)=>{(occ[n]=occ[n]||[]).push({unk:true,fi,si});});else f.idx.forEach(x=>{(occ[x.n]=occ[x.n]||[]).push({unk:false,h:x.h});});});
+      const free=[];
+      for(const n in occ){const o=occ[n];if(o.length>2)throw `Term ${ti+1}: index ${n} appears ${o.length} times.`;
+        if(o.length===2){const k=o.filter(x=>!x.unk),u=o.filter(x=>x.unk);
+          if(k.length===2){if(k[0].h===k[1].h)notes.push(`term ${ti+1}: dummy ${n} has the same height in two known tensors (illegal)`);}
+          else if(k.length===1){u[0].res=k[0].h==='u'?'d':'u';}
+          else{u[0].res='u';u[1].res='d';notes.push(`term ${ti+1}: dummy ${n} sits in two unknown slots; chose up/down (either order is fine)`);}
+          u.forEach(x=>{T.facs[x.fi].h[x.si]=x.res;});}
+        else{free.push(n);const x=o[0];if(!x.unk){if(freeH[n]&&freeH[n]!==x.h)notes.push(`free index ${n} is up in one term and down in another (inconsistent)`);freeH[n]=x.h;}else{x.free=n;T.facs[x.fi].h[x.si]='?';}}}
+      freeSets.push({ti,set:free.slice().sort().join(',')});});
+    const ref=freeSets[0].set,okSets=freeSets.every(f=>f.set===ref);
+    html+='<p>free indices per term: '+freeSets.map(f=>`term ${f.ti+1}: {${f.set||'none'}}`).join(' &nbsp; ')+'</p>';
+    if(!okSets){html+=`<p class="bad">✗ The terms do not carry the same free indices, so no choice of heights can make this a tensor equation. Rename indices first (see the "renamed" presets).</p>`;}
+    terms.forEach(T=>T.facs.forEach(f=>{if(f.unk)f.h=f.h.map((h,si)=>h==='?'?(freeH[f.slots[si]]||(freeH[f.slots[si]]='u',notes.push(`free index ${f.slots[si]} occurs only in unknown slots; chose it upper`),'u')):h);}));
+    const show=T=>T.zero?'0':T.facs.map(f=>{if(f.unk){const up=f.slots.filter((_,i)=>f.h[i]==='u'),dn=f.slots.filter((_,i)=>f.h[i]==='d');return `<b>${f.nm}${SUPS(up,'u')}${SUPS(dn,'d')}</b>`;}
+      const up=[],dn=[];let out=f.nm;let cur=null,buf=[];f.idx.forEach(x=>{if(x.h!==cur){if(buf.length)out+=SUPS(buf,cur);cur=x.h;buf=[];}buf.push(x.n);});if(buf.length)out+=SUPS(buf,cur);return out;}).join(' ');
+    let eq='';terms.forEach((T,i)=>{const prev=terms[i-1];if(i>0&&prev.side!==T.side)eq+=' = ';eq+=(eq===''||eq.endsWith(' = ')?(T.sign==='−'?'−':''):` ${T.sign} `)+show(T);});
+    html+=`<div class="eq">${eq}</div>`+(notes.length?'<p class="small">'+notes.map(n=>'• '+n).join('<br>')+'</p>':'')+(okSets?'<p class="ok">✓ Every term has the same free indices at the same heights; unknowns (bold) now carry proper tensor indices.</p>':'');
+  }catch(e){html=`<p class="bad">${e}</p>`;}
+  $('fxOut').innerHTML=html;
+}
+$('fxGo').onclick=fixRun;$('fxX').addEventListener('keydown',e=>{if(e.key==='Enter')fixRun();});
+document.querySelectorAll('[data-fx]').forEach(b=>b.onclick=()=>{$('fxX').value=b.dataset.fx;fixRun();});
+
+/* ---------- Quiz ---------- */
+const QZ=[
+ {q:'The quotient law requires the probing tensor to be…',o:['arbitrary','symmetric','nonzero only','a scalar'],a:0,e:'Otherwise only part of the bracket is forced to vanish.'},
+ {q:'If A(i,j)B^j = C_i for every vector B^j, then A is…',o:['A_ij (covariant)','A^ij','A^i_j','not a tensor'],a:0,e:'j pairs with the upper B^j ⇒ down; i matches C_i ⇒ down.'},
+ {q:'If A(i,j,k) B^jk = C^i only for symmetric B^jk, we can conclude that…',o:['A(i,j,k) + A(i,k,j) is a tensor','A is a tensor','A is antisymmetric','nothing'],a:0,e:'Example 1.'},
+ {q:'The conjugate of a symmetric A_ij is, as a matrix,…',o:['A⁻¹','Aᵀ','adj A','A²'],a:0,e:'B^ij = cofactor/det.'},
+ {q:'A symmetric tensor has a conjugate iff…',o:['det A ≠ 0','A is positive','Tr A ≠ 0','N is even'],a:0,e:'Otherwise the inverse does not exist.'},
+ {q:'A_ij B^ij for conjugate tensors in N dimensions equals…',o:['N','1','0','det A'],a:0,e:'δ^j_j.'},
+ {q:'ds² = g_ij dx^i dx^j invariant implies directly that…',o:['g_ij + g_ji is a tensor','g_ij is antisymmetric','g_ij = δ_ij','g^ij exists'],a:0,e:'dx^i dx^j is a symmetric probe (Exercise 1).'},
+ {q:'Why can’t (12), A_ij B^ik = δ^k_j, be used directly with the quotient law?',o:['A_ij is symmetric, not arbitrary','δ is not a tensor','B is unknown','N may be infinite'],a:0,e:'So an arbitrary vector D_i = A_ij C^j is introduced.'}
+];
+(function(){let sc=0;$('qTot').textContent=QZ.length;
+ $('quiz').innerHTML=QZ.map((x,i)=>{const ord=x.o.map((t,j)=>({t,j})).sort(()=>Math.random()-0.5);
+  return `<div class="qq" data-q="${i}"><b>Q${i+1}.</b> ${x.q}${ord.map(o=>`<label class="opt"><input type="radio" name="q${i}" value="${o.j}"> ${o.t}</label>`).join('')}<div class="fb"></div></div>`;}).join('');
+ document.querySelectorAll('#quiz .qq').forEach(div=>{const i=+div.dataset.q;let done=false;
+  div.querySelectorAll('input').forEach(inp=>inp.addEventListener('change',()=>{if(done)return;done=true;const ok=+inp.value===QZ[i].a;if(ok)sc++;$('qScore').textContent=sc;
+    div.querySelector('.fb').innerHTML=`<span class="${ok?'ok':'bad'}">${ok?'✓ Correct.':'✗ Answer: '+QZ[i].o[QZ[i].a]+'.'}</span> ${QZ[i].e}`;
+    div.querySelectorAll('input').forEach(x=>x.disabled=true);}));});})();
+
+function drawAll(){drawC();}
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+$('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawAll();};})();
+bbRun();drawC();fixRun();
+</script>
+</body>
+</html>

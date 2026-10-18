@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:110px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:85px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:collapse;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;margin:3px 4px;width:auto}
+.mx.det{border-radius:0}
+.mx td{border:0;padding:1px 8px;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.verdict{font-weight:700;font-size:1.05rem;margin:6px 0}
+.sys{font-family:"Cambria Math",Cambria,"Times New Roman",serif;display:inline-block;text-align:left;line-height:1.5}
+</style>
+<title>Tensor Calculus</title>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>22. Tensor Calculus</h1>
+<p>Why ∂A<sub>i</sub>/∂x<sup>j</sup> is not a tensor · Christoffel symbols of the first and second kind · Their (non-tensorial) transformation · Covariant derivative · Ricci's lemma · Christoffel symbols of the sphere · Γ<sup>i</sup><sub>ij</sub> = ∂ ln√g/∂x<sup>j</sup> · Intrinsic (absolute) derivative · Product rule &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 237–247</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">The problem</a><a href="#s2">Christoffel symbols</a><a href="#s3">Γ calculator</a><a href="#s4">Transformation</a><a href="#s5">Covariant derivative</a><a href="#s6">Polar-field lab</a><a href="#s7">Ricci's lemma</a><a href="#s8">Sphere, ln√g</a><a href="#s9">Intrinsic derivative</a><a href="#s10">Parallel-transport lab</a><a href="#s11">Product rule</a><a href="#s12">Summary</a><a href="#s13">Exercise 22</a><a href="#s14">Practice</a><a href="#s15">Quiz</a><a href="#s16">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>In Cartesian coordinates, the derivative of a vector field is easy: differentiate each component. In curved coordinates (polar, spherical) or on a curved surface, this fails. The basis vectors themselves change from point to point, so a field with "constant components" can actually be turning. The fix is to add correction terms built from the metric. These are the <b>Christoffel symbols</b> Γ, and the corrected derivative is the <b>covariant derivative</b>, which <b>is</b> a tensor.</p>
+<div class="flow"><span>∂A<sub>i</sub>/∂x<sup>j</sup> not a tensor</span><b>→</b><span>Γ<sup>k</sup><sub>ij</sub> from ∂g</span><b>→</b><span>A<sub>i;j</sub> = A<sub>i,j</sub> − A<sub>k</sub>Γ<sup>k</sup><sub>ij</sub> (a tensor)</span><b>→</b><span>g<sub>ij;k</sub> = 0</span><b>→</b><span>DA/Dτ along a curve</span><b>→</b><span>geodesics (Section 23), curvature (Section 24)</span></div>
+<div class="box tip"><b class="t">Notation (Eqs. 1–4)</b> A comma means an ordinary partial derivative, a semicolon the covariant derivative:
+A<sub>i,j</sub> = ∂A<sub>i</sub>/∂x<sup>j</sup>, &nbsp; φ<sub>,ij</sub> = ∂²φ/∂x<sup>i</sup>∂x<sup>j</sup>, &nbsp; x<sup>i</sup><sub>,α</sub> = ∂x<sup>i</sup>/∂x̄<sup>α</sup>, &nbsp; x̄<sup>α</sup><sub>,j</sub> = ∂x̄<sup>α</sup>/∂x<sup>j</sup>. So x<sup>i</sup><sub>,α</sub>x̄<sup>α</sup><sub>,j</sub> = δ<sup>i</sup><sub>j</sub> (2). Latin letters label the unbarred system, Greek letters the barred one. The x<sup>i</sup><sub>,α</sub> themselves are <b>not</b> tensors.<br>
+<b>Needed from earlier:</b> transformation laws (Section 15), quotient law (17), metric g<sub>ij</sub>, g<sup>ij</sup> and raising/lowering (18), and Exercise 15.7 (second derivatives are not a tensor).</div>
+</section>
+
+<section id="s1">
+<h2>1. The problem (Eqs. 5–6)</h2>
+<p>The gradient A<sub>i</sub> = φ<sub>,i</sub> of a scalar is a covariant vector: Ā<sub>α</sub> = x<sup>i</sup><sub>,α</sub>A<sub>i</sub>. &nbsp;(5) &nbsp; Differentiate once more with respect to x̄<sup>β</sup>:</p>
+<div class="eq">Ā<sub>α,β</sub> = <b>x<sup>i</sup><sub>,αβ</sub>A<sub>i</sub></b> + x<sup>i</sup><sub>,α</sub>x<sup>j</sup><sub>,β</sub>A<sub>i,j</sub> &nbsp;&nbsp;(6)</div>
+<p>The second term is the correct rank-2 tensor law. The first term spoils it. It vanishes only when the transformation is linear (x<sup>i</sup><sub>,αβ</sub> = 0), i.e. for Cartesian-to-Cartesian changes. In general <b>coordinate derivatives of a tensor (other than a scalar) are not tensors</b>.</p>
+<p><b>Geometric reason:</b> A<sub>i,j</sub> compares the components of A at two neighbouring points. But in curvilinear coordinates the basis vectors at those two points differ, so the difference of components mixes "A really changed" with "the basis turned". Γ measures how the basis turns.</p>
+</section>
+
+<section id="s2">
+<h2>2. Christoffel symbols (Eqs. 7–10, Example 1)</h2>
+<div class="box def"><b class="t">Definitions</b>
+<div class="eq">First kind: &nbsp; [ij, k] = ½(g<sub>ik,j</sub> + g<sub>jk,i</sub> − g<sub>ij,k</sub>) &nbsp;&nbsp;(7a)</div>
+<div class="eq">Second kind: &nbsp; Γ<sup>k</sup><sub>ij</sub> = g<sup>km</sup>[ij, m] = ½g<sup>km</sup>(g<sub>im,j</sub> + g<sub>jm,i</sub> − g<sub>ij,m</sub>) &nbsp;&nbsp;(7b)</div>
+Γ<sup>k</sup><sub>ij</sub> is also written {<sup>k</sup><sub>ij</sub>}.</div>
+<ul>
+<li><b>Symmetry:</b> [ij, k] = [ji, k] and Γ<sup>k</sup><sub>ij</sub> = Γ<sup>k</sup><sub>ji</sub> (8). In N dimensions there are N·N(N+1)/2 independent symbols of each kind (6 in 2D, 18 in 3D, 40 in 4D).</li>
+<li><b>Memory aid:</b> "first index plus second index minus the shared one": the pattern is g<sub>ik,j</sub> + g<sub>jk,i</sub> − g<sub>ij,k</sub>, with k always in the metric and the two lower indices i, j appearing once as the derivative.</li>
+<li><b>Cartesian coordinates</b> (constant g): every Γ = 0. That is why ordinary derivatives worked there.</li>
+<li><b>Lowering:</b> [ij, k] = g<sub>km</sub>Γ<sup>m</sup><sub>ij</sub> (from (7b) with g<sub>km</sub>g<sup>mn</sup> = δ).</li>
+</ul>
+<h3>Example 1: g<sub>ij,k</sub> = [ik, j] + [jk, i] &nbsp;(9)</h3>
+<p>[ik, j] = ½(g<sub>ij,k</sub> + g<sub>kj,i</sub> − g<sub>ik,j</sub>) and [jk, i] = ½(g<sub>ji,k</sub> + g<sub>ki,j</sub> − g<sub>jk,i</sub>) (10). Adding, and using the symmetry of g, the last four terms cancel in pairs: [ik, j] + [jk, i] = g<sub>ij,k</sub>. ∎ So the derivatives of the metric are completely determined by the Christoffel symbols, and vice versa.</p>
+<h3>Diagonal metrics: the short cut (used in Example 5)</h3>
+<p>If g<sub>ij</sub> = 0 for i ≠ j, then (no summation) with distinct i, j, k:</p>
+<div class="tbl-wrap"><table>
+<tr><th>Symbol</th><th>First kind</th><th>Second kind</th></tr>
+<tr><td>all indices equal</td><td>[ii, i] = ½∂<sub>i</sub>g<sub>ii</sub></td><td>Γ<sup>i</sup><sub>ii</sub> = ∂<sub>i</sub>g<sub>ii</sub>/(2g<sub>ii</sub>) = ∂<sub>i</sub> ln√g<sub>ii</sub></td></tr>
+<tr><td>i = k ≠ j</td><td>[ij, i] = ½∂<sub>j</sub>g<sub>ii</sub></td><td>Γ<sup>i</sup><sub>ij</sub> = ∂<sub>j</sub>g<sub>ii</sub>/(2g<sub>ii</sub>)</td></tr>
+<tr><td>i = j ≠ k</td><td>[ii, k] = −½∂<sub>k</sub>g<sub>ii</sub></td><td>Γ<sup>k</sup><sub>ii</sub> = −∂<sub>k</sub>g<sub>ii</sub>/(2g<sub>kk</sub>)</td></tr>
+<tr><td>i, j, k all different</td><td>0</td><td>0</td></tr>
+</table></div>
+<h3>Standard results (computed symbolically)</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Coordinates</th><th>Nonzero Γ<sup>k</sup><sub>ij</sub></th></tr>
+<tr><td>Polar (r, θ): ds² = dr² + r²dθ²</td><td>Γ<sup>r</sup><sub>θθ</sub> = −r, &nbsp; Γ<sup>θ</sup><sub>rθ</sub> = Γ<sup>θ</sup><sub>θr</sub> = 1/r &nbsp;(68)</td></tr>
+<tr><td>Cylindrical (ρ, φ, z)</td><td>Γ<sup>ρ</sup><sub>φφ</sub> = −ρ, &nbsp; Γ<sup>φ</sup><sub>ρφ</sub> = 1/ρ</td></tr>
+<tr><td>Spherical (r, θ, φ)</td><td>Γ<sup>r</sup><sub>θθ</sub> = −r, Γ<sup>r</sup><sub>φφ</sub> = −r sin²θ, Γ<sup>θ</sup><sub>rθ</sub> = 1/r, Γ<sup>θ</sup><sub>φφ</sub> = −sin θ cos θ, Γ<sup>φ</sup><sub>rφ</sub> = 1/r, Γ<sup>φ</sup><sub>θφ</sub> = cot θ</td></tr>
+<tr><td>Sphere r = a, (θ, φ) (Example 5)</td><td>Γ<sup>θ</sup><sub>φφ</sub> = −sin θ cos θ, &nbsp; Γ<sup>φ</sup><sub>θφ</sub> = cot θ (independent of a)</td></tr>
+</table></div>
+</section>
+
+<section id="s3">
+<h2>3. 🔬 Christoffel-symbol calculator</h2>
+<p>Choose a metric and a point. The lab evaluates g<sub>ij</sub>, its inverse, and all Γ<sup>k</sup><sub>ij</sub> numerically from Eq. (7b), differentiating g by central differences. It then compares with the exact formulas above and checks Example 1, g<sub>ij,k</sub> = [ik, j] + [jk, i], and Example 6, Γ<sup>i</sup><sub>ij</sub> = ∂ ln√g/∂x<sup>j</sup>.</p>
+<div class="lab">
+<div class="ctrl"><label>metric <select id="cM"><option value="polar">plane polar (r, θ)</option><option value="sph2">sphere surface a²(dθ² + sin²θ dφ²)</option><option value="cyl">cylindrical (ρ, φ, z)</option><option value="sph">spherical (r, θ, φ)</option><option value="uvw">(u, v, w) of Example 18.4 (non-diagonal)</option><option value="obl">oblique axes (constant g)</option><option value="poinc">Poincaré half-plane (dx² + dy²)/y²</option></select></label></div>
+<div id="cIn" class="ctrl"></div>
+<div id="cOut"></div>
+</div>
+</section>
+
+<section id="s4">
+<h2>4. Christoffel symbols are not tensors (Example 2, Eqs. 11–18)</h2>
+<p>Start from ḡ<sub>αβ</sub> = x<sup>i</sup><sub>,α</sub>x<sup>j</sup><sub>,β</sub>g<sub>ij</sub> (11), differentiate with respect to x̄<sup>γ</sup> (12), write the two cyclic permutations (13, 14), add two and subtract one, and use the symmetry of g. The result:</p>
+<div class="eq">[αβ, γ]̄ = <b>x<sup>i</sup><sub>,αβ</sub>x<sup>j</sup><sub>,γ</sub>g<sub>ij</sub></b> + x<sup>i</sup><sub>,α</sub>x<sup>j</sup><sub>,β</sub>x<sup>k</sup><sub>,γ</sub>[ij, k] &nbsp;&nbsp;(16)</div>
+<div class="eq">Γ̄<sup>γ</sup><sub>αβ</sub> = <b>x<sup>i</sup><sub>,αβ</sub>x̄<sup>γ</sup><sub>,i</sub></b> + x<sup>i</sup><sub>,α</sub>x<sup>j</sup><sub>,β</sub>x̄<sup>γ</sup><sub>,k</sub>Γ<sup>k</sup><sub>ij</sub> &nbsp;&nbsp;(18)</div>
+<p>The second terms are tensor laws; the first (bold) terms are not. So Γ is <b>not a tensor</b>. The clearest evidence: Γ = 0 in Cartesian coordinates but Γ ≠ 0 in polar coordinates of the same flat plane. A true tensor that is zero in one system is zero in every system (Section 16).</p>
+<p><b>Index rule:</b> the second term of (16) and (18) shows how the indices behave: in [ij, k] and Γ<sup>k</sup><sub>ij</sub>, i, j, k (resp. i, j) act as <b>covariant</b> indices and the upper k of Γ as <b>contravariant</b>. Use this to check equations, even though Γ is not a tensor.</p>
+<div class="box fact"><b class="t">The non-tensor terms are exactly what is needed</b> Solving (18) for x<sup>k</sup><sub>,αβ</sub> gives</div>
+<div class="eq">x<sup>k</sup><sub>,αβ</sub> = x<sup>k</sup><sub>,ρ</sub>Γ̄<sup>ρ</sup><sub>αβ</sub> − x<sup>i</sup><sub>,α</sub>x<sup>j</sup><sub>,β</sub>Γ<sup>k</sup><sub>ij</sub> &nbsp;&nbsp;(19)</div>
+<p>which expresses the troublesome second derivatives of (6) through Γ's. This is how the cancellation in the next section works.</p>
+</section>
+
+<section id="s5">
+<h2>5. The covariant derivative (Eqs. 19–28, Example 3)</h2>
+<p>Put (19) into (6). The bad term splits into a Γ̄ part, which joins the left side, and a Γ part, which joins the right side (20, 21):</p>
+<div class="eq">Ā<sub>α,β</sub> − Ā<sub>ρ</sub>Γ̄<sup>ρ</sup><sub>αβ</sub> = x<sup>i</sup><sub>,α</sub>x<sup>j</sup><sub>,β</sub>(A<sub>i,j</sub> − A<sub>k</sub>Γ<sup>k</sup><sub>ij</sub>)</div>
+<div class="box def"><b class="t">Covariant derivative</b>
+<div class="eq">A<sub>i;j</sub> = A<sub>i,j</sub> − A<sub>k</sub>Γ<sup>k</sup><sub>ij</sub> &nbsp;(covariant vector, 22a) &nbsp;&nbsp;&nbsp; A<sup>i</sup><sub>;j</sub> = A<sup>i</sup><sub>,j</sub> + A<sup>k</sup>Γ<sup>i</sup><sub>kj</sub> &nbsp;(contravariant vector, 25)</div>
+Then Ā<sub>α;β</sub> = x<sup>i</sup><sub>,α</sub>x<sup>j</sup><sub>,β</sub>A<sub>i;j</sub> (23): <b>A<sub>i;j</sub> is a rank-2 tensor</b>, covariant in j.</div>
+<div class="box warnb"><b class="t">Do not confuse A<sub>i,j</sub> and A<sub>i;j</sub></b> The comma version is the plain partial derivative, not a tensor. The semicolon version is the covariant derivative, a tensor. Other books write ∇<sub>j</sub>A<sub>i</sub> or D<sub>j</sub>A<sub>i</sub> for A<sub>i;j</sub>.</div>
+<h3>The general rule (27)</h3>
+<p>For any tensor: take the partial derivative, then add <b>+Γ</b> for every upper index and <b>−Γ</b> for every lower index:</p>
+<div class="eq">A<sup>i₁…i<sub>p</sub></sup><sub>j₁…j<sub>q</sub>;k</sub> = A<sup>i₁…</sup><sub>j₁…,k</sub> + Σ<sub>r</sub> A<sup>…l…</sup><sub>j₁…</sub>Γ<sup>i<sub>r</sub></sup><sub>lk</sub> − Σ<sub>s</sub> A<sup>i₁…</sup><sub>…l…</sub>Γ<sup>l</sup><sub>j<sub>s</sub>k</sub></div>
+<p>The result has one more covariant index. A scalar has no correction: φ<sub>;i</sub> = φ<sub>,i</sub> (26).</p>
+<h3>Example 3: rank-2 tensors (28)</h3>
+<div class="eq">A<sub>ij;k</sub> = A<sub>ij,k</sub> − A<sub>pj</sub>Γ<sup>p</sup><sub>ik</sub> − A<sub>ip</sub>Γ<sup>p</sup><sub>jk</sub><br>A<sup>ij</sup><sub>;k</sub> = A<sup>ij</sup><sub>,k</sub> + A<sup>pj</sup>Γ<sup>i</sup><sub>pk</sub> + A<sup>ip</sup>Γ<sup>j</sup><sub>pk</sub><br>A<sup>i</sup><sub>j;k</sub> = A<sup>i</sup><sub>j,k</sub> + A<sup>p</sup><sub>j</sub>Γ<sup>i</sup><sub>pk</sub> − A<sup>i</sup><sub>p</sub>Γ<sup>p</sup><sub>jk</sub></div>
+<h3>Example 7: a fluid with v<sup>i</sup> = (x², y²) in polar coordinates</h3>
+<ol>
+<li>Polar components (contravariant, Eq. 15.24): u<sup>r</sup> = r²(cos³θ + sin³θ), &nbsp; u<sup>θ</sup> = r sin θ cos θ(sin θ − cos θ). &nbsp;(66)</li>
+<li>u<sup>i</sup><sub>;j</sub> = ∂u<sup>i</sup>/∂x<sup>j</sup> + u<sup>k</sup>Γ<sup>i</sup><sub>kj</sub> (67) with Γ from (68):</li>
+</ol>
+<div class="eq"><span class="sys">u<sup>r</sup><sub>;r</sub> = ∂u<sup>r</sup>/∂r = 2r(cos³θ + sin³θ) &nbsp;(69)<br>
+u<sup>r</sup><sub>;θ</sub> = ∂u<sup>r</sup>/∂θ + u<sup>θ</sup>Γ<sup>r</sup><sub>θθ</sub> = 2r² sin θ cos θ(sin θ − cos θ) &nbsp;(70)<br>
+u<sup>θ</sup><sub>;r</sub> = ∂u<sup>θ</sup>/∂r + u<sup>θ</sup>Γ<sup>θ</sup><sub>θr</sub> = 2 sin θ cos θ(sin θ − cos θ) &nbsp;(71)<br>
+u<sup>θ</sup><sub>;θ</sub> = ∂u<sup>θ</sup>/∂θ + u<sup>r</sup>Γ<sup>θ</sup><sub>rθ</sub> = 2r sin θ cos θ(sin θ + cos θ) &nbsp;(72)</span></div>
+<p class="small">Checked symbolically. <b>Sanity check:</b> the contraction u<sup>i</sup><sub>;i</sub> = 2r(cos³θ + sin³θ) + 2r sin θ cos θ(sin θ + cos θ) = 2r(sin θ + cos θ) = 2x + 2y, which equals the Cartesian divergence ∂(x²)/∂x + ∂(y²)/∂y. A scalar must agree in every coordinate system ✓.</p>
+</section>
+
+<section id="s6">
+<h2>6. 🔬 Polar-field lab: why the Γ terms are needed</h2>
+<p>Pick a vector field in the plane. The lab works in polar coordinates at the point P (drag it). It shows the ordinary derivatives u<sup>i</sup><sub>,j</sub>, the covariant derivatives u<sup>i</sup><sub>;j</sub>, and converts u<sup>i</sup><sub>;j</sub> back to Cartesian components (with the Jacobians). Only the covariant version agrees with the true Cartesian gradient ∂v<sup>a</sup>/∂x<sup>b</sup>. The most striking case is the <b>constant field</b> v = (1, 0): its polar components vary from point to point, so u<sup>i</sup><sub>,j</sub> ≠ 0, yet u<sup>i</sup><sub>;j</sub> = 0 exactly.</p>
+<div class="lab">
+<div class="grid2">
+<div><canvas id="cvF" width="440" height="440"></canvas></div>
+<div>
+<div class="ctrl"><button class="alt" data-vf="const">constant (1, 0)</button><button class="alt" data-vf="ex7">Example 7 (x², y²)</button><button class="alt" data-vf="ex8">Exercise 8 (x, 2y)</button><button class="alt" data-vf="rot">rotation (−y, x)</button><button class="alt" data-vf="rad">radial (x, y)</button></div>
+<div class="readout out" id="fOut"></div>
+</div></div></div>
+</section>
+
+<section id="s7">
+<h2>7. Ricci's lemma: the metric is covariantly constant (Example 4, Eqs. 29–38)</h2>
+<div class="box thm"><b class="t">Ricci's lemma</b> &nbsp; g<sub>ij;k</sub> = 0, &nbsp; g<sup>ij</sup><sub>;k</sub> = 0, &nbsp; δ<sup>i</sup><sub>j;k</sub> = 0.</div>
+<ol>
+<li><b>(a) g<sub>ij;k</sub>:</b> by (28a), g<sub>ij;k</sub> = g<sub>ij,k</sub> − g<sub>pj</sub>Γ<sup>p</sup><sub>ik</sub> − g<sub>ip</sub>Γ<sup>p</sup><sub>jk</sub> (29). Lowering, g<sub>pj</sub>Γ<sup>p</sup><sub>ik</sub> = [ik, j] and g<sub>ip</sub>Γ<sup>p</sup><sub>jk</sub> = [jk, i] (30). By Example 1 the result is g<sub>ij,k</sub> − [ik, j] − [jk, i] = 0. &nbsp;(31)</li>
+<li><b>g<sup>ij</sup><sub>;k</sub>:</b> from (28b), g<sup>ij</sup><sub>;k</sub> = g<sup>ij</sup><sub>,k</sub> + g<sup>pj</sup>g<sup>iq</sup>g<sub>pq,k</sub> (32). Differentiating g<sup>pj</sup>g<sup>qi</sup>g<sub>pq</sub> = g<sup>ij</sup> two ways (33–35) shows that this combination equals 0. &nbsp;(36)</li>
+<li><b>(b) δ<sup>i</sup><sub>j;k</sub></b> = δ<sup>i</sup><sub>j,k</sub> + δ<sup>p</sup><sub>j</sub>Γ<sup>i</sup><sub>pk</sub> − δ<sup>i</sup><sub>p</sub>Γ<sup>p</sup><sub>jk</sub> = 0 + Γ<sup>i</sup><sub>jk</sub> − Γ<sup>i</sup><sub>jk</sub> = 0. &nbsp;(37, 38)</li>
+</ol>
+<p><b>Why it matters:</b> g and g<sup>-1</sup> pass straight through a covariant derivative, so <b>raising and lowering indices commutes with ";"</b>: (g<sub>ij</sub>A<sup>j</sup>)<sub>;k</sub> = g<sub>ij</sub>A<sup>j</sup><sub>;k</sub>, i.e. A<sub>i;k</sub> = g<sub>ij</sub>A<sup>j</sup><sub>;k</sub>. Lengths and angles are preserved by parallel transport (Section 9).</p>
+</section>
+
+<section id="s8">
+<h2>8. Example 5 (sphere) and Example 6 (Γ<sup>i</sup><sub>ij</sub>)</h2>
+<h3>Example 5: sphere of radius a, x¹ = θ, x² = φ</h3>
+<p>g₁₁ = a², g₂₂ = a²sin²θ, g₁₂ = 0. Only g₂₂ depends on a coordinate: ∂g₂₂/∂θ = 2a² sin θ cos θ (44). Using the diagonal short cut, the eight symbols of the first kind are</p>
+<div class="eq">[ii, i] = 0 &nbsp;(48a), &nbsp; [12, 1] = [21, 1] = 0 &nbsp;(48b), &nbsp; [12, 2] = [21, 2] = a² sin θ cos θ &nbsp;(48c), &nbsp; [11, 2] = 0 &nbsp;(48d), &nbsp; [22, 1] = −a² sin θ cos θ &nbsp;(48e)</div>
+<p>With g<sup>11</sup> = 1/a², g<sup>22</sup> = 1/(a² sin²θ) (50) and Γ<sup>k</sup><sub>ij</sub> = g<sup>kk</sup>[ij, k] (49):</p>
+<div class="eq"><b>Γ<sup>2</sup><sub>12</sub> = Γ<sup>2</sup><sub>21</sub> = cot θ, &nbsp; Γ<sup>1</sup><sub>22</sub> = −sin θ cos θ</b>, all others 0 &nbsp;(51)</div>
+<p>They are independent of the radius a: scaling a metric by a constant does not change Γ.</p>
+<h3>Example 6: Γ<sup>i</sup><sub>ij</sub> = ∂(ln√g)/∂x<sup>j</sup> &nbsp;(52)</h3>
+<ol>
+<li>Γ<sup>i</sup><sub>ij</sub> = g<sup>ih</sup>[ij, h] = ½g<sup>ih</sup>(g<sub>ih,j</sub> + g<sub>jh,i</sub> − g<sub>ij,h</sub>). &nbsp;(53, 54)</li>
+<li>i and h are both dummies and g<sup>ih</sup> is symmetric, so the last two terms cancel after swapping i ↔ h. That leaves ½g<sup>ih</sup>g<sub>ih,j</sub>.</li>
+<li>g<sup>ih</sup> = (cofactor of g<sub>ih</sub>)/g, and Σ(cofactor)(∂g<sub>ih</sub>/∂x<sup>j</sup>) = ∂g/∂x<sup>j</sup> (the derivative of a determinant, Eq. 4.6). &nbsp;(55)</li>
+<li>So Γ<sup>i</sup><sub>ij</sub> = (1/2g)∂g/∂x<sup>j</sup> = ∂(ln√g)/∂x<sup>j</sup>. ∎ &nbsp;(56)</li>
+</ol>
+<div class="box fact"><b class="t">The payoff: divergence in any coordinates</b> A<sup>i</sup><sub>;i</sub> = A<sup>i</sup><sub>,i</sub> + A<sup>k</sup>Γ<sup>i</sup><sub>ki</sub> = A<sup>i</sup><sub>,i</sub> + A<sup>k</sup>∂<sub>k</sub>ln√g, i.e.
+<div class="eq">div A = A<sup>i</sup><sub>;i</sub> = (1/√g) ∂(√g A<sup>i</sup>)/∂x<sup>i</sup></div>
+This is the short formula promised in Section 15. Cylindrical: √g = ρ gives Eq. (15.57). Spherical: √g = r² sin θ gives Exercise 15.8(a). The Laplacian: ∇²φ = (1/√g)∂<sub>i</sub>(√g g<sup>ij</sup>∂<sub>j</sub>φ).</div>
+</section>
+
+<section id="s9">
+<h2>9. Intrinsic (absolute) derivative along a curve (Eqs. 57–64)</h2>
+<p>Let C be a curve x<sup>k</sup> = x<sup>k</sup>(τ) and A a tensor defined along it (57). Its <b>intrinsic derivative</b> is</p>
+<div class="eq">DA<sup>i…</sup><sub>j…</sub>/Dτ = A<sup>i…</sup><sub>j…;k</sub> dx<sup>k</sup>/dτ &nbsp;&nbsp;(58)</div>
+<p>a tensor of the same type (quotient law: a tensor times the vector dx<sup>k</sup>/dτ). Written out:</p>
+<div class="eq">Dφ/Dτ = dφ/dτ &nbsp;(59); &nbsp;&nbsp; <b>DA<sup>i</sup>/Dτ = dA<sup>i</sup>/dτ + Γ<sup>i</sup><sub>kj</sub>A<sup>j</sup>dx<sup>k</sup>/dτ</b> &nbsp;(60); &nbsp;&nbsp; DA<sub>i</sub>/Dτ = dA<sub>i</sub>/dτ − Γ<sup>j</sup><sub>ik</sub>A<sub>j</sub>dx<sup>k</sup>/dτ &nbsp;(61)</div>
+<p>Differential form: DA<sup>i</sup> = dA<sup>i</sup> + Γ<sup>i</sup><sub>kj</sub>A<sup>j</sup>dx<sup>k</sup>, &nbsp; DA<sub>i</sub> = dA<sub>i</sub> − Γ<sup>j</sup><sub>ik</sub>A<sub>j</sub>dx<sup>k</sup> (62). Higher rank as in (63). By Ricci's lemma, Dg<sub>ij</sub>/Dτ = Dg<sup>ij</sup>/Dτ = Dδ<sup>i</sup><sub>j</sub>/Dτ = 0. &nbsp;(64)</p>
+<ul>
+<li><b>Physics example:</b> with A<sup>i</sup> = velocity dx<sup>i</sup>/dτ, (60) gives d²x<sup>i</sup>/dτ² + Γ<sup>i</sup><sub>kj</sub>(dx<sup>k</sup>/dτ)(dx<sup>j</sup>/dτ), which is <b>exactly</b> the polar/spherical acceleration of Section 15 (e.g. a<sup>r</sup> = r̈ − rθ̇², with the −rθ̇² from Γ<sup>r</sup><sub>θθ</sub> = −r). Setting it to zero gives geodesics: Section 23.</li>
+<li><b>Parallel transport:</b> a vector is carried "without turning" along C if DA<sup>i</sup>/Dτ = 0. In a flat plane this keeps the arrow pointing the same way. On a curved surface it does not come back to itself around a closed loop. That failure measures curvature (Section 24).</li>
+</ul>
+</section>
+
+<section id="s10">
+<h2>10. 🔬 Parallel-transport lab on the sphere (drag to rotate the view)</h2>
+<p>A vector is carried around the circle of latitude θ = θ₀ by solving DA<sup>i</sup>/Dφ = 0 with the sphere's Γ's from Example 5:</p>
+<div class="eq">dA<sup>θ</sup>/dφ = sin θ₀ cos θ₀ A<sup>φ</sup>, &nbsp;&nbsp; dA<sup>φ</sup>/dφ = −cot θ₀ A<sup>θ</sup></div>
+<p>After one full turn the vector comes back rotated by <b>2π(1 − cos θ₀)</b>, which equals the solid angle of the cap enclosed (area/a²). On the equator (θ₀ = 90°, a great circle) there is no rotation. The orange arrow keeps constant length throughout, as Ricci's lemma requires.</p>
+<div class="lab">
+<div class="grid2">
+<div><canvas id="cvS" width="460" height="460"></canvas></div>
+<div>
+<div class="ctrl"><label>latitude θ₀ <input type="range" id="sT" min="10" max="90" step="1" value="50"><span id="sTv"></span></label></div>
+<div class="ctrl"><label>travelled φ <input type="range" id="sP" min="0" max="360" step="1" value="360" style="width:170px"><span id="sPv"></span></label><button id="sPlay">▶ transport</button></div>
+<div class="readout out" id="sOut"></div>
+</div></div></div>
+</section>
+
+<section id="s11">
+<h2>11. The product (Leibniz) rule (Example 8, Eqs. 73–74)</h2>
+<div class="eq">(A<sup>i</sup><sub>j</sub>B<sup>kl</sup>)<sub>;q</sub> = A<sup>i</sup><sub>j;q</sub>B<sup>kl</sup> + A<sup>i</sup><sub>j</sub>B<sup>kl</sup><sub>;q</sub> &nbsp;&nbsp;(73)</div>
+<p><b>Proof:</b> write C<sup>ikl</sup><sub>j</sub> = A<sup>i</sup><sub>j</sub>B<sup>kl</sup> and apply (27): C<sub>;q</sub> = C<sub>,q</sub> + (three +Γ terms for i, k, l) − (one −Γ term for j). The ordinary product rule splits C<sub>,q</sub>. Group the Γ terms belonging to A's indices with A<sub>,q</sub> B and those belonging to B's indices with A B<sub>,q</sub>: each group is exactly a covariant derivative. ∎ &nbsp;(74) &nbsp; The same works for any product, outer or inner (Exercises 12, 13), because contraction commutes with ";" (δ<sup>i</sup><sub>j;k</sub> = 0).</p>
+</section>
+
+<section id="s12">
+<h2>12. Summary sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Item</th><th>Formula</th></tr>
+<tr><td>First kind</td><td>[ij, k] = ½(g<sub>ik,j</sub> + g<sub>jk,i</sub> − g<sub>ij,k</sub>), symmetric in i, j</td></tr>
+<tr><td>Second kind</td><td>Γ<sup>k</sup><sub>ij</sub> = g<sup>km</sup>[ij, m], symmetric in i, j; zero in Cartesian coordinates</td></tr>
+<tr><td>Metric derivative</td><td>g<sub>ij,k</sub> = [ik, j] + [jk, i]</td></tr>
+<tr><td>Not tensors</td><td>Γ̄ = (non-tensor term x<sup>i</sup><sub>,αβ</sub>x̄<sup>γ</sup><sub>,i</sub>) + tensor law</td></tr>
+<tr><td>Covariant derivative</td><td>A<sup>i</sup><sub>;j</sub> = A<sup>i</sup><sub>,j</sub> + Γ<sup>i</sup><sub>kj</sub>A<sup>k</sup>, A<sub>i;j</sub> = A<sub>i,j</sub> − Γ<sup>k</sup><sub>ij</sub>A<sub>k</sub>; +Γ per upper, −Γ per lower index</td></tr>
+<tr><td>Ricci's lemma</td><td>g<sub>ij;k</sub> = g<sup>ij</sup><sub>;k</sub> = δ<sup>i</sup><sub>j;k</sub> = 0</td></tr>
+<tr><td>Contracted Γ</td><td>Γ<sup>i</sup><sub>ij</sub> = ∂<sub>j</sub> ln√g ⇒ div A = (1/√g)∂<sub>i</sub>(√g A<sup>i</sup>)</td></tr>
+<tr><td>Intrinsic derivative</td><td>DA<sup>i</sup>/Dτ = dA<sup>i</sup>/dτ + Γ<sup>i</sup><sub>kj</sub>A<sup>j</sup>dx<sup>k</sup>/dτ</td></tr>
+<tr><td>Polar Γ</td><td>Γ<sup>r</sup><sub>θθ</sub> = −r, Γ<sup>θ</sup><sub>rθ</sub> = 1/r</td></tr>
+<tr><td>Sphere Γ</td><td>Γ<sup>θ</sup><sub>φφ</sub> = −sin θ cos θ, Γ<sup>φ</sup><sub>θφ</sub> = cot θ</td></tr>
+</table></div>
+</section>
+
+<section id="s13">
+<h2>13. Book's Exercise 22: solved</h2>
+<div class="prob"><div class="q">1. Write the covariant derivatives of (a) A<sup>i</sup><sub>jk</sub>, (b) A<sup>ij</sup><sub>kl</sub>, (c) A<sup>ijk</sup><sub>l</sub>, (d) A<sup>ij</sup><sub>klm</sub> with respect to x<sup>q</sup>.</div>
+<details><summary>Show solution</summary><p>Rule: +Γ for each upper, −Γ for each lower index (27).</p>
+<div class="eq">(a) A<sup>i</sup><sub>jk;q</sub> = A<sup>i</sup><sub>jk,q</sub> + A<sup>p</sup><sub>jk</sub>Γ<sup>i</sup><sub>pq</sub> − A<sup>i</sup><sub>pk</sub>Γ<sup>p</sup><sub>jq</sub> − A<sup>i</sup><sub>jp</sub>Γ<sup>p</sup><sub>kq</sub></div>
+<div class="eq">(b) A<sup>ij</sup><sub>kl;q</sub> = A<sup>ij</sup><sub>kl,q</sub> + A<sup>pj</sup><sub>kl</sub>Γ<sup>i</sup><sub>pq</sub> + A<sup>ip</sup><sub>kl</sub>Γ<sup>j</sup><sub>pq</sub> − A<sup>ij</sup><sub>pl</sub>Γ<sup>p</sup><sub>kq</sub> − A<sup>ij</sup><sub>kp</sub>Γ<sup>p</sup><sub>lq</sub></div>
+<div class="eq">(c) A<sup>ijk</sup><sub>l;q</sub> = A<sup>ijk</sup><sub>l,q</sub> + A<sup>pjk</sup><sub>l</sub>Γ<sup>i</sup><sub>pq</sub> + A<sup>ipk</sup><sub>l</sub>Γ<sup>j</sup><sub>pq</sub> + A<sup>ijp</sup><sub>l</sub>Γ<sup>k</sup><sub>pq</sub> − A<sup>ijk</sup><sub>p</sub>Γ<sup>p</sup><sub>lq</sub></div>
+<div class="eq">(d) A<sup>ij</sup><sub>klm;q</sub> = A<sup>ij</sup><sub>klm,q</sub> + A<sup>pj</sup><sub>klm</sub>Γ<sup>i</sup><sub>pq</sub> + A<sup>ip</sup><sub>klm</sub>Γ<sup>j</sup><sub>pq</sub> − A<sup>ij</sup><sub>plm</sub>Γ<sup>p</sup><sub>kq</sub> − A<sup>ij</sup><sub>kpm</sub>Γ<sup>p</sup><sub>lq</sub> − A<sup>ij</sup><sub>klp</sub>Γ<sup>p</sup><sub>mq</sub></div></details></div>
+<div class="prob"><div class="q">2. Write the intrinsic derivatives of the tensors of Exercise 1 along x<sup>q</sup> = x<sup>q</sup>(τ).</div>
+<details><summary>Show solution</summary><p>Multiply each result of Exercise 1 by dx<sup>q</sup>/dτ (58). For example</p><div class="eq">DA<sup>i</sup><sub>jk</sub>/Dτ = dA<sup>i</sup><sub>jk</sub>/dτ + (A<sup>p</sup><sub>jk</sub>Γ<sup>i</sup><sub>pq</sub> − A<sup>i</sup><sub>pk</sub>Γ<sup>p</sup><sub>jq</sub> − A<sup>i</sup><sub>jp</sub>Γ<sup>p</sup><sub>kq</sub>) dx<sup>q</sup>/dτ</div><p>using A<sub>,q</sub>dx<sup>q</sup>/dτ = dA/dτ (chain rule). The others follow the same pattern.</p></details></div>
+<div class="prob"><div class="q">3. If A<sub>i</sub> is a covariant vector, show that A<sub>i,j</sub> − A<sub>j,i</sub> is a tensor.</div>
+<details><summary>Show solution</summary><p>A<sub>i;j</sub> − A<sub>j;i</sub> = (A<sub>i,j</sub> − Γ<sup>k</sup><sub>ij</sub>A<sub>k</sub>) − (A<sub>j,i</sub> − Γ<sup>k</sup><sub>ji</sub>A<sub>k</sub>) = A<sub>i,j</sub> − A<sub>j,i</sub>, because Γ<sup>k</sup><sub>ij</sub> = Γ<sup>k</sup><sub>ji</sub>. The left side is a difference of tensors, hence a tensor. ∎ This is the "curl" (e.g. F<sub>ij</sub> = A<sub>j,i</sub> − A<sub>i,j</sub> in Section 21 needs no Γ's even in curved coordinates).</p></details></div>
+<div class="prob"><div class="q">4. If A<sub>ij</sub> is antisymmetric, show that A<sub>ij;k</sub> + A<sub>jk;i</sub> + A<sub>ki;j</sub> is a tensor, antisymmetric in any pair of indices.</div>
+<details><summary>Show solution</summary><p>It is a sum of covariant derivatives, so a tensor. Expand with (28a): the Γ terms are −A<sub>pj</sub>Γ<sup>p</sup><sub>ik</sub> − A<sub>ip</sub>Γ<sup>p</sup><sub>jk</sub> − A<sub>pk</sub>Γ<sup>p</sup><sub>ji</sub> − A<sub>jp</sub>Γ<sup>p</sup><sub>ki</sub> − A<sub>pi</sub>Γ<sup>p</sup><sub>kj</sub> − A<sub>kp</sub>Γ<sup>p</sup><sub>ij</sub>. Pair them: A<sub>pj</sub>Γ<sup>p</sup><sub>ik</sub> + A<sub>jp</sub>Γ<sup>p</sup><sub>ki</sub> = 0 (antisymmetry of A, symmetry of Γ), and similarly for the other two pairs. So the expression equals A<sub>ij,k</sub> + A<sub>jk,i</sub> + A<sub>ki,j</sub>.</p><p>Antisymmetry: swapping i ↔ j gives A<sub>ji;k</sub> + A<sub>ik;j</sub> + A<sub>kj;i</sub> = −(A<sub>ij;k</sub> + A<sub>ki;j</sub> + A<sub>jk;i</sub>), the negative. Likewise for the other pairs. (This is the cyclic identity (21.34) for F.)</p></details></div>
+<div class="prob"><div class="q">5. Compute the Christoffel symbols of both kinds for a plane in polar coordinates r, θ.</div>
+<details><summary>Show solution</summary><p>g = diag(1, r²), only g₂₂,₁ = 2r ≠ 0. First kind: [22, 1] = −r, [12, 2] = [21, 2] = r, all others 0. Second kind: Γ<sup>1</sup><sub>22</sub> = −r, Γ<sup>2</sup><sub>12</sub> = Γ<sup>2</sup><sub>21</sub> = 1/r, others 0 (Eq. 68).</p></details></div>
+<div class="prob"><div class="q">6. Compute the nonvanishing Christoffel symbols of both kinds for cylindrical and spherical coordinates in 3D Euclidean space.</div>
+<details><summary>Show solution</summary>
+<p><b>Cylindrical</b> (ρ, φ, z), g = diag(1, ρ², 1): [φφ, ρ] = −ρ, [ρφ, φ] = ρ; Γ<sup>ρ</sup><sub>φφ</sub> = −ρ, Γ<sup>φ</sup><sub>ρφ</sub> = 1/ρ.</p>
+<p><b>Spherical</b> (r, θ, φ), g = diag(1, r², r²sin²θ):</p>
+<div class="eq">First kind: [θθ, r] = −r, [rθ, θ] = r, [φφ, r] = −r sin²θ, [rφ, φ] = r sin²θ, [φφ, θ] = −r² sin θ cos θ, [θφ, φ] = r² sin θ cos θ</div>
+<div class="eq">Second kind: Γ<sup>r</sup><sub>θθ</sub> = −r, Γ<sup>r</sup><sub>φφ</sub> = −r sin²θ, Γ<sup>θ</sup><sub>rθ</sub> = 1/r, Γ<sup>θ</sup><sub>φφ</sub> = −sin θ cos θ, Γ<sup>φ</sup><sub>rφ</sub> = 1/r, Γ<sup>φ</sup><sub>θφ</sub> = cot θ</div>
+<p>(Computed symbolically. Check with Example 6: Γ<sup>i</sup><sub>ir</sub> = 2/r = ∂<sub>r</sub>ln(r² sin θ) ✓, Γ<sup>i</sup><sub>iθ</sub> = cot θ ✓.)</p></details></div>
+<div class="prob"><div class="q">7. Compute all the Christoffel symbols for the space-time ds² = −e<sup>λ</sup>dr² − r²dθ² − r² sin²θ dφ² + e<sup>ν</sup>dt², λ, ν functions of r and t.</div>
+<details><summary>Show solution</summary>
+<p>Coordinates (r, θ, φ, t), g = diag(−e<sup>λ</sup>, −r², −r²sin²θ, e<sup>ν</sup>). Dots: ∂/∂t, primes: ∂/∂r. Nonzero second-kind symbols (computed symbolically):</p>
+<div class="eq"><span class="sys">Γ<sup>r</sup><sub>rr</sub> = λ′/2, &nbsp; Γ<sup>r</sup><sub>rt</sub> = λ̇/2, &nbsp; Γ<sup>r</sup><sub>θθ</sub> = −r e<sup>−λ</sup>, &nbsp; Γ<sup>r</sup><sub>φφ</sub> = −r sin²θ e<sup>−λ</sup>, &nbsp; Γ<sup>r</sup><sub>tt</sub> = ½ν′e<sup>ν−λ</sup><br>
+Γ<sup>θ</sup><sub>rθ</sub> = 1/r, &nbsp; Γ<sup>θ</sup><sub>φφ</sub> = −sin θ cos θ<br>
+Γ<sup>φ</sup><sub>rφ</sub> = 1/r, &nbsp; Γ<sup>φ</sup><sub>θφ</sub> = cot θ<br>
+Γ<sup>t</sup><sub>rr</sub> = ½λ̇e<sup>λ−ν</sup>, &nbsp; Γ<sup>t</sup><sub>rt</sub> = ν′/2, &nbsp; Γ<sup>t</sup><sub>tt</sub> = ν̇/2</span></div>
+<p>(plus the symmetric partners Γ<sup>k</sup><sub>ji</sub> = Γ<sup>k</sup><sub>ij</sub>). This is the general spherically symmetric metric; with e<sup>ν</sup> = e<sup>−λ</sup> = 1 − 2GM/rc² it is the Schwarzschild metric of a star or black hole.</p></details></div>
+<div class="prob"><div class="q">8. A fluid has v<sup>i</sup> = (x, 2y) in Cartesian coordinates. Find its covariant derivative in polar coordinates.</div>
+<details><summary>Show solution</summary>
+<p>Polar components: u<sup>r</sup> = cos θ·x + sin θ·2y = r(1 + sin²θ), &nbsp; u<sup>θ</sup> = (−sin θ·x + cos θ·2y)/r = sin θ cos θ.</p>
+<div class="eq"><span class="sys">u<sup>r</sup><sub>;r</sub> = ∂u<sup>r</sup>/∂r = 1 + sin²θ<br>
+u<sup>r</sup><sub>;θ</sub> = ∂u<sup>r</sup>/∂θ + u<sup>θ</sup>Γ<sup>r</sup><sub>θθ</sub> = 2r sin θ cos θ − r sin θ cos θ = r sin θ cos θ<br>
+u<sup>θ</sup><sub>;r</sub> = ∂u<sup>θ</sup>/∂r + u<sup>θ</sup>Γ<sup>θ</sup><sub>θr</sub> = 0 + sin θ cos θ/r<br>
+u<sup>θ</sup><sub>;θ</sub> = ∂u<sup>θ</sup>/∂θ + u<sup>r</sup>Γ<sup>θ</sup><sub>rθ</sub> = cos 2θ + 1 + sin²θ = 1 + cos²θ</span></div>
+<p>Check: u<sup>i</sup><sub>;i</sub> = 1 + sin²θ + 1 + cos²θ = 3 = ∂x/∂x + ∂(2y)/∂y ✓. (Load "Exercise 8" in the polar-field lab.)</p></details></div>
+<div class="prob"><div class="q">9. Find the intrinsic derivative of the field of Exercise 8 along the spiral r = aθ + b.</div>
+<details><summary>Show solution</summary>
+<p>Parametrize by θ: dr/dθ = a, dθ/dθ = 1. DA<sup>i</sup>/Dθ = u<sup>i</sup><sub>;r</sub>(dr/dθ) + u<sup>i</sup><sub>;θ</sub>:</p>
+<div class="eq">Du<sup>r</sup>/Dθ = a(1 + sin²θ) + r sin θ cos θ, &nbsp;&nbsp; Du<sup>θ</sup>/Dθ = a sin θ cos θ/r + 1 + cos²θ, &nbsp; with r = aθ + b</div>
+<p>Check in Cartesian: v changes along the curve by dv/dθ = (dx/dθ, 2dy/dθ). Converting that vector to polar components gives the same two numbers, as it must (the intrinsic derivative is the true rate of change of the vector).</p></details></div>
+<div class="prob"><div class="q">10. Christoffel symbols of both kinds for ds² = f(u, v)du² + h(u, v)dv².</div>
+<details><summary>Show solution</summary>
+<p>Diagonal, so use the short cut (subscripts u, v denote partial derivatives):</p>
+<div class="eq">First kind: [uu, u] = ½f<sub>u</sub>, [uu, v] = −½f<sub>v</sub>, [uv, u] = ½f<sub>v</sub>, [uv, v] = ½h<sub>u</sub>, [vv, u] = −½h<sub>u</sub>, [vv, v] = ½h<sub>v</sub></div>
+<div class="eq">Second kind: Γ<sup>u</sup><sub>uu</sub> = f<sub>u</sub>/2f, Γ<sup>u</sup><sub>uv</sub> = f<sub>v</sub>/2f, Γ<sup>u</sup><sub>vv</sub> = −h<sub>u</sub>/2f, Γ<sup>v</sup><sub>uu</sub> = −f<sub>v</sub>/2h, Γ<sup>v</sup><sub>uv</sub> = h<sub>u</sub>/2h, Γ<sup>v</sup><sub>vv</sub> = h<sub>v</sub>/2h</div>
+<p>Polar check: f = 1, h = r² gives Γ<sup>u</sup><sub>vv</sub> = −r, Γ<sup>v</sup><sub>uv</sub> = 1/r ✓.</p></details></div>
+<div class="prob"><div class="q">11. Christoffel symbols for ds² = R du² + 2S du dv + T dv² (R, S, T functions of u, v, RT − S² ≠ 0).</div>
+<details><summary>Show solution</summary>
+<p>First kind directly from (7a):</p>
+<div class="eq">[11, 1] = ½R<sub>u</sub>, &nbsp; [11, 2] = S<sub>u</sub> − ½R<sub>v</sub>, &nbsp; [12, 1] = ½R<sub>v</sub>, &nbsp; [12, 2] = ½T<sub>u</sub>, &nbsp; [22, 1] = S<sub>v</sub> − ½T<sub>u</sub>, &nbsp; [22, 2] = ½T<sub>v</sub></div>
+<p>With Δ = RT − S², g<sup>11</sup> = T/Δ, g<sup>12</sup> = −S/Δ, g<sup>22</sup> = R/Δ, and Γ<sup>k</sup><sub>ij</sub> = g<sup>k1</sup>[ij, 1] + g<sup>k2</sup>[ij, 2]:</p>
+<div class="eq">Γ<sup>1</sup><sub>11</sub> = [T R<sub>u</sub>/2 − S(S<sub>u</sub> − R<sub>v</sub>/2)]/Δ, &nbsp; Γ<sup>2</sup><sub>11</sub> = [R(S<sub>u</sub> − R<sub>v</sub>/2) − S R<sub>u</sub>/2]/Δ<br>
+Γ<sup>1</sup><sub>12</sub> = (T R<sub>v</sub> − S T<sub>u</sub>)/2Δ, &nbsp; Γ<sup>2</sup><sub>12</sub> = (R T<sub>u</sub> − S R<sub>v</sub>)/2Δ<br>
+Γ<sup>1</sup><sub>22</sub> = [T(S<sub>v</sub> − T<sub>u</sub>/2) − S T<sub>v</sub>/2]/Δ, &nbsp; Γ<sup>2</sup><sub>22</sub> = [R T<sub>v</sub>/2 − S(S<sub>v</sub> − T<sub>u</sub>/2)]/Δ</div>
+<p>With S = 0, R = f, T = h these reduce to Exercise 10 ✓. (Try a numeric case in the calculator: the (u, v, w) metric is non-diagonal.)</p></details></div>
+<div class="prob"><div class="q">12. Prove (a) (A<sub>ij</sub>B<sup>k</sup><sub>lm</sub>)<sub>;q</sub> = A<sub>ij;q</sub>B<sup>k</sup><sub>lm</sub> + A<sub>ij</sub>B<sup>k</sup><sub>lm;q</sub>; (b) (A<sub>i</sub><sup>j</sup>B<sup>jk</sup>)<sub>;q</sub> (inner product) = A<sub>i;q</sub><sup>j</sup>B<sup>jk</sup> + A<sub>i</sub><sup>j</sup>B<sup>jk</sup><sub>;q</sub>; (c) (A<sub>i</sub>B<sup>j</sup>C<sub>k</sub>)<sub>;q</sub> = A<sub>i;q</sub>B<sup>j</sup>C<sub>k</sub> + A<sub>i</sub>B<sup>j</sup><sub>;q</sub>C<sub>k</sub> + A<sub>i</sub>B<sup>j</sup>C<sub>k;q</sub>.</div>
+<details><summary>Show solution</summary><p>(a), (c): exactly as Example 8. Expand the covariant derivative of the outer product with (27); the ordinary product rule splits the partial derivative, and each Γ term belongs to the index of exactly one factor, so the terms regroup into the covariant derivatives of the factors.</p><p>(b): first form the outer product D<sub>i</sub><sup>jlk</sup> = A<sub>i</sub><sup>j</sup>B<sup>lk</sup>, apply (a), then contract j with l. Contraction commutes with ";" because δ<sup>j</sup><sub>l;q</sub> = 0, i.e. the two Γ terms belonging to the contracted pair (+Γ<sup>j</sup><sub>pq</sub> and −Γ<sup>p</sup><sub>lq</sub>) cancel after setting l = j. ∎</p></details></div>
+<div class="prob"><div class="q">13. Prove in general that intrinsic differentiation of a product satisfies the distributive law.</div>
+<details><summary>Show solution</summary><p>D(AB)/Dτ = (AB)<sub>;k</sub>dx<sup>k</sup>/dτ = (A<sub>;k</sub>B + AB<sub>;k</sub>)dx<sup>k</sup>/dτ = (DA/Dτ)B + A(DB/Dτ), using Exercise 12 and multiplying by dx<sup>k</sup>/dτ. ∎ Consequence: D(g<sub>ij</sub>A<sup>i</sup>B<sup>j</sup>)/Dτ = g<sub>ij</sub>(DA<sup>i</sup>/Dτ)B<sup>j</sup> + g<sub>ij</sub>A<sup>i</sup>(DB<sup>j</sup>/Dτ). Under parallel transport (DA = DB = 0) the dot product, hence lengths and angles, stays constant.</p></details></div>
+<div class="prob"><div class="q">14. If u is a 3D vector, show (curl u)<sub>i</sub> = ε<sub>ijk</sub>u<sub>k,j</sub> in Cartesian coordinates.</div>
+<details><summary>Show solution</summary><p>(curl u)<sub>i</sub> = (∇ × u)<sub>i</sub> = ε<sub>ijk</sub>∂<sub>j</sub>u<sub>k</sub> (cross product formula 16.37 with ∇ as the first vector) = ε<sub>ijk</sub>u<sub>k,j</sub>. Check i = x: ε<sub>xyz</sub>u<sub>z,y</sub> + ε<sub>xzy</sub>u<sub>y,z</sub> = ∂<sub>y</sub>u<sub>z</sub> − ∂<sub>z</sub>u<sub>y</sub> ✓. In Cartesian coordinates Γ = 0, so u<sub>k,j</sub> = u<sub>k;j</sub>; and by Exercise 3 only the antisymmetric part appears anyway.</p></details></div>
+</section>
+
+<section id="s14">
+<h2>14. Practice set (CSIR-NET / GATE style)</h2>
+<div class="prob"><div class="q">P1. How many independent Γ<sup>k</sup><sub>ij</sub> exist in 4D? <span class="tag">count</span></div>
+<details><summary>Show solution</summary><p>4 × (4·5/2) = 40.</p></details></div>
+<div class="prob"><div class="q">P2. Find ∇²(r<sup>n</sup>) in spherical coordinates using (1/√g)∂<sub>i</sub>(√g g<sup>ij</sup>∂<sub>j</sub>). <span class="tag">Laplacian</span></div>
+<details><summary>Show solution</summary><p>√g = r²sin θ, g<sup>rr</sup> = 1: ∇² r<sup>n</sup> = (1/r²)d(r²·nr<sup>n−1</sup>)/dr = n(n+1)r<sup>n−2</sup>. Zero for n = 0 or n = −1 (the Coulomb potential).</p></details></div>
+<div class="prob"><div class="q">P3. Is Γ<sup>k</sup><sub>ij</sub> = 0 at a point enough to conclude that space is flat? <span class="tag">concept</span></div>
+<details><summary>Show solution</summary><p>No. At any single point one can choose coordinates in which all Γ vanish ("locally inertial" or Riemann normal coordinates), even on a sphere. Flatness requires the curvature tensor to vanish everywhere (Section 24).</p></details></div>
+<div class="prob"><div class="q">P4. Using Γ's, derive the polar acceleration a<sup>r</sup>. <span class="tag">kinematics</span></div>
+<details><summary>Show solution</summary><p>a<sup>r</sup> = Dv<sup>r</sup>/Dt = r̈ + Γ<sup>r</sup><sub>θθ</sub>θ̇² = r̈ − rθ̇² (Eq. 15.51) ✓; a<sup>θ</sup> = θ̈ + 2Γ<sup>θ</sup><sub>rθ</sub>ṙθ̇ = θ̈ + 2ṙθ̇/r ✓.</p></details></div>
+<div class="prob"><div class="q">P5. Compute div A for A<sup>i</sup> = (1/r², 0, 0) in spherical coordinates (r ≠ 0). <span class="tag">divergence</span></div>
+<details><summary>Show solution</summary><p>(1/(r²sin θ))∂<sub>r</sub>(r²sin θ · r⁻²) = 0. The inverse-square field is divergence-free away from the origin.</p></details></div>
+<div class="prob"><div class="q">P6. A vector is parallel-transported around the circle θ = 60° on a unit sphere. By what angle is it rotated? <span class="tag">holonomy</span></div>
+<details><summary>Show solution</summary><p>2π(1 − cos 60°) = π, i.e. 180°.</p></details></div>
+</section>
+
+<section id="s15" class="quiz">
+<h2>15. Self-test quiz</h2>
+<div id="quiz"></div>
+<p><b>Score: <span id="qScore">0</span> / <span id="qTot">0</span></b></p>
+</section>
+
+<section id="s16">
+<h2>16. Interesting facts</h2>
+<div class="box fact"><b class="t">Christoffel (1869)</b> Elwin Bruno Christoffel introduced his symbols while asking when two quadratic forms g<sub>ij</sub>dx<sup>i</sup>dx<sup>j</sup> can be transformed into each other. Ricci and Levi-Civita turned his tools into the "absolute differential calculus" (1900), the name explained by the absolute derivative D/Dτ.</div>
+<div class="box fact"><b class="t">Gravity is a Γ</b> In general relativity the geodesic equation ẍ<sup>i</sup> + Γ<sup>i</sup><sub>jk</sub>ẋ<sup>j</sup>ẋ<sup>k</sup> = 0 replaces Newton's law. For slow motion in weak gravity, Γ<sup>i</sup><sub>00</sub> ≈ ∂<sub>i</sub>Φ/c², so the Christoffel symbols play the role of the gravitational field and the metric plays the role of the potential. Because Γ is not a tensor, gravity can be "switched off" at a point by free fall, which is Einstein's equivalence principle.</div>
+<div class="box fact"><b class="t">Foucault's pendulum</b> The plane of a Foucault pendulum at latitude λ turns by 2π sin λ per day, exactly the parallel-transport rotation 2π(1 − cos θ₀) of the lab, with θ₀ = 90° − λ measured from the pole (after subtracting the trivial full turn of the Earth).</div>
+</section>
+</div>
+<script>
+/* ---------- small linear-algebra toolkit ---------- */
+const $=id=>document.getElementById(id);
+const cssv=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const eye=n=>Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0));
+const zeros=n=>Array.from({length:n},()=>Array(n).fill(0));
+const clone=M=>M.map(r=>r.slice());
+const mul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>s+v*B[k][j],0)));
+const add=(A,B)=>A.map((r,i)=>r.map((v,j)=>v+B[i][j]));
+const sub=(A,B)=>A.map((r,i)=>r.map((v,j)=>v-B[i][j]));
+const scl=(k,A)=>A.map(r=>r.map(v=>k*v));
+const trc=A=>A.reduce((s,r,i)=>s+r[i],0);
+const T=A=>A[0].map((_,j)=>A.map(r=>r[j]));
+const maxAbs=A=>Math.max(...A.flat().map(Math.abs));
+const mv=(A,x)=>A.map(r=>r.reduce((s,v,k)=>s+v*x[k],0));
+const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
+const nrm=a=>Math.sqrt(dot(a,a));
+const neg=s=>String(s).replace(/-/g,'−');
+function fmt(x,dec=3){
+  if(!isFinite(x))return '∞';
+  if(Math.abs(x)<1e-9)return '0';
+  const r=Math.round(x); if(Math.abs(x-r)<1e-7*Math.max(1,Math.abs(x)))return neg(r);
+  for(let q=2;q<=12;q++){const p=Math.round(x*q);if(Math.abs(x*q-p)<1e-7*q)return neg(p)+'/'+q;}
+  return neg(+x.toFixed(dec));
+}
+function mxH(M,heat,scale){
+  const s=scale||Math.max(1e-12,maxAbs(M));
+  return '<table class="mx">'+M.map(r=>'<tr>'+r.map(v=>{
+    let st='';
+    if(heat){const a=Math.min(1,Math.abs(v)/s)*0.55;if(Math.abs(v)>1e-9)st=` style="background:${v>0?`rgba(47,111,223,${a})`:`rgba(201,42,42,${a})`}"`;}
+    return `<td${st}>${fmt(v)}</td>`;}).join('')+'</tr>').join('')+'</table>';
+}
+function rank(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol)continue;
+    [A[r],A[p]]=[A[p],A[r]];
+    for(let i=r+1;i<n;i++){const f=A[i][c]/A[r][c];for(let j=c;j<m;j++)A[i][j]-=f*A[r][j];}
+    r++;
+  }
+  return r;
+}
+function nullspace(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  const piv=[];let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol){for(let i=r;i<n;i++)A[i][c]=0;continue;}
+    [A[r],A[p]]=[A[p],A[r]];
+    const d=A[r][c];for(let j=0;j<m;j++)A[r][j]/=d;
+    for(let i=0;i<n;i++)if(i!==r){const f=A[i][c];for(let j=0;j<m;j++)A[i][j]-=f*A[r][j];}
+    piv.push(c);r++;
+  }
+  const basis=[];
+  for(let f=0;f<m;f++){if(piv.includes(f))continue;
+    const v=Array(m).fill(0);v[f]=1;piv.forEach((c,i)=>{v[c]=-A[i][f];});basis.push(v);}
+  return basis;
+}
+function inv(M){
+  const n=M.length,A=M.map((r,i)=>r.concat(eye(n)[i]));
+  for(let c=0;c<n;c++){
+    let p=c;for(let i=c+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<1e-12)return null;
+    [A[c],A[p]]=[A[p],A[c]];const d=A[c][c];for(let j=0;j<2*n;j++)A[c][j]/=d;
+    for(let i=0;i<n;i++)if(i!==c){const f=A[i][c];for(let j=0;j<2*n;j++)A[i][j]-=f*A[c][j];}
+  }
+  return A.map(r=>r.slice(n));
+}
+/* Faddeev–LeVerrier: det(λI−A)=Σ c[k] λ^k, c[n]=1 */
+function charCoeffs(A){
+  const n=A.length,c=Array(n+1).fill(0);c[n]=1;let M=zeros(n);
+  for(let k=1;k<=n;k++){M=add(mul(A,M),scl(c[n-k+1],eye(n)));c[n-k]=-trc(mul(A,M))/k;}
+  return c;
+}
+/* complex helpers + Durand–Kerner roots of monic poly (c indexed by power) */
+const cm=(a,b)=>[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]];
+const cd=(a,b)=>{const d=b[0]*b[0]+b[1]*b[1];return[(a[0]*b[0]+a[1]*b[1])/d,(a[1]*b[0]-a[0]*b[1])/d];};
+function polyRoots(c){
+  const n=c.length-1;if(n===1)return[[-c[0],0]];
+  let z=Array.from({length:n},(_,k)=>{let w=[1,0];for(let i=0;i<=k;i++)w=cm(w,[0.4,0.9]);return w;});
+  const R=1+Math.max(...c.slice(0,n).map(Math.abs));z=z.map(w=>[w[0]*R,w[1]*R]);
+  const ev=x=>{let s=[1,0];for(let k=n-1;k>=0;k--)s=[s[0]*x[0]-s[1]*x[1]+c[k],s[0]*x[1]+s[1]*x[0]];return s;};
+  for(let it=0;it<2000;it++){
+    let delta=0;
+    z=z.map((zi,i)=>{let den=[1,0];z.forEach((zj,j)=>{if(j!==i)den=cm(den,[zi[0]-zj[0],zi[1]-zj[1]]);});
+      if(Math.hypot(den[0],den[1])<1e-300)den=[1e-12,0];
+      const q=cd(ev(zi),den);delta=Math.max(delta,Math.hypot(q[0],q[1]));return[zi[0]-q[0],zi[1]-q[1]];});
+    if(delta<1e-14)break;
+  }
+  return z;
+}
+function snap(x){for(const q of [1,2,3,4,6,12]){const r=Math.round(x*q)/q;if(Math.abs(x-r)<2e-4)return r;}return x;}
+function eigGroups(A){
+  const z=polyRoots(charCoeffs(A)),used=Array(z.length).fill(false),G=[];
+  const tol=2e-3*Math.max(1,maxAbs(A));
+  for(let i=0;i<z.length;i++){if(used[i])continue;const cl=[z[i]];used[i]=true;
+    for(let j=i+1;j<z.length;j++)if(!used[j]&&Math.hypot(z[j][0]-z[i][0],z[j][1]-z[i][1])<tol){cl.push(z[j]);used[j]=true;}
+    let re=cl.reduce((s,w)=>s+w[0],0)/cl.length,im=cl.reduce((s,w)=>s+w[1],0)/cl.length;
+    if(Math.abs(im)<1e-6)im=0;re=snap(re);if(im)im=snap(im);
+    G.push({re,im,m:cl.length});}
+  G.sort((a,b)=>b.re-a.re||b.im-a.im);return G;
+}
+const powM=(M,k)=>{let R=eye(M.length);for(let i=0;i<k;i++)R=mul(R,M);return R;};
+const lamF=a=>a===0?'λ':(a>0?`(λ − ${fmt(a)})`:`(λ + ${fmt(-a)})`);
+const supN=k=>k===1?'':String(k).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+function minimalPoly(A){
+  const G=eigGroups(A),n=A.length;
+  if(G.some(g=>g.im!==0))return{G,complex:true};
+  const sc=Math.max(1,maxAbs(A));
+  let tups=[[]];G.forEach(g=>{const nt=[];tups.forEach(t=>{for(let r=1;r<=g.m;r++)nt.push(t.concat(r));});tups=nt;});
+  tups.sort((a,b)=>a.reduce((s,v)=>s+v,0)-b.reduce((s,v)=>s+v,0));
+  const tried=[];
+  for(const t of tups){
+    let P=eye(n);G.forEach((g,i)=>{P=mul(P,powM(sub(A,scl(g.re,eye(n))),t[i]));});
+    const deg=t.reduce((s,v)=>s+v,0),zero=maxAbs(P)<1e-6*Math.pow(sc,deg);
+    tried.push({t,P,zero});if(zero)return{G,r:t,tried};
+  }
+  return{G,r:G.map(g=>g.m),tried};
+}
+function expandRoots(rs){let p=[1];rs.forEach(a=>{const q=Array(p.length+1).fill(0);p.forEach((v,i)=>{q[i]+=v;q[i+1]-=a*v;});p=q;});return p;}
+function polyStr(p,v,mat){
+  const d=p.length-1;let s='';
+  p.forEach((c,i)=>{if(Math.abs(c)<1e-9)return;const k=d-i;const a=Math.abs(c);
+    const coef=(a===1&&k>0)?'':fmt(a);const term=k===0?(mat?coef+'I':fmt(a)):(k===1?coef+v:coef+v+supN(k));
+    s+=(s===''?(c<0?'−':''):(c<0?' − ':' + '))+term;});
+  return s||'0';
+}
+function makeEditor(id,M,cb){
+  const box=$(id);let n=M.length;
+  function build(M){n=M.length;box.innerHTML='<div style="display:grid;grid-template-columns:repeat('+n+',58px);gap:4px">'+M.flat().map((v,i)=>`<input type="number" step="any" data-i="${i}" value="${v}" style="width:58px">`).join('')+'</div>';
+    box.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',cb));}
+  build(M);
+  return{get(){const v=[...box.querySelectorAll('input')].map(i=>parseFloat(i.value)||0);return Array.from({length:n},(_,i)=>v.slice(i*n,i*n+n));},
+         set(M){build(M);cb();}};
+}
+function arrow(ctx,x0,y0,x1,y1,col,w=2.5,dash){
+  ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;if(dash)ctx.setLineDash(dash);
+  ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();ctx.setLineDash([]);
+  const a=Math.atan2(y1-y0,x1-x0),L=Math.hypot(x1-x0,y1-y0);
+  if(L>6){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-10*Math.cos(a-0.4),y1-10*Math.sin(a-0.4));ctx.lineTo(x1-10*Math.cos(a+0.4),y1-10*Math.sin(a+0.4));ctx.fill();}
+  ctx.restore();
+}
+function canvasPt(cv,e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height];}
+
+/* ---------- Christoffel calculator ---------- */
+const MET={
+ polar:{n:['r','θ'],x:[1.5,0.7],g:x=>[[1,0],[0,x[0]*x[0]]],ex:x=>({'Γ^r_θθ':-x[0],'Γ^θ_rθ':1/x[0]})},
+ sph2:{n:['θ','φ'],x:[0.8,0.3],g:x=>[[4,0],[0,4*Math.sin(x[0])**2]],ex:x=>({'Γ^θ_φφ':-Math.sin(x[0])*Math.cos(x[0]),'Γ^φ_θφ':1/Math.tan(x[0])}),note:'(a = 2)'},
+ cyl:{n:['ρ','φ','z'],x:[1.2,0.5,0.3],g:x=>[[1,0,0],[0,x[0]*x[0],0],[0,0,1]],ex:x=>({'Γ^ρ_φφ':-x[0],'Γ^φ_ρφ':1/x[0]})},
+ sph:{n:['r','θ','φ'],x:[1.5,0.9,0.4],g:x=>[[1,0,0],[0,x[0]**2,0],[0,0,(x[0]*Math.sin(x[1]))**2]],ex:x=>({'Γ^r_θθ':-x[0],'Γ^r_φφ':-x[0]*Math.sin(x[1])**2,'Γ^θ_rθ':1/x[0],'Γ^θ_φφ':-Math.sin(x[1])*Math.cos(x[1]),'Γ^φ_rφ':1/x[0],'Γ^φ_θφ':1/Math.tan(x[1])})},
+ uvw:{n:['u','v','w'],x:[0.8,1.1,0.6],g:x=>{const[u,v,w]=x;return[[v*v+w*w,u*v,u*w],[u*v,w*w+u*u,v*w],[u*w,v*w,u*u+v*v]];}},
+ obl:{n:['z¹','z²'],x:[0.5,0.5],g:x=>[[1,0.5],[0.5,1]],ex:x=>({})},
+ poinc:{n:['x','y'],x:[0.3,0.8],g:x=>[[1/x[1]**2,0],[0,1/x[1]**2]],ex:x=>({'Γ^x_xy':-1/x[1],'Γ^y_xx':1/x[1],'Γ^y_yy':-1/x[1]})}
+};
+let cKey='polar';
+$('cM').addEventListener('change',()=>{cKey=$('cM').value;buildCIn();labC();});
+function buildCIn(){const M=MET[cKey];$('cIn').innerHTML='point: '+M.n.map((n,i)=>`<label>${n} <input type="number" step="0.1" id="cx${i}" value="${M.x[i]}" style="width:70px"></label>`).join('')+(M.note?` <span class="small">${M.note}</span>`:'');
+  M.n.forEach((_,i)=>$('cx'+i).addEventListener('input',labC));}
+function christ(M,x){const n=x.length,h=1e-5,g=M.g(x),gi=inv(g),dg=[];
+  for(let k=0;k<n;k++){const xp=x.slice(),xm=x.slice();xp[k]+=h;xm[k]-=h;const a=M.g(xp),b=M.g(xm);dg.push(a.map((r,i)=>r.map((v,j)=>(v-b[i][j])/(2*h))));}
+  const F=(i,j,k)=>0.5*(dg[j][i][k]+dg[i][j][k]-dg[k][i][j]);
+  const G=[];for(let k=0;k<n;k++){G.push([]);for(let i=0;i<n;i++){G[k].push([]);for(let j=0;j<n;j++){let s=0;for(let m=0;m<n;m++)s+=gi[k][m]*F(i,j,m);G[k][i].push(s);}}}
+  return{g,gi,dg,F,G};}
+function labC(){
+  const M=MET[cKey],n=M.n.length,x=M.n.map((_,i)=>+$('cx'+i).value),R=christ(M,x),N=M.n;
+  let rows='';for(let k=0;k<n;k++)for(let i=0;i<n;i++)for(let j=i;j<n;j++){const v=R.G[k][i][j];rows+=`<tr${Math.abs(v)<1e-7?' style="opacity:.4"':''}><td>Γ<sup>${N[k]}</sup><sub>${N[i]}${N[j]}</sub></td><td>${fmt(v,5)}</td><td>[${N[i]}${N[j]}, ${N[k]}] = ${fmt(R.F(i,j,k),5)}</td></tr>`;}
+  let ex1=0;for(let i=0;i<n;i++)for(let j=0;j<n;j++)for(let k=0;k<n;k++)ex1=Math.max(ex1,Math.abs(R.dg[k][i][j]-R.F(i,k,j)-R.F(j,k,i)));
+  const h=1e-5,lnsg=y=>0.5*Math.log(Math.abs(detN(M.g(y))));let ex6=0;
+  for(let j=0;j<n;j++){let s=0;for(let i=0;i<n;i++)s+=R.G[i][i][j];const xp=x.slice(),xm=x.slice();xp[j]+=h;xm[j]-=h;ex6=Math.max(ex6,Math.abs(s-(lnsg(xp)-lnsg(xm))/(2*h)));}
+  let exact='';if(M.ex){const E=M.ex(x),ks=Object.keys(E);exact=ks.length?'Exact formulas: '+ks.map(k=>`${k} = ${fmt(E[k],5)}`).join(', '):'Constant metric ⇒ every Γ = 0 (as found).';}
+  $('cOut').innerHTML=`<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start"><div class="small">g<sub>ij</sub><br>${mxH(R.g)}</div><div class="small">g<sup>ij</sup><br>${mxH(R.gi)}</div>
+  <div class="tbl-wrap"><table style="width:auto"><tr><th>symbol</th><th>value</th><th>first kind</th></tr>${rows}</table></div></div>
+  <p class="small">${exact}</p>
+  <p class="small">Example 1 check g<sub>ij,k</sub> = [ik, j] + [jk, i]: max error ${ex1.toExponential(1)} ✓ &nbsp; | &nbsp; Example 6 check Γ<sup>i</sup><sub>ij</sub> = ∂<sub>j</sub>ln√g: max error ${ex6.toExponential(1)} ✓</p>`;
+}
+function detN(M){const n=M.length,A=clone(M);let d=1;for(let c=0;c<n;c++){let p=c;for(let i=c+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;if(Math.abs(A[p][c])<1e-15)return 0;if(p!==c){[A[c],A[p]]=[A[p],A[c]];d=-d;}d*=A[c][c];for(let i=c+1;i<n;i++){const f=A[i][c]/A[c][c];for(let j=c;j<n;j++)A[i][j]-=f*A[c][j];}}return d;}
+
+/* ---------- Polar-field lab ---------- */
+const VF={const:[p=>[1,0],'(1, 0)'],ex7:[p=>[p[0]*p[0],p[1]*p[1]],'(x², y²)'],ex8:[p=>[p[0],2*p[1]],'(x, 2y)'],rot:[p=>[-p[1],p[0]],'(−y, x)'],rad:[p=>[p[0],p[1]],'(x, y)']};
+let vfK='const',vfP=[1.1,0.8],vfG=null;
+document.querySelectorAll('[data-vf]').forEach(b=>b.onclick=()=>{vfK=b.dataset.vf;drawF();});
+(function(){const cv=$('cvF');let d=false;const set=e=>{const [px,py]=canvasPt(cv,e);const p=[(px-vfG.W/2)/vfG.s,(vfG.H/2-py)/vfG.s];if(Math.hypot(...p)>0.15){vfP=p;drawF();}};
+ cv.addEventListener('pointerdown',e=>{d=true;cv.setPointerCapture(e.pointerId);set(e);});cv.addEventListener('pointermove',e=>{if(d)set(e);});cv.addEventListener('pointerup',()=>d=false);})();
+function polarU(f,r,t){const v=f([r*Math.cos(t),r*Math.sin(t)]);return[Math.cos(t)*v[0]+Math.sin(t)*v[1],(-Math.sin(t)*v[0]+Math.cos(t)*v[1])/r];}
+function drawF(){
+  const f=VF[vfK][0],cv=$('cvF'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,ext=2.2,s=W/2/ext,X=x=>W/2+x*s,Y=y=>H/2-y*s;vfG={W,H,s};
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle=cssv('--line');ctx.lineWidth=1;for(let r=0.5;r<=3;r+=0.5){ctx.beginPath();ctx.arc(X(0),Y(0),r*s,0,7);ctx.stroke();}for(let k=0;k<12;k++){const t=k*Math.PI/6;ctx.beginPath();ctx.moveTo(X(0),Y(0));ctx.lineTo(X(3*Math.cos(t)),Y(3*Math.sin(t)));ctx.stroke();}
+  let mx=0;const pts=[];for(let i=-4;i<=4;i++)for(let j=-4;j<=4;j++){const p=[i*0.5,j*0.5],v=f(p);mx=Math.max(mx,Math.hypot(...v));pts.push([p,v]);}
+  pts.forEach(([p,v])=>{const k=0.38/(mx||1);if(Math.hypot(...v)<1e-9)return;arrow(ctx,X(p[0]),Y(p[1]),X(p[0]+k*v[0]),Y(p[1]+k*v[1]),cssv('--acc'),1.6);});
+  const [px,py]=vfP,r=Math.hypot(px,py),t=Math.atan2(py,px);
+  ctx.fillStyle=cssv('--warn');ctx.beginPath();ctx.arc(X(px),Y(py),7,0,7);ctx.fill();
+  const er=[Math.cos(t),Math.sin(t)],et=[-r*Math.sin(t),r*Math.cos(t)];[[er,'e_r'],[et,'e_θ']].forEach(([e,n])=>{arrow(ctx,X(px),Y(py),X(px+0.45*e[0]),Y(py+0.45*e[1]),cssv('--acc2'),2.5);ctx.fillStyle=cssv('--acc2');ctx.font='12px sans-serif';ctx.fillText(n,X(px+0.5*e[0])+3,Y(py+0.5*e[1]));});
+  const h=1e-5,U=(rr,tt)=>polarU(f,rr,tt),u=U(r,t),dr=U(r+h,t).map((v,i)=>(v-U(r-h,t)[i])/(2*h)),dt=U(r,t+h).map((v,i)=>(v-U(r,t-h)[i])/(2*h));
+  const P=[[dr[0],dt[0]],[dr[1],dt[1]]];/* u^i_,j */
+  const C=[[dr[0],dt[0]-r*u[1]],[dr[1]+u[1]/r,dt[1]+u[0]/r]];/* u^i_;j */
+  const J=[[Math.cos(t),-r*Math.sin(t)],[Math.sin(t),r*Math.cos(t)]],Ji=inv(J);/* ∂x/∂q, ∂q/∂x */
+  const Cc=mul(mul(J,C),Ji),Pc=mul(mul(J,P),Ji);
+  const vx=q=>f(q),Gc=[[0,0],[0,0]];for(let b=0;b<2;b++){const qp=vfP.slice(),qm=vfP.slice();qp[b]+=h;qm[b]-=h;const a=vx(qp),c=vx(qm);for(let a2=0;a2<2;a2++)Gc[a2][b]=(a[a2]-c[a2])/(2*h);}
+  const m=M=>'['+M.map(rw=>'['+rw.map(v=>fmt(v,4)).join(', ')+']').join(', ')+']',e1=maxAbs(sub(Cc,Gc)),e2=maxAbs(sub(Pc,Gc));
+  $('fOut').textContent=`field v = ${VF[vfK][1]} (Cartesian)
+P: r = ${fmt(r,3)}, θ = ${(t*180/Math.PI).toFixed(1)}°
+polar components u^r = ${fmt(u[0],4)}, u^θ = ${fmt(u[1],4)}
+
+ordinary u^i_,j  = ${m(P)}
+covariant u^i_;j = ${m(C)}
+  (rows i = r, θ; columns j = r, θ)
+
+converted to Cartesian (J · ∇u · J⁻¹):
+  from u^i_;j : ${m(Cc)}
+  from u^i_,j : ${m(Pc)}
+true Cartesian ∂v^a/∂x^b: ${m(Gc)}
+covariant matches: error ${e1.toExponential(1)} ✓
+ordinary matches:  error ${e2.toExponential(1)} ${e2<1e-6?'(coincidence)':'✗  (the Γ terms are missing)'}
+
+divergence u^i_;i = ${fmt(C[0][0]+C[1][1],4)} = ∂v^x/∂x + ∂v^y/∂y = ${fmt(Gc[0][0]+Gc[1][1],4)}
+but u^i_,i alone  = ${fmt(P[0][0]+P[1][1],4)}`;
+}
+
+/* ---------- Parallel transport on sphere ---------- */
+const sv={yaw:0.5,pitch:0.45};let sRun=false;
+['sT','sP'].forEach(k=>$(k).addEventListener('input',drawS));
+$('sPlay').onclick=()=>{sRun=!sRun;$('sPlay').textContent=sRun?'❚❚':'▶ transport';if(sRun){$('sP').value=0;(function f(){if(!sRun)return;let p=+$('sP').value+2;if(p>360){sRun=false;$('sPlay').textContent='▶ transport';p=360;}$('sP').value=p;drawS();if(sRun)requestAnimationFrame(f);})();}};
+(function(){const cv=$('cvS');let d=null;cv.addEventListener('pointerdown',e=>{d=[e.clientX,e.clientY];cv.setPointerCapture(e.pointerId);});cv.addEventListener('pointermove',e=>{if(!d)return;sv.yaw+=(e.clientX-d[0])*0.01;sv.pitch=Math.max(-1.4,Math.min(1.4,sv.pitch+(e.clientY-d[1])*0.01));d=[e.clientX,e.clientY];drawS();});cv.addEventListener('pointerup',()=>d=null);})();
+function pr(p,s,W,H){const c=Math.cos(sv.yaw),sn=Math.sin(sv.yaw),cp=Math.cos(sv.pitch),sp=Math.sin(sv.pitch);const x=c*p[0]-sn*p[1],y1=sn*p[0]+c*p[1];return{p:[W/2+s*x,H/2-s*(cp*p[2]-sp*y1)],d:cp*y1+sp*p[2]};}
+function transport(th0,phiEnd){let A=[1,0],ph=0;const N=Math.max(1,Math.round(phiEnd/0.002)),h=phiEnd/N,s=Math.sin(th0),c=Math.cos(th0);
+  const f=a=>[s*c*a[1],-(c/s)*a[0]];const path=[[0,A.slice()]];
+  for(let i=0;i<N;i++){const k1=f(A),k2=f([A[0]+h/2*k1[0],A[1]+h/2*k1[1]]),k3=f([A[0]+h/2*k2[0],A[1]+h/2*k2[1]]),k4=f([A[0]+h*k3[0],A[1]+h*k3[1]]);A=[A[0]+h/6*(k1[0]+2*k2[0]+2*k3[0]+k4[0]),A[1]+h/6*(k1[1]+2*k2[1]+2*k3[1]+k4[1])];ph+=h;if(i%Math.max(1,Math.floor(N/36))===0)path.push([ph,A.slice()]);}
+  path.push([phiEnd,A.slice()]);return{A,path};}
+function drawS(){
+  const th0=+$('sT').value*Math.PI/180,phE=+$('sP').value*Math.PI/180;$('sTv').textContent=$('sT').value+'°';$('sPv').textContent=$('sP').value+'°';
+  const cv=$('cvS'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,s=170,P=p=>pr(p,s,W,H);
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);ctx.strokeStyle=cssv('--muted');ctx.beginPath();ctx.arc(W/2,H/2,s,0,7);ctx.stroke();
+  const pt=(t,p)=>[Math.sin(t)*Math.cos(p),Math.sin(t)*Math.sin(p),Math.cos(t)];
+  ctx.strokeStyle=cssv('--line');for(let la=15;la<180;la+=15){ctx.beginPath();let pen=false;for(let k=0;k<=72;k++){const q=P(pt(la*Math.PI/180,k/72*2*Math.PI));if(q.d<0){pen=false;continue;}pen?ctx.lineTo(...q.p):ctx.moveTo(...q.p);pen=true;}ctx.stroke();}
+  for(let lo=0;lo<180;lo+=30){ctx.beginPath();let pen=false;for(let k=0;k<=72;k++){const q=P(pt(k/72*2*Math.PI,lo*Math.PI/180));if(q.d<0){pen=false;continue;}pen?ctx.lineTo(...q.p):ctx.moveTo(...q.p);pen=true;}ctx.stroke();}
+  if(th0<Math.PI/2-1e-6){ctx.fillStyle='rgba(156,54,181,.12)';ctx.beginPath();for(let k=0;k<=72;k++){const q=P(pt(th0,k/72*2*Math.PI));k?ctx.lineTo(...q.p):ctx.moveTo(...q.p);}ctx.fill();}
+  ctx.strokeStyle=cssv('--acc4');ctx.lineWidth=2.5;ctx.beginPath();let pen=false;for(let k=0;k<=144;k++){const q=P(pt(th0,k/144*2*Math.PI));if(q.d<0){pen=false;continue;}pen?ctx.lineTo(...q.p):ctx.moveTo(...q.p);pen=true;}ctx.stroke();ctx.lineWidth=1;
+  const T=transport(th0,phE),L=0.32;
+  const draw=(ph,A,col,w)=>{const st=Math.sin(th0),ct=Math.cos(th0),cp=Math.cos(ph),sp=Math.sin(ph),eth=[ct*cp,ct*sp,-st],eph=[-st*sp,st*cp,0],base=pt(th0,ph);
+    const v=[0,1,2].map(i=>A[0]*eth[i]+A[1]*eph[i]),tip=base.map((b,i)=>b+L*v[i]),q0=P(base),q1=P(tip);if(q0.d<-0.05)return;arrow(ctx,...q0.p,...q1.p,col,w);};
+  T.path.forEach(([ph,A],i)=>{if(i%3===0)draw(ph,A,'rgba(232,89,12,.4)',1.5);});
+  draw(0,[1,0],cssv('--acc3'),3);draw(phE,T.A,cssv('--acc2'),3.5);
+  const len=Math.sqrt(T.A[0]**2+(Math.sin(th0)**2)*T.A[1]**2),ang=Math.atan2(Math.sin(th0)*T.A[1],T.A[0]);
+  let rot=((ang*180/Math.PI)%360+360)%360;if(rot>359.995)rot=0;let pred=360*(1-Math.cos(th0));if(pred>359.995)pred=0;
+  $('sOut').textContent=`circle θ₀ = ${$('sT').value}°, travelled φ = ${$('sP').value}°
+start (green): A = e_θ (pointing south)
+transported A^θ = ${fmt(T.A[0],4)}, A^φ = ${fmt(T.A[1],4)}
+length √(g_ij A^i A^j) = ${fmt(len,6)}  (stays 1: Ricci's lemma)
+angle turned relative to e_θ (towards e_φ): ${rot.toFixed(2)}°
+${+$('sP').value===360?`after a full loop: predicted 2π(1 − cos θ₀) = ${pred.toFixed(2)}°  ✓\nsolid angle of the cap = ${(2*Math.PI*(1-Math.cos(th0))).toFixed(4)} sr`:'(move φ to 360° for the full loop)'}
+${Math.abs(th0-Math.PI/2)<1e-6?'equator = great circle (a geodesic): no rotation':''}`;
+}
+
+/* ---------- Quiz ---------- */
+const QZ=[
+ {q:'In polar coordinates Γ^r_θθ equals…',o:['−r','1/r','r','0'],a:0,e:'From g₂₂ = r².'},
+ {q:'Christoffel symbols are…',o:['not tensors','covariant tensors of rank 3','mixed tensors','scalars'],a:0,e:'They vanish in Cartesian but not in polar coordinates of the same plane.'},
+ {q:'A^i_;j = …',o:['A^i_,j + Γ^i_kj A^k','A^i_,j − Γ^k_ij A_k','A^i_,j','∂_j A^i Γ'],a:0,e:'+Γ for an upper index.'},
+ {q:'g_ij;k equals…',o:['0','g_ij,k','[ij,k]','Γ^k_ij'],a:0,e:'Ricci’s lemma.'},
+ {q:'Γ^i_ij equals…',o:['∂_j ln√g','0','g^ij','∂_j g'],a:0,e:'Example 6.'},
+ {q:'div A in any coordinates is…',o:['(1/√g)∂_i(√g A^i)','∂_i A^i','√g ∂_i A^i','g^ij ∂_i A_j only'],a:0,e:'From Example 6.'},
+ {q:'Why is A_i,j − A_j,i a tensor?',o:['the Γ terms cancel since Γ is symmetric','because A is a gradient','because g is constant','it is not a tensor'],a:0,e:'Exercise 3.'},
+ {q:'For the sphere, Γ^φ_θφ equals…',o:['cot θ','−sinθ cosθ','1/a','tan θ'],a:0,e:'Example 5.'},
+ {q:'A vector parallel-transported around the equator of a sphere…',o:['returns unchanged','turns by 2π','turns by π','shrinks'],a:0,e:'The equator is a geodesic; enclosed solid angle 2π gives a rotation 2π ≡ 0.'},
+ {q:'The covariant derivative of a scalar φ is…',o:['∂φ/∂x^i','zero','φ Γ','not defined'],a:0,e:'Eq. (26).'}
+];
+(function(){let sc=0;$('qTot').textContent=QZ.length;
+ $('quiz').innerHTML=QZ.map((x,i)=>{const ord=x.o.map((t,j)=>({t,j})).sort(()=>Math.random()-0.5);
+  return `<div class="qq" data-q="${i}"><b>Q${i+1}.</b> ${x.q}${ord.map(o=>`<label class="opt"><input type="radio" name="q${i}" value="${o.j}"> ${o.t}</label>`).join('')}<div class="fb"></div></div>`;}).join('');
+ document.querySelectorAll('#quiz .qq').forEach(div=>{const i=+div.dataset.q;let done=false;
+  div.querySelectorAll('input').forEach(inp=>inp.addEventListener('change',()=>{if(done)return;done=true;const ok=+inp.value===QZ[i].a;if(ok)sc++;$('qScore').textContent=sc;
+    div.querySelector('.fb').innerHTML=`<span class="${ok?'ok':'bad'}">${ok?'✓ Correct.':'✗ Answer: '+QZ[i].o[QZ[i].a]+'.'}</span> ${QZ[i].e}`;
+    div.querySelectorAll('input').forEach(x=>x.disabled=true);}));});})();
+
+function drawAll(){drawF();drawS();}
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+$('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawAll();};})();
+buildCIn();labC();drawAll();
+</script>
+</body>
+</html>

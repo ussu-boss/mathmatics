@@ -1,0 +1,1158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2.5 Complex Algebra — Boas Ch. 2</title>
+<script>try{var t=localStorage.getItem('boas-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{
+  --bg:#f6f7fb;--card:#ffffff;--fg:#1c2333;--muted:#596379;--line:#dde2ec;
+  --accent:#2f6bff;--accent2:#e8590c;--accent3:#0b9b6e;--accent4:#a33ec9;--warn:#c92a2a;
+  --defbg:#edf3ff;--thmbg:#eefaf4;--warnbg:#fff3ee;--factbg:#f8f0ff;--notebg:#f4f6fa;
+  --canvas:#ffffff;--grid:#e9ecf3;--axis:#7d879b;--code:#eef1f7;--shadow:0 1px 3px rgba(20,30,60,.08),0 4px 18px rgba(20,30,60,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1219;--card:#161b25;--fg:#e4e8f0;--muted:#9aa3b6;--line:#2a3141;
+    --accent:#6f9cff;--accent2:#ff922b;--accent3:#3ad8a6;--accent4:#d77cf2;--warn:#ff6b6b;
+    --defbg:#162238;--thmbg:#122a21;--warnbg:#2d1a16;--factbg:#23192e;--notebg:#1b212c;
+    --canvas:#11161f;--grid:#202834;--axis:#717b8f;--code:#1f2532;--shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1219;--card:#161b25;--fg:#e4e8f0;--muted:#9aa3b6;--line:#2a3141;
+  --accent:#6f9cff;--accent2:#ff922b;--accent3:#3ad8a6;--accent4:#d77cf2;--warn:#ff6b6b;
+  --defbg:#162238;--thmbg:#122a21;--warnbg:#2d1a16;--factbg:#23192e;--notebg:#1b212c;
+  --canvas:#11161f;--grid:#202834;--axis:#717b8f;--code:#1f2532;--shadow:none;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--fg);font:16.5px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+header.top{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center;padding:8px 16px;flex-wrap:wrap}
+header.top .brand{font-weight:700;font-size:15px;white-space:nowrap}
+header.top .brand small{color:var(--muted);font-weight:500}
+header.top .sp{flex:1}
+header.top select,header.top button,header.top a.btn{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 10px;text-decoration:none;cursor:pointer;max-width:100%}
+header.top select{max-width:260px}
+.layout{display:flex;gap:28px;max-width:1280px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:64px;align-self:flex-start;width:240px;flex:none;max-height:calc(100vh - 80px);overflow:auto;padding:18px 0;font-size:14px}
+nav.toc b{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:3px 10px;border-left:2px solid var(--line)}
+nav.toc a:hover,nav.toc a.on{color:var(--accent);border-left-color:var(--accent)}
+main{flex:1;min-width:0;max-width:940px;padding:10px 0 80px}
+@media (max-width:1100px){nav.toc{display:none}}
+h1{font-size:2rem;line-height:1.2;margin:26px 0 6px}
+h1 .num{color:var(--accent)}
+.subtitle{color:var(--muted);margin:0 0 18px}
+h2{font-size:1.45rem;margin:44px 0 12px;padding-top:6px;border-top:1px solid var(--line)}
+h3{font-size:1.15rem;margin:26px 0 8px}
+h4{font-size:1rem;margin:18px 0 6px}
+p{margin:10px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:16px 0;box-shadow:var(--shadow)}
+.box{border-radius:12px;padding:12px 16px;margin:16px 0;border:1px solid var(--line);border-left-width:5px}
+.box>.tag{display:inline-block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.box.def{background:var(--defbg);border-left-color:var(--accent)}.box.def>.tag{color:var(--accent)}
+.box.thm{background:var(--thmbg);border-left-color:var(--accent3)}.box.thm>.tag{color:var(--accent3)}
+.box.warn{background:var(--warnbg);border-left-color:var(--warn)}.box.warn>.tag{color:var(--warn)}
+.box.fact{background:var(--factbg);border-left-color:var(--accent4)}.box.fact>.tag{color:var(--accent4)}
+.box.note{background:var(--notebg);border-left-color:var(--axis)}.box.note>.tag{color:var(--muted)}
+.ex{border:1px solid var(--line);border-radius:12px;margin:18px 0;background:var(--card);overflow:hidden}
+.ex>.hd{background:var(--notebg);padding:8px 16px;font-weight:600;border-bottom:1px solid var(--line)}
+.ex>.bd{padding:6px 16px 10px}
+ol.steps{padding-left:22px;margin:8px 0}ol.steps>li{margin:6px 0}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}
+.katex{font-size:1.06em}
+table.t{border-collapse:collapse;width:100%;margin:12px 0;font-size:15px;display:block;overflow-x:auto}
+table.t th,table.t td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+table.t th{background:var(--notebg)}
+details.sol{margin:8px 0 4px;border:1px dashed var(--line);border-radius:10px;padding:2px 12px}
+details.sol>summary{cursor:pointer;color:var(--accent);font-weight:600;padding:6px 0;list-style:none}
+details.sol>summary::-webkit-details-marker{display:none}
+details.sol>summary::before{content:"▶ ";font-size:11px}
+details.sol[open]>summary::before{content:"▼ "}
+details.sol[open]{background:var(--card)}
+.prob{border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin:12px 0;background:var(--card)}
+.prob>.q{margin:4px 0}
+.prob>.q>b:first-child{color:var(--accent2)}
+.lvl{font-size:11px;font-weight:700;border-radius:20px;padding:1px 8px;margin-left:6px;vertical-align:middle;border:1px solid currentColor}
+.lvl.e{color:var(--accent3)}.lvl.m{color:var(--accent)}.lvl.h{color:var(--accent2)}.lvl.x{color:var(--warn)}
+.widget{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:18px 0;box-shadow:var(--shadow)}
+.widget>.wt{font-weight:700;margin-bottom:4px}
+.widget>.wd{color:var(--muted);font-size:14px;margin-bottom:8px}
+.widget canvas{width:100%;display:block;border-radius:10px;border:1px solid var(--line);background:var(--canvas)}
+.ctrls{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:10px 0;font-size:14.5px}
+.ctrls label{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.ctrls input[type=range]{width:150px;accent-color:var(--accent)}
+.ctrls output{min-width:46px;font-variant-numeric:tabular-nums;color:var(--accent);font-weight:600}
+.ctrls select,.ctrls input[type=text],.ctrls input[type=number],.ctrls button{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 9px}
+.ctrls input[type=text]{min-width:200px}
+.ctrls input[type=number]{width:80px}
+.ctrls button{cursor:pointer}
+.ctrls button.pri{background:var(--accent);color:#fff;border-color:var(--accent)}
+.readout{font-size:15px;background:var(--notebg);border-radius:10px;padding:8px 12px;margin-top:10px;overflow-x:auto;line-height:1.9}
+.readout .k{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+.pill{display:inline-block;background:var(--code);border-radius:6px;padding:0 6px;font-family:Consolas,monospace;font-size:.92em}
+.mcq{border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin:12px 0;background:var(--card)}
+.mcq .opts{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.mcq .opts button{font:inherit;font-size:15px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 12px;cursor:pointer}
+.mcq .opts button.ok{background:var(--thmbg);border-color:var(--accent3)}
+.mcq .opts button.bad{background:var(--warnbg);border-color:var(--warn)}
+.mcq .fb{font-size:14.5px;color:var(--muted)}
+.lead{font-size:1.07rem}
+.small{font-size:14px;color:var(--muted)}
+.center{text-align:center}
+.hl{color:var(--accent2);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13.5px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:14px;height:4px;border-radius:2px;vertical-align:middle;margin-right:5px}
+.pagenav{display:flex;justify-content:space-between;gap:12px;margin-top:50px;flex-wrap:wrap}
+.pagenav a{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 14px;text-decoration:none;max-width:48%}
+.pagenav a small{display:block;color:var(--muted)}
+.summary li{margin:4px 0}
+kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
+
+</style>
+</head>
+<body>
+<header class="top">
+  <span class="brand">Boas · Ch. 2 Complex Numbers <small>| Section 2.5</small></span>
+  <span class="sp"></span>
+  <select id="chapSel" aria-label="Go to section"><option value="2.0_Complex_Numbers_Index.html">2.0 Chapter 2 Index</option>
+<option value="2.1_Introduction.html">2.1 Introduction</option>
+<option value="2.2_Real_and_Imaginary_Parts.html">2.2 Real and Imaginary Parts of a Complex Number</option>
+<option value="2.3_The_Complex_Plane.html">2.3 The Complex Plane</option>
+<option value="2.4_Terminology_and_Notation.html">2.4 Terminology and Notation</option>
+<option value="2.5_Complex_Algebra.html" selected>2.5 Complex Algebra</option>
+<option value="2.6_Complex_Infinite_Series.html">2.6 Complex Infinite Series</option>
+<option value="2.7_Complex_Power_Series_Disk_of_Convergence.html">2.7 Complex Power Series; Disk of Convergence</option>
+<option value="2.8_Elementary_Functions_of_Complex_Numbers.html">2.8 Elementary Functions of Complex Numbers</option>
+<option value="2.9_Eulers_Formula.html">2.9 Euler&#x27;s Formula</option>
+<option value="2.10_Powers_and_Roots_of_Complex_Numbers.html">2.10 Powers and Roots of Complex Numbers</option>
+<option value="2.11_Exponential_and_Trigonometric_Functions.html">2.11 The Exponential and Trigonometric Functions</option>
+<option value="2.12_Hyperbolic_Functions.html">2.12 Hyperbolic Functions</option>
+<option value="2.13_Logarithms.html">2.13 Logarithms</option>
+<option value="2.14_Complex_Roots_and_Powers.html">2.14 Complex Roots and Powers</option>
+<option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
+<option value="2.16_Some_Applications.html">2.16 Some Applications</option>
+<option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
+</header>
+<div class="layout">
+<nav class="toc" id="toc"></nav>
+<main>
+<h1><span class="num">2.5</span> Complex Algebra</h1>
+<p class="subtitle">Boas, Chapter 2, Section 5 · A. simplifying to $x+iy$ · B. conjugate of an expression · C. absolute value · D. complex equations · E. graphs (loci) · F. physical applications.</p>
+
+<div class="box note"><span class="tag">Goals</span>
+<ul class="summary">
+<li>Simplify any algebraic complex expression to $x+iy$ or $re^{i\theta}$, picking the faster route.</li>
+<li>Take conjugates and absolute values of whole expressions <b>without</b> simplifying them first.</li>
+<li>Solve complex equations by splitting them into two real equations, including square roots of complex numbers and quadratics with complex coefficients.</li>
+<li>Recognise every standard locus: circle, disk, line, bisector, Apollonius circle, ellipse, hyperbola, ray, arc, half-plane.</li>
+<li>Use $dz/dt$ to get speed and acceleration of a moving particle.</li>
+</ul></div>
+
+<h2 id="A">A. Simplifying to $x+iy$ form</h2>
+<p>Complex numbers obey the ordinary rules of algebra plus $i^2=-1$.</p>
+<table class="t">
+<tr><th>Operation</th><th>Rectangular rule</th><th>Polar rule</th></tr>
+<tr><td>add / subtract</td><td>$(a+ib)\pm(c+id)=(a\pm c)+i(b\pm d)$</td><td>(no simple rule, so convert to rectangular)</td></tr>
+<tr><td>multiply</td><td>$(a+ib)(c+id)=(ac-bd)+i(ad+bc)$</td><td>$r_1e^{i\theta_1}\cdot r_2e^{i\theta_2}=r_1r_2e^{i(\theta_1+\theta_2)}$</td></tr>
+<tr><td>divide</td><td>$\dfrac{a+ib}{c+id}=\dfrac{(a+ib)(c-id)}{c^2+d^2}$</td><td>$\dfrac{r_1}{r_2}e^{i(\theta_1-\theta_2)}$</td></tr>
+<tr><td>power</td><td>binomial expansion</td><td>$r^ne^{in\theta}$ (Section 2.10)</td></tr>
+</table>
+<h3>Division: multiply by the conjugate of the denominator</h3>
+<p>Because $(c+id)(c-id)=c^2+d^2$ is <b>real</b>, multiplying the top and bottom by $c-id$ makes the denominator real. Then just divide each part.</p>
+<div class="ex"><div class="hd">Boas Example 1 & 2</div><div class="bd">
+$$(1+i)^2=1+2i+i^2=2i,\qquad \frac{2+i}{3-i}=\frac{2+i}{3-i}\cdot\frac{3+i}{3+i}=\frac{6+5i+i^2}{9-i^2}=\frac{5+5i}{10}=\frac12+\frac12 i .$$</div></div>
+<div class="ex"><div class="hd">Boas Example 3 — polar is sometimes faster</div><div class="bd">
+<p>$1+i=\sqrt2e^{i\pi/4}$, so $(1+i)^2=(\sqrt2)^2e^{i\pi/2}=2i$. For high powers like $(1+i)^{20}$ the polar route is much faster.</p></div></div>
+<div class="ex"><div class="hd">Boas Example 4 — mixed: degrees allowed when the last step is cos/sin</div><div class="bd">
+$$\frac{1}{2(\cos20^\circ+i\sin20^\circ)}=\frac{1}{2e^{i\pi/9}}=0.5e^{-i\pi/9}=0.5(\cos20^\circ-i\sin20^\circ)=0.47-0.17i .$$</div></div>
+<div class="box thm"><span class="tag">Which route?</span>
+<ul>
+<li>Sums and differences: rectangular.</li>
+<li>Products, quotients and powers of numbers with "nice" angles: polar.</li>
+<li>A single quotient: multiply by the conjugate.</li>
+<li>Mixed expressions: simplify each block in its best form, then combine.</li>
+</ul></div>
+
+<div class="widget" id="w-arith">
+<div class="wt">Interactive 1 — See the four operations (drag $z_1$, $z_2$)</div>
+<div class="wd">Addition is the parallelogram rule. Multiplication <b>multiplies the lengths and adds the angles</b>; division divides the lengths and subtracts the angles. The readout does the same computation both in rectangular and in polar form.</div>
+<div class="ctrls"><label>operation <select id="ar-op"><option value="add">z₁ + z₂</option><option value="sub">z₁ − z₂</option><option value="mul" selected>z₁ · z₂</option><option value="div">z₁ / z₂</option></select></label></div>
+<canvas id="cv-arith"></canvas>
+<div class="readout" id="ar-out"></div>
+</div>
+
+<h2 id="B">B. Complex conjugate of a complex expression</h2>
+<div class="box thm"><span class="tag">Theorem</span>
+$$\overline{z_1\pm z_2}=\bar z_1\pm\bar z_2,\qquad\overline{z_1z_2}=\bar z_1\,\bar z_2,\qquad\overline{\left(\frac{z_1}{z_2}\right)}=\frac{\bar z_1}{\bar z_2},\qquad\overline{z^n}=\bar z^{\,n}.$$
+<p><b>Practical rule:</b> to conjugate an expression, change the sign of <b>every</b> $i$ in it.</p></div>
+<p><b>Proofs</b> (Boas Problem 25):</p>
+<ul>
+<li><i>Sum and difference</i> (rectangular): $\overline{(x_1+x_2)+i(y_1+y_2)}=(x_1+x_2)-i(y_1+y_2)=(x_1-iy_1)+(x_2-iy_2)$. The same works for the difference.</li>
+<li><i>Product</i> (polar): $\overline{r_1r_2e^{i(\theta_1+\theta_2)}}=r_1r_2e^{-i(\theta_1+\theta_2)}=r_1e^{-i\theta_1}\,r_2e^{-i\theta_2}=\bar z_1\bar z_2$.</li>
+<li><i>Quotient</i> (polar): $\overline{\tfrac{r_1}{r_2}e^{i(\theta_1-\theta_2)}}=\tfrac{r_1}{r_2}e^{-i(\theta_1-\theta_2)}=\dfrac{r_1e^{-i\theta_1}}{r_2e^{-i\theta_2}}$.</li>
+</ul>
+<div class="ex"><div class="hd">Boas example</div><div class="bd">
+$$z=\frac{2-3i}{i+4}\quad\Longrightarrow\quad\bar z=\frac{2+3i}{-i+4}.$$</div></div>
+<div class="box warn"><span class="tag">Hidden $i$'s</span>
+<p>If $z=f+ig$ where $f$ and $g$ are themselves complex, then $\bar z=\bar f-i\bar g$, <b>not</b> $f-ig$. Examples of hidden $i$'s: $e^{i\theta}$, $\sqrt{-3}=i\sqrt3$, $\ln(-1)$, a symbol such as $a$ that is complex, $\sin(2+i)$.</p>
+<p>For example, $\overline{e^{3i}+5i}=e^{-3i}-5i$, and if $a=1+i$, then $\overline{a+2i}=\bar a-2i=1-3i$ (not $a-2i=1-i$).</p></div>
+<h3>Important consequence: real polynomials have conjugate roots</h3>
+<p>If $P(z)=a_nz^n+\dots+a_1z+a_0$ with all $a_k$ <b>real</b>, then $\overline{P(z)}=P(\bar z)$. So if $P(z_0)=0$, then $P(\bar z_0)=\overline{0}=0$. Non-real roots come in conjugate pairs. In particular, a real polynomial of odd degree always has at least one real root.</p>
+<p>More generally, $\overline{f(z)}=f(\bar z)$ for any $f$ built from real constants and $z$, e.g. $\overline{\cos z}=\cos\bar z$ (Boas Problem 17.25).</p>
+
+<h2 id="C">C. Finding the absolute value $|z|$</h2>
+$$|z|=r=\sqrt{x^2+y^2}=\sqrt{z\bar z}\qquad(5.1)$$
+<p>$z\bar z$ is always real and $\ge0$. Combined with B, the absolute value of a product or quotient is the product or quotient of the absolute values, so <b>you never need to simplify first</b>:</p>
+$$\left|\frac{\sqrt5+3i}{1-i}\right|=\frac{|\sqrt5+3i|}{|1-i|}=\frac{\sqrt{14}}{\sqrt2}=\sqrt7.\qquad(\text{Boas example})$$
+<div class="box warn"><span class="tag">Common mistakes</span>
+<ul>
+<li>$|a+ib|=\sqrt{a^2+b^2}$ only if $a,b$ are <b>real</b>. $|3+i\cdot(2i)|=|3-2|=1$, not $\sqrt{9+4}$.</li>
+<li>$|z|^2=z\bar z$, <b>not</b> $z^2$.</li>
+<li>For sums there is no such shortcut: $|z_1+z_2|\ne|z_1|+|z_2|$ in general.</li>
+</ul></div>
+
+<h2 id="D">D. Complex equations</h2>
+<p>A complex number is a pair of real numbers, and two complex numbers are equal iff their real parts are equal <b>and</b> their imaginary parts are equal. So <b>every complex equation is two real equations</b>.</p>
+<div class="ex"><div class="hd">Boas example — find real $x,y$ with $(x+iy)^2=2i$</div><div class="bd"><ol class="steps">
+<li>Expand: $x^2-y^2+2ixy=0+2i$.</li>
+<li>Real parts: $x^2-y^2=0$. Imaginary parts: $2xy=2$.</li>
+<li>The first gives $y=\pm x$. Substituting into the second: $2x^2=2$ or $-2x^2=2$.</li>
+<li>$x$ is real, so $-2x^2=2$ is impossible. Hence $x^2=1$ and $y=x$.</li>
+<li>Solutions: $x=y=1$ and $x=y=-1$. That is, $\sqrt{2i}=\pm(1+i)$.</li></ol></div></div>
+
+<h3>General method: square root of any complex number</h3>
+<p>To solve $(x+iy)^2=a+ib$: equate parts, $x^2-y^2=a$ and $2xy=b$. Also $|z|^2=|w|$, so $x^2+y^2=\sqrt{a^2+b^2}$. Adding and subtracting:</p>
+$$\boxed{x^2=\frac{\sqrt{a^2+b^2}+a}{2},\qquad y^2=\frac{\sqrt{a^2+b^2}-a}{2},\qquad \operatorname{sign}(xy)=\operatorname{sign}(b)}$$
+<p>Example: $\sqrt{3-4i}$. Here $|w|=5$, so $x^2=4$ and $y^2=1$. Since $b\lt0$, $x$ and $y$ have opposite signs: $\pm(2-i)$.</p>
+<h3>Quadratics with complex coefficients</h3>
+<p>Use the quadratic formula, and find $\sqrt{d}$ by the boxed formula. Example: $z^2-(5+i)z+(8+i)=0$.</p>
+$$d=(5+i)^2-4(8+i)=24+10i-32-4i=-8+6i,\qquad\sqrt d=\pm(1+3i)\ \ (x^2=1,\ y^2=9,\ xy>0)$$
+$$z=\frac{5+i\pm(1+3i)}{2}=3+2i\ \ \text{or}\ \ 2-i .$$
+<div class="box warn"><span class="tag">Watch the word "real"</span>
+<p>When the unknowns $x,y$ are real, any real-valued expression must be real. For example, in $|1-(x+iy)|=x+iy$ (Boas 5.49), the left side is real and $\ge0$, so the right side must be too: $y=0$ and $x\ge0$. Forgetting this gives false solutions.</p></div>
+
+<div class="widget" id="w-eq">
+<div class="wt">Interactive 2 — A complex equation is two real curves; the solutions are where they cross</div>
+<div class="wd">Type any equation $F(z)=0$ in terms of $z$ (you can use <span class="pill">conj(z)</span>, <span class="pill">abs(z)</span>, <span class="pill">re(z)</span>, <span class="pill">im(z)</span>, <span class="pill">^</span>, <span class="pill">sqrt</span>, <span class="pill">exp</span>…). Blue curve: $\operatorname{Re}F=0$. Orange curve: $\operatorname{Im}F=0$. Every crossing is a solution, and the numerical solver lists them.</div>
+<div class="ctrls"><label>$F(z)=$ <input type="text" id="eq-f" value="z^2 - 2i"></label>
+<select id="eq-pre"><option value="">— examples —</option><option>z^2 - 2i</option><option>z^3 + 1</option><option>z^2 - (5+i)z + 8 + i</option><option>conj(z) - z^2</option><option>z^2 + abs(z)</option><option>z^2 - 2i*re(z)</option><option>abs(1 - z) - z</option><option>z^4 + 16</option><option>conj(z) - i z^2</option></select>
+<label>view ± <input type="range" id="eq-span" min="1" max="8" step="0.5" value="3"><output></output></label></div>
+<canvas id="cv-eq"></canvas>
+<div class="readout" id="eq-out"></div>
+</div>
+
+<h2 id="E">E. Graphs: equations and inequalities as regions</h2>
+<p>Since $z\leftrightarrow(x,y)$, an equation in $z$ is a <b>curve</b> and an inequality is a <b>region</b>. The key tool is</p>
+<div class="box thm"><span class="tag">Distance (Boas Problem 65)</span>
+<p>$|z_1-z_2|$ is the distance between the points $z_1$ and $z_2$, because $|z_1-z_2|=\sqrt{(x_1-x_2)^2+(y_1-y_2)^2}$. So $|z-a|$ is the distance from $z$ to the fixed point $a$.</p></div>
+<p>Note on words: "circle" means the curve, and "disk" means the area inside it.</p>
+<table class="t">
+<tr><th>Equation / inequality</th><th>Geometric meaning</th><th>Cartesian form ($a=a_1+ia_2$)</th></tr>
+<tr><td>$|z-a|=R$</td><td>circle, centre $a$, radius $R$</td><td>$(x-a_1)^2+(y-a_2)^2=R^2$</td></tr>
+<tr><td>$|z-a|\lt R$, $\ |z-a|\le R$</td><td>open / closed disk</td><td>inside the circle</td></tr>
+<tr><td>$R_1\lt|z-a|\lt R_2$</td><td>annulus (ring)</td><td>between two circles</td></tr>
+<tr><td>$|z-a|=|z-b|$</td><td>perpendicular bisector of the segment $ab$</td><td>a straight line</td></tr>
+<tr><td>$|z-a|=k|z-b|$, $k\ne1$</td><td>Apollonius circle</td><td>a circle (centre on the line $ab$)</td></tr>
+<tr><td>$|z-a|+|z-b|=2c$</td><td>ellipse with foci $a,b$ (if $2c>|a-b|$)</td><td>semi-axes $c$ and $\sqrt{c^2-(|a-b|/2)^2}$</td></tr>
+<tr><td>$\big||z-a|-|z-b|\big|=2c$</td><td>hyperbola with foci $a,b$ (if $2c\lt|a-b|$)</td><td>—</td></tr>
+<tr><td>$\arg(z-a)=\alpha$</td><td>ray (half-line) from $a$ at angle $\alpha$, not including $a$</td><td>—</td></tr>
+<tr><td>$\arg\dfrac{z-a}{z-b}=\alpha$</td><td>arc of a circle through $a$ and $b$</td><td>(angle subtended by $ab$ is constant)</td></tr>
+<tr><td>$\operatorname{Re}z=c$, $\ \operatorname{Im}z=c$</td><td>vertical / horizontal line</td><td>$x=c$, $y=c$</td></tr>
+<tr><td>$\operatorname{Re}z>c$</td><td>half-plane</td><td>$x>c$</td></tr>
+<tr><td>$\operatorname{Re}(z^2)=c$</td><td>rectangular hyperbola</td><td>$x^2-y^2=c$</td></tr>
+<tr><td>$\operatorname{Im}(z^2)=c$</td><td>rectangular hyperbola (rotated $45^\circ$)</td><td>$2xy=c$</td></tr>
+<tr><td>$\operatorname{Re}(1/z)=c$</td><td>circle through $0$</td><td>$x^2+y^2=x/c$</td></tr>
+<tr><td>$z\bar z+\bar\beta z+\beta\bar z+\gamma=0$ ($\gamma$ real)</td><td>general circle</td><td>centre $-\beta$, radius $\sqrt{|\beta|^2-\gamma}$</td></tr>
+</table>
+<p class="small">Boas's examples: $|z|=3$ is the circle $x^2+y^2=9$; $|z-1|=2$ is a circle and $|z-1|\le2$ a disk; $(\text{angle of }z)=\pi/4$ is the half-line $y=x$, $x>0$; $\operatorname{Re}z>\tfrac12$ is the half-plane $x>\tfrac12$.</p>
+
+<div class="widget" id="w-locus">
+<div class="wt">Interactive 3 — Locus explorer (drag the points $a$ and $b$)</div>
+<div class="wd">Choose a locus, then drag $a$ and $b$ and move the slider. Curves are drawn in blue and regions are shaded. The custom option plots $|f(z)|$, $\operatorname{Re}f$ or $\operatorname{Im}f$ equal to $c$ (or an inequality) for any $f$ you type.</div>
+<div class="ctrls"><label>locus <select id="lc-type">
+<option value="circle">|z − a| = c (circle)</option><option value="disk">|z − a| &lt; c (disk)</option><option value="annulus">1 &lt; |z − a| &lt; c (annulus)</option>
+<option value="bis">|z − a| = |z − b| (bisector)</option><option value="apol">|z − a| = c|z − b| (Apollonius)</option>
+<option value="ell">|z − a| + |z − b| = 2c (ellipse)</option><option value="hyp">||z − a| − |z − b|| = 2c (hyperbola)</option>
+<option value="ray">arg(z − a) = c (ray)</option><option value="arc">arg[(z − a)/(z − b)] = c (arc)</option>
+<option value="rez">Re z &gt; c (half-plane)</option><option value="rez2">Re(z²) = c</option><option value="imz2">Im(z²) = c</option><option value="reinv">Re(1/z) = c</option>
+<option value="custom">custom f(z)</option></select></label>
+<label><span id="lc-plabel">c</span> <input type="range" id="lc-c" min="-5" max="5" step="0.05" value="2"><output></output></label></div>
+<div class="ctrls" id="lc-custom" style="display:none"><label>$f(z)=$ <input type="text" id="lc-f" value="(z-1)/(z+1)"></label>
+<label>relation <select id="lc-rel"><option value="abs=">|f| = c</option><option value="re=">Re f = c</option><option value="im=">Im f = c</option><option value="abs<">|f| &lt; c</option><option value="re>">Re f &gt; c</option><option value="im>">Im f &gt; c</option></select></label></div>
+<canvas id="cv-locus"></canvas>
+<div class="readout" id="lc-out"></div>
+</div>
+
+<h3>Derivations of the less obvious loci</h3>
+<div class="ex"><div class="hd">Apollonius circle: $|z-1|=2|z+1|$</div><div class="bd"><ol class="steps">
+<li>Square: $(x-1)^2+y^2=4[(x+1)^2+y^2]$.</li>
+<li>Expand: $x^2-2x+1+y^2=4x^2+8x+4+4y^2$, so $3x^2+10x+3+3y^2=0$.</li>
+<li>Divide by 3 and complete the square: $\left(x+\tfrac53\right)^2+y^2=\tfrac{25}9-1=\tfrac{16}9$.</li>
+<li>Circle with centre $-\tfrac53$ and radius $\tfrac43$.</li></ol></div></div>
+<div class="ex"><div class="hd">Boas 5.62: $|z+1|+|z-1|=8$</div><div class="bd"><ol class="steps">
+<li>The sum of distances to the two foci $\pm1$ is constant, so this is an ellipse with $2a=8$, $a=4$, focal distance $c=1$.</li>
+<li>$b^2=a^2-c^2=15$, so the equation is $\dfrac{x^2}{16}+\dfrac{y^2}{15}=1$.</li>
+<li>If the constant were exactly $2=|a-b|$, the "ellipse" would collapse to the segment $[-1,1]$. If it were less than 2, there would be no points at all.</li></ol></div></div>
+<div class="ex"><div class="hd">Arc: $\arg\dfrac{z-1}{z+1}=\dfrac\pi2$</div><div class="bd"><ol class="steps">
+<li>The quotient must be purely imaginary with positive imaginary part.</li>
+<li>From Section 2.2: $\dfrac{z-1}{z+1}=\dfrac{(x^2+y^2-1)+2iy}{(x+1)^2+y^2}$.</li>
+<li>Real part zero gives $x^2+y^2=1$. Imaginary part positive gives $y>0$.</li>
+<li>The locus is the upper half of the unit circle: from it, the segment $[-1,1]$ is seen at a right angle (Thales' theorem).</li></ol></div></div>
+<div class="ex"><div class="hd">Boas 5.63, 5.64: $z^2=\bar z^2$ and $z^2=-\bar z^2$</div><div class="bd">
+<p>$z^2-\bar z^2=2i\operatorname{Im}(z^2)=4ixy$, so $z^2=\bar z^2\iff xy=0$: <b>both axes</b>.</p>
+<p>$z^2+\bar z^2=2\operatorname{Re}(z^2)=2(x^2-y^2)$, so $z^2=-\bar z^2\iff y=\pm x$: <b>the two diagonal lines</b>.</p></div></div>
+
+<h2 id="F">F. Physical applications: velocity and acceleration</h2>
+<p>If a particle's position is $z(t)=x(t)+iy(t)$, define the complex velocity and acceleration:</p>
+$$\frac{dz}{dt}=\frac{dx}{dt}+i\frac{dy}{dt},\qquad\frac{d^2z}{dt^2}=\frac{d^2x}{dt^2}+i\frac{d^2y}{dt^2}.$$
+<p>Speed $v=\left|\dfrac{dz}{dt}\right|$ and magnitude of acceleration $a=\left|\dfrac{d^2z}{dt^2}\right|$. You can differentiate with respect to $t$ treating $i$ as a constant, and you never need to separate $x$ and $y$.</p>
+<div class="ex"><div class="hd">Boas example — $z=\dfrac{i+2t}{t-i}$</div><div class="bd"><ol class="steps">
+<li>Quotient rule: $\dfrac{dz}{dt}=\dfrac{2(t-i)-(i+2t)}{(t-i)^2}=\dfrac{-3i}{(t-i)^2}$.</li>
+<li>$v=\dfrac{|-3i|}{|t-i|^2}=\dfrac{3}{t^2+1}$.</li>
+<li>$\dfrac{d^2z}{dt^2}=\dfrac{(-3i)(-2)}{(t-i)^3}=\dfrac{6i}{(t-i)^3}$, so $a=\dfrac{6}{(t^2+1)^{3/2}}$.</li>
+<li>Check (Boas 5.66): $z=\dfrac{(i+2t)(t+i)}{t^2+1}=\dfrac{2t^2-1}{t^2+1}+i\dfrac{3t}{t^2+1}$. Then $\dot x=\dfrac{6t}{(t^2+1)^2}$, $\dot y=\dfrac{3(1-t^2)}{(t^2+1)^2}$, and $\dot x^2+\dot y^2=\dfrac{9(t^2+1)^2}{(t^2+1)^4}$, so $v=\dfrac{3}{t^2+1}$ ✔.</li></ol>
+<p>All physical quantities ($x$, $y$, $v$, $a$) are real. The complex expressions are just a convenient way to compute them.</p></div></div>
+
+<div class="widget" id="w-motion">
+<div class="wt">Interactive 4 — Particle motion $z(t)$ with velocity and acceleration arrows</div>
+<div class="wd">Type any $z(t)$. The path is drawn, and the particle moves with its velocity (green) and acceleration (orange) arrows. The arrows are computed numerically from $dz/dt$ and $d^2z/dt^2$.</div>
+<div class="ctrls"><label>$z(t)=$ <input type="text" id="mo-f" value="(i+2t)/(t-i)"></label>
+<select id="mo-pre"><option value="">— examples —</option><option>(i+2t)/(t-i)</option><option>(1-i t)/(2t+i)</option><option>cos(2t)+i sin(2t)</option><option>1+3exp(2i t)</option><option>(1+i)exp(i t)</option><option>(1+i)t-(2+i)(1-t)</option><option>exp((-0.15+i)t)*3</option><option>t^2 + i t^3</option></select>
+<label>t from <input type="number" id="mo-t0" value="-5" step="0.5"></label><label>to <input type="number" id="mo-t1" value="5" step="0.5"></label>
+<button class="pri" id="mo-play">▶ Play</button><label>t <input type="range" id="mo-t" min="0" max="1" step="0.001" value="0.6"><output></output></label></div>
+<canvas id="cv-motion"></canvas>
+<div class="readout" id="mo-out"></div>
+</div>
+
+<h2 id="boas">Boas Problems, Section 5 — solutions</h2>
+<h3>Problems 1–18: simplify to $x+iy$ (or $re^{i\theta}$)</h3>
+<details class="sol"><summary>Show solutions 1–18</summary>
+<table class="t">
+<tr><th>#</th><th>Expression</th><th>$x+iy$</th><th>$re^{i\theta}$</th></tr>
+<tr><td>1</td><td>$\frac{1}{1+i}$</td><td>$\frac12-\frac12i$</td><td>$\frac1{\sqrt2}e^{-i\pi/4}$</td></tr>
+<tr><td>2</td><td>$\frac{1}{i-1}$</td><td>$-\frac12-\frac12i$</td><td>$\frac1{\sqrt2}e^{-3\pi i/4}$</td></tr>
+<tr><td>3</td><td>$i^4$</td><td>$1$</td><td>$e^0$</td></tr>
+<tr><td>4</td><td>$i^2+2i+1$</td><td>$2i$</td><td>$2e^{i\pi/2}$</td></tr>
+<tr><td>5</td><td>$(i+\sqrt3)^2$</td><td>$2+2\sqrt3i$</td><td>$4e^{i\pi/3}$</td></tr>
+<tr><td>6</td><td>$\left(\frac{1+i}{1-i}\right)^2$</td><td>$-1$ (because $\frac{1+i}{1-i}=i$)</td><td>$e^{i\pi}$</td></tr>
+<tr><td>7</td><td>$\frac{3+i}{2+i}$</td><td>$\frac{(3+i)(2-i)}{5}=\frac75-\frac15i$</td><td>$\sqrt2e^{-0.1419i}$</td></tr>
+<tr><td>8</td><td>$1.6-2.7i$</td><td>$1.6-2.7i$</td><td>$3.14e^{-1.036i}$</td></tr>
+<tr><td>9</td><td>$25e^{2i}$ (2 radians!)</td><td>$-10.40+22.73i$</td><td>$25e^{2i}$</td></tr>
+<tr><td>10</td><td>$\frac{3i-7}{i+4}$</td><td>$\frac{(-7+3i)(4-i)}{17}=-\frac{25}{17}+\frac{19}{17}i$</td><td>$1.847e^{2.492i}$</td></tr>
+<tr><td>11</td><td>$17-12i$</td><td>$17-12i$</td><td>$20.81e^{-0.6147i}$</td></tr>
+<tr><td>12</td><td>$3(\cos28^\circ+i\sin28^\circ)$</td><td>$2.649+1.408i$</td><td>$3e^{0.4887i}$</td></tr>
+<tr><td>13</td><td>$5\left(\cos\frac{2\pi}5+i\sin\frac{2\pi}5\right)$</td><td>$1.545+4.755i$</td><td>$5e^{2\pi i/5}$</td></tr>
+<tr><td>14</td><td>$2.8e^{-1.1i}$</td><td>$1.270-2.495i$</td><td>$2.8e^{-1.1i}$</td></tr>
+<tr><td>15</td><td>$\frac{5-2i}{5+2i}$</td><td>$\frac{(5-2i)^2}{29}=\frac{21}{29}-\frac{20}{29}i$</td><td>$e^{-0.7610i}$ ($|z|=1$)</td></tr>
+<tr><td>16</td><td>$\frac{1}{0.5(\cos40^\circ+i\sin40^\circ)}$</td><td>$2(\cos40^\circ-i\sin40^\circ)=1.532-1.286i$</td><td>$2e^{-2\pi i/9}$</td></tr>
+<tr><td>17</td><td>$(1.7-3.2i)^2$</td><td>$2.89-10.88i-10.24=-7.35-10.88i$</td><td>$13.13e^{-2.165i}$</td></tr>
+<tr><td>18</td><td>$(0.64+0.77i)^4$</td><td>$-0.938-0.361i$</td><td>$1.005e^{-2.774i}$</td></tr>
+</table></details>
+
+<h3>Problems 19–24: with $z=2-3i$, and for general $z=x+iy$</h3>
+<details class="sol"><summary>Show solutions 19–24</summary>
+<table class="t">
+<tr><th>#</th><th>Expression</th><th>$z=2-3i$</th><th>$z=x+iy$</th></tr>
+<tr><td>19</td><td>$z^{-1}$</td><td>$\frac{2+3i}{13}$</td><td>$\frac{x-iy}{x^2+y^2}$</td></tr>
+<tr><td>20</td><td>$\frac1{z^2}$</td><td>$z^2=-5-12i$, so $\frac{-5+12i}{169}$</td><td>$\frac{(x^2-y^2)-2ixy}{(x^2+y^2)^2}$</td></tr>
+<tr><td>21</td><td>$\frac{1}{z+1}$</td><td>$\frac1{3-3i}=\frac{1+i}{6}$</td><td>$\frac{(x+1)-iy}{(x+1)^2+y^2}$</td></tr>
+<tr><td>22</td><td>$\frac1{z-i}$</td><td>$\frac1{2-4i}=\frac{1+2i}{10}$</td><td>$\frac{x-i(y-1)}{x^2+(y-1)^2}$</td></tr>
+<tr><td>23</td><td>$\frac{1+z}{1-z}$</td><td>$\frac{3-3i}{-1+3i}=-\frac65-\frac35i$</td><td>$\frac{(1-x^2-y^2)+2iy}{(1-x)^2+y^2}$</td></tr>
+<tr><td>24</td><td>$\frac{z}{\bar z}$</td><td>$\frac{(2-3i)^2}{13}=\frac{-5-12i}{13}$</td><td>$\frac{x^2-y^2+2ixy}{x^2+y^2}$</td></tr>
+</table>
+<p><b>Method for #23:</b> multiply the top and bottom by $\overline{1-z}=1-\bar z$. The top becomes $(1+z)(1-\bar z)=1-\bar z+z-z\bar z=(1-x^2-y^2)+2iy$.</p></details>
+
+<h3>Problems 26–34: absolute values (do them in your head)</h3>
+<details class="sol"><summary>Show solutions 26–34</summary>
+<table class="t">
+<tr><th>#</th><th>Expression</th><th>$|\ \ |$</th><th>Reason</th></tr>
+<tr><td>26</td><td>$\frac{2i-1}{i-2}$</td><td>$1$</td><td>$\sqrt5/\sqrt5$</td></tr>
+<tr><td>27</td><td>$\frac{2+3i}{1-i}$</td><td>$\sqrt{13/2}$</td><td>$\sqrt{13}/\sqrt2$</td></tr>
+<tr><td>28</td><td>$\frac{z}{\bar z}$</td><td>$1$</td><td>$|\bar z|=|z|$</td></tr>
+<tr><td>29</td><td>$(1+2i)^3$</td><td>$5\sqrt5$</td><td>$(\sqrt5)^3$</td></tr>
+<tr><td>30</td><td>$\frac{3i}{i-\sqrt3}$</td><td>$\frac32$</td><td>$3/2$</td></tr>
+<tr><td>31</td><td>$\frac{5-2i}{5+2i}$</td><td>$1$</td><td>conjugates have equal modulus</td></tr>
+<tr><td>32</td><td>$(2-3i)^4$</td><td>$169$</td><td>$(\sqrt{13})^4$</td></tr>
+<tr><td>33</td><td>$\frac{25}{3+4i}$</td><td>$5$</td><td>$25/5$</td></tr>
+<tr><td>34</td><td>$\left(\frac{1+i}{1-i}\right)^5$</td><td>$1$</td><td>$(\sqrt2/\sqrt2)^5$</td></tr>
+</table>
+<p><b>#25 (proof):</b> see Section B above.</p></details>
+
+<h3>Problems 35–50: solve for real $x,y$</h3>
+<details class="sol"><summary>Show solutions 35–50</summary>
+<table class="t">
+<tr><th>#</th><th>Equation</th><th>Two real equations</th><th>Solution</th></tr>
+<tr><td>35</td><td>$x+iy=3i-4$</td><td>$x=-4,\ y=3$</td><td>$(-4,3)$</td></tr>
+<tr><td>36</td><td>$2ix+3=y-i$</td><td>$3=y,\ 2x=-1$</td><td>$x=-\frac12,\ y=3$</td></tr>
+<tr><td>37</td><td>$x+iy=0$</td><td>$x=0,\ y=0$</td><td>$(0,0)$</td></tr>
+<tr><td>38</td><td>$x+iy=2i-7$</td><td></td><td>$(-7,2)$</td></tr>
+<tr><td>39</td><td>$x+iy=y+ix$</td><td>$x=y,\ y=x$</td><td>$x=y$, any real value</td></tr>
+<tr><td>40</td><td>$x+iy=3i-ix$</td><td>$x=0,\ y=3-x$</td><td>$x=0,\ y=3$</td></tr>
+<tr><td>41</td><td>$(2x-3y-5)+i(x+2y+1)=0$</td><td>$2x-3y=5,\ x+2y=-1$</td><td>$x=1,\ y=-1$</td></tr>
+<tr><td>42</td><td>$(x+2y+3)+i(3x-y-1)=0$</td><td>$x+2y=-3,\ 3x-y=1$</td><td>$x=-\frac17,\ y=-\frac{10}7$</td></tr>
+<tr><td>43</td><td>$(x+iy)^2=2ix$</td><td>$x^2-y^2=0,\ 2xy=2x$</td><td>$(0,0),\ (1,1),\ (-1,1)$</td></tr>
+<tr><td>44</td><td>$x+iy=(1-i)^2$</td><td>$(1-i)^2=-2i$</td><td>$x=0,\ y=-2$</td></tr>
+<tr><td>45</td><td>$(x+iy)^2=(x-iy)^2$</td><td>$4ixy=0$</td><td>$x=0$ or $y=0$ (both axes)</td></tr>
+<tr><td>46</td><td>$\frac{x+iy}{x-iy}=-i$</td><td>$x+iy=-ix-y$, so $x=-y$</td><td>$y=-x$, $x\ne0$</td></tr>
+<tr><td>47</td><td>$(x+iy)^3=-1$</td><td>$x^3-3xy^2=-1,\ y(3x^2-y^2)=0$</td><td>$(-1,0),\ \left(\tfrac12,\pm\tfrac{\sqrt3}2\right)$</td></tr>
+<tr><td>48</td><td>$\frac{x+iy+2+3i}{2x+2iy-3}=i+2$</td><td>with $z=x+iy$: $(3+2i)z=8+6i$</td><td>$x=\frac{36}{13},\ y=\frac2{13}$</td></tr>
+<tr><td>49</td><td>$|1-(x+iy)|=x+iy$</td><td>RHS real, $\ge0$: $y=0$, $|1-x|=x$</td><td>$x=\frac12,\ y=0$</td></tr>
+<tr><td>50</td><td>$|x+iy|=y-ix$</td><td>RHS real: $x=0$, then $|y|=y$</td><td>$x=0$, any $y\ge0$</td></tr>
+</table>
+<p><b>Details for #43:</b> $2xy=2x$ means $x(y-1)=0$. If $x=0$, then $-y^2=0$, so $y=0$. If $y=1$, then $x^2=1$, so $x=\pm1$.</p>
+<p><b>#47:</b> $y=0$ gives $x^3=-1$, so $x=-1$. Or $y^2=3x^2$, which gives $x^3-9x^3=-1$, so $x=\frac12$ and $y=\pm\frac{\sqrt3}2$. These are the three cube roots of $-1$ (Section 2.10).</p>
+<p><b>#48:</b> $z+2+3i=(2+i)(2z-3)=(4+2i)z-6-3i$, so $(3+2i)z=8+6i$ and $z=\frac{(8+6i)(3-2i)}{13}=\frac{36+2i}{13}$.</p></details>
+
+<h3>Problems 51–64: describe the set of points</h3>
+<details class="sol"><summary>Show solutions 51–64</summary>
+<table class="t">
+<tr><th>#</th><th>Condition</th><th>Set</th></tr>
+<tr><td>51</td><td>$|z|=2$</td><td>circle, centre $0$, radius 2</td></tr>
+<tr><td>52</td><td>$\operatorname{Re}z=0$</td><td>the imaginary axis</td></tr>
+<tr><td>53</td><td>$|z-1|=1$</td><td>circle, centre $1$, radius 1 (passes through $0$)</td></tr>
+<tr><td>54</td><td>$|z-1|\lt1$</td><td>open disk inside that circle</td></tr>
+<tr><td>55</td><td>$z-\bar z=5i$</td><td>$2iy=5i$, so the horizontal line $y=\frac52$</td></tr>
+<tr><td>56</td><td>angle of $z=\frac\pi2$</td><td>positive imaginary axis ($x=0,\ y>0$)</td></tr>
+<tr><td>57</td><td>$\operatorname{Re}(z^2)=4$</td><td>hyperbola $x^2-y^2=4$</td></tr>
+<tr><td>58</td><td>$\operatorname{Re}z>2$</td><td>half-plane to the right of $x=2$</td></tr>
+<tr><td>59</td><td>$|z+3i|=4$</td><td>circle, centre $-3i$, radius 4</td></tr>
+<tr><td>60</td><td>$|z-1+i|=2$</td><td>circle, centre $1-i$, radius 2</td></tr>
+<tr><td>61</td><td>$\operatorname{Im}z\lt0$</td><td>lower half-plane</td></tr>
+<tr><td>62</td><td>$|z+1|+|z-1|=8$</td><td>ellipse $\frac{x^2}{16}+\frac{y^2}{15}=1$ (foci $\pm1$)</td></tr>
+<tr><td>63</td><td>$z^2=\bar z^2$</td><td>$xy=0$: both axes</td></tr>
+<tr><td>64</td><td>$z^2=-\bar z^2$</td><td>$x^2=y^2$: the lines $y=\pm x$</td></tr>
+</table>
+<p><b>#65:</b> $|z_1-z_2|=\sqrt{(x_1-x_2)^2+(y_1-y_2)^2}$ is the distance formula. So #53, #59 and #60 say "the distance from a fixed point is constant", giving circles centred at $1$, $-3i$ and $1-i$. #54 says the distance is less than 1: a disk.</p></details>
+
+<h3>Problems 66–68: motion</h3>
+<details class="sol"><summary>Show solutions 66–68</summary>
+<p><b>66.</b> Done in the example above: $x=\frac{2t^2-1}{t^2+1}$, $y=\frac{3t}{t^2+1}$, $v=\frac3{t^2+1}$. For the acceleration: $\ddot x=\frac{6(1-3t^2)}{(t^2+1)^3}$ and $\ddot y=\frac{6t(t^2-3)}{(t^2+1)^3}$, so $\ddot x^2+\ddot y^2=\frac{36[(1-3t^2)^2+t^2(t^2-3)^2]}{(t^2+1)^6}=\frac{36(t^2+1)^3}{(t^2+1)^6}$, giving $a=\frac{6}{(t^2+1)^{3/2}}$ ✔.</p>
+<p>Bonus: the path is a circle. $x-\tfrac12=\frac{3(t^2-1)}{2(t^2+1)}$, so $(x-\tfrac12)^2+y^2=\frac{9(t^2-1)^2+36t^2}{4(t^2+1)^2}=\frac94$: the circle $|z-\tfrac12|=\tfrac32$.</p>
+<p><b>67.</b> $z=\frac{1-it}{2t+i}$. Then $\frac{dz}{dt}=\frac{-i(2t+i)-2(1-it)}{(2t+i)^2}=\frac{-1}{(2t+i)^2}$, so $v=\frac{1}{4t^2+1}$. Next, $\frac{d^2z}{dt^2}=\frac{4}{(2t+i)^3}$, so $a=\frac{4}{(4t^2+1)^{3/2}}$.</p>
+<p><b>68.</b> $z=\cos2t+i\sin2t=e^{2it}$, so $\dot z=2ie^{2it}$ and $v=2$, and $\ddot z=-4e^{2it}$, so $a=4$. Uniform circular motion on the unit circle, counter-clockwise, with angular velocity 2. The acceleration $-4z$ points to the centre (centripetal, $v^2/r=4$).</p></details>
+
+<h2 id="worked">More worked examples (exam level)</h2>
+<div class="ex"><div class="hd">Example — Solve $z^2+|z|=0$</div><div class="bd"><ol class="steps">
+<li>$x^2-y^2+\sqrt{x^2+y^2}=0$ (real part) and $2xy=0$ (imaginary part).</li>
+<li>If $x=0$: $-y^2+|y|=0$, so $|y|=0$ or $1$, giving $z=0,\ \pm i$.</li>
+<li>If $y=0$: $x^2+|x|=0$, so $x=0$.</li>
+<li>Solutions: $z=0,\ i,\ -i$.</li></ol></div></div>
+<div class="ex"><div class="hd">Example — Largest $|z|$ if $\left|z-\dfrac4z\right|=2$</div><div class="bd"><ol class="steps">
+<li>Reverse triangle inequality: $|z|-\dfrac4{|z|}\le\left|z-\dfrac4z\right|=2$.</li>
+<li>With $r=|z|$: $r^2-2r-4\le0$, so $r\le1+\sqrt5$.</li>
+<li>When is the bound reached? $\big|z+(-4/z)\big|=|z|-|4/z|$ needs $z$ and $-4/z$ to point in <b>opposite</b> directions, i.e. $4/z=kz$ with $k>0$, so $z^2>0$ and $z$ is <b>real</b>.</li>
+<li>Check $z=1+\sqrt5$: $\ \dfrac4z=\dfrac{4}{1+\sqrt5}=\sqrt5-1$, so $z-\dfrac4z=2$ ✔.</li>
+<li>Maximum $|z|=1+\sqrt5$, attained at $z=\pm(1+\sqrt5)$. (By the same method, $\frac4{|z|}-|z|\le2$ gives the minimum $|z|=\sqrt5-1$, also attained at real $z=\pm(\sqrt5-1)$: $(\sqrt5-1)-(\sqrt5+1)=-2$ ✔.)</li></ol>
+<p class="small">Lesson: always check where equality in a triangle inequality is actually attained. A purely imaginary $z=iR$ gives $|z-4/z|=R+4/R\ge4$, which is never 2, so the maximum cannot occur there.</p></div></div>
+<div class="ex"><div class="hd">Example — Solve $\bar z=iz^2$</div><div class="bd"><ol class="steps">
+<li>Moduli: $|z|=|z|^2$, so $|z|=0$ or $1$.</li>
+<li>If $|z|=1$: $\bar z=1/z$, so $1/z=iz^2$, i.e. $z^3=1/i=-i$.</li>
+<li>$z^3=-i=e^{-i\pi/2}$ gives $z=e^{i(-\pi/2+2\pi k)/3}=e^{-i\pi/6},\ e^{i\pi/2},\ e^{7i\pi/6}$.</li>
+<li>Solutions: $0,\ i,\ \pm\frac{\sqrt3}2-\frac12i$.</li></ol></div></div>
+
+<h2 id="practice">Practice problems (graded)</h2>
+<div class="prob"><div class="q"><b>P1.</b> Simplify $\dfrac{(2+i)(3-2i)}{1+i}$. <span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>Top: $6-4i+3i+2=8-i$. Then $\dfrac{(8-i)(1-i)}{2}=\dfrac{8-8i-i-1}{2}=\dfrac72-\dfrac92i$.</p></details></div>
+<div class="prob"><div class="q"><b>P2.</b> Find $\sqrt{-15-8i}$ and $\sqrt{5+12i}$. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$|{-15-8i}|=17$: $x^2=1$, $y^2=16$, $xy\lt0$, so $\pm(1-4i)$. $|5+12i|=13$: $x^2=9$, $y^2=4$, $xy>0$, so $\pm(3+2i)$.</p></details></div>
+<div class="prob"><div class="q"><b>P3.</b> Solve $z^2+(1-2i)z-(1+5i)=0$. <span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>$d=(1-2i)^2+4(1+5i)=-3-4i+4+20i=1+16i$. $|d|=\sqrt{257}$, so $\sqrt d$ is not "nice". Numerically $x^2=\frac{\sqrt{257}+1}{2}=8.516$, so $x=2.918$, $y=16/(2x)=2.741$. Then $z=\frac{-(1-2i)\pm(2.918+2.741i)}{2}$, i.e. $z\approx0.959+2.371i$ or $z\approx-1.959-0.371i$. Check: the sum is $-1+2i=-(1-2i)$ ✔.</p></details></div>
+<div class="prob"><div class="q"><b>P4.</b> Without simplifying, find $\overline{\left(\dfrac{(3-i)e^{i\pi/5}}{2+5i}\right)}$. <span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>Change every $i$: $\dfrac{(3+i)e^{-i\pi/5}}{2-5i}$.</p></details></div>
+<div class="prob"><div class="q"><b>P5.</b> Find $\left|\dfrac{(1+i)^{10}(3-4i)^2}{(\sqrt3+i)^{8}}\right|$. <span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\dfrac{2^5\cdot25}{2^8}=\dfrac{25}{8}$.</p></details></div>
+<div class="prob"><div class="q"><b>P6.</b> Describe $1\lt|z-i|\le3$, $\ |z-2|=|z+2i|$, and $\operatorname{Re}(1/z)=\frac12$. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>(a) An annulus centred at $i$, inner radius 1 (inner circle excluded), outer radius 3 (outer circle included).</p>
+<p>(b) Points equidistant from $2$ and $-2i$ lie on the perpendicular bisector: $(x-2)^2+y^2=x^2+(y+2)^2$ gives $-4x=4y$, so the line $y=-x$.</p>
+<p>(c) $\frac{x}{x^2+y^2}=\frac12$ gives $x^2-2x+y^2=0$, the circle $|z-1|=1$, without the origin.</p></details></div>
+<div class="prob"><div class="q"><b>P7.</b> Describe $|z-2|-|z+2|=2$. <span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>Foci $\pm2$ (so $c=2$), $2a=2$ (so $a=1$), and $b^2=3$: hyperbola $x^2-\frac{y^2}3=1$. Since $|z-2|>|z+2|$, $z$ is closer to $-2$, so only the <b>left branch</b> ($x\le-1$).</p></details></div>
+<div class="prob"><div class="q"><b>P8.</b> Find the centre and radius of $|z-3|=2|z-3i|$. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$(x-3)^2+y^2=4[x^2+(y-3)^2]$. Expanding: $x^2-6x+9+y^2=4x^2+4y^2-24y+36$, so $3x^2+3y^2+6x-24y+27=0$, i.e. $x^2+y^2+2x-8y+9=0$. Then $(x+1)^2+(y-4)^2=8$: centre $-1+4i$, radius $2\sqrt2$.</p></details></div>
+<div class="prob"><div class="q"><b>P9.</b> Show that $z\bar z+\bar\beta z+\beta\bar z+\gamma=0$ ($\gamma$ real, $|\beta|^2>\gamma$) is a circle, and find its centre and radius. <span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>$(z+\beta)(\bar z+\bar\beta)=z\bar z+\bar\beta z+\beta\bar z+|\beta|^2$, so the equation is $|z+\beta|^2=|\beta|^2-\gamma$. Centre $-\beta$, radius $\sqrt{|\beta|^2-\gamma}$.</p></details></div>
+<div class="prob"><div class="q"><b>P10.</b> A particle has $z=t^2+it^3$. Find its speed and the magnitude of its acceleration at $t=1$. <span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\dot z=2t+3it^2$, so $v=t\sqrt{4+9t^2}$, which is $\sqrt{13}$ at $t=1$. $\ddot z=2+6it$, so $a=\sqrt{4+36t^2}$, which is $\sqrt{40}=2\sqrt{10}$ at $t=1$.</p></details></div>
+<div class="prob"><div class="q"><b>P11.</b> $z=e^{(-k+i\omega)t}$ with $k,\omega>0$. Describe the motion and find $v(t)$. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$|z|=e^{-kt}$ and the angle is $\omega t$: an inward logarithmic spiral. $\dot z=(-k+i\omega)z$, so $v=\sqrt{k^2+\omega^2}\,e^{-kt}$ and $a=(k^2+\omega^2)e^{-kt}$.</p></details></div>
+<div class="prob"><div class="q"><b>P12.</b> If $z_1,z_2$ are the roots of $z^2+pz+q=0$ with real $p,q$ and non-real roots, show that $|z_1|=|z_2|=\sqrt q$. <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>Non-real roots of a real quadratic are conjugates: $z_2=\bar z_1$. Then $q=z_1z_2=z_1\bar z_1=|z_1|^2$.</p></details></div>
+<div class="prob"><div class="q"><b>P13.</b> (NET-type) The equation $|z-i|+|z+i|=2$ represents: <span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>The foci are $\pm i$ with $|a-b|=2$, equal to the constant. So it is the degenerate case: the line segment from $-i$ to $i$.</p></details></div>
+
+<h2 id="quiz">Quick self-test</h2>
+<div class="mcq" data-ans="2" data-ok="$(1-i)(1-i)/2=-2i/2=-i$." data-no="Multiply the top and bottom by $1-i$."><p>1. $\dfrac{1-i}{1+i}=$</p><div class="opts"><button>$i$</button><button>$1$</button><button>$-i$</button><button>$-1$</button></div><div class="fb"></div></div>
+<div class="mcq" data-ans="0" data-ok="Distance to $1$ equals distance to $i$: the perpendicular bisector $y=x$." data-no="$|z-a|=|z-b|$ is a perpendicular bisector."><p>2. $|z-1|=|z-i|$ is</p><div class="opts"><button>the line $y=x$</button><button>a circle</button><button>the line $y=-x$</button><button>an ellipse</button></div><div class="fb"></div></div>
+<div class="mcq" data-ans="3" data-ok="$|w|=5$: $x^2=4$, $y^2=1$, $xy>0$." data-no="Use $x^2=(|w|+a)/2$, $y^2=(|w|-a)/2$, with $\operatorname{sign}(xy)=\operatorname{sign}(b)$."><p>3. The square roots of $3+4i$ are</p><div class="opts"><button>$\pm(1+2i)$</button><button>$\pm(2-i)$</button><button>$\pm(1-2i)$</button><button>$\pm(2+i)$</button></div><div class="fb"></div></div>
+<div class="mcq" data-ans="1" data-ok="If $a$ is complex, $\overline{a+ib}=\bar a-i\bar b$." data-no="Watch for hidden $i$'s inside $a$ and $b$."><p>4. If $a=1+i$ and $b=2$, then $\overline{a+ib}=$</p><div class="opts"><button>$a-ib=1-i$</button><button>$1-3i$</button><button>$1+3i$</button><button>$-1+3i$</button></div><div class="fb"></div></div>
+
+<h2 id="summary">Summary</h2>
+<div class="card"><ul class="summary">
+<li><b>Divide:</b> multiply by the conjugate of the denominator. <b>Multiply or power:</b> polar is often faster.</li>
+<li><b>Conjugate</b> of an expression: change every $i$ (including hidden ones).</li>
+<li>$|z|=\sqrt{z\bar z}$. The modulus of a product or quotient is the product or quotient of the moduli.</li>
+<li>A <b>complex equation</b> is two real equations. $\sqrt{a+ib}$: $x^2=\frac{|w|+a}2$, $y^2=\frac{|w|-a}2$.</li>
+<li>$|z-a|$ is a distance, and this gives circles, bisectors, ellipses, hyperbolas and Apollonius circles.</li>
+<li>Motion: $v=|\dot z|$ and $a=|\ddot z|$.</li>
+</ul></div>
+
+
+<div class="pagenav"><a href="2.4_Terminology_and_Notation.html"><small>← Previous</small>2.4 Terminology and Notation</a><a href="2.6_Complex_Infinite_Series.html" style="text-align:right"><small>Next →</small>2.6 Complex Infinite Series</a></div>
+</main>
+</div>
+<script>
+"use strict";
+/* ===== shared helpers for all Chapter 2 pages ===== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const PI = Math.PI, TAU = 2 * Math.PI;
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function onReady(fn) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
+
+/* ---------- number formatting ---------- */
+function fnum(x, d = 4) {
+  if (Number.isNaN(x)) return 'undefined';
+  if (!isFinite(x)) return x > 0 ? '∞' : '−∞';
+  if (Math.abs(x) >= 1e7) return x.toExponential(3).replace('-', '−');
+  let s = (+x.toFixed(d)).toString();
+  if (s === '-0') s = '0';
+  return s.replace('-', '−');
+}
+/* ---------- complex arithmetic, numbers are [re, im] ---------- */
+const Cx = {
+  c: (a, b = 0) => [a, b],
+  I: [0, 1],
+  add: (a, b) => [a[0] + b[0], a[1] + b[1]],
+  sub: (a, b) => [a[0] - b[0], a[1] - b[1]],
+  mul: (a, b) => [a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]],
+  div: (a, b) => { const d = b[0] * b[0] + b[1] * b[1]; return [(a[0] * b[0] + a[1] * b[1]) / d, (a[1] * b[0] - a[0] * b[1]) / d]; },
+  scale: (a, k) => [a[0] * k, a[1] * k],
+  conj: a => [a[0], -a[1]],
+  neg: a => [-a[0], -a[1]],
+  abs: a => Math.hypot(a[0], a[1]),
+  abs2: a => a[0] * a[0] + a[1] * a[1],
+  arg: a => Math.atan2(a[1], a[0]),
+  arg2pi: a => { let t = Math.atan2(a[1], a[0]); return t < 0 ? t + TAU : t; },
+  polar: (r, t) => [r * Math.cos(t), r * Math.sin(t)],
+  exp: a => { const e = Math.exp(a[0]); return [e * Math.cos(a[1]), e * Math.sin(a[1])]; },
+  log: (a, n = 0) => [Math.log(Math.hypot(a[0], a[1])), Math.atan2(a[1], a[0]) + TAU * n],
+  ipow(a, n) { let r = [1, 0], b = a, k = Math.abs(n); while (k) { if (k & 1) r = Cx.mul(r, b); b = Cx.mul(b, b); k >>= 1; } return n < 0 ? Cx.div([1, 0], r) : r; },
+  pow(a, b, n = 0) {
+    if (b[1] === 0 && Number.isInteger(b[0]) && Math.abs(b[0]) <= 4096) return Cx.ipow(a, b[0]);
+    if (a[0] === 0 && a[1] === 0) return b[0] > 0 ? [0, 0] : [NaN, NaN];
+    return Cx.exp(Cx.mul(b, Cx.log(a, n)));
+  },
+  sqrt: a => Cx.polar(Math.sqrt(Math.hypot(a[0], a[1])), Math.atan2(a[1], a[0]) / 2),
+  sin: a => [Math.sin(a[0]) * Math.cosh(a[1]), Math.cos(a[0]) * Math.sinh(a[1])],
+  cos: a => [Math.cos(a[0]) * Math.cosh(a[1]), -Math.sin(a[0]) * Math.sinh(a[1])],
+  tan: a => Cx.div(Cx.sin(a), Cx.cos(a)),
+  sinh: a => [Math.sinh(a[0]) * Math.cos(a[1]), Math.cosh(a[0]) * Math.sin(a[1])],
+  cosh: a => [Math.cosh(a[0]) * Math.cos(a[1]), Math.sinh(a[0]) * Math.sin(a[1])],
+  tanh: a => Cx.div(Cx.sinh(a), Cx.cosh(a)),
+  // principal branches
+  asin: z => Cx.mul([0, -1], Cx.log(Cx.add(Cx.mul([0, 1], z), Cx.sqrt(Cx.sub([1, 0], Cx.mul(z, z)))))),
+  acos: z => Cx.sub([PI / 2, 0], Cx.asin(z)),
+  atan: z => Cx.mul([0, -0.5], Cx.log(Cx.div(Cx.add([1, 0], Cx.mul([0, 1], z)), Cx.sub([1, 0], Cx.mul([0, 1], z))))),
+  asinh: z => Cx.log(Cx.add(z, Cx.sqrt(Cx.add(Cx.mul(z, z), [1, 0])))),
+  acosh: z => Cx.log(Cx.add(z, Cx.mul(Cx.sqrt(Cx.add(z, [1, 0])), Cx.sqrt(Cx.sub(z, [1, 0]))))),
+  atanh: z => Cx.scale(Cx.log(Cx.div(Cx.add([1, 0], z), Cx.sub([1, 0], z))), 0.5),
+  eq: (a, b, e = 1e-9) => Math.abs(a[0] - b[0]) < e && Math.abs(a[1] - b[1]) < e,
+  fmt(z, d = 4) {
+    if (!isFinite(z[0]) || !isFinite(z[1])) return 'undefined';
+    const eps = 0.5 * Math.pow(10, -d);
+    const R = Math.abs(z[0]) < eps ? 0 : z[0], I = Math.abs(z[1]) < eps ? 0 : z[1];
+    if (I === 0) return fnum(R, d);
+    const ai = Math.abs(I), ip = (Math.abs(ai - 1) < eps ? '' : fnum(ai, d)) + 'i';
+    if (R === 0) return (I < 0 ? '−' : '') + ip;
+    return fnum(R, d) + (I < 0 ? ' − ' : ' + ') + ip;
+  },
+  tex(z, d = 4) { return Cx.fmt(z, d).replace(/−/g, '-').replace('undefined', '\\text{undefined}'); },
+  polarTex(z, d = 3) {
+    const r = Cx.abs(z), t = Cx.arg(z);
+    return fnum(r, d).replace('−', '-') + '\\,e^{' + fnum(t, d).replace('−', '-') + 'i}';
+  }
+};
+/* angle as a nice multiple of pi if possible */
+function piFrac(t, maxDen = 12) {
+  const q = t / PI;
+  for (let den = 1; den <= maxDen; den++) {
+    const num = Math.round(q * den);
+    if (Math.abs(q * den - num) < 1e-9) {
+      if (num === 0) return '0';
+      const g = gcd(Math.abs(num), den), a = num / g, b = den / g;
+      const s = a < 0 ? '-' : '', A = Math.abs(a);
+      const top = (A === 1 ? '' : A) + '\\pi';
+      return b === 1 ? s + top : s + '\\frac{' + top + '}{' + b + '}';
+    }
+  }
+  return fnum(t, 4).replace('−', '-');
+}
+function gcd(a, b) { while (b) [a, b] = [b, a % b]; return a; }
+/* coefficient of i in TeX: 1 -> '', -1 -> '-' */
+function icoef(v, d = 3) { const s = fnum(v, d).replace('−', '-'); return s === '1' ? '' : s === '-1' ? '-' : s; }
+/* KaTeX render into element (falls back to plain text if KaTeX could not load) */
+function tex(el, s, disp = false) {
+  if (typeof el === 'string') el = $(el);
+  if (!el) return;
+  if (window.katex) { try { katex.render(s, el, { displayMode: disp, throwOnError: false }); return; } catch (e) { } }
+  el.textContent = s;
+}
+/* render a string that mixes text and $...$ math into an element */
+function texMix(el, s) {
+  if (typeof el === 'string') el = $(el);
+  el.innerHTML = '';
+  s.split(/(\$\$[^$]+\$\$|\$[^$]+\$)/).forEach(part => {
+    if (!part) return;
+    const span = document.createElement('span');
+    if (part.startsWith('$$')) tex(span, part.slice(2, -2), true);
+    else if (part.startsWith('$')) tex(span, part.slice(1, -1));
+    else span.innerHTML = part;
+    el.appendChild(span);
+  });
+}
+
+/* ---------- expression parser for complex expressions ---------- */
+const Parser = (() => {
+  const F = {
+    sin: Cx.sin, cos: Cx.cos, tan: Cx.tan, sinh: Cx.sinh, cosh: Cx.cosh, tanh: Cx.tanh,
+    sec: z => Cx.div([1, 0], Cx.cos(z)), csc: z => Cx.div([1, 0], Cx.sin(z)), cot: z => Cx.div(Cx.cos(z), Cx.sin(z)),
+    sech: z => Cx.div([1, 0], Cx.cosh(z)), csch: z => Cx.div([1, 0], Cx.sinh(z)), coth: z => Cx.div(Cx.cosh(z), Cx.sinh(z)),
+    exp: Cx.exp, ln: z => Cx.log(z), log: z => Cx.log(z), sqrt: Cx.sqrt, conj: Cx.conj,
+    abs: z => [Cx.abs(z), 0], arg: z => [Cx.arg(z), 0], re: z => [z[0], 0], im: z => [z[1], 0],
+    asin: Cx.asin, acos: Cx.acos, atan: Cx.atan, asinh: Cx.asinh, acosh: Cx.acosh, atanh: Cx.atanh,
+    arcsin: Cx.asin, arccos: Cx.acos, arctan: Cx.atan, arcsinh: Cx.asinh, arccosh: Cx.acosh, arctanh: Cx.atanh
+  };
+  function tokenize(s) {
+    s = s.replace(/−/g, '-').replace(/×|·/g, '*').replace(/÷/g, '/').replace(/π/g, 'pi').replace(/√/g, 'sqrt').replace(/\*\*/g, '^');
+    const out = []; let i = 0;
+    while (i < s.length) {
+      const c = s[i];
+      if (/\s/.test(c)) { i++; continue; }
+      if (/[0-9.]/.test(c)) { let j = i; while (j < s.length && /[0-9.]/.test(s[j])) j++; if (s[j] === 'e' && /[-+0-9]/.test(s[j + 1] || '') && /[0-9]/.test(s[j + 1] === '-' || s[j + 1] === '+' ? s[j + 2] : s[j + 1])) { j += 2; while (j < s.length && /[0-9]/.test(s[j])) j++; } out.push({ t: 'n', v: parseFloat(s.slice(i, j)) }); i = j; continue; }
+      if (/[a-zA-Z_]/.test(c)) { let j = i; while (j < s.length && /[a-zA-Z_0-9]/.test(s[j])) j++; out.push({ t: 'id', v: s.slice(i, j).toLowerCase() }); i = j; continue; }
+      if ('+-*/^(),'.includes(c)) { out.push({ t: 'op', v: c }); i++; continue; }
+      throw new Error('Unexpected character "' + c + '"');
+    }
+    return out;
+  }
+  function compile(src) {
+    const tk = tokenize(src); let p = 0;
+    const peek = () => tk[p], next = () => tk[p++];
+    const isOp = v => tk[p] && tk[p].t === 'op' && tk[p].v === v;
+    function expr() { let a = term(); while (isOp('+') || isOp('-')) { const o = next().v, b = term(), A = a; a = o === '+' ? e => Cx.add(A(e), b(e)) : e => Cx.sub(A(e), b(e)); } return a; }
+    function term() {
+      let a = unary();
+      for (; ;) {
+        if (isOp('*') || isOp('/')) { const o = next().v, b = unary(), A = a; a = o === '*' ? e => Cx.mul(A(e), b(e)) : e => Cx.div(A(e), b(e)); }
+        else if (peek() && (peek().t === 'n' || peek().t === 'id' || isOp('('))) { const b = power(), A = a; a = e => Cx.mul(A(e), b(e)); }
+        else break;
+      }
+      return a;
+    }
+    function unary() { if (isOp('-')) { next(); const a = unary(); return e => Cx.neg(a(e)); } if (isOp('+')) { next(); return unary(); } return power(); }
+    function power() { const a = primary(); if (isOp('^')) { next(); const b = unary(); return e => Cx.pow(a(e), b(e)); } return a; }
+    function primary() {
+      const t = next();
+      if (!t) throw new Error('Expression ended too early');
+      if (t.t === 'n') { const v = [t.v, 0]; return () => v; }
+      if (t.t === 'op' && t.v === '(') { const a = expr(); if (!isOp(')')) throw new Error('Missing ")"'); next(); return a; }
+      if (t.t === 'id') {
+        if (F[t.v]) {
+          if (!isOp('(')) throw new Error(t.v + ' needs brackets, e.g. ' + t.v + '(1+i)');
+          next(); const a = expr(); if (!isOp(')')) throw new Error('Missing ")"'); next(); const f = F[t.v]; return e => f(a(e));
+        }
+        if (t.v === 'i' || t.v === 'j') return () => [0, 1];
+        if (t.v === 'pi') return () => [PI, 0];
+        if (t.v === 'e') return () => [Math.E, 0];
+        const name = t.v; return e => { if (e && name in e) return e[name]; throw new Error('Unknown name "' + name + '"'); };
+      }
+      throw new Error('Unexpected "' + t.v + '"');
+    }
+    const f = expr(); if (p < tk.length) throw new Error('Unexpected "' + tk[p].v + '"');
+    return f;
+  }
+  return { compile, eval: (s, env) => compile(s)(env || {}) };
+})();
+
+/* ---------- contour integration: ∫ f(z) dz along z = path(t), t in [a,b] (composite Simpson) ---------- */
+function contourInt(f, path, a, b, N = 2000) {
+  if (N % 2) N++;
+  const h = (b - a) / N, d = h * 1e-3;
+  let s = [0, 0];
+  for (let k = 0; k <= N; k++) {
+    const t = a + k * h, z = path(t), dz = Cx.scale(Cx.sub(path(t + d), path(t - d)), 1 / (2 * d));
+    const w = k === 0 || k === N ? 1 : (k % 2 ? 4 : 2);
+    s = Cx.add(s, Cx.scale(Cx.mul(f(z), dz), w));
+  }
+  return Cx.scale(s, h / 3);
+}
+const circlePath = (c, r) => t => Cx.add(c, Cx.polar(r, t));
+
+/* ---------- colours ---------- */
+function hsl2rgb(h, s, l) { // h in [0,1)
+  const a = s * Math.min(l, 1 - l);
+  const f = n => { const k = (n + h * 12) % 12; return l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)); };
+  return [f(0) * 255, f(8) * 255, f(4) * 255];
+}
+function phaseRGB(t, light = 0.5) { let h = (t / TAU) % 1; if (h < 0) h += 1; return hsl2rgb(h, 0.85, light); }
+function heatRGB(u) { // 0..1 -> perceptual blue->teal->yellow
+  u = Math.max(0, Math.min(1, u));
+  const st = [[48, 18, 120], [33, 102, 172], [32, 164, 160], [110, 200, 90], [240, 220, 60]];
+  const x = u * (st.length - 1), i = Math.min(st.length - 2, Math.floor(x)), f = x - i;
+  return st[i].map((v, k) => v + (st[i + 1][k] - v) * f);
+}
+const rgbs = c => `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`;
+
+/* ---------- redraw registry (resize + theme change) ---------- */
+const _views = [];
+let _rzT = 0;
+window.addEventListener('resize', () => { clearTimeout(_rzT); _rzT = setTimeout(() => _views.forEach(v => v.resize()), 120); });
+function redrawAll() { _views.forEach(v => v.redraw()); }
+
+/* ---------- 2-D complex plane ---------- */
+class Plane {
+  constructor(cv, o = {}) {
+    this.cv = typeof cv === 'string' ? $(cv) : cv; this.ctx = this.cv.getContext('2d');
+    this.cx = o.cx ?? 0; this.cy = o.cy ?? 0; this.span = o.span ?? 3; this.aspect = o.aspect ?? 0.7;
+    this.gridOn = o.grid !== false; this.snap = o.snap ?? 0.05; this.axisLabels = o.axisLabels ?? ['Re', 'Im'];
+    this.draw = o.draw || (() => { }); this.drags = []; this.onClick = o.onClick || null; this.active = null;
+    this._bind(); _views.push(this); this.resize();
+  }
+  resize() {
+    const dpr = window.devicePixelRatio || 1, w = this.cv.clientWidth || 600, h = Math.round(w * this.aspect);
+    this.cv.style.height = h + 'px'; this.cv.width = Math.round(w * dpr); this.cv.height = Math.round(h * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); this.W = w; this.H = h; this.dpr = dpr; this.redraw();
+  }
+  get k() { return this.W / (2 * this.span); }
+  X(x) { return this.W / 2 + (x - this.cx) * this.k; }
+  Y(y) { return this.H / 2 - (y - this.cy) * this.k; }
+  wx(px) { return (px - this.W / 2) / this.k + this.cx; }
+  wy(py) { return -(py - this.H / 2) / this.k + this.cy; }
+  get x0() { return this.wx(0); } get x1() { return this.wx(this.W); }
+  get y0() { return this.wy(this.H); } get y1() { return this.wy(0); }
+  redraw() { if (!this.W) return; const c = this.ctx; c.save(); c.fillStyle = cssv('--canvas'); c.fillRect(0, 0, this.W, this.H); c.restore(); if (this.gridOn) this.grid(); this.draw(this); }
+  step() { const raw = 55 / this.k, p = Math.pow(10, Math.floor(Math.log10(raw))); for (const m of [1, 2, 5, 10]) if (m * p >= raw) return m * p; return 10 * p; }
+  grid() {
+    const c = this.ctx, s = this.step(); c.save(); c.lineWidth = 1; c.strokeStyle = cssv('--grid');
+    c.beginPath();
+    for (let x = Math.ceil(this.x0 / s) * s; x <= this.x1; x += s) { const X = Math.round(this.X(x)) + .5; c.moveTo(X, 0); c.lineTo(X, this.H); }
+    for (let y = Math.ceil(this.y0 / s) * s; y <= this.y1; y += s) { const Y = Math.round(this.Y(y)) + .5; c.moveTo(0, Y); c.lineTo(this.W, Y); }
+    c.stroke();
+    c.strokeStyle = cssv('--axis'); c.lineWidth = 1.3; c.beginPath();
+    const ox = this.X(0), oy = this.Y(0); c.moveTo(0, oy); c.lineTo(this.W, oy); c.moveTo(ox, 0); c.lineTo(ox, this.H); c.stroke();
+    c.fillStyle = cssv('--muted'); c.font = '11px system-ui,sans-serif';
+    const lx = Math.min(Math.max(ox, 4), this.W - 30), ly = Math.min(Math.max(oy, 12), this.H - 4);
+    c.textAlign = 'center';
+    for (let x = Math.ceil(this.x0 / s) * s; x <= this.x1; x += s) { if (Math.abs(x) < s / 2) continue; c.fillText(fnum(x, 3), this.X(x), ly + 13 > this.H ? ly - 4 : ly + 13); }
+    c.textAlign = 'left';
+    for (let y = Math.ceil(this.y0 / s) * s; y <= this.y1; y += s) { if (Math.abs(y) < s / 2) continue; c.fillText(fnum(y, 3) + (this.axisLabels[1] === 'Im' ? 'i' : ''), lx + 4, this.Y(y) + 4); }
+    c.font = '600 12px system-ui,sans-serif'; c.fillStyle = cssv('--axis');
+    if (this.axisLabels[0]) { c.textAlign = 'right'; c.fillText(this.axisLabels[0], this.W - 6, Math.min(Math.max(oy - 6, 14), this.H - 6)); }
+    if (this.axisLabels[1]) { c.textAlign = 'left'; c.fillText(this.axisLabels[1], Math.min(Math.max(ox + 6, 6), this.W - 30), 14); }
+    c.restore();
+  }
+  col(v) { return v && v.startsWith('--') ? cssv(v) : (v || cssv('--accent')); }
+  line(a, b, o = {}) { const c = this.ctx; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; if (o.dash) c.setLineDash(o.dash); c.globalAlpha = o.alpha ?? 1; c.beginPath(); c.moveTo(this.X(a[0]), this.Y(a[1])); c.lineTo(this.X(b[0]), this.Y(b[1])); c.stroke(); c.restore(); }
+  lineInf(p, d, o = {}) { const L = 1e4; this.line([p[0] - d[0] * L, p[1] - d[1] * L], [p[0] + d[0] * L, p[1] + d[1] * L], o); }
+  arrow(a, b, o = {}) {
+    const c = this.ctx, x0 = this.X(a[0]), y0 = this.Y(a[1]), x1 = this.X(b[0]), y1 = this.Y(b[1]), L = Math.hypot(x1 - x0, y1 - y0);
+    c.save(); c.strokeStyle = c.fillStyle = this.col(o.color); c.lineWidth = o.width || 2.5; c.globalAlpha = o.alpha ?? 1; if (o.dash) c.setLineDash(o.dash);
+    if (L < 1) { c.restore(); return; }
+    const h = Math.min(o.head || 11, L * 0.5), ux = (x1 - x0) / L, uy = (y1 - y0) / L;
+    c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1 - ux * h * 0.8, y1 - uy * h * 0.8); c.stroke(); c.setLineDash([]);
+    c.beginPath(); c.moveTo(x1, y1); c.lineTo(x1 - ux * h - uy * h * 0.45, y1 - uy * h + ux * h * 0.45); c.lineTo(x1 - ux * h + uy * h * 0.45, y1 - uy * h - ux * h * 0.45); c.closePath(); c.fill(); c.restore();
+  }
+  dot(z, o = {}) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(o.color); c.globalAlpha = o.alpha ?? 1;
+    c.beginPath(); c.arc(this.X(z[0]), this.Y(z[1]), o.r || 5, 0, TAU);
+    if (o.hollow) { c.strokeStyle = c.fillStyle; c.lineWidth = 2; c.stroke(); } else c.fill();
+    if (o.ring) { c.strokeStyle = cssv('--canvas'); c.lineWidth = 2; c.stroke(); }
+    c.restore(); if (o.label) this.label(z, o.label, o);
+  }
+  label(z, s, o = {}) {
+    const c = this.ctx; c.save(); c.font = o.font || '600 13px system-ui,sans-serif'; c.fillStyle = this.col(o.lcolor || o.color);
+    c.textAlign = o.align || 'left'; const X = this.X(z[0]) + (o.dx ?? 8), Y = this.Y(z[1]) + (o.dy ?? -8);
+    if (o.bg !== false) { const w = c.measureText(s).width, ax = c.textAlign === 'center' ? X - w / 2 : c.textAlign === 'right' ? X - w : X; c.globalAlpha = 0.75; c.fillStyle = cssv('--canvas'); c.fillRect(ax - 2, Y - 12, w + 4, 16); c.globalAlpha = 1; c.fillStyle = this.col(o.lcolor || o.color); }
+    c.fillText(s, X, Y); c.restore();
+  }
+  text(px, py, s, o = {}) { const c = this.ctx; c.save(); c.font = o.font || '600 13px system-ui,sans-serif'; c.fillStyle = this.col(o.color || '--fg'); c.textAlign = o.align || 'left'; c.fillText(s, px, py); c.restore(); }
+  circle(ctr, r, o = {}) {
+    const c = this.ctx; c.save(); c.beginPath(); c.arc(this.X(ctr[0]), this.Y(ctr[1]), Math.abs(r) * this.k, 0, TAU);
+    if (o.fill) { c.fillStyle = this.col(o.fill); c.globalAlpha = o.fillAlpha ?? 0.15; c.fill(); c.globalAlpha = 1; }
+    if (o.color !== 'none') { c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; if (o.dash) c.setLineDash(o.dash); c.stroke(); }
+    c.restore();
+  }
+  path(pts, o = {}) {
+    const c = this.ctx; if (!pts.length) return; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 2; c.globalAlpha = o.alpha ?? 1; if (o.dash) c.setLineDash(o.dash);
+    c.beginPath(); let pen = false;
+    for (const p of pts) { if (!p || !isFinite(p[0]) || !isFinite(p[1]) || Math.abs(p[0]) > 1e6 || Math.abs(p[1]) > 1e6) { pen = false; continue; } const X = this.X(p[0]), Y = this.Y(p[1]); if (pen) c.lineTo(X, Y); else { c.moveTo(X, Y); pen = true; } }
+    if (o.close) c.closePath();
+    if (o.fill) { c.fillStyle = this.col(o.fill); c.globalAlpha = o.fillAlpha ?? 0.15; c.fill(); c.globalAlpha = o.alpha ?? 1; }
+    if (o.color !== 'none') c.stroke(); c.restore();
+  }
+  angleArc(t0, t1, rpx, o = {}, ctr = [0, 0]) {
+    const c = this.ctx; c.save(); c.strokeStyle = this.col(o.color); c.lineWidth = o.width || 1.8; c.beginPath();
+    c.arc(this.X(ctr[0]), this.Y(ctr[1]), rpx, -t0, -t1, t1 > t0); c.stroke(); c.restore();
+  }
+  /* shade region where test(x,y) is true */
+  region(test, color, alpha = 0.22, res = 3) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(color); c.globalAlpha = alpha;
+    for (let py = 0; py < this.H; py += res) for (let px = 0; px < this.W; px += res) if (test(this.wx(px + res / 2), this.wy(py + res / 2))) c.fillRect(px, py, res, res);
+    c.restore();
+  }
+  /* implicit curve F(x,y)=0 by marching squares (sign changes) */
+  implicit(Fn, o = {}, res = 3) {
+    const c = this.ctx; c.save(); c.fillStyle = this.col(o.color); const nx = Math.ceil(this.W / res) + 1, ny = Math.ceil(this.H / res) + 1; const v = new Float64Array(nx * ny);
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) v[j * nx + i] = Fn(this.wx(i * res), this.wy(j * res));
+    for (let j = 0; j < ny - 1; j++) for (let i = 0; i < nx - 1; i++) { const a = v[j * nx + i], b = v[j * nx + i + 1], d = v[(j + 1) * nx + i]; if (!isFinite(a) || !isFinite(b) || !isFinite(d)) continue; if ((a > 0) !== (b > 0) || (a > 0) !== (d > 0)) { if (o.maxJump && (Math.abs(a - b) > o.maxJump || Math.abs(a - d) > o.maxJump)) continue; c.fillRect(i * res - (o.width || 2) / 2 + res / 2, j * res - (o.width || 2) / 2 + res / 2, o.width || 2.4, o.width || 2.4); } }
+    c.restore();
+  }
+  /* domain colouring of w=f(z) : hue = arg w, brightness bands = log|w| */
+  domain(f, o = {}) {
+    const res = o.res || 2, c = this.ctx, w = Math.ceil(this.W / res), h = Math.ceil(this.H / res);
+    const img = c.createImageData(w, h), d = img.data;
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+      const z = [this.wx(i * res + res / 2), this.wy(j * res + res / 2)], v = f(z), k = (j * w + i) * 4;
+      if (!isFinite(v[0]) || !isFinite(v[1])) { d[k] = d[k + 1] = d[k + 2] = 255; d[k + 3] = 255; continue; }
+      const m = Math.hypot(v[0], v[1]); let L = 0.5;
+      if (o.bands !== false) { const fr = (Math.log2(m) % 1 + 1) % 1; L = 0.32 + 0.3 * fr; }
+      const rgb = phaseRGB(Math.atan2(v[1], v[0]), L); d[k] = rgb[0]; d[k + 1] = rgb[1]; d[k + 2] = rgb[2]; d[k + 3] = 255;
+    }
+    const tmp = document.createElement('canvas'); tmp.width = w; tmp.height = h; tmp.getContext('2d').putImageData(img, 0, 0);
+    c.save(); c.imageSmoothingEnabled = true; c.globalAlpha = o.alpha ?? 1; c.drawImage(tmp, 0, 0, this.W, this.H); c.restore();
+  }
+  addDrag(get, set, o = {}) { this.drags.push({ get, set, r: o.r || 16 }); this.cv.style.touchAction = 'none'; this.cv.style.cursor = 'grab'; }
+  _bind() {
+    const pos = e => { const b = this.cv.getBoundingClientRect(); return [e.clientX - b.left, e.clientY - b.top]; };
+    const snapv = v => this.snap ? Math.round(v / this.snap) * this.snap : v;
+    this.cv.addEventListener('pointerdown', e => {
+      const [px, py] = pos(e); let best = null, bd = 1e9;
+      for (const d of this.drags) { const z = d.get(); const dd = Math.hypot(this.X(z[0]) - px, this.Y(z[1]) - py); if (dd < d.r && dd < bd) { bd = dd; best = d; } }
+      if (best) { this.active = best; this.cv.setPointerCapture(e.pointerId); this.cv.style.cursor = 'grabbing'; e.preventDefault(); }
+      else if (this.onClick) { this.onClick([snapv(this.wx(px)), snapv(this.wy(py))]); this.redraw(); }
+    });
+    this.cv.addEventListener('pointermove', e => {
+      if (!this.active) return; const [px, py] = pos(e);
+      this.active.set([snapv(this.wx(px)), snapv(this.wy(py))]); this.redraw(); if (this.onchange) this.onchange();
+    });
+    const up = () => { if (this.active) { this.active = null; this.cv.style.cursor = this.drags.length ? 'grab' : ''; } };
+    this.cv.addEventListener('pointerup', up); this.cv.addEventListener('pointercancel', up);
+  }
+}
+
+/* ---------- simple 2-D function graph (real x, real y) ---------- */
+class Graph extends Plane {
+  constructor(cv, o = {}) { super(cv, Object.assign({ axisLabels: o.axisLabels || ['x', 'y'], snap: 0 }, o)); }
+  fn(f, o = {}) { const pts = []; const n = o.n || 600; for (let i = 0; i <= n; i++) { const x = this.x0 + (this.x1 - this.x0) * i / n; const y = f(x); pts.push(isFinite(y) && Math.abs(y) < 1e5 ? [x, y] : null); } this.path(pts, o); }
+}
+
+/* ---------- rotatable 3-D surface z = h(x,y) ---------- */
+class Surf3D {
+  constructor(cv, o = {}) {
+    this.cv = typeof cv === 'string' ? $(cv) : cv; this.ctx = this.cv.getContext('2d');
+    Object.assign(this, { xr: [-2, 2], yr: [-2, 2], zr: [0, 4], n: 46, yaw: -0.65, pitch: 0.55, zoom: 1, aspect: 0.72, zs: 0.9, labels: ['x', 'y', 'z'], wire: true }, o);
+    this.h = o.h; this.color = o.color || null; this.extra = o.extra || null;
+    this._bind(); _views.push(this); this.build(); this.resize();
+  }
+  setFn(h, color) { this.h = h; if (color !== undefined) this.color = color; this.build(); this.redraw(); }
+  build() {
+    const n = this.n, V = [];
+    for (let j = 0; j <= n; j++) for (let i = 0; i <= n; i++) {
+      let x, y, hv, u = 0, v = 0;
+      if (this.param) { // parametric surface (u,v) -> [x, y, height]
+        u = this.ur[0] + (this.ur[1] - this.ur[0]) * i / n; v = this.vr[0] + (this.vr[1] - this.vr[0]) * j / n;
+        [x, y, hv] = this.param(u, v);
+      } else { x = this.xr[0] + (this.xr[1] - this.xr[0]) * i / n; y = this.yr[0] + (this.yr[1] - this.yr[0]) * j / n; hv = this.h(x, y); }
+      if (!isFinite(hv)) hv = this.zr[1]; const hc = Math.max(this.zr[0], Math.min(this.zr[1], hv));
+      V.push({ x, y, u, v, h: hc, raw: hv, X: 2 * (x - this.xr[0]) / (this.xr[1] - this.xr[0]) - 1, Y: 2 * (y - this.yr[0]) / (this.yr[1] - this.yr[0]) - 1, Z: (2 * (hc - this.zr[0]) / (this.zr[1] - this.zr[0]) - 1) * this.zs });
+    }
+    this.V = V;
+  }
+  resize() {
+    const dpr = window.devicePixelRatio || 1, w = this.cv.clientWidth || 600, h = Math.round(w * this.aspect);
+    this.cv.style.height = h + 'px'; this.cv.width = Math.round(w * dpr); this.cv.height = Math.round(h * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); this.W = w; this.H = h; this.redraw();
+  }
+  proj(X, Y, Z) {
+    const cy = Math.cos(this.yaw), sy = Math.sin(this.yaw), cp = Math.cos(this.pitch), sp = Math.sin(this.pitch);
+    const x1 = X * cy - Y * sy, y1 = X * sy + Y * cy, y2 = y1 * cp - Z * sp, z2 = y1 * sp + Z * cp;
+    const f = 4 / (4 + y2), S = Math.min(this.W, this.H / 0.9) * 0.34 * this.zoom;
+    return [this.W / 2 + x1 * f * S, this.H / 2 + 10 - z2 * f * S, y2];
+  }
+  redraw() {
+    if (!this.W) return; const c = this.ctx, n = this.n, V = this.V;
+    c.save(); c.fillStyle = cssv('--canvas'); c.fillRect(0, 0, this.W, this.H);
+    const P = V.map(v => this.proj(v.X, v.Y, v.Z));
+    // base box
+    const bz = -this.zs, tz = this.zs, corners = [[-1, -1], [1, -1], [1, 1], [-1, 1]];
+    c.strokeStyle = cssv('--axis'); c.lineWidth = 1; c.globalAlpha = 0.55; c.beginPath();
+    corners.forEach((q, i) => { const a = this.proj(q[0], q[1], bz), b = this.proj(corners[(i + 1) % 4][0], corners[(i + 1) % 4][1], bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); });
+    c.stroke(); c.globalAlpha = 1;
+    // grid on floor
+    c.strokeStyle = cssv('--grid'); c.beginPath();
+    for (let t = -1; t <= 1.001; t += 0.25) { let a = this.proj(t, -1, bz), b = this.proj(t, 1, bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); a = this.proj(-1, t, bz); b = this.proj(1, t, bz); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); }
+    c.stroke();
+    const quads = [];
+    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
+      const a = j * (n + 1) + i, b = a + 1, d = a + n + 1, e = d + 1;
+      quads.push([a, b, e, d, (P[a][2] + P[b][2] + P[d][2] + P[e][2]) / 4]);
+    }
+    quads.sort((p, q) => q[4] - p[4]);
+    const L = [0.35, -0.45, 0.82], ll = Math.hypot(...L);
+    const wire = cssv('--canvas');
+    for (const q of quads) {
+      const A = V[q[0]], B = V[q[1]], E = V[q[2]], D = V[q[3]];
+      const ux = B.X - A.X, uy = B.Y - A.Y, uz = B.Z - A.Z, vx = D.X - A.X, vy = D.Y - A.Y, vz = D.Z - A.Z;
+      let nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx; const nl = Math.hypot(nx, ny, nz) || 1;
+      const lam = Math.abs((nx * L[0] + ny * L[1] + nz * L[2]) / (nl * ll)), sh = 0.5 + 0.5 * lam;
+      let rgb;
+      if (this.color) rgb = this.color((A.x + E.x) / 2, (A.y + E.y) / 2, (A.raw + E.raw) / 2, (A.u + E.u) / 2, (A.v + E.v) / 2);
+      else rgb = heatRGB(((A.h + B.h + D.h + E.h) / 4 - this.zr[0]) / (this.zr[1] - this.zr[0]));
+      c.fillStyle = rgbs(rgb.map(v => v * sh));
+      c.beginPath(); [q[0], q[1], q[2], q[3]].forEach((k, m) => m ? c.lineTo(P[k][0], P[k][1]) : c.moveTo(P[k][0], P[k][1])); c.closePath(); c.fill();
+      if (this.wire) { c.strokeStyle = wire; c.globalAlpha = 0.18; c.lineWidth = 0.6; c.stroke(); c.globalAlpha = 1; } else { c.strokeStyle = c.fillStyle; c.lineWidth = 0.5; c.stroke(); }
+    }
+    if (this.extra) this.extra(this);
+    // axis labels
+    c.fillStyle = cssv('--fg'); c.font = '600 13px system-ui,sans-serif'; c.textAlign = 'center';
+    let p = this.proj(1.18, -1, bz); c.fillText(this.labels[0] + ' →', p[0], p[1]);
+    p = this.proj(-1, 1.18, bz); c.fillText(this.labels[1] + ' →', p[0], p[1]);
+    p = this.proj(-1, -1, tz + 0.15); c.fillText(this.labels[2], p[0], p[1]);
+    c.font = '11px system-ui,sans-serif'; c.fillStyle = cssv('--muted');
+    p = this.proj(-1, -1, bz); c.fillText('(' + fnum(this.xr[0], 2) + ',' + fnum(this.yr[0], 2) + ')', p[0], p[1] + 14);
+    p = this.proj(1, -1, bz); c.fillText(fnum(this.xr[1], 2), p[0], p[1] + 14);
+    p = this.proj(-1, 1, bz); c.fillText(fnum(this.yr[1], 2), p[0], p[1] + 14);
+    const zt = this.proj(-1, -1, tz); c.textAlign = 'right'; c.fillText(fnum(this.zr[1], 2), zt[0] - 6, zt[1]);
+    c.strokeStyle = cssv('--axis'); c.globalAlpha = 0.5; c.beginPath(); const z0 = this.proj(-1, -1, bz); c.moveTo(z0[0], z0[1]); c.lineTo(zt[0], zt[1]); c.stroke();
+    c.restore();
+  }
+  pt3(x, y, h) { // world -> screen
+    return this.proj(2 * (x - this.xr[0]) / (this.xr[1] - this.xr[0]) - 1, 2 * (y - this.yr[0]) / (this.yr[1] - this.yr[0]) - 1, (2 * (Math.max(this.zr[0], Math.min(this.zr[1], h)) - this.zr[0]) / (this.zr[1] - this.zr[0]) - 1) * this.zs);
+  }
+  _bind() {
+    let drag = null; this.cv.style.touchAction = 'none'; this.cv.style.cursor = 'grab';
+    this.cv.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY, this.yaw, this.pitch]; this.cv.setPointerCapture(e.pointerId); this.cv.style.cursor = 'grabbing'; });
+    this.cv.addEventListener('pointermove', e => { if (!drag) return; this.yaw = drag[2] - (e.clientX - drag[0]) * 0.01; this.pitch = Math.max(-0.2, Math.min(1.5, drag[3] + (e.clientY - drag[1]) * 0.01)); this.redraw(); });
+    const up = () => { drag = null; this.cv.style.cursor = 'grab'; };
+    this.cv.addEventListener('pointerup', up); this.cv.addEventListener('pointercancel', up);
+  }
+}
+
+/* ---------- animation helper ---------- */
+function animator(step) { // step(dtSeconds) ; returns {play,pause,toggle,running}
+  let on = false, last = 0;
+  const tick = t => { if (!on) return; const dt = last ? Math.min(0.05, (t - last) / 1000) : 0; last = t; step(dt); requestAnimationFrame(tick); };
+  return { get running() { return on; }, play() { if (!on) { on = true; last = 0; requestAnimationFrame(tick); } }, pause() { on = false; }, toggle() { on ? this.pause() : this.play(); return on; } };
+}
+/* ---------- slider wiring: updates <output> next to each range ---------- */
+function val(id) { const el = document.getElementById(id); return el.type === 'checkbox' ? el.checked : (el.type === 'range' || el.type === 'number' ? +el.value : el.value); }
+function watch(ids, cb, fmtMap = {}) {
+  ids.forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    const out = el.parentElement.querySelector('output');
+    const upd = () => { if (out) out.textContent = fmtMap[id] ? fmtMap[id](+el.value) : fnum(+el.value, 3); };
+    upd(); el.addEventListener('input', () => { upd(); cb(); }); el.addEventListener('change', () => { upd(); cb(); });
+  });
+}
+
+/* ---------- page chrome: TOC, theme, MCQs, chapter nav ---------- */
+onReady(() => {
+  const toc = $('#toc'); if (toc) {
+    toc.innerHTML = '<b>On this page</b>';
+    $$('main h2').forEach((h, i) => { if (!h.id) h.id = 's' + (i + 1); const a = document.createElement('a'); a.href = '#' + h.id; a.textContent = h.textContent; toc.appendChild(a); });
+    const links = $$('a', toc), hs = $$('main h2');
+    const spy = () => { let k = 0; hs.forEach((h, i) => { if (h.getBoundingClientRect().top < 120) k = i; }); links.forEach((a, i) => a.classList.toggle('on', i === k)); };
+    window.addEventListener('scroll', spy, { passive: true }); spy();
+  }
+  if (window.renderMathInElement) renderMathInElement(document.body, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '\\[', right: '\\]', display: true }, { left: '$', right: '$', display: false }, { left: '\\(', right: '\\)', display: false }], ignoredClasses: ['nomath'], throwOnError: false });
+  $$('.mcq').forEach(q => {
+    const ans = +q.dataset.ans, fb = $('.fb', q), bs = $$('.opts button', q);
+    bs.forEach((b, i) => b.addEventListener('click', () => {
+      bs.forEach(x => x.classList.remove('ok', 'bad'));
+      b.classList.add(i === ans ? 'ok' : 'bad');
+      if (fb) { fb.style.display = 'block'; const msg = i === ans ? (q.dataset.ok || 'Correct!') : (q.dataset.no || 'Not quite — think again.'); texMix(fb, (i === ans ? '✔ ' : '✘ ') + msg); }
+    }));
+    if (fb) fb.style.display = 'none';
+  });
+  const tb = $('#themeBtn');
+  if (tb) tb.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const nx = cur === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', nx);
+    try { localStorage.setItem('boas-theme', nx); } catch (e) { }
+    redrawAll();
+  });
+  const sel = $('#chapSel'); if (sel) sel.addEventListener('change', () => { location.href = sel.value; });
+});
+try { const t = localStorage.getItem('boas-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) { }
+
+</script>
+<script>
+
+onReady(() => {
+  /* ---------- Interactive 1: arithmetic ---------- */
+  let z1 = [1.5, 1], z2 = [1, 1.5];
+  const AR = new Plane('#cv-arith', { span: 4.5, aspect: 0.7, snap: 0.1, draw: p => {
+    const op = val('ar-op');
+    let w;
+    if (op === 'add') { w = Cx.add(z1, z2); p.path([[0, 0], z1, w, z2], { color: '--muted', dash: [4, 4], width: 1, close: true }); }
+    else if (op === 'sub') { w = Cx.sub(z1, z2); p.arrow(z2, z1, { color: '--accent4', dash: [5, 4], width: 1.6 }); p.path([[0, 0], w, z1, z2], { color: '--muted', dash: [3, 4], width: 1, close: true }); }
+    else if (op === 'mul') { w = Cx.mul(z1, z2); p.angleArc(0, Cx.arg(z1), 26, { color: '--accent' }); p.angleArc(Cx.arg(z1), Cx.arg(z1) + Cx.arg(z2), 26, { color: '--accent3', width: 3 }); p.angleArc(0, Cx.arg(z2), 40, { color: '--accent3' }); p.circle([0, 0], Cx.abs(w), { color: '--grid', dash: [4, 4], width: 1 }); }
+    else { w = Cx.div(z1, z2); p.angleArc(0, Cx.arg(z1), 26, { color: '--accent' }); p.angleArc(Cx.arg(z1), Cx.arg(z1) - Cx.arg(z2), 34, { color: '--accent3', width: 3 }); p.circle([0, 0], Cx.abs(w), { color: '--grid', dash: [4, 4], width: 1 }); }
+    p.circle([0, 0], 1, { color: '--axis', dash: [2, 5], width: 1 });
+    p.arrow([0, 0], z1, { color: '--accent' }); p.arrow([0, 0], z2, { color: '--accent3' });
+    if (isFinite(w[0])) { p.arrow([0, 0], w, { color: '--accent2', width: 3 }); p.dot(w, { color: '--accent2', r: 6, label: { add: 'z₁+z₂', sub: 'z₁−z₂', mul: 'z₁z₂', div: 'z₁/z₂' }[op] }); }
+    p.dot(z1, { color: '--accent', r: 7, label: 'z₁' }); p.dot(z2, { color: '--accent3', r: 7, label: 'z₂' });
+  }});
+  AR.addDrag(() => z1, v => { z1 = v; arOut(); }); AR.addDrag(() => z2, v => { z2 = v; arOut(); });
+  const arOut = () => {
+    const op = val('ar-op'), f = v => Cx.tex(v, 3), r1 = Cx.abs(z1), r2 = Cx.abs(z2), t1 = Cx.arg(z1), t2 = Cx.arg(z2);
+    let s = `$z_1=${f(z1)}=${fnum(r1, 3)}e^{${fnum(t1, 3)}i}$, &nbsp; $z_2=${f(z2)}=${fnum(r2, 3)}e^{${fnum(t2, 3)}i}$<br>`;
+    if (op === 'add') s += `$z_1+z_2=(${fnum(z1[0], 2)}+${fnum(z2[0], 2)})+i(${fnum(z1[1], 2)}+${fnum(z2[1], 2)})=${f(Cx.add(z1, z2))}$`;
+    else if (op === 'sub') s += `$z_1-z_2=${f(Cx.sub(z1, z2))}$: the arrow from $z_2$ to $z_1$, moved to the origin. Its length $|z_1-z_2|=${fnum(Cx.abs(Cx.sub(z1, z2)), 3)}$ is the distance between the points.`;
+    else if (op === 'mul') { const w = Cx.mul(z1, z2); s += `Rectangular: $(${f(z1)})(${f(z2)})=${f(w)}$<br>Polar: $r_1r_2=${fnum(r1 * r2, 3)}$, $\\ \\theta_1+\\theta_2=${fnum(t1 + t2, 3)}$ ⇒ $${fnum(r1 * r2, 3)}e^{${fnum(t1 + t2, 3)}i}=${f(Cx.polar(r1 * r2, t1 + t2))}$ ✔`; }
+    else { if (r2 < 1e-9) { texMix('#ar-out', 'Division by zero is undefined. Move $z_2$ away from $0$.'); return; } const w = Cx.div(z1, z2), cz = Cx.conj(z2); s += `Rectangular: $\\dfrac{z_1}{z_2}=\\dfrac{z_1\\bar z_2}{|z_2|^2}=\\dfrac{(${f(z1)})(${f(cz)})}{${fnum(r2 * r2, 3)}}=\\dfrac{${f(Cx.mul(z1, cz))}}{${fnum(r2 * r2, 3)}}=${f(w)}$<br>Polar: $\\dfrac{r_1}{r_2}=${fnum(r1 / r2, 3)}$, $\\ \\theta_1-\\theta_2=${fnum(t1 - t2, 3)}$ ⇒ $${f(Cx.polar(r1 / r2, t1 - t2))}$ ✔`; }
+    texMix('#ar-out', s);
+  };
+  $('#ar-op').addEventListener('change', () => { AR.redraw(); arOut(); });
+  arOut();
+
+  /* ---------- Interactive 2: complex equation = two real curves ---------- */
+  let EF = null, eqErr = '';
+  const compileEq = () => { try { const f = Parser.compile($('#eq-f').value); EF = z => f({ z }); f({ z: [0.3, 0.2] }); eqErr = ''; } catch (e) { EF = null; eqErr = e.message; } };
+  const solve = () => {
+    if (!EF) return [];
+    const S = val('eq-span'), sols = [], h = 1e-6;
+    const F = (x, y) => EF([x, y]);
+    for (let i = 0; i < 14; i++) for (let j = 0; j < 14; j++) {
+      let x = -S + 2 * S * (i + 0.5) / 14, y = -S + 2 * S * (j + 0.5) / 14, ok = false;
+      for (let it = 0; it < 60; it++) {
+        const f0 = F(x, y); if (!isFinite(f0[0]) || !isFinite(f0[1])) break;
+        if (Math.hypot(f0[0], f0[1]) < 1e-12) { ok = true; break; }
+        const fx = F(x + h, y), fy = F(x, y + h);
+        const a = (fx[0] - f0[0]) / h, b = (fy[0] - f0[0]) / h, c = (fx[1] - f0[1]) / h, d = (fy[1] - f0[1]) / h, det = a * d - b * c;
+        if (!isFinite(det) || Math.abs(det) < 1e-14) break;
+        const dx = (d * f0[0] - b * f0[1]) / det, dy = (-c * f0[0] + a * f0[1]) / det;
+        x -= dx; y -= dy; if (Math.abs(x) > 1e3 || Math.abs(y) > 1e3) break;
+        if (Math.hypot(dx, dy) < 1e-13) { ok = Math.hypot(...F(x, y)) < 1e-8; break; }
+      }
+      if (ok && Math.abs(x) <= S * 1.05 && Math.abs(y) <= S * 1.05 && !sols.some(s => Math.hypot(s[0] - x, s[1] - y) < 1e-5)) sols.push([x, y]);
+    }
+    return sols.sort((p, q) => p[0] - q[0] || p[1] - q[1]);
+  };
+  const EQ = new Plane('#cv-eq', { span: 3, aspect: 0.75, snap: 0, draw: p => {
+    if (!EF) return;
+    p.implicit((x, y) => EF([x, y])[0], { color: '--accent', width: 2.4, maxJump: 40 }, 2);
+    p.implicit((x, y) => EF([x, y])[1], { color: '--accent2', width: 2.4, maxJump: 40 }, 2);
+    solve().forEach(s => p.dot(s, { r: 7, color: '--accent3', label: Cx.fmt(s, 3), ring: true }));
+  }});
+  const eqOut = () => {
+    if (!EF) { $('#eq-out').textContent = 'Error: ' + eqErr; return; }
+    const s = solve();
+    texMix('#eq-out', '<span style="color:var(--accent)">■</span> $\\operatorname{Re}F=0$ &nbsp; <span style="color:var(--accent2)">■</span> $\\operatorname{Im}F=0$<br>' +
+      (s.length ? `<b>${s.length} solution${s.length > 1 ? 's' : ''} in view:</b> ` + s.map(z => `$${Cx.tex(z, 4)}$`).join(', &nbsp;') : 'No isolated solution found in this window. The curves may not cross, or the solutions form a whole curve.'));
+  };
+  const eqAll = () => { compileEq(); EQ.span = val('eq-span'); EQ.redraw(); eqOut(); };
+  $('#eq-f').addEventListener('change', eqAll); $('#eq-f').addEventListener('keydown', e => { if (e.key === 'Enter') eqAll(); });
+  $('#eq-pre').addEventListener('change', e => { if (e.target.value) { $('#eq-f').value = e.target.value; eqAll(); } });
+  watch(['eq-span'], eqAll);
+  eqAll();
+
+  /* ---------- Interactive 3: loci ---------- */
+  let la = [1, 0], lb = [-1, 0], CF = null;
+  const PL = { circle: ['radius c', 0.1, 5, 2], disk: ['radius c', 0.1, 5, 2], annulus: ['outer radius c', 1.05, 5, 2.5], bis: ['(no parameter)', 0, 1, 0], apol: ['ratio c', 0.1, 4, 2], ell: ['semi-major c', 0.1, 5, 2], hyp: ['c', 0.05, 3, 0.6], ray: ['angle c (rad)', -3.14, 3.14, 0.785], arc: ['angle c (rad)', -3.14, 3.14, 1.571], rez: ['c', -5, 5, 0.5], rez2: ['c', -5, 5, 1], imz2: ['c', -5, 5, 1], reinv: ['c', -3, 3, 0.5], custom: ['c', -5, 5, 1] };
+  const lcType = () => val('lc-type');
+  const setParam = () => { const t = lcType(), q = PL[t], el = $('#lc-c'); $('#lc-plabel').textContent = q[0]; el.min = q[1]; el.max = q[2]; el.value = q[3]; el.parentElement.querySelector('output').textContent = fnum(q[3], 3); $('#lc-custom').style.display = t === 'custom' ? 'flex' : 'none'; };
+  const d = (z, w) => Math.hypot(z[0] - w[0], z[1] - w[1]);
+  const LC = new Plane('#cv-locus', { span: 4, aspect: 0.72, snap: 0.25, draw: p => {
+    const t = lcType(), c = val('lc-c'), blue = { color: '--accent', width: 2.6 };
+    const usesB = ['bis', 'apol', 'ell', 'hyp', 'arc'].includes(t), usesA = !['rez', 'rez2', 'imz2', 'reinv', 'custom'].includes(t);
+    switch (t) {
+      case 'circle': p.circle(la, c, blue); p.line(la, [la[0] + c, la[1]], { color: '--muted', dash: [4, 4], width: 1 }); break;
+      case 'disk': p.circle(la, c, { color: '--accent', width: 2, dash: [6, 4], fill: '--accent', fillAlpha: 0.2 }); break;
+      case 'annulus': p.region((x, y) => { const r = Math.hypot(x - la[0], y - la[1]); return r > 1 && r < c; }, '--accent', 0.22); p.circle(la, 1, { color: '--accent', dash: [6, 4] }); p.circle(la, c, { color: '--accent', dash: [6, 4] }); break;
+      case 'bis': p.implicit((x, y) => d([x, y], la) - d([x, y], lb), blue); p.line(la, lb, { color: '--muted', dash: [4, 4], width: 1 }); break;
+      case 'apol': p.implicit((x, y) => d([x, y], la) - c * d([x, y], lb), blue); break;
+      case 'ell': p.implicit((x, y) => d([x, y], la) + d([x, y], lb) - 2 * c, blue); p.line(la, lb, { color: '--muted', dash: [4, 4], width: 1 }); break;
+      case 'hyp': p.implicit((x, y) => Math.abs(d([x, y], la) - d([x, y], lb)) - 2 * c, blue); break;
+      case 'ray': p.line(la, [la[0] + 50 * Math.cos(c), la[1] + 50 * Math.sin(c)], blue); p.dot(la, { r: 6, color: '--canvas' }); p.dot(la, { r: 6, color: '--accent', hollow: true }); break;
+      case 'arc': p.implicit((x, y) => { const q = Cx.div(Cx.sub([x, y], la), Cx.sub([x, y], lb)), w = Cx.mul(q, Cx.polar(1, -c)); return w[0] > 0 ? w[1] : NaN; }, blue, 2); break;
+      case 'rez': p.region((x, y) => x > c, '--accent', 0.2); p.line([c, -50], [c, 50], { color: '--accent', dash: [6, 4] }); break;
+      case 'rez2': p.implicit((x, y) => x * x - y * y - c, blue); break;
+      case 'imz2': p.implicit((x, y) => 2 * x * y - c, blue); break;
+      case 'reinv': p.implicit((x, y) => x / (x * x + y * y) - c, { ...blue, maxJump: 5 }); break;
+      case 'custom': if (CF) { const rel = val('lc-rel'), g = (x, y) => { const w = CF([x, y]); return rel[0] === 'a' ? Cx.abs(w) : rel[0] === 'r' ? w[0] : w[1]; }; if (rel.endsWith('=')) p.implicit((x, y) => g(x, y) - c, { ...blue, maxJump: 20 }, 2); else p.region((x, y) => rel.endsWith('<') ? g(x, y) < c : g(x, y) > c, '--accent', 0.22); } break;
+    }
+    if (usesA) p.dot(la, { color: '--accent2', r: 7, label: 'a' });
+    if (usesB) p.dot(lb, { color: '--accent3', r: 7, label: 'b' });
+  }});
+  LC.addDrag(() => la, v => { la = v; lcOut(); }); LC.addDrag(() => lb, v => { lb = v; lcOut(); });
+  const lcOut = () => {
+    const t = lcType(), c = val('lc-c'), A = Cx.tex(la, 2), B = Cx.tex(lb, 2), ab = d(la, lb); let s = '';
+    switch (t) {
+      case 'circle': s = `$|z-(${A})|=${fnum(c, 2)}$: circle $(x-${fnum(la[0], 2)})^2+(y-${fnum(la[1], 2)})^2=${fnum(c * c, 3)}$`; break;
+      case 'disk': s = `$|z-(${A})|\\lt ${fnum(c, 2)}$: open disk (dashed boundary not included)`; break;
+      case 'annulus': s = `$1\\lt|z-(${A})|\\lt ${fnum(c, 2)}$: open annulus`; break;
+      case 'bis': s = `$|z-(${A})|=|z-(${B})|$: perpendicular bisector of the segment $ab$. Squaring gives a <b>linear</b> equation: $${fnum(2 * (lb[0] - la[0]), 2)}x+${fnum(2 * (lb[1] - la[1]), 2)}y=${fnum(Cx.abs2(lb) - Cx.abs2(la), 2)}$`; break;
+      case 'apol': if (Math.abs(c - 1) < 1e-9) s = 'Ratio 1 gives the bisector line.'; else { const ctr = Cx.scale(Cx.sub(la, Cx.scale(lb, c * c)), 1 / (1 - c * c)), R = c * ab / Math.abs(1 - c * c); s = `Apollonius circle: centre $\\dfrac{a-c^2b}{1-c^2}=${Cx.tex(ctr, 3)}$, radius $\\dfrac{c|a-b|}{|1-c^2|}=${fnum(R, 3)}$`; } break;
+      case 'ell': s = 2 * c > ab + 1e-9 ? `Ellipse: foci $a,b$, semi-major axis $${fnum(c, 2)}$, semi-minor $\\sqrt{c^2-(|a-b|/2)^2}=${fnum(Math.sqrt(c * c - ab * ab / 4), 3)}$` : (Math.abs(2 * c - ab) < 1e-9 ? 'Degenerate: $2c=|a-b|$, so the locus is just the segment $ab$.' : `<b>Empty set:</b> $2c=${fnum(2 * c, 2)}\\lt|a-b|=${fnum(ab, 2)}$ (no point is that close to both foci).`); break;
+      case 'hyp': s = 2 * c < ab - 1e-9 ? `Hyperbola: foci $a,b$, $2c=${fnum(2 * c, 2)}\\lt|a-b|=${fnum(ab, 2)}$. Without the absolute value you get only <b>one</b> branch.` : `<b>Empty set (or rays):</b> need $2c\\lt|a-b|=${fnum(ab, 2)}$.`; break;
+      case 'ray': s = `$\\arg(z-(${A}))=${fnum(c, 3)}$: ray from $a$ at angle $${fnum(c * 180 / PI, 1)}^\\circ$ ($a$ itself excluded)`; break;
+      case 'arc': s = `$\\arg\\dfrac{z-a}{z-b}=${fnum(c, 3)}$: the arc of a circle through $a$ and $b$ from which the segment $ab$ is seen at angle $${fnum(Math.abs(c) * 180 / PI, 1)}^\\circ$. At $c=\\pi/2$ it is a semicircle.`; break;
+      case 'rez': s = `$\\operatorname{Re}z>${fnum(c, 2)}$: open half-plane to the right of the dashed line`; break;
+      case 'rez2': s = `$x^2-y^2=${fnum(c, 2)}$: rectangular hyperbola` + (Math.abs(c) < 1e-9 ? ' (here degenerate: the two lines $y=\\pm x$)' : ''); break;
+      case 'imz2': s = `$2xy=${fnum(c, 2)}$: rectangular hyperbola with the axes as asymptotes` + (Math.abs(c) < 1e-9 ? ' (here degenerate: the axes)' : ''); break;
+      case 'reinv': s = Math.abs(c) < 1e-9 ? '$\\operatorname{Re}(1/z)=0$: the imaginary axis (without $0$)' : `$\\dfrac{x}{x^2+y^2}=${fnum(c, 2)}$: circle with centre $${fnum(1 / (2 * c), 3)}$ and radius $${fnum(1 / (2 * Math.abs(c)), 3)}$, passing through $0$ (excluded)`; break;
+      case 'custom': s = CF ? `Plotting the set where ${$('#lc-rel').selectedOptions[0].textContent.replace('c', fnum(c, 2))} for $f(z)=$ <span class="pill">${$('#lc-f').value}</span>` : 'Could not parse $f$.'; break;
+    }
+    texMix('#lc-out', s);
+  };
+  const compileCF = () => { try { const f = Parser.compile($('#lc-f').value); CF = z => f({ z }); CF([0.1, 0.2]); } catch (e) { CF = null; } };
+  $('#lc-type').addEventListener('change', () => { setParam(); LC.redraw(); lcOut(); });
+  ['lc-f'].forEach(id => $('#' + id).addEventListener('change', () => { compileCF(); LC.redraw(); lcOut(); }));
+  $('#lc-rel').addEventListener('change', () => { LC.redraw(); lcOut(); });
+  watch(['lc-c'], () => { LC.redraw(); lcOut(); });
+  compileCF(); setParam(); LC.redraw(); lcOut();
+
+  /* ---------- Interactive 4: motion ---------- */
+  let MF = null, moT = 0.6;
+  const compileMo = () => { try { const f = Parser.compile($('#mo-f').value); MF = t => f({ t: [t, 0] }); MF(0.3); } catch (e) { MF = null; $('#mo-out').textContent = 'Error: ' + e.message; } };
+  const tr = () => { const a = +$('#mo-t0').value, b = +$('#mo-t1').value; return [a, b > a ? b : a + 1]; };
+  const MO = new Plane('#cv-motion', { span: 4, aspect: 0.7, snap: 0, draw: p => {
+    if (!MF) return; const [a, b] = tr(), pts = [];
+    for (let k = 0; k <= 800; k++) pts.push(MF(a + (b - a) * k / 800));
+    p.path(pts, { color: '--accent', width: 2, alpha: 0.7 });
+    const t = a + (b - a) * moT, h = 1e-4, z = MF(t), zp = MF(t + h), zm = MF(t - h);
+    const v = Cx.scale(Cx.sub(zp, zm), 1 / (2 * h)), ac = Cx.scale(Cx.add(Cx.sub(zp, Cx.scale(z, 2)), zm), 1 / (h * h));
+    const sv = 1 / Math.max(1, Cx.abs(v) / 1.5), sa = 1 / Math.max(1, Cx.abs(ac) / 1.5);
+    p.arrow(z, Cx.add(z, Cx.scale(v, sv)), { color: '--accent3', width: 2.5 }); p.arrow(z, Cx.add(z, Cx.scale(ac, sa)), { color: '--accent2', width: 2.5 });
+    p.dot(z, { color: '--accent', r: 7 });
+    moOut(t, z, v, ac);
+  }});
+  const moOut = (t, z, v, ac) => {
+    let s = `$t=${fnum(t, 3)}$: $\\ z=${Cx.tex(z, 3)}$, $\\ \\dot z=${Cx.tex(v, 3)}$, $\\ \\ddot z=${Cx.tex(ac, 3)}$<br><span style="color:var(--accent3)">speed</span> $v=|\\dot z|=${fnum(Cx.abs(v), 4)}$, &nbsp; <span style="color:var(--accent2)">acceleration</span> $a=|\\ddot z|=${fnum(Cx.abs(ac), 4)}$`;
+    if ($('#mo-f').value.replace(/\s/g, '') === '(i+2t)/(t-i)') s += `<br>Boas formulas: $\\frac{3}{t^2+1}=${fnum(3 / (t * t + 1), 4)}$, $\\ \\frac{6}{(t^2+1)^{3/2}}=${fnum(6 / Math.pow(t * t + 1, 1.5), 4)}$ ✔`;
+    texMix('#mo-out', s);
+  };
+  const moAll = () => { compileMo(); MO.redraw(); };
+  $('#mo-f').addEventListener('change', moAll); $('#mo-f').addEventListener('keydown', e => { if (e.key === 'Enter') moAll(); });
+  $('#mo-pre').addEventListener('change', e => { if (e.target.value) { $('#mo-f').value = e.target.value; const pre = { 'cos(2t)+i sin(2t)': [0, 3.2], '1+3exp(2i t)': [0, 3.2], '(1+i)exp(i t)': [0, 6.3], '(1+i)t-(2+i)(1-t)': [-1, 2], 'exp((-0.15+i)t)*3': [0, 25], 't^2 + i t^3': [-1.5, 1.5] }[e.target.value] || [-5, 5]; $('#mo-t0').value = pre[0]; $('#mo-t1').value = pre[1]; moAll(); } });
+  ['mo-t0', 'mo-t1'].forEach(id => $('#' + id).addEventListener('change', () => MO.redraw()));
+  watch(['mo-t'], () => { moT = val('mo-t'); MO.redraw(); });
+  const an = animator(dt => { moT = (moT + dt * 0.08) % 1; $('#mo-t').value = moT; MO.redraw(); });
+  $('#mo-play').onclick = e => { e.currentTarget.textContent = an.toggle() ? '❚❚ Pause' : '▶ Play'; };
+  moAll();
+});
+
+</script>
+</body>
+</html>

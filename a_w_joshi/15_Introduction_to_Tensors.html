@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:110px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:85px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:collapse;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;margin:3px 4px;width:auto}
+.mx.det{border-radius:0}
+.mx td{border:0;padding:1px 8px;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.verdict{font-weight:700;font-size:1.05rem;margin:6px 0}
+.sys{font-family:"Cambria Math",Cambria,"Times New Roman",serif;display:inline-block;text-align:left;line-height:1.5}
+</style>
+<title>Introduction to Tensors</title>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>15. Introduction to Tensors</h1>
+<p>Why tensors appear in physics · Index notation · Einstein summation convention · Kronecker delta · Contravariant and covariant vectors · Tensors of rank 2 and general rank · Velocity, acceleration, gradient, divergence and Laplacian in curvilinear coordinates · Why physical laws must be tensor equations &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 159–172</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">Tensors in physics</a><a href="#s2">Notation</a><a href="#s3">Summation lab</a><a href="#s4">Kronecker δ</a><a href="#s5">Contravariant</a><a href="#s6">Covariant</a><a href="#s7">Co vs contra lab</a><a href="#s8">Higher rank</a><a href="#s9">Polar lab</a><a href="#s10">Acceleration</a><a href="#s11">div &amp; ∇²</a><a href="#s12">Why tensors?</a><a href="#s13">Summary</a><a href="#s14">Exercise 15</a><a href="#s15">Practice</a><a href="#s16">Quiz</a><a href="#s17">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>A <b>tensor</b> is defined by <b>how its components change</b> when you change coordinates. The definition is not "an arrow" or "a table of numbers". The number of indices is the <b>rank</b>:</p>
+<div class="tbl-wrap"><table>
+<tr><th>Rank</th><th>Components in N dimensions</th><th>Example</th><th>Transforms with</th></tr>
+<tr><td>0 (scalar)</td><td>1</td><td>temperature, mass, energy</td><td>does not change</td></tr>
+<tr><td>1 (vector)</td><td>N</td><td>velocity v<sup>i</sup> (contravariant), gradient ∂φ/∂x<sup>i</sup> (covariant)</td><td>one factor ∂x̄/∂x or ∂x/∂x̄</td></tr>
+<tr><td>2</td><td>N²</td><td>conductivity σ<sub>ij</sub>, stress, inertia, metric g<sub>ij</sub></td><td>two factors</td></tr>
+<tr><td>p + q</td><td>N<sup>p+q</sup></td><td>Riemann curvature R<sup>i</sup><sub>jkl</sub> (rank 4)</td><td>p + q factors</td></tr>
+</table></div>
+<div class="flow"><span>coordinates x<sup>i</sup> → x̄<sup>α</sup></span><b>→</b><span>dx̄<sup>α</sup> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>) dx<sup>i</sup></span><b>→</b><span>things that change like dx: contravariant</span><b>|</b><span>things that change like ∂/∂x: covariant</span><b>→</b><span>laws written with tensors hold in every frame</span></div>
+<div class="box tip"><b class="t">Needed from earlier</b> Partial derivatives and the chain rule. The Jacobian matrix [∂x̄<sup>α</sup>/∂x<sup>i</sup>]. Matrix multiplication (a rank-2 tensor in fixed coordinates is just a square matrix, Eq. 40). Rotation matrices (Section 14). Spherical and cylindrical coordinates.</div>
+</section>
+
+<section id="s1">
+<h2>1. Where tensors appear in physics (Eqs. 1–2)</h2>
+<p>Simple laws like <b>a = F/m</b> and <b>j = σE</b> (Ohm's law) assume an <b>isotropic</b> medium, i.e. one with the same properties in every direction. Then the response is <b>parallel</b> to the cause.</p>
+<p>In a crystal the current need not flow along E. Each component of j depends on <b>all</b> components of E:</p>
+<div class="eq"><span class="sys">j<sub>x</sub> = σ<sub>xx</sub>E<sub>x</sub> + σ<sub>xy</sub>E<sub>y</sub> + σ<sub>xz</sub>E<sub>z</sub><br>j<sub>y</sub> = σ<sub>yx</sub>E<sub>x</sub> + σ<sub>yy</sub>E<sub>y</sub> + σ<sub>yz</sub>E<sub>z</sub><br>j<sub>z</sub> = σ<sub>zx</sub>E<sub>x</sub> + σ<sub>zy</sub>E<sub>y</sub> + σ<sub>zz</sub>E<sub>z</sub></span> &nbsp;&nbsp;(2) &nbsp; i.e. &nbsp; j<sub>i</sub> = σ<sub>ij</sub>E<sub>j</sub></div>
+<p>The nine σ<sub>ij</sub> form the <b>conductivity tensor</b>, a rank-2 tensor. Similarly, an electron in a crystal has an <b>effective mass tensor</b>: a<sub>i</sub> = (1/m)<sub>ij</sub>F<sub>j</sub>.</p>
+<div class="box def"><b class="t">Isotropic is the special case</b> If σ<sub>ij</sub> = σδ<sub>ij</sub> (σ times the identity), Eq. (2) reduces to j = σE. A rank-2 tensor is a <b>linear machine</b> that turns one vector into another, possibly rotating it as well as stretching it.</div>
+<div class="lab"><h4>🔬 Lab 1: anisotropic Ohm's law, and why it holds in every frame</h4>
+<p class="small">Drag the tip of <b>E</b> (blue). The crystal has conductivities σ₁, σ₂ along its two principal axes (dashed). The current <b>j</b> (orange) is generally <b>not parallel</b> to E. Now rotate <b>your</b> coordinate frame with θ: every component of E, j and σ changes, but j′ = σ′E′ still holds. That is the whole point of tensors.</p>
+<div class="grid2">
+<div><canvas id="cvO" width="460" height="460"></canvas></div>
+<div>
+<div class="ctrl"><label>σ₁ <input type="range" id="oS1" min="0.2" max="3" step="0.05" value="2.5"><span id="oS1v"></span></label><label>σ₂ <input type="range" id="oS2" min="0.2" max="3" step="0.05" value="0.6"><span id="oS2v"></span></label></div>
+<div class="ctrl"><label>crystal axis angle <input type="range" id="oC" min="0" max="180" step="1" value="30"><span id="oCv"></span></label></div>
+<div class="ctrl"><label>your frame θ <input type="range" id="oT" min="0" max="360" step="1" value="0"><span id="oTv"></span></label><button id="oPlay">▶ rotate frame</button></div>
+<div class="readout out" id="oOut"></div>
+</div></div></div>
+</section>
+
+<section id="s2">
+<h2>2. Notation and conventions (Eqs. 3–17)</h2>
+<ul>
+<li>N-dimensional space V<sub>N</sub>, coordinates x¹, x², …, x<sup>N</sup>. The <b>superscript is a label, not a power</b>. A power is written with brackets: (x²)³.</li>
+<li>Latin indices (i, j, k) label the unbarred system x<sup>i</sup>. Greek indices (α, β) label the barred system x̄<sup>α</sup>.</li>
+<li>Each set of coordinates is a function of the other: x<sup>i</sup> = x<sup>i</sup>(x̄¹, …, x̄<sup>N</sup>), x̄<sup>α</sup> = x̄<sup>α</sup>(x¹, …, x<sup>N</sup>). &nbsp;(3)</li>
+</ul>
+<h3>Example 1: Cartesian ↔ spherical</h3>
+<div class="eq">x = r sin θ cos φ, &nbsp; y = r sin θ sin φ, &nbsp; z = r cos θ &nbsp;(4)</div>
+<div class="eq">r = √(x² + y² + z²), &nbsp; θ = tan⁻¹[√(x² + y²)/z], &nbsp; φ = tan⁻¹(y/x) &nbsp;(5)</div>
+<p>Differentiating with the chain rule:</p>
+<div class="eq">dx<sup>i</sup> = Σ<sub>α</sub> (∂x<sup>i</sup>/∂x̄<sup>α</sup>) dx̄<sup>α</sup>, &nbsp;&nbsp; dx̄<sup>α</sup> = Σ<sub>i</sub> (∂x̄<sup>α</sup>/∂x<sup>i</sup>) dx<sup>i</sup> &nbsp;&nbsp;(6)</div>
+<h3>Einstein summation convention</h3>
+<div class="box def"><b class="t">The rule</b> If an index is <b>repeated in a term</b>, sum over it from 1 to N. No Σ sign is written.
+<div class="eq">dx<sup>i</sup> = (∂x<sup>i</sup>/∂x̄<sup>α</sup>) dx̄<sup>α</sup> &nbsp;&nbsp;(7a, 8)</div>
+<ul style="margin:4px 0">
+<li><b>Dummy index</b>: appears <b>twice</b> in a term and is summed. It can be renamed freely: a<sub>i</sub>b<sub>i</sub> = a<sub>j</sub>b<sub>j</sub> = a<sub>k</sub>b<sub>k</sub>. &nbsp;(11)</li>
+<li><b>Free index</b>: appears <b>once</b>, can take any value 1…N, and must be the same on both sides of an equation. Eq. (8) is really N equations, one for each i.</li>
+<li>An index must <b>never</b> appear three or more times in one term.</li>
+</ul></div>
+<h3>Example 2: the traps</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Expression</th><th>Meaning</th><th>Note</th></tr>
+<tr><td>a<sub>i</sub>b<sub>i</sub></td><td>a₁b₁ + a₂b₂ + … + a<sub>N</sub>b<sub>N</sub> (a single number) &nbsp;(9)</td><td>i is a dummy</td></tr>
+<tr><td>a<sub>i</sub>b<sub>j</sub>c<sub>j</sub></td><td>a<sub>i</sub>(b₁c₁ + … + b<sub>N</sub>c<sub>N</sub>) &nbsp;(10)</td><td>i free, j dummy; N numbers</td></tr>
+<tr><td>a<sub>i</sub>b<sub>j</sub>c<sub>j</sub> = a<sub>i</sub>b<sub>k</sub>c<sub>k</sub></td><td>✓ renaming a dummy &nbsp;(12)</td><td></td></tr>
+<tr><td>a<sub>i</sub>b<sub>j</sub>c<sub>j</sub> ≠ a<sub>i</sub>b<sub>i</sub>c<sub>i</sub></td><td>✗ the dummy j <b>cannot</b> be renamed to i, which is already used &nbsp;(13)</td><td>a<sub>i</sub>b<sub>i</sub>c<sub>i</sub> is not even allowed</td></tr>
+<tr><td>a<sub>i</sub>b<sub>i</sub>c<sub>j</sub>d<sub>j</sub></td><td>(Σa<sub>i</sub>b<sub>i</sub>)(Σc<sub>j</sub>d<sub>j</sub>), which has cross terms &nbsp;(15b)</td><td>two separate sums</td></tr>
+<tr><td>a<sub>i</sub>b<sub>i</sub>c<sub>i</sub>d<sub>i</sub></td><td>Σa<sub>i</sub>b<sub>i</sub>c<sub>i</sub>d<sub>i</sub>, no cross terms &nbsp;(15a)</td><td>⚠ not allowed under the strict rule; the book writes it out only to show it is different (16)</td></tr>
+</table></div>
+</section>
+
+<section id="s3">
+<h2>3. 🔬 Summation-convention lab</h2>
+<p>Type an index expression. Each factor is a letter plus its indices: <code>a_i</code>, <code>M_ij</code>, <code>δ_ij</code> or <code>del_ij</code> (the Kronecker delta). The lab classifies every index as free or dummy, refuses illegal triple indices, writes out the sum, and evaluates it with random numbers.</p>
+<div class="lab">
+<div class="ctrl"><label>expression <input type="text" id="eX" value="a_i b_j c_j" style="width:220px"></label><label>N <select id="eN"><option>2</option><option selected>3</option></select></label><button id="eGo">Evaluate</button><button id="eRnd" class="alt">new random numbers</button></div>
+<div class="ctrl small">Try: <button class="alt" data-ex="a_i b_i">a_i b_i</button><button class="alt" data-ex="a_i b_j c_j">a_i b_j c_j</button><button class="alt" data-ex="a_i b_i c_j d_j">a_i b_i c_j d_j</button><button class="alt" data-ex="a_i b_i c_i">a_i b_i c_i</button><button class="alt" data-ex="M_ij a_j">M_ij a_j</button><button class="alt" data-ex="M_ii">M_ii (trace)</button><button class="alt" data-ex="δ_ij a_j">δ_ij a_j</button><button class="alt" data-ex="δ_ii">δ_ii</button><button class="alt" data-ex="δ_ij δ_jk δ_ki">δ_ij δ_jk δ_ki</button><button class="alt" data-ex="M_ij M_ji">M_ij M_ji</button></div>
+<div id="eOut"></div>
+</div>
+</section>
+
+<section id="s4">
+<h2>4. The Kronecker delta (Eqs. 18–23)</h2>
+<p>The coordinates are independent of each other, so ∂x<sup>i</sup>/∂x<sup>j</sup> = 1 if i = j and 0 otherwise. &nbsp;(18) &nbsp; Define</p>
+<div class="eq">δ<sup>i</sup><sub>j</sub> = 1 (i = j), 0 (i ≠ j); &nbsp;&nbsp; ∂x<sup>i</sup>/∂x<sup>j</sup> = δ<sup>i</sup><sub>j</sub>, &nbsp; ∂x̄<sup>α</sup>/∂x̄<sup>β</sup> = δ<sup>α</sup><sub>β</sub> &nbsp;&nbsp;(19–21)</div>
+<p>The chain rule then gives the key identity:</p>
+<div class="eq">(∂x<sup>i</sup>/∂x̄<sup>α</sup>)(∂x̄<sup>α</sup>/∂x<sup>j</sup>) = δ<sup>i</sup><sub>j</sub>, &nbsp;&nbsp; (∂x̄<sup>α</sup>/∂x<sup>k</sup>)(∂x<sup>k</sup>/∂x̄<sup>β</sup>) = δ<sup>α</sup><sub>β</sub> &nbsp;&nbsp;(22, 23)</div>
+<div class="box thm"><b class="t">In matrix language</b> Let J = [∂x̄<sup>α</sup>/∂x<sup>i</sup>] (the Jacobian matrix) and K = [∂x<sup>i</sup>/∂x̄<sup>α</sup>]. Then (23) says <b>JK = KJ = I</b>: the two Jacobian matrices are <b>inverses</b> of each other. Lab 4 shows this at any point you choose.</div>
+<h3>Rules for using δ</h3>
+<ul>
+<li><b>Substitution:</b> δ<sup>i</sup><sub>j</sub>A<sup>j</sup> = A<sup>i</sup>. The δ "renames" the index and disappears.</li>
+<li>δ<sup>i</sup><sub>i</sub> = N (trace of the identity), not 1!</li>
+<li>δ<sup>i</sup><sub>j</sub>δ<sup>j</sup><sub>k</sub> = δ<sup>i</sup><sub>k</sub> (I·I = I).</li>
+<li>Note: δ<sub>ij</sub> = ∂x<sup>i</sup>/∂x<sup>j</sup> is careless notation. The mixed δ<sup>i</sup><sub>j</sub> is the true tensor (Section 16).</li>
+</ul>
+</section>
+
+<section id="s5">
+<h2>5. Contravariant vectors (Eqs. 24–27)</h2>
+<div class="box def"><b class="t">Definition</b> N quantities A<sup>i</sup> (index <b>up</b>) are the components of a <b>contravariant vector</b> if, under x → x̄,
+<div class="eq">Ā<sup>α</sup> = (∂x̄<sup>α</sup>/∂x<sup>j</sup>) A<sup>j</sup> &nbsp;&nbsp;(24)</div>
+It transforms <b>like the differentials dx<sup>i</sup></b>, i.e. like a small displacement.</div>
+<p><b>Inverse:</b> multiply (24) by ∂x<sup>k</sup>/∂x̄<sup>α</sup> and sum over α. Using (23a), (∂x<sup>k</sup>/∂x̄<sup>α</sup>)(∂x̄<sup>α</sup>/∂x<sup>j</sup>)A<sup>j</sup> = δ<sup>k</sup><sub>j</sub>A<sup>j</sup> = A<sup>k</sup>. So</p>
+<div class="eq">A<sup>i</sup> = (∂x<sup>i</sup>/∂x̄<sup>α</sup>) Ā<sup>α</sup> &nbsp;&nbsp;(25–27)</div>
+<h3>Example 3(a): velocity is contravariant</h3>
+<p>Divide dx̄<sup>α</sup> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)dx<sup>i</sup> by dt: v̄<sup>α</sup> = dx̄<sup>α</sup>/dt = (∂x̄<sup>α</sup>/∂x<sup>i</sup>) v<sup>i</sup>. This is exactly (24). &nbsp;(30–32)</p>
+<p>In spherical coordinates the contravariant velocity components are just (ṙ, θ̇, φ̇) (Exercise 4). Note that θ̇ and φ̇ are angular rates, not speeds: contravariant components need not have the same units.</p>
+<div class="box warnb"><b class="t">About "acceleration is also contravariant"</b> The book argues this by differentiating again in time, treating ∂x̄<sup>α</sup>/∂x<sup>i</sup> as constant (footnote 3). That is true for <b>linear</b> transformations, such as rotations or fixed oblique axes. For curvilinear coordinates the Jacobian is evaluated at the moving particle, so it changes with time. Then d²x̄<sup>α</sup>/dt² is <b>not</b> a vector. The acceleration vector is still defined by transforming the Cartesian a<sup>i</sup> with (24), which is exactly what Example 4 does. The result contains extra velocity-squared terms (the centripetal and Coriolis-like terms), which are the Christoffel-symbol terms of Section 19. Lab 5 shows the difference numerically.</div>
+</section>
+
+<section id="s6">
+<h2>6. Covariant vectors (Eqs. 28–36)</h2>
+<div class="box def"><b class="t">Definition</b> N quantities A<sub>i</sub> (index <b>down</b>) are the components of a <b>covariant vector</b> if
+<div class="eq">Ā<sub>α</sub> = (∂x<sup>i</sup>/∂x̄<sup>α</sup>) A<sub>i</sub>, &nbsp;&nbsp; inverse: A<sub>i</sub> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>) Ā<sub>α</sub> &nbsp;&nbsp;(28, 29)</div>
+It transforms <b>like the derivative operator ∂/∂x<sup>i</sup></b>, which uses the <b>inverse</b> Jacobian compared with (24).</div>
+<h3>Example 3(b): the gradient is covariant</h3>
+<ol>
+<li>A scalar field has the same value at the same point in every system: φ(x) = φ̄(x̄). &nbsp;(33)</li>
+<li>Define A<sub>i</sub> = ∂φ/∂x<sup>i</sup> and Ā<sub>α</sub> = ∂φ/∂x̄<sup>α</sup>. &nbsp;(34)</li>
+<li>Chain rule: ∂φ/∂x̄<sup>α</sup> = (∂φ/∂x<sup>i</sup>)(∂x<sup>i</sup>/∂x̄<sup>α</sup>), i.e. Ā<sub>α</sub> = (∂x<sup>i</sup>/∂x̄<sup>α</sup>)A<sub>i</sub>. That is (28). ∎ &nbsp;(35, 36)</li>
+</ol>
+<div class="tbl-wrap"><table>
+<tr><th></th><th>Contravariant A<sup>i</sup></th><th>Covariant A<sub>i</sub></th></tr>
+<tr><td>Transforms like</td><td>dx<sup>i</sup> (displacement)</td><td>∂/∂x<sup>i</sup> (gradient)</td></tr>
+<tr><td>Law</td><td>Ā<sup>α</sup> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)A<sup>i</sup> (matrix J)</td><td>Ā<sub>α</sub> = (∂x<sup>i</sup>/∂x̄<sup>α</sup>)A<sub>i</sub> (matrix Kᵀ = (J⁻¹)ᵀ)</td></tr>
+<tr><td>Geometric picture</td><td>components along the directions of coordinate <b>increase</b> (parallel projection)</td><td>components measured <b>across</b> the constant-coordinate surfaces (perpendicular projection)</td></tr>
+<tr><td>Examples</td><td>velocity, displacement dx<sup>i</sup></td><td>gradient ∂φ/∂x<sup>i</sup>, force as −∂V/∂x<sup>i</sup></td></tr>
+<tr><td>Cartesian coordinates</td><td colspan="2">the two kinds are <b>identical</b>: for a rotation, J is orthogonal, so (J⁻¹)ᵀ = J</td></tr>
+</table></div>
+<div class="box fact"><b class="t">Invariant pairing</b> Contracting one of each gives a scalar: Ā<sub>α</sub>B̄<sup>α</sup> = (∂x<sup>i</sup>/∂x̄<sup>α</sup>)(∂x̄<sup>α</sup>/∂x<sup>j</sup>)A<sub>i</sub>B<sup>j</sup> = δ<sup>i</sup><sub>j</sub>A<sub>i</sub>B<sup>j</sup> = A<sub>i</sub>B<sup>i</sup>. Example: dφ = (∂φ/∂x<sup>i</sup>)dx<sup>i</sup>, the change of a scalar, is the same in all systems. That is why one index is up and the other down.</div>
+</section>
+
+<section id="s7">
+<h2>7. 🔬 Lab 3: see the difference between contravariant and covariant components</h2>
+<p>Use <b>oblique axes</b> at an angle ω (a linear coordinate change, so everything is exact). The <b>contravariant</b> components are found by drawing lines <b>parallel</b> to the axes (the parallelogram rule): V = V¹e₁ + V²e₂. The <b>covariant</b> components are the <b>perpendicular</b> projections V<sub>i</sub> = V·e<sub>i</sub>. At ω = 90° they coincide, which is why you never noticed the difference in Cartesian coordinates.</p>
+<div class="lab">
+<div class="grid2">
+<div><canvas id="cvK" width="460" height="460"></canvas></div>
+<div>
+<div class="ctrl"><label>angle between axes ω <input type="range" id="kW" min="25" max="155" step="1" value="60"><span id="kWv"></span></label></div>
+<div class="ctrl"><label>V angle <input type="range" id="kA" min="0" max="360" step="1" value="35"><span id="kAv"></span></label><label>|V| <input type="range" id="kL" min="0.5" max="2.2" step="0.05" value="1.6"><span id="kLv"></span></label></div>
+<div class="readout out" id="kOut"></div>
+</div></div></div>
+</section>
+
+<section id="s8">
+<h2>8. Tensors of rank 2 and of general rank (Eqs. 37–41)</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Type</th><th>Transformation law</th></tr>
+<tr><td>Contravariant rank 2, A<sup>ij</sup></td><td>Ā<sup>αβ</sup> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)(∂x̄<sup>β</sup>/∂x<sup>j</sup>) A<sup>ij</sup> &nbsp;(37)</td></tr>
+<tr><td>Covariant rank 2, A<sub>ij</sub></td><td>Ā<sub>αβ</sub> = (∂x<sup>i</sup>/∂x̄<sup>α</sup>)(∂x<sup>j</sup>/∂x̄<sup>β</sup>) A<sub>ij</sub> &nbsp;(38)</td></tr>
+<tr><td>Mixed A<sup>i</sup><sub>j</sub></td><td>Ā<sup>α</sup><sub>β</sub> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)(∂x<sup>j</sup>/∂x̄<sup>β</sup>) A<sup>i</sup><sub>j</sub> &nbsp;(39)</td></tr>
+<tr><td>General: contravariant rank p, covariant rank q</td><td>Ā<sup>α₁…α<sub>p</sub></sup><sub>β₁…β<sub>q</sub></sub> = (∂x̄<sup>α₁</sup>/∂x<sup>i₁</sup>)…(∂x̄<sup>α<sub>p</sub></sup>/∂x<sup>i<sub>p</sub></sup>)(∂x<sup>j₁</sup>/∂x̄<sup>β₁</sup>)…(∂x<sup>j<sub>q</sub></sup>/∂x̄<sup>β<sub>q</sub></sup>) A<sup>i₁…i<sub>p</sub></sup><sub>j₁…j<sub>q</sub></sub> &nbsp;(41)</td></tr>
+</table></div>
+<ul>
+<li><b>One Jacobian factor per index</b>: ∂x̄/∂x for every upper index, ∂x/∂x̄ for every lower index. A tensor of rank p + q has N<sup>p+q</sup> components.</li>
+<li>p = q = 0: Ā = A. A scalar is <b>invariant</b> (length, mass, energy, volume).</li>
+<li>In fixed coordinates a rank-2 tensor can be written as an N×N matrix (40). In matrix form (37) is Ā = JAJᵀ, (38) is Ā = KᵀAK, and (39) is Ā = JAK = JAJ⁻¹, a <b>similarity transformation</b>. That is why the eigenvalues of a mixed tensor are invariant.</li>
+<li>For rotations (J = R orthogonal), all three become Ā = RARᵀ, which is the rule Lab 1 used for σ.</li>
+</ul>
+<div class="box warnb"><b class="t">Things that are NOT tensors</b>
+<ul style="margin:4px 0">
+<li>The <b>coordinates x<sup>i</sup> themselves</b>: in curvilinear coordinates (r, θ, φ) do not transform by (24). Only the differentials dx<sup>i</sup> do.</li>
+<li><b>Second derivatives</b> ∂²f/∂x<sup>i</sup>∂x<sup>j</sup> (Exercise 7): an extra term (∂²x<sup>j</sup>/∂x̄<sup>α</sup>∂x̄<sup>β</sup>)(∂f/∂x<sup>j</sup>) appears.</li>
+<li><b>d²x̄<sup>α</sup>/dt²</b> in curvilinear coordinates (Section 10).</li>
+</ul></div>
+</section>
+
+<section id="s9">
+<h2>9. 🔬 Lab 4: polar coordinates, the Jacobian, and both kinds of components</h2>
+<p>Drag the point P. At P the lab computes J = ∂(ρ, φ)/∂(x, y) and K = ∂(x, y)/∂(ρ, φ), shows that JK = I (Eq. 23), and transforms the Cartesian vector A (sliders) into contravariant (A<sup>ρ</sup>, A<sup>φ</sup>) and covariant (A<sub>ρ</sub>, A<sub>φ</sub>) components. The orange arrows are the tangent basis vectors ∂r/∂ρ and ∂r/∂φ. Notice that |∂r/∂φ| = ρ grows with distance. That is why A<sup>φ</sup> = A<sub>φ</sub>/ρ².</p>
+<div class="lab">
+<div class="grid2">
+<div><canvas id="cvJ" width="460" height="460"></canvas></div>
+<div>
+<div class="ctrl"><label>A<sub>x</sub> <input type="range" id="jAx" min="-2" max="2" step="0.05" value="-0.6"><span id="jAxv"></span></label><label>A<sub>y</sub> <input type="range" id="jAy" min="-2" max="2" step="0.05" value="1.2"><span id="jAyv"></span></label></div>
+<div class="readout out" id="jOut"></div>
+</div></div></div>
+</section>
+
+<section id="s10">
+<h2>10. Acceleration in spherical and polar coordinates (Example 4, Eqs. 42–51)</h2>
+<p>The Cartesian acceleration is a<sup>i</sup> = d²x<sup>i</sup>/dt². Transform with (24): ā<sup>α</sup> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)a<sup>i</sup>.</p>
+<ol>
+<li>The nine derivatives from (5):
+<div class="eq">∂r/∂x = sin θ cos φ, ∂r/∂y = sin θ sin φ, ∂r/∂z = cos θ;<br>∂θ/∂x = cos θ cos φ / r, ∂θ/∂y = cos θ sin φ / r, ∂θ/∂z = −sin θ / r;<br>∂φ/∂x = −sin φ / (r sin θ), ∂φ/∂y = cos φ / (r sin θ), ∂φ/∂z = 0 &nbsp;&nbsp;(45)</div>
+<span class="small">(Careful: ∂r/∂x ≠ 1/(∂x/∂r). Partial derivatives do not invert like that.)</span></li>
+<li>Differentiate x = r sin θ cos φ twice in time (47, 48), and likewise y and z.</li>
+<li>Combine as in (44) and simplify:</li>
+</ol>
+<div class="eq">a<sup>r</sup> = r̈ − rθ̇² − r sin²θ φ̇²<br>a<sup>θ</sup> = θ̈ <b>+ (2/r)ṙθ̇</b> − sin θ cos θ φ̇²<br>a<sup>φ</sup> = φ̈ + (2/r)ṙφ̇ + 2 cot θ θ̇φ̇ &nbsp;&nbsp;(50)</div>
+<div class="box warnb"><b class="t">Misprint in Eq. (50)</b> The book's ā² (= a<sup>θ</sup>) is missing the term (2/r)ṙθ̇. I checked the result symbolically. Quick check: for motion in the plane φ = const it must match the 2D polar result a<sup>φ</sup> = φ̈ + (2/ρ)ρ̇φ̇ of Eq. (51), with θ playing the role of the angle. That needs the 2ṙθ̇/r term.</div>
+<p><b>Units:</b> only a<sup>r</sup> has units of acceleration; a<sup>θ</sup> and a<sup>φ</sup> are in s⁻². The familiar "physical" components are a<sub>θ̂</sub> = r a<sup>θ</sup> = rθ̈ + 2ṙθ̇ − r sin θ cos θ φ̇² and a<sub>φ̂</sub> = r sin θ a<sup>φ</sup>.</p>
+<p><b>Plane polar</b> (θ = π/2, r → ρ):</p>
+<div class="eq">a<sup>ρ</sup> = ρ̈ − ρφ̇², &nbsp;&nbsp; a<sup>φ</sup> = φ̈ + (2/ρ)ρ̇φ̇ &nbsp;&nbsp;(51)</div>
+<p>−ρφ̇² is the <b>centripetal</b> term, and (2/ρ)ρ̇φ̇ is the <b>Coriolis</b>-type term. These terms are exactly what is missing if you naively take (ρ̈, φ̈) as "the acceleration".</p>
+<div class="lab"><h4>🔬 Lab 5: true acceleration vs the naive (ρ̈, φ̈)</h4>
+<p class="small">A particle moves on the chosen path. Orange = the true acceleration vector (from Cartesian d²x/dt²). Grey = what you would get by wrongly treating (ρ̈, φ̈) as contravariant components. They agree only when the extra terms vanish. For uniform circular motion ρ̈ = φ̈ = 0, so the naive "acceleration" is zero, yet the particle clearly accelerates toward the centre.</p>
+<div class="grid2">
+<div><canvas id="cvA" width="460" height="460"></canvas></div>
+<div>
+<div class="ctrl"><button class="alt" data-tr="circ">Uniform circle</button><button class="alt" data-tr="spiral">Spiral out</button><button class="alt" data-tr="ell">Ellipse (orbit-like)</button><button class="alt" data-tr="line">Straight line</button></div>
+<div class="ctrl"><button id="aPlay">❚❚ Pause</button></div>
+<div class="readout out" id="aOut"></div>
+</div></div></div>
+</section>
+
+<section id="s11">
+<h2>11. Divergence and Laplacian in cylindrical coordinates (Example 5, Eqs. 52–65)</h2>
+<p>Cylindrical: x = ρ cos φ, y = ρ sin φ, z = z. &nbsp;(53)</p>
+<h3>(a) Divergence of a contravariant vector</h3>
+<ol>
+<li>Cartesian components from (27): A<sup>x</sup> = cos φ A<sup>ρ</sup> − ρ sin φ A<sup>φ</sup>, &nbsp;A<sup>y</sup> = sin φ A<sup>ρ</sup> + ρ cos φ A<sup>φ</sup>, &nbsp;A<sup>z</sup> = A<sup>z</sup>. &nbsp;(54)</li>
+<li>Chain rule: ∂/∂x = cos φ ∂/∂ρ − (sin φ/ρ)∂/∂φ and ∂/∂y = sin φ ∂/∂ρ + (cos φ/ρ)∂/∂φ. &nbsp;(55)</li>
+<li>Apply these to (54), add, and use sin² + cos² = 1. The cross terms cancel. &nbsp;(56)</li>
+</ol>
+<div class="eq">div A = ∂A<sup>ρ</sup>/∂ρ + ∂A<sup>φ</sup>/∂φ + ∂A<sup>z</sup>/∂z + A<sup>ρ</sup>/ρ &nbsp;&nbsp;(57)</div>
+<h3>(b) Same vector given by covariant components</h3>
+<div class="eq">div A = ∂A<sub>ρ</sub>/∂ρ + (1/ρ²)∂A<sub>φ</sub>/∂φ + ∂A<sub>z</sub>/∂z + A<sub>ρ</sub>/ρ &nbsp;&nbsp;(60)</div>
+<p><b>Link to the textbook formula:</b> with physical components A<sub>ρ̂</sub> = A<sup>ρ</sup> = A<sub>ρ</sub> and A<sub>φ̂</sub> = ρA<sup>φ</sup> = A<sub>φ</sub>/ρ, both (57) and (60) become the familiar</p>
+<div class="eq">∇·A = (1/ρ)∂(ρA<sub>ρ̂</sub>)/∂ρ + (1/ρ)∂A<sub>φ̂</sub>/∂φ + ∂A<sub>z</sub>/∂z</div>
+<h3>(c) Laplacian of a scalar (no complications: I is invariant)</h3>
+<p>∂I/∂x = cos φ ∂I/∂ρ − (sin φ/ρ)∂I/∂φ. &nbsp;(62) &nbsp; Applying it twice, then doing the same for y and adding:</p>
+<div class="eq">∇²I = ∂²I/∂ρ² + (1/ρ)∂I/∂ρ + (1/ρ²)∂²I/∂φ² + ∂²I/∂z² &nbsp;&nbsp;(65)</div>
+<p class="small">These "brute-force chain rule" derivations are long. Sections 19–20 give a short general formula: div A = (1/√g)∂(√g A<sup>i</sup>)/∂x<sup>i</sup>, with √g = ρ (cylindrical) or r² sin θ (spherical).</p>
+</section>
+
+<section id="s12">
+<h2>12. Why tensors? (Galilean invariance)</h2>
+<p>Ten scientists in ten labs each choose their own Cartesian axes. One finds the projectile's maximum height to be 2 m, so every other scientist must find 2 m too. One measures a magnetic field of 500 gauss pointing east, so the others must find the <b>same vector</b>, even though each writes different components. Experience says: <b>physical phenomena do not depend on where you put the origin or how you orient your axes</b> (the principle of Galilean invariance).</p>
+<div class="box thm"><b class="t">Consequence</b> A physical law must keep its form in every frame. Laws written as <b>tensor equations</b> do this automatically:
+<div class="eq">if A<sup>…</sup><sub>…</sub> = B<sup>…</sup><sub>…</sub> in one system, then Ā = B̄ in every system</div>
+Reason: the difference C = A − B is a tensor. If all its components are 0 in one system, the transformation law (41) makes them 0 in every system. That is why only scalars, vectors and tensors can appear in physical laws, and both sides of an equation must be the <b>same type</b>.</div>
+<ul>
+<li><b>Tensors are geometric objects; components are not.</b> The vector u is the same in every frame. Only its components u<sub>i</sub> depend on the frame. The index notation hides this, but it shows the rank and type at a glance.</li>
+<li>A vector space is <b>defined</b> by addition (the parallelogram law) and scalar multiplication. The arrow picture is only a helpful representation (Section 1).</li>
+<li>Higher-rank tensors have no simple picture, so we <b>must</b> define them by their transformation law. This also protects us from "silly ideas", like picturing electron orbits too literally.</li>
+<li>Sections 20–21 extend this from Galilean invariance in 3D space to <b>Lorentz invariance</b> in 4D spacetime.</li>
+</ul>
+<div class="box tip"><b class="t">Type check, a quick test for any equation</b> Every term must have the same free indices, each at the same height. In j<sub>i</sub> = σ<sub>ij</sub>E<sup>j</sup>, both sides have free index i down ✓ (j is a dummy, once up and once down). A<sup>i</sup> = B<sub>i</sub> can only be true in special (Cartesian) frames.</div>
+</section>
+
+<section id="s13">
+<h2>13. Summary sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Item</th><th>Formula</th></tr>
+<tr><td>Summation convention</td><td>repeated index (twice) ⇒ sum 1…N; dummy can be renamed; free index appears once on each side; never three times</td></tr>
+<tr><td>Kronecker delta</td><td>δ<sup>i</sup><sub>j</sub> = ∂x<sup>i</sup>/∂x<sup>j</sup>; δ<sup>i</sup><sub>j</sub>A<sup>j</sup> = A<sup>i</sup>; δ<sup>i</sup><sub>i</sub> = N</td></tr>
+<tr><td>Jacobians</td><td>(∂x<sup>i</sup>/∂x̄<sup>α</sup>)(∂x̄<sup>α</sup>/∂x<sup>j</sup>) = δ<sup>i</sup><sub>j</sub>, i.e. JK = I</td></tr>
+<tr><td>Contravariant</td><td>Ā<sup>α</sup> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)A<sup>i</sup> (like dx; velocity)</td></tr>
+<tr><td>Covariant</td><td>Ā<sub>α</sub> = (∂x<sup>i</sup>/∂x̄<sup>α</sup>)A<sub>i</sub> (like ∂/∂x; gradient)</td></tr>
+<tr><td>Rank 2</td><td>Ā<sup>αβ</sup> = J J A, Ā<sub>αβ</sub> = K K A, Ā<sup>α</sup><sub>β</sub> = J K A</td></tr>
+<tr><td>General</td><td>one ∂x̄/∂x per upper index, one ∂x/∂x̄ per lower index; N<sup>p+q</sup> components</td></tr>
+<tr><td>Invariant</td><td>A<sub>i</sub>B<sup>i</sup> is a scalar</td></tr>
+<tr><td>Polar acceleration</td><td>a<sup>ρ</sup> = ρ̈ − ρφ̇², a<sup>φ</sup> = φ̈ + 2ρ̇φ̇/ρ</td></tr>
+<tr><td>Cylindrical div</td><td>∂A<sup>ρ</sup>/∂ρ + ∂A<sup>φ</sup>/∂φ + ∂A<sup>z</sup>/∂z + A<sup>ρ</sup>/ρ</td></tr>
+<tr><td>Cylindrical ∇²</td><td>I<sub>ρρ</sub> + I<sub>ρ</sub>/ρ + I<sub>φφ</sub>/ρ² + I<sub>zz</sub></td></tr>
+<tr><td>Why tensors</td><td>tensor equation true in one frame ⇒ true in all</td></tr>
+</table></div>
+</section>
+
+<section id="s14">
+<h2>14. Book's Exercise 15: all problems solved</h2>
+<div class="prob"><div class="q">1. Obtain the inverse transformations of Eqs. (37), (38), (39) and (41).</div>
+<details><summary>Show solution</summary>
+<p>Multiply each law by the inverse Jacobians and use (23). For (37): multiply by (∂x<sup>k</sup>/∂x̄<sup>α</sup>)(∂x<sup>l</sup>/∂x̄<sup>β</sup>) and sum over α, β. The factors combine into δ<sup>k</sup><sub>i</sub>δ<sup>l</sup><sub>j</sub>A<sup>ij</sup> = A<sup>kl</sup>. So:</p>
+<div class="eq">A<sup>ij</sup> = (∂x<sup>i</sup>/∂x̄<sup>α</sup>)(∂x<sup>j</sup>/∂x̄<sup>β</sup>)Ā<sup>αβ</sup>; &nbsp; A<sub>ij</sub> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)(∂x̄<sup>β</sup>/∂x<sup>j</sup>)Ā<sub>αβ</sub>; &nbsp; A<sup>i</sup><sub>j</sub> = (∂x<sup>i</sup>/∂x̄<sup>α</sup>)(∂x̄<sup>β</sup>/∂x<sup>j</sup>)Ā<sup>α</sup><sub>β</sub></div>
+<div class="eq">A<sup>i₁…i<sub>p</sub></sup><sub>j₁…j<sub>q</sub></sub> = (∂x<sup>i₁</sup>/∂x̄<sup>α₁</sup>)…(∂x<sup>i<sub>p</sub></sup>/∂x̄<sup>α<sub>p</sub></sup>)(∂x̄<sup>β₁</sup>/∂x<sup>j₁</sup>)…(∂x̄<sup>β<sub>q</sub></sup>/∂x<sup>j<sub>q</sub></sup>) Ā<sup>α₁…α<sub>p</sub></sup><sub>β₁…β<sub>q</sub></sub></div>
+<p>Rule: swap the roles of barred and unbarred everywhere.</p></details></div>
+
+<div class="prob"><div class="q">2. What is δ<sup>i</sup><sub>i</sub> in N dimensions? Evaluate δ<sup>i</sup><sub>j</sub>δ<sup>j</sup><sub>i</sub> and δ<sup>i</sup><sub>j</sub>δ<sup>j</sup><sub>k</sub>δ<sup>k</sup><sub>i</sub>.</div>
+<details><summary>Show solution</summary><p>δ<sup>i</sup><sub>i</sub> = δ¹₁ + … + δ<sup>N</sup><sub>N</sub> = <b>N</b>. δ<sup>i</sup><sub>j</sub>δ<sup>j</sup><sub>i</sub> = δ<sup>i</sup><sub>i</sub> = <b>N</b> (substitution). δ<sup>i</sup><sub>j</sub>δ<sup>j</sup><sub>k</sub>δ<sup>k</sup><sub>i</sub> = δ<sup>i</sup><sub>k</sub>δ<sup>k</sup><sub>i</sub> = δ<sup>i</sup><sub>i</sub> = <b>N</b>. (In matrix language: Tr I = Tr I² = Tr I³ = N.)</p></details></div>
+
+<div class="prob"><div class="q">3. Show (a) δ<sup>i</sup><sub>j</sub>A<sub>ik</sub> = A<sub>jk</sub>; (b) δ<sup>i</sup><sub>j</sub>δ<sup>j</sup><sub>k</sub>A<sup>k</sup><sub>q</sub> = A<sup>i</sup><sub>q</sub>.</div>
+<details><summary>Show solution</summary><p>(a) In the sum over i, only the term i = j survives (δ = 1 there, 0 elsewhere): Σ<sub>i</sub>δ<sup>i</sup><sub>j</sub>A<sub>ik</sub> = A<sub>jk</sub>.<br>(b) First δ<sup>i</sup><sub>j</sub>δ<sup>j</sup><sub>k</sub> = δ<sup>i</sup><sub>k</sub> (sum over j), then δ<sup>i</sup><sub>k</sub>A<sup>k</sup><sub>q</sub> = A<sup>i</sup><sub>q</sub>. ∎</p></details></div>
+
+<div class="prob"><div class="q">4. The Cartesian velocity components are dx/dt, dy/dt, dz/dt. Prove that its spherical components are dr/dt, dθ/dt, dφ/dt.</div>
+<details><summary>Show solution</summary><p>Velocity is contravariant: v̄<sup>α</sup> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)(dx<sup>i</sup>/dt). By the chain rule this is exactly dx̄<sup>α</sup>/dt, since x̄<sup>α</sup> depends on t only through x<sup>i</sup>(t). Hence (v<sup>r</sup>, v<sup>θ</sup>, v<sup>φ</sup>) = (ṙ, θ̇, φ̇). ∎ (Physical components: ṙ, rθ̇, r sin θ φ̇.)</p></details></div>
+
+<div class="prob"><div class="q">5. Find the components of acceleration in cylindrical coordinates (ρ, z, φ) and compare with the plane polar result of Example 4.</div>
+<details><summary>Show solution</summary><p>x = ρ cos φ, y = ρ sin φ, z = z. The inverse Jacobian: ∂ρ/∂x = cos φ, ∂ρ/∂y = sin φ, ∂φ/∂x = −sin φ/ρ, ∂φ/∂y = cos φ/ρ, ∂z/∂z = 1.</p>
+<p>ẍ = (ρ̈ − ρφ̇²)cos φ − (ρφ̈ + 2ρ̇φ̇)sin φ, &nbsp; ÿ = (ρ̈ − ρφ̇²)sin φ + (ρφ̈ + 2ρ̇φ̇)cos φ.</p>
+<p>a<sup>ρ</sup> = cos φ ẍ + sin φ ÿ = <b>ρ̈ − ρφ̇²</b>; &nbsp; a<sup>φ</sup> = (−sin φ ẍ + cos φ ÿ)/ρ = <b>φ̈ + 2ρ̇φ̇/ρ</b>; &nbsp; a<sup>z</sup> = <b>z̈</b>.</p>
+<p>These are exactly Eq. (51) plus the trivial z̈. The z-direction is Cartesian and does not interact with the others.</p></details></div>
+
+<div class="prob"><div class="q">6. Find the components of the gradient of a scalar field in plane polar coordinates. Also give the gradient in spherical coordinates.</div>
+<details><summary>Show solution</summary><p>The gradient is covariant, and its components in <b>any</b> coordinates are simply the partial derivatives (Example 3b):</p>
+<div class="eq">polar: (∂f/∂ρ, ∂f/∂φ); &nbsp;&nbsp; spherical: (∂f/∂r, ∂f/∂θ, ∂f/∂φ)</div>
+<p>Check in polar: A<sub>φ</sub> = (∂x/∂φ)A<sub>x</sub> + (∂y/∂φ)A<sub>y</sub> = −ρ sin φ ∂f/∂x + ρ cos φ ∂f/∂y = ∂f/∂φ ✓.</p>
+<p>The familiar textbook forms (∂f/∂ρ, (1/ρ)∂f/∂φ) and (∂f/∂r, (1/r)∂f/∂θ, (1/(r sin θ))∂f/∂φ) are the <b>physical</b> components, i.e. projections on unit vectors. Covariant components divided by the scale factors (h<sub>ρ</sub>, h<sub>φ</sub>) = (1, ρ) and (h<sub>r</sub>, h<sub>θ</sub>, h<sub>φ</sub>) = (1, r, r sin θ) give the physical ones.</p></details></div>
+
+<div class="prob"><div class="q">7. Show that the second derivatives A<sub>ij</sub> = ∂²f/∂x<sup>i</sup>∂x<sup>j</sup> of a scalar are not the components of a rank-2 tensor.</div>
+<details><summary>Show solution</summary>
+<p>Ā<sub>αβ</sub> = ∂/∂x̄<sup>α</sup>(∂f/∂x̄<sup>β</sup>) = ∂/∂x̄<sup>α</sup>[(∂x<sup>j</sup>/∂x̄<sup>β</sup>)(∂f/∂x<sup>j</sup>)]</p>
+<p>= (∂x<sup>i</sup>/∂x̄<sup>α</sup>)(∂x<sup>j</sup>/∂x̄<sup>β</sup>)(∂²f/∂x<sup>i</sup>∂x<sup>j</sup>) + <b>(∂²x<sup>j</sup>/∂x̄<sup>α</sup>∂x̄<sup>β</sup>)(∂f/∂x<sup>j</sup>)</b>.</p>
+<p>The first term is the tensor law (38). The second, extra term vanishes only if the transformation is linear (second derivatives of x(x̄) are zero). So A<sub>ij</sub> is not a tensor in general. ∎</p>
+<p>Example: f = x in polar coordinates. ∂²f/∂x² = 0 in Cartesian, so if it were a tensor all its polar components would be 0. But f = ρ cos φ gives ∂²f/∂φ² = −ρ cos φ ≠ 0. (The cure is the covariant derivative of Section 19.)</p></details></div>
+
+<div class="prob"><div class="q">8. Show that in spherical coordinates (a) div A<sup>i</sup> = ∂A<sup>r</sup>/∂r + ∂A<sup>θ</sup>/∂θ + ∂A<sup>φ</sup>/∂φ + 2A<sup>r</sup>/r + cot θ A<sup>θ</sup>; (b) div A<sub>i</sub> = ∂A<sub>r</sub>/∂r + (1/r²)∂A<sub>θ</sub>/∂θ + (1/(r² sin²θ))∂A<sub>φ</sub>/∂φ + 2A<sub>r</sub>/r + (cot θ/r²)A<sub>θ</sub>; (c) ∇²I = I<sub>rr</sub> + I<sub>θθ</sub>/r² + I<sub>φφ</sub>/(r² sin²θ) + 2I<sub>r</sub>/r + (cot θ/r²)I<sub>θ</sub>.</div>
+<details><summary>Show solution</summary>
+<p><b>Shortcut (justified in Section 20):</b> div A = (1/√g) ∂(√g A<sup>i</sup>)/∂x<sup>i</sup> with √g = r² sin θ.</p>
+<p>(a) (1/(r² sin θ))[∂(r² sin θ A<sup>r</sup>)/∂r + ∂(r² sin θ A<sup>θ</sup>)/∂θ + ∂(r² sin θ A<sup>φ</sup>)/∂φ] = ∂A<sup>r</sup>/∂r + 2A<sup>r</sup>/r + ∂A<sup>θ</sup>/∂θ + cot θ A<sup>θ</sup> + ∂A<sup>φ</sup>/∂φ ✓.</p>
+<p>(b) The same vector in covariant components: A<sup>r</sup> = A<sub>r</sub>, A<sup>θ</sup> = A<sub>θ</sub>/r², A<sup>φ</sup> = A<sub>φ</sub>/(r² sin²θ) (raising indices with the metric diag(1, r², r² sin²θ)). Substitute into (a). The r² in A<sup>θ</sup> does not depend on θ, so ∂A<sup>θ</sup>/∂θ = (1/r²)∂A<sub>θ</sub>/∂θ. Result (b) ✓.</p>
+<p>(c) ∇²I = div(grad I) with covariant A<sub>i</sub> = ∂I/∂x<sup>i</sup>. Put A<sub>r</sub> = I<sub>r</sub>, A<sub>θ</sub> = I<sub>θ</sub>, A<sub>φ</sub> = I<sub>φ</sub> into (b) ✓. This is the standard spherical Laplacian, (1/r²)∂<sub>r</sub>(r²∂<sub>r</sub>I) + …, expanded.</p>
+<p><b>Brute-force route (as in Example 5):</b> write the Cartesian components in terms of the spherical ones via (27), express ∂/∂x, ∂/∂y, ∂/∂z through (45), and add. It is long but mechanical.</p></details></div>
+
+<div class="prob"><div class="q">9. A fluid in a plane has v<sub>x</sub> = x², v<sub>y</sub> = y². Find the polar components of its velocity.</div>
+<details><summary>Show solution</summary>
+<p>v<sup>ρ</sup> = (∂ρ/∂x)v<sub>x</sub> + (∂ρ/∂y)v<sub>y</sub> = cos φ·ρ²cos²φ + sin φ·ρ²sin²φ = <b>ρ²(cos³φ + sin³φ)</b>.</p>
+<p>v<sup>φ</sup> = (∂φ/∂x)v<sub>x</sub> + (∂φ/∂y)v<sub>y</sub> = (−sin φ/ρ)ρ²cos²φ + (cos φ/ρ)ρ²sin²φ = <b>ρ sin φ cos φ (sin φ − cos φ)</b>.</p>
+<p>The physical (unit-vector) φ component is ρv<sup>φ</sup> = ρ² sin φ cos φ(sin φ − cos φ). Check at φ = 0 (the x-axis): v = (x², 0) = (ρ², 0), so v<sup>ρ</sup> = ρ² and v<sup>φ</sup> = 0 ✓.</p></details></div>
+</section>
+
+<section id="s15">
+<h2>15. Practice set (CSIR-NET / GATE style)</h2>
+<div class="prob"><div class="q">P1. In 3D, evaluate δ<sub>ij</sub>δ<sub>ij</sub> and δ<sub>ij</sub>δ<sub>jk</sub>δ<sub>ki</sub>. <span class="tag">delta</span></div>
+<details><summary>Show solution</summary><p>δ<sub>ij</sub>δ<sub>ij</sub> = δ<sub>ii</sub> = 3. δ<sub>ij</sub>δ<sub>jk</sub>δ<sub>ki</sub> = 3.</p></details></div>
+<div class="prob"><div class="q">P2. How many components does a tensor A<sup>ij</sup><sub>kl</sub> have in 4D? <span class="tag">count</span></div>
+<details><summary>Show solution</summary><p>4⁴ = 256.</p></details></div>
+<div class="prob"><div class="q">P3. Which expressions are valid: (a) A<sub>i</sub>B<sub>i</sub>C<sub>i</sub>; (b) A<sub>ij</sub>B<sub>j</sub> = C<sub>i</sub>; (c) A<sub>i</sub> = B<sub>j</sub>; (d) A<sub>ij</sub>B<sub>jk</sub>C<sub>k</sub> = D<sub>i</sub>? <span class="tag">index rules</span></div>
+<details><summary>Show solution</summary><p>(a) ✗ index repeated three times. (b) ✓. (c) ✗ the free indices differ. (d) ✓ (j and k are dummies, i is free on both sides).</p></details></div>
+<div class="prob"><div class="q">P4. Simplify ∂x<sup>i</sup>/∂x<sup>i</sup> in N dimensions. <span class="tag">trap</span></div>
+<details><summary>Show solution</summary><p>= δ<sup>i</sup><sub>i</sub> = N, not 1.</p></details></div>
+<div class="prob"><div class="q">P5. If A<sub>i</sub>B<sup>i</sup> is a scalar for every contravariant B<sup>i</sup>, show A<sub>i</sub> is covariant. <span class="tag">quotient law</span></div>
+<details><summary>Show solution</summary><p>Ā<sub>α</sub>B̄<sup>α</sup> = A<sub>i</sub>B<sup>i</sup> = A<sub>i</sub>(∂x<sup>i</sup>/∂x̄<sup>α</sup>)B̄<sup>α</sup>. This holds for all B̄, so Ā<sub>α</sub> = (∂x<sup>i</sup>/∂x̄<sup>α</sup>)A<sub>i</sub>. (This is the "quotient law", Section 16.)</p></details></div>
+<div class="prob"><div class="q">P6. Under the rotation x̄ = x cos θ + y sin θ, ȳ = −x sin θ + y cos θ, show that contravariant and covariant components transform the same way. <span class="tag">Cartesian</span></div>
+<details><summary>Show solution</summary><p>J = R (orthogonal) and K = R⁻¹ = Rᵀ. Covariant: Ā<sub>α</sub> = K<sub>iα</sub>A<sub>i</sub> = (Kᵀ)<sub>αi</sub>A<sub>i</sub> = R<sub>αi</sub>A<sub>i</sub>, the same as contravariant. The difference disappears for orthogonal transformations.</p></details></div>
+<div class="prob"><div class="q">P7. A particle moves on a circle ρ = R with φ = ωt. Find a<sup>ρ</sup>, a<sup>φ</sup> and the physical acceleration. <span class="tag">circular</span></div>
+<details><summary>Show solution</summary><p>ρ̇ = ρ̈ = 0, φ̇ = ω, φ̈ = 0 ⇒ a<sup>ρ</sup> = −Rω², a<sup>φ</sup> = 0. Centripetal acceleration Rω² toward the centre.</p></details></div>
+<div class="prob"><div class="q">P8. Compute ∇²(1/ρ) in cylindrical coordinates (ρ ≠ 0). <span class="tag">Laplacian</span></div>
+<details><summary>Show solution</summary><p>I = ρ⁻¹: I<sub>ρρ</sub> = 2ρ⁻³, I<sub>ρ</sub>/ρ = −ρ⁻³ ⇒ ∇²I = ρ⁻³ ≠ 0. (Compare: ln ρ is the harmonic one, since ∇² ln ρ = −1/ρ² + 1/ρ² = 0.)</p></details></div>
+<div class="prob"><div class="q">P9. div of A = (A<sup>ρ</sup>, A<sup>φ</sup>, A<sup>z</sup>) = (ρ, 0, 0) in cylindrical coordinates? <span class="tag">divergence</span></div>
+<details><summary>Show solution</summary><p>(57): ∂ρ/∂ρ + ρ/ρ = 1 + 1 = 2. Check: this is the Cartesian field (x, y, 0), whose divergence is 2 ✓.</p></details></div>
+<div class="prob"><div class="q">P10. σ<sub>ij</sub> = diag(σ₁, σ₂) in crystal axes. Find σ<sub>xy</sub> in a frame rotated by 45°. <span class="tag">tensor rotation</span></div>
+<details><summary>Show solution</summary><p>With R = [[cos θ, sin θ], [−sin θ, cos θ]], σ′ = RσRᵀ gives σ′<sub>xy</sub> = (σ₂ − σ₁) sin θ cos θ, which at 45° is −(σ₁ − σ₂)/2. Off-diagonal conductivity appears purely from the choice of axes.</p></details></div>
+</section>
+
+<section id="s16" class="quiz">
+<h2>16. Self-test quiz</h2>
+<div id="quiz"></div>
+<p><b>Score: <span id="qScore">0</span> / <span id="qTot">0</span></b></p>
+</section>
+
+<section id="s17">
+<h2>17. Interesting facts</h2>
+<div class="box fact"><b class="t">Einstein's "great discovery"</b> Einstein reportedly joked that the summation convention was his great contribution to mathematics. It appeared in his 1916 general relativity paper, simply to stop writing hundreds of Σ signs.</div>
+<div class="box fact"><b class="t">The word "tensor"</b> comes from the Latin tendere, "to stretch". It was first used for the stress tensor in elasticity (Woldemar Voigt, 1898), which describes how a material is stretched. Ricci and Levi-Civita built the general "absolute differential calculus" in 1900, and Einstein learned it from his friend Marcel Grossmann.</div>
+<div class="box fact"><b class="t">Graphite</b> conducts electricity about 10,000 times better along its layers than across them. Its conductivity tensor is extremely anisotropic, so in graphite j can point far away from E (try σ₁/σ₂ large in Lab 1).</div>
+<div class="box fact"><b class="t">Effective mass</b> In silicon the conduction electrons have effective masses of about 0.98 mₑ along one crystal axis and 0.19 mₑ across it. Push one sideways and it accelerates in a different direction. The mass tensor of Eq. (1a) is real physics, and it matters for transistor design.</div>
+<div class="box fact"><b class="t">Up and down indices = column and row vectors</b> In matrix language a contravariant vector is a column, a covariant vector is a row (a "covector"), and A<sub>i</sub>B<sup>i</sup> is row × column = a number. Physicists' bra ⟨ψ| and ket |φ⟩ follow the same idea.</div>
+</section>
+</div>
+<script>
+/* ---------- small linear-algebra toolkit ---------- */
+const $=id=>document.getElementById(id);
+const cssv=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const eye=n=>Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0));
+const zeros=n=>Array.from({length:n},()=>Array(n).fill(0));
+const clone=M=>M.map(r=>r.slice());
+const mul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>s+v*B[k][j],0)));
+const add=(A,B)=>A.map((r,i)=>r.map((v,j)=>v+B[i][j]));
+const sub=(A,B)=>A.map((r,i)=>r.map((v,j)=>v-B[i][j]));
+const scl=(k,A)=>A.map(r=>r.map(v=>k*v));
+const trc=A=>A.reduce((s,r,i)=>s+r[i],0);
+const T=A=>A[0].map((_,j)=>A.map(r=>r[j]));
+const maxAbs=A=>Math.max(...A.flat().map(Math.abs));
+const mv=(A,x)=>A.map(r=>r.reduce((s,v,k)=>s+v*x[k],0));
+const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
+const nrm=a=>Math.sqrt(dot(a,a));
+const neg=s=>String(s).replace(/-/g,'−');
+function fmt(x,dec=3){
+  if(!isFinite(x))return '∞';
+  if(Math.abs(x)<1e-9)return '0';
+  const r=Math.round(x); if(Math.abs(x-r)<1e-7*Math.max(1,Math.abs(x)))return neg(r);
+  for(let q=2;q<=12;q++){const p=Math.round(x*q);if(Math.abs(x*q-p)<1e-7*q)return neg(p)+'/'+q;}
+  return neg(+x.toFixed(dec));
+}
+function mxH(M,heat,scale){
+  const s=scale||Math.max(1e-12,maxAbs(M));
+  return '<table class="mx">'+M.map(r=>'<tr>'+r.map(v=>{
+    let st='';
+    if(heat){const a=Math.min(1,Math.abs(v)/s)*0.55;if(Math.abs(v)>1e-9)st=` style="background:${v>0?`rgba(47,111,223,${a})`:`rgba(201,42,42,${a})`}"`;}
+    return `<td${st}>${fmt(v)}</td>`;}).join('')+'</tr>').join('')+'</table>';
+}
+function rank(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol)continue;
+    [A[r],A[p]]=[A[p],A[r]];
+    for(let i=r+1;i<n;i++){const f=A[i][c]/A[r][c];for(let j=c;j<m;j++)A[i][j]-=f*A[r][j];}
+    r++;
+  }
+  return r;
+}
+function nullspace(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  const piv=[];let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol){for(let i=r;i<n;i++)A[i][c]=0;continue;}
+    [A[r],A[p]]=[A[p],A[r]];
+    const d=A[r][c];for(let j=0;j<m;j++)A[r][j]/=d;
+    for(let i=0;i<n;i++)if(i!==r){const f=A[i][c];for(let j=0;j<m;j++)A[i][j]-=f*A[r][j];}
+    piv.push(c);r++;
+  }
+  const basis=[];
+  for(let f=0;f<m;f++){if(piv.includes(f))continue;
+    const v=Array(m).fill(0);v[f]=1;piv.forEach((c,i)=>{v[c]=-A[i][f];});basis.push(v);}
+  return basis;
+}
+function inv(M){
+  const n=M.length,A=M.map((r,i)=>r.concat(eye(n)[i]));
+  for(let c=0;c<n;c++){
+    let p=c;for(let i=c+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<1e-12)return null;
+    [A[c],A[p]]=[A[p],A[c]];const d=A[c][c];for(let j=0;j<2*n;j++)A[c][j]/=d;
+    for(let i=0;i<n;i++)if(i!==c){const f=A[i][c];for(let j=0;j<2*n;j++)A[i][j]-=f*A[c][j];}
+  }
+  return A.map(r=>r.slice(n));
+}
+/* Faddeev–LeVerrier: det(λI−A)=Σ c[k] λ^k, c[n]=1 */
+function charCoeffs(A){
+  const n=A.length,c=Array(n+1).fill(0);c[n]=1;let M=zeros(n);
+  for(let k=1;k<=n;k++){M=add(mul(A,M),scl(c[n-k+1],eye(n)));c[n-k]=-trc(mul(A,M))/k;}
+  return c;
+}
+/* complex helpers + Durand–Kerner roots of monic poly (c indexed by power) */
+const cm=(a,b)=>[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]];
+const cd=(a,b)=>{const d=b[0]*b[0]+b[1]*b[1];return[(a[0]*b[0]+a[1]*b[1])/d,(a[1]*b[0]-a[0]*b[1])/d];};
+function polyRoots(c){
+  const n=c.length-1;if(n===1)return[[-c[0],0]];
+  let z=Array.from({length:n},(_,k)=>{let w=[1,0];for(let i=0;i<=k;i++)w=cm(w,[0.4,0.9]);return w;});
+  const R=1+Math.max(...c.slice(0,n).map(Math.abs));z=z.map(w=>[w[0]*R,w[1]*R]);
+  const ev=x=>{let s=[1,0];for(let k=n-1;k>=0;k--)s=[s[0]*x[0]-s[1]*x[1]+c[k],s[0]*x[1]+s[1]*x[0]];return s;};
+  for(let it=0;it<2000;it++){
+    let delta=0;
+    z=z.map((zi,i)=>{let den=[1,0];z.forEach((zj,j)=>{if(j!==i)den=cm(den,[zi[0]-zj[0],zi[1]-zj[1]]);});
+      if(Math.hypot(den[0],den[1])<1e-300)den=[1e-12,0];
+      const q=cd(ev(zi),den);delta=Math.max(delta,Math.hypot(q[0],q[1]));return[zi[0]-q[0],zi[1]-q[1]];});
+    if(delta<1e-14)break;
+  }
+  return z;
+}
+function snap(x){for(const q of [1,2,3,4,6,12]){const r=Math.round(x*q)/q;if(Math.abs(x-r)<2e-4)return r;}return x;}
+function eigGroups(A){
+  const z=polyRoots(charCoeffs(A)),used=Array(z.length).fill(false),G=[];
+  const tol=2e-3*Math.max(1,maxAbs(A));
+  for(let i=0;i<z.length;i++){if(used[i])continue;const cl=[z[i]];used[i]=true;
+    for(let j=i+1;j<z.length;j++)if(!used[j]&&Math.hypot(z[j][0]-z[i][0],z[j][1]-z[i][1])<tol){cl.push(z[j]);used[j]=true;}
+    let re=cl.reduce((s,w)=>s+w[0],0)/cl.length,im=cl.reduce((s,w)=>s+w[1],0)/cl.length;
+    if(Math.abs(im)<1e-6)im=0;re=snap(re);if(im)im=snap(im);
+    G.push({re,im,m:cl.length});}
+  G.sort((a,b)=>b.re-a.re||b.im-a.im);return G;
+}
+const powM=(M,k)=>{let R=eye(M.length);for(let i=0;i<k;i++)R=mul(R,M);return R;};
+const lamF=a=>a===0?'λ':(a>0?`(λ − ${fmt(a)})`:`(λ + ${fmt(-a)})`);
+const supN=k=>k===1?'':String(k).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+function minimalPoly(A){
+  const G=eigGroups(A),n=A.length;
+  if(G.some(g=>g.im!==0))return{G,complex:true};
+  const sc=Math.max(1,maxAbs(A));
+  let tups=[[]];G.forEach(g=>{const nt=[];tups.forEach(t=>{for(let r=1;r<=g.m;r++)nt.push(t.concat(r));});tups=nt;});
+  tups.sort((a,b)=>a.reduce((s,v)=>s+v,0)-b.reduce((s,v)=>s+v,0));
+  const tried=[];
+  for(const t of tups){
+    let P=eye(n);G.forEach((g,i)=>{P=mul(P,powM(sub(A,scl(g.re,eye(n))),t[i]));});
+    const deg=t.reduce((s,v)=>s+v,0),zero=maxAbs(P)<1e-6*Math.pow(sc,deg);
+    tried.push({t,P,zero});if(zero)return{G,r:t,tried};
+  }
+  return{G,r:G.map(g=>g.m),tried};
+}
+function expandRoots(rs){let p=[1];rs.forEach(a=>{const q=Array(p.length+1).fill(0);p.forEach((v,i)=>{q[i]+=v;q[i+1]-=a*v;});p=q;});return p;}
+function polyStr(p,v,mat){
+  const d=p.length-1;let s='';
+  p.forEach((c,i)=>{if(Math.abs(c)<1e-9)return;const k=d-i;const a=Math.abs(c);
+    const coef=(a===1&&k>0)?'':fmt(a);const term=k===0?(mat?coef+'I':fmt(a)):(k===1?coef+v:coef+v+supN(k));
+    s+=(s===''?(c<0?'−':''):(c<0?' − ':' + '))+term;});
+  return s||'0';
+}
+function makeEditor(id,M,cb){
+  const box=$(id);let n=M.length;
+  function build(M){n=M.length;box.innerHTML='<div style="display:grid;grid-template-columns:repeat('+n+',58px);gap:4px">'+M.flat().map((v,i)=>`<input type="number" step="any" data-i="${i}" value="${v}" style="width:58px">`).join('')+'</div>';
+    box.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',cb));}
+  build(M);
+  return{get(){const v=[...box.querySelectorAll('input')].map(i=>parseFloat(i.value)||0);return Array.from({length:n},(_,i)=>v.slice(i*n,i*n+n));},
+         set(M){build(M);cb();}};
+}
+function arrow(ctx,x0,y0,x1,y1,col,w=2.5,dash){
+  ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;if(dash)ctx.setLineDash(dash);
+  ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();ctx.setLineDash([]);
+  const a=Math.atan2(y1-y0,x1-x0),L=Math.hypot(x1-x0,y1-y0);
+  if(L>6){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-10*Math.cos(a-0.4),y1-10*Math.sin(a-0.4));ctx.lineTo(x1-10*Math.cos(a+0.4),y1-10*Math.sin(a+0.4));ctx.fill();}
+  ctx.restore();
+}
+function canvasPt(cv,e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height];}
+
+/* ---------- helpers ---------- */
+function plane2(cv,ext){const ctx=cv.getContext('2d'),W=cv.width,H=cv.height,s=(W/2-10)/ext;ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle=cssv('--line');ctx.lineWidth=1;for(let i=-Math.floor(ext);i<=ext;i++){ctx.beginPath();ctx.moveTo(W/2+i*s,0);ctx.lineTo(W/2+i*s,H);ctx.moveTo(0,H/2-i*s);ctx.lineTo(W,H/2-i*s);ctx.stroke();}
+  return{ctx,X:x=>W/2+x*s,Y:y=>H/2-y*s,s,W,H,inv:(px,py)=>[(px-W/2)/s,(H/2-py)/s]};}
+function dragPt(cv,getG,set){let d=false;const go=e=>{const [px,py]=canvasPt(cv,e);set(getG().inv(px,py));};
+  cv.addEventListener('pointerdown',e=>{d=true;cv.setPointerCapture(e.pointerId);go(e);});cv.addEventListener('pointermove',e=>{if(d)go(e);});cv.addEventListener('pointerup',()=>d=false);}
+const v2=(p)=>`(${fmt(p[0],3)}, ${fmt(p[1],3)})`;
+
+/* ---------- Lab 1: anisotropic Ohm ---------- */
+let oE=[0.5,1.5],oG=null;
+['oS1','oS2','oC','oT'].forEach(k=>$(k).addEventListener('input',drawO));
+$('oPlay').onclick=()=>{const t0=performance.now(),st=+$('oT').value;(function f(now){const t=Math.min(1,(now-t0)/4000);$('oT').value=(st+360*t)%360;drawO();if(t<1)requestAnimationFrame(f);})(t0);};
+dragPt($('cvO'),()=>oG,p=>{oE=p;drawO();});
+function drawO(){
+  const s1=+$('oS1').value,s2=+$('oS2').value,c=+$('oC').value*Math.PI/180,th=+$('oT').value*Math.PI/180;
+  $('oS1v').textContent=s1.toFixed(2);$('oS2v').textContent=s2.toFixed(2);$('oCv').textContent=$('oC').value+'°';$('oTv').textContent=Math.round(+$('oT').value)+'°';
+  const Q=[[Math.cos(c),-Math.sin(c)],[Math.sin(c),Math.cos(c)]],S=mul(mul(Q,[[s1,0],[0,s2]]),T(Q)),j=mv(S,oE);
+  const R=[[Math.cos(th),Math.sin(th)],[-Math.sin(th),Math.cos(th)]],Ep=mv(R,oE),jp=mv(R,j),Sp=mul(mul(R,S),T(R)),chk=sub([jp],[mv(Sp,Ep)])[0];
+  const ext=Math.max(3,nrm(j)*1.15,nrm(oE)*1.15);oG=plane2($('cvO'),ext);const {ctx,X,Y}=oG;
+  [[Q[0][0],Q[1][0]],[Q[0][1],Q[1][1]]].forEach((u,i)=>{ctx.save();ctx.setLineDash([6,5]);ctx.strokeStyle=cssv('--muted');ctx.beginPath();ctx.moveTo(X(-ext*u[0]),Y(-ext*u[1]));ctx.lineTo(X(ext*u[0]),Y(ext*u[1]));ctx.stroke();ctx.restore();ctx.fillStyle=cssv('--muted');ctx.font='12px sans-serif';ctx.fillText('σ'+(i?'₂':'₁')+' axis',X(0.8*ext*u[0])+4,Y(0.8*ext*u[1])-4);});
+  [[R[0],"x′",cssv('--acc4')],[R[1],"y′",cssv('--acc4')]].forEach(([u,n,col])=>{ctx.strokeStyle=col;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(X(-ext*u[0]),Y(-ext*u[1]));ctx.lineTo(X(ext*u[0]),Y(ext*u[1]));ctx.stroke();ctx.fillStyle=col;ctx.font='bold 13px sans-serif';ctx.fillText(n,X(0.92*ext*u[0])+4,Y(0.92*ext*u[1]));});
+  arrow(ctx,X(0),Y(0),X(j[0]),Y(j[1]),cssv('--acc2'),4);arrow(ctx,X(0),Y(0),X(oE[0]),Y(oE[1]),cssv('--acc'),4);
+  ctx.fillStyle=cssv('--acc');ctx.beginPath();ctx.arc(X(oE[0]),Y(oE[1]),7,0,7);ctx.fill();ctx.font='bold 14px sans-serif';ctx.fillText('E',X(oE[0])+9,Y(oE[1]));ctx.fillStyle=cssv('--acc2');ctx.fillText('j',X(j[0])+8,Y(j[1]));
+  const ang=Math.acos(Math.max(-1,Math.min(1,dot(oE,j)/(nrm(oE)*nrm(j)||1))))*180/Math.PI;
+  $('oOut').textContent=`angle between E and j: ${ang.toFixed(1)}°  ${ang<0.5?'(parallel)':'(NOT parallel)'}
+
+In YOUR frame (rotated by θ):
+ E′ = ${v2(Ep)}
+ j′ = ${v2(jp)}
+ σ′ = [[${fmt(Sp[0][0],3)}, ${fmt(Sp[0][1],3)}], [${fmt(Sp[1][0],3)}, ${fmt(Sp[1][1],3)}]]
+ σ′E′ = ${v2(mv(Sp,Ep))}
+ j′ − σ′E′ = ${fmt(Math.hypot(...chk),6)}  ✓ law holds
+
+Invariants (same for every θ):
+ |E| = ${fmt(nrm(oE),4)}, |j| = ${fmt(nrm(j),4)}, E·j = ${fmt(dot(oE,j),4)}
+ Tr σ′ = ${fmt(Sp[0][0]+Sp[1][1],4)}, det σ′ = ${fmt(Sp[0][0]*Sp[1][1]-Sp[0][1]*Sp[1][0],4)}`;
+}
+
+/* ---------- Lab: summation convention ---------- */
+let eVals={};
+const SUBD='₀₁₂₃₄₅₆₇₈₉';
+function getT(name,rank,N){const k=name+'|'+rank+'|'+N;if(!eVals[k]){const sz=Math.pow(N,rank);eVals[k]=Array.from({length:sz},()=>Math.floor(Math.random()*7)-3);}return eVals[k];}
+document.querySelectorAll('[data-ex]').forEach(b=>b.onclick=()=>{$('eX').value=b.dataset.ex;labEx();});
+$('eGo').onclick=labEx;$('eN').addEventListener('change',labEx);$('eRnd').onclick=()=>{eVals={};labEx();};$('eX').addEventListener('keydown',e=>{if(e.key==='Enter')labEx();});
+function labEx(){
+  const N=+$('eN').value,src=$('eX').value.trim();
+  const toks=src.split(/[\s*·]+/).filter(Boolean),facs=[];
+  for(const t of toks){const m=t.match(/^([A-Za-zδ]+)_([a-z]+)$/)||t.match(/^([A-Za-zδ]+)$/);if(!m){$('eOut').innerHTML=`<p class="bad">Cannot read "${t}". Use forms like a_i or M_ij.</p>`;return;}
+    const nm=m[1]==='del'?'δ':m[1];facs.push({nm,idx:(m[2]||'').split('')});}
+  const cnt={},order=[];facs.forEach(f=>f.idx.forEach(i=>{if(!(i in cnt)){cnt[i]=0;order.push(i);}cnt[i]++;}));
+  const bad=order.filter(i=>cnt[i]>2);
+  if(bad.length){$('eOut').innerHTML=`<p class="bad">✗ Index ${bad.join(', ')} appears ${cnt[bad[0]]} times in one term. This is not allowed in the summation convention (compare Eq. 13 and the discussion of Eq. 15a). Rename one pair, e.g. a_i b_i c_j d_j.</p>`;return;}
+  const free=order.filter(i=>cnt[i]===1),dum=order.filter(i=>cnt[i]===2);
+  const val=(f,as)=>{if(f.nm==='δ'){return f.idx.length===2?(as[f.idx[0]]===as[f.idx[1]]?1:0):1;}const T=getT(f.nm,f.idx.length,N);let k=0;f.idx.forEach(i=>{k=k*N+as[i];});return T[k];};
+  const each=(names,cb,as={})=>{if(!names.length){cb(as);return;}const [h,...r]=names;for(let v=0;v<N;v++){as[h]=v;each(r,cb,as);}};
+  const sym=(f,as)=>f.nm+f.idx.map(i=>SUBD[as[i]+1]).join('');
+  let h=`<p>free indices: <b>${free.length?free.join(', '):'none'}</b> &nbsp; | &nbsp; dummy (summed) indices: <b>${dum.length?dum.join(', '):'none'}</b> &nbsp; ⇒ the result has ${Math.pow(N,free.length)} component(s)${free.length?'':' (a single number)'}</p>`;
+  const rows=[];let first=true;
+  each(free,fa=>{const fas={...fa};let total=0,terms=[],nums=[];
+    each(dum,da=>{const as={...fas,...da};let p=1;facs.forEach(f=>{p*=val(f,as);});total+=p;terms.push(facs.map(f=>sym(f,as)).join(''));nums.push(facs.map(f=>{const v=val(f,as);return v<0?'('+neg(v)+')':v;}).join('·'));});
+    rows.push({label:free.map(i=>i+'='+(fas[i]+1)).join(', '),total,terms,nums});});
+  const r0=rows[0];
+  h+=`<p><b>Written out</b>${free.length?' for '+r0.label:''}: ${r0.terms.join(' + ')}<br><span class="small">= ${r0.nums.join(' + ')} = <b>${neg(r0.total)}</b></span></p>`;
+  if(free.length){h+='<div class="tbl-wrap"><table style="width:auto"><tr><th>free index values</th><th>value</th></tr>'+rows.map(r=>`<tr><td>${r.label}</td><td>${neg(r.total)}</td></tr>`).join('')+'</table></div>';}
+  const used=[...new Set(facs.filter(f=>f.nm!=='δ').map(f=>f.nm+'|'+f.idx.length))];
+  h+='<p class="small">Random values used: '+used.map(u=>{const [nm,rk]=u.split('|'),T=getT(nm,+rk,N);if(+rk===1)return `${nm} = (${T.map(neg).join(', ')})`;if(+rk===2)return `${nm} = [${Array.from({length:N},(_,i)=>T.slice(i*N,i*N+N).map(neg).join(', ')).join(' ; ')}]`;return nm+' (rank '+rk+')';}).join(' &nbsp; ')+'</p>';
+  $('eOut').innerHTML=h;
+}
+
+/* ---------- Lab 3: oblique axes ---------- */
+['kW','kA','kL'].forEach(k=>$(k).addEventListener('input',drawK));
+function drawK(){
+  const w=+$('kW').value*Math.PI/180,a=+$('kA').value*Math.PI/180,L=+$('kL').value;
+  $('kWv').textContent=$('kW').value+'°';$('kAv').textContent=$('kA').value+'°';$('kLv').textContent=L.toFixed(2);
+  const e1=[1,0],e2=[Math.cos(w),Math.sin(w)],V=[L*Math.cos(a),L*Math.sin(a)];
+  const dt=e1[0]*e2[1]-e1[1]*e2[0],c1=(V[0]*e2[1]-V[1]*e2[0])/dt,c2=(e1[0]*V[1]-e1[1]*V[0])/dt;
+  const V1=dot(V,e1),V2=dot(V,e2);
+  const G=plane2($('cvK'),2.6),{ctx,X,Y}=G;
+  [[e1,'x¹'],[e2,'x²']].forEach(([e,n])=>{ctx.strokeStyle=cssv('--ink');ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(X(-3*e[0]),Y(-3*e[1]));ctx.lineTo(X(3*e[0]),Y(3*e[1]));ctx.stroke();ctx.fillStyle=cssv('--ink');ctx.font='bold 14px sans-serif';ctx.fillText(n,X(2.4*e[0])+4,Y(2.4*e[1])-4);});
+  const p1=[c1*e1[0],c1*e1[1]],p2=[c2*e2[0],c2*e2[1]],oc=cssv('--acc2'),gc=cssv('--acc3');
+  ctx.save();ctx.setLineDash([6,4]);ctx.strokeStyle=oc;ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(X(V[0]),Y(V[1]));ctx.lineTo(X(p1[0]),Y(p1[1]));ctx.moveTo(X(V[0]),Y(V[1]));ctx.lineTo(X(p2[0]),Y(p2[1]));ctx.stroke();ctx.restore();
+  arrow(ctx,X(0),Y(0),X(p1[0]),Y(p1[1]),oc,3);arrow(ctx,X(0),Y(0),X(p2[0]),Y(p2[1]),oc,3);
+  const f1=[V1*e1[0],V1*e1[1]],f2=[V2*e2[0],V2*e2[1]];
+  ctx.save();ctx.setLineDash([2,3]);ctx.strokeStyle=gc;ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(X(V[0]),Y(V[1]));ctx.lineTo(X(f1[0]),Y(f1[1]));ctx.moveTo(X(V[0]),Y(V[1]));ctx.lineTo(X(f2[0]),Y(f2[1]));ctx.stroke();ctx.restore();
+  [f1,f2].forEach(f=>{ctx.fillStyle=gc;ctx.beginPath();ctx.arc(X(f[0]),Y(f[1]),5,0,7);ctx.fill();});
+  arrow(ctx,X(0),Y(0),X(V[0]),Y(V[1]),cssv('--acc'),4);ctx.fillStyle=cssv('--acc');ctx.font='bold 14px sans-serif';ctx.fillText('V',X(V[0])+6,Y(V[1])-6);
+  ctx.font='12px sans-serif';ctx.fillStyle=oc;ctx.fillText('orange: contravariant (parallel)',8,H(ctx)-26);ctx.fillStyle=gc;ctx.fillText('green dots: covariant (perpendicular feet)',8,H(ctx)-10);
+  const g=[[1,Math.cos(w)],[Math.cos(w),1]],low=mv(g,[c1,c2]);
+  $('kOut').textContent=`basis e₁ = (1, 0), e₂ = (cos ω, sin ω), ω = ${$('kW').value}°
+V = ${v2(V)}
+
+contravariant (V = V¹e₁ + V²e₂):
+  V¹ = ${fmt(c1,4)},  V² = ${fmt(c2,4)}
+covariant (V_i = V·e_i):
+  V₁ = ${fmt(V1,4)},  V₂ = ${fmt(V2,4)}
+
+metric g_ij = e_i·e_j = [[1, ${fmt(Math.cos(w),3)}], [${fmt(Math.cos(w),3)}, 1]]
+lowering: g_ij V^j = (${fmt(low[0],4)}, ${fmt(low[1],4)}) = V_i ✓
+invariant: V_i V^i = ${fmt(V1*c1+V2*c2,4)} = |V|² = ${fmt(L*L,4)} ✓
+${Math.abs(+$('kW').value-90)<1?'ω = 90°: both kinds coincide (Cartesian)':''}`;
+}
+function H(ctx){return ctx.canvas.height;}
+
+/* ---------- Lab 4: polar Jacobian ---------- */
+let jP=[1.3,0.9],jG=null;
+['jAx','jAy'].forEach(k=>$(k).addEventListener('input',drawJ));
+dragPt($('cvJ'),()=>jG,p=>{if(Math.hypot(...p)>0.15){jP=p;drawJ();}});
+function drawJ(){
+  const A=[+$('jAx').value,+$('jAy').value];$('jAxv').textContent=fmt(A[0],2);$('jAyv').textContent=fmt(A[1],2);
+  jG=plane2($('cvJ'),2.8);const {ctx,X,Y}=jG;
+  ctx.strokeStyle=cssv('--acc');ctx.globalAlpha=0.25;ctx.lineWidth=1;
+  for(let r=0.5;r<=4;r+=0.5){ctx.beginPath();ctx.arc(X(0),Y(0),r*jG.s,0,7);ctx.stroke();}
+  for(let k=0;k<12;k++){const t=k*Math.PI/6;ctx.beginPath();ctx.moveTo(X(0),Y(0));ctx.lineTo(X(4*Math.cos(t)),Y(4*Math.sin(t)));ctx.stroke();}
+  ctx.globalAlpha=1;
+  const r=Math.hypot(...jP),ph=Math.atan2(jP[1],jP[0]),c=Math.cos(ph),s=Math.sin(ph);
+  const J=[[c,s],[-s/r,c/r]],K=[[c,-r*s],[s,r*c]],JK=mul(J,K),con=mv(J,A),cov=[c*A[0]+s*A[1],-r*s*A[0]+r*c*A[1]];
+  const P=jP,tip=(v,k=1)=>[P[0]+k*v[0],P[1]+k*v[1]];
+  [[[c,s],'∂r/∂ρ'],[[-r*s,r*c],'∂r/∂φ']].forEach(([v,n])=>{const t=tip(v,0.5);arrow(ctx,X(P[0]),Y(P[1]),X(t[0]),Y(t[1]),cssv('--acc2'),3);ctx.fillStyle=cssv('--acc2');ctx.font='12px sans-serif';ctx.fillText(n+' (×½)',X(t[0])+4,Y(t[1]));});
+  [[[c,s],'∇ρ'],[[-s/r,c/r],'∇φ']].forEach(([v,n])=>{const t=tip(v,0.5);arrow(ctx,X(P[0]),Y(P[1]),X(t[0]),Y(t[1]),cssv('--acc3'),2,[4,3]);ctx.fillStyle=cssv('--acc3');ctx.font='12px sans-serif';ctx.fillText(n+' (×½)',X(t[0])+4,Y(t[1])+26);});
+  const tA=tip(A,0.6);arrow(ctx,X(P[0]),Y(P[1]),X(tA[0]),Y(tA[1]),cssv('--acc'),4);ctx.fillStyle=cssv('--acc');ctx.font='bold 13px sans-serif';ctx.fillText('A (×0.6)',X(tA[0])+4,Y(tA[1])-4);
+  ctx.fillStyle=cssv('--ink');ctx.beginPath();ctx.arc(X(P[0]),Y(P[1]),6,0,7);ctx.fill();ctx.fillText('P (drag)',X(P[0])+8,Y(P[1])+16);
+  const m=M=>M.map(r=>'['+r.map(v=>fmt(v,3).padStart(7)).join(' ')+' ]').join('\n   ');
+  $('jOut').textContent=`P: (x, y) = ${v2(P)},  ρ = ${fmt(r,3)}, φ = ${(ph*180/Math.PI).toFixed(1)}°
+
+J = ∂(ρ,φ)/∂(x,y) =
+   ${m(J)}
+K = ∂(x,y)/∂(ρ,φ) =
+   ${m(K)}
+JK = ${JK.map(r=>'['+r.map(v=>fmt(v,3)).join(', ')+']').join(' ')}  = I ✓ (Eq. 23)
+
+A (Cartesian) = ${v2(A)}
+contravariant  A^ρ = ${fmt(con[0],4)},  A^φ = ${fmt(con[1],4)}
+covariant      A_ρ = ${fmt(cov[0],4)},  A_φ = ${fmt(cov[1],4)}
+check A_φ = ρ²A^φ: ${fmt(r*r*con[1],4)} ✓
+physical (unit vectors): (${fmt(con[0],4)}, ${fmt(r*con[1],4)})
+invariant A_i A^i = ${fmt(cov[0]*con[0]+cov[1]*con[1],4)} = |A|² = ${fmt(dot(A,A),4)} ✓`;
+}
+
+/* ---------- Lab 5: acceleration ---------- */
+let trK='circ',aRun=true,aT=0,aLast=null,aTrail=[];
+const TR={circ:t=>[1.6*Math.cos(t),1.6*Math.sin(t)],spiral:t=>{const u=t%12;return[(0.3+0.15*u)*Math.cos(u),(0.3+0.15*u)*Math.sin(u)];},ell:t=>[1.9*Math.cos(t),1.1*Math.sin(t)],line:t=>{const u=(t%8)-4;return[u*0.6,0.7];}};
+document.querySelectorAll('[data-tr]').forEach(b=>b.onclick=()=>{trK=b.dataset.tr;aTrail=[];aT=0;});
+$('aPlay').onclick=()=>{aRun=!aRun;$('aPlay').textContent=aRun?'❚❚ Pause':'▶ Play';if(aRun)requestAnimationFrame(stepA);};
+function stepA(now){if(!aRun)return;if(aLast!==null)aT+=Math.min(0.05,(now-aLast)/1000)*0.8;aLast=now;drawA();requestAnimationFrame(stepA);}
+function drawA(){
+  const f=TR[trK],h=1e-3,x=f(aT),xp=f(aT+h),xm=f(aT-h),vel=[(xp[0]-xm[0])/(2*h),(xp[1]-xm[1])/(2*h)],acc=[(xp[0]-2*x[0]+xm[0])/(h*h),(xp[1]-2*x[1]+xm[1])/(h*h)];
+  const pol=p=>[Math.hypot(...p),Math.atan2(p[1],p[0])],[r,ph]=pol(x),[rp,php]=pol(xp),[rm,phm]=pol(xm);
+  const wrap=d=>{while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;return d;};
+  const rd=(rp-rm)/(2*h),rdd=(rp-2*r+rm)/(h*h),pd=wrap(php-phm)/(2*h),pdd=(wrap(php-ph)-wrap(ph-phm))/(h*h);
+  const c=Math.cos(ph),s=Math.sin(ph),aR=c*acc[0]+s*acc[1],aP=(-s*acc[0]+c*acc[1])/r;
+  const naive=[rdd*c-r*pdd*s,rdd*s+r*pdd*c];
+  aTrail.push(x);if(aTrail.length>400)aTrail.shift();
+  const G=plane2($('cvA'),2.6),{ctx,X,Y}=G;
+  ctx.strokeStyle=cssv('--muted');ctx.lineWidth=1.5;ctx.beginPath();aTrail.forEach((p,i)=>i?ctx.lineTo(X(p[0]),Y(p[1])):ctx.moveTo(X(p[0]),Y(p[1])));ctx.stroke();
+  ctx.strokeStyle=cssv('--line');ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(X(0),Y(0));ctx.lineTo(X(x[0]),Y(x[1]));ctx.stroke();ctx.setLineDash([]);
+  const k=0.35,ta=[x[0]+k*acc[0],x[1]+k*acc[1]],tn=[x[0]+k*naive[0],x[1]+k*naive[1]];
+  arrow(ctx,X(x[0]),Y(x[1]),X(tn[0]),Y(tn[1]),cssv('--muted'),3,[5,4]);arrow(ctx,X(x[0]),Y(x[1]),X(ta[0]),Y(ta[1]),cssv('--acc2'),4);
+  ctx.fillStyle=cssv('--acc');ctx.beginPath();ctx.arc(X(x[0]),Y(x[1]),7,0,7);ctx.fill();
+  ctx.font='12px sans-serif';ctx.fillStyle=cssv('--acc2');ctx.fillText('true a',8,16);ctx.fillStyle=cssv('--muted');ctx.fillText('naive (ρ̈, φ̈)',8,32);
+  $('aOut').textContent=`ρ = ${fmt(r,3)}  ρ̇ = ${fmt(rd,3)}  ρ̈ = ${fmt(rdd,3)}
+φ̇ = ${fmt(pd,3)}  φ̈ = ${fmt(pdd,3)}
+
+true contravariant acceleration (transform ẍ, ÿ):
+  a^ρ = ${fmt(aR,4)}    formula ρ̈ − ρφ̇² = ${fmt(rdd-r*pd*pd,4)}
+  a^φ = ${fmt(aP,4)}    formula φ̈ + 2ρ̇φ̇/ρ = ${fmt(pdd+2*rd*pd/r,4)}
+
+naive "components" (ρ̈, φ̈) = (${fmt(rdd,4)}, ${fmt(pdd,4)})
+missing terms: −ρφ̇² = ${fmt(-r*pd*pd,4)},  2ρ̇φ̇/ρ = ${fmt(2*rd*pd/r,4)}`;
+}
+
+/* ---------- Quiz ---------- */
+const QZ=[
+ {q:'In a_i b_j c_j, the index i is…',o:['free','dummy','summed','illegal'],a:0,e:'It appears once.'},
+ {q:'δ^i_i in 4 dimensions equals…',o:['4','1','0','16'],a:0,e:'Trace of the identity.'},
+ {q:'Velocity components dx^i/dt form a…',o:['contravariant vector','covariant vector','scalar','rank-2 tensor'],a:0,e:'They transform like dx^i.'},
+ {q:'The gradient ∂φ/∂x^i is a…',o:['covariant vector','contravariant vector','scalar','not a tensor'],a:0,e:'Chain rule gives Eq. (28).'},
+ {q:'A tensor A^{ij}_k in 3D has how many components?',o:['27','9','6','81'],a:0,e:'3³.'},
+ {q:'(∂x^i/∂x̄^α)(∂x̄^α/∂x^j) = …',o:['δ^i_j','N','1 always','0'],a:0,e:'Eq. (23a): the Jacobians are inverse matrices.'},
+ {q:'In Cartesian coordinates related by rotations, covariant and contravariant components…',o:['are identical','differ by a factor ρ','are inverse','are unrelated'],a:0,e:'Orthogonal J ⇒ (J⁻¹)ᵀ = J.'},
+ {q:'For uniform circular motion (ρ = R, φ = ωt), a^ρ = …',o:['−Rω²','0','Rω','ω²'],a:0,e:'ρ̈ − ρφ̇².'},
+ {q:'Second derivatives ∂²f/∂x^i∂x^j of a scalar…',o:['are not a tensor in general','are always a covariant tensor','are a scalar','are contravariant'],a:0,e:'An extra term with ∂²x/∂x̄∂x̄ appears (Exercise 7).'},
+ {q:'Why must physical laws be tensor equations?',o:['so they hold in every coordinate frame','to make the numbers smaller','because vectors are arrows','only for relativity'],a:0,e:'A tensor that vanishes in one frame vanishes in all.'}
+];
+(function(){let sc=0;$('qTot').textContent=QZ.length;
+ $('quiz').innerHTML=QZ.map((x,i)=>{const ord=x.o.map((t,j)=>({t,j})).sort(()=>Math.random()-0.5);
+  return `<div class="qq" data-q="${i}"><b>Q${i+1}.</b> ${x.q}${ord.map(o=>`<label class="opt"><input type="radio" name="q${i}" value="${o.j}"> ${o.t}</label>`).join('')}<div class="fb"></div></div>`;}).join('');
+ document.querySelectorAll('#quiz .qq').forEach(div=>{const i=+div.dataset.q;let done=false;
+  div.querySelectorAll('input').forEach(inp=>inp.addEventListener('change',()=>{if(done)return;done=true;const ok=+inp.value===QZ[i].a;if(ok)sc++;$('qScore').textContent=sc;
+    div.querySelector('.fb').innerHTML=`<span class="${ok?'ok':'bad'}">${ok?'✓ Correct.':'✗ Answer: '+QZ[i].o[QZ[i].a]+'.'}</span> ${QZ[i].e}`;
+    div.querySelectorAll('input').forEach(x=>x.disabled=true);}));});})();
+
+function drawAll(){drawO();drawK();drawJ();drawA();}
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+$('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawAll();};})();
+labEx();drawAll();requestAnimationFrame(stepA);
+</script>
+</body>
+</html>

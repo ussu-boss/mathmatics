@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linear Algebra Ladder — Interactive Learning Lab</title>
+<style>
+:root{--bg:#08111f;--panel:#111e31;--panel2:#16263d;--ink:#eef5ff;--muted:#a8bad2;--line:#2c4160;--cyan:#5eead4;--blue:#8ab4ff;--gold:#ffd166;--pink:#ff8fab;--green:#8ce99a;--red:#ff8787}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at top,#142746 0,#08111f 55%);color:var(--ink);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer;border:1px solid #3c587b;background:#203653;color:var(--ink);border-radius:10px;padding:9px 13px}button:hover{border-color:var(--cyan);transform:translateY(-1px)}button.primary{background:#0f766e;border-color:#2dd4bf}button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+header{padding:38px 20px 25px;max-width:1250px;margin:auto}h1{font-size:clamp(2rem,5vw,3.7rem);line-height:1.08;margin:8px 0 14px;letter-spacing:-.04em}.eyebrow{color:var(--cyan);font-weight:800;text-transform:uppercase;letter-spacing:.16em;font-size:.78rem}.lead{max-width:850px;color:var(--muted);font-size:1.08rem}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.chip{border:1px solid var(--line);padding:5px 10px;border-radius:999px;color:#cfe2ff;font-size:.86rem}
+main{max-width:1250px;margin:auto;padding:0 20px 60px}.layout{display:grid;grid-template-columns:275px minmax(0,1fr);gap:20px;align-items:start}.sidebar,.card{background:linear-gradient(160deg,rgba(22,38,61,.96),rgba(13,25,42,.96));border:1px solid var(--line);border-radius:18px;box-shadow:0 15px 35px #0002}.sidebar{padding:16px;position:sticky;top:12px}.sidebar h2{font-size:1rem;margin:3px 8px 12px}.ladder{list-style:none;padding:0;margin:0}.ladder li{margin:4px 0}.ladder button{display:flex;align-items:center;gap:10px;text-align:left;width:100%;background:transparent;border-color:transparent;color:#c5d4e9;padding:9px}.ladder button.active{background:#1d3c55;border-color:#3e7b85;color:#fff}.num{width:27px;height:27px;display:grid;place-items:center;border-radius:50%;background:#263b56;color:var(--cyan);font-weight:800;flex:none;font-size:.8rem}.progress{height:7px;background:#253650;border-radius:99px;margin:15px 5px 5px;overflow:hidden}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--blue));transition:width .3s}.small{font-size:.86rem;color:var(--muted)}.content{min-width:0}.card{padding:clamp(17px,3vw,28px);margin-bottom:18px}.section-top{display:flex;gap:14px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}.section-top h2{font-size:clamp(1.5rem,3vw,2.1rem);margin:0 0 5px}.kicker{color:var(--cyan);font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;font-weight:800}.why{border-left:3px solid var(--gold);background:#342d1c55;padding:12px 15px;border-radius:0 10px 10px 0;margin:18px 0}.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.subcard{border:1px solid var(--line);border-radius:13px;padding:15px;background:#0a1728aa;min-width:0}.subcard h3{margin:0 0 8px;font-size:1.05rem}.math{font-family:Cambria,"Times New Roman",serif;font-size:1.14rem;color:#fff;overflow-wrap:anywhere}.math.big{font-size:clamp(1.25rem,2.5vw,1.8rem)}.muted{color:var(--muted)}.tag{display:inline-block;border-radius:7px;padding:2px 8px;font-size:.78rem;font-weight:800;background:#153c3b;color:var(--cyan)}.warning{background:#3a2029;color:#ffc2cd;border:1px solid #713c4b;padding:11px 13px;border-radius:10px}.good{background:#15372c;color:#b5f6cb;border:1px solid #286348;padding:11px 13px;border-radius:10px}.formula{padding:13px;border-radius:11px;background:#0a1524;border:1px solid #2b405e;text-align:center;margin:10px 0}.dotflow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:15px 0}.node{padding:9px 12px;border:1px solid #406184;border-radius:10px;background:#162a43;font-weight:700}.arrow{color:var(--cyan);font-size:1.4rem}.visual{width:100%;height:auto;display:block;border-radius:12px;background:#091523;border:1px solid var(--line)}.control-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0}.control-row label{color:var(--muted);font-size:.9rem}.control-row input[type=range]{accent-color:var(--cyan);max-width:220px}.control-row input[type=number]{width:75px;background:#091523;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.tabs button.active{background:#0f766e;border-color:var(--cyan)}.question{border:1px solid var(--line);border-radius:13px;padding:15px;margin:12px 0;background:#0b1728}.qhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.qnum{color:var(--cyan);font-weight:800}.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:12px}.choice{text-align:left;background:#14243a;border-color:#334b6c}.choice.correct{border-color:#4ade80;background:#14382c}.choice.wrong{border-color:#fb7185;background:#3c202b}.feedback{padding:10px;border-radius:9px;margin-top:10px;display:none}.feedback.show{display:block}.answer{display:none;border-top:1px dashed var(--line);padding-top:10px;margin-top:10px;color:#d8e6fa}.answer.show{display:block}.question-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.badge{font-size:.78rem;color:var(--muted)}.matrix{border-collapse:separate;border-spacing:5px;margin:auto}.matrix td{padding:5px 12px;background:#172b43;border-radius:5px;text-align:center}.footer{text-align:center;color:var(--muted);padding:25px}.hidden{display:none!important}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{position:static}.ladder{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}.three{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){header{padding:25px 15px 18px}main{padding:0 12px 40px}.ladder{grid-template-columns:1fr}.three{grid-template-columns:1fr}.card{padding:16px}.choices{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Interactive mathematics studio · Learn → see → practise</div>
+  <h1>The Linear Algebra<br><span style="color:var(--cyan)">Connection Ladder</span></h1>
+  <p class="lead">Start with the rules for numbers and operations, then climb toward vector spaces, transformations and matrices. Every rung has a plain-language explanation, worked examples, a visual experiment and <b>five practice questions with solutions</b>. Work through the dots in order—or jump to any rung.</p>
+  <div class="chips"><span class="chip">11 connected topics</span><span class="chip">55 practice questions</span><span class="chip">Interactive visuals</span><span class="chip">Works offline in one HTML file</span></div>
+</header>
+<main>
+<div class="layout">
+<aside class="sidebar">
+  <h2>Your learning ladder</h2>
+  <ol class="ladder" id="ladder"></ol>
+  <div class="progress"><span id="progressbar"></span></div>
+  <div class="small" id="progressText">0 of 11 topics explored</div>
+  <p class="small">Tip: read the “why”, follow the connected dots, then attempt the five questions before revealing solutions.</p>
+  <button id="resetProgress" style="width:100%">Reset progress</button>
+</aside>
+<div class="content">
+<section class="card" id="overview">
+ <div class="kicker">The big picture</div><h2>How the ideas connect</h2>
+ <p class="muted">Each new idea reuses the ideas below it. The ladder is a map, not a claim that every topic is a strict prerequisite for every later topic.</p>
+ <div class="dotflow" id="bigFlow"></div>
+ <div class="two">
+  <div class="subcard"><h3>How to study each rung</h3><ol><li><b>Need:</b> why the idea exists.</li><li><b>Understand:</b> the smallest useful example.</li><li><b>Experiment:</b> change values and observe.</li><li><b>Practise:</b> answer five questions.</li><li><b>Connect:</b> see what the next rung adds.</li></ol></div>
+  <div class="subcard"><h3>Important distinction</h3><p>A <b>set</b> is a collection of objects. An <b>operation</b> tells you how to combine objects. A <b>structure</b> is a set equipped with operations that obey particular rules.</p><div class="formula math">Set + operations + rules = structure</div></div>
+ </div>
+</section>
+<section class="card" id="lesson">
+ <div class="section-top"><div><div class="kicker" id="topicKicker">Rung 1</div><h2 id="topicTitle">Group</h2><p id="topicSummary" class="muted"></p></div><span class="tag" id="topicTag">Foundation</span></div>
+ <div class="why"><b>Why do we need it?</b><div id="topicWhy"></div></div>
+ <div id="topicBody"></div>
+ <div class="dotflow" id="topicFlow"></div>
+ <div class="control-row"><button id="prevBtn">← Previous</button><button class="primary" id="nextBtn">Next rung →</button><button id="markBtn">Mark as explored ✓</button></div>
+</section>
+<section class="card" id="practice">
+ <div class="section-top"><div><div class="kicker">Retrieval practice</div><h2>Five questions for this rung</h2><p class="muted">Choose an answer to get immediate feedback. Use “Show solution” for the reasoning. Your score is local to this page.</p></div><div class="tag" id="scoreTag">Score: 0 / 5</div></div>
+ <div id="questions"></div>
+ <div class="control-row"><button class="primary" id="checkAll">Show all solutions</button><button id="retryBtn">Retry this set</button></div>
+</section>
+<section class="card">
+ <div class="kicker">Keep your bearings</div><h2>Mini glossary</h2>
+ <div class="three">
+ <div class="subcard"><h3>Scalar</h3><p class="muted">A number from the chosen field, such as 2 or −½ in \(\mathbb R\).</p></div>
+ <div class="subcard"><h3>Vector</h3><p class="muted">An object that can be added to other vectors and scaled, such as (2, 3).</p></div>
+ <div class="subcard"><h3>Dimension</h3><p class="muted">The number of vectors in any basis of a finite-dimensional vector space.</p></div>
+ </div>
+</section>
+</div></div>
+</main>
+<div class="footer">Built as a self-contained study file. No login, internet connection, or external libraries required.</div>
+<script>
+const topics = [
+{id:"group",title:"Group",tag:"Operations & rules",summary:"A set with one operation that follows four rules.",why:"We need a precise way to describe an operation that can be performed consistently, has a neutral element, and can be undone.",body:`
+<div class="two">
+ <div class="subcard"><h3>Four rules (for operation ★)</h3><ol><li><b>Closure:</b> a ★ b stays in the set.</li><li><b>Associativity:</b> (a ★ b) ★ c = a ★ (b ★ c).</li><li><b>Identity:</b> an element e leaves everything unchanged: a ★ e = e ★ a = a.</li><li><b>Inverse:</b> each a has an a⁻¹ with a ★ a⁻¹ = e.</li></ol><p class="muted">If the operation is also commutative, a ★ b = b ★ a, the group is called abelian.</p></div>
+ <div class="subcard"><h3>Worked example: integers under addition</h3><div class="formula math">(\u2124,+)</div><p>Closure: 3 + (−7) = −4, still an integer.</p><p>Identity: 0, because n + 0 = n.</p><p>Inverse of 5: −5, because 5 + (−5) = 0.</p><p>It is abelian because 2 + 7 = 7 + 2.</p><div class="good">Important: a group need not use the symbol +. The operation could be ★ or multiplication.</div></div>
+</div>
+<div class="subcard"><h3>Try the operation</h3><p>On integers, use a ★ b = a + b. Change a and b.</p><div class="control-row"><label>a <input id="gA" type="number" value="3"></label><label>b <input id="gB" type="number" value="-5"></label><button id="gCalc">Calculate</button></div><div id="gResult" class="formula math">3 + (−5) = −2</div></div>`},
+{id:"field",title:"Field",tag:"Two operations",summary:"A number system with well-behaved addition and multiplication.",why:"Linear algebra needs scalars that can be added, multiplied, subtracted and—except for zero—divided.",body:`
+<div class="two">
+ <div class="subcard"><h3>What makes a field?</h3><p>There are two operations: addition and multiplication. Under addition, the set is an abelian group. The nonzero elements form an abelian group under multiplication. Multiplication distributes over addition.</p><div class="formula math">(a+b)c = ac+bc</div><p class="muted">In a field, every nonzero number has a multiplicative inverse. Zero does not.</p></div>
+ <div class="subcard"><h3>Worked example: real numbers</h3><p>In \u211d, 7 + (−2) = 5 and 3 × 4 = 12.</p><p>The additive inverse of 7 is −7.</p><p>The multiplicative inverse of 4 is 1/4 because 4 × 1/4 = 1.</p><div class="warning">Division by zero is not allowed. So \u211d\\{0} forms the multiplicative group, not all of \u211d.</div></div>
+</div>
+<div class="subcard"><h3>Explore inverses</h3><div class="control-row"><label>Number a <input id="fA" type="number" step="0.5" value="4"></label><button id="fCalc">Find inverses</button></div><div id="fResult" class="formula">Additive inverse: −4 · Multiplicative inverse: 1/4</div></div>`},
+{id:"vector",title:"Vector space",tag:"Vectors + scalars",summary:"Vectors can be added and scaled by numbers from a field.",why:"This is the main setting of linear algebra. It captures arrows, coordinate lists, polynomials and many other objects using the same rules.",body:`
+<div class="two">
+ <div class="subcard"><h3>Example in \u211d²</h3><div class="formula math">(1,2)+(3,4)=(4,6)</div><div class="formula math">2(1,2)=(2,4)</div><p>The vectors are pairs; the scalars come from \u211d. A vector space must obey the vector-space axioms, including an additive zero and additive inverses.</p></div>
+ <div class="subcard"><h3>A set that fails</h3><div class="formula math">S={(x,y): x≥0, y≥0}</div><p>This first quadrant is not a vector space over \u211d: (1,2) is in S, but its additive inverse (−1,−2) is not.</p><div class="good">Fast test: a vector space must contain 0 and be closed under addition and scalar multiplication for every scalar in the field.</div></div>
+</div>
+<div class="subcard"><h3>Animate scalar multiplication</h3><p class="muted">Move the slider to stretch, shrink or reverse a vector.</p><div class="control-row"><label>Scalar k = <b id="vKLabel">2</b></label><input id="vK" type="range" min="-2" max="3" step=".5" value="2"></div><svg class="visual" id="vectorSvg" viewBox="0 0 420 280" role="img" aria-label="Coordinate plane showing a vector and its scaled version"></svg><p id="vExplain" class="muted"></p></div>`},
+{id:"subspace",title:"Subspace",tag:"Smaller vector space",summary:"A subset that is itself a vector space using the same operations.",why:"Subspaces let us focus on a meaningful part of a vector space—such as a line through the origin or a plane through the origin—without losing the vector-space rules.",body:`
+<div class="two">
+ <div class="subcard"><h3>Example: the x-axis</h3><div class="formula math">W={(x,0): x∈\u211d}</div><p>Adding (2,0)+(−3,0)=(−1,0) stays on the x-axis. Scaling 4(2,0)=(8,0) also stays on it. Zero is included, and inverses remain on the axis.</p><span class="tag">Subspace of \u211d²</span></div>
+ <div class="subcard"><h3>Non-example: first quadrant</h3><p>S={(x,y):x,y≥0} fails because negative scalar multiplication can leave S. For example, −1(1,2)=(−1,−2) is outside S.</p><span class="tag" style="background:#43232c;color:#ffc2cd">Not a subspace</span></div>
+</div>
+<div class="subcard"><h3>Visual: line through the origin</h3><div class="control-row"><label>Slope m <input id="slope" type="range" min="-2" max="2" step=".25" value="1"></label><b id="slopeLabel">1</b></div><svg class="visual" id="subSvg" viewBox="0 0 420 280" aria-label="Line through origin"></svg><p class="muted">Every line through (0,0) in \u211d² is a one-dimensional subspace. A shifted line such as y=x+1 is not, because it does not contain the zero vector.</p></div>`},
+{id:"combination",title:"Linear combination",tag:"Build vectors",summary:"Multiply vectors by scalars and add the results.",why:"It answers: can these building blocks create a target vector? This is the basic language for span, independence and basis.",body:`
+<div class="two">
+ <div class="subcard"><h3>Worked example</h3><div class="formula math">u=(1,0), v=(0,1)</div><div class="formula math">3u+2v=(3,0)+(0,2)=(3,2)</div><p>The coefficients 3 and 2 tell us how much of each vector to use.</p></div>
+ <div class="subcard"><h3>Coordinates are coefficients</h3><p>Using the standard coordinate vectors, any (x,y) can be written:</p><div class="formula math">(x,y)=x(1,0)+y(0,1)</div><p class="muted">A linear combination always uses scalar multiples followed by addition.</p></div>
+</div>
+<div class="subcard"><h3>Build your own vector</h3><div class="control-row"><label>a <input id="cA" type="range" min="-4" max="4" value="3"></label><b id="cALabel">3</b><label>b <input id="cB" type="range" min="-4" max="4" value="2"></label><b id="cBLabel">2</b></div><svg class="visual" id="combSvg" viewBox="0 0 420 280" aria-label="Vector addition visualization"></svg><div class="formula math" id="combResult">3(1,0) + 2(0,1) = (3,2)</div></div>`},
+{id:"independence",title:"Linear independence",tag:"Redundant or necessary?",summary:"Vectors are independent when no vector in the set is made from the others.",why:"Independence tells us whether our list contains redundant directions. It is essential for finding a basis and understanding dimension.",body:`
+<div class="two">
+ <div class="subcard"><h3>Dependent example</h3><div class="formula math">a=(1,2), b=(2,4)=2a</div><p>One vector is just a scaled version of the other. The pair is linearly dependent.</p></div>
+ <div class="subcard"><h3>Independent example</h3><div class="formula math">u=(1,2), v=(3,4)</div><p>If v=ku, the first coordinate requires k=3 while the second requires k=2. Impossible, so the vectors are independent.</p></div>
+</div>
+<div class="subcard"><h3>Explore two vectors</h3><p>In \u211d², two vectors are independent exactly when neither is a scalar multiple of the other (equivalently, their 2×2 determinant is nonzero).</p><div class="control-row"><label>u = (<input id="iAx" type="number" value="1">, <input id="iAy" type="number" value="2">)</label><label>v = (<input id="iBx" type="number" value="3">, <input id="iBy" type="number" value="4">)</label><button id="iCalc">Check</button></div><div id="iResult" class="formula"></div></div>`},
+{id:"basis",title:"Basis",tag:"Independent building blocks",summary:"A basis is an independent set that spans the whole space.",why:"A basis gives each vector a unique coordinate description. It tells us which directions are needed, without redundant vectors.",body:`
+<div class="two">
+ <div class="subcard"><h3>Standard basis of \u211d²</h3><div class="formula math">e₁=(1,0), e₂=(0,1)</div><p>These vectors are independent and span all of \u211d²:</p><div class="formula math">(x,y)=xe₁+ye₂</div></div>
+ <div class="subcard"><h3>Not a basis</h3><div class="formula math">(1,0), (2,0)</div><p>These vectors point along the same line, so they cannot produce a vector such as (0,1). They are dependent and do not span \u211d².</p></div>
+</div>
+<div class="subcard"><h3>Basis check for two vectors in \u211d²</h3><p>Place the vectors as columns. If the determinant is nonzero, they form a basis of \u211d².</p><div class="formula math">det [[a,c],[b,d]] = ad − bc</div><div class="control-row"><label>u=(<input id="bAx" type="number" value="1">,<input id="bAy" type="number" value="0">)</label><label>v=(<input id="bBx" type="number" value="0">,<input id="bBy" type="number" value="1">)</label><button id="bCalc">Check basis</button></div><div id="bResult" class="formula"></div></div>`},
+{id:"dimension",title:"Dimension",tag:"Number of basis vectors",summary:"The dimension is the number of vectors in a basis.",why:"Dimension measures how many independent directions a space has. It tells us the size of a coordinate description, not the number of points.",body:`
+<div class="three">
+ <div class="subcard"><h3>\u211d¹</h3><div class="formula math">1 coordinate</div><p>One direction: a line.</p></div>
+ <div class="subcard"><h3>\u211d²</h3><div class="formula math">2 coordinates</div><p>Two independent directions: a plane.</p></div>
+ <div class="subcard"><h3>\u211d³</h3><div class="formula math">3 coordinates</div><p>Three independent directions: ordinary 3D space.</p></div>
+</div>
+<div class="subcard"><h3>Dimension explorer</h3><div class="control-row"><label>Space \u211d<sup>n</sup>: <input id="dimN" type="range" min="1" max="8" value="4"></label><b id="dimLabel">n = 4</b></div><div class="formula math big" id="dimResult">dim(\u211d⁴) = 4</div><p class="muted">The standard basis consists of the n coordinate vectors, each with one 1 and all other entries 0.</p><div id="basisVectors" class="formula math"></div></div>`},
+{id:"transformation",title:"Linear transformation",tag:"Structure-preserving map",summary:"A function that preserves vector addition and scalar multiplication.",why:"Transformations let us model rotations, reflections, scaling, projections and many coordinate changes with one mathematical rule.",body:`
+<div class="two">
+ <div class="subcard"><h3>Two tests</h3><div class="formula math">T(u+v)=T(u)+T(v)</div><div class="formula math">T(cu)=cT(u)</div><p>Both must hold for every vector u,v and scalar c.</p></div>
+ <div class="subcard"><h3>Linear example</h3><div class="formula math">T(x,y)=(2x,3y)</div><p>This stretches x-coordinates by 2 and y-coordinates by 3. It sends (1,2) to (2,6), and sends (0,0) to (0,0).</p><div class="warning">A shift T(x,y)=(x+1,y) is not linear because T(0,0) ≠ (0,0).</div></div>
+</div>
+<div class="subcard"><h3>Animate a transformation</h3><div class="control-row"><label>x scale <input id="tx" type="range" min="-2" max="2" step=".25" value="1.5"></label><b id="txLabel">1.5</b><label>y scale <input id="ty" type="range" min="-2" max="2" step=".25" value=".75"></label><b id="tyLabel">0.75</b></div><svg class="visual" id="transSvg" viewBox="0 0 420 280" aria-label="Before and after transformed vector"></svg><div class="formula math" id="transResult"></div></div>`},
+{id:"kernelimage",title:"Kernel & image",tag:"Inputs & outputs",summary:"Kernel = inputs sent to zero; image = all outputs the transformation can produce.",why:"These tell us what a transformation destroys and what it can reach. They are central to solving linear systems and understanding rank-nullity.",body:`
+<div class="two">
+ <div class="subcard"><h3>Example: projection onto x-axis</h3><div class="formula math">T(x,y)=(x,0)</div><p>Kernel: x must be zero, while y can be anything.</p><div class="formula math">ker(T)={(0,y): y∈\u211d}</div><p>Image: every point on the x-axis can appear.</p><div class="formula math">Im(T)={(x,0): x∈\u211d}</div></div>
+ <div class="subcard"><h3>Compare with doubling</h3><div class="formula math">T(x,y)=(2x,2y)</div><p>Only (0,0) maps to zero, so the kernel is {(0,0)}. Every vector can be reached, so the image is all of \u211d².</p></div>
+</div>
+<div class="subcard"><h3>Projection experiment</h3><div class="control-row"><label>Input x <input id="kx" type="range" min="-4" max="4" value="2"></label><b id="kxLabel">2</b><label>Input y <input id="ky" type="range" min="-4" max="4" value="3"></label><b id="kyLabel">3</b></div><svg class="visual" id="kernelSvg" viewBox="0 0 420 280" aria-label="Input vector projected onto x axis"></svg><div class="formula math" id="kernelResult">T(2,3) = (2,0)</div></div>`},
+{id:"ranknullity",title:"Rank & nullity",tag:"Dimension accounting",summary:"Rank is the dimension of the image; nullity is the dimension of the kernel.",why:"The rank-nullity theorem tells us how the input dimensions are split between directions that survive and directions that get collapsed to zero.",body:`
+<div class="formula math big">rank(T) + nullity(T) = dim(domain)</div>
+<div class="two">
+ <div class="subcard"><h3>Projection example</h3><p>T(x,y)=(x,0) has image the x-axis (dimension 1) and kernel the y-axis (dimension 1).</p><div class="formula math">rank = 1, nullity = 1, domain dimension = 2</div></div>
+ <div class="subcard"><h3>Three-dimensional example</h3><p>If a linear map has rank 2 and nullity 1, then its domain has dimension 3.</p><div class="formula math">2 + 1 = 3</div></div>
+</div>
+<div class="subcard"><h3>Rank-nullity calculator</h3><div class="control-row"><label>Rank <input id="rank" type="number" min="0" value="2"></label><label>Nullity <input id="nullity" type="number" min="0" value="3"></label><button id="rnCalc">Calculate domain dimension</button></div><div id="rnResult" class="formula math big">Dimension of domain = 5</div><p class="muted">For a finite-dimensional domain, the rank and nullity add up to its dimension.</p></div>`},
+{id:"matrix",title:"Matrices",tag:"Numbers as a transformation",summary:"A matrix records how a linear transformation acts on coordinate vectors.",why:"Matrices turn a linear transformation into a practical calculation. They are useful for solving systems, graphics, data analysis and physics.",body:`
+<div class="two">
+ <div class="subcard"><h3>Example</h3><div class="formula math">T(x,y)=(x+y,y)</div><div class="formula math">A = [[1,1],[0,1]]</div><p>Then A[x,y]ᵀ = [x+y,y]ᵀ. The columns of A are T(1,0) and T(0,1).</p></div>
+ <div class="subcard"><h3>Read rows carefully</h3><p>Each row makes one output coordinate:</p><div class="formula math">x′ = 1x + 1y<br>y′ = 0x + 1y</div><p>For (2,3), the output is (5,3).</p></div>
+</div>
+<div class="subcard"><h3>Matrix calculator</h3><p>For A = [[a,b],[c,d]], calculate A(x,y) = (ax+by,cx+dy).</p><div class="control-row"><label>a<input id="ma" type="number" value="1"></label><label>b<input id="mb" type="number" value="1"></label><label>c<input id="mc" type="number" value="0"></label><label>d<input id="md" type="number" value="1"></label></div><div class="control-row"><label>x<input id="mx" type="number" value="2"></label><label>y<input id="my" type="number" value="3"></label><button id="mCalc">Multiply</button></div><div id="mResult" class="formula math">A(2,3) = (5,3)</div></div>`}
+];
+
+const qs = {
+group:[
+["Which pair is a group under addition?","Integers ℤ","Positive integers","Nonzero natural numbers","Integers ℤ","ℤ has 0 and every integer n has inverse −n; positive integers lack additive inverses."],
+["What is the identity for addition?","1","0","−1","0","Adding 0 leaves every number unchanged: a+0=a."],
+["What is the additive inverse of −8?","−8","8","0","8","Because −8+8=0."],
+["What extra property makes a group abelian?","Closure","Identity","Commutativity","Commutativity","An abelian group satisfies a★b=b★a as well as the group rules."],
+["On real numbers, is multiplication a group operation on all of ℝ?","Yes, because 1 exists","No, because 0 has no multiplicative inverse","No, because multiplication is not associative","No, because 0 has no multiplicative inverse","Every group element needs an inverse. Zero has no number z such that 0·z=1. ℝ\\{0} is a group under multiplication."]],
+field:[
+["Which number has no multiplicative inverse in a field?","0","1","−2","0","There is no number c with 0·c=1."],
+["The multiplicative inverse of 5 is…","−5","1/5","5","1/5","5·(1/5)=1."],
+["Which property connects multiplication and addition?","Distributivity","Associativity only","Inverse only","Distributivity","a(b+c)=ab+ac."],
+["Which is a field?","Real numbers ℝ","Positive integers under + and ×","Integers ℤ with usual + and ×","Real numbers ℝ","The real numbers have additive inverses and multiplicative inverses for every nonzero number. Integers do not have multiplicative inverses for all nonzero elements."],
+["In a field, which set forms a group under multiplication?","All elements including 0","Only positive elements","All nonzero elements","All nonzero elements","The zero element must be excluded for multiplication because it has no inverse."]],
+vector:[
+["In ℝ², (1,2)+(3,4) equals…","(4,6)","(3,8)","(4,8)","(4,6)","Add corresponding coordinates: (1+3,2+4)=(4,6)."],
+["For a vector space over ℝ, what are scalars?","Only positive integers","Real numbers","Vectors only","Real numbers","Scalars come from the chosen field, here ℝ."],
+["Which is required in a vector space?","Every vector has an additive inverse","Every vector has a multiplicative inverse","Every vector has positive coordinates","Every vector has an additive inverse","For each v, there must be −v with v+(−v)=0."],
+["Is the first quadrant {(x,y):x,y≥0} a vector space over ℝ?","Yes","No","Only if x=y","No","Multiplying (1,2) by −1 gives (−1,−2), outside the set."],
+["If v=(2,−1), then 3v equals…","(6,−3)","(5,2)","(6,−1)","(6,−3)","Multiply each coordinate by 3."]],
+subspace:[
+["A subspace must contain…","The zero vector","Only positive vectors","Only unit vectors","The zero vector","Every vector space contains its zero vector."],
+["Which is a subspace of ℝ²?","The x-axis y=0","The line y=x+1","The region x>0,y>0","The x-axis y=0","It contains zero and is closed under addition and all real scalar multiples."],
+["Why is y=x+1 not a subspace?","It has too many points","It does not contain (0,0)","It is not a line","It does not contain (0,0)","The zero vector must belong to every subspace; (0,0) does not satisfy y=x+1."],
+["If W is a subspace and v∈W, then for any real c…","cv∈W","cv is never in W","Only cv for c>0 is in W","cv∈W","Closure under scalar multiplication uses every scalar, including negative values and zero."],
+["Is {(x,0):x∈ℝ} a subspace of ℝ²?","Yes","No, it lacks (0,1)","No, it has no zero vector","Yes","It contains (0,0) and is closed under addition and scalar multiplication."]],
+combination:[
+["With u=(1,0), v=(0,1), 5u+3v is…","(5,3)","(3,5)","(8,0)","(5,3)","5u=(5,0), 3v=(0,3), sum=(5,3)."],
+["Which is a linear combination of u and v?","2u−3v","u divided by v","u to the power v","2u−3v","A linear combination is a sum of scalar multiples."],
+["If u=(1,2), then 3u equals…","(3,6)","(4,5)","(3,2)","(3,6)","Multiply both coordinates by 3."],
+["Using e₁=(1,0), e₂=(0,1), write (−2,4).","−2e₁+4e₂","4e₁−2e₂","2e₁+4e₂","−2e₁+4e₂","The coefficients match the x- and y-coordinates."],
+["A linear combination uses…","Scalar multiples and addition","Only multiplication of vectors","Only positive coefficients","Scalar multiples and addition","Coefficients may be positive, negative, or zero."]],
+independence:[
+["Vectors (1,2) and (2,4) are…","Independent","Dependent","Neither","Dependent","(2,4)=2(1,2), so one vector is a scalar multiple of the other."],
+["Vectors (1,2) and (3,4) in ℝ² are…","Independent","Dependent","Equal","Independent","No scalar k makes (3,4)=k(1,2): the coordinates would require k=3 and k=2."],
+["A set is linearly dependent if…","A nontrivial combination gives zero","All vectors have length 1","It contains no zero vector","A nontrivial combination gives zero","There are coefficients not all zero whose weighted sum is the zero vector."],
+["Any set containing the zero vector is…","Linearly independent","Linearly dependent","A basis automatically","Linearly dependent","Choose coefficient 1 for the zero vector and 0 for the rest to obtain zero nontrivially."],
+["In ℝ², two nonzero vectors are dependent when…","They are scalar multiples","Their coordinates are all different","They have different lengths","They are scalar multiples","They point along the same line (possibly opposite directions)."]],
+basis:[
+["A basis must be…","Independent and spanning","Only spanning","Only independent","Independent and spanning","Both properties are required."],
+["The standard basis of ℝ² is…","(1,0),(0,1)","(1,0),(2,0)","(1,1),(2,2)","(1,0),(0,1)","The vectors are independent and can produce every (x,y)."],
+["Do (1,0) and (2,0) form a basis for ℝ²?","Yes","No","Only for ℝ³","No","They are dependent and cannot produce vectors with nonzero y-coordinate."],
+["In a basis, coordinates of a vector are…","Unique","Always positive","Always integers","Unique","Linear independence guarantees a unique coefficient representation."],
+["A basis for ℝ³ has how many vectors?","2","3","4","3","The dimension of ℝ³ is 3."]],
+dimension:[
+["dim(ℝ⁴) is…","2","3","4","4","The standard basis has four coordinate vectors."],
+["Dimension means…","Number of vectors in a basis","Number of all vectors in the space","Largest coordinate value","Number of vectors in a basis","A vector space may have infinitely many vectors but finite dimension."],
+["A line through the origin in ℝ² has dimension…","0","1","2","1","One independent direction spans the line."],
+["The zero vector space {0} has dimension…","0","1","Cannot be defined","0","Its basis is the empty set, which has zero vectors."],
+["A basis for ℝ⁵ contains…","5 vectors","10 vectors","Infinitely many vectors","5 vectors","The standard basis has one coordinate vector per dimension."]],
+transformation:[
+["A linear transformation must satisfy…","T(u+v)=T(u)+T(v) and T(cv)=cT(v)","T(u)=u always","T(0)=(1,1)","T(u+v)=T(u)+T(v) and T(cv)=cT(v)","Both additivity and homogeneity are required."],
+["Is T(x,y)=(2x,3y) linear?","Yes","No","Only for positive x","Yes","It scales coordinates linearly and sends zero to zero."],
+["Why is T(x,y)=(x+1,y) not linear?","T(0,0)≠(0,0)","It changes x","It has two outputs","T(0,0)≠(0,0)","Every linear transformation maps the zero vector to zero."],
+["For T(x,y)=(x+y,y), T(2,3)=…","(5,3)","(2,5)","(5,2)","(5,3)","Substitute x=2, y=3."],
+["If T(2v)=2T(v) for every v, this checks…","Homogeneity for scalar 2 only","Every linearity condition","Neither condition","Homogeneity for scalar 2 only","Linearity requires homogeneity for every scalar and additivity too."]],
+kernelimage:[
+["Kernel contains inputs that map to…","The zero vector","Every possible output","A unit vector only","The zero vector","ker(T)={v:T(v)=0}."],
+["For T(x,y)=(x,0), the kernel is…","{(0,y):y∈ℝ}","{(x,0):x∈ℝ}","All ℝ²","{(0,y):y∈ℝ}","Output is zero exactly when x=0; y can be anything."],
+["For T(x,y)=(x,0), the image is…","The x-axis","The y-axis","All ℝ²","The x-axis","Outputs have the form (x,0)."],
+["For T(x,y)=(2x,2y), the kernel is…","{(0,0)}","The x-axis","All ℝ²","{(0,0)}","Both 2x=0 and 2y=0 imply x=y=0."],
+["The image of a linear transformation is…","The set of all possible outputs","The inputs mapped to zero","Always just zero","The set of all possible outputs","The image is the range of the transformation."]],
+ranknullity:[
+["Rank equals…","Dimension of the image","Dimension of the kernel","Dimension of the domain always","Dimension of the image","Rank measures the number of independent output directions."],
+["Nullity equals…","Dimension of the image","Dimension of the kernel","Number of equations always","Dimension of the kernel","Nullity counts independent directions collapsed to zero."],
+["If rank=2 and nullity=3, domain dimension is…","1","5","6","5","2+3=5."],
+["For projection T(x,y)=(x,0), rank and nullity are…","rank 1, nullity 1","rank 2, nullity 0","rank 0, nullity 2","rank 1, nullity 1","The image and kernel are each one-dimensional axes."],
+["If domain dimension is 6 and rank is 4, nullity is…","2","4","10","2","nullity=6−4=2."]],
+matrix:[
+["Which matrix represents T(x,y)=(x+y,y)?","[[1,1],[0,1]]","[[1,0],[1,1]]","[[0,1],[1,0]]","[[1,1],[0,1]]","The first row calculates x+y; the second calculates y."],
+["A 2×2 matrix maps…","ℝ² to ℝ²","ℝ to ℝ² always","Only numbers to text","ℝ² to ℝ²","Multiplying a two-entry column vector yields a two-entry column vector."],
+["For A=[[2,0],[0,3]], A(1,2)=…","(2,6)","(3,2)","(2,3)","(2,6)","Multiply each coordinate by its diagonal entry."],
+["The columns of a matrix for T are…","T(e₁), T(e₂), …","The rows of the input","Always identity vectors","T(e₁), T(e₂), …","Each column records the image of a standard basis vector."],
+["For A=[[1,1],[0,1]], A(2,3)=…","(5,3)","(2,5)","(3,2)","(5,3)","First output is 1·2+1·3=5; second is 0·2+1·3=3."]]
+};
+const topicNames=topics.map(t=>t.title), explored=new Set(), scores={};
+let current=0;
+const $=id=>document.getElementById(id);
+function make(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!==undefined)e.innerHTML=html;return e}
+function renderLadder(){const ol=$("ladder");ol.innerHTML="";topics.forEach((t,i)=>{let li=make("li");let b=make("button",i===current?"active":"",`<span class="num">${i+1}</span><span>${t.title}</span>`);b.addEventListener("click",()=>go(i));li.append(b);ol.append(li)});$("progressbar").style.width=(explored.size/topics.length*100)+"%";$("progressText").textContent=`${explored.size} of ${topics.length} topics explored`}
+function flow(container, upto){container.innerHTML="";topics.forEach((t,i)=>{if(i>upto)return;let n=make("span","node",`${i+1}. ${t.title}`);n.title=t.summary;container.append(n);if(i<upto)container.append(make("span","arrow","···›"))})}
+function go(i){current=Math.max(0,Math.min(topics.length-1,i));renderLadder();renderTopic();window.scrollTo({top:$("lesson").offsetTop-12,behavior:"smooth"})}
+function renderTopic(){const t=topics[current];$("topicKicker").textContent=`Rung ${current+1} of ${topics.length}`;$("topicTitle").textContent=t.title;$("topicSummary").textContent=t.summary;$("topicTag").textContent=t.tag;$("topicWhy").textContent=t.why;$("topicBody").innerHTML=t.body;$("markBtn").textContent=explored.has(t.id)?"Explored ✓":"Mark as explored ✓";$("prevBtn").disabled=current===0;$("nextBtn").textContent=current===topics.length-1?"Back to first rung ↺":"Next rung →";flow($("topicFlow"),current);renderQuestions();bindExperiments()}
+function renderQuestions(){const t=topics[current], data=qs[t.id], wrap=$("questions");wrap.innerHTML="";scores[t.id]=scores[t.id]||{answered:{},correct:0};data.forEach((q,idx)=>{const card=make("div","question");card.dataset.q=idx;card.append(make("div","qhead",`<div><span class="qnum">Question ${idx+1} of 5</span><div style="margin-top:5px;font-weight:650">${q[0]}</div></div><span class="badge">Practice</span>`));const choices=make("div","choices");q.slice(1,4).forEach((option,j)=>{let b=make("button","choice",`${String.fromCharCode(65+j)}. ${option}`);b.addEventListener("click",()=>answer(idx,j,b));choices.append(b)});card.append(choices);card.append(make("div","feedback",""));const actions=make("div","question-actions");const sol=make("button","","Show solution");sol.addEventListener("click",()=>card.querySelector(".answer").classList.toggle("show"));actions.append(sol);card.append(actions);card.append(make("div","answer",`<b>Answer: ${q[4]}</b><br>${q[5]}`));wrap.append(card)});updateScore()}
+function answer(idx,j,btn){const t=topics[current],q=qs[t.id][idx],card=btn.closest(".question"),fb=card.querySelector(".feedback"),state=scores[t.id];if(state.answered[idx]!==undefined)return;const correct=q[1+j]===q[4];state.answered[idx]=correct;if(correct)state.correct++;card.querySelectorAll(".choice").forEach(b=>{b.disabled=true;if(b.textContent.slice(3)===q[4])b.classList.add("correct")});if(!correct)btn.classList.add("wrong");fb.className="feedback show "+(correct?"good":"warning");fb.textContent=correct?"Correct! "+q[5]:"Not quite. Correct answer: "+q[4]+". "+q[5];updateScore()}
+function updateScore(){const s=scores[topics[current].id]||{answered:{},correct:0};$("scoreTag").textContent=`Score: ${s.correct||0} / 5 · Answered ${Object.keys(s.answered||{}).length}/5`}
+function bindExperiments(){
+ const listen=(id,fn,event="input")=>{const e=$(id);if(e)e.addEventListener(event,fn)};
+ listen("gCalc",()=>{let a=+$("gA").value,b=+$("gB").value;$("gResult").textContent=`${a} + (${b}) = ${a+b}` },"click");
+ listen("fCalc",()=>{let a=+$("fA").value;$("fResult").textContent=a===0?"Additive inverse: 0 · Multiplicative inverse: undefined (zero has no multiplicative inverse)":`Additive inverse: ${-a} · Multiplicative inverse: ${1/a}` },"click");
+ const drawAxes=(svg)=>{const ns="http://www.w3.org/2000/svg";svg.innerHTML="";const add=(tag,attrs)=>{let e=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));svg.append(e);return e};for(let x=30;x<=390;x+=30)add("line",{x1:x,y1:15,x2:x,y2:265,stroke:"#1d3049","stroke-width":1});for(let y=25;y<=265;y+=30)add("line",{x1:20,y1:y,x2:400,y2:y,stroke:"#1d3049","stroke-width":1});add("line",{x1:20,y1:140,x2:400,y2:140,stroke:"#7089a8","stroke-width":1.5});add("line",{x1:210,y1:15,x2:210,y2:265,stroke:"#7089a8","stroke-width":1.5});return {add,ns}};
+ const vec=(svg,x,y,color,label)=>{let {add}=drawAxes(svg);};
+ const arrow=(add,x1,y1,x2,y2,color,label)=>{add("line",{x1,y1,x2,y2,stroke:color,"stroke-width":3,"stroke-linecap":"round"});let ang=Math.atan2(y2-y1,x2-x1),len=9;add("polygon",{points:`${x2},${y2} ${x2-len*Math.cos(ang-.45)},${y2-len*Math.sin(ang-.45)} ${x2-len*Math.cos(ang+.45)},${y2-len*Math.sin(ang+.45)}`,fill:color});if(label){let txt=add("text",{x:x2+5,y:y2-6,fill:color,"font-size":12});txt.textContent=label}};
+ const map=(x,y)=>[210+x*35,140-y*30];
+ const drawVector=()=>{let k=+$("vK").value;$("vKLabel").textContent=k;let svg=$("vectorSvg"),{add}=drawAxes(svg),p=map(2,1),q=map(2*k,k);arrow(add,210,140,p[0],p[1],"#8ab4ff","v");arrow(add,210,140,q[0],q[1],"#5eead4","kv");$("vExplain").textContent=`v=(2,1); k=${k}; kv=(${2*k},${k}). Negative k reverses the direction; k=0 collapses the vector to zero.`};
+ listen("vK",drawVector);
+ const drawSub=()=>{let m=+$("slope").value;$("slopeLabel").textContent=m;let svg=$("subSvg"),{add}=drawAxes(svg);arrow(add,...map(-4,-4*m),...map(4,4*m),"#5eead4",`y=${m}x`)};
+ listen("slope",drawSub);
+ const drawComb=()=>{let a=+$("cA").value,b=+$("cB").value;$("cALabel").textContent=a;$("cBLabel").textContent=b;let svg=$("combSvg"),{add}=drawAxes(svg);arrow(add,210,140,...map(a,0),"#8ab4ff",`${a}u`);arrow(add,210,140,...map(0,b),"#ffd166",`${b}v`);arrow(add,210,140,...map(a,b),"#5eead4",`(${a},${b})`);$("combResult").textContent=`${a}(1,0) + ${b}(0,1) = (${a},${b})`};
+ listen("cA",drawComb);listen("cB",drawComb);
+ listen("iCalc",()=>{let ax=+$("iAx").value,ay=+$("iAy").value,bx=+$("iBx").value,by=+$("iBy").value,d=ax*by-ay*bx;$("iResult").innerHTML=`Determinant = ${d}. <b>${Math.abs(d)<1e-9?"Linearly dependent":"Linearly independent"}</b>`},"click");
+ listen("bCalc",()=>{let ax=+$("bAx").value,ay=+$("bAy").value,bx=+$("bBx").value,by=+$("bBy").value,d=ax*by-ay*bx;$("bResult").innerHTML=`Determinant = ${d}. <b>${Math.abs(d)<1e-9?"Not a basis of ℝ² (dependent)":"These vectors form a basis of ℝ²"}</b>`},"click");
+ const drawTrans=()=>{let x=+$("tx").value,y=+$("ty").value;$("txLabel").textContent=x;$("tyLabel").textContent=y;let svg=$("transSvg"),{add}=drawAxes(svg);arrow(add,210,140,...map(2,2),"#8ab4ff","v");arrow(add,210,140,...map(2*x,2*y),"#5eead4","T(v)");$("transResult").textContent=`T(2,2) = (${2*x}, ${2*y})`};
+ listen("tx",drawTrans);listen("ty",drawTrans);
+ const drawKernel=()=>{let x=+$("kx").value,y=+$("ky").value;$("kxLabel").textContent=x;$("kyLabel").textContent=y;let svg=$("kernelSvg"),{add}=drawAxes(svg);arrow(add,210,140,...map(x,y),"#8ab4ff",`(${x},${y})`);arrow(add,210,140,...map(x,0),"#5eead4",`(${x},0)`);add("line",{x1:20,y1:140,x2:400,y2:140,stroke:"#5eead4","stroke-width":2});$("kernelResult").textContent=`T(${x},${y}) = (${x},0). The y-coordinate is removed.`};
+ listen("kx",drawKernel);listen("ky",drawKernel);
+ const drawDim=()=>{let n=+$("dimN").value;$("dimLabel").textContent=`n = ${n}`;$("dimResult").textContent=`dim(ℝ${["","¹","²","³","⁴","⁵","⁶","⁷","⁸"][n]}) = ${n}`;$("basisVectors").textContent="Standard basis: "+Array.from({length:n},(_,i)=>"e"+(i+1)).join(", ")};
+ listen("dimN",drawDim);
+ listen("rnCalc",()=>{let r=+$("rank").value,n=+$("nullity").value;$("rnResult").textContent=(r<0||n<0)?"Rank and nullity must be nonnegative.":`Dimension of domain = rank + nullity = ${r+n}`},"click");
+ listen("mCalc",()=>{let a=+$("ma").value,b=+$("mb").value,c=+$("mc").value,d=+$("md").value,x=+$("mx").value,y=+$("my").value;$("mResult").textContent=`A(${x},${y}) = (${a*x+b*y}, ${c*x+d*y})`},"click");
+ // Initialize every visible experiment safely.
+ if($("gCalc")){$("gResult").textContent=`${+$("gA").value} + (${+$("gB").value}) = ${+$("gA").value + +$("gB").value}`;$("fResult").textContent="Additive inverse: −4 · Multiplicative inverse: 1/4";drawVector();drawSub();drawComb();$("iResult").textContent="Determinant = −2. Linearly independent";$("bResult").textContent="Determinant = 1. These vectors form a basis of ℝ²";drawDim();drawTrans();drawKernel()}
+}
+$("prevBtn").addEventListener("click",()=>go(current-1));$("nextBtn").addEventListener("click",()=>go(current===topics.length-1?0:current+1));
+$("markBtn").addEventListener("click",()=>{explored.add(topics[current].id);renderLadder();$("markBtn").textContent="Explored ✓"});
+$("resetProgress").addEventListener("click",()=>{explored.clear();Object.keys(scores).forEach(k=>delete scores[k]);renderLadder();renderQuestions();$("markBtn").textContent="Mark as explored ✓"});
+$("checkAll").addEventListener("click",()=>document.querySelectorAll(".answer").forEach(e=>e.classList.add("show")));
+$("retryBtn").addEventListener("click",()=>{delete scores[topics[current].id];renderQuestions()});
+flow($("bigFlow"),topics.length-1);renderLadder();renderTopic();
+</script>
+</body>
+</html>

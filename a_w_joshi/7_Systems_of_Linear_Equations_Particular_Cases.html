@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linear Equations: Particular Cases</title>
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:100px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:80px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:collapse;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;margin:3px 4px;width:auto}
+.mx.det{border-radius:0}
+.mx td{border:0;padding:1px 8px;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.mx td.cr{border-right:2px dashed var(--acc2)}
+.verdict{font-weight:700;font-size:1.05rem;margin:6px 0}
+.sys{font-family:"Cambria Math",Cambria,"Times New Roman",serif;display:inline-block;text-align:left;line-height:1.5}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>7. Systems of Linear Equations: Particular Cases</h1>
+<p>One unknown · Two unknowns (lines) · Three equations in two unknowns · Three unknowns (planes) · Coefficient and augmented matrix · Cramer's rule &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 67–78</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">Ax = b</a><a href="#s2">One unknown</a><a href="#s3">2 eq, 2 unknowns</a><a href="#s4">3 eq, 2 unknowns</a><a href="#s5">3 unknowns (planes)</a><a href="#s6">Rank rule</a><a href="#s7">Cramer's rule</a><a href="#s8">Cramer picture</a><a href="#s9">Solver</a><a href="#s10">Circuits</a><a href="#s11">Summary</a><a href="#s12">Exercise 7</a><a href="#s13">Practice</a><a href="#s14">Quiz</a><a href="#s15">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<!-- 0 -->
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>Question of this section: <b>given some linear equations, are there no solutions, exactly one, or infinitely many?</b> We answer it by building up slowly: 1 unknown, then 2 (lines in a plane), then 3 (planes in space). Every time, the answer depends on a determinant, and more generally on ranks. At the end comes <b>Cramer's rule</b>, which gives the unique solution as a ratio of determinants.</p>
+<div class="flow"><span>ax = b</span><b>→</b><span>2 lines</span><b>→</b><span>3 lines</span><b>→</b><span>planes in 3D</span><b>→</b><span>rank A vs rank [A|b]</span><b>→</b><span>Cramer: xₖ = Dₖ/det A</span></div>
+<div class="box tip"><b class="t">The one picture to keep in mind</b>
+Each linear equation is a line (2 unknowns) or a plane (3 unknowns). A <b>solution</b> is a point lying on <b>all</b> of them at once. Count the common points: 0, 1 or ∞. These are the only possibilities. A linear system can never have exactly 2 solutions.</div>
+</section>
+
+<!-- 1 -->
+<section id="s1">
+<h2>1. The general system and some words (Eqs. 1–3)</h2>
+<p>A <b>linear equation</b> in x₁,…,xₙ has no powers higher than 1, no products xᵢxⱼ, and constant coefficients. m such equations in n unknowns:</p>
+<div class="eq"><span class="sys">a₁₁x₁ + a₁₂x₂ + … + a₁ₙxₙ = b₁<br>a₂₁x₁ + a₂₂x₂ + … + a₂ₙxₙ = b₂<br>&nbsp;&nbsp;⋮<br>aₘ₁x₁ + aₘ₂x₂ + … + aₘₙxₙ = bₘ</span> &nbsp;&nbsp;⟺&nbsp;&nbsp; <b>Ax = b</b></div>
+<p>A is m×n (the <b>coefficient matrix</b>), x is n×1, b is m×1.</p>
+<div class="tbl-wrap"><table>
+<tr><th>Word</th><th>Meaning</th></tr>
+<tr><td>Homogeneous</td><td>b = 0 (every bᵢ = 0)</td></tr>
+<tr><td>Inhomogeneous</td><td>b ≠ 0 (at least one bᵢ ≠ 0)</td></tr>
+<tr><td>Trivial solution</td><td>x = 0. A homogeneous system <b>always</b> has it.</td></tr>
+<tr><td>Nontrivial solution</td><td>a solution with at least one xᵢ ≠ 0</td></tr>
+<tr><td>Associated homogeneous equation</td><td>Ax = 0, the same A with b set to 0 (Eq. 3)</td></tr>
+<tr><td>Augmented matrix</td><td>[A | b]: A with the column b attached (Eq. 24)</td></tr>
+<tr><td>Consistent / inconsistent</td><td>has at least one solution / has none</td></tr>
+</table></div>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+<h2>2. One equation in one unknown: ax = b (Eq. 4)</h2>
+<p>The school answer "x = b/a" fails when a = 0. The full list of cases:</p>
+<div class="tbl-wrap"><table>
+<tr><th>Case</th><th>Condition</th><th>Solutions</th></tr>
+<tr><td>1a</td><td>a ≠ 0, b = 0</td><td>exactly one: x = 0 (trivial)</td></tr>
+<tr><td>1b</td><td>a ≠ 0, b ≠ 0</td><td>exactly one: x = b/a ≠ 0</td></tr>
+<tr><td>2a</td><td>a = 0, b ≠ 0</td><td><b>none</b> (0·x = b is impossible)</td></tr>
+<tr><td>2b</td><td>a = 0, b = 0</td><td><b>infinitely many</b>: every x works</td></tr>
+</table></div>
+<div class="box thm"><b class="t">The four lessons (they hold for every size of system)</b>
+<ol>
+<li>"Coefficient nonzero" (a ≠ 0, later det A ≠ 0) ⇒ <b>unique</b> solution.</li>
+<li>Unique and homogeneous ⇒ only the trivial solution.</li>
+<li>"Coefficient zero" ⇒ either <b>no</b> solution or <b>infinitely many</b>.</li>
+<li><b>A homogeneous equation has a nontrivial solution ⇔ the coefficient is zero</b> (a = 0, later det A = 0).</li>
+</ol></div>
+<p><b>Several equations, one unknown</b> (Eq. 5): a₁x = b₁, …, aₘx = bₘ. If some aᵢ = 0 with bᵢ ≠ 0, there is no solution. Otherwise solve any one equation and check it in all the others. A solution exists ⇔ b₁/a₁ = b₂/a₂ = … = bₘ/aₘ. More equations than unknowns usually means <b>no</b> solution, unless the equations happen to agree.</p>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+<h2>3. Two equations in two unknowns: two lines (Eqs. 6–15, Fig. 3)</h2>
+<div class="eq"><span class="sys">a₁₁x₁ + a₁₂x₂ = b₁<br>a₂₁x₁ + a₂₂x₂ = b₂</span>&nbsp;&nbsp;&nbsp; det A = a₁₁a₂₂ − a₁₂a₂₁</div>
+<h3>Case 1: det A ≠ 0 → exactly one solution</h3>
+<div class="eq">x₁ = (b₁a₂₂ − b₂a₁₂)/det A, &nbsp;&nbsp; x₂ = (b₂a₁₁ − b₁a₂₁)/det A &nbsp;&nbsp;(Eq. 8)</div>
+<ul><li><b>1a</b>: b = 0 → only x₁ = x₂ = 0. Two lines through the origin cross only there.</li>
+<li><b>1b</b>: b ≠ 0 → one nontrivial solution. Two lines with different slopes cross at one point.</li></ul>
+<h3>Case 2: det A = 0 → the lines are parallel (same slope)</h3>
+<p>det A = 0 ⇔ a₁₁/a₁₂ = a₂₁/a₂₂ (Eq. 15): equal slopes. Then the second equation's left side is a multiple of the first's. Everything depends on whether the right side follows the same multiple:</p>
+<ul>
+<li><b>2a</b>: b ≠ 0 and a₂₂b₁/a₁₂ = b₂ (i.e. a₂₁/a₁₁ = a₂₂/a₁₂ = b₂/b₁, Eq. 12). The second equation is a multiple of the first, the <b>same line</b>, so there are <b>infinitely many</b> solutions: x₂ = (b₁ − a₁₁x₁)/a₁₂ with x₁ arbitrary.</li>
+<li><b>2b</b>: b ≠ 0 and a₂₂b₁/a₁₂ ≠ b₂. These are <b>distinct parallel lines</b>, so there is <b>no</b> solution.</li>
+<li><b>2c</b>: b = 0. Both lines pass through the origin with the same slope, so they are the same line and there are infinitely many solutions: x₂ = −a₁₁x₁/a₁₂.</li>
+</ul>
+<div class="box fact"><b class="t">Geometry in one sentence</b> The ratio of the coefficients sets the <b>slope</b>. The right-hand side sets <b>where the line cuts the axis</b>. b = 0 means the line passes through the origin. det A = 0 means the slopes are equal.</div>
+
+<div class="lab"><h4>🔬 Lab 1: two lines, all five cases of Fig. 3</h4>
+<div class="ctrl">
+<button class="alt" data-l1="1a">Case 1a</button><button class="alt" data-l1="1b">Case 1b</button><button class="alt" data-l1="2a">Case 2a</button><button class="alt" data-l1="2b">Case 2b</button><button class="alt" data-l1="2c">Case 2c</button>
+</div>
+<div class="ctrl">
+<label><b style="color:#1c7ed6">line 1:</b> a₁₁ <input type="range" id="p11" min="-3" max="3" step="0.1"></label>
+<label>a₁₂ <input type="range" id="p12" min="-3" max="3" step="0.1"></label>
+<label>b₁ <input type="range" id="pb1" min="-4" max="4" step="0.1"></label>
+</div>
+<div class="ctrl">
+<label><b style="color:#e8590c">line 2:</b> a₂₁ <input type="range" id="p21" min="-3" max="3" step="0.1"></label>
+<label>a₂₂ <input type="range" id="p22" min="-3" max="3" step="0.1"></label>
+<label>b₂ <input type="range" id="pb2" min="-4" max="4" step="0.1"></label>
+</div>
+<div class="grid2"><canvas id="l1can" width="440" height="400"></canvas><div><div class="verdict" id="l1verdict"></div><div class="readout" id="l1out"></div></div></div>
+<p class="small">Slowly drag a₂₂ until the slopes match. det A goes to 0, and the crossing point runs off to infinity. Then move b₂: the two parallel lines either merge into one (infinitely many solutions) or stay apart (no solution).</p></div>
+</section>
+
+<!-- 4 -->
+<section id="s4">
+<h2>4. Three equations in two unknowns: three lines (Eqs. 16–18, Fig. 4)</h2>
+<p>A solution exists only if all three lines pass through one common point. The key quantity is the determinant of the 3×3 <b>augmented</b> matrix:</p>
+<div class="eq">D = <span class="M det" data-m="a₁₁ a₁₂ b₁; a₂₁ a₂₂ b₂; a₃₁ a₃₂ b₃"></span></div>
+<ul>
+<li>If no two lines are parallel, |D| is proportional to the <b>area of the triangle</b> the three lines form. The lines meet at one point ⇔ the triangle shrinks to a point ⇔ D = 0.</li>
+<li>D = 0 ⇔ one row is a combination of the other two, e.g. (a₃₁, a₃₂, b₃) = c(a₁₁, a₁₂, b₁) + d(a₂₁, a₂₂, b₂) (Eq. 18). The equations are <b>linearly dependent</b>: if two hold, the third holds automatically.</li>
+</ul>
+<div class="box thm"><b class="t">Conclusions</b>
+<ol>
+<li><b>D ≠ 0 ⇒ no solution.</b> This is the only statement that is always safe.</li>
+<li>All three equations describe the same line ⇒ D = 0 and infinitely many solutions.</li>
+<li>D = 0 and not all the same line ⇒ exactly one solution if no two lines are parallel, and no solution if some two are parallel (and distinct).</li>
+</ol></div>
+<div class="box warnb"><b class="t">D = 0 does NOT guarantee a solution</b>
+Three distinct parallel lines: the 2nd column of D is a multiple of the 1st, so D = 0, yet there is no common point. You must also check the ranks (Section 6).</div>
+<div class="lab"><h4>🔬 Lab 2: three lines, the seven pictures of Fig. 4</h4>
+<div class="ctrl">
+<button class="alt" data-l2="a">(a) triangle</button><button class="alt" data-l2="b">(b) concurrent</button><button class="alt" data-l2="c">(c) 2 parallel</button><button class="alt" data-l2="d">(d) 3 parallel</button><button class="alt" data-l2="e">(e) 2 same + parallel</button><button class="alt" data-l2="f">(f) 2 same + cutting</button><button class="alt" data-l2="g">(g) all same</button>
+</div>
+<div class="ctrl"><b style="color:#2f9e44">Move line 3:</b>
+<label>a₃₁ <input type="range" id="q31" min="-3" max="3" step="0.1"></label>
+<label>a₃₂ <input type="range" id="q32" min="-3" max="3" step="0.1"></label>
+<label>b₃ <input type="range" id="qb3" min="-5" max="5" step="0.1"></label></div>
+<div class="grid2"><canvas id="l2can" width="440" height="400"></canvas><div><div class="verdict" id="l2verdict"></div><div class="readout" id="l2out"></div></div></div>
+<p class="small">The shaded triangle has area proportional to |D|. Start from (a) and slide b₃: the triangle shrinks, and at the moment D = 0 the third line passes through the crossing point of the first two, giving exactly one solution.</p></div>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+<h2>5. Three unknowns: planes in space (Eqs. 19–24)</h2>
+<p>An equation a₁x₁ + a₂x₂ + a₃x₃ = b is a <b>plane</b> with normal vector (a₁, a₂, a₃). If b = 0 it passes through the origin and is a 2-dimensional subspace.</p>
+<h3>One equation</h3>
+<p>Every point of the plane works. Solve for one variable: x₃ = (b₁ − a₁₁x₁ − a₁₂x₂)/a₁₃, with x₁ and x₂ arbitrary. This is a <b>two-fold arbitrariness</b> (2 free parameters).</p>
+<h3>Two equations: cases with ranks</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Case</th><th>Geometry</th><th>Condition</th><th>rank A</th><th>rank [A|b]</th><th>Solutions</th></tr>
+<tr><td>1</td><td>planes cross in a line</td><td>normals not proportional</td><td>2</td><td>2</td><td>∞, 1 free parameter</td></tr>
+<tr><td>2</td><td>parallel, distinct</td><td>a₂₁/a₁₁ = a₂₂/a₁₂ = a₂₃/a₁₃ ≠ b₂/b₁</td><td>1</td><td>2</td><td>none</td></tr>
+<tr><td>3</td><td>same plane</td><td>… = b₂/b₁ as well</td><td>1</td><td>1</td><td>∞, 2 free parameters</td></tr>
+</table></div>
+<p>The pattern: <b>rank [A|b]</b> counts the independent equations, and <b>rank A</b> counts the independent left-hand sides (the associated homogeneous equations). They are equal ⇔ there is a solution.</p>
+<h3>Three equations in three unknowns</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Picture</th><th>rank A</th><th>rank [A|b]</th><th>Solutions</th></tr>
+<tr><td>Three planes meet in one point</td><td>3</td><td>3</td><td>unique (det A ≠ 0)</td></tr>
+<tr><td>Three planes through one line (a "book", or sheaf)</td><td>2</td><td>2</td><td>∞, 1 parameter</td></tr>
+<tr><td>Two planes coincide, the third cuts them</td><td>2</td><td>2</td><td>∞, 1 parameter</td></tr>
+<tr><td>All three planes identical</td><td>1</td><td>1</td><td>∞, 2 parameters</td></tr>
+<tr><td>Triangular prism (each pair meets, no common line)</td><td>2</td><td>3</td><td>none (no two are parallel!)</td></tr>
+<tr><td>Two parallel planes, the third cuts both</td><td>2</td><td>3</td><td>none</td></tr>
+<tr><td>Three parallel planes (distinct), or two coincide and the third is parallel</td><td>1</td><td>2</td><td>none</td></tr>
+</table></div>
+<div class="lab"><h4>🔬 Lab 3 (3D): three planes. Drag to rotate.</h4>
+<div class="ctrl">
+<button class="alt" data-l3="point">One point</button><button class="alt" data-l3="sheaf">Sheaf (line)</button><button class="alt" data-l3="prism">Prism (none)</button><button class="alt" data-l3="twopar">2 parallel + 1</button><button class="alt" data-l3="threepar">3 parallel</button><button class="alt" data-l3="twosame">2 same + 1</button><button class="alt" data-l3="allsame">All same</button>
+</div>
+<div class="ctrl"><label>shift plane 3 (b₃) <input type="range" id="l3b" min="-3" max="3" step="0.05" value="0"><span id="l3bv"></span></label>
+<label>tilt plane 3 <input type="range" id="l3t" min="-1" max="1" step="0.02" value="0"><span id="l3tv"></span></label></div>
+<div class="grid2"><canvas id="l3can" width="460" height="420"></canvas><div><div class="verdict" id="l3verdict"></div><div class="readout" id="l3out"></div></div></div>
+<p class="small">Blue, orange and green are the three planes. A black dot is a unique solution, a thick black line is a one-parameter family. Pick "Sheaf", then drag "shift plane 3": the common line splits into a <b>prism</b>. Each pair of planes still meets, but no point lies on all three. rank [A|b] jumps from 2 to 3 while rank A stays 2. Pick "Prism" and drag "tilt": the planes stop being a prism and meet in a single point (rank A becomes 3).</p></div>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+<h2>6. The rank rule (preview of Section 8)</h2>
+<div class="box thm"><b class="t">Rouché–Capelli (Kronecker–Capelli) theorem</b>
+For m equations in n unknowns, Ax = b:
+<ul>
+<li><b>Solvable ⇔ rank A = rank [A | b]</b>.</li>
+<li>If solvable, the number of free parameters is <b>n − rank A</b>. Unique solution ⇔ rank A = n.</li>
+<li>Homogeneous Ax = 0 is always solvable. It has a <b>nontrivial</b> solution ⇔ rank A &lt; n. For square A: ⇔ <b>det A = 0</b>.</li>
+</ul></div>
+<p>Why: rank [A|b] &gt; rank A means b is <i>not</i> a combination of the columns of A. But Ax = x₁(col 1) + … + xₙ(col n), so Ax can never equal b.</p>
+<div class="box tip"><b class="t">Practical recipe for 3 or more equations</b> The book suggests: solve any three independent equations first, then check the solution in the remaining ones. Or use the solver in Section 9, which row-reduces [A | b] and reads off both ranks.</div>
+</section>
+
+<!-- 7 -->
+<section id="s7">
+<h2>7. Cramer's rule (Eqs. 25–35)</h2>
+<h3>Derivation for 3×3</h3>
+<p>Take a₁₁x₁ + a₁₂x₂ + a₁₃x₃ = b₁ and the two similar equations. Multiply equation i by the cofactor Aⁱᵏ and add all three (Eq. 26):</p>
+<div class="eq">x₁(∑ᵢ aᵢ₁Aⁱᵏ) + x₂(∑ᵢ aᵢ₂Aⁱᵏ) + x₃(∑ᵢ aᵢ₃Aⁱᵏ) = ∑ᵢ bᵢAⁱᵏ</div>
+<p>By the alien-cofactor rule (Eq. 4.5), ∑ᵢ aᵢⱼAⁱᵏ = (det A)δⱼₖ. Only the coefficient of xₖ survives, and it equals det A:</p>
+<div class="eq">xₖ det A = b₁A¹ᵏ + b₂A²ᵏ + b₃A³ᵏ = Dₖ</div>
+<p>The right side is the expansion, down column k, of the determinant <b>Dₖ = det A with column k replaced by b</b>.</p>
+<div class="box thm"><b class="t">Cramer's theorem</b>
+If det A ≠ 0, the system of n equations in n unknowns has <b>exactly one</b> solution:
+<div class="eq">xₖ = Dₖ / det A, &nbsp;&nbsp; k = 1, …, n</div>
+<div class="eq">D₁ = <span class="M det" data-m="b₁ a₁₂ a₁₃; b₂ a₂₂ a₂₃; b₃ a₃₂ a₃₃"></span>, &nbsp;D₂ = <span class="M det" data-m="a₁₁ b₁ a₁₃; a₂₁ b₂ a₂₃; a₃₁ b₃ a₃₃"></span>, &nbsp;D₃ = <span class="M det" data-m="a₁₁ a₁₂ b₁; a₂₁ a₂₂ b₂; a₃₁ a₃₂ b₃"></span></div></div>
+<h3>Corollaries</h3>
+<ol type="a">
+<li>det A = 0 but some Dₖ ≠ 0 ⇒ <b>no solution</b>. (From xₖ·0 = Dₖ ≠ 0.)</li>
+<li>det A ≠ 0 and b = 0 ⇒ all Dₖ = 0 (a column of zeros) ⇒ <b>only the trivial solution</b>.</li>
+</ol>
+<div class="box warnb"><b class="t">The trap: det A = 0 and all Dₖ = 0</b>
+Then Cramer's rule says <b>nothing</b>. For n = 2 this means infinitely many solutions (if A ≠ 0). For n ≥ 3 there may be <b>no solution</b>! Example: x + y + z = 1, x + y + z = 2, x + y + z = 3. Here det A = 0 and every Dₖ has two equal columns, so all Dₖ = 0, yet the planes are parallel and there is no solution. Use ranks instead.</div>
+<h3>Book Example 1</h3>
+<div class="prob"><div class="q">Solve 4a + 2b + c = −8, &nbsp;3a − b + 2c = 4, &nbsp;−a − b − c = 2.</div>
+<p>det A = <span class="M det" data-m="4 2 1; 3 −1 2; −1 −1 −1"></span> = 4(1 + 2) − 2(−3 + 2) + 1(−3 − 1) = 12 + 2 − 4 = <b>10</b> ≠ 0, so there is a unique solution.</p>
+<p>D₁ = <span class="M det" data-m="−8 2 1; 4 −1 2; 2 −1 −1"></span> = −8(1 + 2) − 2(−4 − 4) + 1(−4 + 2) = −24 + 16 − 2 = −10</p>
+<p>D₂ = <span class="M det" data-m="4 −8 1; 3 4 2; −1 2 −1"></span> = 4(−4 − 4) + 8(−3 + 2) + 1(6 + 4) = −32 − 8 + 10 = −30</p>
+<p>D₃ = <span class="M det" data-m="4 2 −8; 3 −1 4; −1 −1 2"></span> = 4(−2 + 4) − 2(6 + 4) − 8(−3 − 1) = 8 − 20 + 32 = 20</p>
+<div class="eq">a = −10/10 = −1, &nbsp; b = −30/10 = −3, &nbsp; c = 20/10 = 2</div>
+<p class="small">Check in equation 1: 4(−1) + 2(−3) + 2 = −8 ✓. Equation 3: 1 + 3 − 2 = 2 ✓.</p></div>
+<div class="box fact"><b class="t">When to use Cramer</b> It is excellent for 2×2 and 3×3 systems, for symbolic coefficients, and when you need only <i>one</i> unknown (compute a single Dₖ). For large n it is very slow (n + 1 determinants). Gaussian elimination is what computers use.</div>
+</section>
+
+<!-- 8 -->
+<section id="s8">
+<h2>8. Feel Cramer's rule: areas</h2>
+<p>Write the 2×2 system as <span class="m">x₁a₁ + x₂a₂ = b</span>, where a₁ and a₂ are the <b>columns</b> of A. We want to know how much of a₁ and how much of a₂ build b.</p>
+<p>det[a₁ a₂] is the (signed) area of the parallelogram on a₁ and a₂. Replace a₁ by b: det[b a₂] = det[x₁a₁ + x₂a₂, a₂] = x₁ det[a₁ a₂], because the x₂a₂ part adds a column parallel to a₂, which adds no area. So</p>
+<div class="eq">x₁ = area(b, a₂) / area(a₁, a₂), &nbsp;&nbsp; x₂ = area(a₁, b) / area(a₁, a₂)</div>
+<div class="lab"><h4>🔬 Lab 4: Cramer's rule as a ratio of areas</h4>
+<div class="ctrl">
+<label>b₁ <input type="range" id="c4b1" min="-4" max="4" step="0.1" value="3"></label>
+<label>b₂ <input type="range" id="c4b2" min="-4" max="4" step="0.1" value="2.5"></label>
+<label>a₂ angle <input type="range" id="c4ang" min="5" max="175" step="1" value="65"><span id="c4angv"></span>°</label>
+<label>show <select id="c4show"><option value="1">x₁: area(b,a₂)</option><option value="2">x₂: area(a₁,b)</option></select></label>
+</div>
+<div class="grid2"><canvas id="c4can" width="440" height="400"></canvas><div class="readout" id="c4out"></div></div>
+<p class="small">Blue parallelogram: area(a₁, a₂) = det A. Orange: the same with one column replaced by b, i.e. Dₖ. The dashed path shows b = x₁a₁ + x₂a₂. Turn a₂ towards a₁: the blue area shrinks to 0 (det A → 0) and x₁, x₂ blow up. That is the singular case.</p></div>
+</section>
+
+<!-- 9 -->
+<section id="s9">
+<h2>9. 🧮 System solver: Cramer + rank analysis</h2>
+<p>Type the <b>augmented</b> matrix: one equation per line, coefficients, then <code>|</code>, then the right side. Integers and fractions are solved exactly. Any m×n works: Cramer steps are shown when the system is square with det ≠ 0, and the rank analysis with the general solution is always shown.</p>
+<textarea id="svIn">4 2 1 | -8
+3 -1 2 | 4
+-1 -1 -1 | 2</textarea>
+<div class="ctrl"><button id="svGo">Solve</button>
+<button class="alt" data-sv="1 1 3 | 6&#10;2 3 -4 | 6&#10;3 2 7 | 0">Ex. 7.3(b)</button>
+<button class="alt" data-sv="2 1 | 3&#10;-1 4 | 0&#10;1 3 | -1">Ex. 7.3(a)</button>
+<button class="alt" data-sv="-2 1 1 | 0&#10;1 -2 1 | 0&#10;1 1 -2 | 0">Ex. 7.2(a)</button>
+<button class="alt" data-sv="1 1 1 | 1&#10;1 1 1 | 2&#10;1 1 1 | 3">Cramer trap</button>
+<button class="alt" data-sv="1 1 1 | 6&#10;1 2 3 | 10&#10;1 2 3 | 10">Infinite</button></div>
+<div class="out" id="svOut"></div>
+</section>
+
+<!-- 10 -->
+<section id="s10">
+<h2>10. Physics application: Kirchhoff's laws (Exercises 4, 5)</h2>
+<p>Kirchhoff's laws turn any DC circuit into a linear system:</p>
+<ul><li><b>Junction law</b>: the currents into a node add up to the currents out of it.</li>
+<li><b>Loop law</b>: around any closed loop, the sum of EMFs equals the sum of the IR drops.</li></ul>
+<p>The circuit has a unique set of currents exactly when the coefficient determinant is nonzero. A negative answer only means the real current flows opposite to the arrow you guessed.</p>
+<div class="lab"><h4>🔬 Lab 5: the circuit of Fig. 6 (Exercise 5). Change any value.</h4>
+<div class="ctrl">
+<label>R₁ <input type="range" id="kR1" min="1" max="20" step="1" value="10"><span id="kR1v"></span>Ω</label>
+<label>R₂ <input type="range" id="kR2" min="1" max="20" step="1" value="5"><span id="kR2v"></span>Ω</label>
+<label>R₃ <input type="range" id="kR3" min="1" max="20" step="1" value="2"><span id="kR3v"></span>Ω</label>
+<label>R₄ <input type="range" id="kR4" min="1" max="20" step="1" value="5"><span id="kR4v"></span>Ω</label>
+<label>E₁ <input type="range" id="kE1" min="-6" max="6" step="0.5" value="2"><span id="kE1v"></span>V</label>
+<label>E₂ <input type="range" id="kE2" min="-6" max="6" step="0.5" value="3"><span id="kE2v"></span>V</label>
+</div>
+<div class="grid2"><canvas id="kcan" width="460" height="300"></canvas><div class="readout" id="kout"></div></div>
+<p class="small">The arrows show the <b>actual</b> direction of each current, and their thickness grows with its size. Reverse E₂ or make R₄ small and watch I₃ change direction.</p></div>
+</section>
+
+<!-- 11 -->
+<section id="s11">
+<h2>11. All cases on one page</h2>
+<div class="tbl-wrap"><table>
+<tr><th>System</th><th>Unique</th><th>Infinitely many</th><th>None</th></tr>
+<tr><td>ax = b</td><td>a ≠ 0</td><td>a = 0, b = 0</td><td>a = 0, b ≠ 0</td></tr>
+<tr><td>2 eq, 2 unknowns</td><td>det A ≠ 0 (lines cross)</td><td>det A = 0, same line</td><td>det A = 0, parallel distinct</td></tr>
+<tr><td>3 eq, 2 unknowns</td><td>D = 0, no two parallel, not all the same</td><td>all the same line</td><td>D ≠ 0, or some two parallel and distinct</td></tr>
+<tr><td>1 eq, 3 unknowns</td><td>never</td><td>always (plane, 2 params) if a ≠ 0</td><td>a = 0, b ≠ 0</td></tr>
+<tr><td>2 eq, 3 unknowns</td><td>never</td><td>rank A = rank[A|b] (line or plane)</td><td>parallel distinct planes</td></tr>
+<tr><td>n eq, n unknowns</td><td>det A ≠ 0 (Cramer)</td><td>det A = 0, rank A = rank[A|b]</td><td>rank A &lt; rank[A|b]</td></tr>
+<tr><td>Homogeneous, square</td><td>det A ≠ 0 (trivial only)</td><td>det A = 0 (nontrivial exists)</td><td>never</td></tr>
+<tr><td>General m×n</td><td>rank A = rank[A|b] = n</td><td>rank A = rank[A|b] &lt; n, with n − rank free parameters</td><td>rank A &lt; rank[A|b]</td></tr>
+</table></div>
+<p class="small">Fewer equations than unknowns (m &lt; n) can never give a unique solution. More equations than unknowns (m &gt; n) usually gives no solution, unless the equations are dependent.</p>
+</section>
+
+<!-- 12 -->
+<section id="s12">
+<h2>12. Book's Exercise 7: all problems solved</h2>
+
+<div class="prob"><div class="q">1. Invert the transformation u = 19x + 2y − 9z, v = −4x − y + 2z, w = −2x + z by finding the inverse of the coefficient matrix.</div>
+<details><summary>Show solution</summary>
+<p>A = <span class="M" data-m="19 2 −9; −4 −1 2; −2 0 1"></span>. det A by row 3: −2·(2·2 − (−9)(−1)) + 0 + 1·(19·(−1) − 2·(−4)) = −2(4 − 9) + (−19 + 8) = 10 − 11 = <b>−1</b>.</p>
+<p>Cofactors: A¹¹ = −1, A¹² = 0, A¹³ = −2; A²¹ = −2, A²² = 1, A²³ = −4; A³¹ = −5, A³² = −2, A³³ = −11.<br>
+adj A = <span class="M" data-m="−1 −2 −5; 0 1 −2; −2 −4 −11"></span>, so A⁻¹ = adj A/(−1) = <span class="M" data-m="1 2 5; 0 −1 2; 2 4 11"></span>.</p>
+<div class="eq">x = u + 2v + 5w, &nbsp; y = −v + 2w, &nbsp; z = 2u + 4v + 11w</div>
+<p class="small">Check: x = 1, y = z = 0 gives u = 19, v = −4, w = −2. Then u + 2v + 5w = 19 − 8 − 10 = 1 ✓, −v + 2w = 4 − 4 = 0 ✓, 2u + 4v + 11w = 38 − 16 − 22 = 0 ✓.</p></details></div>
+
+<div class="prob"><div class="q">2. With A = <span class="M" data-m="0 1 1; 1 0 1; 1 1 0"></span>, solve (a) Ax = 2x, (b) Ax = −x, (c) Ax = 3x.</div>
+<details><summary>Show solution</summary>
+<p>Each is a homogeneous system (A − λI)x = 0. It has nontrivial solutions ⇔ det(A − λI) = 0. (These λ will later be called eigenvalues.)</p>
+<p><b>(a) λ = 2:</b> −2x₁ + x₂ + x₃ = 0, x₁ − 2x₂ + x₃ = 0, x₁ + x₂ − 2x₃ = 0. det(A − 2I) = −2(4 − 1) − 1(−2 − 1) + 1(1 + 2) = −6 + 3 + 3 = 0, so nontrivial solutions exist. Subtracting the first two equations gives −3x₁ + 3x₂ = 0, so x₁ = x₂, and then x₃ = x₁. Answer: <b>x = t(1, 1, 1)ᵀ</b>, one free parameter (rank 2).</p>
+<p><b>(b) λ = −1:</b> A + I is the all-ones matrix, so all three equations read x₁ + x₂ + x₃ = 0 (rank 1). Answer: <b>x = s(1, −1, 0)ᵀ + t(1, 0, −1)ᵀ</b>, two free parameters (a whole plane).</p>
+<p><b>(c) λ = 3:</b> det(A − 3I) = −3(9 − 1) − 1(−3 − 1) + 1(1 + 3) = −24 + 4 + 4 = −16 ≠ 0. Only <b>x = 0</b> (the trivial solution).</p>
+<p class="small">Check (a): A(1,1,1)ᵀ = (2,2,2)ᵀ ✓. Check (b): A(1,−1,0)ᵀ = (−1, 1, 0)ᵀ = −(1,−1,0)ᵀ ✓.</p></details></div>
+
+<div class="prob"><div class="q">3. Solve (a) 2x + y = 3, −x + 4y = 0, x + 3y = −1; &nbsp;(b) x + y + 3z = 6, 2x + 3y − 4z = 6, 3x + 2y + 7z = 0.</div>
+<details><summary>Show solution</summary>
+<p><b>(a)</b> Three equations, two unknowns. D = <span class="M det" data-m="2 1 3; −1 4 0; 1 3 −1"></span> = 2(−4 − 0) − 1(1 − 0) + 3(−3 − 4) = −8 − 1 − 21 = −30 ≠ 0 ⇒ <b>no solution</b>.<br>
+Direct check: the first two give x = 4y, 9y = 3, so y = 1/3 and x = 4/3. Then the third gives 4/3 + 1 = 7/3 ≠ −1 ✗. The three lines form a triangle (Fig. 4a).</p>
+<p><b>(b)</b> det A = 1(21 + 8) − 1(14 + 12) + 3(4 − 9) = 29 − 26 − 15 = −12.<br>
+D₁ = <span class="M det" data-m="6 1 3; 6 3 −4; 0 2 7"></span> = 6(21 + 8) − 1(42 − 0) + 3(12 − 0) = 174 − 42 + 36 = 168<br>
+D₂ = <span class="M det" data-m="1 6 3; 2 6 −4; 3 0 7"></span> = 1(42 − 0) − 6(14 + 12) + 3(0 − 18) = 42 − 156 − 54 = −168<br>
+D₃ = <span class="M det" data-m="1 1 6; 2 3 6; 3 2 0"></span> = 1(0 − 12) − 1(0 − 18) + 6(4 − 9) = −12 + 18 − 30 = −24</p>
+<div class="eq">x = 168/(−12) = −14, &nbsp; y = −168/(−12) = 14, &nbsp; z = −24/(−12) = 2</div>
+<p class="small">Check: −14 + 14 + 6 = 6 ✓; −28 + 42 − 8 = 6 ✓; −42 + 28 + 14 = 0 ✓.</p></details></div>
+
+<div class="prob"><div class="q">4. Fig. 5: E₀ in series with R₁, followed by R₂ ∥ R₃. Show I₁ − I₂ − I₃ = 0, R₂I₂ − R₃I₃ = 0, R₁I₁ + R₂I₂ = E₀, and solve.</div>
+<details><summary>Show solution</summary>
+<p><b>Equations:</b> At the junction, I₁ splits into I₂ and I₃, giving I₁ − I₂ − I₃ = 0. The loop through R₂ and R₃ contains no EMF, so the voltage across R₂ equals that across R₃: R₂I₂ − R₃I₃ = 0. The outer loop through E₀, R₁ and R₂ gives R₁I₁ + R₂I₂ = E₀.</p>
+<div class="eq"><span class="M" data-m="1 −1 −1; 0 R₂ −R₃; R₁ R₂ 0"></span><span class="M" data-m="I₁; I₂; I₃"></span> = <span class="M" data-m="0; 0; E₀"></span></div>
+<p>det = 1(0 + R₂R₃) + 1(0 + R₁R₃) − 1(0 − R₁R₂) = R₁R₂ + R₂R₃ + R₃R₁ ≡ Σ &gt; 0.<br>
+D₁ = <span class="M det" data-m="0 −1 −1; 0 R₂ −R₃; E₀ R₂ 0"></span> = E₀(R₃ + R₂) (expand down column 1)<br>
+D₂ = <span class="M det" data-m="1 0 −1; 0 0 −R₃; R₁ E₀ 0"></span> = 1(0 + R₃E₀) − 0 − 1(0 − 0) = E₀R₃<br>
+D₃ = <span class="M det" data-m="1 −1 0; 0 R₂ 0; R₁ R₂ E₀"></span> = E₀R₂</p>
+<div class="eq">I₁ = E₀(R₂ + R₃)/Σ, &nbsp; I₂ = E₀R₃/Σ, &nbsp; I₃ = E₀R₂/Σ, &nbsp;&nbsp; Σ = R₁R₂ + R₂R₃ + R₃R₁</div>
+<p class="small">Check: I₁ = E₀/(R₁ + R₂R₃/(R₂ + R₃)), the familiar series–parallel result. The current divides in inverse proportion to the resistances: I₂/I₃ = R₃/R₂ ✓.</p></details></div>
+
+<div class="prob"><div class="q">5. Find the currents in the network of Fig. 6 (R₁ = 10 Ω, R₂ = 5 Ω, R₃ = 2 Ω, R₄ = 5 Ω, E₁ = 2 V, E₂ = 3 V).</div>
+<details><summary>Show solution</summary>
+<p><b>Reading the figure:</b> the left loop contains E₁ (arrow up), R₁ (top), the middle branch (R₂ in series with E₂, arrow down, carrying I₂ downward) and R₃ (bottom). The right branch has R₄ carrying I₃ downward. I₁ flows clockwise through E₁ and R₁. Assumption: an EMF arrow points in the direction the cell pushes current.</p>
+<p><b>Junction</b> (top node): I₁ = I₂ + I₃.<br>
+<b>Left loop</b> (clockwise; both EMFs push the same way round): E₁ + E₂ = R₁I₁ + R₂I₂ + R₃I₁ ⇒ 12I₁ + 5I₂ = 5.<br>
+<b>Right loop</b> (middle branch vs R₄, both from the top node to the bottom node): the potential drop must be the same, so R₄I₃ = R₂I₂ − E₂ ⇒ 5I₃ = 5I₂ − 3.</p>
+<div class="eq"><span class="M" data-m="1 −1 −1; 12 5 0; 0 5 −5"></span><span class="M" data-m="I₁; I₂; I₃"></span> = <span class="M" data-m="0; 5; 3"></span>, &nbsp; det = 1(−25) + 1(−60) − 1(60) = −145</div>
+<p>From the third equation I₃ = I₂ − 0.6, so I₁ = 2I₂ − 0.6. Substituting: 12(2I₂ − 0.6) + 5I₂ = 5 ⇒ 29I₂ = 12.2.</p>
+<div class="eq">I₂ = 61/145 ≈ 0.421 A, &nbsp; I₁ = 7/29 ≈ 0.241 A, &nbsp; I₃ = −26/145 ≈ −0.179 A</div>
+<p>The minus sign on I₃ means the current in R₄ actually flows <b>upward</b>, opposite to the arrow drawn.</p>
+<p class="small">Check, left loop: 12(0.2414) + 5(0.4207) = 2.897 + 2.103 = 5.000 ✓. Lab 5 above solves this same circuit live. (If your book's sign convention for the EMF arrows differs, flip the sign of E₂ in the lab and the method stays the same.)</p></details></div>
+
+<div class="prob"><div class="q">6. Given A = <span class="M" data-m="1 2 3; 4 5 6"></span>, find the general B with AB = I (2×2). Show B has two arbitrary parameters, and that no B gives BA = I (3×3).</div>
+<details><summary>Show solution</summary>
+<p>B is 3×2. Its columns b₁, b₂ must satisfy Ab₁ = e₁ = (1, 0)ᵀ and Ab₂ = e₂ = (0, 1)ᵀ. Each is 2 equations in 3 unknowns, and rank A = 2, so each has 3 − 2 = 1 free parameter.</p>
+<p><b>Null space of A</b>: x + 2y + 3z = 0, 4x + 5y + 6z = 0 ⇒ (R₂ − 4R₁) −3y − 6z = 0 ⇒ y = −2z, x = z. So n = (1, −2, 1)ᵀ.</p>
+<p><b>Particular solutions</b> (put z = 0):<br>
+Ab₁ = e₁: x + 2y = 1, 4x + 5y = 0 ⇒ y = 4/3, x = −5/3.<br>
+Ab₂ = e₂: x + 2y = 0, 4x + 5y = 1 ⇒ y = −1/3, x = 2/3.</p>
+<div class="eq">B = <span class="M" data-m="−5/3 + s|2/3 + t; 4/3 − 2s|−1/3 − 2t; s|t"></span>, &nbsp; s, t arbitrary</div>
+<p>Two arbitrary parameters ✓. Example: s = t = 0 gives B = <span class="M" data-m="−5/3 2/3; 4/3 −1/3; 0 0"></span>; check row 1 of A · column 1 = −5/3 + 8/3 + 0 = 1 ✓.</p>
+<p><b>No left inverse:</b> BA is 3×3, but rank(BA) ≤ rank A = 2 &lt; 3. So BA is singular and can never equal I₃. (Equivalently, BA·n = B(An) = 0 for n = (1, −2, 1)ᵀ ≠ 0.) ∎</p>
+<p class="small">This is the finite-matrix fact behind Section 5: a non-square matrix can have a one-sided inverse, but never a two-sided one.</p></details></div>
+</section>
+
+<!-- 13 -->
+<section id="s13">
+<h2>13. Practice set (CSIR-NET / GATE style)</h2>
+
+<div class="prob"><div class="q">P1. For which k does kx + y = 1, x + ky = 1 have a unique solution, no solution, or infinitely many?<span class="tag">classic</span></div>
+<details><summary>Show solution</summary><p>det = k² − 1.<br>k ≠ ±1: unique, x = y = 1/(k + 1).<br>k = 1: both equations are x + y = 1, so infinitely many.<br>k = −1: −x + y = 1 and x − y = 1 are distinct parallel lines, so no solution.</p></details></div>
+
+<div class="prob"><div class="q">P2. x + y + z = 6, x + 2y + 3z = 10, x + 2y + λz = μ. Discuss in terms of λ, μ.<span class="tag">NET favourite</span></div>
+<details><summary>Show solution</summary><p>R₃ − R₂: (λ − 3)z = μ − 10.<br>λ ≠ 3: unique solution.<br>λ = 3, μ ≠ 10: 0 = μ − 10 ≠ 0, so no solution (rank A = 2, rank [A|b] = 3).<br>λ = 3, μ = 10: infinitely many (rank 2, one free parameter): z = t, y = 4 − 2t, x = 2 + t.</p></details></div>
+
+<div class="prob"><div class="q">P3. For what k does x + ky + 3z = 0, 3x + ky − 2z = 0, 2x + 3y − 4z = 0 have a nontrivial solution?</div>
+<details><summary>Show solution</summary><p>Need det = 0: 1(−4k + 6) − k(−12 + 4) + 3(9 − 2k) = −4k + 6 + 8k + 27 − 6k = 33 − 2k = 0 ⇒ <b>k = 33/2</b>.</p></details></div>
+
+<div class="prob"><div class="q">P4. Solve 3x + 2y = 7, x − y = −1 by Cramer's rule.</div>
+<details><summary>Show solution</summary><p>det = −3 − 2 = −5. D₁ = 7(−1) − 2(−1) = −5, D₂ = 3(−1) − 7(1) = −10. So x = 1, y = 2.</p></details></div>
+
+<div class="prob"><div class="q">P5. Find k so that the lines x + y = 2, x − y = 0, 2x + ky = 3 are concurrent.</div>
+<details><summary>Show solution</summary><p>D = <span class="M det" data-m="1 1 2; 1 −1 0; 2 k 3"></span> = 1(−3) − 1(3) + 2(k + 2) = 2k − 2 = 0 ⇒ k = 1. Check: the first two meet at (1, 1), and 2 + k = 3 ✓. No two of the lines are parallel, so D = 0 is enough here.</p></details></div>
+
+<div class="prob"><div class="q">P6. A consistent system has 5 unknowns and rank A = 3. How many free parameters does the solution have? What if rank [A|b] = 4?</div>
+<details><summary>Show solution</summary><p>5 − 3 = 2 free parameters. If rank [A|b] = 4 ≠ 3, the system is inconsistent and has no solution.</p></details></div>
+
+<div class="prob"><div class="q">P7. Find the parabola y = a + bx + cx² through (1, 2), (2, 3), (3, 6).</div>
+<details><summary>Show solution</summary><p>a + b + c = 2, a + 2b + 4c = 3, a + 3b + 9c = 6. Differences give b + 3c = 1 and b + 5c = 3 ⇒ c = 1, b = −2, a = 3. So y = x² − 2x + 3. (The determinant is a Vandermonde determinant, (2−1)(3−1)(3−2) = 2 ≠ 0, so the solution is unique.)</p></details></div>
+
+<div class="prob"><div class="q">P8. Balance C₃H₈ + O₂ → CO₂ + H₂O by setting up a homogeneous system.<span class="tag">application</span></div>
+<details><summary>Show solution</summary><p>Write x₁C₃H₈ + x₂O₂ = x₃CO₂ + x₄H₂O. C: 3x₁ = x₃. H: 8x₁ = 2x₄. O: 2x₂ = 2x₃ + x₄. That is 3 equations in 4 unknowns, rank 3, so there is 1 free parameter. With x₁ = 1: x₃ = 3, x₄ = 4, x₂ = 5. Answer: C₃H₈ + 5O₂ → 3CO₂ + 4H₂O.</p></details></div>
+
+<div class="prob"><div class="q">P9. True or false: "If det A = 0 and all Dₖ = 0, the system has infinitely many solutions."</div>
+<details><summary>Show solution</summary><p>False for n ≥ 3. Counterexample: x + y + z = 1, 2, 3. Every Dₖ has two proportional columns, so all are 0, but there is no solution (three parallel planes). For n = 2 with A ≠ 0 the statement is true.</p></details></div>
+
+<div class="prob"><div class="q">P10. Line of intersection of the planes x + y + z = 1 and x − y = 0.</div>
+<details><summary>Show solution</summary><p>rank 2, so there is 1 parameter. Put x = t: then y = t and z = 1 − 2t. Line: (0, 0, 1) + t(1, 1, −2). The direction (1, 1, −2) is the cross product of the normals (1,1,1) × (1,−1,0) = (1, 1, −2) ✓.</p></details></div>
+
+<div class="prob"><div class="q">P11. A is 3×3 with det A = 0, and b is a combination of the columns of A. How many solutions does Ax = b have?</div>
+<details><summary>Show solution</summary><p>rank A = rank [A|b] &lt; 3, so the system is consistent with at least one free parameter: <b>infinitely many</b>.</p></details></div>
+
+<div class="prob"><div class="q">P12. Show that a homogeneous system with more unknowns than equations (n &gt; m) always has a nontrivial solution.</div>
+<details><summary>Show solution</summary><p>rank A ≤ m &lt; n, so there are n − rank A ≥ 1 free parameters. Choosing a free parameter ≠ 0 gives a nontrivial solution.</p></details></div>
+
+<div class="prob"><div class="q">P13. Using Cramer's rule, find only z in: x + y + z = 2, 2x − y + z = 1, x + 2y − z = 3.</div>
+<details><summary>Show solution</summary><p>det A = 1(1 − 2) − 1(−2 − 1) + 1(4 + 1) = −1 + 3 + 5 = 7.<br>D₃ = <span class="M det" data-m="1 1 2; 2 −1 1; 1 2 3"></span> = 1(−3 − 2) − 1(6 − 1) + 2(4 + 1) = −5 − 5 + 10 = 0. So z = 0. (Then x + y = 2 and 2x − y = 1 give x = 1, y = 1. Check the third: 1 + 2 − 0 = 3 ✓.)</p></details></div>
+</section>
+
+<!-- 14 -->
+<section id="s14" class="quiz">
+<h2>14. Self-test quiz</h2>
+<div id="quizBox"></div>
+<button id="quizCheck">Check answers</button> <span id="quizScore" class="readout"></span>
+</section>
+
+<!-- 15 -->
+<section id="s15">
+<h2>15. Interesting facts</h2>
+<div class="box fact"><b class="t">Older than matrices</b> Solving linear systems by elimination appears in the Chinese text <i>Nine Chapters on the Mathematical Art</i> (around 200 BCE), using counting rods arranged in a grid. That is essentially an augmented matrix, almost 2000 years before Gauss.</div>
+<div class="box fact"><b class="t">Cramer wasn't first</b> Gabriel Cramer published his rule in 1750, but Colin Maclaurin had it in a work published in 1748, and Leibniz used determinant-like ideas in 1693. Determinants came <i>before</i> matrices historically.</div>
+<div class="box fact"><b class="t">Why computers avoid Cramer</b> Cramer with cofactor expansion takes about (n + 1)! operations. For n = 20 that is ~5 × 10¹⁹, years even on a fast computer. Gaussian elimination needs about n³ ≈ 8000 operations.</div>
+<div class="box fact"><b class="t">The prism case</b> Three planes can pairwise intersect in three parallel lines, like the faces of a Toblerone box, and still have no common point. This is the 3D version of three lines forming a triangle, and the reason "no two parallel" does not guarantee a solution.</div>
+<div class="box fact"><b class="t">Physics everywhere</b> Circuit analysis, truss and statics problems, chemical balancing, curve fitting and finite-difference solutions of Laplace's equation all reduce to Ax = b, sometimes with millions of unknowns.</div>
+</section>
+
+</div>
+
+<script>
+/* ---------- theme ---------- */
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+document.getElementById('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawAll();};})();
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+const $=id=>document.getElementById(id);
+function renderM(){document.querySelectorAll('.M[data-m]').forEach(el=>{const s=el.getAttribute('data-m');
+  const rows=s.split(';').map(r=>{r=r.trim();return r.includes('|')?r.split(/\s*\|\s*/):r.split(/\s+/);});
+  el.innerHTML='<table class="mx'+(el.classList.contains('det')?' det':'')+'">'+rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</table>';});}
+renderM();
+function f(x,d=3){if(Math.abs(x)<1e-9)x=0;return (+x.toFixed(d)).toString();}
+function setupCanvas(c){const dpr=window.devicePixelRatio||1;if(!c._w){c._w=c.width;c._h=c.height;c.width=c._w*dpr;c.height=c._h*dpr;c.style.width='100%';c.style.maxWidth=c._w+'px';}const g=c.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);return [g,c._w,c._h];}
+function arrow(g,x1,y1,x2,y2,col,w=2.5){g.strokeStyle=col;g.fillStyle=col;g.lineWidth=w;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();const a=Math.atan2(y2-y1,x2-x1),L=Math.min(10+w,Math.hypot(x2-x1,y2-y1)*.5);if(L<2)return;g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-L*Math.cos(a-.4),y2-L*Math.sin(a-.4));g.lineTo(x2-L*Math.cos(a+.4),y2-L*Math.sin(a+.4));g.closePath();g.fill();}
+function clear(g,w,h){g.fillStyle=css('--card');g.fillRect(0,0,w,h);}
+
+/* ---------- float rank / solve helpers ---------- */
+function rankF(M,tol=1e-9){const A=M.map(r=>r.slice());const m=A.length,n=A[0].length;let rk=0;for(let c=0;c<n&&rk<m;c++){let p=rk;for(let r=rk+1;r<m;r++)if(Math.abs(A[r][c])>Math.abs(A[p][c]))p=r;if(Math.abs(A[p][c])<tol)continue;[A[p],A[rk]]=[A[rk],A[p]];for(let r=rk+1;r<m;r++){const k=A[r][c]/A[rk][c];for(let j=c;j<n;j++)A[r][j]-=k*A[rk][j];}rk++;}return rk;}
+// plane-grid helpers for 2D labs
+function grid2D(g,w,h,S){const ox=w/2,oy=h/2;g.strokeStyle=css('--line');g.lineWidth=1;for(let i=-10;i<=10;i++){g.beginPath();g.moveTo(ox+i*S,0);g.lineTo(ox+i*S,h);g.stroke();g.beginPath();g.moveTo(0,oy-i*S);g.lineTo(w,oy-i*S);g.stroke();}g.strokeStyle=css('--muted');g.lineWidth=1.5;g.beginPath();g.moveTo(0,oy);g.lineTo(w,oy);g.moveTo(ox,0);g.lineTo(ox,h);g.stroke();g.fillStyle=css('--muted');g.font='12px sans-serif';g.fillText('x₁',w-16,oy-6);g.fillText('x₂',ox+6,12);}
+function drawLine(g,w,h,S,a,b,c,col,wd=2.5,dash){const ox=w/2,oy=h/2;const X=w/2/S+1,Y=h/2/S+1;g.strokeStyle=col;g.lineWidth=wd;if(dash)g.setLineDash(dash);g.beginPath();
+ if(Math.abs(b)>Math.abs(a)){const y1=(c-a*(-X))/b,y2=(c-a*X)/b;g.moveTo(ox-X*S,oy-y1*S);g.lineTo(ox+X*S,oy-y2*S);}else if(Math.abs(a)>1e-9){const x1=(c-b*(-Y))/a,x2=(c-b*Y)/a;g.moveTo(ox+x1*S,oy+Y*S);g.lineTo(ox+x2*S,oy-Y*S);}
+ g.stroke();g.setLineDash([]);}
+
+/* ---------- Lab 1: two lines ---------- */
+const L1P={'1a':[1,1,0,1,-1,0],'1b':[1,1,2,1,-2,-1],'2a':[1,-1,-1,2,-2,-2],'2b':[1,-1,-1,1,-1,1.5],'2c':[1,-1,0,-2,2,0]};
+const L1ids=['p11','p12','pb1','p21','p22','pb2'];
+function setL1(k){L1P[k].forEach((v,i)=>$(L1ids[i]).value=v);drawL1();}
+document.querySelectorAll('[data-l1]').forEach(b=>b.onclick=()=>setL1(b.dataset.l1));
+L1ids.forEach(id=>$(id).oninput=drawL1);
+function drawL1(){const [a11,a12,b1,a21,a22,b2]=L1ids.map(id=>+$(id).value);const [g,w,h]=setupCanvas($('l1can'));clear(g,w,h);const S=40;grid2D(g,w,h,S);
+ drawLine(g,w,h,S,a11,a12,b1,'#1c7ed6',3);drawLine(g,w,h,S,a21,a22,b2,'#e8590c',3,(Math.abs(a11*a22-a12*a21)<1e-9&&rankF([[a11,a12,b1],[a21,a22,b2]])===1)?[8,6]:null);
+ const D=a11*a22-a12*a21;const rA=rankF([[a11,a12],[a21,a22]]),rB=rankF([[a11,a12,b1],[a21,a22,b2]]);const hom=Math.abs(b1)<1e-9&&Math.abs(b2)<1e-9;
+ let v,cls,txt='det A = '+f(a11)+'·'+f(a22)+' − '+f(a12)+'·'+f(a21)+' = '+f(D)+'\nrank A = '+rA+',  rank [A|b] = '+rB+'\n\n';
+ if(Math.abs(D)>1e-9){const x1=(b1*a22-b2*a12)/D,x2=(b2*a11-b1*a21)/D;const ox=w/2,oy=h/2;g.fillStyle=css('--ink');g.beginPath();g.arc(ox+x1*S,oy-x2*S,6,0,7);g.fill();
+  v=hom?'Case 1a: unique, trivial solution':'Case 1b: unique solution';cls='ok';txt+='x₁ = (b₁a₂₂ − b₂a₁₂)/det = '+f(x1)+'\nx₂ = (b₂a₁₁ − b₁a₂₁)/det = '+f(x2)+'\n\nThe lines have different slopes → they cross once.';}
+ else if(rA===0){v=rB===0?'0 = 0: every point is a solution':'No solution (0 = nonzero)';cls=rB===0?'ok':'bad';}
+ else if(rB===rA){v=hom?'Case 2c: infinitely many (line through origin)':'Case 2a: infinitely many (same line)';cls='ok';txt+='The second equation is a multiple of the first:\nthe lines coincide (dashed over solid).\nOne free parameter: pick x₁, then x₂ = (b₁ − a₁₁x₁)/a₁₂.';}
+ else{v='Case 2b: no solution (parallel lines)';cls='bad';txt+='Same slope, different intercepts:\nthe lines never meet.';}
+ $('l1verdict').innerHTML='<span class="'+cls+'">'+v+'</span>';$('l1out').textContent='line 1: '+f(a11)+'x₁ + '+f(a12)+'x₂ = '+f(b1)+'\nline 2: '+f(a21)+'x₁ + '+f(a22)+'x₂ = '+f(b2)+'\n\n'+txt;}
+
+/* ---------- Lab 2: three lines ---------- */
+const L2base={a:[[1,1,2],[1,-1,0],[0.2,1,-1]],b:[[1,1,2],[1,-1,0],[2,1,3]],c:[[1,1,2],[1,1,-1],[1,-1,0]],d:[[1,-1,0],[1,-1,2],[1,-1,-2]],e:[[1,-1,0],[2,-2,0],[1,-1,2.5]],f:[[1,-1,0],[2,-2,0],[1,1,2]],g:[[1,-1,1],[2,-2,2],[-1,1,-1]]};
+let L2fixed=L2base.a.slice(0,2);
+function setL2(k){const P=L2base[k];L2fixed=[P[0],P[1]];$('q31').value=P[2][0];$('q32').value=P[2][1];$('qb3').value=P[2][2];drawL2();}
+document.querySelectorAll('[data-l2]').forEach(b=>b.onclick=()=>setL2(b.dataset.l2));
+['q31','q32','qb3'].forEach(id=>$(id).oninput=drawL2);
+function det3(M){return M[0][0]*(M[1][1]*M[2][2]-M[1][2]*M[2][1])-M[0][1]*(M[1][0]*M[2][2]-M[1][2]*M[2][0])+M[0][2]*(M[1][0]*M[2][1]-M[1][1]*M[2][0]);}
+function drawL2(){const L=[L2fixed[0],L2fixed[1],[+$('q31').value,+$('q32').value,+$('qb3').value]];const [g,w,h]=setupCanvas($('l2can'));clear(g,w,h);const S=40;grid2D(g,w,h,S);const ox=w/2,oy=h/2;
+ const cols=['#1c7ed6','#e8590c','#2f9e44'];
+ const meet=(p,q)=>{const d=p[0]*q[1]-p[1]*q[0];if(Math.abs(d)<1e-9)return null;return [(p[2]*q[1]-q[2]*p[1])/d,(p[0]*q[2]-q[0]*p[2])/d];};
+ const P12=meet(L[0],L[1]),P13=meet(L[0],L[2]),P23=meet(L[1],L[2]);
+ const D=det3(L);
+ if(P12&&P13&&P23&&Math.abs(D)>1e-6){g.fillStyle=css('--acc4');g.globalAlpha=.22;g.beginPath();[P12,P13,P23].forEach((p,i)=>{const X=ox+p[0]*S,Y=oy-p[1]*S;i?g.lineTo(X,Y):g.moveTo(X,Y);});g.closePath();g.fill();g.globalAlpha=1;}
+ L.forEach((l,i)=>drawLine(g,w,h,S,l[0],l[1],l[2],cols[i],3,i===2?null:(i===1&&rankF([L[0],L[1]])===1?[8,6]:null)));
+ const A=L.map(l=>[l[0],l[1]]);const rA=rankF(A),rB=rankF(L);
+ let v,cls;if(rA===rB){if(rA===2){const s=P12||P13||P23;g.fillStyle=css('--ink');g.beginPath();g.arc(ox+s[0]*S,oy-s[1]*S,6,0,7);g.fill();v='Exactly one solution: ('+f(s[0],2)+', '+f(s[1],2)+')';}else v='Infinitely many: all three lines are the same';cls='ok';}else{v='No solution';cls='bad';}
+ let par=[];[[0,1],[0,2],[1,2]].forEach(([i,j])=>{if(Math.abs(L[i][0]*L[j][1]-L[i][1]*L[j][0])<1e-9)par.push((i+1)+'∥'+(j+1));});
+ let tri='';if(P12&&P13&&P23){const area=Math.abs((P13[0]-P12[0])*(P23[1]-P12[1])-(P23[0]-P12[0])*(P13[1]-P12[1]))/2;tri='\ntriangle area = '+f(area)+'  (∝ D²; 0 ⇔ D = 0)';}
+ $('l2verdict').innerHTML='<span class="'+cls+'">'+v+'</span>';
+ $('l2out').textContent=L.map((l,i)=>'line '+(i+1)+': '+f(l[0])+'x₁ + '+f(l[1])+'x₂ = '+f(l[2])).join('\n')+'\n\nD = det of augmented 3×3 = '+f(D)+tri+'\n\nrank A (3×2) = '+rA+'\nrank [A|b]   = '+rB+'\nparallel pairs: '+(par.length?par.join(', '):'none')+'\n\n'+(Math.abs(D)>1e-6?'D ≠ 0 ⇒ certainly no solution.':'D = 0 ⇒ rows dependent; a solution exists\nonly if rank A = rank [A|b].');}
+
+/* ---------- Lab 3: three planes in 3D ---------- */
+const view={yaw:-0.75,pitch:0.42};
+const L3P={point:[[1,1,1,1.5],[1,-1,0.5,0],[-0.5,1,1,1]],sheaf:[[1,1,1,1.5],[1,-1,0.5,0],[2,0,1.5,1.5]],prism:[[1,1,1,1.5],[1,-1,0.5,0],[2,0,1.5,-0.5]],twopar:[[1,1,1,1.5],[1,1,1,-1],[1,-1,0.5,0]],threepar:[[1,1,1,1.8],[1,1,1,0],[1,1,1,-1.8]],twosame:[[1,1,1,1],[2,2,2,2],[1,-1,0.5,0]],allsame:[[1,1,1,1],[2,2,2,2],[-1,-1,-1,-1]]};
+let L3base=L3P.point;
+function setL3(k){L3base=L3P[k];$('l3b').value=0;$('l3t').value=0;drawL3();}
+document.querySelectorAll('[data-l3]').forEach(b=>b.onclick=()=>setL3(b.dataset.l3));
+['l3b','l3t'].forEach(id=>$(id).oninput=drawL3);
+function curPlanes(){const P=L3base.map(r=>r.slice());const db=+$('l3b').value,tt=+$('l3t').value;P[2][3]+=db;P[2][1]+=tt;P[2][0]-=0.5*tt;return P;}
+// Gaussian solve (float) for 3 planes → {type, point, dirs}
+function solve3(P){const M=P.map(r=>r.slice());const m=3,n=3;const piv=[];let rk=0;
+ for(let c=0;c<n&&rk<m;c++){let p=rk;for(let r=rk+1;r<m;r++)if(Math.abs(M[r][c])>Math.abs(M[p][c]))p=r;if(Math.abs(M[p][c])<1e-7)continue;[M[p],M[rk]]=[M[rk],M[p]];const pv=M[rk][c];for(let j=0;j<=n;j++)M[rk][j]/=pv;for(let r=0;r<m;r++)if(r!==rk){const k=M[r][c];for(let j=0;j<=n;j++)M[r][j]-=k*M[rk][j];}piv.push(c);rk++;}
+ for(let r=rk;r<m;r++)if(Math.abs(M[r][n])>1e-6)return {rank:rk,cons:false};
+ const free=[0,1,2].filter(c=>!piv.includes(c));const x0=[0,0,0];piv.forEach((c,i)=>x0[c]=M[i][n]);
+ const dirs=free.map(fc=>{const v=[0,0,0];v[fc]=1;piv.forEach((c,i)=>v[c]=-M[i][fc]);return v;});return {rank:rk,cons:true,x0,dirs};}
+function drawL3(){const P=curPlanes();const [g,w,h]=setupCanvas($('l3can'));clear(g,w,h);
+ const cy=Math.cos(view.yaw),sy=Math.sin(view.yaw),cp=Math.cos(view.pitch),sp=Math.sin(view.pitch);const Sc=62,ox=w/2,oy=h/2+10;
+ const proj=v=>{const X=cy*v[0]-sy*v[1],Y=sy*v[0]+cy*v[1];return [ox+Sc*X,oy-Sc*(v[2]*cp-Y*sp),Y*cp+v[2]*sp];};
+ // axes
+ g.globalAlpha=.5;[[1,0,0,'x₁'],[0,1,0,'x₂'],[0,0,1,'x₃']].forEach(a=>{const o=proj([0,0,0]),p=proj([a[0]*2.6,a[1]*2.6,a[2]*2.6]);arrow(g,o[0],o[1],p[0],p[1],css('--muted'),1.2);g.fillStyle=css('--muted');g.font='12px sans-serif';g.fillText(a[3],p[0]+4,p[1]);});g.globalAlpha=1;
+ const cols=['#1c7ed6','#e8590c','#2f9e44'];const H=2.3;
+ const quads=[];P.forEach((pl,i)=>{const nv=[pl[0],pl[1],pl[2]];const nn=Math.hypot(...nv);if(nn<1e-9)return;const nh=nv.map(x=>x/nn);const p0=nh.map(x=>x*pl[3]/nn);
+  let t=Math.abs(nh[0])<0.9?[1,0,0]:[0,1,0];const u=[nh[1]*t[2]-nh[2]*t[1],nh[2]*t[0]-nh[0]*t[2],nh[0]*t[1]-nh[1]*t[0]];const un=Math.hypot(...u);u.forEach((x,k)=>u[k]=x/un);const v=[nh[1]*u[2]-nh[2]*u[1],nh[2]*u[0]-nh[0]*u[2],nh[0]*u[1]-nh[1]*u[0]];
+  const N=6;for(let a=0;a<N;a++)for(let b=0;b<N;b++){const s0=-H+2*H*a/N,s1=-H+2*H*(a+1)/N,t0=-H+2*H*b/N,t1=-H+2*H*(b+1)/N;const pts=[[s0,t0],[s1,t0],[s1,t1],[s0,t1]].map(([s,tt])=>proj(p0.map((x,k)=>x+s*u[k]+tt*v[k])));quads.push({pts,z:pts.reduce((q,p)=>q+p[2],0)/4,col:cols[i]});}});
+ quads.sort((a,b)=>a.z-b.z);quads.forEach(q=>{g.fillStyle=q.col;g.globalAlpha=.28;g.beginPath();q.pts.forEach((p,k)=>k?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.closePath();g.fill();g.globalAlpha=.45;g.strokeStyle=q.col;g.lineWidth=.6;g.stroke();});g.globalAlpha=1;
+ const sol=solve3(P);const A=P.map(r=>r.slice(0,3));const rA=rankF(A,1e-7),rB=rankF(P,1e-7);
+ let v,cls='ok';if(!sol.cons){v='No solution';cls='bad';}else if(sol.dirs.length===0){const p=proj(sol.x0);g.fillStyle=css('--ink');g.beginPath();g.arc(p[0],p[1],7,0,7);g.fill();v='Unique solution (one point)';}
+ else if(sol.dirs.length===1){const d=sol.dirs[0],dn=Math.hypot(...d);const a=proj(sol.x0.map((x,k)=>x-3*d[k]/dn)),b=proj(sol.x0.map((x,k)=>x+3*d[k]/dn));g.strokeStyle=css('--ink');g.lineWidth=4;g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke();v='Infinitely many: a line (1 free parameter)';}
+ else v='Infinitely many: a whole plane (2 free parameters)';
+ $('l3verdict').innerHTML='<span class="'+cls+'">'+v+'</span>';
+ const dA=det3(A);let txt=P.map((p,i)=>'plane '+(i+1)+': '+f(p[0],2)+'x₁ + '+f(p[1],2)+'x₂ + '+f(p[2],2)+'x₃ = '+f(p[3],2)).join('\n')+'\n\ndet A = '+f(dA)+'\nrank A     = '+rA+'\nrank [A|b] = '+rB+(sol.cons?'\nfree parameters = 3 − rank A = '+(3-rA):'\nrank A ≠ rank [A|b] ⇒ inconsistent')+'\n\n';
+ if(sol.cons){txt+='x = ('+sol.x0.map(x=>f(x,2)).join(', ')+')';sol.dirs.forEach((d,i)=>txt+=' + '+'st'[i]+'·('+d.map(x=>f(x,2)).join(', ')+')');}else txt+=rA===2?'Each pair of non-parallel planes meets in a line,\nbut the lines never meet: rank [A|b] > rank A.':'Some planes are parallel and distinct.';
+ $('l3out').textContent=txt;$('l3bv').textContent=(+$('l3b').value).toFixed(2);$('l3tv').textContent=(+$('l3t').value).toFixed(2);}
+(function(){const c=$('l3can');let d=null;c.addEventListener('pointerdown',e=>{d=[e.clientX,e.clientY];c.setPointerCapture(e.pointerId);});c.addEventListener('pointermove',e=>{if(!d)return;view.yaw+=(e.clientX-d[0])*.01;view.pitch=Math.max(-1.5,Math.min(1.5,view.pitch+(e.clientY-d[1])*.01));d=[e.clientX,e.clientY];drawL3();});c.addEventListener('pointerup',()=>d=null);})();
+
+/* ---------- Lab 4: Cramer areas ---------- */
+['c4b1','c4b2','c4ang','c4show'].forEach(id=>$(id).oninput=drawC4);
+function drawC4(){const [g,w,h]=setupCanvas($('c4can'));clear(g,w,h);const S=40;grid2D(g,w,h,S);const ox=w/2,oy=h/2;
+ const ang=+$('c4ang').value*Math.PI/180;const a1=[2,0.5],a2=[1.8*Math.cos(ang),1.8*Math.sin(ang)],b=[+$('c4b1').value,+$('c4b2').value];const which=+$('c4show').value;
+ const P=v=>[ox+v[0]*S,oy-v[1]*S];const det=(u,v)=>u[0]*v[1]-u[1]*v[0];
+ const para=(u,v,col)=>{g.fillStyle=col;g.globalAlpha=.25;g.beginPath();g.moveTo(...P([0,0]));g.lineTo(...P(u));g.lineTo(...P([u[0]+v[0],u[1]+v[1]]));g.lineTo(...P(v));g.closePath();g.fill();g.globalAlpha=1;};
+ para(a1,a2,'#1c7ed6');if(which===1)para(b,a2,'#e8590c');else para(a1,b,'#e8590c');
+ const D=det(a1,a2),D1=det(b,a2),D2=det(a1,b);const x1=D1/D,x2=D2/D;
+ if(Math.abs(D)>1e-6){g.setLineDash([6,4]);const m=[x1*a1[0],x1*a1[1]];g.strokeStyle=css('--acc4');g.lineWidth=2;g.beginPath();g.moveTo(...P([0,0]));g.lineTo(...P(m));g.lineTo(...P(b));g.stroke();g.setLineDash([]);}
+ const o=P([0,0]);arrow(g,o[0],o[1],...P(a1),'#1c7ed6',3);arrow(g,o[0],o[1],...P(a2),'#2f9e44',3);arrow(g,o[0],o[1],...P(b),'#e8590c',3);
+ g.font='bold 13px sans-serif';g.fillStyle='#1c7ed6';g.fillText('a₁',...P([a1[0]+.1,a1[1]-.25]));g.fillStyle='#2f9e44';g.fillText('a₂',...P([a2[0]+.1,a2[1]+.1]));g.fillStyle='#e8590c';g.fillText('b',...P([b[0]+.1,b[1]+.1]));
+ $('c4angv').textContent=$('c4ang').value;
+ $('c4out').textContent='Columns: a₁ = ('+f(a1[0],2)+', '+f(a1[1],2)+'),  a₂ = ('+f(a2[0],2)+', '+f(a2[1],2)+')\nb = ('+f(b[0],2)+', '+f(b[1],2)+')\n\ndet A = area(a₁,a₂) = '+f(D)+'\nD₁ = area(b,a₂) = '+f(D1)+'\nD₂ = area(a₁,b) = '+f(D2)+'\n\n'+(Math.abs(D)<1e-3?'det A ≈ 0: a₁ ∥ a₂, Cramer fails.':'x₁ = D₁/det = '+f(x1)+'\nx₂ = D₂/det = '+f(x2)+'\n\ncheck x₁a₁ + x₂a₂ = ('+f(x1*a1[0]+x2*a2[0],2)+', '+f(x1*a1[1]+x2*a2[1],2)+') = b ✓')+'\n\n(signed areas: negative = clockwise order)';}
+
+/* ---------- Solver ---------- */
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;}
+class Fr{constructor(n,d=1){if(d<0){n=-n;d=-d;}const g=gcd(n,d);this.n=n/g;this.d=d/g;}add(o){return new Fr(this.n*o.d+o.n*this.d,this.d*o.d)}sub(o){return new Fr(this.n*o.d-o.n*this.d,this.d*o.d)}mul(o){return new Fr(this.n*o.n,this.d*o.d)}div(o){return new Fr(this.n*o.d,this.d*o.n)}isZ(){return this.n===0}toString(){return this.d===1?''+this.n:this.n+'/'+this.d}}
+const F0=new Fr(0),F1=new Fr(1);
+function fdet(A){const n=A.length;if(n===1)return A[0][0];let s=F0;for(let j=0;j<n;j++){if(A[0][j].isZ())continue;const t=A[0][j].mul(fdet(A.slice(1).map(r=>r.filter((_,k)=>k!==j))));s=j%2?s.sub(t):s.add(t);}return s;}
+const SM=A=>A.map(r=>'  [ '+r.map(x=>x.toString().padStart(6)).join(' ')+' ]').join('\n');
+function solveSys(){const out=$('svOut');try{const lines=$('svIn').value.trim().split('\n').filter(l=>l.trim());const parse=x=>{if(!/^-?\d+(\/\d+)?$/.test(x))throw 'Use integers or fractions: "'+x+'"';const [a,b]=x.split('/');return new Fr(+a,b?+b:1);};
+ const rows=lines.map(l=>{if(!l.includes('|'))throw 'Each line needs "|" before the right-hand side.';const [L,R]=l.split('|');return [L.trim().split(/[\s,]+/).map(parse),parse(R.trim())];});
+ const m=rows.length,n=rows[0][0].length;if(rows.some(r=>r[0].length!==n))throw 'Every equation must have '+n+' coefficients.';if(n>6||m>6)throw 'Keep it at most 6×6.';
+ const A=rows.map(r=>r[0]),b=rows.map(r=>r[1]);const names=n<=3?['x','y','z']:Array.from({length:n},(_,i)=>'x'+(i+1));
+ let t=m+' equations, '+n+' unknowns\n\nA =\n'+SM(A)+'\nb = ('+b.join(', ')+')\n';
+ if(m===n){const D=fdet(A);t+='\ndet A = '+D+'\n';if(!D.isZ()){t+='det A ≠ 0 ⇒ unique solution (Cramer):\n';for(let k=0;k<n;k++){const Ak=A.map((r,i)=>r.map((x,j)=>j===k?b[i]:x));const Dk=fdet(Ak);t+='\nD'+(k+1)+' (column '+(k+1)+' replaced by b) =\n'+SM(Ak)+'\n  = '+Dk+'   ⇒  '+names[k]+' = '+Dk+' / '+D+' = '+Dk.div(D)+'\n';}}
+  else{const Ds=[];for(let k=0;k<n;k++)Ds.push(fdet(A.map((r,i)=>r.map((x,j)=>j===k?b[i]:x))));t+='D_k = '+Ds.join(', ')+'\n'+(Ds.some(d=>!d.isZ())?'det A = 0 but some D_k ≠ 0 ⇒ NO solution (corollary a).\n':'det A = 0 and all D_k = 0 ⇒ Cramer is silent; use ranks ↓\n');}}
+ // row reduce augmented
+ const G=A.map((r,i)=>[...r,b[i]]);const piv=[];let rk=0;let log='';
+ for(let c=0;c<n&&rk<m;c++){let p=rk;while(p<m&&G[p][c].isZ())p++;if(p===m)continue;if(p!==rk){[G[p],G[rk]]=[G[rk],G[p]];log+='R'+(rk+1)+'↔R'+(p+1)+'  ';}const pv=G[rk][c];G[rk]=G[rk].map(x=>x.div(pv));for(let r=0;r<m;r++)if(r!==rk&&!G[r][c].isZ()){const k=G[r][c];G[r]=G[r].map((x,j)=>x.sub(k.mul(G[rk][j])));}piv.push(c);rk++;}
+ const rAb=rk+G.slice(rk).filter(r=>!r[n].isZ()).length>rk?rk+1:rk;
+ t+='\nRow-reduced [A | b]:\n'+G.map(r=>'  [ '+r.slice(0,n).map(x=>x.toString().padStart(6)).join(' ')+' |'+r[n].toString().padStart(6)+' ]').join('\n')+'\n\nrank A = '+rk+',  rank [A|b] = '+rAb+'\n';
+ if(rAb>rk){t+='rank A < rank [A|b] ⇒ INCONSISTENT: no solution.';out.textContent=t;return;}
+ const free=[...Array(n).keys()].filter(c=>!piv.includes(c));
+ if(!free.length){t+='rank = n = '+n+' ⇒ unique solution:\n  '+piv.map((c,i)=>names[c]+' = '+G[i][n]).join(',  ');}
+ else{const pn=['s','t','u','v','w','p'];t+='Consistent, '+free.length+' free parameter(s): '+free.map((c,i)=>names[c]+' = '+pn[i]).join(', ')+'\n';
+  piv.forEach((c,i)=>{let s=names[c]+' = '+G[i][n];free.forEach((fc,k)=>{const co=G[i][fc];if(!co.isZ()){const v=F0.sub(co);s+=(v.n<0?' − ':' + ')+(Math.abs(v.n)===1&&v.d===1?'':new Fr(Math.abs(v.n),v.d).toString())+pn[k];}});t+='  '+s+'\n';});
+  const allZ=b.every(x=>x.isZ());if(allZ)t+='(homogeneous: nontrivial solutions exist because rank < n)';}
+ out.textContent=t;}catch(e){out.textContent='Error: '+e;}}
+$('svGo').onclick=solveSys;document.querySelectorAll('[data-sv]').forEach(btn=>btn.onclick=()=>{$('svIn').value=btn.dataset.sv;solveSys();});
+
+/* ---------- Lab 5: Kirchhoff circuit ---------- */
+['kR1','kR2','kR3','kR4','kE1','kE2'].forEach(id=>$(id).oninput=drawK);
+function drawK(){const R1=+$('kR1').value,R2=+$('kR2').value,R3=+$('kR3').value,R4=+$('kR4').value,E1=+$('kE1').value,E2=+$('kE2').value;
+ ['kR1','kR2','kR3','kR4','kE1','kE2'].forEach(id=>$(id+'v').textContent=$(id).value);
+ // I1 = I2 + I3 ; (R1+R3) I1 + R2 I2 = E1 + E2 ; R2 I2 - R4 I3 = E2
+ const M=[[1,-1,-1],[R1+R3,R2,0],[0,R2,-R4]],bb=[0,E1+E2,E2];const D=det3(M);const sol=[0,1,2].map(k=>det3(M.map((r,i)=>r.map((x,j)=>j===k?bb[i]:x)))/D);const [I1,I2,I3]=sol;
+ const [g,w,h]=setupCanvas($('kcan'));clear(g,w,h);const ink=css('--ink');g.strokeStyle=ink;g.lineWidth=2;
+ const xL=50,xM=240,xR=410,yT=50,yB=250;g.beginPath();g.moveTo(xL,yT);g.lineTo(xR,yT);g.lineTo(xR,yB);g.lineTo(xL,yB);g.closePath();g.moveTo(xM,yT);g.lineTo(xM,yB);g.stroke();
+ const res=(x,y,wd,ht,lbl)=>{g.fillStyle=css('--card');g.fillRect(x-wd/2,y-ht/2,wd,ht);g.strokeStyle=ink;g.lineWidth=2;g.strokeRect(x-wd/2,y-ht/2,wd,ht);g.fillStyle=ink;g.font='12px sans-serif';g.fillText(lbl,x-wd/2+4,y+4);};
+ res(140,yT,70,22,'R₁='+R1+'Ω');res(xM,115,64,22,'R₂='+R2+'Ω');res(140,yB,70,22,'R₃='+R3+'Ω');res(xR,150,64,22,'R₄='+R4+'Ω');
+ const cell=(x,y,lbl,up)=>{g.fillStyle=css('--card');g.fillRect(x-14,y-8,28,16);g.strokeStyle=ink;g.lineWidth=3;g.beginPath();g.moveTo(x-14,y-5);g.lineTo(x+14,y-5);g.stroke();g.lineWidth=1.5;g.beginPath();g.moveTo(x-8,y+5);g.lineTo(x+8,y+5);g.stroke();g.fillStyle=ink;g.font='12px sans-serif';g.fillText(lbl,x+18,y+4);};
+ cell(xL,150,'E₁='+E1+'V');cell(xM,185,'E₂='+E2+'V');
+ const cur=(x1,y1,x2,y2,I,lbl)=>{const s=I>=0?1:-1;const mx=(x1+x2)/2,my=(y1+y2)/2,dx=(x2-x1)*s,dy=(y2-y1)*s,L=Math.hypot(dx,dy);const ux=dx/L,uy=dy/L;const wdt=2+Math.min(6,Math.abs(I)*8);arrow(g,mx-ux*16,my-uy*16,mx+ux*16,my+uy*16,'#e03131',wdt);g.fillStyle='#e03131';g.font='bold 12px sans-serif';g.fillText(lbl+' = '+f(Math.abs(I),3)+' A',mx+(uy?10:-30),my+(uy?4:-12));};
+ cur(70,yT,110,yT,I1,'I₁');cur(xM,215,xM,240,I2,'I₂');cur(xR,80,xR,110,I3,'I₃');
+ $('kout').textContent='Unknowns I₁, I₂, I₃ (arrows in Fig. 6 directions):\n  I₁ − I₂ − I₃ = 0\n  (R₁+R₃)I₁ + R₂I₂ = E₁ + E₂\n  R₂I₂ − R₄I₃ = E₂\n\nCoefficient matrix:\n  [ 1  −1  −1 ]\n  [ '+(R1+R3)+'   '+R2+'   0 ]\n  [ 0   '+R2+'  −'+R4+' ]\ndet = '+f(D)+'\n\nCramer:\n  I₁ = '+f(I1,4)+' A\n  I₂ = '+f(I2,4)+' A\n  I₃ = '+f(I3,4)+' A'+(I3<0?'  (flows upward in R₄)':'')+'\n\ncheck junction: I₁ − I₂ − I₃ = '+f(I1-I2-I3,6);}
+
+/* ---------- Quiz ---------- */
+const Q=[
+['A homogeneous system Ax = 0 (A square) has a nontrivial solution iff',['det A ≠ 0','det A = 0','A is symmetric','b ≠ 0'],1,'Lesson 4 / Cramer corollary (b).'],
+['Two equations in two unknowns with det A = 0 and b ≠ 0 can have',['exactly one solution','no solution or infinitely many','exactly two solutions','always infinitely many'],1,'Parallel lines: distinct (none) or coincident (∞).'],
+['Three equations in two unknowns with D (augmented det) ≠ 0 has',['a unique solution','infinitely many','no solution','cannot tell'],2,'D ≠ 0 ⇒ the three lines form a triangle ⇒ no common point.'],
+['Three planes forming a triangular prism have',['rank A = 3','rank A = 2, rank [A|b] = 3','rank A = rank [A|b] = 2','rank A = 1'],1,'Normals coplanar (rank 2) but inconsistent.'],
+['In Cramer\'s rule, D₂ is det A with',['row 2 replaced by b','column 2 replaced by b','column 2 deleted','b added as a new column'],1,'Eq. (29).'],
+['A consistent system in 6 unknowns with rank A = 4 has how many free parameters?',['0','2','4','6'],1,'n − rank = 2.'],
+['x + y + z = 1, x + y + z = 2, x + y + z = 3: det A = 0 and all D_k = 0. The system has',['infinitely many solutions','one solution','no solution','two solutions'],2,'Three parallel planes – the Cramer trap.'],
+['A linear system can have exactly',['2 solutions','0, 1 or ∞ solutions','any finite number','only 1 solution'],1,'If x and y are solutions, so is every point on the line through them.'],
+['One equation in three unknowns (nonzero coefficients) gives',['a point','a line (1 parameter)','a plane (2 parameters)','no solution'],2,'Eq. (20): two-fold arbitrariness.']];
+(function(){$('quizBox').innerHTML=Q.map((q,i)=>'<div class="qq"><b>'+(i+1)+'. '+q[0]+'</b>'+q[1].map((o,j)=>'<label class="opt"><input type="radio" name="q'+i+'" value="'+j+'"> '+o+'</label>').join('')+'<div class="small" id="qf'+i+'"></div></div>').join('');
+$('quizCheck').onclick=()=>{let s=0;Q.forEach((q,i)=>{const c=document.querySelector('input[name=q'+i+']:checked');const ok=c&&+c.value===q[2];if(ok)s++;$('qf'+i).innerHTML=(ok?'<span class="ok">✓ Correct.</span> ':'<span class="bad">✗ Answer: '+q[1][q[2]]+'.</span> ')+q[3];});$('quizScore').textContent='Score: '+s+' / '+Q.length;};})();
+
+function drawAll(){drawL1();drawL2();drawL3();drawC4();drawK();}
+setL1('1b');setL2('a');setL3('point');drawC4();drawK();solveSys();
+</script>
+</body>
+</html>

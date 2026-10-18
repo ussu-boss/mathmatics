@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:110px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:85px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:collapse;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;margin:3px 4px;width:auto}
+.mx.det{border-radius:0}
+.mx td{border:0;padding:1px 8px;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.verdict{font-weight:700;font-size:1.05rem;margin:6px 0}
+.sys{font-family:"Cambria Math",Cambria,"Times New Roman",serif;display:inline-block;text-align:left;line-height:1.5}
+</style>
+<title>Matrices in Mechanics</title>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>14. Matrices in Classical and Quantum Mechanics</h1>
+<p>Rotation matrices · Euler angles · Pauli spin matrices · Dirac matrices · Infinite matrices · Matrix representation of an operator &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 146–154</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">2D rotation</a><a href="#s2">3D &amp; Euler</a><a href="#s3">Pauli</a><a href="#s4">Bloch lab</a><a href="#s5">Dirac</a><a href="#s6">Infinite matrices</a><a href="#s7">Operator matrix</a><a href="#s8">Summary</a><a href="#s9">Exercise 14</a><a href="#s10">Practice</a><a href="#s11">Quiz</a><a href="#s12">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>This section puts the matrix tools of Sections 1–13 to work in physics:</p>
+<ul>
+<li><b>Rotations</b>: change of axes is an orthogonal matrix with det +1. A general rotation is built from three simple ones, given by the Euler angles.</li>
+<li><b>Pauli matrices</b>: the spin of an electron <b>cannot</b> be described by numbers, because its components anticommute. The smallest matrices that work are 2×2, and we derive them step by step.</li>
+<li><b>Dirac matrices</b>: the relativistic electron needs four mutually anticommuting objects. 2×2 is too small, so they are 4×4.</li>
+<li><b>Infinite matrices</b> and the <b>matrix of an operator</b>: quantum mechanics is linear algebra in an infinite-dimensional space. In practice we pick a basis, write the operator as a matrix, and diagonalize it.</li>
+</ul>
+<div class="box tip"><b class="t">Needed from earlier</b> Orthogonal and unitary matrices (Section 5), hermitian matrices and their real eigenvalues (Section 9), diagonalization by a unitary matrix (Section 10), e<sup>A</sup> (Section 12), direct product ⊗ (Section 13).</div>
+</section>
+
+<section id="s1">
+<h2>1. The rotation matrix in 2D (Eqs. 1–4)</h2>
+<p>Rotate the <b>coordinate axes</b> (not the vector) anticlockwise by θ about z. The vector u stays where it is, but its components with respect to the new axes x′, y′ are</p>
+<div class="eq">u₁′ = u₁ cos θ + u₂ sin θ, &nbsp;&nbsp; u₂′ = −u₁ sin θ + u₂ cos θ &nbsp;&nbsp;(1)</div>
+<div class="eq"><table class="mx"><tr><td>u₁′</td></tr><tr><td>u₂′</td></tr></table> = <table class="mx"><tr><td>cos θ</td><td>sin θ</td></tr><tr><td>−sin θ</td><td>cos θ</td></tr></table><table class="mx"><tr><td>u₁</td></tr><tr><td>u₂</td></tr></table>, &nbsp;&nbsp; R<sub>z</sub>(θ) = <table class="mx"><tr><td>cos θ</td><td>sin θ</td></tr><tr><td>−sin θ</td><td>cos θ</td></tr></table> &nbsp;(2–4)</div>
+<p><b>Where it comes from:</b> u₁′ is the projection of u onto the new unit vector x̂′ = (cos θ, sin θ), and u₂′ is the projection onto ŷ′ = (−sin θ, cos θ). The <b>rows</b> of R are the new axis vectors written in the old frame.</p>
+<div class="box warnb"><b class="t">Passive vs active</b> Turning the <b>axes</b> by +θ (passive, as in the book) gives the same new components as turning the <b>vector</b> by −θ with the axes fixed (active). The active rotation matrix is the transpose [[cos θ, −sin θ], [sin θ, cos θ]]. Many textbooks use the active form, so always check which one is meant.</div>
+<h3>Properties of R(θ)</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Property</th><th>Meaning</th></tr>
+<tr><td>RᵀR = I</td><td>orthogonal: lengths and angles are kept</td></tr>
+<tr><td>det R = +1</td><td>a proper rotation (−1 would be a reflection)</td></tr>
+<tr><td>R(θ₁)R(θ₂) = R(θ₁ + θ₂)</td><td>rotations about the same axis add, and they commute</td></tr>
+<tr><td>R(θ)⁻¹ = R(−θ) = R(θ)ᵀ</td><td>undo by rotating back</td></tr>
+<tr><td>eigenvalues e<sup>±iθ</sup></td><td>no real eigenvector unless θ = 0 or π: every direction turns</td></tr>
+<tr><td>R(θ) = e<sup>−θJ</sup>, J = [[0, −1], [1, 0]]</td><td>a rotation is the exponential of an antisymmetric "generator" (Section 12)</td></tr>
+</table></div>
+<p><b>The representation depends on the coordinate system:</b> the same operator R<sub>z</sub>(θ) is a 2×2 matrix on the xy-plane and the 3×3 matrix of Eq. (6) on xyz-space.</p>
+<div class="lab"><h4>🔬 Lab 1: rotate the axes, keep the vector</h4>
+<div class="grid2">
+<div><canvas id="cvR" width="460" height="460"></canvas></div>
+<div>
+<div class="ctrl"><label>θ <input type="range" id="rT" min="-180" max="180" step="1" value="30" style="width:180px"><span id="rTv"></span></label><button id="rPlay">▶</button></div>
+<div class="ctrl"><label>u₁ <input type="range" id="rU1" min="-2" max="2" step="0.05" value="1.2"><span id="rU1v"></span></label><label>u₂ <input type="range" id="rU2" min="-2" max="2" step="0.05" value="1.4"><span id="rU2v"></span></label></div>
+<div class="ctrl"><label><input type="radio" name="rMode" value="passive" checked> passive (rotate axes, book)</label><label><input type="radio" name="rMode" value="active"> active (rotate vector)</label></div>
+<div class="readout out" id="rOut"></div>
+</div></div></div>
+</section>
+
+<section id="s2">
+<h2>2. Rotations in 3D and Euler angles (Eqs. 5–10)</h2>
+<p>About the z-axis, the z component does not change:</p>
+<div class="eq">R<sub>z</sub>(θ) = <table class="mx"><tr><td>cos θ</td><td>sin θ</td><td>0</td></tr><tr><td>−sin θ</td><td>cos θ</td><td>0</td></tr><tr><td>0</td><td>0</td><td>1</td></tr></table> &nbsp;(6), &nbsp;&nbsp; R<sub>y</sub>(β) = <table class="mx"><tr><td>cos β</td><td>0</td><td>sin β</td></tr><tr><td>0</td><td>1</td><td>0</td></tr><tr><td>−sin β</td><td>0</td><td>cos β</td></tr></table> &nbsp;(7, as printed)</div>
+<h3>Euler's three rotations</h3>
+<p>Any rotation can be written as three successive rotations about coordinate axes:</p>
+<ol><li>by α about z,</li><li>by β about the <b>new</b> y (or x) axis,</li><li>by γ about the <b>new</b> z axis.</li></ol>
+<div class="eq">R(α, β, γ) = R<sub>z</sub>(γ) R<sub>y</sub>(β) R<sub>z</sub>(α) &nbsp;&nbsp;(8, 9)</div>
+<p><b>The order matters:</b> the first rotation stands on the <b>right</b>, because it acts on u first. Rotations about different axes do <b>not</b> commute.</p>
+<div class="box warnb"><b class="t">Convention check for Eq. (10)</b>
+Multiplying out (9) with R<sub>y</sub> from (7) gives (c = cos, s = sin):
+<div class="eq"><table class="mx"><tr><td>cγcβcα − sγsα</td><td>cγcβsα + sγcα</td><td>cγsβ</td></tr><tr><td>−sγcβcα − cγsα</td><td>−sγcβsα + cγcα</td><td>−sγsβ</td></tr><tr><td>−sβcα</td><td>−sβsα</td><td>cβ</td></tr></table></div>
+The matrix printed as Eq. (10),
+<div class="eq"><table class="mx"><tr><td>cγcα − sγcβsα</td><td>cγsα + sγcβcα</td><td>sγsβ</td></tr><tr><td>−sγcα − cγcβsα</td><td>−sγsα + cγcβcα</td><td>cγsβ</td></tr><tr><td>sβsα</td><td>−sβcα</td><td>cβ</td></tr></table></div>
+is instead R<sub>z</sub>(γ)R<sub>x</sub>(β)R<sub>z</sub>(α): the <b>z–x–z</b> convention of Goldstein, which the book's footnote cites. I checked both numerically. Both are valid "general rotation matrices", orthogonal with det +1, but they use different middle axes. The 3D lab lets you switch between them. For exams, state which convention you use.</div>
+<div class="box fact"><b class="t">Every rotation has an axis (Euler's theorem)</b> A 3×3 orthogonal R with det +1 always has eigenvalue <b>1</b>. Its eigenvector is the rotation axis n̂. The other two eigenvalues are e<sup>±iφ</sup>, where φ is the rotation angle, and Tr R = 1 + 2cos φ. So any combination of Euler rotations equals a single rotation about one axis. The lab finds that axis.</div>
+<div class="lab"><h4>🔬 Lab 2: Euler angles in 3D (drag to rotate the view)</h4>
+<p class="small">Thin axes: the original x, y, z. Thick axes: the new x′, y′, z′ (the rows of R). Press "Animate steps" to watch the three rotations happen one after another. The purple arrow is the single equivalent rotation axis.</p>
+<div class="grid2">
+<div><canvas id="cvE" width="480" height="480"></canvas></div>
+<div>
+<div class="ctrl"><label>α <input type="range" id="eA" min="0" max="360" step="1" value="40"><span id="eAv"></span></label><label>β <input type="range" id="eB" min="0" max="180" step="1" value="50"><span id="eBv"></span></label><label>γ <input type="range" id="eG" min="0" max="360" step="1" value="30"><span id="eGv"></span></label></div>
+<div class="ctrl"><label>convention <select id="eConv"><option value="zyz">z–y–z (Eq. 9 with Eq. 7)</option><option value="zxz">z–x–z (Eq. 10, Goldstein)</option></select></label><button id="eAnim">▶ Animate steps</button></div>
+<div class="readout out" id="eOut"></div>
+</div></div></div>
+</section>
+
+<section id="s3">
+<h2>3. Pauli spin matrices (Eqs. 11–19)</h2>
+<p>The spin operator is s = (ħ/2)σ, with σ<sub>x</sub>, σ<sub>y</sub>, σ<sub>z</sub> hermitian and satisfying</p>
+<div class="eq">σ<sub>x</sub>² = σ<sub>y</sub>² = σ<sub>z</sub>² = 1 &nbsp;(12a), &nbsp;&nbsp; σ<sub>x</sub>σ<sub>y</sub> + σ<sub>y</sub>σ<sub>x</sub> = σ<sub>y</sub>σ<sub>z</sub> + σ<sub>z</sub>σ<sub>y</sub> = σ<sub>z</sub>σ<sub>x</sub> + σ<sub>x</sub>σ<sub>z</sub> = 0 &nbsp;(12b)</div>
+<p>Numbers commute, so anticommuting nonzero objects cannot be numbers. Try 2×2 matrices.</p>
+<h3>Derivation, step by step</h3>
+<ol>
+<li><b>Make σ<sub>z</sub> diagonal.</b> Only one of them can be diagonal: diagonal matrices commute with each other, while these anticommute. σ<sub>z</sub>² = I ⇒ its diagonal entries are ±1. They cannot be equal, since ±I commutes with everything. So σ<sub>z</sub> = diag(1, −1) (the order is a matter of choice). &nbsp;(13)</li>
+<li><b>Anticommute with σ<sub>z</sub>:</b> for M = [[a, b], [c, d]], σ<sub>z</sub>M + Mσ<sub>z</sub> = [[2a, 0], [0, −2d]] = 0 ⇒ a = d = 0. So M = [[0, b], [c, 0]]. &nbsp;(14)</li>
+<li><b>Square to I:</b> [[0, b], [c, 0]]² = [[bc, 0], [0, bc]] = I ⇒ bc = 1. &nbsp;(15)</li>
+<li>So σ<sub>x</sub> = [[0, p], [q, 0]] and σ<sub>y</sub> = [[0, r], [s, 0]] with pq = 1, rs = 1. &nbsp;(16, 17)</li>
+<li><b>σ<sub>x</sub> and σ<sub>y</sub> anticommute:</b> σ<sub>x</sub>σ<sub>y</sub> + σ<sub>y</sub>σ<sub>x</sub> = diag(ps + qr, qr + ps) = 0 ⇒ ps + qr = 0. &nbsp;(18)</li>
+<li>Choose p = 1 ⇒ q = 1. Then s + r = 0 and rs = 1 ⇒ −r² = 1 ⇒ r = −i, s = i. <b>Hermiticity</b> is automatic: s = r*.</li>
+</ol>
+<div class="eq">σ<sub>x</sub> = <table class="mx"><tr><td>0</td><td>1</td></tr><tr><td>1</td><td>0</td></tr></table>, &nbsp; σ<sub>y</sub> = <table class="mx"><tr><td>0</td><td>−i</td></tr><tr><td>i</td><td>0</td></tr></table>, &nbsp; σ<sub>z</sub> = <table class="mx"><tr><td>1</td><td>0</td></tr><tr><td>0</td><td>−1</td></tr></table> &nbsp;&nbsp;(19)</div>
+<h3>Everything you need to know about them</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Property</th><th>Formula</th></tr>
+<tr><td>Product rule (master formula)</td><td><b>σ<sub>j</sub>σ<sub>k</sub> = δ<sub>jk</sub>I + iε<sub>jkl</sub>σ<sub>l</sub></b>, e.g. σ<sub>x</sub>σ<sub>y</sub> = iσ<sub>z</sub></td></tr>
+<tr><td>Commutator</td><td>[σ<sub>j</sub>, σ<sub>k</sub>] = 2iε<sub>jkl</sub>σ<sub>l</sub> ⇒ [s<sub>x</sub>, s<sub>y</sub>] = iħs<sub>z</sub></td></tr>
+<tr><td>Anticommutator</td><td>{σ<sub>j</sub>, σ<sub>k</sub>} = 2δ<sub>jk</sub>I</td></tr>
+<tr><td>Trace, det, eigenvalues</td><td>Tr σᵢ = 0, det σᵢ = −1, eigenvalues ±1</td></tr>
+<tr><td>Also unitary</td><td>σᵢ† = σᵢ = σᵢ⁻¹</td></tr>
+<tr><td>Product of all three</td><td>σ<sub>x</sub>σ<sub>y</sub>σ<sub>z</sub> = iI</td></tr>
+<tr><td>Basis of 2×2 matrices</td><td>any M = a₀I + a·σ, with a₀ = ½Tr M, aᵢ = ½Tr(σᵢM)</td></tr>
+<tr><td>(a·σ)(b·σ)</td><td>(a·b)I + i(a×b)·σ</td></tr>
+<tr><td>Spin along n̂</td><td>n̂·σ has eigenvalues ±1, eigenvector (cos θ/2, e<sup>iφ</sup>sin θ/2) for +1</td></tr>
+<tr><td>Rotation of a spinor</td><td>U = e<sup>−iθ(n̂·σ)/2</sup> = I cos(θ/2) − i(n̂·σ) sin(θ/2); θ = 2π gives −I!</td></tr>
+<tr><td>Ladder</td><td>σ<sub>±</sub> = σ<sub>x</sub> ± iσ<sub>y</sub>, [σ<sub>z</sub>, σ<sub>±</sub>] = ±2σ<sub>±</sub>, [σ₊, σ₋] = 4σ<sub>z</sub></td></tr>
+</table></div>
+</section>
+
+<section id="s4">
+<h2>4. 🔬 Pauli lab: algebra table and Bloch sphere</h2>
+<div class="lab"><h4>(a) Multiply any two</h4>
+<div class="ctrl"><label>first <select id="pa1"><option>I</option><option selected>σx</option><option>σy</option><option>σz</option><option>σ+</option><option>σ−</option></select></label><label>second <select id="pa2"><option>I</option><option>σx</option><option selected>σy</option><option>σz</option><option>σ+</option><option>σ−</option></select></label></div>
+<div id="paOut"></div>
+</div>
+<div class="lab"><h4>(b) Spin pointing along n̂ = (sin θ cos φ, sin θ sin φ, cos θ)</h4>
+<p class="small">The lab builds n̂·σ, finds its +1 eigenvector χ, and computes ⟨σ<sub>x</sub>⟩, ⟨σ<sub>y</sub>⟩, ⟨σ<sub>z</sub>⟩ = χ†σχ. They come out equal to n̂: the spin points where you told it to. "Precess" applies U = e<sup>−iωtσ<sub>z</sub>/2</sup>, which is a magnetic field along z, and the arrow turns around z (Larmor precession). Drag to rotate the view.</p>
+<div class="grid2">
+<div><canvas id="cvB" width="440" height="440"></canvas></div>
+<div>
+<div class="ctrl"><label>θ <input type="range" id="bT" min="0" max="180" step="1" value="60"><span id="bTv"></span></label><label>φ <input type="range" id="bP" min="0" max="360" step="1" value="30"><span id="bPv"></span></label></div>
+<div class="ctrl"><button id="bPrec">▶ Precess about z</button></div>
+<div class="readout out" id="bOut"></div>
+</div></div></div>
+</section>
+
+<section id="s5">
+<h2>5. Dirac matrices (Eqs. 20–26)</h2>
+<p>Dirac's Hamiltonian for a free relativistic particle is</p>
+<div class="eq">H = c(α<sub>x</sub>p<sub>x</sub> + α<sub>y</sub>p<sub>y</sub> + α<sub>z</sub>p<sub>z</sub>) + βmc² &nbsp;&nbsp;(20)</div>
+<p>We need H² = (p²c² + m²c⁴)I, Einstein's energy relation. Squaring (20) gives cross terms like α<sub>x</sub>α<sub>y</sub> + α<sub>y</sub>α<sub>x</sub>, which must vanish. So:</p>
+<div class="eq">α<sub>x</sub>² = α<sub>y</sub>² = α<sub>z</sub>² = β² = I &nbsp;(21a); &nbsp; all four <b>mutually anticommute</b> &nbsp;(21b)</div>
+<h3>Why they must be 4×4</h3>
+<ol>
+<li>2×2 is too small. Exercise 1: no nonzero 2×2 matrix anticommutes with all three σ's, so there is no room for a fourth.</li>
+<li>Make β diagonal with entries ±1, not all equal: β = [[I<sub>m</sub>, 0], [0, −I<sub>n</sub>]]. &nbsp;(22)</li>
+<li>Partition α<sub>i</sub> = [[A, B], [C, D]]. Anticommuting with β forces A = D = 0, and α<sub>i</sub>² = I gives BC = I, CB = I. &nbsp;(23, 24)</li>
+<li>B is m×n and C is n×m. BC = I<sub>m</sub> and CB = I<sub>n</sub> force m = n (Appendix II: a non-square matrix cannot have a two-sided inverse). We need m + n &gt; 2, so the smallest choice is <b>m = n = 2: 4×4 matrices</b>.</li>
+<li>Take B = C = σᵢ (Pauli): then BC = σᵢ² = I, and the α's anticommute because the σ's do.</li>
+</ol>
+<div class="eq">β = <table class="mx"><tr><td>I₂</td><td>0</td></tr><tr><td>0</td><td>−I₂</td></tr></table>, &nbsp; α<sub>i</sub> = <table class="mx"><tr><td>0</td><td>σᵢ</td></tr><tr><td>σᵢ</td><td>0</td></tr></table> &nbsp;&nbsp;(25, 26)</div>
+<div class="eq">α<sub>x</sub> = <table class="mx"><tr><td>0</td><td>0</td><td>0</td><td>1</td></tr><tr><td>0</td><td>0</td><td>1</td><td>0</td></tr><tr><td>0</td><td>1</td><td>0</td><td>0</td></tr><tr><td>1</td><td>0</td><td>0</td><td>0</td></tr></table> &nbsp; α<sub>y</sub> = <table class="mx"><tr><td>0</td><td>0</td><td>0</td><td>−i</td></tr><tr><td>0</td><td>0</td><td>i</td><td>0</td></tr><tr><td>0</td><td>−i</td><td>0</td><td>0</td></tr><tr><td>i</td><td>0</td><td>0</td><td>0</td></tr></table> &nbsp; α<sub>z</sub> = <table class="mx"><tr><td>0</td><td>0</td><td>1</td><td>0</td></tr><tr><td>0</td><td>0</td><td>0</td><td>−1</td></tr><tr><td>1</td><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td>−1</td><td>0</td><td>0</td></tr></table></div>
+<div class="box fact"><b class="t">Link to Section 13</b> In Kronecker-product language: <b>β = σ<sub>z</sub> ⊗ I₂</b> and <b>α<sub>i</sub> = σ<sub>x</sub> ⊗ σ<sub>i</sub></b>. The anticommutation follows from the mixed-product rule: α<sub>i</sub>α<sub>j</sub> + α<sub>j</sub>α<sub>i</sub> = σ<sub>x</sub>² ⊗ {σᵢ, σⱼ} = I ⊗ 2δᵢⱼI. And α<sub>i</sub>β + βα<sub>i</sub> = {σ<sub>x</sub>, σ<sub>z</sub>} ⊗ σᵢ = 0.</div>
+<div class="lab"><h4>🔬 Lab 3: check the Dirac algebra and find the energies</h4>
+<p class="small">Left: the table of anticommutators {M<sub>a</sub>, M<sub>b</sub>}/2 for the four matrices. It is I on the diagonal and 0 elsewhere. Right: H = c α·p + βmc² (with c = 1) is diagonalized numerically. The energies are always ±√(p² + m²), each <b>twice</b> (two spin states). The negative branch is what led Dirac to predict the positron.</p>
+<div class="grid2">
+<div id="dTab"></div>
+<div>
+<div class="ctrl"><label>p<sub>x</sub> <input type="range" id="dPx" min="-3" max="3" step="0.05" value="1"><span id="dPxv"></span></label><label>p<sub>y</sub> <input type="range" id="dPy" min="-3" max="3" step="0.05" value="0.5"><span id="dPyv"></span></label></div>
+<div class="ctrl"><label>p<sub>z</sub> <input type="range" id="dPz" min="-3" max="3" step="0.05" value="0"><span id="dPzv"></span></label><label>m <input type="range" id="dM" min="0" max="2" step="0.05" value="1"><span id="dMv"></span></label></div>
+<canvas id="cvD" width="440" height="240"></canvas>
+<div class="readout out" id="dOut"></div>
+</div></div></div>
+</section>
+
+<section id="s6">
+<h2>6. Infinite matrices (Eqs. 27–28)</h2>
+<p>A matrix is <b>infinite</b> if it has infinitely many rows or columns. (It does not mean the entries are infinite. A matrix with an infinite entry does not exist.) The index can be:</p>
+<ul>
+<li><b>discrete</b>: a<sub>ij</sub>, i, j = 1, 2, 3, … (denumerably infinite);</li>
+<li><b>continuous</b>: a<sub>xy</sub>, with x, y real numbers in an interval (nondenumerably infinite);</li>
+<li><b>mixed</b>: a<sub>ix</sub>, a matrix with discrete rows and continuous columns.</li>
+</ul>
+<p>A matrix is <b>square</b> if rows and columns are labelled by the <b>same scheme</b>. A hermitian infinite matrix must be square, since a<sub>μν</sub>* = a<sub>νμ</sub> needs μ and ν to run over the same set.</p>
+<div class="tbl-wrap"><table>
+<tr><th></th><th>Discrete indices</th><th>Continuous indices</th></tr>
+<tr><td>Product</td><td>c<sub>ij</sub> = Σ<sub>k</sub> a<sub>ik</sub>b<sub>kj</sub> (the series must converge) &nbsp;(27)</td><td>c<sub>iy</sub> = ∫ a<sub>ix</sub>b<sub>xy</sub> dx (the integral must converge) &nbsp;(28)</td></tr>
+<tr><td>Unit matrix</td><td>(I)<sub>μν</sub> = δ<sub>μν</sub></td><td>(I)<sub>μν</sub> = δ(μ − ν): <b>diagonal "entries" are not 1</b> (they are infinite in the δ-function sense)</td></tr>
+<tr><td>Example</td><td>⟨m|x̂|n⟩ for the harmonic oscillator</td><td>⟨x|p̂|x′⟩ = −iħ δ′(x − x′)</td></tr>
+</table></div>
+<div class="box warnb"><b class="t">Strange things happen when n = ∞</b>
+<ul style="margin:4px 0">
+<li>A finite nonsingular matrix must be square, but an infinite nonsingular matrix can be "rectangular".</li>
+<li>Tr(AB − BA) = 0 for finite matrices, so [A, B] = iħI is <b>impossible</b> for finite matrices (the trace of the right side is iħn ≠ 0). The canonical commutator [x, p] = iħ <b>forces</b> infinite matrices.</li>
+<li>The shift matrix S (1's just below the diagonal) satisfies SᵀS = I but SSᵀ ≠ I, so it has a left inverse that is not a right inverse.</li>
+</ul></div>
+</section>
+
+<section id="s7">
+<h2>7. Matrix representation of an operator (Eqs. 29–34)</h2>
+<p>The central problem of quantum mechanics is the eigenvalue equation of a hermitian operator P:</p>
+<div class="eq">Pψ<sub>μ</sub> = λ<sub>μ</sub>ψ<sub>μ</sub> &nbsp;&nbsp;(29, 30)</div>
+<p>Its eigenfunctions ψ<sub>μ</sub> form an orthonormal basis of the Hilbert space, so any state is φ = ∫<sub>μ</sub> a<sub>μ</sub>ψ<sub>μ</sub>. &nbsp;(31) &nbsp; (∫<sub>μ</sub> means a sum over the discrete part and an integral over the continuous part.)</p>
+<h3>The practical recipe</h3>
+<ol>
+<li>We don't know the ψ<sub>μ</sub> yet. So choose <b>any</b> convenient orthonormal basis {φ<sub>μ</sub>}, e.g. the harmonic-oscillator states or plane waves.</li>
+<li>Compute the <b>matrix elements</b> P<sub>μν</sub> = (φ<sub>μ</sub>, Pφ<sub>ν</sub>) = ∫φ<sub>μ</sub>* Pφ<sub>ν</sub> dτ. &nbsp;(32)</li>
+<li>Arrange them as a matrix <b>P = [P<sub>μν</sub>]</b>, the operator matrix (generally infinite). &nbsp;(33)</li>
+<li><b>Diagonalize</b> it by a unitary transformation. The diagonal entries are the eigenvalues λ<sub>μ</sub>, and the columns of the unitary matrix give the eigenfunctions as combinations of the φ's.</li>
+</ol>
+<div class="box thm"><b class="t">In its own eigenbasis an operator is diagonal (Eq. 34)</b>
+(ψ<sub>μ</sub>, Pψ<sub>ν</sub>) = (ψ<sub>μ</sub>, λ<sub>ν</sub>ψ<sub>ν</sub>) = λ<sub>ν</sub>(ψ<sub>μ</sub>, ψ<sub>ν</sub>) = λ<sub>μ</sub>δ<sub>μν</sub> (discrete) or λ<sub>μ</sub>δ(μ − ν) (continuous).<br>
+So "the basis that makes an operator diagonal" and "the eigenfunctions of that operator" mean the same thing.</div>
+<p>In practice the infinite matrix is <b>truncated</b> to N×N and diagonalized numerically. As N grows, the low eigenvalues converge. This is how most of quantum chemistry and nuclear physics is actually computed.</p>
+<div class="lab"><h4>🔬 Lab 4: anharmonic oscillator by matrix diagonalization</h4>
+<p class="small">H = p²/2 + x²/2 + λx⁴ (units ħ = m = ω = 1). Basis: harmonic-oscillator states |n⟩, n = 0 … N−1, in which x = (a + a†)/√2 with ⟨n−1|a|n⟩ = √n. The lab builds the N×N matrix of H, diagonalizes it, and plots the lowest levels against N. At λ = 0 they are exactly n + ½. Turn on λ and watch the levels shift up and settle down as N increases: the truncated matrix converges to the true energies.</p>
+<div class="grid2">
+<div><canvas id="cvA" width="460" height="300"></canvas></div>
+<div>
+<div class="ctrl"><label>λ <input type="range" id="aL" min="0" max="1" step="0.01" value="0.1"><span id="aLv"></span></label><label>N <input type="range" id="aN" min="2" max="30" step="1" value="12"><span id="aNv"></span></label></div>
+<div id="aMat" style="overflow-x:auto"></div>
+<div class="readout out" id="aOut"></div>
+</div></div></div>
+</section>
+
+<section id="s8">
+<h2>8. Summary sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Object</th><th>Key facts</th></tr>
+<tr><td>R<sub>z</sub>(θ) (passive)</td><td>[[c, s], [−s, c]]; orthogonal, det 1, R(a)R(b) = R(a + b), eigenvalues e<sup>±iθ</sup></td></tr>
+<tr><td>Euler angles</td><td>R = R<sub>z</sub>(γ)R<sub>y or x</sub>(β)R<sub>z</sub>(α); first rotation on the right; check the convention</td></tr>
+<tr><td>3D rotation</td><td>eigenvalue 1 ↔ axis; Tr R = 1 + 2cos φ</td></tr>
+<tr><td>Pauli</td><td>σ<sub>j</sub>σ<sub>k</sub> = δ<sub>jk</sub>I + iε<sub>jkl</sub>σ<sub>l</sub>; Tr 0, det −1, eigenvalues ±1, hermitian and unitary</td></tr>
+<tr><td>Dirac</td><td>4×4: β = σ<sub>z</sub>⊗I, αᵢ = σ<sub>x</sub>⊗σᵢ; all square to I and mutually anticommute; E = ±√(p²c² + m²c⁴)</td></tr>
+<tr><td>Infinite matrices</td><td>products need convergent sums/integrals; continuous unit matrix = δ(μ − ν)</td></tr>
+<tr><td>Operator matrix</td><td>P<sub>μν</sub> = (φ<sub>μ</sub>, Pφ<sub>ν</sub>); diagonal ⇔ basis = eigenfunctions</td></tr>
+</table></div>
+</section>
+
+<section id="s9">
+<h2>9. Book's Exercise 14: all problems solved</h2>
+<div class="prob"><div class="q">1. Show that there is no nonzero 2×2 matrix that anticommutes with all three Pauli matrices.</div>
+<details><summary>Show solution</summary>
+<p><b>Method 1 (direct):</b> anticommuting with σ<sub>z</sub> gives M = [[0, b], [c, 0]] (Eq. 14).<br>
+With σ<sub>x</sub>: σ<sub>x</sub>M + Mσ<sub>x</sub> = [[c, 0], [0, b]] + [[b, 0], [0, c]] = (b + c)I = 0 ⇒ c = −b.<br>
+With σ<sub>y</sub>: σ<sub>y</sub>M = [[−ic, 0], [0, ib]], Mσ<sub>y</sub> = [[ib, 0], [0, −ic]], sum = i(b − c)I = 0 ⇒ c = b.<br>
+Together b = c = 0 ⇒ M = 0. ∎</p>
+<p><b>Method 2 (elegant):</b> write M = a₀I + a·σ. Then {σⱼ, M} = 2a₀σⱼ + 2aⱼI (using {σⱼ, σₖ} = 2δⱼₖI). This vanishes ⇔ a₀ = 0 and aⱼ = 0 for every j, i.e. M = 0. ∎ This is why Dirac needed matrices bigger than 2×2.</p></details></div>
+<div class="prob"><div class="q">2. Verify that the Pauli matrices satisfy (12), and show (a) [σ<sub>x</sub>, σ<sub>y</sub>] = 2iσ<sub>z</sub> etc.; (b) σ² = σ<sub>x</sub>² + σ<sub>y</sub>² + σ<sub>z</sub>² = 3I; (c) [σ², σᵢ] = 0; (d) [σ<sub>z</sub>, σ<sub>±</sub>] = ±2σ<sub>±</sub>, σ<sub>±</sub> = σ<sub>x</sub> ± iσ<sub>y</sub>; (e) [σ₊, σ₋] = 4σ<sub>z</sub>.</div>
+<details><summary>Show solution</summary>
+<p><b>(12):</b> σ<sub>x</sub>² = [[0, 1], [1, 0]]² = I. σ<sub>y</sub>² = [[(−i)(i), 0], [0, (i)(−i)]] = I. σ<sub>z</sub>² = I.<br>
+σ<sub>x</sub>σ<sub>y</sub> = [[0, 1], [1, 0]][[0, −i], [i, 0]] = [[i, 0], [0, −i]] = iσ<sub>z</sub>. σ<sub>y</sub>σ<sub>x</sub> = [[−i, 0], [0, i]] = −iσ<sub>z</sub>. Their sum is 0 ✓. Similarly σ<sub>y</sub>σ<sub>z</sub> = iσ<sub>x</sub> = −σ<sub>z</sub>σ<sub>y</sub> and σ<sub>z</sub>σ<sub>x</sub> = iσ<sub>y</sub> = −σ<sub>x</sub>σ<sub>z</sub>.</p>
+<p><b>(a)</b> [σ<sub>x</sub>, σ<sub>y</sub>] = iσ<sub>z</sub> − (−iσ<sub>z</sub>) = 2iσ<sub>z</sub>, and cyclically [σ<sub>y</sub>, σ<sub>z</sub>] = 2iσ<sub>x</sub>, [σ<sub>z</sub>, σ<sub>x</sub>] = 2iσ<sub>y</sub>.</p>
+<p><b>(b)</b> I + I + I = 3I. (For spin ½: s² = (ħ²/4)·3I = ħ²·½(½ + 1)I ✓.)</p>
+<p><b>(c)</b> σ² = 3I commutes with everything.</p>
+<p><b>(d)</b> σ₊ = [[0, 2], [0, 0]], σ₋ = [[0, 0], [2, 0]]. σ<sub>z</sub>σ₊ = [[0, 2], [0, 0]] and σ₊σ<sub>z</sub> = [[0, −2], [0, 0]], so [σ<sub>z</sub>, σ₊] = [[0, 4], [0, 0]] = 2σ₊. Similarly [σ<sub>z</sub>, σ₋] = −2σ₋.</p>
+<p><b>(e)</b> σ₊σ₋ = [[4, 0], [0, 0]], σ₋σ₊ = [[0, 0], [0, 4]], difference = 4σ<sub>z</sub> ✓.</p></details></div>
+<div class="prob"><div class="q">3. Find a similarity transformation that makes σ<sub>x</sub> diagonal. Find σ<sub>x</sub>, σ<sub>y</sub>, σ<sub>z</sub> in the new representation.</div>
+<details><summary>Show solution</summary>
+<p>Eigenvectors of σ<sub>x</sub>: (1, 1)/√2 for +1 and (1, −1)/√2 for −1. U = (1/√2)[[1, 1], [1, −1]] (the Hadamard matrix; U = U† = U⁻¹).</p>
+<p>New matrices U†σU:</p>
+<div class="eq">σ<sub>x</sub>′ = <table class="mx"><tr><td>1</td><td>0</td></tr><tr><td>0</td><td>−1</td></tr></table>, &nbsp; σ<sub>y</sub>′ = <table class="mx"><tr><td>0</td><td>i</td></tr><tr><td>−i</td><td>0</td></tr></table> = −σ<sub>y</sub>, &nbsp; σ<sub>z</sub>′ = <table class="mx"><tr><td>0</td><td>1</td></tr><tr><td>1</td><td>0</td></tr></table></div>
+<p>Check: still hermitian, square to I, anticommute, and σ<sub>x</sub>′σ<sub>y</sub>′ = iσ<sub>z</sub>′ ✓: [[1, 0], [0, −1]][[0, i], [−i, 0]] = [[0, i], [i, 0]] = i[[0, 1], [1, 0]].</p></details></div>
+<div class="prob"><div class="q">4. Do the same with σ<sub>y</sub> diagonal.</div>
+<details><summary>Show solution</summary>
+<p>Eigenvectors of σ<sub>y</sub>: (1, i)/√2 for +1 and (1, −i)/√2 for −1. U = (1/√2)[[1, 1], [i, −i]].</p>
+<div class="eq">σ<sub>x</sub>′ = U†σ<sub>x</sub>U = <table class="mx"><tr><td>0</td><td>−i</td></tr><tr><td>i</td><td>0</td></tr></table>, &nbsp; σ<sub>y</sub>′ = <table class="mx"><tr><td>1</td><td>0</td></tr><tr><td>0</td><td>−1</td></tr></table>, &nbsp; σ<sub>z</sub>′ = <table class="mx"><tr><td>0</td><td>1</td></tr><tr><td>1</td><td>0</td></tr></table></div>
+<p>Checked numerically. Check the algebra: σ<sub>x</sub>′σ<sub>y</sub>′ = [[0, i], [i, 0]] = iσ<sub>z</sub>′ ✓. (A different choice of eigenvector phases gives an equivalent set that differs by signs.)</p></details></div>
+<div class="prob"><div class="q">5. Show that α<sub>x</sub>, α<sub>y</sub>, α<sub>z</sub>, β satisfy Eqs. (21).</div>
+<details><summary>Show solution</summary>
+<p>Block multiplication with αᵢ = [[0, σᵢ], [σᵢ, 0]] and β = [[I, 0], [0, −I]]:</p>
+<ul><li>αᵢ² = [[σᵢ², 0], [0, σᵢ²]] = I; β² = [[I, 0], [0, I]] = I.</li>
+<li>αᵢαⱼ + αⱼαᵢ = [[σᵢσⱼ + σⱼσᵢ, 0], [0, σᵢσⱼ + σⱼσᵢ]] = 0 for i ≠ j.</li>
+<li>αᵢβ = [[0, −σᵢ], [σᵢ, 0]], βαᵢ = [[0, σᵢ], [−σᵢ, 0]] ⇒ αᵢβ + βαᵢ = 0. ∎</li></ul>
+<p>Lab 3 checks all 16 anticommutators numerically.</p></details></div>
+</section>
+
+<section id="s10">
+<h2>10. Practice set (CSIR-NET / GATE style)</h2>
+<div class="prob"><div class="q">P1. Compute (σ<sub>x</sub> + iσ<sub>y</sub>)² and e<sup>iπσ<sub>y</sub>/2</sup>. <span class="tag">Pauli</span></div>
+<details><summary>Show solution</summary><p>σ₊² = [[0, 2], [0, 0]]² = 0. e<sup>iπσ<sub>y</sub>/2</sup> = I cos(π/2) + iσ<sub>y</sub> sin(π/2) = iσ<sub>y</sub> = [[0, 1], [−1, 0]].</p></details></div>
+<div class="prob"><div class="q">P2. Eigenvalues of σ<sub>x</sub> + σ<sub>y</sub> + σ<sub>z</sub>? <span class="tag">eigen</span></div>
+<details><summary>Show solution</summary><p>It is √3(n̂·σ) with n̂ = (1, 1, 1)/√3, so the eigenvalues are <b>±√3</b>. (Check: (a·σ)² = |a|²I = 3I.)</p></details></div>
+<div class="prob"><div class="q">P3. Find Tr(σ<sub>x</sub>σ<sub>y</sub>σ<sub>z</sub>). <span class="tag">trace</span></div>
+<details><summary>Show solution</summary><p>σ<sub>x</sub>σ<sub>y</sub> = iσ<sub>z</sub> ⇒ σ<sub>x</sub>σ<sub>y</sub>σ<sub>z</sub> = iσ<sub>z</sub>² = iI ⇒ Tr = <b>2i</b>.</p></details></div>
+<div class="prob"><div class="q">P4. A rotation matrix has Tr R = 0. What is the rotation angle? <span class="tag">rotation</span></div>
+<details><summary>Show solution</summary><p>1 + 2cos φ = 0 ⇒ cos φ = −½ ⇒ <b>φ = 120°</b>. Example: the cyclic permutation [[0, 0, 1], [1, 0, 0], [0, 1, 0]], a rotation by 120° about (1, 1, 1).</p></details></div>
+<div class="prob"><div class="q">P5. Is R<sub>z</sub>(90°)R<sub>x</sub>(90°) = R<sub>x</sub>(90°)R<sub>z</sub>(90°)? <span class="tag">order</span></div>
+<details><summary>Show solution</summary><p>No. Finite rotations about different axes do not commute. Try it with a book: turn it 90° about z then x, versus x then z. The difference is a second-order effect in the angles: infinitesimal rotations do commute to first order, and their commutator gives the angular momentum algebra.</p></details></div>
+<div class="prob"><div class="q">P6. Expectation of σ<sub>x</sub> in the state χ = (cos(θ/2), e<sup>iφ</sup>sin(θ/2)). <span class="tag">Bloch</span></div>
+<details><summary>Show solution</summary><p>χ†σ<sub>x</sub>χ = 2 Re[cos(θ/2)·e<sup>iφ</sup>sin(θ/2)] = sin θ cos φ. Likewise ⟨σ<sub>y</sub>⟩ = sin θ sin φ and ⟨σ<sub>z</sub>⟩ = cos θ.</p></details></div>
+<div class="prob"><div class="q">P7. Show that γ⁰ = β, γⁱ = βαᵢ satisfy {γ<sup>μ</sup>, γ<sup>ν</sup>} = 2η<sup>μν</sup>I, η = diag(1, −1, −1, −1). <span class="tag">Dirac</span></div>
+<details><summary>Show solution</summary><p>(γ⁰)² = β² = I. (γⁱ)² = βαᵢβαᵢ = −β²αᵢ² = −I (since αᵢβ = −βαᵢ). For i ≠ j: γⁱγʲ + γʲγⁱ = βαᵢβαⱼ + βαⱼβαᵢ = −(αᵢαⱼ + αⱼαᵢ) = 0. {γ⁰, γⁱ} = β²αᵢ + βαᵢβ = αᵢ − αᵢ = 0. ∎</p></details></div>
+<div class="prob"><div class="q">P8. Why can't [x, p] = iħI hold for finite matrices? <span class="tag">infinite</span></div>
+<details><summary>Show solution</summary><p>Tr(xp − px) = Tr(xp) − Tr(px) = 0, but Tr(iħI<sub>n</sub>) = iħn ≠ 0. A contradiction, so the matrices must be infinite.</p></details></div>
+<div class="prob"><div class="q">P9. In the HO basis, ⟨m|x|n⟩ = (1/√2)(√n δ<sub>m,n−1</sub> + √(n+1) δ<sub>m,n+1</sub>). Find ⟨0|x²|0⟩ and ⟨0|x²|2⟩. <span class="tag">matrix elements</span></div>
+<details><summary>Show solution</summary><p>(x²)<sub>00</sub> = Σ<sub>k</sub> x<sub>0k</sub>x<sub>k0</sub> = x<sub>01</sub>x<sub>10</sub> = (1/√2)² = <b>½</b>. (x²)<sub>02</sub> = x<sub>01</sub>x<sub>12</sub> = (1/√2)(√2/√2) = <b>1/√2</b>. This is matrix multiplication with infinite matrices (Eq. 27). Only a few terms are nonzero.</p></details></div>
+<div class="prob"><div class="q">P10. U = e<sup>−iθσ<sub>z</sub>/2</sup>. Find U for θ = 2π and interpret. <span class="tag">spinor</span></div>
+<details><summary>Show solution</summary><p>U = I cos π − iσ<sub>z</sub> sin π = <b>−I</b>. A full 360° rotation multiplies a spinor by −1. You need 720° to return to +1. This has been confirmed in neutron interferometry experiments.</p></details></div>
+</section>
+
+<section id="s11" class="quiz">
+<h2>11. Self-test quiz</h2>
+<div id="quiz"></div>
+<p><b>Score: <span id="qScore">0</span> / <span id="qTot">0</span></b></p>
+</section>
+
+<section id="s12">
+<h2>12. Interesting facts</h2>
+<div class="box fact"><b class="t">Gimbal lock</b> At β = 0 the first and third Euler rotations are about the same axis, so α and γ merge into one angle and a degree of freedom is lost. The Apollo 11 guidance computer had to avoid this ("gimbal lock"). Modern spacecraft and video games use quaternions, which are closely related to the Pauli matrices: iσ<sub>x</sub>, iσ<sub>y</sub>, iσ<sub>z</sub> multiply like −i, −j, −k.</div>
+<div class="box fact"><b class="t">Heisenberg's matrix mechanics (1925)</b> Heisenberg found rules for multiplying arrays of transition amplitudes without knowing they were matrices. Born recognized the "matrix multiplication", and then Born, Jordan and Heisenberg wrote down [x, p] = iħ. Infinite matrices were the very first form of quantum mechanics, before Schrödinger's waves.</div>
+<div class="box fact"><b class="t">Dirac's surprise</b> The 4 components of the Dirac spinor give 2 spin states × 2 energy signs. Dirac first tried to read the negative energies as protons, but the prediction turned out to be the positron, discovered by Anderson in 1932.</div>
+<div class="box fact"><b class="t">The only anticommuting families</b> The number of mutually anticommuting n×n matrices that square to I is at most 2k + 1 when n = 2<sup>k</sup>m with m odd. For 2×2 that is 3 (the Pauli matrices), for 4×4 it is 5 (Dirac's four plus γ⁵). These are Clifford algebras, which also describe rotations in any dimension.</div>
+</section>
+</div>
+<script>
+/* ---------- small linear-algebra toolkit ---------- */
+const $=id=>document.getElementById(id);
+const cssv=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const eye=n=>Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0));
+const zeros=n=>Array.from({length:n},()=>Array(n).fill(0));
+const clone=M=>M.map(r=>r.slice());
+const mul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>s+v*B[k][j],0)));
+const add=(A,B)=>A.map((r,i)=>r.map((v,j)=>v+B[i][j]));
+const sub=(A,B)=>A.map((r,i)=>r.map((v,j)=>v-B[i][j]));
+const scl=(k,A)=>A.map(r=>r.map(v=>k*v));
+const trc=A=>A.reduce((s,r,i)=>s+r[i],0);
+const T=A=>A[0].map((_,j)=>A.map(r=>r[j]));
+const maxAbs=A=>Math.max(...A.flat().map(Math.abs));
+const mv=(A,x)=>A.map(r=>r.reduce((s,v,k)=>s+v*x[k],0));
+const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
+const nrm=a=>Math.sqrt(dot(a,a));
+const neg=s=>String(s).replace(/-/g,'−');
+function fmt(x,dec=3){
+  if(!isFinite(x))return '∞';
+  if(Math.abs(x)<1e-9)return '0';
+  const r=Math.round(x); if(Math.abs(x-r)<1e-7*Math.max(1,Math.abs(x)))return neg(r);
+  for(let q=2;q<=12;q++){const p=Math.round(x*q);if(Math.abs(x*q-p)<1e-7*q)return neg(p)+'/'+q;}
+  return neg(+x.toFixed(dec));
+}
+function mxH(M,heat,scale){
+  const s=scale||Math.max(1e-12,maxAbs(M));
+  return '<table class="mx">'+M.map(r=>'<tr>'+r.map(v=>{
+    let st='';
+    if(heat){const a=Math.min(1,Math.abs(v)/s)*0.55;if(Math.abs(v)>1e-9)st=` style="background:${v>0?`rgba(47,111,223,${a})`:`rgba(201,42,42,${a})`}"`;}
+    return `<td${st}>${fmt(v)}</td>`;}).join('')+'</tr>').join('')+'</table>';
+}
+function rank(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol)continue;
+    [A[r],A[p]]=[A[p],A[r]];
+    for(let i=r+1;i<n;i++){const f=A[i][c]/A[r][c];for(let j=c;j<m;j++)A[i][j]-=f*A[r][j];}
+    r++;
+  }
+  return r;
+}
+function nullspace(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  const piv=[];let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol){for(let i=r;i<n;i++)A[i][c]=0;continue;}
+    [A[r],A[p]]=[A[p],A[r]];
+    const d=A[r][c];for(let j=0;j<m;j++)A[r][j]/=d;
+    for(let i=0;i<n;i++)if(i!==r){const f=A[i][c];for(let j=0;j<m;j++)A[i][j]-=f*A[r][j];}
+    piv.push(c);r++;
+  }
+  const basis=[];
+  for(let f=0;f<m;f++){if(piv.includes(f))continue;
+    const v=Array(m).fill(0);v[f]=1;piv.forEach((c,i)=>{v[c]=-A[i][f];});basis.push(v);}
+  return basis;
+}
+function inv(M){
+  const n=M.length,A=M.map((r,i)=>r.concat(eye(n)[i]));
+  for(let c=0;c<n;c++){
+    let p=c;for(let i=c+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<1e-12)return null;
+    [A[c],A[p]]=[A[p],A[c]];const d=A[c][c];for(let j=0;j<2*n;j++)A[c][j]/=d;
+    for(let i=0;i<n;i++)if(i!==c){const f=A[i][c];for(let j=0;j<2*n;j++)A[i][j]-=f*A[c][j];}
+  }
+  return A.map(r=>r.slice(n));
+}
+/* Faddeev–LeVerrier: det(λI−A)=Σ c[k] λ^k, c[n]=1 */
+function charCoeffs(A){
+  const n=A.length,c=Array(n+1).fill(0);c[n]=1;let M=zeros(n);
+  for(let k=1;k<=n;k++){M=add(mul(A,M),scl(c[n-k+1],eye(n)));c[n-k]=-trc(mul(A,M))/k;}
+  return c;
+}
+/* complex helpers + Durand–Kerner roots of monic poly (c indexed by power) */
+const cm=(a,b)=>[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]];
+const cd=(a,b)=>{const d=b[0]*b[0]+b[1]*b[1];return[(a[0]*b[0]+a[1]*b[1])/d,(a[1]*b[0]-a[0]*b[1])/d];};
+function polyRoots(c){
+  const n=c.length-1;if(n===1)return[[-c[0],0]];
+  let z=Array.from({length:n},(_,k)=>{let w=[1,0];for(let i=0;i<=k;i++)w=cm(w,[0.4,0.9]);return w;});
+  const R=1+Math.max(...c.slice(0,n).map(Math.abs));z=z.map(w=>[w[0]*R,w[1]*R]);
+  const ev=x=>{let s=[1,0];for(let k=n-1;k>=0;k--)s=[s[0]*x[0]-s[1]*x[1]+c[k],s[0]*x[1]+s[1]*x[0]];return s;};
+  for(let it=0;it<2000;it++){
+    let delta=0;
+    z=z.map((zi,i)=>{let den=[1,0];z.forEach((zj,j)=>{if(j!==i)den=cm(den,[zi[0]-zj[0],zi[1]-zj[1]]);});
+      if(Math.hypot(den[0],den[1])<1e-300)den=[1e-12,0];
+      const q=cd(ev(zi),den);delta=Math.max(delta,Math.hypot(q[0],q[1]));return[zi[0]-q[0],zi[1]-q[1]];});
+    if(delta<1e-14)break;
+  }
+  return z;
+}
+function snap(x){for(const q of [1,2,3,4,6,12]){const r=Math.round(x*q)/q;if(Math.abs(x-r)<2e-4)return r;}return x;}
+function eigGroups(A){
+  const z=polyRoots(charCoeffs(A)),used=Array(z.length).fill(false),G=[];
+  const tol=2e-3*Math.max(1,maxAbs(A));
+  for(let i=0;i<z.length;i++){if(used[i])continue;const cl=[z[i]];used[i]=true;
+    for(let j=i+1;j<z.length;j++)if(!used[j]&&Math.hypot(z[j][0]-z[i][0],z[j][1]-z[i][1])<tol){cl.push(z[j]);used[j]=true;}
+    let re=cl.reduce((s,w)=>s+w[0],0)/cl.length,im=cl.reduce((s,w)=>s+w[1],0)/cl.length;
+    if(Math.abs(im)<1e-6)im=0;re=snap(re);if(im)im=snap(im);
+    G.push({re,im,m:cl.length});}
+  G.sort((a,b)=>b.re-a.re||b.im-a.im);return G;
+}
+const powM=(M,k)=>{let R=eye(M.length);for(let i=0;i<k;i++)R=mul(R,M);return R;};
+const lamF=a=>a===0?'λ':(a>0?`(λ − ${fmt(a)})`:`(λ + ${fmt(-a)})`);
+const supN=k=>k===1?'':String(k).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+function minimalPoly(A){
+  const G=eigGroups(A),n=A.length;
+  if(G.some(g=>g.im!==0))return{G,complex:true};
+  const sc=Math.max(1,maxAbs(A));
+  let tups=[[]];G.forEach(g=>{const nt=[];tups.forEach(t=>{for(let r=1;r<=g.m;r++)nt.push(t.concat(r));});tups=nt;});
+  tups.sort((a,b)=>a.reduce((s,v)=>s+v,0)-b.reduce((s,v)=>s+v,0));
+  const tried=[];
+  for(const t of tups){
+    let P=eye(n);G.forEach((g,i)=>{P=mul(P,powM(sub(A,scl(g.re,eye(n))),t[i]));});
+    const deg=t.reduce((s,v)=>s+v,0),zero=maxAbs(P)<1e-6*Math.pow(sc,deg);
+    tried.push({t,P,zero});if(zero)return{G,r:t,tried};
+  }
+  return{G,r:G.map(g=>g.m),tried};
+}
+function expandRoots(rs){let p=[1];rs.forEach(a=>{const q=Array(p.length+1).fill(0);p.forEach((v,i)=>{q[i]+=v;q[i+1]-=a*v;});p=q;});return p;}
+function polyStr(p,v,mat){
+  const d=p.length-1;let s='';
+  p.forEach((c,i)=>{if(Math.abs(c)<1e-9)return;const k=d-i;const a=Math.abs(c);
+    const coef=(a===1&&k>0)?'':fmt(a);const term=k===0?(mat?coef+'I':fmt(a)):(k===1?coef+v:coef+v+supN(k));
+    s+=(s===''?(c<0?'−':''):(c<0?' − ':' + '))+term;});
+  return s||'0';
+}
+function makeEditor(id,M,cb){
+  const box=$(id);let n=M.length;
+  function build(M){n=M.length;box.innerHTML='<div style="display:grid;grid-template-columns:repeat('+n+',58px);gap:4px">'+M.flat().map((v,i)=>`<input type="number" step="any" data-i="${i}" value="${v}" style="width:58px">`).join('')+'</div>';
+    box.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',cb));}
+  build(M);
+  return{get(){const v=[...box.querySelectorAll('input')].map(i=>parseFloat(i.value)||0);return Array.from({length:n},(_,i)=>v.slice(i*n,i*n+n));},
+         set(M){build(M);cb();}};
+}
+function arrow(ctx,x0,y0,x1,y1,col,w=2.5,dash){
+  ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;if(dash)ctx.setLineDash(dash);
+  ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();ctx.setLineDash([]);
+  const a=Math.atan2(y1-y0,x1-x0),L=Math.hypot(x1-x0,y1-y0);
+  if(L>6){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-10*Math.cos(a-0.4),y1-10*Math.sin(a-0.4));ctx.lineTo(x1-10*Math.cos(a+0.4),y1-10*Math.sin(a+0.4));ctx.fill();}
+  ctx.restore();
+}
+function canvasPt(cv,e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height];}
+
+/* ---------- helpers ---------- */
+function jacobi(S){
+  const n=S.length;let A=clone(S),V=eye(n);
+  for(let sweep=0;sweep<80;sweep++){
+    let off=0;for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)off+=A[i][j]*A[i][j];
+    if(off<1e-22)break;
+    for(let p=0;p<n;p++)for(let q=p+1;q<n;q++){
+      if(Math.abs(A[p][q])<1e-15)continue;
+      const th=(A[q][q]-A[p][p])/(2*A[p][q]),t=Math.sign(th||1)/(Math.abs(th)+Math.sqrt(th*th+1)),c=1/Math.sqrt(t*t+1),s=t*c;
+      for(let k=0;k<n;k++){const akp=A[k][p],akq=A[k][q];A[k][p]=c*akp-s*akq;A[k][q]=s*akp+c*akq;}
+      for(let k=0;k<n;k++){const apk=A[p][k],aqk=A[q][k];A[p][k]=c*apk-s*aqk;A[q][k]=s*apk+c*aqk;}
+      for(let k=0;k<n;k++){const vkp=V[k][p],vkq=V[k][q];V[k][p]=c*vkp-s*vkq;V[k][q]=s*vkp+c*vkq;}
+    }
+  }
+  return A.map((r,i)=>({l:r[i],v:V.map(row=>row[i])})).sort((a,b)=>a.l-b.l);
+}
+/* complex matrices: entries [re,im] */
+const C=(re,im=0)=>[re,im];
+const cadd=(a,b)=>[a[0]+b[0],a[1]+b[1]],cmul=(a,b)=>[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]],conj=a=>[a[0],-a[1]];
+const cM=M=>M.map(r=>r.map(v=>Array.isArray(v)?v:[v,0]));
+const zmul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>cadd(s,cmul(v,B[k][j])),[0,0])));
+const zadd=(A,B)=>A.map((r,i)=>r.map((v,j)=>cadd(v,B[i][j])));
+const zscl=(k,A)=>A.map(r=>r.map(v=>cmul(k,v)));
+const zdag=A=>A[0].map((_,j)=>A.map(r=>conj(r[j])));
+const zkron=(A,B)=>{const P=B.length,Q=B[0].length;return Array.from({length:A.length*P},(_,i)=>Array.from({length:A[0].length*Q},(_,j)=>cmul(A[Math.floor(i/P)][Math.floor(j/Q)],B[i%P][j%Q])));};
+const zmax=A=>Math.max(...A.flat().map(v=>Math.hypot(v[0],v[1])));
+const ztr=A=>A.reduce((s,r,i)=>cadd(s,r[i]),[0,0]);
+function cfmt(z){const [a,b]=[Math.abs(z[0])<1e-10?0:z[0],Math.abs(z[1])<1e-10?0:z[1]];const fi=v=>{const t=fmt(v);return t.includes('/')?'('+t+')':t;};if(!b)return fmt(a);if(!a)return (b===1?'':b===-1?'−':fi(b))+'i';return fmt(a)+(b>0?' + ':' − ')+(Math.abs(b)===1?'':fi(Math.abs(b)))+'i';}
+const zH=M=>'<table class="mx">'+M.map(r=>'<tr>'+r.map(v=>`<td>${cfmt(v)}</td>`).join('')+'</tr>').join('')+'</table>';
+const SX=cM([[0,1],[1,0]]),SY=[[C(0),C(0,-1)],[C(0,1),C(0)]],SZ=cM([[1,0],[0,-1]]),I2=cM([[1,0],[0,1]]);
+const PAU={'I':I2,'σx':SX,'σy':SY,'σz':SZ,'σ+':zadd(SX,zscl(C(0,1),SY)),'σ−':zadd(SX,zscl(C(0,-1),SY))};
+function pr3(p,yaw,pitch,s,W,H){const c=Math.cos(yaw),sn=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);const x=c*p[0]-sn*p[1],y1=sn*p[0]+c*p[1];return[W/2+s*x,H/2-s*(cp*p[2]-sp*y1)];}
+function dragView(cv,st,redraw){let d=null;cv.addEventListener('pointerdown',e=>{d=[e.clientX,e.clientY];cv.setPointerCapture(e.pointerId);});
+  cv.addEventListener('pointermove',e=>{if(!d)return;st.yaw+=(e.clientX-d[0])*0.01;st.pitch=Math.max(-1.5,Math.min(1.5,st.pitch+(e.clientY-d[1])*0.01));d=[e.clientX,e.clientY];redraw();});
+  cv.addEventListener('pointerup',()=>d=null);}
+
+/* ---------- Lab 1: 2D rotation ---------- */
+['rT','rU1','rU2'].forEach(k=>$(k).addEventListener('input',drawR));document.querySelectorAll('[name=rMode]').forEach(r=>r.addEventListener('change',drawR));
+$('rPlay').onclick=()=>{const t0=performance.now();(function f(now){const t=Math.min(1,(now-t0)/3000);$('rT').value=Math.round(-180+360*t);drawR();if(t<1)requestAnimationFrame(f);})(t0);};
+function drawR(){
+  const th=+$('rT').value*Math.PI/180,u=[+$('rU1').value,+$('rU2').value],mode=document.querySelector('[name=rMode]:checked').value;
+  $('rTv').textContent=$('rT').value+'°';$('rU1v').textContent=fmt(u[0],2);$('rU2v').textContent=fmt(u[1],2);
+  const cv=$('cvR'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,s=95,X=p=>W/2+p[0]*s,Y=p=>H/2-p[1]*s;
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);
+  const c=Math.cos(th),sn=Math.sin(th),R=[[c,sn],[-sn,c]],up=mv(R,u);
+  ctx.strokeStyle=cssv('--muted');ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.moveTo(W/2,0);ctx.lineTo(W/2,H);ctx.stroke();
+  ctx.fillStyle=cssv('--muted');ctx.font='13px sans-serif';ctx.fillText('x',W-14,H/2-6);ctx.fillText('y',W/2+6,12);
+  if(mode==='passive'){
+    const ex=[c,sn],ey=[-sn,c];
+    [[ex,"x′",cssv('--acc2')],[ey,"y′",cssv('--acc3')]].forEach(([e,n,col])=>{ctx.strokeStyle=col;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(X([-2.3*e[0],-2.3*e[1]]),Y([-2.3*e[0],-2.3*e[1]]));ctx.lineTo(X([2.3*e[0],2.3*e[1]]),Y([2.3*e[0],2.3*e[1]]));ctx.stroke();ctx.fillStyle=col;ctx.font='bold 14px sans-serif';ctx.fillText(n,X([2.2*e[0],2.2*e[1]])+4,Y([2.2*e[0],2.2*e[1]]));});
+    [[ex,up[0],cssv('--acc2')],[ey,up[1],cssv('--acc3')]].forEach(([e,k,col])=>{const f=[k*e[0],k*e[1]];ctx.save();ctx.setLineDash([4,4]);ctx.strokeStyle=col;ctx.beginPath();ctx.moveTo(X(u),Y(u));ctx.lineTo(X(f),Y(f));ctx.stroke();ctx.restore();ctx.fillStyle=col;ctx.beginPath();ctx.arc(X(f),Y(f),4,0,7);ctx.fill();});
+    arrow(ctx,X([0,0]),Y([0,0]),X(u),Y(u),cssv('--acc'),3.5);
+  }else{
+    arrow(ctx,X([0,0]),Y([0,0]),X(u),Y(u),cssv('--muted'),1.5,[5,4]);arrow(ctx,X([0,0]),Y([0,0]),X(up),Y(up),cssv('--acc'),3.5);
+    ctx.strokeStyle=cssv('--acc4');ctx.beginPath();ctx.arc(X([0,0]),Y([0,0]),40,-Math.atan2(u[1],u[0]),-Math.atan2(up[1],up[0]),th>0);ctx.stroke();
+  }
+  $('rOut').textContent=`R(θ) = [[${fmt(c,4)}, ${fmt(sn,4)}], [${fmt(-sn,4)}, ${fmt(c,4)}]]
+u  = (${fmt(u[0],3)}, ${fmt(u[1],3)})
+u′ = R u = (${fmt(up[0],4)}, ${fmt(up[1],4)})
+|u| = ${fmt(nrm(u),4)} = |u′| = ${fmt(nrm(up),4)}  (length kept)
+det R = ${fmt(c*c+sn*sn,4)}, eigenvalues e^(±iθ) = ${fmt(c,3)} ± ${fmt(Math.abs(sn),3)}i
+
+${mode==='passive'?'PASSIVE: the blue vector never moves.\nThe dots are its components along the\nturned axes x′, y′.':'ACTIVE: the axes stay; the vector is\nturned by −θ. Its new x, y components\nequal the passive u′₁, u′₂.'}`;
+}
+
+/* ---------- Lab 2: Euler ---------- */
+const ev={yaw:0.75,pitch:0.35};let eAnimT=null;
+const Rz3=t=>[[Math.cos(t),Math.sin(t),0],[-Math.sin(t),Math.cos(t),0],[0,0,1]];
+const Ry3=t=>[[Math.cos(t),0,Math.sin(t)],[0,1,0],[-Math.sin(t),0,Math.cos(t)]];
+const Rx3=t=>[[1,0,0],[0,Math.cos(t),Math.sin(t)],[0,-Math.sin(t),Math.cos(t)]];
+['eA','eB','eG','eConv'].forEach(k=>$(k).addEventListener('input',()=>{eAnimT=null;drawE();}));
+$('eAnim').onclick=()=>{const t0=performance.now();(function f(now){eAnimT=Math.min(3,(now-t0)/1200);drawE();if(eAnimT<3)requestAnimationFrame(f);else eAnimT=null;})(t0);};
+dragView($('cvE'),ev,()=>drawE());
+function drawE(){
+  const d2r=Math.PI/180,A=+$('eA').value*d2r,B=+$('eB').value*d2r,G=+$('eG').value*d2r,conv=$('eConv').value;
+  $('eAv').textContent=$('eA').value+'°';$('eBv').textContent=$('eB').value+'°';$('eGv').textContent=$('eG').value+'°';
+  const cl=x=>Math.max(0,Math.min(1,x)),t=eAnimT===null?3:eAnimT;
+  const a=A*cl(t),b=B*cl(t-1),g=G*cl(t-2),Mid=conv==='zyz'?Ry3:Rx3;
+  const R=mul(mul(Rz3(g),Mid(b)),Rz3(a)),Rf=mul(mul(Rz3(G),Mid(B)),Rz3(A));
+  const cv=$('cvE'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,s=150,P=p=>pr3(p,ev.yaw,ev.pitch,s,W,H);
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle=cssv('--line');ctx.lineWidth=1;for(let k=0;k<=48;k++){}
+  [[0,1],[0,2],[1,2]].forEach(([i,j])=>{ctx.beginPath();for(let k=0;k<=64;k++){const th=k/64*2*Math.PI,p=[0,0,0];p[i]=Math.cos(th);p[j]=Math.sin(th);const q=P(p);k?ctx.lineTo(...q):ctx.moveTo(...q);}ctx.stroke();});
+  const cols=['#c92a2a','#2b9348','#2f6fdf'],names=['x','y','z'],o=P([0,0,0]);
+  [0,1,2].forEach(i=>{const e=[0,0,0];e[i]=1.25;const q=P(e);ctx.strokeStyle=cols[i];ctx.globalAlpha=0.45;ctx.lineWidth=1.5;ctx.setLineDash([5,4]);ctx.beginPath();ctx.moveTo(...o);ctx.lineTo(...q);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1;ctx.fillStyle=cols[i];ctx.font='13px sans-serif';ctx.fillText(names[i],q[0]+4,q[1]);});
+  [0,1,2].forEach(i=>{const q=P(R[i].map(v=>v*1.15));arrow(ctx,o[0],o[1],q[0],q[1],cols[i],4);ctx.fillStyle=cols[i];ctx.font='bold 15px sans-serif';ctx.fillText(names[i]+'′',q[0]+5,q[1]-5);});
+  const tr=trc(R),phi=Math.acos(Math.max(-1,Math.min(1,(tr-1)/2)));let ax=nullspace(sub(R,eye(3)),1e-7)[0];
+  if(ax&&phi>1e-6){const m=nrm(ax);ax=ax.map(v=>v/m);const q1=P(ax.map(v=>1.45*v)),q2=P(ax.map(v=>-1.45*v));ctx.strokeStyle=cssv('--acc4');ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(...q2);ctx.lineTo(...q1);ctx.stroke();ctx.fillStyle=cssv('--acc4');ctx.font='bold 13px sans-serif';ctx.fillText('axis',q1[0]+4,q1[1]);}
+  const step=eAnimT===null?'':(t<1?'step 1: α about z':t<2?`step 2: β about new ${conv==='zyz'?'y':'x'}`:'step 3: γ about new z');
+  ctx.fillStyle=cssv('--ink');ctx.font='bold 14px sans-serif';ctx.fillText(step,10,20);
+  const RtR=mul(T(Rf),Rf);
+  $('eOut').textContent=`R(α,β,γ) = Rz(γ) R${conv==='zyz'?'y':'x'}(β) Rz(α) =
+${Rf.map(r=>'  ['+r.map(v=>fmt(v,4).padStart(8)).join(' ')+' ]').join('\n')}
+rows = new axes x′, y′, z′ in old coordinates
+
+RᵀR = I ? max error ${maxAbs(sub(RtR,eye(3))).toExponential(1)}
+det R = ${fmt(det3(Rf),6)}
+Tr R = ${fmt(trc(Rf),4)}  ⇒ single rotation angle φ = ${(Math.acos(Math.max(-1,Math.min(1,(trc(Rf)-1)/2)))*180/Math.PI).toFixed(2)}°
+axis (eigenvector for λ = 1): ${(()=>{const v=nullspace(sub(Rf,eye(3)),1e-7)[0];if(!v)return '—';const m=nrm(v);return '('+v.map(x=>fmt(x/m,3)).join(', ')+')';})()}`;
+}
+function det3(M){return M[0][0]*(M[1][1]*M[2][2]-M[1][2]*M[2][1])-M[0][1]*(M[1][0]*M[2][2]-M[1][2]*M[2][0])+M[0][2]*(M[1][0]*M[2][1]-M[1][1]*M[2][0]);}
+
+/* ---------- Pauli algebra ---------- */
+['pa1','pa2'].forEach(k=>$(k).addEventListener('change',labPa));
+function decomp(M){const h=z=>[z[0]/2,z[1]/2];const a0=h(ztr(M)),ax=h(ztr(zmul(SX,M))),ay=h(ztr(zmul(SY,M))),az=h(ztr(zmul(SZ,M)));
+  const parts=[[a0,'I'],[ax,'σx'],[ay,'σy'],[az,'σz']].filter(([z])=>Math.hypot(z[0],z[1])>1e-10).map(([z,n])=>{const s=cfmt(z);return (s==='1'?'':s==='−1'?'−':(s.includes(' ')?'('+s+')':s))+n;});
+  return parts.length?parts.join(' + ').replace(/\+ −/g,'− '):'0';}
+function labPa(){
+  const n1=$('pa1').value,n2=$('pa2').value,A=PAU[n1],B=PAU[n2],AB=zmul(A,B),BA=zmul(B,A),com=zadd(AB,zscl(C(-1),BA)),acom=zadd(AB,BA);
+  $('paOut').innerHTML=`<div style="display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start">
+  <div class="small">${n1}<br>${zH(A)}</div><div class="small">${n2}<br>${zH(B)}</div>
+  <div class="small">${n1}·${n2}<br>${zH(AB)}<br>= ${decomp(AB)}</div>
+  <div class="small">[${n1}, ${n2}]<br>${zH(com)}<br>= ${decomp(com)}</div>
+  <div class="small">{${n1}, ${n2}}<br>${zH(acom)}<br>= ${decomp(acom)}</div></div>`;
+}
+
+/* ---------- Bloch sphere ---------- */
+const bv={yaw:0.6,pitch:0.3};let bRun=false;
+['bT','bP'].forEach(k=>$(k).addEventListener('input',drawB));
+dragView($('cvB'),bv,()=>drawB());
+$('bPrec').onclick=()=>{bRun=!bRun;$('bPrec').textContent=bRun?'❚❚ Stop':'▶ Precess about z';if(bRun)(function f(){if(!bRun)return;$('bP').value=(+$('bP').value+1)%360;drawB();requestAnimationFrame(f);})();};
+function drawB(){
+  const th=+$('bT').value*Math.PI/180,ph=+$('bP').value*Math.PI/180;$('bTv').textContent=$('bT').value+'°';$('bPv').textContent=$('bP').value+'°';
+  const n=[Math.sin(th)*Math.cos(ph),Math.sin(th)*Math.sin(ph),Math.cos(th)];
+  const chi=[[C(Math.cos(th/2))],[[Math.cos(ph)*Math.sin(th/2),Math.sin(ph)*Math.sin(th/2)]]];
+  const ex=M=>zmul(zmul(zdag(chi),M),chi)[0][0][0];
+  const nS=zadd(zadd(zscl(C(n[0]),SX),zscl(C(n[1]),SY)),zscl(C(n[2]),SZ)),nchi=zmul(nS,chi);
+  const cv=$('cvB'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,s=150,P=p=>pr3(p,bv.yaw,bv.pitch,s,W,H),o=P([0,0,0]);
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);ctx.strokeStyle=cssv('--line');ctx.lineWidth=1;
+  for(let la=-60;la<=60;la+=30){ctx.beginPath();for(let k=0;k<=64;k++){const t=k/64*2*Math.PI,r=Math.cos(la*Math.PI/180),q=P([r*Math.cos(t),r*Math.sin(t),Math.sin(la*Math.PI/180)]);k?ctx.lineTo(...q):ctx.moveTo(...q);}ctx.stroke();}
+  for(let lo=0;lo<180;lo+=30){ctx.beginPath();for(let k=0;k<=64;k++){const t=k/64*2*Math.PI,q=P([Math.sin(t)*Math.cos(lo*Math.PI/180),Math.sin(t)*Math.sin(lo*Math.PI/180),Math.cos(t)]);k?ctx.lineTo(...q):ctx.moveTo(...q);}ctx.stroke();}
+  [['x','#c92a2a',[1.25,0,0]],['y','#2b9348',[0,1.25,0]],['z  |↑⟩','#2f6fdf',[0,0,1.25]]].forEach(([nm,c,e])=>{const q=P(e);ctx.strokeStyle=c;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(...o);ctx.lineTo(...q);ctx.stroke();ctx.fillStyle=c;ctx.font='13px sans-serif';ctx.fillText(nm,q[0]+4,q[1]);});
+  const qd=P([0,0,-1.2]);ctx.fillStyle=cssv('--muted');ctx.fillText('|↓⟩',qd[0]+4,qd[1]);
+  ctx.strokeStyle=cssv('--acc4');ctx.setLineDash([3,3]);ctx.beginPath();for(let k=0;k<=64;k++){const t=k/64*2*Math.PI,q=P([Math.sin(th)*Math.cos(t),Math.sin(th)*Math.sin(t),Math.cos(th)]);k?ctx.lineTo(...q):ctx.moveTo(...q);}ctx.stroke();ctx.setLineDash([]);
+  const tip=P(n);arrow(ctx,o[0],o[1],tip[0],tip[1],cssv('--acc2'),4);ctx.fillStyle=cssv('--acc2');ctx.beginPath();ctx.arc(tip[0],tip[1],5,0,7);ctx.fill();
+  const v=[ex(SX),ex(SY),ex(SZ)];
+  $('bOut').textContent=`n̂ = (${n.map(x=>fmt(x,3)).join(', ')})
+n̂·σ = [[${cfmt(nS[0][0])}, ${cfmt(nS[0][1])}],
+       [${cfmt(nS[1][0])}, ${cfmt(nS[1][1])}]]   (rounded)
+χ = (cos θ/2, e^{iφ} sin θ/2) = (${cfmt(chi[0][0])}, ${cfmt(chi[1][0])})
+(n̂·σ)χ = χ ?  error ${zmax(zadd(nchi,zscl(C(-1),chi))).toExponential(1)}  ✓ eigenvalue +1
+
+⟨σx⟩ = ${fmt(v[0],4)}   ⟨σy⟩ = ${fmt(v[1],4)}   ⟨σz⟩ = ${fmt(v[2],4)}
+→ equals n̂: the spin points along n̂
+P(↑ along z) = |χ₁|² = cos²(θ/2) = ${fmt(Math.cos(th/2)**2,4)}`;
+}
+
+/* ---------- Dirac ---------- */
+const Z2=cM([[0,0],[0,0]]);
+const BETA=zkron(SZ,I2),AL=[zkron(SX,SX),zkron(SX,SY),zkron(SX,SZ)];
+(function(){const M=[AL[0],AL[1],AL[2],BETA],nm=['αx','αy','αz','β'];let h='<table style="width:auto"><tr><th>{a,b}/2</th>'+nm.map(n=>`<th>${n}</th>`).join('')+'</tr>';
+  M.forEach((A,i)=>{h+=`<tr><th>${nm[i]}</th>`;M.forEach((B,j)=>{const S=zscl(C(0.5),zadd(zmul(A,B),zmul(B,A)));const isI=zmax(zadd(S,zscl(C(-1),zkron(I2,I2))))<1e-12,is0=zmax(S)<1e-12;h+=`<td class="${(i===j?isI:is0)?'ok':'bad'}">${isI?'I':is0?'0':'?'}</td>`;});h+='</tr>';});
+  h+='</table><p class="small">αx = σx⊗σx:</p>'+zH(AL[0])+'<p class="small">β = σz⊗I:</p>'+zH(BETA);$('dTab').innerHTML=h;})();
+['dPx','dPy','dPz','dM'].forEach(k=>$(k).addEventListener('input',drawD));
+function hermEig(Hc){const n=Hc.length,Rm=Array.from({length:2*n},(_,i)=>Array.from({length:2*n},(_,j)=>{const z=Hc[i%n][j%n];if(i<n&&j<n)return z[0];if(i>=n&&j>=n)return z[0];if(i<n&&j>=n)return -z[1];return z[1];}));
+  const e=jacobi(Rm).map(x=>x.l);const out=[];for(let k=0;k<e.length;k+=2)out.push((e[k]+e[k+1])/2);return out;}
+function drawD(){
+  const p=[+$('dPx').value,+$('dPy').value,+$('dPz').value],m=+$('dM').value;['dPx','dPy','dPz','dM'].forEach(k=>$(k+'v').textContent=fmt(+$(k).value,2));
+  let Hm=zscl(C(m),BETA);AL.forEach((A,i)=>{Hm=zadd(Hm,zscl(C(p[i]),A));});
+  const E=hermEig(Hm),pp=nrm(p),Ex=Math.sqrt(pp*pp+m*m);
+  const cv=$('cvD'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,X=q=>W/2+q/3.2*(W/2-10),Y=e=>H/2-e/4.5*(H/2-10);
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);ctx.strokeStyle=cssv('--muted');ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.moveTo(W/2,0);ctx.lineTo(W/2,H);ctx.stroke();
+  ctx.font='12px sans-serif';ctx.fillStyle=cssv('--muted');ctx.fillText('|p|',W-22,H/2-4);ctx.fillText('E',W/2+5,12);
+  [1,-1].forEach(sg=>{ctx.strokeStyle=sg>0?cssv('--acc'):cssv('--warn');ctx.lineWidth=2.5;ctx.beginPath();for(let k=0;k<=100;k++){const q=-3.2+6.4*k/100,e=sg*Math.sqrt(q*q+m*m);k?ctx.lineTo(X(q),Y(e)):ctx.moveTo(X(q),Y(e));}ctx.stroke();});
+  ctx.strokeStyle=cssv('--line');ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(X(-3.2),Y(-3.2));ctx.lineTo(X(3.2),Y(3.2));ctx.moveTo(X(-3.2),Y(3.2));ctx.lineTo(X(3.2),Y(-3.2));ctx.stroke();ctx.setLineDash([]);
+  E.forEach(e=>{ctx.fillStyle=cssv('--acc2');ctx.beginPath();ctx.arc(X(pp),Y(e),6,0,7);ctx.fill();});
+  $('dOut').textContent=`H = α·p + βm (c = 1), a 4×4 hermitian matrix
+numerical eigenvalues: ${E.map(e=>fmt(e,5)).join(', ')}
+formula ±√(p² + m²) = ±${fmt(Ex,5)}   (each twice: spin)
+H² = (p² + m²)I: max error ${zmax(zadd(zmul(Hm,Hm),zscl(C(-(pp*pp+m*m)),zkron(I2,I2)))).toExponential(1)}
+dashed lines: E = ±|p| (massless limit m = 0)`;
+}
+
+/* ---------- Anharmonic oscillator ---------- */
+['aL','aN'].forEach(k=>$(k).addEventListener('input',drawA));
+let aCacheL=null,aCache=null;
+function anhH(N,l){const M=N+4,x=zeros(M);for(let n=1;n<M;n++){x[n-1][n]=Math.sqrt(n/2);x[n][n-1]=Math.sqrt(n/2);}
+  const x2=mul(x,x),x4=mul(x2,x2),H=zeros(N);for(let i=0;i<N;i++)for(let j=0;j<N;j++)H[i][j]=(i===j?i+0.5:0)+l*x4[i][j];return H;}
+function drawA(){
+  const l=+$('aL').value,N=+$('aN').value;$('aLv').textContent=l.toFixed(2);$('aNv').textContent=N;
+  if(aCacheL!==l){aCacheL=l;aCache={};for(let n=2;n<=30;n++)aCache[n]=jacobi(anhH(n,l)).map(e=>e.l);}
+  const cv=$('cvA'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,L=36,top=Math.max(6,aCache[30][4]*1.25);
+  const Xp=n=>L+(n-2)/28*(W-L-10),Yp=e=>H-20-e/top*(H-30);
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);ctx.font='11px sans-serif';
+  for(let e=0;e<=top;e+=Math.ceil(top/6)){ctx.strokeStyle=cssv('--line');ctx.beginPath();ctx.moveTo(L,Yp(e));ctx.lineTo(W,Yp(e));ctx.stroke();ctx.fillStyle=cssv('--muted');ctx.fillText(e,4,Yp(e)+4);}
+  ctx.fillText('N (basis size) →',W-100,H-4);
+  const cols=['#2f6fdf','#e8590c','#2b9348','#9c36b5','#c92a2a'];
+  for(let k=0;k<5;k++){ctx.strokeStyle=cols[k];ctx.lineWidth=2;ctx.beginPath();let st=false;for(let n=2;n<=30;n++){if(aCache[n].length<=k)continue;const p=[Xp(n),Yp(aCache[n][k])];st?ctx.lineTo(...p):ctx.moveTo(...p);st=true;}ctx.stroke();}
+  ctx.strokeStyle=cssv('--ink');ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(Xp(N),10);ctx.lineTo(Xp(N),H-20);ctx.stroke();ctx.setLineDash([]);
+  const Hm=anhH(N,l),show=Hm.slice(0,Math.min(N,7)).map(r=>r.slice(0,Math.min(N,7)));
+  $('aMat').innerHTML=`<div class="small">H matrix (${N}×${N}${N>7?', top-left 7×7 shown':''}): only even offsets 0, ±2, ±4 are nonzero</div>`+mxH(show,true);
+  const e=aCache[N],ref=aCache[30];
+  $('aOut').textContent=`lowest levels with N = ${N}:
+${e.slice(0,5).map((v,k)=>`E${k} = ${v.toFixed(6)}   (N=30: ${ref[k].toFixed(6)})`).join('\n')}
+${l===0?'λ = 0: exactly n + ½ for any N':'error in E0 at this N: '+Math.abs(e[0]-ref[0]).toExponential(1)}`;
+}
+
+/* ---------- Quiz ---------- */
+const QZ=[
+ {q:'det of any proper rotation matrix is…',o:['+1','−1','0','depends on θ'],a:0,e:'Orthogonal with det +1.'},
+ {q:'A 3D rotation R has Tr R = 1. The rotation angle is…',o:['90°','0°','180°','60°'],a:0,e:'1 + 2cos φ = 1 ⇒ cos φ = 0.'},
+ {q:'σxσy equals…',o:['iσz','−iσz','σz','I'],a:0,e:'σjσk = δjk I + iεjkl σl.'},
+ {q:'Eigenvalues of σy are…',o:['±1','±i','0, 1','1, 1'],a:0,e:'Hermitian, squares to I.'},
+ {q:'The smallest size for four mutually anticommuting matrices squaring to I is…',o:['4×4','2×2','3×3','8×8'],a:0,e:'2×2 allows only three (Exercise 1).'},
+ {q:'Eigenvalues of the Dirac Hamiltonian cα·p + βmc² are…',o:['±√(p²c² + m²c⁴), each twice','mc² only','±pc','p²/2m'],a:0,e:'H² = (p²c² + m²c⁴)I.'},
+ {q:'An operator matrix is diagonal when the basis consists of…',o:['its eigenfunctions','plane waves always','any orthonormal set','position states'],a:0,e:'Eq. (34).'},
+ {q:'The continuous unit matrix has elements…',o:['δ(μ − ν)','1 on the diagonal','δμν','0'],a:0,e:'Dirac delta; the "diagonal" is not 1.'},
+ {q:'e^(−iπσz) (a 2π rotation of a spinor) equals…',o:['−I','I','σz','0'],a:0,e:'cos π I − i sin π σz = −I.'},
+ {q:'In the Euler product Rz(γ)Ry(β)Rz(α), the rotation applied first is…',o:['Rz(α)','Rz(γ)','Ry(β)','all together'],a:0,e:'The rightmost acts on u first.'}
+];
+(function(){let sc=0;$('qTot').textContent=QZ.length;
+ $('quiz').innerHTML=QZ.map((x,i)=>{const ord=x.o.map((t,j)=>({t,j})).sort(()=>Math.random()-0.5);
+  return `<div class="qq" data-q="${i}"><b>Q${i+1}.</b> ${x.q}${ord.map(o=>`<label class="opt"><input type="radio" name="q${i}" value="${o.j}"> ${o.t}</label>`).join('')}<div class="fb"></div></div>`;}).join('');
+ document.querySelectorAll('#quiz .qq').forEach(div=>{const i=+div.dataset.q;let done=false;
+  div.querySelectorAll('input').forEach(inp=>inp.addEventListener('change',()=>{if(done)return;done=true;const ok=+inp.value===QZ[i].a;if(ok)sc++;$('qScore').textContent=sc;
+    div.querySelector('.fb').innerHTML=`<span class="${ok?'ok':'bad'}">${ok?'✓ Correct.':'✗ Answer: '+QZ[i].o[QZ[i].a]+'.'}</span> ${QZ[i].e}`;
+    div.querySelectorAll('input').forEach(x=>x.disabled=true);}));});})();
+
+function drawAll(){drawR();drawE();drawB();drawD();drawA();}
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+$('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawAll();};})();
+labPa();drawAll();
+</script>
+</body>
+</html>

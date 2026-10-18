@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Special Matrices I</title>
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+h4{margin-bottom:4px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:120px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:90px}section{padding:16px 14px}}
+.read{font-weight:600;color:var(--acc2)}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.legend span{display:inline-block;margin-right:12px;font-size:.88rem}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:middle}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:separate;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;padding:1px 3px;margin:3px 4px;width:auto}
+.mx td{border:0!important;padding:1px 8px!important;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.mulgrid{display:grid;grid-template-columns:auto auto;gap:8px 14px;align-items:center;justify-content:start;overflow-x:auto}
+.mulgrid table{width:auto;border-collapse:collapse;margin:0}
+.mulgrid td{min-width:46px;text-align:center;font-family:Consolas,monospace;padding:6px 8px;border:1px solid var(--line)}
+.mulgrid .lbl{font-weight:700;color:var(--muted);text-align:center}
+td.hr{background:var(--soft)!important;color:var(--acc);font-weight:700}
+td.hc{background:var(--softg)!important;color:var(--acc3);font-weight:700}
+td.hx{background:var(--softw)!important;color:var(--acc2);font-weight:800;outline:2px solid var(--acc2)}
+#prodC td{cursor:pointer}
+.tpbox{position:relative;margin:10px 0}
+.tpcell{position:absolute;width:64px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:6px;background:var(--card);font-family:Consolas,monospace;font-size:.9rem;transition:left 1s ease,top 1s ease,background .4s}
+.tpcell.diag{background:var(--softw)}
+.tpcell.flip{background:var(--softr);color:var(--warn);font-weight:700}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">Light / Dark</button>
+<h1>3 · Special Matrices I</h1>
+<p>A. W. Joshi, <i>Matrices and Tensors in Physics</i>, Section 3 (pp. 30–42). Complete notes, interactive labs, parameter counting, shortcuts, the book's Exercise 3 fully solved, and extra practice for CSIR-NET / GATE / JEST / TIFR.</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#roadmap">Roadmap</a><a href="#diag">Diagonal &amp; scalar</a><a href="#commute">Who commutes?</a><a href="#six">Six types</a>
+<a href="#decomp">Decompositions</a><a href="#qform">x̃Ax = 0</a><a href="#tri">Triangular</a><a href="#params">Parameters</a>
+<a href="#indep">Independent matrices</a><a href="#pauli">Pauli basis</a><a href="#poly">Polynomial elements</a><a href="#trace">Trace</a>
+<a href="#short">Shortcuts</a><a href="#classify">Classifier</a><a href="#bookex">Book Exercise 3</a><a href="#practice">Practice</a><a href="#quiz">Quiz</a><a href="#facts">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<section id="roadmap">
+<h2>0. Roadmap</h2>
+<p>Special matrices get their names from <b>conditions on their elements</b>. Each condition removes some freedom, so this section also teaches you to <b>count independent parameters</b>, a favourite CSIR-NET/GATE question. Every special matrix is defined by one of two kinds of condition:</p>
+<ul><li>a <b>pattern of zeros</b> (diagonal, scalar, triangular), or</li>
+<li>a <b>relation between A and A*, Ã, A†</b> (real, imaginary, symmetric, antisymmetric, Hermitian, antiHermitian).</li></ul>
+<div class="flow"><span>Square, diagonal, scalar, I</span><b>→</b><span>Who commutes with them?</span><b>→</b><span>6 types from A*, Ã, A†</span><b>→</b><span>Unique decompositions</span><b>→</b><span>Triangular</span><b>→</b><span>Counting parameters</span><b>→</b><span>Independent matrices, Pauli basis</span><b>→</b><span>Polynomial matrices</span><b>→</b><span>Trace</span></div>
+<div class="box warnb"><b class="t">Names to know</b> A "constant matrix" (book) is the same as a <b>scalar matrix</b> aI. "Right-triangular" (book) is <b>upper triangular</b>, and "left-triangular" is <b>lower triangular</b>. "Spur" (German) or "diagonal sum" means the trace. AntiHermitian is the same as skew-Hermitian, and antisymmetric is the same as skew-symmetric.</div>
+</section>
+
+<section id="diag">
+<h2>1. Square, diagonal, scalar (constant) and unit matrices</h2>
+<div class="box def"><b class="t">Definitions</b>
+<ul>
+<li><b>Square matrix of order n:</b> m = n. Its <b>principal diagonal</b> consists of a₁₁, a₂₂, …, aₙₙ (from top-left to bottom-right). All the other elements aᵢⱼ (i ≠ j) are <b>off-diagonal</b>.</li>
+<li><b>Diagonal matrix:</b> all off-diagonal elements are zero, so <span class="m">(A)ᵢⱼ = aᵢᵢδᵢⱼ</span>. It is written diag(a₁₁, …, aₙₙ). (Some diagonal entries may also be zero.)</li>
+<li><b>Constant (scalar) matrix:</b> a diagonal matrix with all diagonal elements equal, <span class="m">(A)ᵢⱼ = aδᵢⱼ</span>, i.e. <b>A = aI</b>.</li>
+<li><b>Unit (identity) matrix:</b> a = 1, <span class="m">(I)ᵢⱼ = δᵢⱼ</span>. Iₙ is the identity of order n.</li>
+</ul></div>
+<div class="flow"><span>square</span><b>⊃</b><span>diagonal</span><b>⊃</b><span>scalar aI</span><b>⊃</b><span>I (a = 1) and 0 (a = 0)</span></div>
+<div class="box thm"><b class="t">Arithmetic of diagonal matrices</b>
+<ul>
+<li>diag(aᵢ) + diag(bᵢ) = diag(aᵢ + bᵢ),  diag(aᵢ)·diag(bᵢ) = diag(aᵢbᵢ). Diagonal matrices <b>always commute with each other</b>.</li>
+<li>diag(aᵢ)ᵏ = diag(aᵢᵏ), and diag(aᵢ)⁻¹ = diag(1/aᵢ) (if no aᵢ = 0). det = Πaᵢ, Tr = Σaᵢ.</li>
+<li>D·A scales the <b>rows</b> of A, and A·D scales the <b>columns</b>: (DA)ᵢⱼ = dᵢaᵢⱼ and (AD)ᵢⱼ = aᵢⱼdⱼ.</li>
+<li>The scalar matrix aI behaves exactly like the number a: (aI)A = A(aI) = aA.</li>
+</ul></div>
+</section>
+
+<section id="commute">
+<h2>2. Who commutes with diagonal and constant matrices?</h2>
+<div class="box thm"><b class="t">Book Example 1</b> If B commutes with a diagonal matrix A = diag(a₁, …, aₙ) whose diagonal elements are <b>all different</b>, then B is diagonal.
+<p><b>Proof:</b> (AB)ᵢⱼ = aᵢbᵢⱼ and (BA)ᵢⱼ = bᵢⱼaⱼ. Equating them gives <b>(aᵢ − aⱼ)bᵢⱼ = 0</b>. For i ≠ j, aᵢ ≠ aⱼ, so bᵢⱼ = 0. ∎</p></div>
+<div class="box thm"><b class="t">Book Example 2</b> Let E<sub>kl</sub> be the matrix with 1 in position (k,l) and 0 elsewhere, (E<sub>kl</sub>)ᵢⱼ = δᵢₖδⱼₗ. There are n² of them. If B commutes with E<sub>kl</sub> for all k (and one fixed l), then B is a constant matrix.
+<p><b>Proof:</b> (BE<sub>kl</sub>)ᵢⱼ = bᵢₖδⱼₗ and (E<sub>kl</sub>B)ᵢⱼ = δᵢₖbₗⱼ. Put j = l: bᵢₖ = δᵢₖbₗₗ. So the off-diagonal bᵢₖ are 0 and every diagonal element equals bₗₗ. Hence B = bₗₗI. ∎</p></div>
+<div class="box tip"><b class="t">⚡ What it means (a very common exam fact)</b>
+<ul>
+<li><b>Only scalar matrices commute with every matrix.</b> (This is the matrix version of Schur's lemma.)</li>
+<li>If some diagonal entries of A are <b>equal</b>, B may have nonzero entries in the corresponding <b>block</b>. For A = diag(1, 1, 2), the matrices commuting with A have the form <span class="M" data-m="* * 0; * * 0; 0 0 *"></span>. In QM this is <b>degeneracy</b>: inside a degenerate block, you can mix states freely.</li>
+<li>Matrices commuting with σ_z = diag(1, −1) are diagonal. Matrices commuting with σₓ have the form <span class="M" data-m="a b; b a"></span>.</li>
+</ul></div>
+<div class="lab"><h4>🔬 Lab 1 – Which entries of B are forced to be zero when DB = BD?</h4>
+<div class="ctrl"><label>d₁ <input type="range" id="d1" min="-3" max="3" step="1" value="1"><b id="d1v"></b></label><label>d₂ <input type="range" id="d2" min="-3" max="3" step="1" value="2"><b id="d2v"></b></label><label>d₃ <input type="range" id="d3" min="-3" max="3" step="1" value="3"><b id="d3v"></b></label><label>d₄ <input type="range" id="d4" min="-3" max="3" step="1" value="-1"><b id="d4v"></b></label></div>
+<div class="grid2"><div><b>(DB − BD)ᵢⱼ = (dᵢ − dⱼ) bᵢⱼ: the factor (dᵢ − dⱼ)</b><div id="commTbl"></div></div><div><b>Allowed pattern for B</b><div id="commPat"></div></div></div>
+<div class="out" id="commOut"></div>
+<p class="small">The left table shows the factor (dᵢ − dⱼ) for each position. Wherever it is nonzero, bᵢⱼ must be 0 (grey "0" on the right). Wherever dᵢ = dⱼ, bᵢⱼ is free (green "★"). Make two d's equal and a free block appears. Make all of them equal (a scalar matrix) and every entry becomes free.</p>
+</div>
+</section>
+
+<section id="six">
+<h2>3. The six types defined by A*, Ã, A†</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Name</th><th>Matrix condition</th><th>Element condition</th><th>Consequence for the diagonal</th><th>Example</th></tr>
+<tr><td><b>Real</b></td><td>A* = A</td><td>aᵢⱼ* = aᵢⱼ</td><td>—</td><td><span class="M" data-m="1 2; 3 4"></span></td></tr>
+<tr><td><b>Purely imaginary</b></td><td>A* = −A</td><td>aᵢⱼ* = −aᵢⱼ</td><td>—</td><td><span class="M" data-m="i 0; 2i -3i"></span></td></tr>
+<tr><td><b>Symmetric</b></td><td>Ã = A</td><td>aᵢⱼ = aⱼᵢ</td><td>anything</td><td><span class="M" data-m="1 2+i; 2+i 3"></span></td></tr>
+<tr><td><b>Antisymmetric</b></td><td>Ã = −A</td><td>aᵢⱼ = −aⱼᵢ</td><td><b>aᵢᵢ = 0</b></td><td><span class="M" data-m="0 5; -5 0"></span></td></tr>
+<tr><td><b>Hermitian</b></td><td>A† = A</td><td>aᵢⱼ* = aⱼᵢ</td><td><b>aᵢᵢ real</b></td><td><span class="M" data-m="2 1-i; 1+i 3"></span></td></tr>
+<tr><td><b>AntiHermitian</b></td><td>A† = −A</td><td>aᵢⱼ* = −aⱼᵢ</td><td><b>aᵢᵢ purely imaginary (or 0)</b></td><td><span class="M" data-m="i 1+i; -1+i 0"></span></td></tr>
+</table></div>
+<p>The first two make sense for any m×n matrix. The last four require <b>square</b> matrices, because Ã and A† are n×m.</p>
+<div class="box thm"><b class="t">How the types combine (very useful)</b>
+<div class="tbl-wrap"><table>
+<tr><th>If A is…</th><th>and also…</th><th>then A is…</th></tr>
+<tr><td>real</td><td>symmetric</td><td>Hermitian (real symmetric = real Hermitian)</td></tr>
+<tr><td>real</td><td>antisymmetric</td><td>antiHermitian</td></tr>
+<tr><td>purely imaginary</td><td>antisymmetric</td><td>Hermitian (e.g. σᵧ)</td></tr>
+<tr><td>purely imaginary</td><td>symmetric</td><td>antiHermitian (e.g. iσₓ)</td></tr>
+<tr><td>Hermitian</td><td>antiHermitian</td><td>0</td></tr>
+<tr><td>symmetric</td><td>antisymmetric</td><td>0</td></tr>
+<tr><td>Hermitian</td><td>multiplied by i</td><td>antiHermitian (and vice versa)</td></tr>
+<tr><td>Hermitian</td><td>real diagonal entries only</td><td>that is automatic: the diagonal of a Hermitian matrix is always real</td></tr>
+</table></div>
+In short: <b>Hermitian = (real part symmetric) + i·(imaginary part antisymmetric)</b>. Writing H = S + iK with S, K real, H is Hermitian ⇔ S is symmetric and K is antisymmetric.</div>
+<div class="box fact"><b class="t">Physics</b> Observables in QM are <b>Hermitian</b>, which gives real eigenvalues (Section 9). Generators of rotations satisfy U = e^{−iθJ}, where J is Hermitian and −iJ is antiHermitian. Real antisymmetric matrices generate rotations in classical mechanics (the a × r operator from Section 1). The inertia tensor, stress tensor and metric are real symmetric.</div>
+</section>
+
+<section id="decomp">
+<h2>4. Unique decompositions</h2>
+<div class="box thm"><b class="t">Three ways to split any matrix (each is unique)</b>
+<div class="eq">A = ½(A + A*) + ½(A − A*)  (real + purely imaginary; any m×n)<br>A = ½(A + Ã) + ½(A − Ã)  (symmetric + antisymmetric; square)<br>A = ½(A + A†) + ½(A − A†)  (Hermitian + antiHermitian; square)</div></div>
+<h3>Book Example 3 (two proofs that the Hermitian + antiHermitian split exists and is unique)</h3>
+<p><b>Element method:</b> suppose A = B + C with B† = B and C† = −C. Element-wise, aᵢⱼ = bᵢⱼ + cᵢⱼ. Take the dagger of A = B + C to get A† = B − C, i.e. aⱼᵢ* = bᵢⱼ − cᵢⱼ. Adding and subtracting gives <b>bᵢⱼ = (aᵢⱼ + aⱼᵢ*)/2</b> and <b>cᵢⱼ = (aᵢⱼ − aⱼᵢ*)/2</b>. These are uniquely fixed by A, and one checks bⱼᵢ* = bᵢⱼ and cⱼᵢ* = −cᵢⱼ.</p>
+<p><b>Matrix method (shorter):</b> A = B + C and A† = B − C give B = (A + A†)/2 and C = (A − A†)/2. Then B† = (A† + A)/2 = B and C† = (A† − A)/2 = −C. ∎</p>
+<p>The book's lesson: there are two ways to prove matrix identities, (1) element by element and (2) with matrix operations. The second is shorter and more elegant. Use it whenever you can.</p>
+<div class="box tip"><b class="t">⚡ Also write it as A = H₁ + iH₂ with both H's Hermitian</b> H₁ = (A + A†)/2 and H₂ = (A − A†)/(2i). This is the matrix analogue of z = x + iy, and "Hermitian ↔ real numbers, antiHermitian ↔ imaginary numbers" is a good guide in general.</div>
+</section>
+
+<section id="qform">
+<h2>5. Book Example 4: x̃Ax = 0 for antisymmetric A</h2>
+<p>If A is antisymmetric (Ã = −A) and x is any column vector, then the number x̃Ax = Σᵢⱼ aᵢⱼxᵢxⱼ = 0.</p>
+<p><b>Proof 1 (elements):</b> swap the dummy indices i ↔ j: Σ aᵢⱼxᵢxⱼ = Σ aⱼᵢxⱼxᵢ = −Σ aᵢⱼxᵢxⱼ. A number equal to its own negative is 0.</p>
+<p><b>Proof 2 (matrices):</b> x̃Ax is 1×1, so it equals its own transpose: x̃Ax = (x̃Ax)ᵀ = x̃Ãx = −x̃Ax ⇒ 0.</p>
+<div class="box thm"><b class="t">Variations (all from the same trick)</b>
+<ul>
+<li><b>A quadratic form only sees the symmetric part:</b> x̃Ax = x̃Sx with S = ½(A + Ã). So when quadratic forms come up (Section 11), always symmetrise first.</li>
+<li><b>Hermitian H:</b> x†Hx is <b>real</b>. (Proof: (x†Hx)* = (x†Hx)† = x†H†x = x†Hx.) So expectation values ⟨ψ|H|ψ⟩ are real.</li>
+<li><b>AntiHermitian K:</b> x†Kx is <b>purely imaginary</b>.</li>
+<li>Geometrically, for real antisymmetric A, the vector <b>Ax is always perpendicular to x</b>. That is the property of a magnetic force qv × B: it does no work.</li>
+<li>Tr(SK) = 0 when S is symmetric and K is antisymmetric. (Proof: Tr(SK) = Tr((SK)ᵀ) = Tr(KᵀSᵀ) = −Tr(KS) = −Tr(SK).)</li>
+</ul></div>
+<div class="lab"><h4>🔬 Lab 2 – The antisymmetric part pushes sideways (drag x)</h4>
+<div class="ctrl"><label>a<input type="range" id="qa" min="-2" max="2" step="0.1" value="1"></label><label>b<input type="range" id="qb" min="-2" max="2" step="0.1" value="1.5"></label><label>c<input type="range" id="qc" min="-2" max="2" step="0.1" value="-0.5"></label><label>d<input type="range" id="qd" min="-2" max="2" step="0.1" value="0.5"></label></div>
+<canvas id="cvQ" width="640" height="400"></canvas>
+<div class="out" id="outQ"></div>
+<p class="small">A = [a b; c d] splits as S + K. The orange arrow is Sx, the symmetric part. The purple arrow is Kx, the antisymmetric part, and it is always at 90° to x. So x̃Kx = 0, and x̃Ax = x̃Sx, the shadow of Sx on x. Set b = −c with a = d = 0 to get a pure rotation generator.</p>
+</div>
+</section>
+
+<section id="tri">
+<h2>6. Triangular matrices</h2>
+<div class="box def"><b class="t">Definition</b> A square matrix is <b>triangular</b> if all the elements on one side of the principal diagonal vanish.
+<ul><li><b>Right- (upper) triangular:</b> aᵢⱼ = 0 for i &gt; j, e.g. <span class="M" data-m="3 4 -1; 0 2 5; 0 0 -6"></span>.</li>
+<li><b>Left- (lower) triangular:</b> aᵢⱼ = 0 for i &lt; j, e.g. <span class="M" data-m="1 0 0 0; 2 -2 0 0; 3 5 3 0; 4 6 -4 5"></span>.</li>
+<li><b>Strictly</b> triangular: also zero on the diagonal. Such a matrix is nilpotent, Nⁿ = 0.</li></ul></div>
+<div class="box thm"><b class="t">Properties</b>
+<ul>
+<li>A product of two upper (lower) triangular matrices is upper (lower) triangular. So are all their powers (Exercise 12).</li>
+<li><b>The diagonal of the product is the product of the diagonals:</b> (T₁T₂)ᵢᵢ = (T₁)ᵢᵢ(T₂)ᵢᵢ. Hence the diagonal of Tᵏ is tᵢᵢᵏ (Exercise 18).</li>
+<li>det T = t₁₁t₂₂⋯tₙₙ. The eigenvalues of T are its diagonal entries (Section 9).</li>
+<li>The inverse of an invertible upper triangular matrix is upper triangular, with diagonal 1/tᵢᵢ.</li>
+<li>The transpose of an upper triangular matrix is lower triangular. A matrix that is both upper and lower triangular is diagonal.</li>
+<li>Upper triangular n×n matrices form a vector space of dimension n(n+1)/2.</li>
+</ul></div>
+</section>
+<section id="params">
+<h2>7. Counting independent (real) parameters</h2>
+<div class="box def"><b class="t">The rule</b> A general complex m×n matrix has <b>2mn</b> real parameters (each element has a real and an imaginary part). For a special matrix:
+<div class="eq">number of independent real parameters = 2mn − (number of independent real conditions)</div>
+Or count directly: list the elements you are free to choose, and how many real numbers each one costs.</div>
+<h3>Book's method, shown for a complex symmetric matrix</h3>
+<p><b>Direct count:</b> only the elements with i ≤ j are free. There are 1 + 2 + … + n = n(n+1)/2 of them, each complex, giving <b>n(n+1)</b> real parameters.</p>
+<p><b>Conditions count:</b> aᵢⱼ = aⱼᵢ for i &lt; j is n(n−1)/2 complex equations, i.e. n(n−1) real conditions. Then 2n² − n(n−1) = <b>n(n+1)</b> ✓.</p>
+<div class="tbl-wrap"><table>
+<tr><th>Type (n×n)</th><th>Real parameters</th><th>n = 2</th><th>n = 3</th><th>Reason</th></tr>
+<tr><td>General complex</td><td>2n²</td><td>8</td><td>18</td><td>n² complex entries</td></tr>
+<tr><td>Real, or purely imaginary</td><td>n²</td><td>4</td><td>9</td><td>one real number per entry</td></tr>
+<tr><td>Complex symmetric</td><td>n(n+1)</td><td>6</td><td>12</td><td>n(n+1)/2 complex entries (i ≤ j)</td></tr>
+<tr><td>Complex antisymmetric</td><td>n(n−1)</td><td>2</td><td>6</td><td>diagonal 0, n(n−1)/2 complex entries</td></tr>
+<tr><td><b>Hermitian</b></td><td><b>n²</b></td><td>4</td><td>9</td><td>n real diagonal entries + n(n−1)/2 complex entries above the diagonal</td></tr>
+<tr><td><b>AntiHermitian</b></td><td><b>n²</b></td><td>4</td><td>9</td><td>n imaginary diagonal entries + n(n−1)/2 complex entries</td></tr>
+<tr><td>Real symmetric</td><td>n(n+1)/2</td><td>3</td><td>6</td><td></td></tr>
+<tr><td>Real antisymmetric</td><td>n(n−1)/2</td><td>1</td><td>3</td><td>the same as a vector in 3D (a × r)</td></tr>
+<tr><td>Traceless Hermitian</td><td>n² − 1</td><td>3</td><td>8</td><td>the Pauli matrices (n = 2) and Gell-Mann matrices (n = 3)</td></tr>
+<tr><td>Complex diagonal / real diagonal</td><td>2n / n</td><td>4 / 2</td><td>6 / 3</td><td></td></tr>
+<tr><td>Complex scalar aI</td><td>2</td><td>2</td><td>2</td><td></td></tr>
+<tr><td>Complex triangular</td><td>n(n+1)</td><td>6</td><td>12</td><td></td></tr>
+<tr><td><i>Unitary (Section 5)</i></td><td><i>n²</i></td><td><i>4</i></td><td><i>9</i></td><td><i>preview</i></td></tr>
+<tr><td><i>Real orthogonal (Section 5)</i></td><td><i>n(n−1)/2</i></td><td><i>1</i></td><td><i>3</i></td><td><i>the angle(s) of a rotation</i></td></tr>
+</table></div>
+<p><b>Book Example 5: the most general 2×2 matrices.</b></p>
+<p>Symmetric: A<sub>S</sub> = <span class="M" data-m="a+ib e+if; e+if c+id"></span> (6 real parameters). Hermitian: A<sub>H</sub> = <span class="M" data-m="a c+id; c−id b"></span> (4 real parameters).</p>
+<div class="lab"><h4>🔬 Lab 3 – Parameter counter: see which entries are free</h4>
+<div class="ctrl"><label>type <select id="ptype">
+<option value="gen">General complex</option><option value="real">Real</option><option value="imag">Purely imaginary</option>
+<option value="csym">Complex symmetric</option><option value="canti">Complex antisymmetric</option><option value="herm" selected>Hermitian</option><option value="aherm">AntiHermitian</option>
+<option value="rsym">Real symmetric</option><option value="ranti">Real antisymmetric</option><option value="thrm">Traceless Hermitian</option>
+<option value="cdiag">Complex diagonal</option><option value="rdiag">Real diagonal</option><option value="scal">Scalar aI (complex)</option><option value="ctri">Complex upper triangular</option></select></label>
+<label>n = <input type="range" id="pn" min="1" max="7" value="3"><b id="pnv"></b></label></div>
+<div id="pgrid"></div>
+<div class="legend"><span><i style="background:#2f6fdf"></i>free complex (2)</span><span><i style="background:#2b9348"></i>free real (1)</span><span><i style="background:#9c36b5"></i>free imaginary (1)</span><span><i style="background:#adb5bd"></i>fixed by another entry (0)</span><span><i style="background:#ffe8cc"></i>fixed by trace = 0 (0)</span><span><i style="background:#f1f3f5;border:1px solid #ccc"></i>zero (0)</span></div>
+<div class="out" id="pOut"></div>
+</div>
+</section>
+
+<section id="indep">
+<h2>8. Linearly independent matrices and linear combinations</h2>
+<div class="box def"><b class="t">Definition (as for vectors, Section 1)</b> Matrices A₁, …, A_p of the same order are <b>linearly independent</b> if Σcᵢ Aᵢ = <b>0</b> forces all cᵢ = 0. Otherwise they are <b>dependent</b>, and at least one of them is a linear combination of the others: A_k = −Σ<sub>i≠k</sub>(cᵢ/c_k)Aᵢ. For two matrices, dependent means A₁ = cA₂.</div>
+<h3>Book Example 6: the standard basis E<sub>kl</sub></h3>
+<p>(a) The mn matrices E<sub>kl</sub> (1 at (k,l), 0 elsewhere) are independent: Σ a<sub>kl</sub>E<sub>kl</sub> is the matrix whose (k,l) entry is a<sub>kl</sub>. That is zero only if every a<sub>kl</sub> = 0.<br>(b) Any B = [bᵢⱼ] equals Σ b<sub>kl</sub>E<sub>kl</sub>. So <b>mn is the maximum number of independent m×n matrices</b>, and {E<sub>kl</sub>} is a basis.</p>
+<div class="box warnb"><b class="t">Real vs complex coefficients: a subtle point (handle it carefully)</b>
+<p>The book's rule: for a type of special matrix, the maximum number of independent matrices equals the number of real parameters if only <b>real</b> coefficients are allowed, and half of it if <b>complex</b> coefficients are allowed. This works for types that stay inside the type when multiplied by complex numbers (complex symmetric, antisymmetric, triangular, …). For example, symmetric matrices have n(n+1) real parameters, so there are n(n+1)/2 independent ones over ℂ.</p>
+<p><b>Hermitian matrices are different:</b> iH is not Hermitian, so Hermitian matrices form a vector space only over ℝ, of dimension n². Remarkably, n² independent Hermitian matrices (such as I, σₓ, σᵧ, σ_z) stay independent even with complex coefficients, and they then span <i>all</i> n×n complex matrices. That is why the book's answer for Hermitian is n² in both cases.</p></div>
+</section>
+
+<section id="pauli">
+<h2>9. Book Example 7: the Pauli basis of 2×2 Hermitian matrices</h2>
+<p>Try A₁ = <span class="M" data-m="1 0; 0 0"></span>, A₂ = <span class="M" data-m="0 0; 0 1"></span>, A₃ = <span class="M" data-m="0 1; 1 0"></span>, A₄ = <span class="M" data-m="0 -i; i 0"></span>. Then Σaᵢ Aᵢ = <span class="M" data-m="a₁ a₃−ia₄; a₃+ia₄ a₂"></span> = 0 forces a₁ = a₂ = 0 and a₃ ± ia₄ = 0, so a₃ = a₄ = 0. They are independent.</p>
+<p>The conventional choice uses A₁ + A₂ and A₁ − A₂:</p>
+<div class="eq">I = <span class="M" data-m="1 0; 0 1"></span>,  σ_z = <span class="M" data-m="1 0; 0 -1"></span>,  σₓ = <span class="M" data-m="0 1; 1 0"></span>,  σᵧ = <span class="M" data-m="0 -i; i 0"></span></div>
+<p>These are the <b>Pauli spin matrices</b> of a spin-½ particle.</p>
+<div class="box tip"><b class="t">⚡ Pauli decomposition (Exercise 13, a frequent exam question)</b>
+<div class="eq">H = <span class="M" data-m="a c−id; c+id b"></span> = ½(a + b) I + c σₓ + d σᵧ + ½(a − b) σ_z</div>
+For any 2×2 matrix (even a complex one), the coefficient of σₖ is <b>½ Tr(σₖ A)</b> and the coefficient of I is ½ Tr A. This works because Tr(σᵢσⱼ) = 2δᵢⱼ. Writing H = a₀I + r·σ, the eigenvalues are <b>a₀ ± |r|</b>, Tr H = 2a₀, and det H = a₀² − |r|².</div>
+<div class="lab"><h4>🔬 Lab 4 – A 2×2 Hermitian matrix is a point (a₀) plus a 3D arrow r (drag to rotate)</h4>
+<div class="grid2"><div><canvas id="cvPauli" width="480" height="400"></canvas></div><div>
+<div class="ctrl"><label>a (H₁₁)<input type="range" id="ha" min="-3" max="3" step="0.1" value="2"></label><label>b (H₂₂)<input type="range" id="hb" min="-3" max="3" step="0.1" value="0"></label></div>
+<div class="ctrl"><label>c (Re H₂₁)<input type="range" id="hc" min="-3" max="3" step="0.1" value="1"></label><label>d (Im H₂₁)<input type="range" id="hd" min="-3" max="3" step="0.1" value="1"></label></div>
+<div class="out" id="outPauli"></div></div></div>
+<p class="small">The arrow r = (c, d, (a−b)/2) is the "σ-vector" of H. Its length fixes the splitting between the two eigenvalues, a₀ + |r| and a₀ − |r|. Its direction is the spin axis. The diagonal shift a₀ only moves both eigenvalues up or down together.</p>
+</div>
+</section>
+
+<section id="poly">
+<h2>10. Matrices with polynomial elements</h2>
+<p>If every element fᵢⱼ(x) of an m×n matrix is a polynomial of degree ≤ p, the matrix can be written <b>uniquely</b> as</p>
+<div class="eq">A(x) = B₀ + B₁x + B₂x² + … + B_p x^p,  with (B_k)ᵢⱼ = coefficient of x^k in fᵢⱼ(x)</div>
+<p>(Uniqueness follows because the coefficients of a polynomial are unique.) This form is used in the proof of the Cayley–Hamilton theorem (Section 12).</p>
+<div class="prob"><div class="q">Book Example 8: expand A = <span class="M" data-m="3x³+2x−1 5x²−3x+2 −2x³+3x²−5x+1; 9x³−3 6x+4 7x²−4x; 2x³−3x−10 x³+6x²+x 6x³−4x²+8"></span>.</div>
+<details><summary>Show solution</summary>
+<p>Collect the constant term, then the x, x², x³ coefficients of every entry:</p>
+<p>A = <span class="M" data-m="-1 2 1; -3 4 0; -10 0 8"></span> + <span class="M" data-m="2 -3 -5; 0 6 -4; -3 1 0"></span>x + <span class="M" data-m="0 5 3; 0 0 7; 0 6 -4"></span>x² + <span class="M" data-m="3 0 -2; 9 0 0; 2 1 6"></span>x³</p>
+<p>Check entry (3,2): x³ + 6x² + x has constant 0, x-coefficient 1, x²-coefficient 6, x³-coefficient 1 ✓.</p></details></div>
+</section>
+
+<section id="trace">
+<h2>11. The trace (Spur, diagonal sum)</h2>
+<div class="eq">Tr A = Sp A = Σᵢ aᵢᵢ</div>
+<div class="box thm"><b class="t">Book Example 9: the trace is invariant under cyclic permutations</b>
+<p>For A (m×n) and B (n×m): Tr(AB) = Σᵢ Σⱼ aᵢⱼbⱼᵢ and Tr(BA) = Σⱼ Σᵢ bⱼᵢaᵢⱼ, which is the same double sum. So <b>Tr(AB) = Tr(BA)</b>, even though AB is m×m and BA is n×n.</p>
+<p>For k matrices, put C = A₁⋯A_r and D = A_{r+1}⋯A_k. Then Tr(CD) = Tr(DC) gives Tr(A₁A₂⋯A_k) = Tr(A_{r+1}⋯A_kA₁⋯A_r). ∎</p>
+<p><b>Only cyclic permutations work.</b> Tr(ABC) = Tr(BCA) = Tr(CAB), but in general Tr(ABC) ≠ Tr(ACB) (e.g. with Pauli matrices: 2i vs −2i).</p></div>
+<div class="tbl-wrap"><table>
+<tr><th>Fact</th><th>Why</th></tr>
+<tr><td>Tr(A + B + …) = Tr A + Tr B + … (Exercise 17)</td><td>the diagonal of a sum is the sum of the diagonals</td></tr>
+<tr><td>Tr[(AB)ᵏ] = Tr[(BA)ᵏ] (Exercise 19)</td><td>(AB)ᵏ = A(BA)ᵏ⁻¹B, then use cyclicity</td></tr>
+<tr><td>Tr of an antisymmetric matrix = 0</td><td>the diagonal is zero</td></tr>
+<tr><td>Tr of a Hermitian matrix is real; of an antiHermitian matrix, imaginary</td><td>from the diagonal entries</td></tr>
+<tr><td>Tr(SK) = 0 for S symmetric, K antisymmetric</td><td>transpose argument (Section 5)</td></tr>
+<tr><td>Tr(A†A) = Σ|aᵢⱼ|² ≥ 0</td><td>the "squared length" of the matrix</td></tr>
+<tr><td>Tr(Tᵏ) = Σ tᵢᵢᵏ for triangular T</td><td>Exercise 18</td></tr>
+<tr><td>Tr(P⁻¹AP) = Tr A</td><td>cyclicity: basis independence</td></tr>
+</table></div>
+</section>
+
+<section id="short">
+<h2>12. Exam shortcut sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Question</th><th>Fast answer</th></tr>
+<tr><td>Which matrices commute with diag(distinct entries)?</td><td>only diagonal ones</td></tr>
+<tr><td>Which matrices commute with everything?</td><td>only scalar matrices aI</td></tr>
+<tr><td>Number of real parameters of a type</td><td>use the table: Hermitian n², real symmetric n(n+1)/2, real antisymmetric n(n−1)/2, complex symmetric n(n+1), traceless Hermitian n² − 1</td></tr>
+<tr><td>Is H Hermitian?</td><td>diagonal real, and each entry below the diagonal is the conjugate of its mirror above</td></tr>
+<tr><td>Decompose A</td><td>(A ± A†)/2, (A ± Ã)/2, (A ± A*)/2</td></tr>
+<tr><td>x̃Ax for antisymmetric A</td><td>0. For a general A, x̃Ax = x̃·sym(A)·x.</td></tr>
+<tr><td>x†Hx for Hermitian H</td><td>real; for antiHermitian, purely imaginary</td></tr>
+<tr><td>Product of Hermitian A, B</td><td>Hermitian ⇔ AB = BA. i[A,B] and {A,B} are always Hermitian.</td></tr>
+<tr><td>Linear combination aA + bB of Hermitian matrices</td><td>Hermitian for every pair ⇔ a, b real</td></tr>
+<tr><td>2×2 Hermitian H in Pauli form</td><td>a₀ = Tr H/2, rₖ = Tr(σₖH)/2, eigenvalues a₀ ± |r|</td></tr>
+<tr><td>Diagonal of Tᵏ, det T (T triangular)</td><td>tᵢᵢᵏ, Π tᵢᵢ</td></tr>
+<tr><td>A = [1 0 0; 0 1 0; a b −1]: Aⁿ?</td><td>A² = I, so Aⁿ = I (n even) or A (n odd)</td></tr>
+<tr><td>Find scalars with I + aA + bA² = 0 (2×2)</td><td>Cayley–Hamilton: A² = (Tr A)A − (det A)I, then match coefficients</td></tr>
+<tr><td>E<sub>kl</sub>E<sub>pq</sub></td><td>δ<sub>lp</sub>E<sub>kq</sub>: the inner indices must match</td></tr>
+<tr><td>Trace of a product of Pauli matrices</td><td>Tr σᵢ = 0, Tr(σᵢσⱼ) = 2δᵢⱼ, Tr(σᵢσⱼσₖ) = 2iεᵢⱼₖ</td></tr>
+<tr><td>det of an odd-order antisymmetric matrix</td><td>0, since det Ã = det(−A) = (−1)ⁿ det A</td></tr>
+</table></div>
+</section>
+
+<section id="classify">
+<h2>13. 🧮 Matrix classifier and decomposer</h2>
+<div class="lab">
+<p class="small">Enter a matrix (real, complex or fractional, e.g. 2+3i, -i, 1/2). The tool tests every type in this section and prints the three decompositions, the trace and the Pauli form (for 2×2).</p>
+<textarea id="clIn">3+2i 1-i 5
+-2+7i 6i -1+4i
+4-3i 2+2i 6+i</textarea>
+<div class="ctrl"><button id="clBtn">Classify &amp; decompose</button>
+<button class="alt" data-cl="0 -i&#10;i 0">σᵧ</button><button class="alt" data-cl="2 1-i&#10;1+i 3">Hermitian</button><button class="alt" data-cl="0 2 -1&#10;-2 0 3&#10;1 -3 0">Real antisymmetric</button>
+<button class="alt" data-cl="3 4 -1&#10;0 2 5&#10;0 0 -6">Upper triangular</button><button class="alt" data-cl="1 0 0&#10;0 1 0&#10;2 5 -1">Ex 11 matrix</button><button class="alt" data-cl="3 1-2i&#10;1+2i -1">2×2 Hermitian</button></div>
+<div class="out" id="clOut"></div>
+</div>
+</section>
+<section id="bookex">
+<h2>14. Book's Exercise 3 – all 20 problems solved</h2>
+
+<div class="prob"><div class="q">1. Write M = <span class="M" data-m="3+2i 1−i 5; −2+7i 6i −1+4i; 4−3i 2+2i 6+i"></span> as (a) real + purely imaginary, (b) symmetric + antisymmetric, (c) Hermitian + antiHermitian.</div>
+<details><summary>Show solution</summary>
+<p>(a) M = <span class="M" data-m="3 1 5; -2 0 -1; 4 2 6"></span> + i<span class="M" data-m="2 -1 0; 7 6 4; -3 2 1"></span>. Simply separate the real and imaginary parts.</p>
+<p>(b) S = ½(M + M̃) = <span class="M" data-m="3+2i −1/2+3i 9/2−3i/2; −1/2+3i 6i 1/2+3i; 9/2−3i/2 1/2+3i 6+i"></span>, K = ½(M − M̃) = <span class="M" data-m="0 3/2−4i 1/2+3i/2; −3/2+4i 0 −3/2+i; −1/2−3i/2 3/2−i 0"></span>.<br>Example: S₁₂ = ½[(1−i) + (−2+7i)] = −½ + 3i, and K₁₂ = ½[(1−i) − (−2+7i)] = 3/2 − 4i.</p>
+<p>(c) H = ½(M + M†) = <span class="M" data-m="3 −1/2−4i 9/2+3i/2; −1/2+4i 0 1/2+i; 9/2−3i/2 1/2−i 6"></span>, C = ½(M − M†) = <span class="M" data-m="2i 3/2+3i 1/2−3i/2; −3/2+3i 6i −3/2+3i; −1/2−3i/2 3/2+3i i"></span>.<br>Example: H₁₂ = ½[M₁₂ + M₂₁*] = ½[(1−i) + (−2−7i)] = −½ − 4i. Check that H's diagonal (3, 0, 6) is real and C's diagonal (2i, 6i, i) is imaginary ✓. You can verify all of these in the classifier above.</p></details></div>
+
+<div class="prob"><div class="q">2. Show (a) every matrix is uniquely real + purely imaginary; (b) every square matrix is uniquely symmetric + antisymmetric.</div>
+<details><summary>Show solution</summary>
+<p>(a) Suppose A = R + P with R* = R (real) and P* = −P (purely imaginary). Conjugating gives A* = R − P. So R = (A + A*)/2 and P = (A − A*)/2 are forced (uniqueness), and these choices do work (existence).</p>
+<p>(b) A = S + K with S̃ = S and K̃ = −K. Transposing gives Ã = S − K, so S = (A + Ã)/2 and K = (A − Ã)/2. This is the same argument as Example 3, with ~ in place of †.</p></details></div>
+
+<div class="prob"><div class="q">3. If A and B are both symmetric, or both antisymmetric, show that BA is the transpose of AB.</div>
+<details><summary>Show solution</summary>
+<p>(AB)ᵀ = B̃Ã. Both symmetric: B̃Ã = BA. Both antisymmetric: B̃Ã = (−B)(−A) = BA. Either way, (AB)ᵀ = BA. Consequently AB is symmetric ⇔ AB = BA.</p></details></div>
+
+<div class="prob"><div class="q">4. (a) The sum of Hermitian matrices is Hermitian. (b) The product of two Hermitian matrices is Hermitian ⇔ they commute.</div>
+<details><summary>Show solution</summary>
+<p>(a) (A + B)† = A† + B† = A + B.</p>
+<p>(b) (AB)† = B†A† = BA. So (AB)† = AB ⇔ BA = AB. (Both directions are covered: if they commute, AB is Hermitian, and if AB is Hermitian, they commute.)</p></details></div>
+
+<div class="prob"><div class="q">5. (a) For Hermitian A, B, when is aA + bB Hermitian? (b) For antiHermitian A, B, when is aA + bB antiHermitian?</div>
+<details><summary>Show solution</summary>
+<p>(a) (aA + bB)† = a*A + b*B. This equals aA + bB for every Hermitian A and B ⇔ a* = a and b* = b, i.e. <b>a and b are real</b>. (Take B = 0 and A = I to see that a* = a is needed.)</p>
+<p>(b) (aA + bB)† = −(a*A + b*B), which must equal −(aA + bB). Again ⇔ <b>a and b are real</b>.</p></details></div>
+
+<div class="prob"><div class="q">6. H₁ is Hermitian and H₂ is antiHermitian. Show H₁ + iH₂ and H₁ − iH₂ are Hermitian.</div>
+<details><summary>Show solution</summary>
+<p>(iH₂)† = −iH₂† = −i(−H₂) = iH₂, so iH₂ is Hermitian. Then H₁ ± iH₂ is a sum (or difference) of Hermitian matrices, hence Hermitian.</p></details></div>
+
+<div class="prob"><div class="q">7. Find scalars a, b with I + aA + bA² = 0 for A = <span class="M" data-m="2 -5; 3 1"></span>.</div>
+<details><summary>Show solution</summary>
+<p>A² = <span class="M" data-m="2·2−5·3 2(−5)−5·1; 3·2+1·3 3(−5)+1"></span> = <span class="M" data-m="-11 -15; 9 -14"></span>.</p>
+<p><b>Shortcut (Cayley–Hamilton):</b> Tr A = 3 and det A = 2 + 15 = 17, so A² = 3A − 17I. Then I + aA + b(3A − 17I) = (1 − 17b)I + (a + 3b)A = 0. Since A is not a multiple of I, both coefficients must vanish: b = 1/17 and a = −3b = <b>−3/17</b>, <b>b = 1/17</b>.</p>
+<p>Check (1,1): 1 + (−3/17)(2) + (1/17)(−11) = (17 − 6 − 11)/17 = 0 ✓.</p></details></div>
+
+<div class="prob"><div class="q">8. Show (a) E<sub>kl</sub>E<sub>pq</sub> = δ<sub>lp</sub>E<sub>kq</sub>, (b) E<sub>kl</sub>² = E<sub>kl</sub>δ<sub>kl</sub>.</div>
+<details><summary>Show solution</summary>
+<p>(a) (E<sub>kl</sub>E<sub>pq</sub>)ᵢⱼ = Σᵣ δᵢₖδᵣₗ·δᵣₚδⱼq = δᵢₖδₗₚδⱼq = δₗₚ(E<sub>kq</sub>)ᵢⱼ.</p>
+<p>(b) Put p = k, q = l: E<sub>kl</sub>² = δ<sub>lk</sub>E<sub>kl</sub>. So E<sub>kk</sub> is idempotent and E<sub>kl</sub> (k ≠ l) is nilpotent.</p></details></div>
+
+<div class="prob"><div class="q">9. I, A = <span class="M" data-m="1 0; 0 -1"></span>, B = ½<span class="M" data-m="-1 √3; √3 1"></span>, C = ½<span class="M" data-m="-1 -√3; -√3 1"></span>, D = ½<span class="M" data-m="-1 √3; -√3 -1"></span>, F = ½<span class="M" data-m="-1 -√3; √3 -1"></span>. Show (a) A² = B² = C² = I, (b) AB = D, (c) AC = BA = F.</div>
+<details><summary>Show solution</summary>
+<p>(a) A² = I is clear. B² = ¼<span class="M" data-m="1+3 −√3+√3; −√3+√3 3+1"></span> = I, and C² = I similarly.</p>
+<p>(b) AB: A flips the sign of row 2 of B, so AB = ½<span class="M" data-m="-1 √3; -√3 -1"></span> = D ✓.</p>
+<p>(c) AC = ½<span class="M" data-m="-1 -√3; √3 -1"></span> = F ✓. BA: A on the right flips the sign of column 2 of B, so BA = ½<span class="M" data-m="-1 -√3; √3 -1"></span> = F ✓.</p>
+<p><b>Meaning:</b> A, B, C are reflections in three mirror lines 60° apart, and D, F are rotations by ∓120°. Together with I, these 6 matrices form a group: the symmetry group of an equilateral triangle (S₃ ≅ C₃ᵥ), the smallest non-abelian group. Check: D³ = I and DF = I.</p></details></div>
+
+<div class="prob"><div class="q">10. Spin-1: Mₓ = (1/√2)<span class="M" data-m="0 1 0; 1 0 1; 0 1 0"></span>, Mᵧ = (1/√2)<span class="M" data-m="0 -i 0; i 0 -i; 0 i 0"></span>, M_z = <span class="M" data-m="1 0 0; 0 0 0; 0 0 -1"></span>, M± = Mₓ ± iMᵧ. Show (a)–(g).</div>
+<details><summary>Show solution</summary>
+<p><b>M±:</b> M₊ = <span class="M" data-m="0 √2 0; 0 0 √2; 0 0 0"></span>, M₋ = <span class="M" data-m="0 0 0; √2 0 0; 0 √2 0"></span> (raising and lowering operators).</p>
+<p>(a) MₓMᵧ = ½<span class="M" data-m="i 0 −i; 0 0 0; i 0 −i"></span> and MᵧMₓ = ½<span class="M" data-m="−i 0 −i; 0 0 0; i 0 i"></span>, so [Mₓ, Mᵧ] = <span class="M" data-m="i 0 0; 0 0 0; 0 0 −i"></span> = iM_z ✓. The others ([Mᵧ,M_z] = iMₓ, [M_z,Mₓ] = iMᵧ) follow the same way (verified).</p>
+<p>(b) Mₓ² = ½<span class="M" data-m="1 0 1; 0 2 0; 1 0 1"></span>, Mᵧ² = ½<span class="M" data-m="1 0 −1; 0 2 0; −1 0 1"></span>, M_z² = diag(1, 0, 1). Sum = diag(2, 2, 2) = 2I = s(s+1)I with s = 1 ✓.</p>
+<p>(c) M² = 2I commutes with everything, in particular with each Mᵢ.</p>
+<p>(d) [M_z, M±] = [M_z, Mₓ] ± i[M_z, Mᵧ] = iMᵧ ± i(−iMₓ) = ±(Mₓ ± iMᵧ) = ±M± ✓.</p>
+<p>(e) [M₊, M₋] = [Mₓ + iMᵧ, Mₓ − iMᵧ] = −i[Mₓ, Mᵧ] + i[Mᵧ, Mₓ] = −2i(iM_z) = 2M_z ✓ (directly: M₊M₋ − M₋M₊ = diag(2,2,0) − diag(0,2,2) = diag(2,0,−2)).</p>
+<p>(f) (M₊)† = Mₓ† − iMᵧ† = Mₓ − iMᵧ = M₋, using (g).</p>
+<p>(g) Mₓ is real symmetric, hence Hermitian. Mᵧ is imaginary antisymmetric, hence Hermitian. M_z is real diagonal, hence Hermitian.</p></details></div>
+
+<div class="prob"><div class="q">11. Show every even power of A = <span class="M" data-m="1 0 0; 0 1 0; a b -1"></span> is I and every odd power is A.</div>
+<details><summary>Show solution</summary>
+<p>A² rows: rows 1 and 2 stay e₁ᵀ and e₂ᵀ. Row 3 = (a·1 + b·0 + (−1)a, a·0 + b·1 + (−1)b, (−1)(−1)) = (0, 0, 1). So A² = I, and then A^{2k} = I and A^{2k+1} = A. (A is a reflection, an involution, for any a and b.)</p></details></div>
+
+<div class="prob"><div class="q">12. The product of two triangular matrices of the same type is triangular of that type, and so are all powers.</div>
+<details><summary>Show solution</summary>
+<p>Upper triangular: aᵢₖ = 0 for i &gt; k and bₖⱼ = 0 for k &gt; j. In (AB)ᵢⱼ = Σₖ aᵢₖbₖⱼ, a term is nonzero only if i ≤ k ≤ j. If i &gt; j there is no such k, so (AB)ᵢⱼ = 0. Powers follow by induction, and lower triangular is analogous.</p></details></div>
+
+<div class="prob"><div class="q">13. Any 2×2 Hermitian matrix is uniquely a real combination of I, σ_z, σₓ, σᵧ.</div>
+<details><summary>Show solution</summary>
+<p>Write H = <span class="M" data-m="a c−id; c+id b"></span> (a, b, c, d real). Then H = ½(a+b)I + ½(a−b)σ_z + cσₓ + dσᵧ. Uniqueness: the four matrices are independent (Example 7), so the coefficients are unique.</p></details></div>
+
+<div class="prob"><div class="q">14. (a) The maximum number of linearly independent 3×3 Hermitian matrices is 9. (b) Construct 9. (c) Write the most general 3×3 Hermitian matrix (9 real parameters). (d) Expand it in the 9 matrices.</div>
+<details><summary>Show solution</summary>
+<p>(a) 3×3 Hermitian matrices have n² = 9 real parameters. They form a real vector space of dimension 9, so at most 9 are independent.</p>
+<p>(b) E₁₁, E₂₂, E₃₃, and for each pair (k,l) with k &lt; l the two matrices S<sub>kl</sub> = E<sub>kl</sub> + E<sub>lk</sub> and A<sub>kl</sub> = −iE<sub>kl</sub> + iE<sub>lk</sub>. That gives 3 + 3 + 3 = 9.</p>
+<p>(c) H = <span class="M" data-m="a₁ p₁−iq₁ p₂−iq₂; p₁+iq₁ a₂ p₃−iq₃; p₂+iq₂ p₃+iq₃ a₃"></span>, with 9 real numbers a₁, a₂, a₃, p₁, p₂, p₃, q₁, q₂, q₃.</p>
+<p>(d) H = a₁E₁₁ + a₂E₂₂ + a₃E₃₃ + p₁S₁₂ + q₁A₁₂ + p₂S₁₃ + q₂A₁₃ + p₃S₂₃ + q₃A₂₃. The expansion is unique because the 9 matrices are independent. (The physicists' alternative is I plus the 8 Gell-Mann matrices.)</p></details></div>
+
+<div class="prob"><div class="q">15. Find all matrices whose square is <span class="M" data-m="2 1; 0 2"></span>.</div>
+<details><summary>Show solution</summary>
+<p>If X² = A, then X commutes with A (XA = X·X² = X²·X = AX). The matrices commuting with A = 2I + E₁₂ are <span class="M" data-m="p q; 0 p"></span> (Practice P5 of Section 2). So X² = <span class="M" data-m="p² 2pq; 0 p²"></span> = <span class="M" data-m="2 1; 0 2"></span>, giving p² = 2 and q = 1/(2p).</p>
+<p><b>X = ±<span class="M" data-m="√2 √2/4; 0 √2"></span></b>, exactly two solutions (confirmed by solving all four equations).</p></details></div>
+
+<div class="prob"><div class="q">16. Maximum number of independent antisymmetric matrices of order n? Construct a basis for order 3, and expand the general 3×3 antisymmetric matrix.</div>
+<details><summary>Show solution</summary>
+<p>An antisymmetric matrix is fixed by its n(n−1)/2 entries above the diagonal, so the maximum is <b>n(n−1)/2</b> (with complex coefficients). For n = 3 that is 3:</p>
+<p>J₁ = <span class="M" data-m="0 0 0; 0 0 -1; 0 1 0"></span>, J₂ = <span class="M" data-m="0 0 1; 0 0 0; -1 0 0"></span>, J₃ = <span class="M" data-m="0 -1 0; 1 0 0; 0 0 0"></span>.</p>
+<p>General: <span class="M" data-m="0 -c b; c 0 -a; -b a 0"></span> = aJ₁ + bJ₂ + cJ₃ (a, b, c complex). These Jₖ are the generators of rotations about the x, y, z axes, and (Jₖ)ᵢⱼ = −εₖᵢⱼ.</p></details></div>
+
+<div class="prob"><div class="q">17. Tr(A + B + C + …) = Tr A + Tr B + Tr C + ….</div>
+<details><summary>Show solution</summary><p>Σᵢ(aᵢᵢ + bᵢᵢ + cᵢᵢ + …) = Σaᵢᵢ + Σbᵢᵢ + Σcᵢᵢ + … (finite sums can be rearranged).</p></details></div>
+
+<div class="prob"><div class="q">18. If T is triangular with diagonal elements tᵢᵢ, the diagonal elements of Tᵏ are tᵢᵢᵏ.</div>
+<details><summary>Show solution</summary><p>For upper triangular A, B: (AB)ᵢᵢ = Σₖ aᵢₖbₖᵢ, and only k = i survives (we need i ≤ k ≤ i). So (AB)ᵢᵢ = aᵢᵢbᵢᵢ. By induction, (Tᵏ)ᵢᵢ = tᵢᵢᵏ. Consequently Tr Tᵏ = Σtᵢᵢᵏ.</p></details></div>
+
+<div class="prob"><div class="q">19. Show Tr[(AB)ᵏ] = Tr[(BA)ᵏ].</div>
+<details><summary>Show solution</summary><p>(AB)ᵏ = ABAB⋯AB. Move the first A to the end (a cyclic permutation): Tr(ABAB⋯AB) = Tr(BABA⋯BA) = Tr[(BA)ᵏ]. (AB and BA have the same nonzero eigenvalues, Section 9.)</p></details></div>
+
+<div class="prob"><div class="q">20. P is Hermitian with P² = P. Show Px and (I − P)x are orthogonal for every x.</div>
+<details><summary>Show solution</summary><p>(Px)†(I − P)x = x†P†(I − P)x = x†(P − P²)x = x†(P − P)x = 0. So P is an <b>orthogonal projector</b>. It splits every vector into a part in its range and a perpendicular part, x = Px + (I − P)x. In QM, P = |ψ⟩⟨ψ| is the measurement projector.</p></details></div>
+</section>
+
+<section id="practice">
+<h2>15. Practice set (with solutions)</h2>
+<h3>A. Identify the type</h3>
+<div class="prob"><div class="q">P1. Classify each: (a) <span class="M" data-m="0 -i; i 0"></span> (b) <span class="M" data-m="i 2; 2 i"></span> (c) <span class="M" data-m="0 1+i; -1+i 0"></span> (d) <span class="M" data-m="1 2i; -2i 3"></span> (e) <span class="M" data-m="0 3; -3 0"></span></div>
+<details><summary>Show solution</summary><p>(a) imaginary, antisymmetric ⇒ Hermitian (σᵧ). (b) symmetric, but neither Hermitian nor antiHermitian. It equals iI + 2σₓ: the iI part is antiHermitian and the 2σₓ part is Hermitian. (c) A₂₁ = −1 + i and −A₁₂* = −(1 − i) = −1 + i ✓, with zero diagonal ⇒ <b>antiHermitian</b>. It is not antisymmetric, since A₂₁ ≠ −A₁₂. (d) diagonal real, A₂₁ = −2i = (2i)* ⇒ Hermitian. (e) real antisymmetric ⇒ antiHermitian.</p></details></div>
+<div class="prob"><div class="q">P2. Which diagonal matrices are Hermitian? AntiHermitian? Which are both real and Hermitian?</div>
+<details><summary>Show solution</summary><p>Hermitian: diagonal with real entries. AntiHermitian: diagonal with imaginary entries. Real and Hermitian: real symmetric matrices (diagonal ones in this case).</p></details></div>
+<div class="prob"><div class="q">P3. Can a nonzero matrix be both Hermitian and antiHermitian? Both symmetric and antisymmetric? Both real and imaginary?</div>
+<details><summary>Show solution</summary><p>No in each case: A = A† = −A ⇒ 2A = 0. The same argument works for the other two.</p></details></div>
+
+<h3>B. Parameter counting (MCQ favourites)</h3>
+<div class="prob"><div class="q">P4. Number of real parameters: (a) 4×4 complex symmetric (b) 4×4 real antisymmetric (c) 3×3 traceless Hermitian (d) 3×3 complex upper triangular (e) 5×5 Hermitian.</div>
+<details><summary>Show solution</summary><p>(a) n(n+1) = 20. (b) n(n−1)/2 = 6. (c) n² − 1 = 8. (d) n(n+1) = 12. (e) n² = 25.</p></details></div>
+<div class="prob"><div class="q">P5. Dimension (over ℂ) of the space of 3×3 complex matrices that are symmetric and traceless.</div>
+<details><summary>Show solution</summary><p>Symmetric: 6 complex dimensions. The trace condition removes one: <b>5</b>.</p></details></div>
+<div class="prob"><div class="q">P6. Write the most general 2×2 antiHermitian matrix and count its parameters.</div>
+<details><summary>Show solution</summary><p><span class="M" data-m="ia c+id; −c+id ib"></span> with a, b, c, d real: 4 parameters. Check: K₂₁ = −K₁₂* = −(c − id) = −c + id ✓. It equals i × (a Hermitian matrix).</p></details></div>
+
+<h3>C. Commuting matrices</h3>
+<div class="prob"><div class="q">P7. Find all matrices commuting with σₓ, and with diag(1, 1, 2).</div>
+<details><summary>Show solution</summary><p>For σₓ: X = <span class="M" data-m="a b; c d"></span>. σₓX swaps the rows and Xσₓ swaps the columns. Equal ⇔ c = b and d = a, so X = <span class="M" data-m="a b; b a"></span> = aI + bσₓ.<br>For diag(1,1,2): (dᵢ − dⱼ)xᵢⱼ = 0 ⇒ x₁₃ = x₂₃ = x₃₁ = x₃₂ = 0, so X = <span class="M" data-m="* * 0; * * 0; 0 0 *"></span> (a 2×2 block plus a 1×1 block).</p></details></div>
+<div class="prob"><div class="q">P8. Show that a matrix commuting with all diagonal matrices must be diagonal.</div>
+<details><summary>Show solution</summary><p>It must in particular commute with diag(1, 2, …, n), whose entries are distinct. By Example 1, it is diagonal.</p></details></div>
+
+<h3>D. Hermitian algebra</h3>
+<div class="prob"><div class="q">P9. A and B are Hermitian. Which are Hermitian: AB + BA, AB − BA, i(AB − BA), ABA, A², A + iB?</div>
+<details><summary>Show solution</summary><p>AB + BA ✓. AB − BA ✗ (it is antiHermitian). i(AB − BA) ✓. ABA ✓, since (ABA)† = A†B†A† = ABA. A² ✓. A + iB ✗ in general.</p></details></div>
+<div class="prob"><div class="q">P10. Show that x†Hx is real for Hermitian H, and compute it for H = <span class="M" data-m="2 1-i; 1+i 3"></span>, x = {1, i}.</div>
+<details><summary>Show solution</summary><p>(x†Hx)* = (x†Hx)† = x†H†x = x†Hx, so it is real.<br>Hx = {2 + (1−i)i, (1+i) + 3i} = {2 + i + 1, 1 + 4i} = {3 + i, 1 + 4i}. Then x†Hx = 1·(3 + i) + (−i)(1 + 4i) = 3 + i − i + 4 = <b>7</b> (real ✓).</p></details></div>
+<div class="prob"><div class="q">P11. Pauli form of H = <span class="M" data-m="3 1-2i; 1+2i -1"></span>, and its eigenvalues without solving a quadratic.</div>
+<details><summary>Show solution</summary><p>a₀ = (3 − 1)/2 = 1, r_z = (3 + 1)/2 = 2, rₓ = 1, rᵧ = 2 (from c − id = 1 − 2i). |r| = √(1 + 4 + 4) = 3. Eigenvalues 1 ± 3 = <b>4, −2</b>. Check: Tr = 2 ✓, det = −3 − |1 − 2i|² = −3 − 5 = −8 = 4·(−2) ✓.</p></details></div>
+<div class="prob"><div class="q">P12. If H is Hermitian, show that iH is antiHermitian and that H² has non-negative diagonal elements.</div>
+<details><summary>Show solution</summary><p>(iH)† = −iH† = −iH. (H²)ᵢᵢ = Σₖ hᵢₖhₖᵢ = Σₖ hᵢₖhᵢₖ* = Σₖ |hᵢₖ|² ≥ 0.</p></details></div>
+
+<h3>E. Symmetric / antisymmetric</h3>
+<div class="prob"><div class="q">P13. Split A = <span class="M" data-m="1 2 3; 4 5 6; 7 8 9"></span> into symmetric + antisymmetric parts.</div>
+<details><summary>Show solution</summary><p>S = <span class="M" data-m="1 3 5; 3 5 7; 5 7 9"></span>, K = <span class="M" data-m="0 -1 -2; 1 0 -1; 2 1 0"></span>. Check: S + K = A ✓.</p></details></div>
+<div class="prob"><div class="q">P14. Show that x̃Ax = x̃Sx (S = symmetric part), and verify for A = <span class="M" data-m="1 4; 0 3"></span>.</div>
+<details><summary>Show solution</summary><p>x̃Ax = x̃Sx + x̃Kx = x̃Sx + 0. Here x̃Ax = x₁² + 4x₁x₂ + 3x₂². With S = <span class="M" data-m="1 2; 2 3"></span>: x₁² + 2·2x₁x₂ + 3x₂², the same ✓.</p></details></div>
+<div class="prob"><div class="q">P15. Show that the determinant of an antisymmetric matrix of odd order is 0.</div>
+<details><summary>Show solution</summary><p>det A = det Ã = det(−A) = (−1)ⁿ det A = −det A (n odd) ⇒ det A = 0. In 3D, a × r has a zero eigenvalue (along a).</p></details></div>
+<div class="prob"><div class="q">P16. Show Tr(SK) = 0 for S symmetric and K antisymmetric. Verify with S = <span class="M" data-m="1 2; 2 3"></span>, K = <span class="M" data-m="0 1; -1 0"></span>.</div>
+<details><summary>Show solution</summary><p>Tr(SK) = Tr((SK)ᵀ) = Tr(K̃S̃) = −Tr(KS) = −Tr(SK) ⇒ 0. Directly: SK = <span class="M" data-m="-2 1; -3 2"></span>, trace 0 ✓.</p></details></div>
+
+<h3>F. Triangular, E<sub>kl</sub>, polynomial matrices</h3>
+<div class="prob"><div class="q">P17. T = <span class="M" data-m="2 7; 0 -1"></span>. Find the diagonal of T⁵ and Tr T⁵ without multiplying.</div>
+<details><summary>Show solution</summary><p>diag(2⁵, (−1)⁵) = (32, −1). Tr = 31. (The full T⁵ = <span class="M" data-m="32 77; 0 -1"></span>. Its corner is 7(2⁵ − (−1)⁵)/(2 − (−1)) = 7·33/3 = 77.)</p></details></div>
+<div class="prob"><div class="q">P18. Compute E₁₂E₂₃, E₂₃E₁₂ and E₁₂² (3×3).</div>
+<details><summary>Show solution</summary><p>E₁₂E₂₃ = δ₂₂E₁₃ = E₁₃. E₂₃E₁₂ = δ₃₁E₂₂ = 0. E₁₂² = δ₂₁E₁₂ = 0.</p></details></div>
+<div class="prob"><div class="q">P19. Write <span class="M" data-m="x²+1 2x; 3 x²−x"></span> as B₀ + B₁x + B₂x².</div>
+<details><summary>Show solution</summary><p><span class="M" data-m="1 0; 3 0"></span> + <span class="M" data-m="0 2; 0 -1"></span>x + <span class="M" data-m="1 0; 0 1"></span>x².</p></details></div>
+<div class="prob"><div class="q">P20. Spin-½: with S = σ/2, show S² = Sₓ² + Sᵧ² + S_z² = (3/4)I, and compare with spin-1 (Exercise 10b).</div>
+<details><summary>Show solution</summary><p>Each σᵢ² = I, so S² = 3·(1/4)I = (3/4)I = s(s+1)I with s = ½. For spin 1, M² = 2I = 1·2·I. The general rule is S² = s(s+1)I (with ħ = 1).</p></details></div>
+</section>
+
+<section id="quiz" class="quiz">
+<h2>16. Self-test quiz</h2>
+<div id="quizBox"></div>
+<div class="ctrl"><button id="quizCheck">Check answers</button><button class="alt" id="quizReset">Reset</button><span id="quizScore"></span></div>
+</section>
+
+<section id="facts">
+<h2>17. Interesting facts</h2>
+<div class="box fact"><ul>
+<li>Charles Hermite (1855) introduced Hermitian forms while studying number theory, long before quantum mechanics made them famous.</li>
+<li>The "only scalar matrices commute with everything" fact is a baby version of <b>Schur's lemma</b>, the cornerstone of group representation theory: in an irreducible representation, any matrix that commutes with all the group matrices is a multiple of I. Degeneracies in QM come from this.</li>
+<li>Counting parameters gives Lie group dimensions: U(n) has n² parameters (from Hermitian generators), SU(n) has n² − 1 (traceless), and SO(n) has n(n−1)/2 (real antisymmetric). So SU(2) has 3 parameters (spin), SU(3) has 8 (gluons) and SO(3) has 3 (rotations).</li>
+<li>The 2×2 Hermitian matrices form a real 4-dimensional space, the same as spacetime: x^μ ↔ x⁰I + x·σ, with det = (x⁰)² − |x|², the Minkowski interval. This is how SL(2,ℂ) describes Lorentz transformations.</li>
+<li>Book Exercise 9's six matrices are the symmetry group of NH₃ and of an equilateral triangle, the first example in any group-theory course.</li>
+<li>"Spur" is the German word for trace, which is why old physics papers write Sp A.</li>
+</ul></div>
+</section>
+
+<script>
+/* ===== helpers ===== */
+const $=id=>document.getElementById(id);
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function pal(){return{ink:css('--ink'),muted:css('--muted'),line:css('--line'),bg:css('--card'),blue:css('--acc'),orange:css('--acc2'),green:css('--acc3'),purple:css('--acc4'),red:css('--warn')}}
+const redrawers=[];
+function fmt(x,d=2){if(Math.abs(x)<1e-9)x=0;return (+x.toFixed(d)).toString()}
+const add=(a,b)=>a.map((x,i)=>x+b[i]),sub=(a,b)=>a.map((x,i)=>x-b[i]),mul=(k,a)=>a.map(x=>k*x),nrm=a=>Math.hypot(...a);
+const ap=(m,p)=>[m[0]*p[0]+m[1]*p[1],m[2]*p[0]+m[3]*p[1]];
+const mm=(x,y)=>[x[0]*y[0]+x[1]*y[2],x[0]*y[1]+x[1]*y[3],x[2]*y[0]+x[3]*y[2],x[2]*y[1]+x[3]*y[3]];
+const m2s=m=>`[ ${m.map(v=>fmt(v,3)).slice(0,2).join('  ')} ]\n[ ${m.map(v=>fmt(v,3)).slice(2).join('  ')} ]`;
+function arrow(ctx,x1,y1,x2,y2,col,w=2.5,label,dash){ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;if(dash)ctx.setLineDash(dash);
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.setLineDash([]);const L=Math.hypot(x2-x1,y2-y1);
+  if(L>3){const a=Math.atan2(y2-y1,x2-x1),h=Math.min(12,L*0.4);ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-0.4),y2-h*Math.sin(a-0.4));ctx.lineTo(x2-h*Math.cos(a+0.4),y2-h*Math.sin(a+0.4));ctx.closePath();ctx.fill();}
+  if(label){ctx.font='bold 14px Segoe UI, sans-serif';ctx.fillText(label,x2+6,y2-6)}ctx.restore()}
+function evtPos(cv,e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height]}
+class Plane2D{
+  constructor(cv,unit,onDraw){this.cv=cv;this.ctx=cv.getContext('2d');this.u=unit;this.ox=cv.width/2;this.oy=cv.height/2;this.drag=[];this.onDraw=onDraw;this.act=null;
+    cv.addEventListener('pointerdown',e=>{const p=evtPos(cv,e);let best=null,bd=18;this.drag.forEach(d=>{const s=this.S(d.get());const dd=Math.hypot(s[0]-p[0],s[1]-p[1]);if(dd<bd){bd=dd;best=d}});if(best){this.act=best;cv.setPointerCapture(e.pointerId)}});
+    cv.addEventListener('pointermove',e=>{const p=evtPos(cv,e);if(this.act){const w=this.W(p);this.act.set([Math.round(w[0]*10)/10,Math.round(w[1]*10)/10]);this.draw()}
+      else{const near=this.drag.some(d=>{const s=this.S(d.get());return Math.hypot(s[0]-p[0],s[1]-p[1])<18});cv.style.cursor=near?'pointer':'default'}});
+    const up=()=>this.act=null;cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);redrawers.push(()=>this.draw())}
+  S(p){return[this.ox+p[0]*this.u,this.oy-p[1]*this.u]} W(p){return[(p[0]-this.ox)/this.u,(this.oy-p[1])/this.u]}
+  grid(){const c=this.ctx,pl=pal(),W=this.cv.width,H=this.cv.height;c.save();c.strokeStyle=pl.line;c.lineWidth=1;
+    for(let x=this.ox%this.u;x<W;x+=this.u){c.beginPath();c.moveTo(x,0);c.lineTo(x,H);c.stroke()}
+    for(let y=this.oy%this.u;y<H;y+=this.u){c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke()}
+    c.strokeStyle=pl.muted;c.lineWidth=1.3;c.beginPath();c.moveTo(0,this.oy);c.lineTo(W,this.oy);c.moveTo(this.ox,0);c.lineTo(this.ox,H);c.stroke();c.restore()}
+  line(a,b,col,w=1,dash){const c=this.ctx,p=this.S(a),q=this.S(b);c.save();c.strokeStyle=col;c.lineWidth=w;if(dash)c.setLineDash(dash);c.beginPath();c.moveTo(...p);c.lineTo(...q);c.stroke();c.restore()}
+  arrow(a,b,col,label,w=2.6,dash){const p=this.S(a),q=this.S(b);arrow(this.ctx,p[0],p[1],q[0],q[1],col,w,label,dash)}
+  dot(p,col,r=6){const c=this.ctx,q=this.S(p);c.fillStyle=col;c.beginPath();c.arc(q[0],q[1],r,0,7);c.fill()}
+  ring(p,col,r=10){const c=this.ctx,q=this.S(p);c.save();c.strokeStyle=col;c.lineWidth=2;c.setLineDash([3,3]);c.beginPath();c.arc(q[0],q[1],r,0,7);c.stroke();c.restore()}
+  poly(pts,fill,alpha=0.25,stroke){const c=this.ctx;c.save();c.beginPath();pts.forEach((p,i)=>{const q=this.S(p);i?c.lineTo(...q):c.moveTo(...q)});c.closePath();c.globalAlpha=alpha;c.fillStyle=fill;c.fill();c.globalAlpha=1;if(stroke){c.strokeStyle=stroke;c.lineWidth=1.5;c.stroke()}c.restore()}
+  text(p,t,col,dx=6,dy=-6){const q=this.S(p);this.ctx.fillStyle=col;this.ctx.font='bold 14px Segoe UI, sans-serif';this.ctx.fillText(t,q[0]+dx,q[1]+dy)}
+  draw(){const c=this.ctx;c.clearRect(0,0,this.cv.width,this.cv.height);c.fillStyle=pal().bg;c.fillRect(0,0,this.cv.width,this.cv.height);this.onDraw(this)}
+}
+$('themeBtn').onclick=()=>{const h=document.documentElement;const dark=h.getAttribute('data-theme')?h.getAttribute('data-theme')==='dark':matchMedia('(prefers-color-scheme: dark)').matches;h.setAttribute('data-theme',dark?'light':'dark');redrawers.forEach(f=>f())};
+
+/* ===== static matrix renderer ===== */
+document.querySelectorAll('.M').forEach(el=>{const rows=el.dataset.m.split(';').map(r=>r.trim().split(/\s+/));
+  el.innerHTML='<table class="mx">'+rows.map(r=>'<tr>'+r.map(x=>`<td>${x.replace(/^-/,'−')}</td>`).join('')+'</tr>').join('')+'</table>'});
+
+/* ===== complex numbers ===== */
+const C=(re,im=0)=>({re,im});
+const cadd=(a,b)=>C(a.re+b.re,a.im+b.im),csub=(a,b)=>C(a.re-b.re,a.im-b.im),cmul=(a,b)=>C(a.re*b.re-a.im*b.im,a.re*b.im+a.im*b.re),cconj=a=>C(a.re,-a.im);
+function pReal(s){if(s===''||s==='+')return 1;if(s==='-')return -1;if(s.includes('/')){const[a,b]=s.split('/');return pReal(a)/pReal(b)}const v=Number(s);if(isNaN(v))throw `cannot read "${s}"`;return v}
+function parseC(s){s=s.replace(/\s/g,'').replace(/−/g,'-');if(!s)throw'empty entry';
+  if(s.endsWith('i')){const body=s.slice(0,-1);let k=-1;for(let i=body.length-1;i>0;i--)if(body[i]==='+'||body[i]==='-'){k=i;break}
+    if(k<0)return C(0,pReal(body));return C(pReal(body.slice(0,k)),pReal(body.slice(k)))}
+  return C(pReal(s))}
+function fR(x){if(Math.abs(x)<1e-10)return'0';const r=Math.round(x);if(Math.abs(x-r)<1e-9)return''+r;
+  for(let d=2;d<=1000;d++){const n=Math.round(x*d);if(Math.abs(x*d-n)<1e-7)return n+'/'+d}return x.toFixed(4)}
+function fC(z){const re=Math.abs(z.re)<1e-10?0:z.re,im=Math.abs(z.im)<1e-10?0:z.im;if(im===0)return fR(re);
+  const ims=(Math.abs(im-1)<1e-12?'':Math.abs(im+1)<1e-12?'-':fR(im));if(re===0)return (ims===''?'':ims==='-'?'-':ims)+'i';
+  const a=Math.abs(im);return fR(re)+(im<0?'-':'+')+(Math.abs(a-1)<1e-12?'':fR(a))+'i'}
+function parseMat(t){const rows=t.trim().split(/\n|;/).map(r=>r.trim()).filter(Boolean).map(r=>r.split(/[\s,]+/).filter(Boolean).map(parseC));
+  if(!rows.length)throw'empty matrix';if(rows.some(r=>r.length!==rows[0].length))throw'rows have different lengths';return rows}
+const msz=A=>`${A.length}×${A[0].length}`;
+function mmul(A,B){if(A[0].length!==B.length)throw`cannot multiply ${msz(A)} by ${msz(B)}: inner sizes ${A[0].length} ≠ ${B.length}`;
+  return A.map(r=>B[0].map((_,j)=>r.reduce((s,a,k)=>cadd(s,cmul(a,B[k][j])),C(0))))}
+function madd(A,B,s=1){if(msz(A)!==msz(B))throw`cannot add ${msz(A)} and ${msz(B)}`;return A.map((r,i)=>r.map((a,j)=>s>0?cadd(a,B[i][j]):csub(a,B[i][j])))}
+const mT=A=>A[0].map((_,j)=>A.map(r=>r[j])),mConj=A=>A.map(r=>r.map(cconj)),mDag=A=>mT(mConj(A));
+const mScal=(c,A)=>A.map(r=>r.map(a=>cmul(c,a)));
+function mId(n){return[...Array(n)].map((_,i)=>[...Array(n)].map((_,j)=>C(i===j?1:0)))}
+function mStr(A){const S=A.map(r=>r.map(fC));const w=Math.max(...S.flat().map(s=>s.length));return S.map(r=>'  [ '+r.map(s=>s.padStart(w)).join('  ')+' ]').join('\n')}
+function mTr(A){if(A.length!==A[0].length)throw'trace needs a square matrix';return A.reduce((s,r,i)=>cadd(s,r[i]),C(0))}
+
+/* ================= 3D scene ================= */
+class Scene3D{
+  constructor(cv,onDraw){this.cv=cv;this.ctx=cv.getContext('2d');this.yaw=-0.75;this.pitch=0.42;this.s=cv.height/9;this.onDraw=onDraw;
+    let drag=null;
+    cv.addEventListener('pointerdown',e=>{drag=evtPos(cv,e);cv.setPointerCapture(e.pointerId)});
+    cv.addEventListener('pointermove',e=>{if(!drag)return;const p=evtPos(cv,e);this.yaw-=(p[0]-drag[0])*0.01;this.pitch=Math.max(-1.45,Math.min(1.45,this.pitch+(p[1]-drag[1])*0.01));drag=p;this.draw()});
+    cv.addEventListener('pointerup',()=>drag=null);cv.addEventListener('pointercancel',()=>drag=null);
+    cv.style.cursor='grab';redrawers.push(()=>this.draw());}
+  P(p){const [x,y,z]=p,cy=Math.cos(this.yaw),sy=Math.sin(this.yaw);const x1=x*cy-y*sy,y1=x*sy+y*cy;
+    const cp=Math.cos(this.pitch),sp=Math.sin(this.pitch);const Y=z*cp+y1*sp,dep=y1*cp-z*sp;const f=14/(14+dep);
+    return[this.cv.width/2+x1*this.s*f,this.cv.height/2-Y*this.s*f];}
+  line(a,b,col,w=1,dash){const c=this.ctx,p=this.P(a),q=this.P(b);c.save();c.strokeStyle=col;c.lineWidth=w;if(dash)c.setLineDash(dash);c.beginPath();c.moveTo(...p);c.lineTo(...q);c.stroke();c.restore()}
+  arrow(a,b,col,label,w=2.6,dash){const p=this.P(a),q=this.P(b);arrow(this.ctx,p[0],p[1],q[0],q[1],col,w,label,dash)}
+  poly(pts,fill,alpha=0.18){const c=this.ctx;c.save();c.globalAlpha=alpha;c.fillStyle=fill;c.beginPath();pts.forEach((p,i)=>{const q=this.P(p);i?c.lineTo(...q):c.moveTo(...q)});c.closePath();c.fill();c.restore()}
+  text(p,t,col){const q=this.P(p);this.ctx.fillStyle=col;this.ctx.font='13px Segoe UI, sans-serif';this.ctx.fillText(t,q[0]+4,q[1]-4)}
+  axes(L=3.5){const pl=pal();for(let i=-3;i<=3;i++){this.line([i,-3,0],[i,3,0],pl.line,1);this.line([-3,i,0],[3,i,0],pl.line,1)}
+    this.line([-L,0,0],[L,0,0],pl.muted,1.2);this.line([0,-L,0],[0,L,0],pl.muted,1.2);this.line([0,0,-L],[0,0,L],pl.muted,1.2);
+    this.text([L,0,0],'x',pl.muted);this.text([0,L,0],'y',pl.muted);this.text([0,0,L],'z',pl.muted);}
+  draw(){const c=this.ctx;c.clearRect(0,0,this.cv.width,this.cv.height);c.fillStyle=pal().bg;c.fillRect(0,0,this.cv.width,this.cv.height);this.onDraw(this)}
+}
+
+
+/* ===== Lab 1: commuting with diagonal ===== */
+(function(){const ids=['d1','d2','d3','d4'];
+ function draw(){const d=ids.map(i=>+$(i).value);ids.forEach((i,k)=>$(i+'v').textContent=d[k]);
+  let t='<table style="width:auto">',p='<table style="width:auto">',free=0;
+  for(let i=0;i<4;i++){t+='<tr>';p+='<tr>';for(let j=0;j<4;j++){const f=d[i]-d[j];
+    t+=`<td style="text-align:center;min-width:42px;${f===0?'background:var(--softg);font-weight:700':''}">${f}</td>`;
+    p+=`<td style="text-align:center;min-width:42px;${f===0?'background:var(--softg);color:var(--acc3);font-weight:800':'color:var(--muted)'}">${f===0?'★':'0'}</td>`;if(f===0)free++}t+='</tr>';p+='</tr>'}
+  $('commTbl').innerHTML=t+'</table>';$('commPat').innerHTML=p+'</table>';
+  const distinct=new Set(d).size;
+  $('commOut').textContent=`D = diag(${d.join(', ')})\nFree entries of B: ${free} of 16. `+(distinct===4?'All dᵢ distinct ⇒ B must be DIAGONAL (Book Example 1).':distinct===1?'All dᵢ equal ⇒ D = scalar matrix ⇒ EVERY B commutes with it.':'Some dᵢ equal ⇒ B is BLOCK-diagonal: free blocks where the dᵢ coincide (degeneracy).')}
+ ids.forEach(i=>$(i).addEventListener('input',draw));draw();})();
+
+/* ===== Lab 2: antisymmetric part pushes sideways ===== */
+(function(){let x=[2,1];const ids=['qa','qb','qc','qd'];
+ const S=new Plane2D($('cvQ'),45,s=>{const pl=pal();s.grid();const [a,b,c,d]=ids.map(i=>+$(i).value);
+  const Sm=[a,(b+c)/2,(b+c)/2,d],K=[0,(b-c)/2,(c-b)/2,0];const Ax=ap([a,b,c,d],x),Sx=ap(Sm,x),Kx=ap(K,x);
+  s.arrow([0,0],x,pl.blue,'x',3);s.arrow([0,0],Sx,pl.orange,'Sx',2.6);s.arrow(Sx,Ax,pl.purple,null,2.6);s.arrow([0,0],Kx,pl.purple,'Kx',2.6,[5,4]);s.arrow([0,0],Ax,pl.ink,'Ax',2);
+  const n=x[0]*x[0]+x[1]*x[1];if(n>1e-9){const pr=mul((Sx[0]*x[0]+Sx[1]*x[1])/n,x);s.line(Sx,pr,pl.muted,1,[3,3]);}
+  s.dot(x,pl.ink,4);
+  const dotK=x[0]*Kx[0]+x[1]*Kx[1],qA=x[0]*Ax[0]+x[1]*Ax[1],qS=x[0]*Sx[0]+x[1]*Sx[1];
+  $('outQ').textContent=`A = [${fmt(a)} ${fmt(b)}; ${fmt(c)} ${fmt(d)}]  =  S [${fmt(a)} ${fmt((b+c)/2)}; ${fmt((b+c)/2)} ${fmt(d)}]  +  K [0 ${fmt((b-c)/2)}; ${fmt((c-b)/2)} 0]\nx = (${fmt(x[0])}, ${fmt(x[1])})\nx̃Kx = ${fmt(dotK,4)}   ← always 0 (Kx ⟂ x)\nx̃Ax = ${fmt(qA,3)}  =  x̃Sx = ${fmt(qS,3)}  ✔`});
+ S.drag=[{get:()=>x,set:p=>x=p}];ids.forEach(i=>$(i).addEventListener('input',()=>S.draw()));S.draw();})();
+
+/* ===== Lab 3: parameter counter ===== */
+(function(){const COL={c:'#2f6fdf',r:'#2b9348',im:'#9c36b5',m:'#adb5bd',t:'#ffe8cc',z:'#f1f3f5'},W={c:2,r:1,im:1,m:0,t:0,z:0};
+ const kind=(T,i,j,n)=>{const d=i===j,up=i<j;switch(T){
+  case'gen':return'c';case'real':return'r';case'imag':return'im';
+  case'csym':return i<=j?'c':'m';case'canti':return d?'z':up?'c':'m';
+  case'herm':return d?'r':up?'c':'m';case'aherm':return d?'im':up?'c':'m';
+  case'rsym':return i<=j?'r':'m';case'ranti':return d?'z':up?'r':'m';
+  case'thrm':return d?(i===n-1?'t':'r'):up?'c':'m';
+  case'cdiag':return d?'c':'z';case'rdiag':return d?'r':'z';case'scal':return d?(i===0?'c':'m'):'z';
+  case'ctri':return i<=j?'c':'z'}};
+ const F={gen:'2n²',real:'n²',imag:'n²',csym:'n(n+1)',canti:'n(n−1)',herm:'n²',aherm:'n²',rsym:'n(n+1)/2',ranti:'n(n−1)/2',thrm:'n² − 1',cdiag:'2n',rdiag:'n',scal:'2',ctri:'n(n+1)'};
+ const LBL={c:'ℂ',r:'ℝ',im:'iℝ',m:'↔',t:'tr',z:'0'};
+ function draw(){const T=$('ptype').value,n=+$('pn').value;$('pnv').textContent=n;let h='<table style="width:auto;border-collapse:separate;border-spacing:3px">',cnt=0;
+  for(let i=0;i<n;i++){h+='<tr>';for(let j=0;j<n;j++){const k=kind(T,i,j,n);cnt+=W[k];
+    h+=`<td style="width:44px;height:36px;text-align:center;border-radius:6px;background:${COL[k]};color:${k==='z'||k==='t'?'#555':'#fff'};font-weight:700">${LBL[k]}</td>`}h+='</tr>'}
+  $('pgrid').innerHTML=h+'</table>';
+  $('pOut').textContent=`${$('ptype').selectedOptions[0].text}, n = ${n}\nCount of real parameters = ${cnt}   (formula: ${F[T]})\nGeneral complex n×n would have 2n² = ${2*n*n}, so the conditions remove ${2*n*n-cnt} real parameters.`}
+ ['ptype','pn'].forEach(i=>$(i).addEventListener('input',draw));draw();})();
+
+/* ===== Lab 4: Pauli vector ===== */
+(function(){const g=id=>+$(id).value;
+ const sc=new Scene3D($('cvPauli'),S=>{const pl=pal();const a=g('ha'),b=g('hb'),c=g('hc'),d=g('hd');const a0=(a+b)/2,r=[c,d,(a-b)/2],R=Math.hypot(...r);
+  S.axes(3.2);S.text([3.3,0,0],'σₓ',pl.blue);S.text([0,3.3,0],'σᵧ',pl.green);S.text([0,0,3.3],'σ_z',pl.orange);
+  S.line([r[0],r[1],0],r,pl.muted,1,[3,3]);S.line([0,0,0],[r[0],r[1],0],pl.muted,1,[3,3]);
+  S.arrow([0,0,0],r,pl.purple,'r',3.4);
+  $('outPauli').textContent=`H = [ ${fmt(a)}        ${fmt(c)}${d>=0?'−':'+'}${fmt(Math.abs(d))}i ]\n    [ ${fmt(c)}${d>=0?'+':'−'}${fmt(Math.abs(d))}i   ${fmt(b)} ]\nH = ${fmt(a0)}·I + ${fmt(c)}·σₓ + ${fmt(d)}·σᵧ + ${fmt((a-b)/2)}·σ_z\n|r| = ${fmt(R,3)}\neigenvalues a₀ ± |r| = ${fmt(a0+R,3)}, ${fmt(a0-R,3)}\nTr H = ${fmt(2*a0)},  det H = a₀² − |r|² = ${fmt(a0*a0-R*R,3)}`});
+ ['ha','hb','hc','hd'].forEach(i=>$(i).addEventListener('input',()=>sc.draw()));sc.draw();})();
+
+/* ===== classifier ===== */
+(function(){const z0=z=>Math.abs(z.re)<1e-10&&Math.abs(z.im)<1e-10;const eqM=(A,B)=>A.every((r,i)=>r.every((x,j)=>z0(csub(x,B[i][j]))));
+ const neg=A=>A.map(r=>r.map(x=>C(-x.re,-x.im))),half=A=>A.map(r=>r.map(x=>C(x.re/2,x.im/2)));
+ function run(){const out=$('clOut');try{const A=parseMat($('clIn').value),m=A.length,n=A[0].length,sq=m===n;let s=`Order ${m}×${n}${sq?' (square)':''}\n\n`;
+  const T=[];const yes=(c,name)=>T.push((c?'✔ ':'✘ ')+name);
+  yes(eqM(mConj(A),A),'real (A* = A)');yes(eqM(mConj(A),neg(A)),'purely imaginary (A* = −A)');
+  if(sq){const At=mT(A),Ad=mDag(A);yes(eqM(At,A),'symmetric (Ã = A)');yes(eqM(At,neg(A)),'antisymmetric (Ã = −A)');yes(eqM(Ad,A),'Hermitian (A† = A)');yes(eqM(Ad,neg(A)),'antiHermitian (A† = −A)');
+   const isD=A.every((r,i)=>r.every((x,j)=>i===j||z0(x)));yes(isD,'diagonal');yes(isD&&A.every((r,i)=>z0(csub(r[i],A[0][0]))),'scalar (aI)');
+   yes(A.every((r,i)=>r.every((x,j)=>j>=i||z0(x))),'upper (right) triangular');yes(A.every((r,i)=>r.every((x,j)=>j<=i||z0(x))),'lower (left) triangular');
+   s+=T.join('\n')+`\n\nTr A = ${fC(mTr(A))}\n`;
+   s+=`\n— Real + imaginary —\nRe part:\n${mStr(half(madd(A,mConj(A))))}\ni·(Im part) =\n${mStr(half(madd(A,mConj(A),-1)))}\n`;
+   s+=`\n— Symmetric + antisymmetric —\nS = (A+Ã)/2:\n${mStr(half(madd(A,At)))}\nK = (A−Ã)/2:\n${mStr(half(madd(A,At,-1)))}\n`;
+   s+=`\n— Hermitian + antiHermitian —\nH = (A+A†)/2:\n${mStr(half(madd(A,Ad)))}\nC = (A−A†)/2:\n${mStr(half(madd(A,Ad,-1)))}\n`;
+   if(n===2){const sx=[[C(0),C(1)],[C(1),C(0)]],sy=[[C(0),C(0,-1)],[C(0,1),C(0)]],sz=[[C(1),C(0)],[C(0),C(-1)]];const co=M=>{const t=mTr(mmul(M,A));return C(t.re/2,t.im/2)};
+    s+=`\n— Pauli form —\nA = (${fC(C(mTr(A).re/2,mTr(A).im/2))})·I + (${fC(co(sx))})·σₓ + (${fC(co(sy))})·σᵧ + (${fC(co(sz))})·σ_z`}}
+  else s+=T.join('\n')+'\n(Other types need a square matrix.)\n'+`\nRe part:\n${mStr(half(madd(A,mConj(A))))}\ni·(Im part):\n${mStr(half(madd(A,mConj(A),-1)))}`;
+  out.textContent=s}catch(e){out.textContent='✘ '+e}}
+ $('clBtn').onclick=run;document.querySelectorAll('[data-cl]').forEach(b=>b.onclick=()=>{$('clIn').value=b.dataset.cl;run()});run();})();
+
+/* ===== quiz ===== */
+(function(){const Q=[
+ ['A matrix commuting with diag(1,2,3) must be',['scalar','diagonal','symmetric','anything'],1,'(dᵢ − dⱼ)bᵢⱼ = 0 with distinct dᵢ forces bᵢⱼ = 0 for i ≠ j.'],
+ ['A matrix commuting with every n×n matrix is',['diagonal','scalar aI','Hermitian','zero'],1,'Book Example 2.'],
+ ['The diagonal elements of a Hermitian matrix are',['zero','real','imaginary','arbitrary'],1,'aᵢᵢ* = aᵢᵢ.'],
+ ['The diagonal elements of an antisymmetric matrix are',['zero','real','one','arbitrary'],0,'aᵢᵢ = −aᵢᵢ.'],
+ ['Number of real parameters in a 3×3 Hermitian matrix',['6','9','18','8'],1,'n² = 9.'],
+ ['Number of real parameters in a 4×4 real antisymmetric matrix',['6','8','12','16'],0,'n(n−1)/2 = 6.'],
+ ['A purely imaginary antisymmetric matrix is',['symmetric','Hermitian','antiHermitian','zero'],1,'(A*)ᵀ = (−A)ᵀ = A, e.g. σᵧ.'],
+ ['If A is antisymmetric, x̃Ax equals',['x̃x','0','Tr A','det A'],1,'Book Example 4.'],
+ ['A and B are Hermitian. aA + bB is Hermitian for all such A, B iff',['a, b real','a, b imaginary','a = b','always'],0,'Exercise 5.'],
+ ['Tr(ABC) always equals',['Tr(ACB)','Tr(BCA)','Tr(CBA)','Tr A Tr B Tr C'],1,'Only cyclic permutations are allowed.'],
+ ['For S symmetric and K antisymmetric, Tr(SK) =',['Tr S·Tr K','0','1','det S'],1,'Transpose argument.'],
+ ['The eigenvalues of H = a₀I + r·σ are',['a₀, |r|','a₀ ± |r|','±a₀','a₀|r|'],1,'(r·σ)² = |r|²I.'],
+ ['Number of linearly independent 3×3 antisymmetric matrices',['3','6','9','1'],0,'n(n−1)/2 = 3.'],
+ ['[[1,0,0],[0,1,0],[a,b,−1]]¹⁰ equals',['I','A','0','10A'],0,'A² = I.'],
+ ['The product of two Hermitian matrices is Hermitian iff they',['anticommute','commute','are diagonal','are real'],1,'(AB)† = BA.'],
+ ['(E_kl E_pq) equals',['δ_kq E_lp','δ_lp E_kq','E_kl+E_pq','0 always'],1,'The inner indices must match.'],
+ ['The determinant of a 5×5 antisymmetric matrix is',['1','0','−1','any value'],1,'det A = (−1)⁵ det A.'],
+ ['Traceless 2×2 Hermitian matrices form a real space of dimension',['2','3','4','8'],1,'Spanned by the three Pauli matrices.']];
+ const box=$('quizBox');box.innerHTML=Q.map((q,i)=>`<div class="qq"><b>Q${i+1}.</b> ${q[0]}<div>${q[1].map((o,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"> ${String.fromCharCode(97+j)}) ${o}</label>`).join('')}</div><div class="small" id="qe${i}"></div></div>`).join('');
+ $('quizCheck').onclick=()=>{let s=0;Q.forEach((q,i)=>{const c=document.querySelector(`input[name=q${i}]:checked`),e=$('qe'+i);
+   if(c&&+c.value===q[2]){s++;e.innerHTML='<span class="ok">✔ Correct.</span> '+q[3]}else e.innerHTML=`<span class="bad">✘ ${c?'Wrong':'Not answered'}.</span> Answer: ${String.fromCharCode(97+q[2])}) ${q[1][q[2]]}. ${q[3]}`});$('quizScore').innerHTML=`<b>Score: ${s} / ${Q.length}</b>`};
+ $('quizReset').onclick=()=>{box.querySelectorAll('input').forEach(i=>i.checked=false);Q.forEach((q,i)=>$('qe'+i).innerHTML='');$('quizScore').textContent=''};})();
+</script>
+
+
+
+</div>
+</body>
+</html>

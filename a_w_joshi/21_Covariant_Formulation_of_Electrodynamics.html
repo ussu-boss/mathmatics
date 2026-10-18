@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:110px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:85px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:collapse;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;margin:3px 4px;width:auto}
+.mx.det{border-radius:0}
+.mx td{border:0;padding:1px 8px;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.verdict{font-weight:700;font-size:1.05rem;margin:6px 0}
+.sys{font-family:"Cambria Math",Cambria,"Times New Roman",serif;display:inline-block;text-align:left;line-height:1.5}
+</style>
+<title>Covariant Electrodynamics</title>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>21. Covariant Formulation of Electrodynamics</h1>
+<p>Lorentz gauge · Continuity equation ∂<sub>i</sub>J<sup>i</sup> = 0 · □A<sup>i</sup> = (4π/c)J<sup>i</sup> · Field-strength tensor F<sup>ij</sup> and its dual · Maxwell's equations in tensor form · Transformation of E and B · Invariants E² − B² and E·B · Field of a uniformly moving charge · Moving capacitor &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 223–236 &nbsp;(Gaussian units)</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">Gauge &amp; continuity</a><a href="#s2">F<sup>ij</sup></a><a href="#s3">Maxwell</a><a href="#s4">Transforming E, B</a><a href="#s5">Field lab</a><a href="#s6">Invariants</a><a href="#s7">Moving charge</a><a href="#s8">Charge lab</a><a href="#s9">Capacitor</a><a href="#s10">Summary</a><a href="#s11">Exercise 21</a><a href="#s12">Practice</a><a href="#s13">Quiz</a><a href="#s14">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>Section 20 found four-vectors such as J<sup>i</sup> = (cρ, J) and A<sup>i</sup> = (Φ, A). But <b>E</b> and <b>B</b> are not parts of any four-vector. They mix into each other when you change frame. A charge at rest has only E. Seen by a moving observer, the same charge is a current, so B appears too.</p>
+<p>The way out: the six components of E and B together form one <b>antisymmetric rank-2 tensor</b> F<sup>ij</sup> in space-time (4·3/2 = 6 components). Then all of Maxwell's equations collapse into two tensor equations, which are automatically the same in every inertial frame.</p>
+<div class="flow"><span>A<sup>i</sup> = (Φ, A)</span><b>→</b><span>F<sup>ij</sup> = ∂<sup>i</sup>A<sup>j</sup> − ∂<sup>j</sup>A<sup>i</sup></span><b>→</b><span>∂<sub>i</sub>F<sup>ij</sup> = (4π/c)J<sup>j</sup>, ∂<sub>i</sub>𝔉<sup>ij</sup> = 0</span><b>→</b><span>F̄ = ΛFΛᵀ</span><b>→</b><span>E² − B², E·B invariant</span></div>
+<div class="box tip"><b class="t">Needed from earlier</b> Four-vectors, Lorentz boost, metric diag(1, −1, −1, −1), ∂<sub>i</sub> = (∂₀, ∇), ∂<sup>i</sup> = (∂₀, −∇), □ = ∂<sub>i</sub>∂<sup>i</sup> (Section 20); antisymmetric tensors and ε (Section 16); raising and lowering with g (Section 18). Units: Gaussian (∇·E = 4πρ), as in the book. In SI replace 4π/c by μ₀ and E by E/c where needed.</div>
+</section>
+
+<section id="s1">
+<h2>1. Lorentz gauge, continuity and wave equations (Eqs. 1–6)</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Ordinary form</th><th>Covariant form</th></tr>
+<tr><td>Lorentz gauge: (1/c)∂Φ/∂t + ∇·A = 0 &nbsp;(1)</td><td><b>∂<sub>i</sub>A<sup>i</sup> = 0</b> &nbsp;(2)</td></tr>
+<tr><td>Continuity: ∂ρ/∂t + ∇·J = 0 &nbsp;(3)</td><td><b>∂<sub>i</sub>J<sup>i</sup> = 0</b> &nbsp;(4)</td></tr>
+<tr><td>(1/c²)∂²A/∂t² − ∇²A = (4π/c)J, &nbsp; (1/c²)∂²Φ/∂t² − ∇²Φ = 4πρ &nbsp;(5)</td><td><b>□A<sup>i</sup> = (4π/c)J<sup>i</sup></b> &nbsp;(6)</td></tr>
+</table></div>
+<p>Each covariant equation is a contraction or a □ (a scalar operator) acting on a four-vector, so its form is Lorentz invariant. Check (2): ∂<sub>i</sub>A<sup>i</sup> = ∂₀A⁰ + ∇·A = (1/c)∂Φ/∂t + ∇·A. This needs the <b>+</b> sign in the four-divergence; see the note on Eq. (20.41) on the Chapter 20 page. Similarly (4) with J⁰ = cρ: ∂₀(cρ) = ∂ρ/∂t ✓.</p>
+</section>
+
+<section id="s2">
+<h2>2. The electromagnetic field-strength tensor (Eqs. 7–18)</h2>
+<p>E = −(1/c)∂A/∂t − ∇Φ and B = ∇ × A. &nbsp;(7) &nbsp; With ∂<sup>i</sup> = (∂₀, −∇), the x-components become</p>
+<div class="eq">E<sub>x</sub> = −(∂⁰A¹ − ∂¹A⁰), &nbsp;&nbsp; B<sub>x</sub> = −(∂²A³ − ∂³A²) &nbsp;&nbsp;(8)</div>
+<p>This suggests defining</p>
+<div class="eq"><b>F<sup>ij</sup> = ∂<sup>i</sup>A<sup>j</sup> − ∂<sup>j</sup>A<sup>i</sup></b> &nbsp;&nbsp;(9), &nbsp;&nbsp; F<sup>ij</sup> = −F<sup>ji</sup> &nbsp;(10)</div>
+<p>F<sup>10</sup> = E<sub>x</sub>, F<sup>20</sup> = E<sub>y</sub>, F<sup>30</sup> = E<sub>z</sub> (11); F<sup>12</sup> = −B<sub>z</sub>, F<sup>23</sup> = −B<sub>x</sub>, F<sup>31</sup> = −B<sub>y</sub> (12). Rows and columns are numbered 0–3:</p>
+<div class="eq">F<sup>ij</sup> = <table class="mx"><tr><td>0</td><td>−E<sub>x</sub></td><td>−E<sub>y</sub></td><td>−E<sub>z</sub></td></tr><tr><td>E<sub>x</sub></td><td>0</td><td>−B<sub>z</sub></td><td>B<sub>y</sub></td></tr><tr><td>E<sub>y</sub></td><td>B<sub>z</sub></td><td>0</td><td>−B<sub>x</sub></td></tr><tr><td>E<sub>z</sub></td><td>−B<sub>y</sub></td><td>B<sub>x</sub></td><td>0</td></tr></table> &nbsp;(13), &nbsp;&nbsp; F<sub>ij</sub> = <table class="mx"><tr><td>0</td><td>E<sub>x</sub></td><td>E<sub>y</sub></td><td>E<sub>z</sub></td></tr><tr><td>−E<sub>x</sub></td><td>0</td><td>−B<sub>z</sub></td><td>B<sub>y</sub></td></tr><tr><td>−E<sub>y</sub></td><td>B<sub>z</sub></td><td>0</td><td>−B<sub>x</sub></td></tr><tr><td>−E<sub>z</sub></td><td>−B<sub>y</sub></td><td>B<sub>x</sub></td><td>0</td></tr></table> &nbsp;(16)</div>
+<p><b>Lowering</b> (14, 15): F<sub>ij</sub> = g<sub>ii</sub>g<sub>jj</sub>F<sup>ij</sup> (no sum). Each time index flips a sign and each space index flips a sign, so the E entries (one time and one space index) change sign, while the B entries (two space indices) do not.</p>
+<h3>Dual tensor</h3>
+<div class="eq">𝔉<sup>ij</sup> = ½ ε<sup>ijkl</sup>F<sub>kl</sub> &nbsp;(17) &nbsp; = <table class="mx"><tr><td>0</td><td>−B<sub>x</sub></td><td>−B<sub>y</sub></td><td>−B<sub>z</sub></td></tr><tr><td>B<sub>x</sub></td><td>0</td><td>E<sub>z</sub></td><td>−E<sub>y</sub></td></tr><tr><td>B<sub>y</sub></td><td>−E<sub>z</sub></td><td>0</td><td>E<sub>x</sub></td></tr><tr><td>B<sub>z</sub></td><td>E<sub>y</sub></td><td>−E<sub>x</sub></td><td>0</td></tr></table> &nbsp;(18)</div>
+<p>𝔉<sup>ij</sup> is obtained from F<sup>ij</sup> by replacing <b>E → B, B → −E</b>. (Checked symbolically with ε<sup>0123</sup> = +1.)</p>
+</section>
+
+<section id="s3">
+<h2>3. Maxwell's equations in tensor form (Eqs. 19–36)</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Vector form</th><th></th><th>Tensor form</th></tr>
+<tr><td>∇·E = 4πρ &nbsp;(19a)</td><td rowspan="2">inhomogeneous (sources)</td><td rowspan="2"><b>∂<sub>i</sub>F<sup>ij</sup> = (4π/c)J<sup>j</sup></b> &nbsp;(24)</td></tr>
+<tr><td>∇ × B − (1/c)∂E/∂t = (4π/c)J &nbsp;(19b)</td></tr>
+<tr><td>∇·B = 0 &nbsp;(19c)</td><td rowspan="2">homogeneous</td><td rowspan="2"><b>∂<sub>i</sub>𝔉<sup>ij</sup> = 0</b> &nbsp;(31) &nbsp; or &nbsp; <b>∂<sup>i</sup>F<sup>jk</sup> + ∂<sup>j</sup>F<sup>ki</sup> + ∂<sup>k</sup>F<sup>ij</sup> = 0</b> &nbsp;(34)</td></tr>
+<tr><td>∇ × E + (1/c)∂B/∂t = 0 &nbsp;(19d)</td></tr>
+</table></div>
+<h3>How the pieces come out</h3>
+<ul>
+<li><b>j = 0 in (24):</b> ∂₁F¹⁰ + ∂₂F²⁰ + ∂₃F³⁰ = ∂<sub>x</sub>E<sub>x</sub> + ∂<sub>y</sub>E<sub>y</sub> + ∂<sub>z</sub>E<sub>z</sub> = (4π/c)(cρ). That is Gauss's law (19a), using F⁰⁰ = 0. &nbsp;(20, 21)</li>
+<li><b>j = 1 in (24):</b> ∂₂F²¹ + ∂₃F³¹ + ∂₀F⁰¹ = ∂<sub>y</sub>B<sub>z</sub> − ∂<sub>z</sub>B<sub>y</sub> − (1/c)∂<sub>t</sub>E<sub>x</sub> = (4π/c)J<sub>x</sub>, the x-part of the Ampère–Maxwell law (19b). &nbsp;(22, 23)</li>
+<li><b>Homogeneous, j = 0:</b> ∂<sub>i</sub>𝔉<sup>i0</sup> = ∇·B = 0. &nbsp;(27) &nbsp; <b>j = 1:</b> ∂<sub>i</sub>𝔉<sup>i1</sup> = 0 is the x-part of Faraday's law (19d). &nbsp;(28–30)</li>
+<li><b>Cyclic form (34):</b> with the covariant ∂<sub>i</sub>, the indices in (29) do not appear in cyclic order. Using ∂<sup>i</sup> instead (32, 33) gives the neat cyclic identity (34), which is also <b>automatic</b>: if F<sup>ij</sup> = ∂<sup>i</sup>A<sup>j</sup> − ∂<sup>j</sup>A<sup>i</sup>, the six terms cancel in pairs because mixed partials commute.</li>
+</ul>
+<div class="box fact"><b class="t">Charge conservation is built in</b> Apply ∂<sub>j</sub> to (24): ∂<sub>j</sub>∂<sub>i</sub>F<sup>ij</sup> = 0, because ∂<sub>j</sub>∂<sub>i</sub> is symmetric and F<sup>ij</sup> antisymmetric (Exercise 16.7 idea). So ∂<sub>j</sub>J<sup>j</sup> = 0: Maxwell's equations <b>force</b> the continuity equation (4).</div>
+</section>
+
+<section id="s4">
+<h2>4. Transformation of E and B (Eqs. 37–54)</h2>
+<p>F<sup>ij</sup> is a rank-2 contravariant tensor: F̄<sup>αβ</sup> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)(∂x̄<sup>β</sup>/∂x<sup>j</sup>)F<sup>ij</sup> (37). With the boost matrix A = [a<sub>αi</sub>] = [∂x̄<sup>α</sup>/∂x<sup>i</sup>] (38, 39), which is symmetric for a boost along x¹:</p>
+<div class="eq"><b>F̄ = A F Ã</b> &nbsp;&nbsp;(40)</div>
+<p>Multiplying out and comparing with the form (13) for F̄ (41, 42) gives, for β along x¹:</p>
+<div class="eq"><span class="sys">Ē<sub>x</sub> = E<sub>x</sub>, &nbsp;&nbsp;&nbsp; B̄<sub>x</sub> = B<sub>x</sub><br>Ē<sub>y</sub> = γ(E<sub>y</sub> − βB<sub>z</sub>), &nbsp; B̄<sub>y</sub> = γ(B<sub>y</sub> + βE<sub>z</sub>)<br>Ē<sub>z</sub> = γ(E<sub>z</sub> + βB<sub>y</sub>), &nbsp; B̄<sub>z</sub> = γ(B<sub>z</sub> − βE<sub>y</sub>)</span> &nbsp;&nbsp;(43a) &nbsp;&nbsp; inverse: β → −β (43b)</div>
+<h3>Any direction of β (Eqs. 44–54)</h3>
+<ol>
+<li>Components parallel to β do not change: Ē<sub>∥</sub> = E<sub>∥</sub>. &nbsp;(46)</li>
+<li>Perpendicular part: Ē<sub>⊥</sub> = γ[E<sub>⊥</sub> + β(B<sub>y</sub>k − B<sub>z</sub>j)], and i × B = B<sub>y</sub>k − B<sub>z</sub>j, so Ē<sub>⊥</sub> = γ(E<sub>⊥</sub> + β × B). &nbsp;(47–49)</li>
+<li>Combine with E<sub>∥</sub> = (E·β)β/β² (51):</li>
+</ol>
+<div class="eq"><b>Ē = γ(E + β × B) − [γ²/(γ + 1)] β(β·E), &nbsp;&nbsp; B̄ = γ(B − β × E) − [γ²/(γ + 1)] β(β·B)</b> &nbsp;&nbsp;(54a, b)</div>
+<p>using β²γ² = γ² − 1 (53), so (γ − 1)/β² = γ²/(γ + 1). As β → 0, Ē = E and B̄ = B: E and B are invariant only for observers at rest relative to each other.</p>
+<div class="box tip"><b class="t">Physical reading</b> Ē = γ(E + β × B) for perpendicular parts is the relativistic version of the Lorentz force law: a charge moving with v in fields E, B feels the force q(E + v × B/c), and in its rest frame that whole force must be electric.</div>
+</section>
+
+<section id="s5">
+<h2>5. 🔬 Field-tensor lab: build F, boost it, find special frames</h2>
+<p>Enter E and B (Gaussian units, so E and B have the same units). The lab builds F<sup>ij</sup>, F<sub>ij</sub>, 𝔉<sup>ij</sup>, then boosts with any β by <b>matrix multiplication F̄ = ΛFΛᵀ</b> and by <b>Eq. (54)</b>, compares them, and checks the invariants. The buttons find a frame where the fields become purely electric, purely magnetic or parallel (when one exists).</p>
+<div class="lab">
+<div class="ctrl"><label>E<sub>x</sub> <input type="number" id="fEx" value="1" step="0.5" style="width:64px"></label><label>E<sub>y</sub> <input type="number" id="fEy" value="0" step="0.5" style="width:64px"></label><label>E<sub>z</sub> <input type="number" id="fEz" value="0" step="0.5" style="width:64px"></label>
+<label>B<sub>x</sub> <input type="number" id="fBx" value="0" step="0.5" style="width:64px"></label><label>B<sub>y</sub> <input type="number" id="fBy" value="0.8" step="0.5" style="width:64px"></label><label>B<sub>z</sub> <input type="number" id="fBz" value="0" step="0.5" style="width:64px"></label></div>
+<div class="ctrl"><label>β<sub>x</sub> <input type="range" id="fbx" min="-0.95" max="0.95" step="any" value="0"><span id="fbxv"></span></label><label>β<sub>y</sub> <input type="range" id="fby" min="-0.95" max="0.95" step="any" value="0"><span id="fbyv"></span></label><label>β<sub>z</sub> <input type="range" id="fbz" min="-0.95" max="0.95" step="any" value="0.5"><span id="fbzv"></span></label></div>
+<div class="ctrl small">Presets: <button class="alt" data-fp="pureE">point charge (E only)</button><button class="alt" data-fp="perp">E ⊥ B, E &gt; B</button><button class="alt" data-fp="perpB">E ⊥ B, B &gt; E</button><button class="alt" data-fp="ex1">Exercise 21.1 (θ = 60°)</button><button class="alt" data-fp="wave">plane wave (E = B, E ⊥ B)</button>
+&nbsp;Find frame: <button id="fFind">E ∥ B (or one field zero)</button></div>
+<div id="fOut"></div>
+</div>
+</section>
+
+<section id="s6">
+<h2>6. Invariants of the field (Example 1, Eqs. 55–58)</h2>
+<div class="box thm"><b class="t">Example 1</b> (a) <b>E·B</b> and (b) <b>E² − B²</b> are Lorentz invariant.</div>
+<p><b>First proof (direct):</b> with (43a), Ē·B̄ = E<sub>x</sub>B<sub>x</sub> + γ²[E<sub>y</sub>B<sub>y</sub> + β(E<sub>y</sub>E<sub>z</sub> − B<sub>z</sub>B<sub>y</sub>) − β²E<sub>z</sub>B<sub>z</sub>] + γ²[E<sub>z</sub>B<sub>z</sub> + β(B<sub>y</sub>B<sub>z</sub> − E<sub>y</sub>E<sub>z</sub>) − β²E<sub>y</sub>B<sub>y</sub>]. The β terms cancel and γ²(1 − β²) = 1, leaving E·B. &nbsp;(55) &nbsp; Similarly Ē² − B̄² = E² − B². &nbsp;(56)</p>
+<p><b>Second proof (contractions are scalars):</b></p>
+<div class="eq">F<sup>ij</sup>F<sub>ij</sub> = 2(B² − E²) &nbsp;(57), &nbsp;&nbsp; F<sub>ij</sub>𝔉<sup>ij</sup> = −4E·B &nbsp;(58)</div>
+<p>Both are full contractions, hence world scalars (Section 16). Checked symbolically.</p>
+<h3>Consequences (Exercise 3 and beyond)</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Situation</th><th>Can you find a frame with…</th></tr>
+<tr><td>E·B ≠ 0</td><td>neither field zero in any frame. Best possible: E̅ ∥ B̅.</td></tr>
+<tr><td>E·B = 0, E &gt; B</td><td>B̄ = 0 (pure electric), with β = E × B/E²</td></tr>
+<tr><td>E·B = 0, B &gt; E</td><td>Ē = 0 (pure magnetic), with β = E × B/B²</td></tr>
+<tr><td>E·B = 0, E = B</td><td>neither: a radiation field (plane wave) looks like a wave in every frame</td></tr>
+</table></div>
+<p>The sign of E² − B² cannot change, so "mostly electric" stays mostly electric for every observer.</p>
+</section>
+
+<section id="s7">
+<h2>7. Field of a uniformly moving charge (Eqs. 59–66)</h2>
+<p>Charge q moves with velocity v along x¹ in S. Find the field at P = (0, d, 0), where d is the distance of closest approach (Fig. 17). Trick: go to the charge's rest frame S′, where there is only a Coulomb field, and transform back.</p>
+<ol>
+<li>In S′ the charge is at the origin and P is at x̄¹ = −vt̄, x̄² = d, x̄³ = 0. Distance r̄ = (d² + v²t̄²)<sup>1/2</sup>. &nbsp;(59, 60)</li>
+<li>At P, x¹ = 0, so by (20.10) t̄ = γ(t − vx¹/c²) = γt. Hence r̄ = (d² + γ²v²t²)<sup>1/2</sup>. &nbsp;(61, 62)</li>
+<li>Coulomb field in S′: Ē<sub>x</sub> = −qvt̄/r̄³, Ē<sub>y</sub> = qd/r̄³, B̄ = 0. &nbsp;(63)</li>
+<li>Express with t (64), then transform back with (43b), using B̄ = 0: E<sub>x</sub> = Ē<sub>x</sub>, E<sub>y</sub> = γĒ<sub>y</sub>, B<sub>z</sub> = γβĒ<sub>y</sub>.</li>
+</ol>
+<div class="eq">E<sub>x</sub> = −qγvt/(d² + γ²v²t²)<sup>3/2</sup>, &nbsp; E<sub>y</sub> = γqd/(d² + γ²v²t²)<sup>3/2</sup>, &nbsp; B<sub>z</sub> = βE<sub>y</sub> &nbsp;&nbsp;(65)</div>
+<ul>
+<li>At t = 0 (closest approach): E<sub>x</sub> = 0, E<sub>y</sub> = γq/d². The peak field is <b>γ times</b> the static value q/d².</li>
+<li>E<sub>x</sub> is odd in t and E<sub>y</sub> is even (Fig. 18).</li>
+<li>The pulse lasts about Δt = d/(γv) (66). E<sub>x</sub> has its extremes at t = ±Δt/√2. As γ grows the pulse gets taller and shorter: the field lines crowd into a "pancake" perpendicular to the motion.</li>
+<li>B<sub>z</sub> = βE<sub>y</sub>: the moving charge is a current, so it makes a magnetic field. At low speed this is the Biot–Savart field qv × r/(cr³).</li>
+</ul>
+</section>
+
+<section id="s8">
+<h2>8. 🔬 Moving-charge lab</h2>
+<p><b>Left:</b> the electric field around a charge moving to the right with speed β, drawn at one instant (arrows from the <b>present</b> position, strength ∝ arrow length). At β = 0 it is the round Coulomb field. As β → 1 it flattens into a disc perpendicular to the motion. <b>Right:</b> E<sub>x</sub>(t), E<sub>y</sub>(t) and B<sub>z</sub>(t) at the fixed point P (Eq. 65, Fig. 18), in units of q/d², with the time axis in units of d/v.</p>
+<div class="lab">
+<div class="ctrl"><label>β = v/c <input type="range" id="qB" min="0" max="0.97" step="0.01" value="0.8" style="width:200px"><span id="qBv"></span></label></div>
+<div class="grid2">
+<div><canvas id="cvQ" width="460" height="400"></canvas></div>
+<div><canvas id="cvT" width="460" height="400"></canvas></div>
+</div>
+<div class="readout out" id="qOut"></div>
+</div>
+</section>
+
+<section id="s9">
+<h2>9. Example 2: a moving parallel-plate capacitor (Eqs. 67–75)</h2>
+<p>Plates 25 cm × 20 cm, gap d = 2 cm, potential difference 1000 V. A second observer moves at v = 0.6c parallel to the 25 cm side. (Gaussian units: C = A/(4πd); 1 statvolt = 300 V.)</p>
+<div class="tbl-wrap"><table>
+<tr><th>Quantity</th><th>Rest frame S</th><th>Moving frame S′ (γ = 1.25)</th></tr>
+<tr><td>Dimensions</td><td>25 × 20 cm, d = 2 cm</td><td>L̄₁ = 25/1.25 = <b>20 cm</b>, L̄₂ = 20 cm, d̄ = 2 cm</td></tr>
+<tr><td>(a) Capacitance</td><td>C = 500/(8π) = <b>19.89 cm</b> &nbsp;(67)</td><td>C̄ = 400/(8π) = <b>15.92 cm</b> = C/γ &nbsp;(71)</td></tr>
+<tr><td>Charge</td><td>Q = CV = 19.89 × 3.33 = <b>66.27 esu</b> &nbsp;(68)</td><td>Q̄ = Q (charge is invariant) &nbsp;(72)</td></tr>
+<tr><td>Excess electrons</td><td>n = Q/e = 66.27/(4.8×10⁻¹⁰) = <b>1.38×10¹¹</b> &nbsp;(69)</td><td>n̄ = n (counting is invariant)</td></tr>
+<tr><td>Field</td><td>E = V/d = 3.33/2 = <b>1.67 esu</b> &nbsp;(b)</td><td>E is ⊥ to v, so Ē = γE = 1.25 × 1.67 = <b>2.09 esu</b> &nbsp;(73, 74); a magnetic field B̄ = −β × Ē also appears</td></tr>
+<tr><td>Voltage</td><td>V = 3.33 statvolt</td><td>V̄ = Q̄/C̄ = γV = 4.17 statvolt &nbsp;(75)</td></tr>
+</table></div>
+<p><b>Check:</b> Ē = V̄/d̄ = γV/d = γE ✓. <b>Picture:</b> the same charge is squeezed onto a plate that is shorter by γ, so the surface charge density and the field go up by γ.</p>
+<div class="lab"><h4>🔬 Capacitor calculator</h4>
+<div class="ctrl"><label>v/c <input type="range" id="kB" min="0" max="0.99" step="0.01" value="0.6"><span id="kBv"></span></label><label>direction of motion <select id="kDir"><option value="L1">parallel to L₁ (book)</option><option value="L2">parallel to L₂</option><option value="d">normal to the plates (Exercise 2)</option></select></label></div>
+<div class="readout out" id="kOut"></div>
+</div>
+</section>
+
+<section id="s10">
+<h2>10. Summary sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Item</th><th>Formula</th></tr>
+<tr><td>Gauge, continuity, wave equation</td><td>∂<sub>i</sub>A<sup>i</sup> = 0, ∂<sub>i</sub>J<sup>i</sup> = 0, □A<sup>i</sup> = (4π/c)J<sup>i</sup></td></tr>
+<tr><td>Field tensor</td><td>F<sup>ij</sup> = ∂<sup>i</sup>A<sup>j</sup> − ∂<sup>j</sup>A<sup>i</sup>; F<sup>i0</sup> = E<sub>i</sub>, F<sup>12</sup> = −B<sub>z</sub> (cyclic)</td></tr>
+<tr><td>Lowering</td><td>F<sub>ij</sub>: E entries change sign, B entries do not</td></tr>
+<tr><td>Dual</td><td>𝔉<sup>ij</sup> = ½ε<sup>ijkl</sup>F<sub>kl</sub>: E → B, B → −E</td></tr>
+<tr><td>Maxwell</td><td>∂<sub>i</sub>F<sup>ij</sup> = (4π/c)J<sup>j</sup>, ∂<sub>i</sub>𝔉<sup>ij</sup> = 0 (⇔ ∂<sup>i</sup>F<sup>jk</sup> + cyclic = 0)</td></tr>
+<tr><td>Boost along x</td><td>E<sub>∥</sub>, B<sub>∥</sub> fixed; Ē<sub>y</sub> = γ(E<sub>y</sub> − βB<sub>z</sub>), Ē<sub>z</sub> = γ(E<sub>z</sub> + βB<sub>y</sub>), B̄<sub>y</sub> = γ(B<sub>y</sub> + βE<sub>z</sub>), B̄<sub>z</sub> = γ(B<sub>z</sub> − βE<sub>y</sub>)</td></tr>
+<tr><td>Any β</td><td>Ē = γ(E + β×B) − γ²β(β·E)/(γ+1), B̄ = γ(B − β×E) − γ²β(β·B)/(γ+1)</td></tr>
+<tr><td>Invariants</td><td>F<sup>ij</sup>F<sub>ij</sub> = 2(B² − E²), F<sub>ij</sub>𝔉<sup>ij</sup> = −4E·B</td></tr>
+<tr><td>Moving charge</td><td>E<sub>y</sub>(0) = γq/d², pulse width Δt = d/(γv), B<sub>z</sub> = βE<sub>y</sub></td></tr>
+</table></div>
+</section>
+
+<section id="s11">
+<h2>11. Book's Exercise 21: all problems solved</h2>
+<div class="prob"><div class="q">1. In frame S there is a uniform static E along x¹ and a uniform static B of magnitude 2E in the x¹x² plane at angle θ to the x¹ axis. Another frame moves relative to S such that the fields there are parallel. (a) Find |Ē| and |B̄| in terms of E and θ. (b) Find β if the relative velocity is along x³.</div>
+<details><summary>Show solution</summary>
+<p><b>(a) Use the invariants.</b> E² − B² = E² − 4E² = −3E² and E·B = 2E² cos θ. In the new frame Ē ∥ B̄, so Ē·B̄ = ĒB̄ (taking 0 ≤ θ &lt; 90°; otherwise antiparallel and use |cos θ|). Then</p>
+<div class="eq">Ē² − B̄² = −3E², &nbsp; ĒB̄ = 2E²cos θ</div>
+<p>Put x = Ē²: x − 4E⁴cos²θ/x = −3E² ⇒ x² + 3E²x − 4E⁴cos²θ = 0:</p>
+<div class="eq">Ē² = (E²/2)[−3 + √(9 + 16cos²θ)], &nbsp;&nbsp; B̄² = (E²/2)[3 + √(9 + 16cos²θ)]</div>
+<p>Check θ = 0 (already parallel): Ē² = E²(−3 + 5)/2 = E² ✓, B̄² = 4E² ✓. Check θ = 90° (E ⊥ B, B &gt; E): Ē = 0 and B̄ = √3 E, a pure magnetic field ✓.</p>
+<p><b>(b)</b> β = βx̂₃ is ⊥ to E and B, so β·E = β·B = 0 and Ē = γ(E + β × B), B̄ = γ(B − β × E). With E = E(1, 0, 0), B = 2E(cos θ, sin θ, 0):</p>
+<div class="eq">Ē ∝ (1 − 2β sin θ, 2β cos θ, 0), &nbsp;&nbsp; B̄ ∝ (2cos θ, 2sin θ − β, 0)</div>
+<p>Parallel ⇔ the z-component of Ē × B̄ vanishes: (1 − 2β sin θ)(2 sin θ − β) − 4β cos²θ = 0 ⇒ 2β² sin θ − 5β + 2 sin θ = 0:</p>
+<div class="eq">β = [5 − √(25 − 16 sin²θ)] / (4 sin θ) &nbsp; (the root with β &lt; 1)</div>
+<p>This agrees with the general result β/(1 + β²) = |E × B|/(E² + B²) = 2 sin θ/5. Example θ = 60°: β = (5 − √13)/(2√3) ≈ 0.403. (Load "Exercise 21.1" in the field lab and press "Find frame".)</p></details></div>
+<div class="prob"><div class="q">2. In Example 2, answer (c), (d), (e) if the relative velocity is v = 0.6c normal to the plates.</div>
+<details><summary>Show solution</summary>
+<p>Now the gap contracts: d̄ = d/γ = 1.6 cm, while L₁, L₂ are unchanged.</p>
+<ul><li>(c) C̄ = A/(4πd̄) = 500/(6.4π) ≈ <b>24.87 cm</b> = γC.</li>
+<li>(d) Q̄ = Q = 66.27 esu, n̄ = n = 1.38×10¹¹ (invariant).</li>
+<li>(e) E is now <b>parallel</b> to v, and the parallel component does not change: Ē = E = <b>1.67 esu</b>. No magnetic field appears (β × E = 0).</li></ul>
+<p>Check: V̄ = Q̄/C̄ = V/γ = 2.67 statvolt, and Ē = V̄/d̄ = (V/γ)/(d/γ) = E ✓. (Capacitor calculator, "normal to the plates".)</p></details></div>
+<div class="prob"><div class="q">3. In some frame E &gt; B. Can there be another frame with (a) only an electric field, (b) only a magnetic field?</div>
+<details><summary>Show solution</summary>
+<p>E² − B² &gt; 0 is invariant. (b) A pure magnetic field needs E² − B² = −B̄² &lt; 0. <b>Impossible.</b></p>
+<p>(a) A pure electric field needs both invariants to fit: E² − B² = Ē² &gt; 0 ✓ and E·B = Ē·0 = 0. So it is possible <b>if and only if E ⊥ B</b> (E·B = 0). The frame moves with β = E × B/E² (then |β| = B/E &lt; 1), which makes B̄ = γ(B − β × E) = 0. If E·B ≠ 0, no frame has only one field; the best is Ē ∥ B̄ (Exercise 1).</p></details></div>
+</section>
+
+<section id="s12">
+<h2>12. Practice set (CSIR-NET / GATE style)</h2>
+<div class="prob"><div class="q">P1. A frame has E = (0, 3, 0) and B = (0, 0, 5) (Gaussian). Is there a frame with E = 0? With which velocity? <span class="tag">frames</span></div>
+<details><summary>Show solution</summary><p>E·B = 0 and B &gt; E ⇒ yes. β = E × B/B² = (15, 0, 0)/25 = (0.6, 0, 0). Then B̄ = 4 (invariant: −B̄² = 9 − 25).</p></details></div>
+<div class="prob"><div class="q">P2. Find F<sup>ij</sup>F<sub>ij</sub> and F<sub>ij</sub>𝔉<sup>ij</sup> for a plane electromagnetic wave. <span class="tag">invariants</span></div>
+<details><summary>Show solution</summary><p>|E| = |B| and E ⊥ B ⇒ both invariants are zero. A light wave is "null" in every frame.</p></details></div>
+<div class="prob"><div class="q">P3. How many independent components do F<sup>ij</sup> and the cyclic identity (34) have? <span class="tag">count</span></div>
+<details><summary>Show solution</summary><p>F: 6 (antisymmetric 4×4). (34) is nontrivial only for i, j, k all different: C(4,3) = 4 equations = ∇·B = 0 plus 3 components of Faraday's law.</p></details></div>
+<div class="prob"><div class="q">P4. Show that ∂<sup>i</sup>F<sup>jk</sup> + ∂<sup>j</sup>F<sup>ki</sup> + ∂<sup>k</sup>F<sup>ij</sup> = 0 follows from F = ∂A − ∂A. <span class="tag">identity</span></div>
+<details><summary>Show solution</summary><p>Expand: ∂<sup>i</sup>∂<sup>j</sup>A<sup>k</sup> − ∂<sup>i</sup>∂<sup>k</sup>A<sup>j</sup> + ∂<sup>j</sup>∂<sup>k</sup>A<sup>i</sup> − ∂<sup>j</sup>∂<sup>i</sup>A<sup>k</sup> + ∂<sup>k</sup>∂<sup>i</sup>A<sup>j</sup> − ∂<sup>k</sup>∂<sup>j</sup>A<sup>i</sup> = 0, the terms cancelling in pairs.</p></details></div>
+<div class="prob"><div class="q">P5. An electron passes a point at closest distance d with γ = 100. Compare the peak field and duration with the static case. <span class="tag">moving charge</span></div>
+<details><summary>Show solution</summary><p>Peak E<sub>y</sub> = 100 × q/d²; duration ≈ d/(γv) ≈ d/(100c). Ultra-relativistic particles deliver short, intense "flat" field pulses (the Weizsäcker–Williams picture of a charge as a cloud of virtual photons).</p></details></div>
+<div class="prob"><div class="q">P6. Show that the Lorentz gauge condition is Lorentz invariant. <span class="tag">gauge</span></div>
+<details><summary>Show solution</summary><p>∂<sub>i</sub>A<sup>i</sup> is the contraction of a covariant operator with a contravariant vector: a scalar. If it is zero in one frame it is zero in all.</p></details></div>
+<div class="prob"><div class="q">P7. A long wire carries current I along z (neutral, so E = 0 in S). An observer moves along z with v. What fields does it see? <span class="tag">transformation</span></div>
+<details><summary>Show solution</summary><p>B is azimuthal (⊥ v). Ē = γ(E + β × B) = γβ × B, a radial electric field: the wire looks charged to the moving observer (length contraction affects the positive ions and the electrons differently). B̄ = γB.</p></details></div>
+</section>
+
+<section id="s13" class="quiz">
+<h2>13. Self-test quiz</h2>
+<div id="quiz"></div>
+<p><b>Score: <span id="qScore">0</span> / <span id="qTot">0</span></b></p>
+</section>
+
+<section id="s14">
+<h2>14. Interesting facts</h2>
+<div class="box fact"><b class="t">Einstein's starting point</b> Einstein's 1905 paper opens with exactly the problem of this section: a magnet moving near a conductor and a conductor moving near a magnet give the same current, yet the classical explanations were completely different (an electric field in one case, a magnetic force in the other). The tensor F<sup>ij</sup> shows they are one phenomenon seen from two frames.</div>
+<div class="box fact"><b class="t">Magnetism as a relativistic effect</b> Electrons in a wire drift at only about 0.1 mm/s, so their γ − 1 ≈ 10⁻²⁶. Yet the magnetic force between currents is easily felt, because it is the tiny relativistic correction applied to an enormous number of charges whose electric forces cancel exactly.</div>
+<div class="box fact"><b class="t">Electromagnetic duality</b> The map E → B, B → −E that turns F into 𝔉 is a symmetry of the source-free Maxwell equations. Dirac (1931) showed that if magnetic monopoles existed, this duality would extend to sources and electric charge would have to be quantized. None have been found yet.</div>
+<div class="box fact"><b class="t">Differential forms</b> In modern notation F is a 2-form, F = dA, and Maxwell's equations become dF = 0 and d⋆F = 4π⋆J. The homogeneous equation dF = 0 is just "d² = 0", which is the cyclic identity (34).</div>
+</section>
+</div>
+<script>
+/* ---------- small linear-algebra toolkit ---------- */
+const $=id=>document.getElementById(id);
+const cssv=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const eye=n=>Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0));
+const zeros=n=>Array.from({length:n},()=>Array(n).fill(0));
+const clone=M=>M.map(r=>r.slice());
+const mul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>s+v*B[k][j],0)));
+const add=(A,B)=>A.map((r,i)=>r.map((v,j)=>v+B[i][j]));
+const sub=(A,B)=>A.map((r,i)=>r.map((v,j)=>v-B[i][j]));
+const scl=(k,A)=>A.map(r=>r.map(v=>k*v));
+const trc=A=>A.reduce((s,r,i)=>s+r[i],0);
+const T=A=>A[0].map((_,j)=>A.map(r=>r[j]));
+const maxAbs=A=>Math.max(...A.flat().map(Math.abs));
+const mv=(A,x)=>A.map(r=>r.reduce((s,v,k)=>s+v*x[k],0));
+const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
+const nrm=a=>Math.sqrt(dot(a,a));
+const neg=s=>String(s).replace(/-/g,'−');
+function fmt(x,dec=3){
+  if(!isFinite(x))return '∞';
+  if(Math.abs(x)<1e-9)return '0';
+  const r=Math.round(x); if(Math.abs(x-r)<1e-7*Math.max(1,Math.abs(x)))return neg(r);
+  for(let q=2;q<=12;q++){const p=Math.round(x*q);if(Math.abs(x*q-p)<1e-7*q)return neg(p)+'/'+q;}
+  return neg(+x.toFixed(dec));
+}
+function mxH(M,heat,scale){
+  const s=scale||Math.max(1e-12,maxAbs(M));
+  return '<table class="mx">'+M.map(r=>'<tr>'+r.map(v=>{
+    let st='';
+    if(heat){const a=Math.min(1,Math.abs(v)/s)*0.55;if(Math.abs(v)>1e-9)st=` style="background:${v>0?`rgba(47,111,223,${a})`:`rgba(201,42,42,${a})`}"`;}
+    return `<td${st}>${fmt(v)}</td>`;}).join('')+'</tr>').join('')+'</table>';
+}
+function rank(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol)continue;
+    [A[r],A[p]]=[A[p],A[r]];
+    for(let i=r+1;i<n;i++){const f=A[i][c]/A[r][c];for(let j=c;j<m;j++)A[i][j]-=f*A[r][j];}
+    r++;
+  }
+  return r;
+}
+function nullspace(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  const piv=[];let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol){for(let i=r;i<n;i++)A[i][c]=0;continue;}
+    [A[r],A[p]]=[A[p],A[r]];
+    const d=A[r][c];for(let j=0;j<m;j++)A[r][j]/=d;
+    for(let i=0;i<n;i++)if(i!==r){const f=A[i][c];for(let j=0;j<m;j++)A[i][j]-=f*A[r][j];}
+    piv.push(c);r++;
+  }
+  const basis=[];
+  for(let f=0;f<m;f++){if(piv.includes(f))continue;
+    const v=Array(m).fill(0);v[f]=1;piv.forEach((c,i)=>{v[c]=-A[i][f];});basis.push(v);}
+  return basis;
+}
+function inv(M){
+  const n=M.length,A=M.map((r,i)=>r.concat(eye(n)[i]));
+  for(let c=0;c<n;c++){
+    let p=c;for(let i=c+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<1e-12)return null;
+    [A[c],A[p]]=[A[p],A[c]];const d=A[c][c];for(let j=0;j<2*n;j++)A[c][j]/=d;
+    for(let i=0;i<n;i++)if(i!==c){const f=A[i][c];for(let j=0;j<2*n;j++)A[i][j]-=f*A[c][j];}
+  }
+  return A.map(r=>r.slice(n));
+}
+/* Faddeev–LeVerrier: det(λI−A)=Σ c[k] λ^k, c[n]=1 */
+function charCoeffs(A){
+  const n=A.length,c=Array(n+1).fill(0);c[n]=1;let M=zeros(n);
+  for(let k=1;k<=n;k++){M=add(mul(A,M),scl(c[n-k+1],eye(n)));c[n-k]=-trc(mul(A,M))/k;}
+  return c;
+}
+/* complex helpers + Durand–Kerner roots of monic poly (c indexed by power) */
+const cm=(a,b)=>[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]];
+const cd=(a,b)=>{const d=b[0]*b[0]+b[1]*b[1];return[(a[0]*b[0]+a[1]*b[1])/d,(a[1]*b[0]-a[0]*b[1])/d];};
+function polyRoots(c){
+  const n=c.length-1;if(n===1)return[[-c[0],0]];
+  let z=Array.from({length:n},(_,k)=>{let w=[1,0];for(let i=0;i<=k;i++)w=cm(w,[0.4,0.9]);return w;});
+  const R=1+Math.max(...c.slice(0,n).map(Math.abs));z=z.map(w=>[w[0]*R,w[1]*R]);
+  const ev=x=>{let s=[1,0];for(let k=n-1;k>=0;k--)s=[s[0]*x[0]-s[1]*x[1]+c[k],s[0]*x[1]+s[1]*x[0]];return s;};
+  for(let it=0;it<2000;it++){
+    let delta=0;
+    z=z.map((zi,i)=>{let den=[1,0];z.forEach((zj,j)=>{if(j!==i)den=cm(den,[zi[0]-zj[0],zi[1]-zj[1]]);});
+      if(Math.hypot(den[0],den[1])<1e-300)den=[1e-12,0];
+      const q=cd(ev(zi),den);delta=Math.max(delta,Math.hypot(q[0],q[1]));return[zi[0]-q[0],zi[1]-q[1]];});
+    if(delta<1e-14)break;
+  }
+  return z;
+}
+function snap(x){for(const q of [1,2,3,4,6,12]){const r=Math.round(x*q)/q;if(Math.abs(x-r)<2e-4)return r;}return x;}
+function eigGroups(A){
+  const z=polyRoots(charCoeffs(A)),used=Array(z.length).fill(false),G=[];
+  const tol=2e-3*Math.max(1,maxAbs(A));
+  for(let i=0;i<z.length;i++){if(used[i])continue;const cl=[z[i]];used[i]=true;
+    for(let j=i+1;j<z.length;j++)if(!used[j]&&Math.hypot(z[j][0]-z[i][0],z[j][1]-z[i][1])<tol){cl.push(z[j]);used[j]=true;}
+    let re=cl.reduce((s,w)=>s+w[0],0)/cl.length,im=cl.reduce((s,w)=>s+w[1],0)/cl.length;
+    if(Math.abs(im)<1e-6)im=0;re=snap(re);if(im)im=snap(im);
+    G.push({re,im,m:cl.length});}
+  G.sort((a,b)=>b.re-a.re||b.im-a.im);return G;
+}
+const powM=(M,k)=>{let R=eye(M.length);for(let i=0;i<k;i++)R=mul(R,M);return R;};
+const lamF=a=>a===0?'λ':(a>0?`(λ − ${fmt(a)})`:`(λ + ${fmt(-a)})`);
+const supN=k=>k===1?'':String(k).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+function minimalPoly(A){
+  const G=eigGroups(A),n=A.length;
+  if(G.some(g=>g.im!==0))return{G,complex:true};
+  const sc=Math.max(1,maxAbs(A));
+  let tups=[[]];G.forEach(g=>{const nt=[];tups.forEach(t=>{for(let r=1;r<=g.m;r++)nt.push(t.concat(r));});tups=nt;});
+  tups.sort((a,b)=>a.reduce((s,v)=>s+v,0)-b.reduce((s,v)=>s+v,0));
+  const tried=[];
+  for(const t of tups){
+    let P=eye(n);G.forEach((g,i)=>{P=mul(P,powM(sub(A,scl(g.re,eye(n))),t[i]));});
+    const deg=t.reduce((s,v)=>s+v,0),zero=maxAbs(P)<1e-6*Math.pow(sc,deg);
+    tried.push({t,P,zero});if(zero)return{G,r:t,tried};
+  }
+  return{G,r:G.map(g=>g.m),tried};
+}
+function expandRoots(rs){let p=[1];rs.forEach(a=>{const q=Array(p.length+1).fill(0);p.forEach((v,i)=>{q[i]+=v;q[i+1]-=a*v;});p=q;});return p;}
+function polyStr(p,v,mat){
+  const d=p.length-1;let s='';
+  p.forEach((c,i)=>{if(Math.abs(c)<1e-9)return;const k=d-i;const a=Math.abs(c);
+    const coef=(a===1&&k>0)?'':fmt(a);const term=k===0?(mat?coef+'I':fmt(a)):(k===1?coef+v:coef+v+supN(k));
+    s+=(s===''?(c<0?'−':''):(c<0?' − ':' + '))+term;});
+  return s||'0';
+}
+function makeEditor(id,M,cb){
+  const box=$(id);let n=M.length;
+  function build(M){n=M.length;box.innerHTML='<div style="display:grid;grid-template-columns:repeat('+n+',58px);gap:4px">'+M.flat().map((v,i)=>`<input type="number" step="any" data-i="${i}" value="${v}" style="width:58px">`).join('')+'</div>';
+    box.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',cb));}
+  build(M);
+  return{get(){const v=[...box.querySelectorAll('input')].map(i=>parseFloat(i.value)||0);return Array.from({length:n},(_,i)=>v.slice(i*n,i*n+n));},
+         set(M){build(M);cb();}};
+}
+function arrow(ctx,x0,y0,x1,y1,col,w=2.5,dash){
+  ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;if(dash)ctx.setLineDash(dash);
+  ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();ctx.setLineDash([]);
+  const a=Math.atan2(y1-y0,x1-x0),L=Math.hypot(x1-x0,y1-y0);
+  if(L>6){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-10*Math.cos(a-0.4),y1-10*Math.sin(a-0.4));ctx.lineTo(x1-10*Math.cos(a+0.4),y1-10*Math.sin(a+0.4));ctx.fill();}
+  ctx.restore();
+}
+function canvasPt(cv,e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height];}
+
+/* ---------- helpers ---------- */
+const gam=b=>1/Math.sqrt(1-b*b);
+function boostMat(b){const bb=dot(b,b),g=1/Math.sqrt(1-bb),M=zeros(4);M[0][0]=g;
+  for(let i=0;i<3;i++){M[0][i+1]=M[i+1][0]=-g*b[i];for(let j=0;j<3;j++)M[i+1][j+1]=(i===j?1:0)+(bb>1e-14?(g-1)*b[i]*b[j]/bb:0);}return M;}
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+function Fup(E,B){const[ex,ey,ez]=E,[bx,by,bz]=B;return[[0,-ex,-ey,-ez],[ex,0,-bz,by],[ey,bz,0,-bx],[ez,-by,bx,0]];}
+const eta=[[1,0,0,0],[0,-1,0,0],[0,0,-1,0],[0,0,0,-1]];
+function EB(F){return{E:[F[1][0],F[2][0],F[3][0]],B:[F[3][2],F[1][3],F[2][1]]};}
+function eq54(E,B,b){const g=1/Math.sqrt(1-dot(b,b)),k=g*g/(g+1);
+  return{E:E.map((x,i)=>g*(x+cross(b,B)[i])-k*b[i]*dot(b,E)),B:B.map((x,i)=>g*(x-cross(b,E)[i])-k*b[i]*dot(b,B))};}
+function dualF(E,B){return Fup(B,E.map(x=>-x));}
+const v3=x=>'('+x.map(y=>fmt(y,4)).join(', ')+')';
+
+/* ---------- Field lab ---------- */
+const FP={pureE:[[0,0,1],[0,0,0],[0.6,0,0]],perp:[[0,1,0],[0,0,0.6],[0,0,0]],perpB:[[0,0.6,0],[0,0,1],[0,0,0]],ex1:[[1,0,0],[1,Math.sqrt(3),0],[0,0,0]],wave:[[0,1,0],[0,0,1],[0.5,0,0]]};
+const fIds=['fEx','fEy','fEz','fBx','fBy','fBz'];
+document.querySelectorAll('[data-fp]').forEach(b=>b.onclick=()=>{const p=FP[b.dataset.fp];p[0].concat(p[1]).forEach((v,i)=>$(fIds[i]).value=+v.toFixed(4));['fbx','fby','fbz'].forEach((k,i)=>$(k).value=p[2][i]);labF();});
+fIds.concat(['fbx','fby','fbz']).forEach(k=>$(k).addEventListener('input',labF));
+$('fFind').onclick=()=>{const E=fIds.slice(0,3).map(k=>+$(k).value||0),B=fIds.slice(3).map(k=>+$(k).value||0),S=cross(E,B),s=nrm(S);
+  if(s<1e-12){['fbx','fby','fbz'].forEach(k=>$(k).value=0);labF();return;}
+  const r=s/(dot(E,E)+dot(B,B));let b=(1-Math.sqrt(1-4*r*r))/(2*r);if(b>0.95)b=0.95;const n=S.map(x=>x/s);
+  ['fbx','fby','fbz'].forEach((k,i)=>$(k).value=b*n[i]);labF();};
+function labF(){
+  const E=fIds.slice(0,3).map(k=>+$(k).value||0),B=fIds.slice(3).map(k=>+$(k).value||0);let b=['fbx','fby','fbz'].map(k=>+$(k).value);
+  ['fbx','fby','fbz'].forEach(k=>$(k+'v').textContent=fmt(+$(k).value,3));
+  let warn='';const bb=nrm(b);if(bb>=0.99){b=b.map(x=>x*0.99/bb);warn='<p class="small bad">|β| ≥ 1 is impossible; scaled to 0.99.</p>';}
+  const F=Fup(E,B),Fl=mul(mul(eta,F),eta),D=dualF(E,B),L=boostMat(b),Fb=mul(mul(L,F),T(L)),r=EB(Fb),r2=eq54(E,B,b);
+  const d=Math.max(...r.E.map((x,i)=>Math.abs(x-r2.E[i])),...r.B.map((x,i)=>Math.abs(x-r2.B[i])));
+  let I1=0,I2=0;for(let i=0;i<4;i++)for(let j=0;j<4;j++){I1+=F[i][j]*Fl[i][j];I2+=Fl[i][j]*D[i][j];}
+  const EE=dot(r.E,r.E),BBb=dot(r.B,r.B),ang=(EE>1e-12&&BBb>1e-12)?Math.acos(Math.max(-1,Math.min(1,dot(r.E,r.B)/Math.sqrt(EE*BBb))))*180/Math.PI:null;
+  const cls=Math.abs(dot(E,B))>1e-9?'E·B ≠ 0: no frame has a single field; the best is Ē ∥ B̄.':(dot(E,E)-dot(B,B)>1e-9?'E·B = 0, E > B: a frame with B̄ = 0 exists (β = E×B/E²).':(dot(B,B)-dot(E,E)>1e-9?'E·B = 0, B > E: a frame with Ē = 0 exists (β = E×B/B²).':(dot(E,E)<1e-12?'no field':'E·B = 0, E = B: radiation field; no frame removes either field.')));
+  $('fOut').innerHTML=warn+`<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start"><div class="small">F<sup>ij</sup> (Eq. 13)<br>${mxH(F,true)}</div><div class="small">F<sub>ij</sub> (Eq. 16)<br>${mxH(Fl,true)}</div><div class="small">dual 𝔉<sup>ij</sup> (Eq. 18)<br>${mxH(D,true)}</div><div class="small">F̄ = ΛFΛᵀ<br>${mxH(Fb,true)}</div></div>
+  <p>In the new frame (β = ${v3(b)}): <b>Ē = ${v3(r.E)}</b>, <b>B̄ = ${v3(r.B)}</b> &nbsp; <span class="small">(Eq. 54 gives the same: max diff ${d.toExponential(1)} ✓)</span></p>
+  <p>Invariants: F<sup>ij</sup>F<sub>ij</sub> = ${fmt(I1,4)} = 2(B² − E²) = ${fmt(2*(dot(B,B)-dot(E,E)),4)} → in new frame 2(B̄² − Ē²) = ${fmt(2*(BBb-EE),4)} ✓; &nbsp; F<sub>ij</sub>𝔉<sup>ij</sup> = ${fmt(I2,4)} = −4E·B → new frame −4Ē·B̄ = ${fmt(-4*dot(r.E,r.B),4)} ✓</p>
+  <p class="small">${cls} ${ang===null?(EE<1e-10&&BBb>1e-10?'<b>Here Ē = 0.</b>':BBb<1e-10&&EE>1e-10?'<b>Here B̄ = 0.</b>':''):'Angle between Ē and B̄ now: '+ang.toFixed(2)+'°'+(ang<0.05||ang>179.95?' <b>(parallel)</b>':'')}</p>`;
+}
+
+/* ---------- Moving charge ---------- */
+$('qB').addEventListener('input',drawQ);
+function drawQ(){
+  const b=+$('qB').value,g=gam(b);$('qBv').textContent=b.toFixed(2);
+  const cv=$('cvQ'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height;ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);
+  const cx=W/2,cy=H/2;
+  for(let k=0;k<36;k++){const a=k/36*2*Math.PI,s=Math.sin(a);
+    for(const R of [55,105,155]){const f=(1-b*b)/Math.pow(1-b*b*s*s,1.5)*(55/R);const L=Math.min(46,16*f);
+      const x=cx+R*Math.cos(a),y=cy-R*Math.sin(a),col=`rgba(47,111,223,${Math.min(1,0.25+0.25*f)})`;arrow(ctx,x,y,x+L*Math.cos(a),y-L*Math.sin(a),col,1.6);}}
+  ctx.fillStyle=cssv('--warn');ctx.beginPath();ctx.arc(cx,cy,9,0,7);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 12px sans-serif';ctx.fillText('q',cx-4,cy+4);
+  arrow(ctx,cx+14,cy,cx+14+60*b,cy,cssv('--acc2'),3);ctx.fillStyle=cssv('--ink');ctx.font='12px sans-serif';ctx.fillText('E field now (arrow length ∝ |E|·r, to show the angular shape), v →',8,16);
+  const ratioPerp=g,ratioPar=1-b*b;
+  /* time profile */
+  const c2=$('cvT'),t=c2.getContext('2d'),W2=c2.width,H2=c2.height,X=u=>W2/2+u*(W2/2-20)/3,Y=e=>H2/2-e*(H2/2-30)/Math.max(1.2,g*1.05);
+  t.fillStyle=cssv('--card');t.fillRect(0,0,W2,H2);t.strokeStyle=cssv('--line');t.beginPath();t.moveTo(0,Y(0));t.lineTo(W2,Y(0));t.moveTo(X(0),0);t.lineTo(X(0),H2);t.stroke();
+  t.fillStyle=cssv('--muted');t.font='12px sans-serif';t.fillText('vt/d →',W2-48,Y(0)-6);t.fillText('field × d²/q',X(0)+6,14);
+  const Ef=u=>{const D=Math.pow(1+g*g*u*u,1.5);return{ex:-g*u/D,ey:g/D};};
+  [['ey',cssv('--acc'),'E_y'],['ex',cssv('--acc2'),'E_x'],['bz',cssv('--acc4'),'B_z']].forEach(([k,c,n],ii)=>{t.strokeStyle=c;t.lineWidth=2.2;if(k==='bz')t.setLineDash([5,4]);t.beginPath();for(let i=0;i<=300;i++){const u=-3+6*i/300,f=Ef(u),v=k==='bz'?b*f.ey:f[k];i?t.lineTo(X(u),Y(v)):t.moveTo(X(u),Y(v));}t.stroke();t.setLineDash([]);t.fillStyle=c;t.fillText(n,W2-60,30+16*ii);});
+  t.strokeStyle=cssv('--muted');t.setLineDash([2,3]);t.beginPath();t.moveTo(X(0),Y(1));t.lineTo(W2,Y(1));t.stroke();t.setLineDash([]);t.fillStyle=cssv('--muted');t.fillText('static q/d²',W2-70,Y(1)-4);
+  const dt=1/g;t.strokeStyle=cssv('--ink');t.beginPath();t.moveTo(X(-dt/2),Y(g)-10);t.lineTo(X(dt/2),Y(g)-10);t.stroke();t.fillStyle=cssv('--ink');t.fillText('vΔt = d/γ',X(dt/2)+4,Y(g)-6);
+  $('qOut').textContent=`β = ${b.toFixed(2)},  γ = ${g.toFixed(4)}
+At t = 0 (closest approach): E_y = γq/d² = ${g.toFixed(3)} × static,  E_x = 0,  B_z = βE_y = ${(b*g).toFixed(3)} q/d²
+Field strength around the charge (same distance r):
+  perpendicular to v: γ = ${ratioPerp.toFixed(3)} × Coulomb      along v: (1 − β²) = ${ratioPar.toFixed(3)} × Coulomb
+pulse width at P: Δt = d/(γv)  →  in units of d/v: ${(1/g).toFixed(3)};  E_x extremes at vt/d = ±${(1/(g*Math.SQRT2)).toFixed(3)}`;
+}
+
+/* ---------- Capacitor ---------- */
+['kB','kDir'].forEach(k=>$(k).addEventListener('input',labK));
+function labK(){
+  const b=+$('kB').value,g=gam(b),dir=$('kDir').value;$('kBv').textContent=b.toFixed(2);
+  let L1=25,L2=20,d=2;const C=L1*L2/(4*Math.PI*d),V=1000/300,Q=C*V,E=V/d,n=Q/4.8e-10;
+  let L1b=L1,L2b=L2,db=d;if(dir==='L1')L1b=L1/g;else if(dir==='L2')L2b=L2/g;else db=d/g;
+  const Cb=L1b*L2b/(4*Math.PI*db),Vb=Q/Cb,Eb=dir==='d'?E:g*E,Bb=dir==='d'?0:g*b*E;
+  $('kOut').textContent=`γ = ${g.toFixed(4)}
+REST FRAME:   plates ${L1} × ${L2} cm, d = ${d} cm
+  C = A/(4πd) = ${C.toFixed(2)} cm   Q = CV = ${Q.toFixed(2)} esu   n = ${n.toExponential(2)}   E = V/d = ${E.toFixed(3)} esu
+MOVING FRAME: plates ${L1b.toFixed(2)} × ${L2b.toFixed(2)} cm, d = ${db.toFixed(3)} cm
+  C̄ = ${Cb.toFixed(2)} cm  (${dir==='d'?'γC':'C/γ'})   Q̄ = Q = ${Q.toFixed(2)} esu   n̄ = n
+  Ē = ${Eb.toFixed(3)} esu  (${dir==='d'?'E ∥ v: unchanged':'E ⊥ v: γE'})   V̄ = Q̄/C̄ = ${Vb.toFixed(3)} statvolt  (${dir==='d'?'V/γ':'γV'})
+  check Ē = V̄/d̄ = ${(Vb/db).toFixed(3)} ✓
+  magnetic field |B̄| = ${Bb.toFixed(3)} ${dir==='d'?'(none, since β × E = 0)':'(γβE, from the moving charged plates)'}`;
+}
+
+/* ---------- Quiz ---------- */
+const QZ=[
+ {q:'F^ij = ∂^i A^j − ∂^j A^i has how many independent components?',o:['6','16','10','4'],a:0,e:'Antisymmetric 4×4.'},
+ {q:'F^10 equals…',o:['E_x','−E_x','B_x','−B_z'],a:0,e:'Eq. (11).'},
+ {q:'The inhomogeneous Maxwell equations in tensor form are…',o:['∂_i F^ij = (4π/c) J^j','∂_i 𝔉^ij = 0','□F = 0','F^ij F_ij = 0'],a:0,e:'Eq. (24).'},
+ {q:'Under a boost along x, which field components are unchanged?',o:['E_x and B_x','E_y and B_y','all','none'],a:0,e:'Parallel components are invariant.'},
+ {q:'The dual 𝔉^ij is obtained from F^ij by…',o:['E → B, B → −E','E → −E','transposing','B → E, E → B'],a:0,e:'Eq. (18).'},
+ {q:'Which is a Lorentz invariant?',o:['E² − B²','E² + B²','|E|','E × B'],a:0,e:'F^ij F_ij = 2(B² − E²).'},
+ {q:'If E·B ≠ 0 in one frame…',o:['no frame has only E or only B','some frame has B = 0','some frame has E = 0','E·B can change sign'],a:0,e:'E·B is invariant.'},
+ {q:'The peak field of a charge passing at distance d with Lorentz factor γ is…',o:['γ q/d²','q/d²','q/(γd²)','γ² q/d²'],a:0,e:'Eq. (65) at t = 0.'},
+ {q:'A capacitor moving parallel to its plates has capacitance…',o:['C/γ','γC','C','C/γ²'],a:0,e:'One side contracts.'},
+ {q:'∂_i J^i = 0 follows from Maxwell’s equations because…',o:['∂_j∂_i is symmetric and F^ij antisymmetric','J is a scalar','F is symmetric','□ = 0'],a:0,e:'Charge conservation is built in.'}
+];
+(function(){let sc=0;$('qTot').textContent=QZ.length;
+ $('quiz').innerHTML=QZ.map((x,i)=>{const ord=x.o.map((t,j)=>({t,j})).sort(()=>Math.random()-0.5);
+  return `<div class="qq" data-q="${i}"><b>Q${i+1}.</b> ${x.q}${ord.map(o=>`<label class="opt"><input type="radio" name="q${i}" value="${o.j}"> ${o.t}</label>`).join('')}<div class="fb"></div></div>`;}).join('');
+ document.querySelectorAll('#quiz .qq').forEach(div=>{const i=+div.dataset.q;let done=false;
+  div.querySelectorAll('input').forEach(inp=>inp.addEventListener('change',()=>{if(done)return;done=true;const ok=+inp.value===QZ[i].a;if(ok)sc++;$('qScore').textContent=sc;
+    div.querySelector('.fb').innerHTML=`<span class="${ok?'ok':'bad'}">${ok?'✓ Correct.':'✗ Answer: '+QZ[i].o[QZ[i].a]+'.'}</span> ${QZ[i].e}`;
+    div.querySelectorAll('input').forEach(x=>x.disabled=true);}));});})();
+
+function drawAll(){drawQ();}
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+$('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawAll();};})();
+labF();drawQ();labK();
+</script>
+</body>
+</html>

@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:110px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:85px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:collapse;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;margin:3px 4px;width:auto}
+.mx.det{border-radius:0}
+.mx td{border:0;padding:1px 8px;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.verdict{font-weight:700;font-size:1.05rem;margin:6px 0}
+.sys{font-family:"Cambria Math",Cambria,"Times New Roman",serif;display:inline-block;text-align:left;line-height:1.5}
+</style>
+<title>Four-Vectors in Relativity</title>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>20. Four-Vectors in Special Relativity</h1>
+<p>Invariant interval · Four-vectors (position, velocity, momentum, current, potential, wave vector) · Galilean vs world scalars · Lorentz transformation along x and in an arbitrary direction · Invariant scalar product · Minkowski metric · Four-gradient, four-divergence, d'Alembertian &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 213–222</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">Interval</a><a href="#s2">Four-vectors</a><a href="#s3">World scalars</a><a href="#s4">Boost along x</a><a href="#s5">Minkowski lab</a><a href="#s6">Any direction</a><a href="#s7">Boost lab</a><a href="#s8">Scalar product</a><a href="#s9">Metric &amp; ∂</a><a href="#s10">Momentum &amp; Doppler lab</a><a href="#s11">Summary</a><a href="#s12">Exercise 20</a><a href="#s13">Practice</a><a href="#s14">Quiz</a><a href="#s15">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>Section 15 argued that physical laws must be tensor equations, so that they look the same to every observer. In Newtonian physics "every observer" meant observers with rotated or shifted axes (<b>Galilean</b> invariance). Special relativity adds observers <b>moving</b> uniformly relative to each other. Then:</p>
+<ul>
+<li>space intervals dx and time intervals dt are no longer separately invariant, but the <b>interval</b> ds² = c²dt² − dx² is;</li>
+<li>so the "vectors" of physics become <b>four-vectors</b> in a 4D space-time (Minkowski space) with metric diag(1, −1, −1, −1);</li>
+<li>a <b>Lorentz transformation</b> plays the role that rotations played in Section 19.</li>
+</ul>
+<div class="flow"><span>ds² invariant</span><b>→</b><span>metric g = diag(1,−1,−1,−1)</span><b>→</b><span>Lorentz boost (γ, β)</span><b>→</b><span>four-vectors A<sup>i</sup> = (A⁰, A)</span><b>→</b><span>invariant A⁰B⁰ − A·B</span><b>→</b><span>∂<sub>i</sub>, □</span></div>
+<div class="box tip"><b class="t">Needed from earlier</b> Contravariant vs covariant components and the transformation law (Section 15), the metric tensor, raising and lowering indices (Section 18), the gradient being covariant (Example 15.3b), rotations and Cartesian tensors (Section 19), hyperbolic functions cosh, sinh, tanh.</div>
+</section>
+
+<section id="s1">
+<h2>1. The invariant interval (Eq. 1)</h2>
+<p>Two events, e.g. "a child is born here" and "a star explodes there", are separated by a space interval dx and a time interval dt. Observers in relative motion measure <b>different</b> dx and dt. What they all agree on is</p>
+<div class="eq">(ds)² = c²(dt)² − [(dx¹)² + (dx²)² + (dx³)²] &nbsp;&nbsp;(1)</div>
+<p>where c is the speed of light. Transformations that keep ds² unchanged between inertial observers are the <b>Lorentz transformations</b>. They include uniform relative motion as well as rotations and translations.</p>
+<div class="tbl-wrap"><table>
+<tr><th>Sign of ds²</th><th>Name</th><th>Meaning</th></tr>
+<tr><td>ds² &gt; 0</td><td>timelike</td><td>one event can cause the other; a clock can travel between them. ds/c = proper time.</td></tr>
+<tr><td>ds² = 0</td><td>lightlike (null)</td><td>connected by a light signal</td></tr>
+<tr><td>ds² &lt; 0</td><td>spacelike</td><td>no signal can connect them; their time order depends on the observer</td></tr>
+</table></div>
+<p>Since the sign of ds² is invariant, these three classes are the same for every observer: cause and effect are never reversed.</p>
+</section>
+
+<section id="s2">
+<h2>2. Four-vectors (Eqs. 2–9)</h2>
+<p>A <b>four-vector</b> (world vector) is an ordered set of 4 components that transforms like (ct, x) under Lorentz transformations. Each one is a Galilean scalar (time part) plus a Galilean vector (space part). Its "length" (A⁰)² − |A|² is invariant.</p>
+<div class="tbl-wrap"><table>
+<tr><th>Four-vector</th><th>Components A<sup>i</sup> = (A⁰, A)</th><th>Invariant (A⁰)² − |A|²</th></tr>
+<tr><td>(a) position / interval</td><td>x<sup>i</sup> = (ct, x), x⁰ = ct</td><td>c²t² − |x|² (= s²)</td></tr>
+<tr><td>(b) four-velocity</td><td>U<sup>i</sup> = (γc, γv), γ = (1 − v²/c²)<sup>−1/2</sup> &nbsp;(2, 3)</td><td>γ²c² − γ²v² = <b>c²</b> &nbsp;(4)</td></tr>
+<tr><td>(c) four-momentum</td><td>p<sup>i</sup> = (E/c, p), E = γm₀c², p = γm₀v &nbsp;(5)</td><td><b>m₀²c²</b> &nbsp;(6), i.e. E² = p²c² + m₀²c⁴</td></tr>
+<tr><td>(d) four-current</td><td>J<sup>i</sup> = (cρ, J) &nbsp;(7)</td><td>c²ρ₀² (ρ₀ = rest-frame density)</td></tr>
+<tr><td>(e) four-potential</td><td>A<sup>i</sup> = (Φ, A) &nbsp;(8)</td><td>—</td></tr>
+<tr><td>(f) four-wave vector</td><td>k<sup>i</sup> = (ω/c, k) &nbsp;(9)</td><td>0 for light in vacuum (ω = c|k|)</td></tr>
+</table></div>
+<div class="box tip"><b class="t">Why U<sup>i</sup> = γ(c, v)?</b> U<sup>i</sup> = dx<sup>i</sup>/dτ, where dτ = ds/c = dt/γ is the <b>proper time</b>, which is invariant. dx<sup>i</sup> is a four-vector and dτ a scalar, so U<sup>i</sup> is a four-vector. Then p<sup>i</sup> = m₀U<sup>i</sup> follows at once. (Units: the book writes A⁰ = Φ, which is the convention with c absorbed in the units; in SI it is Φ/c.)</div>
+</section>
+
+<section id="s3">
+<h2>3. Galilean scalars vs world scalars</h2>
+<ul>
+<li><b>Galilean scalars</b> (invariant under rotations only): mass, energy, length, time interval, volume, charge density. These are <b>not</b> world scalars: a moving rod is shorter, a moving clock is slower, a moving charge distribution is denser.</li>
+<li><b>World scalars</b> (Lorentz invariant): c, electric charge q, rest mass m₀, proper time τ, ds², and any full contraction A<sub>i</sub>B<sup>i</sup>.</li>
+<li>Charge q is a world scalar, but charge density ρ = q/V is <b>not</b>, because volume contracts. Instead cρ is the time part of the four-vector J<sup>i</sup>.</li>
+</ul>
+</section>
+
+<section id="s4">
+<h2>4. Lorentz transformation along x¹ (Eqs. 10–12)</h2>
+<p>Frame S′ moves with velocity v along x¹ relative to S, axes parallel. With β = v/c (0 ≤ β &lt; 1) and γ = 1/√(1 − β²):</p>
+<div class="eq"><span class="sys">x̄⁰ = γ(x⁰ − βx¹)<br>x̄¹ = γ(x¹ − βx⁰)<br>x̄² = x², &nbsp; x̄³ = x³</span> &nbsp;&nbsp;(10) &nbsp;&nbsp;&nbsp; inverse: β → −β &nbsp;(12)</div>
+<p>As a matrix, Λ = [[γ, −γβ], [−γβ, γ]] acting on (x⁰, x¹). Write β = tanh ψ (ψ = <b>rapidity</b>). Then γ = cosh ψ, γβ = sinh ψ, and</p>
+<div class="eq">Λ(ψ) = <table class="mx"><tr><td>cosh ψ</td><td>−sinh ψ</td></tr><tr><td>−sinh ψ</td><td>cosh ψ</td></tr></table></div>
+<p>It is a "rotation" by an imaginary angle. cosh² − sinh² = 1 is why (x⁰)² − (x¹)² is unchanged, exactly as cos² + sin² = 1 keeps x² + y² unchanged under a rotation. Boosts along the same line add their <b>rapidities</b>: ψ = ψ₁ + ψ₂, which gives the velocity-addition law β = (β₁ + β₂)/(1 + β₁β₂).</p>
+<h3>What (10) says physically</h3>
+<ul>
+<li><b>Time dilation:</b> a clock at rest in S′ (x̄¹ fixed) gives dx̄⁰ = dx⁰/γ: moving clocks run slow.</li>
+<li><b>Length contraction:</b> a rod at rest in S′ of length L₀ is measured in S (both ends at the same x⁰) as L₀/γ.</li>
+<li><b>Relativity of simultaneity:</b> two events with the same x⁰ but different x¹ have x̄⁰ differing by −γβ Δx¹: the "time lag" γβx¹.</li>
+<li><b>c is the limit:</b> γ is real only for β &lt; 1.</li>
+</ul>
+</section>
+
+<section id="s5">
+<h2>5. 🔬 Minkowski-diagram lab</h2>
+<p>Horizontal: x¹, vertical: x⁰ = ct, both in S (black square grid). The blue axes are those of S′ moving with β: its time axis (x̄¹ = 0) and its space axis (x̄⁰ = 0) tilt symmetrically toward the light line (orange, 45°). Drag the event E. The grey hyperbola through E is the set of all events with the <b>same interval s² from the origin</b>: as you change β, E's S′ coordinates change but E always stays on its hyperbola. Click "two events" to see simultaneity break.</p>
+<div class="lab">
+<div class="grid2">
+<div><canvas id="cvM" width="460" height="460"></canvas></div>
+<div>
+<div class="ctrl"><label>β = v/c <input type="range" id="mB" min="-0.95" max="0.95" step="0.01" value="0.5" style="width:170px"><span id="mBv"></span></label></div>
+<div class="ctrl"><button id="mTwo" class="alt">two events (simultaneous in S)</button><button id="mPlay" class="alt">▶ sweep β</button></div>
+<div class="readout out" id="mOut"></div>
+</div></div></div>
+</section>
+
+<section id="s6">
+<h2>6. Boost in an arbitrary direction (Eqs. 13–23)</h2>
+<p>Let β = v/c point in any direction (axes of S and S′ still parallel). Split the position into parts parallel and perpendicular to β (Fig. 16): x = x<sub>∥</sub> + x<sub>⊥</sub>. &nbsp;(15)</p>
+<ol>
+<li><b>Time:</b> the dilation factor γ depends only on |β|. The time lag γβx¹ in (10) must become γ(β₁x¹ + β₂x² + β₃x³), the only expression that reduces correctly when β lies along any axis:
+<div class="eq">x̄⁰ = γ(x⁰ − β·x) &nbsp;&nbsp;(14)</div></li>
+<li><b>Perpendicular part:</b> unchanged, x̄<sub>⊥</sub> = x<sub>⊥</sub>. &nbsp;(17)</li>
+<li><b>Parallel part:</b> transforms like x¹ in (10): x̄<sub>∥</sub> = γ(x<sub>∥</sub> − βx⁰). &nbsp;(18)</li>
+<li>Add them: x̄ = γx<sub>∥</sub> + x<sub>⊥</sub> − γβx⁰ = x + (γ − 1)x<sub>∥</sub> − γβx⁰. &nbsp;(19)</li>
+<li>With x<sub>∥</sub> = (x·β)β/β² (20, 21):</li>
+</ol>
+<div class="eq"><b>x̄⁰ = γ(x⁰ − β·x), &nbsp;&nbsp; x̄ = x + [(γ − 1)/β²](x·β)β − γβx⁰</b> &nbsp;&nbsp;(23)</div>
+<p>Every four-vector transforms the same way (24):</p>
+<div class="eq">Ā⁰ = γ(A⁰ − β·A), &nbsp; Ā<sub>∥</sub> = γ(A<sub>∥</sub> − βA⁰), &nbsp; Ā<sub>⊥</sub> = A<sub>⊥</sub>, &nbsp; i.e. Ā = A + [(γ−1)/β²](A·β)β − γβA⁰ &nbsp;(24a–d)</div>
+<p><b>As a 4×4 matrix:</b> Λ⁰₀ = γ, Λ⁰<sub>j</sub> = Λ<sup>j</sup>₀ = −γβ<sub>j</sub>, Λ<sup>i</sup><sub>j</sub> = δ<sub>ij</sub> + (γ − 1)β<sub>i</sub>β<sub>j</sub>/β². It is <b>symmetric</b>.</p>
+<div class="box warnb"><b class="t">Two boosts do not make a boost</b> A boost along x followed by a boost along y is <b>not</b> a pure boost. The product matrix is not symmetric: it is a boost times a <b>rotation</b> (the Wigner rotation). This causes Thomas precession, which halves the spin–orbit coupling in atoms. The boost lab shows the non-symmetric product.</div>
+</section>
+
+<section id="s7">
+<h2>7. 🔬 Boost lab: arbitrary β, any four-vector</h2>
+<p>Set β (3 components) and a four-vector A<sup>i</sup>. The lab applies Eq. (24), checks it against the 4×4 matrix, and checks that (A⁰)² − |A|² is unchanged. The second part composes two boosts and measures how far the result is from a pure boost.</p>
+<div class="lab">
+<div class="ctrl"><label>β₁ <input type="range" id="bx" min="-0.9" max="0.9" step="0.01" value="0.6"><span id="bxv"></span></label><label>β₂ <input type="range" id="by" min="-0.9" max="0.9" step="0.01" value="0.3"><span id="byv"></span></label><label>β₃ <input type="range" id="bz" min="-0.9" max="0.9" step="0.01" value="0"><span id="bzv"></span></label></div>
+<div class="ctrl"><label>A⁰ <input type="number" id="a0" value="5" step="0.5" style="width:70px"></label><label>A¹ <input type="number" id="a1" value="1" step="0.5" style="width:70px"></label><label>A² <input type="number" id="a2" value="2" step="0.5" style="width:70px"></label><label>A³ <input type="number" id="a3" value="-1" step="0.5" style="width:70px"></label>
+<button class="alt" id="bRest">A = particle at rest (1,0,0,0)</button><button class="alt" id="bLight">A = light pulse (1,1,0,0)</button></div>
+<div id="bOut"></div>
+<h4>Composition: boost β<sub>a</sub> along x, then β<sub>b</sub> along y</h4>
+<div class="ctrl"><label>β<sub>a</sub> <input type="range" id="ca" min="0" max="0.95" step="0.01" value="0.6"><span id="cav"></span></label><label>β<sub>b</sub> <input type="range" id="cb" min="0" max="0.95" step="0.01" value="0.6"><span id="cbv"></span></label></div>
+<div id="cOut"></div>
+</div>
+</section>
+
+<section id="s8">
+<h2>8. The invariant scalar product (Example 1, Eqs. 25–30)</h2>
+<div class="box thm"><b class="t">Example 1</b> For four-vectors (A⁰, A), (B⁰, B), the scalar product A⁰B⁰ − A·B is Lorentz invariant.</div>
+<ol>
+<li>Write Ā⁰B̄⁰ − Ā·B̄ = Ā⁰B̄⁰ − Ā<sub>∥</sub>B̄<sub>∥</sub> − Ā<sub>⊥</sub>·B̄<sub>⊥</sub>. &nbsp;(26)</li>
+<li>Insert (24): = γ²(A⁰ − βA<sub>∥</sub>)(B⁰ − βB<sub>∥</sub>) − γ²(A<sub>∥</sub> − βA⁰)(B<sub>∥</sub> − βB⁰) − A<sub>⊥</sub>·B<sub>⊥</sub>, using β·A = βA<sub>∥</sub>.</li>
+<li>Expand: the cross terms −γ²β(A⁰B<sub>∥</sub> + A<sub>∥</sub>B⁰) cancel between the two products, leaving γ²(1 − β²)A⁰B⁰ − γ²(1 − β²)A<sub>∥</sub>B<sub>∥</sub> − A<sub>⊥</sub>·B<sub>⊥</sub>. &nbsp;(27)</li>
+<li>γ²(1 − β²) = 1 (28), so the result is A⁰B⁰ − A<sub>∥</sub>B<sub>∥</sub> − A<sub>⊥</sub>·B<sub>⊥</sub> = A⁰B⁰ − A·B. ∎ &nbsp;(29)</li>
+</ol>
+<p>Special case A = B: (Ā⁰)² − |Ā|² = (A⁰)² − |A|². &nbsp;(30) &nbsp; Example: p<sub>i</sub>p<sup>i</sup> = m₀²c² for every observer.</p>
+</section>
+
+<section id="s9">
+<h2>9. Minkowski metric, covariant components and the four-gradient (Eqs. 31–42)</h2>
+<p>Comparing (1) with ds² = g<sub>ij</sub>dx<sup>i</sup>dx<sup>j</sup> (18.1):</p>
+<div class="eq">[g<sub>ij</sub>] = diag(1, −1, −1, −1) &nbsp;(31), &nbsp;&nbsp; g<sup>ij</sup> = g<sub>ij</sub> &nbsp;(32)</div>
+<p>(It is its own inverse.) A contravariant four-vector transforms as Ā<sup>α</sup> = (∂x̄<sup>α</sup>/∂x<sup>i</sup>)A<sup>i</sup> (33). <b>Lowering</b> the index flips the sign of the space part:</p>
+<div class="eq">A<sub>0</sub> = A⁰, &nbsp; A<sub>k</sub> = −A<sup>k</sup> &nbsp;(34); &nbsp;&nbsp; A<sup>i</sup> = (A⁰, A), &nbsp; A<sub>i</sub> = (A⁰, −A) &nbsp;(35); &nbsp;&nbsp; A·B ≡ A<sup>i</sup>B<sub>i</sub> = A⁰B⁰ − A·B &nbsp;(36)</div>
+<p>So the invariant of Example 1 is simply the contraction A<sup>i</sup>B<sub>i</sub>, a scalar by Section 16. Here the difference between upper and lower components does <b>not</b> vanish, even though the coordinates are "Cartesian", because g<sub>ij</sub> ≠ δ<sub>ij</sub>.</p>
+<h3>Four-gradient</h3>
+<p>By the chain rule ∂/∂x̄<sup>α</sup> = (∂x<sup>i</sup>/∂x̄<sup>α</sup>)∂/∂x<sup>i</sup> (37), so ∂/∂x<sup>i</sup> is a <b>covariant</b> vector operator:</p>
+<div class="eq">∂<sub>i</sub> ≡ ∂/∂x<sup>i</sup> = ((1/c)∂/∂t, ∇) &nbsp;(38, 39a), &nbsp;&nbsp; ∂<sup>i</sup> ≡ ∂/∂x<sub>i</sub> = ((1/c)∂/∂t, −∇) &nbsp;(39b), &nbsp; x<sub>i</sub> = g<sub>ij</sub>x<sup>j</sup> &nbsp;(40)</div>
+<ul>
+<li><b>Four-gradient</b> of a scalar: ∂<sub>i</sub>φ (covariant) or ∂<sup>i</sup>φ.</li>
+<li><b>Four-divergence</b>: ∂<sub>i</sub>A<sup>i</sup> = ∂<sup>i</sup>A<sub>i</sub> = ∂A⁰/∂x⁰ + ∇·A, a Lorentz scalar. &nbsp;(41) &nbsp; (The book prints "− ∇·A" in (41). With A<sup>i</sup> = (A⁰, A) and ∂<sub>i</sub> = (∂₀, ∇), the sign is <b>+</b>, which is what makes ∂<sub>i</sub>J<sup>i</sup> = 0 the continuity equation in Section 21.)</li>
+<li><b>d'Alembertian</b>: □ = ∂<sub>i</sub>∂<sup>i</sup> = (1/c²)∂²/∂t² − ∇² &nbsp;(42), the operator of the wave equation □φ = 0, invariant under Lorentz transformations.</li>
+</ul>
+</section>
+
+<section id="s10">
+<h2>10. 🔬 Four-momentum and Doppler lab</h2>
+<p><b>Left:</b> a particle of rest mass m₀ (units c = 1) moving with speed v. Its four-momentum (E, p) lies on the <b>mass hyperbola</b> E² − p² = m₀². Boost to another frame with β′: the point slides along the same hyperbola. <b>Right:</b> a photon k<sup>i</sup> = (ω, ω cos θ, ω sin θ, 0) seen by an observer moving along x. Transforming k<sup>i</sup> with (24) gives the relativistic <b>Doppler shift</b> ω̄ = γω(1 − β cos θ) and the <b>aberration</b> of the direction.</p>
+<div class="lab">
+<div class="grid2">
+<div><canvas id="cvP" width="440" height="380"></canvas>
+<div class="ctrl"><label>m₀ <input type="range" id="pM" min="0" max="2" step="0.05" value="1"><span id="pMv"></span></label><label>v <input type="range" id="pV" min="-0.95" max="0.95" step="0.01" value="0.6"><span id="pVv"></span></label><label>observer β′ <input type="range" id="pB" min="-0.95" max="0.95" step="0.01" value="0"><span id="pBv"></span></label></div>
+<div class="readout out" id="pOut"></div></div>
+<div><canvas id="cvD" width="440" height="380"></canvas>
+<div class="ctrl"><label>photon angle θ <input type="range" id="dT" min="0" max="180" step="1" value="0"><span id="dTv"></span></label><label>observer β <input type="range" id="dB" min="-0.95" max="0.95" step="0.01" value="0.5"><span id="dBv"></span></label></div>
+<div class="readout out" id="dOut"></div></div>
+</div></div>
+</section>
+
+<section id="s11">
+<h2>11. Summary sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Item</th><th>Formula</th></tr>
+<tr><td>Interval</td><td>ds² = c²dt² − |dx|² (invariant); proper time dτ = ds/c</td></tr>
+<tr><td>γ, β, rapidity</td><td>β = v/c, γ = (1 − β²)<sup>−1/2</sup>, β = tanh ψ, γ = cosh ψ</td></tr>
+<tr><td>Boost along x</td><td>x̄⁰ = γ(x⁰ − βx¹), x̄¹ = γ(x¹ − βx⁰), x̄², x̄³ unchanged</td></tr>
+<tr><td>Any direction</td><td>Ā⁰ = γ(A⁰ − β·A), Ā = A + [(γ−1)/β²](A·β)β − γβA⁰</td></tr>
+<tr><td>Four-vectors</td><td>(ct, x), γ(c, v), (E/c, p), (cρ, J), (Φ, A), (ω/c, k)</td></tr>
+<tr><td>Invariants</td><td>U<sub>i</sub>U<sup>i</sup> = c², p<sub>i</sub>p<sup>i</sup> = m₀²c², k<sub>i</sub>k<sup>i</sup> = 0 (light)</td></tr>
+<tr><td>Metric</td><td>g<sub>ij</sub> = g<sup>ij</sup> = diag(1, −1, −1, −1); A<sub>i</sub> = (A⁰, −A)</td></tr>
+<tr><td>Scalar product</td><td>A<sup>i</sup>B<sub>i</sub> = A⁰B⁰ − A·B</td></tr>
+<tr><td>Four-gradient</td><td>∂<sub>i</sub> = (∂<sub>0</sub>, ∇), ∂<sup>i</sup> = (∂<sub>0</sub>, −∇)</td></tr>
+<tr><td>Divergence, □</td><td>∂<sub>i</sub>A<sup>i</sup> = ∂₀A⁰ + ∇·A; □ = (1/c²)∂²<sub>t</sub> − ∇²</td></tr>
+<tr><td>Doppler</td><td>ω̄ = γω(1 − β cos θ); head-on: ω̄ = ω√((1 − β)/(1 + β))</td></tr>
+</table></div>
+</section>
+
+<section id="s12">
+<h2>12. Book's Exercise 20: solved</h2>
+<div class="prob"><div class="q">1. Consider x⁰ = r cosh ψ, x¹ = r sin θ cos φ sinh ψ, x² = r sin θ sin φ sinh ψ, x³ = r cos θ sinh ψ. (a) Using the metric (1), obtain the metric in terms of (r, θ, φ, ψ). (b) Obtain the inverse transformation.</div>
+<details><summary>Show solution (a)</summary>
+<p>Write R = |x| = r sinh ψ. The spatial part is ordinary spherical coordinates with radius R: |dx|² = dR² + R²(dθ² + sin²θ dφ²).</p>
+<p>dx⁰ = cosh ψ dr + r sinh ψ dψ, &nbsp; dR = sinh ψ dr + r cosh ψ dψ.</p>
+<p>(dx⁰)² − dR² = dr²(cosh²ψ − sinh²ψ) + r²dψ²(sinh²ψ − cosh²ψ) + 2r dr dψ(cosh ψ sinh ψ − sinh ψ cosh ψ) = dr² − r²dψ².</p>
+<div class="eq">ds² = dr² − r²[dψ² + sinh²ψ (dθ² + sin²θ dφ²)]</div>
+<p>g<sub>ij</sub> = diag(1, −r², −r²sinh²ψ, −r²sinh²ψ sin²θ) in the order (r, ψ, θ, φ). Diagonal, so the coordinates are orthogonal. The bracket is the metric of 3D <b>hyperbolic space</b>: each surface r = const is a hyperboloid c²t² − |x|² = r², all of whose points are reached from the origin by observers moving at different velocities. ψ is their <b>rapidity</b>.</p></details>
+<details><summary>Show solution (b)</summary>
+<p>(x⁰)² − |x|² = r²(cosh²ψ − sinh²ψ) = r², so</p>
+<div class="eq">r = √[(x⁰)² − (x¹)² − (x²)² − (x³)²], &nbsp; tanh ψ = √[(x¹)² + (x²)² + (x³)²]/x⁰,<br>θ = tan⁻¹[√((x¹)² + (x²)²)/x³], &nbsp; φ = tan⁻¹(x²/x¹)</div>
+<p>These coordinates cover only the region inside the future light cone (x⁰ &gt; |x|, timelike from the origin), because cosh ψ &gt; sinh ψ ≥ 0. Note tanh ψ = |x|/x⁰ = velocity/c of an observer who starts at the origin and reaches the event.</p></details></div>
+</section>
+
+<section id="s13">
+<h2>13. Practice set (CSIR-NET / GATE style)</h2>
+<div class="prob"><div class="q">P1. A particle has E = 5 GeV and |p|c = 4 GeV. Find its rest energy and speed. <span class="tag">invariant</span></div>
+<details><summary>Show solution</summary><p>m₀c² = √(25 − 16) = 3 GeV. β = pc/E = 0.8, γ = 5/3.</p></details></div>
+<div class="prob"><div class="q">P2. A muon (τ₀ = 2.2 μs) moves with γ = 20. How far does it travel in one mean lifetime? <span class="tag">dilation</span></div>
+<details><summary>Show solution</summary><p>βγcτ₀ = √(400 − 1)·(3×10⁸)(2.2×10⁻⁶) ≈ 19.97 × 660 m ≈ 13.2 km. Without time dilation it would only be about 660 m.</p></details></div>
+<div class="prob"><div class="q">P3. Two rockets approach each other, each at 0.8c relative to Earth. Speed of one relative to the other? <span class="tag">addition</span></div>
+<details><summary>Show solution</summary><p>(0.8 + 0.8)/(1 + 0.64) = 1.6/1.64 ≈ 0.976c. Rapidities: tanh⁻¹0.8 ≈ 1.099, doubled = 2.197, tanh(2.197) ≈ 0.976 ✓.</p></details></div>
+<div class="prob"><div class="q">P4. Events (ct, x) = (0, 0) and (3, 5) m. Classify the interval. Is there a frame where they are simultaneous? <span class="tag">interval</span></div>
+<details><summary>Show solution</summary><p>s² = 9 − 25 = −16 &lt; 0: spacelike. Yes: need βx¹ = x⁰, β = 3/5. In that frame they are 4 m apart (proper distance).</p></details></div>
+<div class="prob"><div class="q">P5. A source emits light of frequency ω. What frequency does an observer moving directly toward it at β = 0.6 see? <span class="tag">Doppler</span></div>
+<details><summary>Show solution</summary><p>Approaching: ω̄ = ω√((1 + β)/(1 − β)) = ω√(1.6/0.4) = 2ω.</p></details></div>
+<div class="prob"><div class="q">P6. Show ∂<sub>i</sub>x<sup>i</sup> = 4 and ∂<sub>i</sub>x<sup>j</sup> = δ<sub>i</sub><sup>j</sup>. <span class="tag">four-gradient</span></div>
+<details><summary>Show solution</summary><p>∂x<sup>j</sup>/∂x<sup>i</sup> = δ<sup>j</sup><sub>i</sub>; contracting gives δ<sup>i</sup><sub>i</sub> = 4 (the dimension of space-time).</p></details></div>
+<div class="prob"><div class="q">P7. Show U<sub>i</sub>a<sup>i</sup> = 0 where a<sup>i</sup> = dU<sup>i</sup>/dτ. <span class="tag">four-acceleration</span></div>
+<details><summary>Show solution</summary><p>U<sub>i</sub>U<sup>i</sup> = c² is constant; differentiate with respect to τ: 2U<sub>i</sub>a<sup>i</sup> = 0. The four-acceleration is always orthogonal (in the Minkowski sense) to the four-velocity.</p></details></div>
+<div class="prob"><div class="q">P8. Find the threshold photon energy for γ + p → p + π⁰ on a proton at rest (m<sub>p</sub>c² = 938 MeV, m<sub>π</sub>c² = 135 MeV). <span class="tag">invariant mass</span></div>
+<details><summary>Show solution</summary><p>Invariant s = (E<sub>γ</sub> + m<sub>p</sub>)² − E<sub>γ</sub>² = m<sub>p</sub>² + 2E<sub>γ</sub>m<sub>p</sub> must reach (m<sub>p</sub> + m<sub>π</sub>)². E<sub>γ</sub> = [(m<sub>p</sub> + m<sub>π</sub>)² − m<sub>p</sub>²]/(2m<sub>p</sub>) = (1073² − 938²)/1876 ≈ 145 MeV.</p></details></div>
+</section>
+
+<section id="s14" class="quiz">
+<h2>14. Self-test quiz</h2>
+<div id="quiz"></div>
+<p><b>Score: <span id="qScore">0</span> / <span id="qTot">0</span></b></p>
+</section>
+
+<section id="s15">
+<h2>15. Interesting facts</h2>
+<div class="box fact"><b class="t">Minkowski 1908</b> Hermann Minkowski (Einstein's former maths teacher) announced: "Henceforth space by itself, and time by itself, are doomed to fade away into mere shadows, and only a kind of union of the two will preserve an independent reality." Einstein at first called the four-dimensional formalism "superfluous learnedness". He changed his mind when he needed it for general relativity.</div>
+<div class="box fact"><b class="t">Rapidity in colliders</b> Particle physicists at the LHC describe particles by rapidity rather than velocity, because rapidities simply add under boosts along the beam. The shape of a distribution in rapidity is the same in every frame moving along the beam.</div>
+<div class="box fact"><b class="t">Thomas precession</b> Llewellyn Thomas (1926) showed that the non-commuting of boosts (Section 6) gives an extra rotation of the electron's spin frame, which accounts for a missing factor of ½ in the atomic fine structure. At the time it rescued the new idea of electron spin.</div>
+<div class="box fact"><b class="t">Sign conventions</b> This book (and most particle physics) uses (+, −, −, −). Many GR and string theory texts use (−, +, +, +). The physics is identical; only the signs of p<sub>i</sub>p<sup>i</sup> and □ flip. Always check the convention before comparing formulas.</div>
+</section>
+</div>
+<script>
+/* ---------- small linear-algebra toolkit ---------- */
+const $=id=>document.getElementById(id);
+const cssv=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const eye=n=>Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0));
+const zeros=n=>Array.from({length:n},()=>Array(n).fill(0));
+const clone=M=>M.map(r=>r.slice());
+const mul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>s+v*B[k][j],0)));
+const add=(A,B)=>A.map((r,i)=>r.map((v,j)=>v+B[i][j]));
+const sub=(A,B)=>A.map((r,i)=>r.map((v,j)=>v-B[i][j]));
+const scl=(k,A)=>A.map(r=>r.map(v=>k*v));
+const trc=A=>A.reduce((s,r,i)=>s+r[i],0);
+const T=A=>A[0].map((_,j)=>A.map(r=>r[j]));
+const maxAbs=A=>Math.max(...A.flat().map(Math.abs));
+const mv=(A,x)=>A.map(r=>r.reduce((s,v,k)=>s+v*x[k],0));
+const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
+const nrm=a=>Math.sqrt(dot(a,a));
+const neg=s=>String(s).replace(/-/g,'−');
+function fmt(x,dec=3){
+  if(!isFinite(x))return '∞';
+  if(Math.abs(x)<1e-9)return '0';
+  const r=Math.round(x); if(Math.abs(x-r)<1e-7*Math.max(1,Math.abs(x)))return neg(r);
+  for(let q=2;q<=12;q++){const p=Math.round(x*q);if(Math.abs(x*q-p)<1e-7*q)return neg(p)+'/'+q;}
+  return neg(+x.toFixed(dec));
+}
+function mxH(M,heat,scale){
+  const s=scale||Math.max(1e-12,maxAbs(M));
+  return '<table class="mx">'+M.map(r=>'<tr>'+r.map(v=>{
+    let st='';
+    if(heat){const a=Math.min(1,Math.abs(v)/s)*0.55;if(Math.abs(v)>1e-9)st=` style="background:${v>0?`rgba(47,111,223,${a})`:`rgba(201,42,42,${a})`}"`;}
+    return `<td${st}>${fmt(v)}</td>`;}).join('')+'</tr>').join('')+'</table>';
+}
+function rank(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol)continue;
+    [A[r],A[p]]=[A[p],A[r]];
+    for(let i=r+1;i<n;i++){const f=A[i][c]/A[r][c];for(let j=c;j<m;j++)A[i][j]-=f*A[r][j];}
+    r++;
+  }
+  return r;
+}
+function nullspace(M,tol){
+  const A=clone(M),n=A.length,m=A[0].length;tol=tol||1e-6*Math.max(1,maxAbs(M));
+  const piv=[];let r=0;
+  for(let c=0;c<m&&r<n;c++){
+    let p=r;for(let i=r+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<tol){for(let i=r;i<n;i++)A[i][c]=0;continue;}
+    [A[r],A[p]]=[A[p],A[r]];
+    const d=A[r][c];for(let j=0;j<m;j++)A[r][j]/=d;
+    for(let i=0;i<n;i++)if(i!==r){const f=A[i][c];for(let j=0;j<m;j++)A[i][j]-=f*A[r][j];}
+    piv.push(c);r++;
+  }
+  const basis=[];
+  for(let f=0;f<m;f++){if(piv.includes(f))continue;
+    const v=Array(m).fill(0);v[f]=1;piv.forEach((c,i)=>{v[c]=-A[i][f];});basis.push(v);}
+  return basis;
+}
+function inv(M){
+  const n=M.length,A=M.map((r,i)=>r.concat(eye(n)[i]));
+  for(let c=0;c<n;c++){
+    let p=c;for(let i=c+1;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;
+    if(Math.abs(A[p][c])<1e-12)return null;
+    [A[c],A[p]]=[A[p],A[c]];const d=A[c][c];for(let j=0;j<2*n;j++)A[c][j]/=d;
+    for(let i=0;i<n;i++)if(i!==c){const f=A[i][c];for(let j=0;j<2*n;j++)A[i][j]-=f*A[c][j];}
+  }
+  return A.map(r=>r.slice(n));
+}
+/* Faddeev–LeVerrier: det(λI−A)=Σ c[k] λ^k, c[n]=1 */
+function charCoeffs(A){
+  const n=A.length,c=Array(n+1).fill(0);c[n]=1;let M=zeros(n);
+  for(let k=1;k<=n;k++){M=add(mul(A,M),scl(c[n-k+1],eye(n)));c[n-k]=-trc(mul(A,M))/k;}
+  return c;
+}
+/* complex helpers + Durand–Kerner roots of monic poly (c indexed by power) */
+const cm=(a,b)=>[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]];
+const cd=(a,b)=>{const d=b[0]*b[0]+b[1]*b[1];return[(a[0]*b[0]+a[1]*b[1])/d,(a[1]*b[0]-a[0]*b[1])/d];};
+function polyRoots(c){
+  const n=c.length-1;if(n===1)return[[-c[0],0]];
+  let z=Array.from({length:n},(_,k)=>{let w=[1,0];for(let i=0;i<=k;i++)w=cm(w,[0.4,0.9]);return w;});
+  const R=1+Math.max(...c.slice(0,n).map(Math.abs));z=z.map(w=>[w[0]*R,w[1]*R]);
+  const ev=x=>{let s=[1,0];for(let k=n-1;k>=0;k--)s=[s[0]*x[0]-s[1]*x[1]+c[k],s[0]*x[1]+s[1]*x[0]];return s;};
+  for(let it=0;it<2000;it++){
+    let delta=0;
+    z=z.map((zi,i)=>{let den=[1,0];z.forEach((zj,j)=>{if(j!==i)den=cm(den,[zi[0]-zj[0],zi[1]-zj[1]]);});
+      if(Math.hypot(den[0],den[1])<1e-300)den=[1e-12,0];
+      const q=cd(ev(zi),den);delta=Math.max(delta,Math.hypot(q[0],q[1]));return[zi[0]-q[0],zi[1]-q[1]];});
+    if(delta<1e-14)break;
+  }
+  return z;
+}
+function snap(x){for(const q of [1,2,3,4,6,12]){const r=Math.round(x*q)/q;if(Math.abs(x-r)<2e-4)return r;}return x;}
+function eigGroups(A){
+  const z=polyRoots(charCoeffs(A)),used=Array(z.length).fill(false),G=[];
+  const tol=2e-3*Math.max(1,maxAbs(A));
+  for(let i=0;i<z.length;i++){if(used[i])continue;const cl=[z[i]];used[i]=true;
+    for(let j=i+1;j<z.length;j++)if(!used[j]&&Math.hypot(z[j][0]-z[i][0],z[j][1]-z[i][1])<tol){cl.push(z[j]);used[j]=true;}
+    let re=cl.reduce((s,w)=>s+w[0],0)/cl.length,im=cl.reduce((s,w)=>s+w[1],0)/cl.length;
+    if(Math.abs(im)<1e-6)im=0;re=snap(re);if(im)im=snap(im);
+    G.push({re,im,m:cl.length});}
+  G.sort((a,b)=>b.re-a.re||b.im-a.im);return G;
+}
+const powM=(M,k)=>{let R=eye(M.length);for(let i=0;i<k;i++)R=mul(R,M);return R;};
+const lamF=a=>a===0?'λ':(a>0?`(λ − ${fmt(a)})`:`(λ + ${fmt(-a)})`);
+const supN=k=>k===1?'':String(k).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+function minimalPoly(A){
+  const G=eigGroups(A),n=A.length;
+  if(G.some(g=>g.im!==0))return{G,complex:true};
+  const sc=Math.max(1,maxAbs(A));
+  let tups=[[]];G.forEach(g=>{const nt=[];tups.forEach(t=>{for(let r=1;r<=g.m;r++)nt.push(t.concat(r));});tups=nt;});
+  tups.sort((a,b)=>a.reduce((s,v)=>s+v,0)-b.reduce((s,v)=>s+v,0));
+  const tried=[];
+  for(const t of tups){
+    let P=eye(n);G.forEach((g,i)=>{P=mul(P,powM(sub(A,scl(g.re,eye(n))),t[i]));});
+    const deg=t.reduce((s,v)=>s+v,0),zero=maxAbs(P)<1e-6*Math.pow(sc,deg);
+    tried.push({t,P,zero});if(zero)return{G,r:t,tried};
+  }
+  return{G,r:G.map(g=>g.m),tried};
+}
+function expandRoots(rs){let p=[1];rs.forEach(a=>{const q=Array(p.length+1).fill(0);p.forEach((v,i)=>{q[i]+=v;q[i+1]-=a*v;});p=q;});return p;}
+function polyStr(p,v,mat){
+  const d=p.length-1;let s='';
+  p.forEach((c,i)=>{if(Math.abs(c)<1e-9)return;const k=d-i;const a=Math.abs(c);
+    const coef=(a===1&&k>0)?'':fmt(a);const term=k===0?(mat?coef+'I':fmt(a)):(k===1?coef+v:coef+v+supN(k));
+    s+=(s===''?(c<0?'−':''):(c<0?' − ':' + '))+term;});
+  return s||'0';
+}
+function makeEditor(id,M,cb){
+  const box=$(id);let n=M.length;
+  function build(M){n=M.length;box.innerHTML='<div style="display:grid;grid-template-columns:repeat('+n+',58px);gap:4px">'+M.flat().map((v,i)=>`<input type="number" step="any" data-i="${i}" value="${v}" style="width:58px">`).join('')+'</div>';
+    box.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',cb));}
+  build(M);
+  return{get(){const v=[...box.querySelectorAll('input')].map(i=>parseFloat(i.value)||0);return Array.from({length:n},(_,i)=>v.slice(i*n,i*n+n));},
+         set(M){build(M);cb();}};
+}
+function arrow(ctx,x0,y0,x1,y1,col,w=2.5,dash){
+  ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;if(dash)ctx.setLineDash(dash);
+  ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();ctx.setLineDash([]);
+  const a=Math.atan2(y1-y0,x1-x0),L=Math.hypot(x1-x0,y1-y0);
+  if(L>6){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-10*Math.cos(a-0.4),y1-10*Math.sin(a-0.4));ctx.lineTo(x1-10*Math.cos(a+0.4),y1-10*Math.sin(a+0.4));ctx.fill();}
+  ctx.restore();
+}
+function canvasPt(cv,e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height];}
+
+/* ---------- helpers ---------- */
+const gam=b=>1/Math.sqrt(1-b*b);
+function boostMat(b){const bb=dot(b,b),g=1/Math.sqrt(1-bb),M=zeros(4);M[0][0]=g;
+  for(let i=0;i<3;i++){M[0][i+1]=M[i+1][0]=-g*b[i];for(let j=0;j<3;j++)M[i+1][j+1]=(i===j?1:0)+(bb>1e-14?(g-1)*b[i]*b[j]/bb:0);}return M;}
+function boostEq24(b,A){const bb=dot(b,b),g=1/Math.sqrt(1-bb),a=A.slice(1),ba=dot(b,a);
+  return[g*(A[0]-ba),...a.map((x,i)=>x+(bb>1e-14?(g-1)*ba*b[i]/bb:0)-g*b[i]*A[0])];}
+const mink=(A,B)=>A[0]*B[0]-A[1]*B[1]-A[2]*B[2]-A[3]*B[3];
+const v4=x=>'('+x.map(y=>fmt(y,4)).join(', ')+')';
+
+/* ---------- Minkowski lab ---------- */
+let mE=[1.2,1.8],mTwo=false,mRun=false,mG=null;
+$('mB').addEventListener('input',drawM);
+$('mTwo').onclick=()=>{mTwo=!mTwo;$('mTwo').textContent=mTwo?'one event':'two events (simultaneous in S)';drawM();};
+$('mPlay').onclick=()=>{mRun=!mRun;if(mRun){const t0=performance.now();(function f(now){if(!mRun)return;$('mB').value=(0.9*Math.sin((now-t0)/1500)).toFixed(3);drawM();requestAnimationFrame(f);})(t0);}};
+(function(){const cv=$('cvM');let d=false;const set=e=>{const [px,py]=canvasPt(cv,e);mE=[(px-mG.W/2)/mG.s,(mG.H/2-py)/mG.s];drawM();};
+ cv.addEventListener('pointerdown',e=>{d=true;cv.setPointerCapture(e.pointerId);set(e);});cv.addEventListener('pointermove',e=>{if(d)set(e);});cv.addEventListener('pointerup',()=>d=false);})();
+function drawM(){
+  const b=+$('mB').value,g=gam(b);$('mBv').textContent=b.toFixed(2);
+  const cv=$('cvM'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,ext=3.2,s=W/2/ext,X=x=>W/2+x*s,Y=t=>H/2-t*s;mG={W,H,s};
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle=cssv('--line');ctx.lineWidth=1;for(let k=-3;k<=3;k++){ctx.beginPath();ctx.moveTo(X(k),0);ctx.lineTo(X(k),H);ctx.moveTo(0,Y(k));ctx.lineTo(W,Y(k));ctx.stroke();}
+  ctx.strokeStyle=cssv('--ink');ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(0,Y(0));ctx.lineTo(W,Y(0));ctx.moveTo(X(0),0);ctx.lineTo(X(0),H);ctx.stroke();
+  ctx.fillStyle=cssv('--ink');ctx.font='13px sans-serif';ctx.fillText('x¹',W-18,Y(0)-6);ctx.fillText('x⁰ = ct',X(0)+6,14);
+  ctx.strokeStyle=cssv('--acc2');ctx.lineWidth=1.8;ctx.setLineDash([6,4]);ctx.beginPath();ctx.moveTo(X(-ext),Y(-ext));ctx.lineTo(X(ext),Y(ext));ctx.moveTo(X(-ext),Y(ext));ctx.lineTo(X(ext),Y(-ext));ctx.stroke();ctx.setLineDash([]);
+  /* S' grid: lines of constant x̄⁰ and x̄¹ */
+  const toS=(t,x)=>[g*(t+b*x),g*(x+b*t)];
+  ctx.strokeStyle=cssv('--acc');ctx.globalAlpha=0.28;ctx.lineWidth=1;
+  for(let k=-6;k<=6;k++){let p=toS(k,-8),q=toS(k,8);ctx.beginPath();ctx.moveTo(X(p[1]),Y(p[0]));ctx.lineTo(X(q[1]),Y(q[0]));ctx.stroke();p=toS(-8,k);q=toS(8,k);ctx.beginPath();ctx.moveTo(X(p[1]),Y(p[0]));ctx.lineTo(X(q[1]),Y(q[0]));ctx.stroke();}
+  ctx.globalAlpha=1;ctx.lineWidth=2.5;
+  let p=toS(-8,0),q=toS(8,0);ctx.beginPath();ctx.moveTo(X(p[1]),Y(p[0]));ctx.lineTo(X(q[1]),Y(q[0]));ctx.stroke();
+  p=toS(0,-8);q=toS(0,8);ctx.beginPath();ctx.moveTo(X(p[1]),Y(p[0]));ctx.lineTo(X(q[1]),Y(q[0]));ctx.stroke();
+  ctx.fillStyle=cssv('--acc');const lt=toS(2.8,0),lx=toS(0,2.8);ctx.fillText('x̄⁰',X(lt[1])+6,Y(lt[0]));ctx.fillText('x̄¹',X(lx[1])+4,Y(lx[0])-6);
+  const evs=mTwo?[[1.2,-1.5],[1.2,1.5]]:[mE];const t=mE[1],x=mE[0];
+  const lines=[];
+  evs.forEach((e,ei)=>{const ev=mTwo?[e[0],e[1]]:[t,x];const s2=ev[0]*ev[0]-ev[1]*ev[1];
+    if(!mTwo&&Math.abs(s2)>1e-6){ctx.strokeStyle=cssv('--muted');ctx.lineWidth=1.3;ctx.beginPath();let pen=false;for(let k=-60;k<=60;k++){const u=k/60*2.5,r=Math.sqrt(Math.abs(s2));let tt,xx;if(s2>0){tt=Math.sign(ev[0])*r*Math.cosh(u);xx=r*Math.sinh(u);}else{xx=Math.sign(ev[1])*r*Math.cosh(u);tt=r*Math.sinh(u);}if(Math.abs(tt)>ext||Math.abs(xx)>ext){pen=false;continue;}pen?ctx.lineTo(X(xx),Y(tt)):ctx.moveTo(X(xx),Y(tt));pen=true;}ctx.stroke();}
+    const tb=g*(ev[0]-b*ev[1]),xb=g*(ev[1]-b*ev[0]);
+    const a1=toS(tb,0),a2=toS(0,xb);ctx.strokeStyle=cssv('--acc');ctx.setLineDash([3,3]);ctx.lineWidth=1.3;ctx.beginPath();ctx.moveTo(X(ev[1]),Y(ev[0]));ctx.lineTo(X(a1[1]),Y(a1[0]));ctx.moveTo(X(ev[1]),Y(ev[0]));ctx.lineTo(X(a2[1]),Y(a2[0]));ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle=cssv('--warn');ctx.beginPath();ctx.arc(X(ev[1]),Y(ev[0]),7,0,7);ctx.fill();ctx.fillStyle=cssv('--ink');ctx.font='bold 13px sans-serif';ctx.fillText(mTwo?(ei?'B':'A'):'E',X(ev[1])+9,Y(ev[0])-6);
+    lines.push({n:mTwo?(ei?'B':'A'):'E',t:ev[0],x:ev[1],tb,xb,s2});});
+  if(mTwo){ctx.strokeStyle=cssv('--warn');ctx.setLineDash([2,4]);ctx.beginPath();ctx.moveTo(X(-1.5),Y(1.2));ctx.lineTo(X(1.5),Y(1.2));ctx.stroke();ctx.setLineDash([]);}
+  let o=`β = ${b.toFixed(3)},  γ = ${g.toFixed(4)},  rapidity ψ = ${Math.atanh(b).toFixed(4)}\nS′ axes tilt by tan⁻¹β = ${(Math.atan(Math.abs(b))*180/Math.PI).toFixed(1)}° toward the light line\n\n`;
+  lines.forEach(l=>{o+=`${l.n}:  S (x⁰, x¹) = (${fmt(l.t,3)}, ${fmt(l.x,3)})   S′ (x̄⁰, x̄¹) = (${fmt(l.tb,3)}, ${fmt(l.xb,3)})\n    s² = (x⁰)² − (x¹)² = ${fmt(l.s2,4)} = (x̄⁰)² − (x̄¹)² = ${fmt(l.tb*l.tb-l.xb*l.xb,4)}  ${l.s2>1e-6?'timelike':l.s2<-1e-6?'spacelike':'lightlike'}\n`;});
+  if(mTwo)o+=`\nA and B are simultaneous in S (same x⁰) but in S′:\nΔx̄⁰ = x̄⁰_B − x̄⁰_A = ${fmt(lines[1].tb-lines[0].tb,4)} = −γβΔx¹ (time lag)`;
+  $('mOut').textContent=o;
+}
+
+/* ---------- Boost lab ---------- */
+['bx','by','bz','a0','a1','a2','a3','ca','cb'].forEach(k=>$(k).addEventListener('input',labB));
+$('bRest').onclick=()=>{[1,0,0,0].forEach((v,i)=>$('a'+i).value=v);labB();};$('bLight').onclick=()=>{[1,1,0,0].forEach((v,i)=>$('a'+i).value=v);labB();};
+function labB(){
+  let b=[+$('bx').value,+$('by').value,+$('bz').value];['bx','by','bz'].forEach(k=>$(k+'v').textContent=fmt(+$(k).value,2));
+  const bb=nrm(b);let warn='';if(bb>=0.99){b=b.map(x=>x*0.99/bb);warn=`<p class="small bad">|β| was ≥ 1 (faster than light), so it was scaled down to 0.99.</p>`;}
+  const A=[0,1,2,3].map(i=>+$('a'+i).value||0),L=boostMat(b),A1=mv(L,A),A2=boostEq24(b,A),g=1/Math.sqrt(1-dot(b,b));
+  const eta=[[1,0,0,0],[0,-1,0,0],[0,0,-1,0],[0,0,0,-1]],chk=maxAbs(sub(mul(mul(T(L),eta),L),eta));
+  const sA=mink(A,A),sB=mink(A1,A1);
+  $('bOut').innerHTML=warn+`<div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center"><div class="small">Λ (|β| = ${fmt(nrm(b),4)}, γ = ${fmt(g,4)})<br>${mxH(L)}</div>
+  <div><p>A = ${v4(A)}</p><p>Ā by Eq. (24) = ${v4(A2)}</p><p>Ā by Λ·A = ${v4(A1)} <span class="ok">${maxAbs([A1.map((x,i)=>x-A2[i])])<1e-10?'✓ same':'✗'}</span></p>
+  <p>(A⁰)² − |A|² = ${fmt(sA,5)} &nbsp; → &nbsp; (Ā⁰)² − |Ā|² = ${fmt(sB,5)} <span class="ok">✓ invariant</span> ${Math.abs(sA)<1e-9?'(null vector stays null)':sA>0?'(timelike)':'(spacelike)'}</p>
+  <p class="small">ΛᵀηΛ = η: max error ${chk.toExponential(1)}. Λ symmetric: ${maxAbs(sub(L,T(L)))<1e-12?'yes ✓':'no'}.</p></div></div>`;
+  const ba=+$('ca').value,bc=+$('cb').value;$('cav').textContent=ba.toFixed(2);$('cbv').textContent=bc.toFixed(2);
+  const L1=boostMat([ba,0,0]),L2=boostMat([0,bc,0]),P=mul(L2,L1),asym=maxAbs(sub(P,T(P)));
+  const g0=P[0][0],bnet=[-P[0][1]/g0,-P[0][2]/g0,-P[0][3]/g0],Lnet=boostMat(bnet),Rw=mul(P,inv(Lnet));
+  const ang=Math.acos(Math.max(-1,Math.min(1,(Rw[1][1]+Rw[2][2]+Rw[3][3]-1)/2)))*180/Math.PI;
+  $('cOut').innerHTML=`<div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center"><div class="small">Λ<sub>y</sub>(β<sub>b</sub>)·Λ<sub>x</sub>(β<sub>a</sub>)<br>${mxH(P)}</div><div class="small">rotation left over R = P·Λ(β<sub>net</sub>)⁻¹<br>${mxH(Rw)}</div></div>
+  <p>Product symmetric? max|P − Pᵀ| = ${fmt(asym,4)} → ${asym<1e-10?'a pure boost':'<b>not a pure boost</b>'}. Net velocity |β<sub>net</sub>| = ${fmt(nrm(bnet),4)}; the leftover <b>Wigner rotation</b> about the z axis is ${ang.toFixed(2)}°. (It vanishes when either boost is zero, and grows as both approach c.)</p>`;
+}
+
+/* ---------- Momentum & Doppler ---------- */
+['pM','pV','pB','dT','dB'].forEach(k=>$(k).addEventListener('input',()=>{drawP();drawD();}));
+function drawP(){
+  const m=+$('pM').value,v=+$('pV').value,bo=+$('pB').value;['pM','pV','pB'].forEach(k=>$(k+'v').textContent=fmt(+$(k).value,2));
+  const g=gam(v),E=g*m,p=g*m*v,Eb=gam(bo)*(E-bo*p),pb=gam(bo)*(p-bo*E);
+  const cv=$('cvP'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,s=H/8,X=x=>W/2+x*s,Y=e=>H-20-e*s;
+  ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);ctx.strokeStyle=cssv('--line');for(let k=-5;k<=5;k++){ctx.beginPath();ctx.moveTo(X(k),0);ctx.lineTo(X(k),H);ctx.stroke();}for(let k=0;k<=7;k++){ctx.beginPath();ctx.moveTo(0,Y(k));ctx.lineTo(W,Y(k));ctx.stroke();}
+  ctx.strokeStyle=cssv('--ink');ctx.beginPath();ctx.moveTo(0,Y(0));ctx.lineTo(W,Y(0));ctx.moveTo(X(0),0);ctx.lineTo(X(0),H);ctx.stroke();ctx.fillStyle=cssv('--ink');ctx.font='13px sans-serif';ctx.fillText('p (c=1)',W-52,Y(0)-6);ctx.fillText('E',X(0)+6,14);
+  ctx.strokeStyle=cssv('--acc2');ctx.setLineDash([6,4]);ctx.beginPath();ctx.moveTo(X(0),Y(0));ctx.lineTo(X(7),Y(7));ctx.moveTo(X(0),Y(0));ctx.lineTo(X(-7),Y(7));ctx.stroke();ctx.setLineDash([]);
+  if(m>0.01){ctx.strokeStyle=cssv('--acc');ctx.lineWidth=2.2;ctx.beginPath();for(let k=-80;k<=80;k++){const u=k/80*3;const pp=m*Math.sinh(u),ee=m*Math.cosh(u);k===-80?ctx.moveTo(X(pp),Y(ee)):ctx.lineTo(X(pp),Y(ee));}ctx.stroke();ctx.lineWidth=1;}
+  [[p,E,cssv('--warn'),'S'],[pb,Eb,cssv('--acc4'),'S′']].forEach(([pp,ee,c,n])=>{arrow(ctx,X(0),Y(0),X(pp),Y(ee),c,2.5);ctx.fillStyle=c;ctx.beginPath();ctx.arc(X(pp),Y(ee),6,0,7);ctx.fill();ctx.font='bold 12px sans-serif';ctx.fillText(n,X(pp)+8,Y(ee));});
+  $('pOut').textContent=`in S:  E = γm₀ = ${fmt(E,4)},  p = γm₀v = ${fmt(p,4)}
+in S′: Ē = ${fmt(Eb,4)},  p̄ = ${fmt(pb,4)}   (moving with β′ = ${bo})
+E² − p² = ${fmt(E*E-p*p,5)} = Ē² − p̄² = ${fmt(Eb*Eb-pb*pb,5)} = m₀² ✓
+velocity seen in S′: ${fmt(pb/Eb,4)} = (v − β′)/(1 − vβ′) = ${fmt((v-bo)/(1-v*bo),4)}`;
+}
+function drawD(){
+  const th=+$('dT').value*Math.PI/180,b=+$('dB').value;$('dTv').textContent=$('dT').value+'°';$('dBv').textContent=fmt(b,2);
+  const w=1,k=[w,w*Math.cos(th),w*Math.sin(th),0],kb=boostEq24([b,0,0],k),wb=kb[0],thb=Math.atan2(kb[2],kb[1]);
+  const cv=$('cvD'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height;ctx.fillStyle=cssv('--card');ctx.fillRect(0,0,W,H);
+  const cx=W/2,cy=H/2+20,R=110;
+  ctx.strokeStyle=cssv('--line');ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.stroke();ctx.beginPath();ctx.moveTo(cx-R-20,cy);ctx.lineTo(cx+R+20,cy);ctx.stroke();
+  arrow(ctx,cx-R-10,cy+R*0.0+R*0.95,cx-R-10+70*Math.sign(b||1),cy+R*0.95,cssv('--acc4'),3);ctx.fillStyle=cssv('--acc4');ctx.font='12px sans-serif';ctx.fillText('observer velocity',cx-R-10,cy+R*0.95-8);
+  const col=f=>{const t=Math.max(0,Math.min(1,(Math.log(f)/Math.log(4)+1)/2));return `hsl(${Math.round(0+260*t)},80%,50%)`;};
+  arrow(ctx,cx,cy,cx+R*Math.cos(th),cy-R*Math.sin(th),'#888',2,[5,4]);
+  arrow(ctx,cx,cy,cx+R*Math.cos(thb)*Math.min(1.6,Math.sqrt(wb)),cy-R*Math.sin(thb)*Math.min(1.6,Math.sqrt(wb)),col(wb),4);
+  ctx.fillStyle=cssv('--ink');ctx.font='12px sans-serif';ctx.fillText('grey: photon direction in S;  coloured: in S′ (length ∝ √ω̄, blue = blueshift)',8,16);
+  const g=gam(b);
+  $('dOut').textContent=`k in S  = ${v4(k)}   (ω = 1)
+k̄ in S′ = ${v4(kb)}
+ω̄/ω = γ(1 − β cos θ) = ${fmt(g*(1-b*Math.cos(th)),5)}  ${wb>1.0001?'BLUESHIFT':wb<0.9999?'REDSHIFT':''}
+direction in S′: θ̄ = ${(thb*180/Math.PI).toFixed(2)}°  (aberration: cos θ̄ = (cos θ − β)/(1 − β cos θ))
+k̄ᵢk̄ⁱ = ${fmt(mink(kb,kb),6)}  (light stays null ✓)
+transverse (θ = 90°): ω̄ = γω = ${fmt(g,4)}  (pure time dilation)`;
+}
+
+/* ---------- Quiz ---------- */
+const QZ=[
+ {q:'The Minkowski metric used in this book is…',o:['diag(1, −1, −1, −1)','diag(1, 1, 1, 1)','diag(−1, 1, 1, 1) only','δ_ij'],a:0,e:'Eq. (31).'},
+ {q:'U_i U^i for the four-velocity equals…',o:['c²','0','γ²','v²'],a:0,e:'Eq. (4).'},
+ {q:'p_i p^i for a particle equals…',o:['m₀²c²','E²','0','p²'],a:0,e:'Eq. (6): E² − p²c² = m₀²c⁴.'},
+ {q:'Under a boost along x, which coordinates are unchanged?',o:['x² and x³','x⁰ and x¹','none','all'],a:0,e:'Eq. (10).'},
+ {q:'Electric charge density ρ is…',o:['the time part of a four-vector, not a world scalar','a world scalar','a Galilean vector','invariant under boosts'],a:0,e:'J^i = (cρ, J).'},
+ {q:'The covariant components of A^i = (A⁰, A) are…',o:['(A⁰, −A)','(−A⁰, A)','(A⁰, A)','(−A⁰, −A)'],a:0,e:'Lower with diag(1,−1,−1,−1).'},
+ {q:'∂/∂x^i is a…',o:['covariant four-vector operator','contravariant operator','scalar','not a vector'],a:0,e:'Eq. (37).'},
+ {q:'The d\'Alembertian □ = ∂_i∂^i equals…',o:['(1/c²)∂²/∂t² − ∇²','∇²','(1/c²)∂²/∂t² + ∇²','∂²/∂t²'],a:0,e:'Eq. (42).'},
+ {q:'A spacelike interval means…',o:['no signal can connect the events','one causes the other','they are connected by light','they happen at the same place'],a:0,e:'ds² < 0.'},
+ {q:'Two successive boosts in different directions give…',o:['a boost times a rotation','always a pure boost','the identity','a reflection'],a:0,e:'Wigner rotation / Thomas precession.'}
+];
+(function(){let sc=0;$('qTot').textContent=QZ.length;
+ $('quiz').innerHTML=QZ.map((x,i)=>{const ord=x.o.map((t,j)=>({t,j})).sort(()=>Math.random()-0.5);
+  return `<div class="qq" data-q="${i}"><b>Q${i+1}.</b> ${x.q}${ord.map(o=>`<label class="opt"><input type="radio" name="q${i}" value="${o.j}"> ${o.t}</label>`).join('')}<div class="fb"></div></div>`;}).join('');
+ document.querySelectorAll('#quiz .qq').forEach(div=>{const i=+div.dataset.q;let done=false;
+  div.querySelectorAll('input').forEach(inp=>inp.addEventListener('change',()=>{if(done)return;done=true;const ok=+inp.value===QZ[i].a;if(ok)sc++;$('qScore').textContent=sc;
+    div.querySelector('.fb').innerHTML=`<span class="${ok?'ok':'bad'}">${ok?'✓ Correct.':'✗ Answer: '+QZ[i].o[QZ[i].a]+'.'}</span> ${QZ[i].e}`;
+    div.querySelectorAll('input').forEach(x=>x.disabled=true);}));});})();
+
+function drawAll(){drawM();drawP();drawD();}
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+$('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawAll();};})();
+drawAll();labB();
+</script>
+</body>
+</html>

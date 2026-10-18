@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eigenvalue Problem I</title>
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:110px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:85px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:collapse;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;margin:3px 4px;width:auto}
+.mx.det{border-radius:0}
+.mx td{border:0;padding:1px 8px;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.verdict{font-weight:700;font-size:1.05rem;margin:6px 0}
+.sys{font-family:"Cambria Math",Cambria,"Times New Roman",serif;display:inline-block;text-align:left;line-height:1.5}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>9. The Eigenvalue Problem, I</h1>
+<p>Eigenvalues · Characteristic equation · Trace and determinant · Eigenvectors and degeneracy · Hermitian and unitary matrices · Diagonalization · Commuting matrices · Coupled differential equations and normal modes &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 88–106</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">Ax = λx</a><a href="#s2">Characteristic eq.</a><a href="#s3">Trace &amp; det</a><a href="#s4">Special matrices</a><a href="#s5">Eigenvectors</a><a href="#s6">Degeneracy (3D)</a><a href="#s7">Hermitian</a><a href="#s8">Diagonalization</a><a href="#s9">Commuting</a><a href="#s10">Coupled ODEs</a><a href="#s11">Springs</a><a href="#s12">Calculator</a><a href="#s13">Summary</a><a href="#s14">Exercise 9</a><a href="#s15">Practice</a><a href="#s16">Quiz</a><a href="#s17">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<!-- 0 -->
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>Most vectors change direction when a matrix acts on them. A few special vectors <b>keep their direction</b> and only get stretched or shrunk. Those are the <b>eigenvectors</b>, and the stretch factors are the <b>eigenvalues</b>. Once you know them, the matrix becomes simple: in the eigenvector basis it is just a diagonal list of stretch factors.</p>
+<div class="flow"><span>Ax = λx</span><b>→</b><span>det(A − λI) = 0</span><b>→</b><span>Σλ = Tr A, Πλ = det A</span><b>→</b><span>eigenvectors, degeneracy</span><b>→</b><span>P⁻¹AP = Λ</span><b>→</b><span>commuting ⇒ common eigenvectors</span><b>→</b><span>normal modes</span></div>
+<div class="box tip"><b class="t">Needed from earlier</b> Homogeneous systems: (A − λI)x = 0 has a nonzero solution ⇔ det(A − λI) = 0 (Section 8). Also similarity transformations (Section 5), hermitian and unitary matrices (Sections 3 and 5), and rank and the number of free parameters (Section 8).</div>
+</section>
+
+<!-- 1 -->
+<section id="s1">
+<h2>1. The eigenvalue problem (Eq. 1)</h2>
+<div class="box def"><b class="t">Definition</b>
+A is a square n×n matrix. If a <b>nonzero</b> column vector x and a scalar λ satisfy
+<div class="eq">Ax = λx</div>
+then x is an <b>eigenvector</b> of A and λ is the <b>eigenvalue</b> belonging to x. ("Eigen" is German for "own" or "characteristic". Other names are characteristic values or proper values.)</div>
+<ul>
+<li>x = 0 always satisfies Ax = λx, so it is excluded. Otherwise every λ would count.</li>
+<li>λ = 0 <i>is</i> allowed. It means Ax = 0 for some x ≠ 0, i.e. A is singular (Exercises 2, 12).</li>
+<li>Rewrite it as <span class="m">(A − λI)x = 0</span> (Eq. 3b). The I is needed: "A − λ" makes no sense, because A is n×n and λ is a number.</li>
+</ul>
+<div class="lab"><h4>🔬 Lab 1: hunt for the special directions</h4>
+<div class="ctrl">
+<button class="alt" data-e2="sym">[[2,1],[1,2]]</button><button class="alt" data-e2="ex9">Ex. 9: [[−8,2],[3,−3]]</button><button class="alt" data-e2="shear">shear [[1,1],[0,1]]</button><button class="alt" data-e2="rot">rotation 60°</button><button class="alt" data-e2="gen">[[3,1],[2,2]]</button>
+</div>
+<div class="ctrl">
+<label>direction of x: φ <input type="range" id="e2phi" min="0" max="360" step="0.5" value="20"><span id="e2phiv"></span>°</label>
+<button id="e2sweep">▶ Sweep</button>
+<label><input type="checkbox" id="e2circle" checked> show circle → image</label>
+</div>
+<div class="grid2"><canvas id="e2can" width="440" height="400"></canvas><div><div class="verdict" id="e2verdict"></div><div class="readout" id="e2out"></div></div></div>
+<p class="small">The blue arrow is a unit vector x and the orange arrow is Ax. Turn x with the slider, or press Sweep. Most of the time Ax points somewhere else. At a few special angles it lines up exactly with x (or points exactly opposite), and those are the eigenvectors (dashed lines). The length ratio |Ax|/|x| with a sign is λ. The rotation matrix has <b>no</b> real eigen-direction: its eigenvalues are complex. The shear has only one.</p></div>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+<h2>2. Finding the eigenvalues: the characteristic equation (Eqs. 2–9)</h2>
+<p>(A − λI)x = 0 is a homogeneous system of n equations. It has a nonzero solution <b>if and only if</b></p>
+<div class="eq">D(λ) ≡ det(A − λI) = <span class="M det" data-m="a₁₁−λ a₁₂ ⋯ a₁ₙ; a₂₁ a₂₂−λ ⋯ a₂ₙ; ⋮ ⋮ ⋱ ⋮; aₙ₁ aₙ₂ ⋯ aₙₙ−λ"></span> = 0 &nbsp;&nbsp;(Eq. 4)</div>
+<ul>
+<li>D(λ) is a polynomial of degree n, the <b>characteristic polynomial</b>: <span class="m">D(λ) = c₀λⁿ + c₁λⁿ⁻¹ + … + cₙ</span>.</li>
+<li>From the determinant you can read off c₀ = (−1)ⁿ, c₁ = (−1)ⁿ⁻¹(a₁₁ + … + aₙₙ), and cₙ = D(0) = det A (Eq. 6).</li>
+<li>D(λ) = 0 is the <b>characteristic equation</b>. A polynomial of degree n has exactly n roots (counted with multiplicity, possibly complex). So:</li>
+</ul>
+<div class="box thm"><b class="t">Every n×n matrix has exactly n eigenvalues</b>, namely the n roots λ₁, …, λₙ of its characteristic polynomial. They need not be distinct or real. The set of eigenvalues is the <b>spectrum</b> of A.</div>
+<div class="tbl-wrap"><table>
+<tr><th>Size</th><th>Characteristic equation (write it as det(λI − A) = 0, same roots)</th></tr>
+<tr><td>2×2</td><td class="m">λ² − (Tr A)λ + det A = 0 &nbsp;⇒&nbsp; λ = [t ± √(t² − 4d)]/2 &nbsp;(Exercise 25)</td></tr>
+<tr><td>3×3</td><td class="m">λ³ − (Tr A)λ² + (sum of the 3 principal 2×2 minors)λ − det A = 0</td></tr>
+</table></div>
+
+<h3>Book Example 1</h3>
+<div class="prob"><div class="q">Find the eigenvalues of A = <span class="M" data-m="2 −2 3; 2 −1 0; −1 1 1"></span>.</div>
+<p>D(λ) = <span class="M det" data-m="2−λ −2 3; 2 −1−λ 0; −1 1 1−λ"></span>. Expand along column 3:</p>
+<p>= 3·[2·1 − (−1−λ)(−1)] + (1−λ)·[(2−λ)(−1−λ) + 4]<br>
+= 3(1 − λ) + (1 − λ)(λ² − λ + 2) = (1 − λ)(λ² − λ + 5).</p>
+<div class="eq">λ₁ = 1, &nbsp; λ₂,₃ = (1 ± i√19)/2</div>
+<p class="small">Check Eq. 10: sum = 1 + 1 = 2 = Tr A = 2 − 1 + 1 ✓. Product = 1 · (1 + 19)/4 = 5. det A = 2(−1 − 0) + 2(2 − 0) + 3(2 − 1) = −2 + 4 + 3 = 5 ✓. This is a real matrix with complex eigenvalues, which come as a conjugate pair (Exercise 7).</p></div>
+
+<div class="lab"><h4>🔬 Lab 2: see the characteristic polynomial and its roots</h4>
+<div class="ctrl">
+<button class="alt" data-cp="2 -2 3; 2 -1 0; -1 1 1">Ex. 1 (Eq. 11)</button>
+<button class="alt" data-cp="3 2 2; 4 3 -3; 0 0 1">Exercise 13</button>
+<button class="alt" data-cp="2 1 1; 1 2 1; 1 1 2">Ex. 4 (q=2,p=1)</button>
+<button class="alt" data-cp="-11 -10 5; 5 4 -5; -20 -20 4">Ex. 8</button>
+<button class="alt" data-cp="0 1 0; 0 0 1; 1 0 0">Exercise 15(b)</button>
+<label>or type rows: <input type="text" id="cpIn" value="2 -2 3; 2 -1 0; -1 1 1" size="24"></label><button id="cpGo">Plot</button>
+</div>
+<div class="grid2"><canvas id="cpcan" width="440" height="300"></canvas><canvas id="cpcplx" width="440" height="300"></canvas></div>
+<div class="readout out" id="cpout"></div>
+<p class="small">Left: D(λ) = det(A − λI) for real λ. The real eigenvalues are where the curve crosses zero. Right: all n eigenvalues in the complex plane. Real ones sit on the horizontal axis, and complex ones appear as mirror-image pairs.</p></div>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+<h2>3. Trace and determinant from the eigenvalues (Eq. 10)</h2>
+<p>Factor the polynomial using its roots: D(λ) = (λ₁ − λ)(λ₂ − λ)…(λₙ − λ) (Eq. 8). Compare the coefficients of λⁿ⁻¹ and λ⁰ with Eq. 6:</p>
+<div class="box thm"><b class="t">Two results to remember</b>
+<div class="eq">λ₁ + λ₂ + … + λₙ = a₁₁ + a₂₂ + … + aₙₙ = <b>Tr A</b> &nbsp;&nbsp;(10a)</div>
+<div class="eq">λ₁ λ₂ ⋯ λₙ = <b>det A</b> &nbsp;&nbsp;(10b)</div></div>
+<ul>
+<li>Quick check on every eigenvalue calculation.</li>
+<li>det A = 0 ⇔ some λ = 0 (Exercise 2).</li>
+<li>More generally, Tr(Aᵏ) = Σλᵢᵏ (Exercise 24). So Tr(A²) = Σλᵢ², and so on.</li>
+<li>For 2×2 matrices, trace and det determine the eigenvalues completely (Exercise 25).</li>
+</ul>
+</section>
+
+<!-- 4 -->
+<section id="s4">
+<h2>4. Eigenvalues of special matrices (Examples 2, 3, 5 and Exercises)</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Matrix</th><th>Eigenvalues</th><th>Reason</th></tr>
+<tr><td>Triangular or diagonal</td><td>the diagonal entries</td><td>det(T − λI) = Π(tᵢᵢ − λ) (Ex. 1)</td></tr>
+<tr><td>A⁻¹</td><td>1/λᵢ, same eigenvectors</td><td>Example 2: A⁻¹x = (1/λ)x</td></tr>
+<tr><td>Aᵏ (k = …, −1, 0, 1, 2, …)</td><td>λᵢᵏ, same eigenvectors</td><td>Ex. 9</td></tr>
+<tr><td>f(A) = a₀I + a₁A + … + aₖAᵏ</td><td>f(λᵢ)</td><td>Ex. 10</td></tr>
+<tr><td>A + cI</td><td>λᵢ + c</td><td>(A + cI)x = (λ + c)x</td></tr>
+<tr><td>Aᵀ</td><td>same as A (eigenvectors may differ)</td><td>det(Aᵀ − λI) = det(A − λI)</td></tr>
+<tr><td>A† (and A*)</td><td>λᵢ*</td><td>det(A† − λ*I) = [det(A − λI)]*</td></tr>
+<tr><td>P⁻¹AP (similar)</td><td>same as A</td><td>same characteristic polynomial (Ex. 8)</td></tr>
+<tr><td>Hermitian H = H†</td><td><b>real</b></td><td>Example 5</td></tr>
+<tr><td>Anti-hermitian</td><td>pure imaginary</td><td>iH is hermitian</td></tr>
+<tr><td>Unitary U†U = I</td><td><b>|λ| = 1</b>, λ = e^{iθ}</td><td>Example 3</td></tr>
+<tr><td>Real orthogonal</td><td>±1 or pairs e^{±iθ}</td><td>Ex. 4 (unitary and real)</td></tr>
+<tr><td>Real symmetric orthogonal</td><td>±1 only</td><td>Ex. 6</td></tr>
+<tr><td>Real matrix</td><td>real, or complex-conjugate pairs; odd n ⇒ at least one real</td><td>Ex. 7</td></tr>
+<tr><td>Nilpotent (Aᵏ = 0)</td><td>all 0</td><td>λᵏ = 0</td></tr>
+<tr><td>Idempotent (A² = A, a projector)</td><td>0 or 1</td><td>λ² = λ</td></tr>
+<tr><td>Involution (A² = I)</td><td>±1</td><td>λ² = 1</td></tr>
+<tr><td>Scalar matrix cI</td><td>c (n-fold); every vector is an eigenvector</td><td>Ex. 11</td></tr>
+</table></div>
+<h3>Book Example 2: eigenvalues of A⁻¹</h3>
+<p>From Ax = λx, multiply by A⁻¹: x = λA⁻¹x. A is nonsingular, so λ ≠ 0. Divide by λ: <span class="m">A⁻¹x = (1/λ)x</span>. So the eigenvalues of A⁻¹ are the reciprocals 1/λ, with the <b>same</b> eigenvectors.</p>
+<h3>Book Example 3: eigenvalues of a unitary matrix have |λ| = 1</h3>
+<p>Ux = λx. Taking the dagger gives x†U† = λ*x†. Multiply the two equations: x†U†Ux = λ*λ x†x. Since U†U = I, this is x†x(|λ|² − 1) = 0. And x†x = ‖x‖² &gt; 0, so <b>|λ| = 1</b>.</p>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+<h2>5. Eigenvectors and their properties</h2>
+<ul>
+<li><b>Any nonzero multiple of an eigenvector is again an eigenvector</b> with the same λ: A(cx) = cAx = λ(cx). We don't count these separately. An eigenvector really stands for a <i>direction</i> (a line). You may normalise it to length 1 if you like.</li>
+<li>To find them: put each eigenvalue λᵢ back into (A − λᵢI)x = 0 and solve (Section 8).</li>
+<li>Since det(A − λᵢI) = 0, its rank s is less than n, and the solution has <b>n − s</b> free parameters. That is the number of independent eigenvectors for λᵢ.</li>
+</ul>
+<div class="box def"><b class="t">Multiplicity and degeneracy</b>
+If λ is a root k times, k is its <b>multiplicity</b>. For a <b>diagonalizable</b> matrix (one with n independent eigenvectors; the book deals only with these in this section), an eigenvalue of multiplicity k has exactly <b>k independent eigenvectors</b>, i.e. rank(A − λI) = n − k. These are called <b>degenerate</b> eigenvectors. <b>Any combination of degenerate eigenvectors is again an eigenvector</b>: they fill a k-dimensional subspace.</div>
+<div class="box warnb"><b class="t">Not every matrix is diagonalizable</b>
+<span class="M" data-m="1 1; 0 1"></span> has λ = 1 twice, but (A − I)x = 0 gives only x = t(1, 0): <b>one</b> eigenvector, not two. Such "defective" matrices are treated in Section 10. In general: number of independent eigenvectors for λ ("geometric multiplicity") ≤ multiplicity as a root ("algebraic multiplicity"). Distinct eigenvalues always give independent eigenvectors, so <b>n distinct eigenvalues ⇒ diagonalizable</b>.</div>
+
+<h3>Book Example 4</h3>
+<div class="prob"><div class="q">Find the eigenvalues and eigenvectors of A = <span class="M" data-m="q p p; p q p; p p q"></span>, p ≠ 0.</div>
+<p><b>Eigenvalues.</b> Add all columns to the first, then factor (q + 2p − λ) out:</p>
+<div class="eq">det(A − λI) = (q − p − λ)²(q + 2p − λ) ⇒ λ₁ = λ₂ = q − p (multiplicity 2), &nbsp; λ₃ = q + 2p</div>
+<p><b>λ₃ = q + 2p:</b> (A − λ₃I)x = 0 gives −2px₁ + px₂ + px₃ = 0, px₁ − 2px₂ + px₃ = 0, … Its rank is 2, so there is 1 free parameter. Solving gives x₁ = x₂ = x₃ ⇒ <b>x₃ = (1, 1, 1)</b>.</p>
+<p><b>λ = q − p:</b> every row of A − (q − p)I is (p, p, p), so the rank is 1 and there are 2 free parameters. The single equation x₁ + x₂ + x₃ = 0 gives x₃ = −x₁ − x₂. Choosing (x₁, x₂) = (1, 0) and (0, 1):</p>
+<div class="eq">x₁ = (1, 0, −1), &nbsp; x₂ = (0, 1, −1) &nbsp;(general: (a, b, −a − b) = a x₁ + b x₂)</div>
+<p>Normalised: (1, 0, −1)/√2, (0, 1, −1)/√2, (1, 1, 1)/√3 (Eq. 29). Check: A(a, a, a) = (q + 2p)(a, a, a) ✓ and A(a, b, −a−b) = (q − p)(a, b, −a−b) ✓ (Eq. 30).</p>
+<p class="small">The eigenvalue q − p is degenerate, so we could have chosen <i>any</i> two independent vectors in the plane x₁ + x₂ + x₃ = 0. Lab 3 lets you see this plane.</p></div>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+<h2>6. Feel degeneracy in 3D</h2>
+<p>A real symmetric 3×3 matrix turns the unit sphere into an <b>ellipsoid</b>. The eigenvectors are its principal axes, and the eigenvalues are the semi-axis lengths. When two eigenvalues are equal, the ellipsoid becomes <b>round</b> around the third axis, and then every direction in that equator is an eigenvector. That is degeneracy.</p>
+<div class="lab"><h4>🔬 Lab 3 (3D): Example 4's matrix acting on the unit sphere. Drag to rotate.</h4>
+<div class="ctrl">
+<label>q <input type="range" id="d3q" min="-1" max="3" step="0.05" value="1.6"><span id="d3qv"></span></label>
+<label>p <input type="range" id="d3p" min="-1" max="1.2" step="0.05" value="0.4"><span id="d3pv"></span></label>
+<label>pair angle in the degenerate plane <input type="range" id="d3a" min="0" max="180" value="0"><span id="d3av"></span>°</label>
+</div>
+<div class="ctrl">
+<label>test vector θ <input type="range" id="d3th" min="0" max="180" value="60"></label>
+<label>φ <input type="range" id="d3ph" min="0" max="360" value="30"></label>
+<button class="alt" id="d3snapE">Snap test vector to (1,1,1)</button><button class="alt" id="d3snapP">Snap into the plane</button>
+</div>
+<div class="grid2"><canvas id="d3can" width="460" height="420"></canvas><div class="readout" id="d3out"></div></div>
+<p class="small">Grey wireframe: the image A·(unit sphere). Red arrow: the eigenvector (1, 1, 1)/√3 with λ = q + 2p. Green and blue arrows: a pair of eigenvectors in the plane x₁ + x₂ + x₃ = 0 with λ = q − p. Turn the "pair angle" slider: <b>every</b> pair works, because the ellipsoid is round there. Purple and orange arrows show a test vector v and Av. They line up only when v is an eigenvector.</p></div>
+</section>
+
+<!-- 7 -->
+<section id="s7">
+<h2>7. Hermitian matrices: real eigenvalues, orthogonal eigenvectors (Example 5)</h2>
+<div class="box thm"><b class="t">Theorem</b>
+(a) All eigenvalues of a hermitian matrix are <b>real</b>.<br>
+(b) Eigenvectors belonging to <b>distinct</b> eigenvalues are <b>orthogonal</b>.</div>
+<p><b>(a)</b> Hx = λx. Its dagger is x†H = λ*x† (using H† = H). Multiply the first by x† on the left and the second by x on the right, then subtract: (λ − λ*)x†x = 0. Since x†x &gt; 0, λ* = λ.</p>
+<p><b>(b)</b> Hx₁ = λ₁x₁ and Hx₂ = λ₂x₂. The dagger of the second, using λ₂ real, is x₂†H = λ₂x₂†. Then x₂†Hx₁ equals both λ₁x₂†x₁ and λ₂x₂†x₁, so (λ₁ − λ₂)x₂†x₁ = 0. Since λ₁ ≠ λ₂, <b>x₂†x₁ = 0</b>.</p>
+<div class="box fact"><b class="t">Why physicists love this</b> In quantum mechanics observables are hermitian operators. Their eigenvalues are the possible measurement results, so they <i>must</i> be real, and the theorem guarantees it. Orthogonal eigenvectors mean different outcomes are perfectly distinguishable states. Real symmetric matrices (inertia tensor, stress tensor, normal-mode problems) are the real special case.</div>
+<p class="small">The same argument for unitary matrices gives orthogonal eigenvectors for distinct eigenvalues too (Exercise 17). Within a degenerate eigenvalue you can always <i>choose</i> orthogonal eigenvectors (Gram–Schmidt). In Example 4, (1,0,−1) and (0,1,−1) are not orthogonal to each other, but (1,0,−1) and (1,−2,1) are.</p>
+</section>
+
+<!-- 8 -->
+<section id="s8">
+<h2>8. Diagonalization (Eqs. 37–46, Example 6)</h2>
+<p>Suppose A has n independent eigenvectors x₁, …, xₙ with Axᵢ = λᵢxᵢ. Put them as <b>columns</b> of P:</p>
+<div class="eq">P = [x₁ x₂ … xₙ], &nbsp;&nbsp; Λ = diag(λ₁, λ₂, …, λₙ)</div>
+<p>P is nonsingular, because its columns are independent (Corollary 2 of Example 8.6). Column i of AP is Axᵢ = λᵢxᵢ, which is also column i of PΛ. So AP = PΛ, and</p>
+<div class="box thm"><b class="t">Diagonalization theorem</b>
+<div class="eq">P⁻¹AP = Λ = diag(λ₁, …, λₙ)</div>
+A matrix with n linearly independent eigenvectors is <b>similar to a diagonal matrix</b> whose entries are its eigenvalues. Conversely, if P⁻¹AP is diagonal, the columns of P are eigenvectors (Exercise 18).</div>
+<ul>
+<li><b>P is not unique.</b> Reordering the columns reorders the eigenvalues in Λ in the same way (Eqs. 45–46). Scaling a column, or picking other vectors in a degenerate subspace, also works.</li>
+<li>Hermitian A: you can choose orthonormal eigenvectors, so P is <b>unitary</b> and P⁻¹ = P†. Real symmetric A: P is orthogonal, P⁻¹ = Pᵀ.</li>
+<li>Payoff: Aᵏ = PΛᵏP⁻¹ and f(A) = P f(Λ) P⁻¹, e.g. e^{At} = P e^{Λt} P⁻¹.</li>
+</ul>
+<h3>Book Example 6</h3>
+<div class="prob"><div class="q">Diagonalize A = <span class="M" data-m="q p p; p q p; p p q"></span> of Example 4.</div>
+<p>P = [x₁ x₂ x₃] = <span class="M" data-m="1 0 1; 0 1 1; −1 −1 1"></span>, det P = 3, &nbsp; P⁻¹ = ⅓<span class="M" data-m="2 −1 −1; −1 2 −1; 1 1 1"></span>.</p>
+<div class="eq">P⁻¹AP = <span class="M" data-m="q−p 0 0; 0 q−p 0; 0 0 q+2p"></span></div>
+<p>With Q = [x₃ x₁ x₂] instead, Q⁻¹AQ = diag(q + 2p, q − p, q − p). The order of the eigenvalues follows the order of the columns.</p></div>
+<div class="lab"><h4>🔬 Lab 4: in the eigenvector basis, A only stretches</h4>
+<div class="ctrl">
+<button class="alt" data-dg="sym">[[2,1],[1,2]]</button><button class="alt" data-dg="ex9">Ex. 9: [[−8,2],[3,−3]]/3</button><button class="alt" data-dg="gen">[[3,1],[2,2]]/2</button><button class="alt" data-dg="ex20">Ex. 20: [[3,2],[2,3]]/2</button>
+<label>apply A: t <input type="range" id="dgT" min="0" max="1" step="0.01" value="1"></label><button id="dgPlay">▶ Animate</button>
+<label><input type="checkbox" id="dgStd"> also show the standard grid</label>
+</div>
+<div class="grid2"><canvas id="dgcan" width="440" height="400"></canvas><div class="readout" id="dgout"></div></div>
+<p class="small">The coloured grid is built from the eigenvectors. When A acts (slide t from 0 to 1), each family of grid lines stays on the <b>same lines</b> and is only stretched by its eigenvalue. That is what "diagonal in this basis" means. Turn on the standard grid: those squares get sheared and turned, because A is not diagonal in the x-y basis.</p></div>
+</section>
+
+<!-- 9 -->
+<section id="s9">
+<h2>9. Commuting matrices share eigenvectors (Eqs. 47–57, Example 7)</h2>
+<div class="box thm"><b class="t">Theorem</b> If AB = BA (and both are diagonalizable), a <b>common set of eigenvectors</b> of A and B can be found. Equivalently: <b>mutually commuting matrices can be diagonalized simultaneously</b>, by the same P. This extends to any number of mutually commuting matrices.</div>
+<p><b>Proof, part 1 (non-degenerate λ).</b> Ax = λx. Multiply by B: BAx = A(Bx) = λ(Bx). So Bx is also an eigenvector of A with the same λ. But λ is non-degenerate, so its eigenvectors form a single line, and Bx must be a multiple of x: Bx = μx. So x is an eigenvector of B.</p>
+<p><b>Part 2 (λ of multiplicity k, eigenvectors x₁, …, xₖ).</b> Each Bxᵢ is again an eigenvector of A with eigenvalue λ, so Bxᵢ = Σⱼ cᵢⱼxⱼ (Eq. 53). Diagonalize the small k×k matrix C = [cᵢⱼ]: DCD⁻¹ = diag(μ₁, …, μₖ). Then the new combinations yᵢ = Σₗ dᵢₗxₗ are still eigenvectors of A (with λ), and also satisfy Byᵢ = μᵢyᵢ (Eq. 57). In words: <b>inside each degenerate subspace of A, diagonalize B</b>. ∎</p>
+<p class="small">The converse is Exercise 5.9: simultaneously diagonalizable ⇒ commuting. In quantum mechanics this is why commuting observables (e.g. H, L², L_z for the hydrogen atom) can be given definite values together. Their common eigenvectors are labelled by several quantum numbers at once, and the extra observables "lift" the degeneracy.</p>
+<h3>Book Example 7</h3>
+<div class="prob"><div class="q">Find common eigenvectors of A = <span class="M" data-m="−1 √6 √2; √6 0 √3; √2 √3 −2"></span> and B = <span class="M" data-m="10 √6 −√2; √6 9 √3; −√2 √3 11"></span>.</div>
+<p>They commute: AB = BA = <span class="M" data-m="−6 9√6 15√2; 9√6 9 9√3; 15√2 9√3 −21"></span>. (The (3,3) entry is −21: row 3 of A · column 3 of B = −2 + 3 − 22. The book prints −11, which is a misprint; it doesn't affect anything.)</p>
+<p>Eigenvalues of A: 3, −3, −3. For λ = 3: <b>x₁ = (√2, √3, 1)</b>. This is non-degenerate, so it must be an eigenvector of B too, and indeed Bx₁ = 12x₁.</p>
+<p>For λ = −3 (doubly degenerate): the general eigenvector is x = (a, b, −√2a − √3b). Apply B:</p>
+<div class="eq">Bx = (12a + 2√6b, &nbsp;6b, &nbsp;−12√2a − 10√3b)</div>
+<p>Require Bx = μx: the second component gives 6b = μb, so either μ = 6 or b = 0.</p>
+<ul><li>b = 0 ⇒ μ = 12, <b>x₂ = (1, 0, −√2)</b>.</li>
+<li>μ = 6 ⇒ 12a + 2√6b = 6a ⇒ b = −√3a/√2. With a = √2: <b>x₃ = (√2, −√3, 1)</b>.</li></ul>
+<div class="tbl-wrap"><table><tr><th>Common eigenvector</th><th>eigenvalue for A</th><th>eigenvalue for B</th></tr>
+<tr><td>(√2, √3, 1)</td><td>3</td><td>12</td></tr><tr><td>(1, 0, −√2)</td><td>−3</td><td>12</td></tr><tr><td>(√2, −√3, 1)</td><td>−3</td><td>6</td></tr></table></div>
+<p class="small">Any combination of x₂ and x₃ is an eigenvector of A (degenerate, −3) but not of B. Any combination of x₁ and x₂ is an eigenvector of B (degenerate, 12) but not of A. Together, A and B leave no degeneracy at all.</p></div>
+</section>
+
+<!-- 10 -->
+<section id="s10">
+<h2>10. Coupled differential equations → eigenvalue problem (Example 8)</h2>
+<p>A system dy/dt = Ay (A constant) couples all the yᵢ together. Try <span class="m">y = x e^{wt}</span> with x constant. Then dy/dt = wxe^{wt} and Ay = Axe^{wt}, so</p>
+<div class="eq">Ax = wx</div>
+<p>The allowed growth rates w are the <b>eigenvalues</b> of A, and the shapes x are the eigenvectors. The general solution is a combination of these "modes":</p>
+<div class="eq">y(t) = c₁x₁e^{w₁t} + c₂x₂e^{w₂t} + … + cₙxₙe^{wₙt}</div>
+<p>The n constants cᵢ are fixed by the initial values y(0). (Equivalently, y = e^{At}y(0) = P e^{Λt}P⁻¹ y(0).)</p>
+<div class="prob"><div class="q">Example 8: ẏ₁ = −11y₁ − 10y₂ + 5y₃, &nbsp;ẏ₂ = 5y₁ + 4y₂ − 5y₃, &nbsp;ẏ₃ = −20y₁ − 20y₂ + 4y₃; &nbsp;y(0) = (5, −4, 4).</div>
+<p>A = <span class="M" data-m="−11 −10 5; 5 4 −5; −20 −20 4"></span>. Its eigenvalues are w = 4, −6, −1, with eigenvectors</p>
+<div class="eq">x₁ = (1, −1, 1) [w = 4], &nbsp; x₂ = (0, 1, 2) [w = −6], &nbsp; x₃ = (1, −1, 0) [w = −1]</div>
+<p>General solution (Eq. 72b): y₁ = ae^{4t} + ce^{−t}, &nbsp;y₂ = −ae^{4t} + be^{−6t} − ce^{−t}, &nbsp;y₃ = ae^{4t} + 2be^{−6t}.</p>
+<p>At t = 0: a + c = 5, −a + b − c = −4, a + 2b = 4 ⇒ a = 2, b = 1, c = 3.</p>
+<div class="eq">y₁ = 2e^{4t} + 3e^{−t}, &nbsp; y₂ = −2e^{4t} + e^{−6t} − 3e^{−t}, &nbsp; y₃ = 2e^{4t} + 2e^{−6t}</div>
+<p class="small">Check: ẏ₁(0) = 8 − 3 = 5, and −11(5) − 10(−4) + 5(4) = −55 + 40 + 20 = 5 ✓. Positive w means growth and negative w means decay. In the long run the e^{4t} mode wins.</p></div>
+</section>
+
+<!-- 11 -->
+<section id="s11">
+<h2>11. Normal modes of coupled springs (Example 9, Fig. 7)</h2>
+<p>Two masses hang in a chain: support – k₁ – m₁ – k₂ – m₂. With y₁, y₂ measured downward from equilibrium, Newton's law gives</p>
+<div class="eq">m₁ÿ₁ = −k₁y₁ + k₂(y₂ − y₁), &nbsp;&nbsp; m₂ÿ₂ = −k₂(y₂ − y₁) &nbsp;&nbsp;⇒&nbsp;&nbsp; ÿ = Ay, &nbsp; A = <span class="M" data-m="−(k₁+k₂)/m₁ k₂/m₁; k₂/m₂ −k₂/m₂"></span></div>
+<p>Try y = xe^{wt}: then Ax = w²x. The eigenvalues of A are negative, w² = −ω², so the motion is oscillatory, with <b>normal-mode frequencies ω = √(−eigenvalue)</b>. Each eigenvector is a mode shape: a pattern in which both masses move at the same single frequency.</p>
+<div class="prob"><div class="q">Book's numbers: k₁ = 18, k₂ = 6, m₁ = 3, m₂ = 2. Lower mass pulled down d = 4 and released from rest.</div>
+<p>A = <span class="M" data-m="−8 2; 3 −3"></span>. Eigenvalues w² = −9 and −2, with modes x₁ = (2, −1) at ω = 3 (masses move <b>opposite</b>, the fast mode) and x₂ = (1, 3) at ω = √2 (masses move <b>together</b>, the slow mode).</p>
+<p>Initial shape: at equilibrium with m₂ pulled down by d, the forces on m₁ balance: k₁y₁(0) = k₂[y₂(0) − y₁(0)], so y₁(0) = k₂d/(k₁ + k₂) = 1, y₂(0) = 4, and both velocities are 0. Then a₁ = −1/7, a₃ = 9/7, and the sine terms vanish:</p>
+<div class="eq">y₁(t) = (9 cos √2 t − 2 cos 3t)/7, &nbsp;&nbsp; y₂(t) = (27 cos √2 t + cos 3t)/7 &nbsp;(Eq. 87)</div>
+<p class="small">Check: y₁(0) = 7/7 = 1 ✓, y₂(0) = 28/7 = 4 ✓. Since √2/3 is irrational, the combined motion never exactly repeats. It is a superposition of two pure modes.</p></div>
+<div class="lab"><h4>🔬 Lab 5: watch the normal modes</h4>
+<div class="ctrl">
+<label>m₁ <input type="range" id="spm1" min="1" max="6" step="0.5" value="3"><span id="spm1v"></span></label>
+<label>m₂ <input type="range" id="spm2" min="1" max="6" step="0.5" value="2"><span id="spm2v"></span></label>
+<label>k₁ <input type="range" id="spk1" min="2" max="40" step="1" value="18"><span id="spk1v"></span></label>
+<label>k₂ <input type="range" id="spk2" min="2" max="40" step="1" value="6"><span id="spk2v"></span></label>
+</div>
+<div class="ctrl"><b>Start in:</b> <button class="alt" id="spMode1">slow mode</button><button class="alt" id="spMode2">fast mode</button><button class="alt" id="spBook">book's start (pull m₂ down)</button><button id="spPlay">❚❚ Pause</button></div>
+<div class="grid2"><canvas id="spcan" width="300" height="420"></canvas><div><canvas id="spplot" width="440" height="260"></canvas><div class="readout" id="spout"></div></div></div>
+<p class="small">Start in a pure mode: both masses oscillate with one frequency and keep a fixed amplitude ratio (the eigenvector). The slow mode moves them in step, the fast mode in opposite directions. The book's start mixes both modes, giving the irregular-looking curves of Eq. 87.</p></div>
+</section>
+
+<!-- 12 -->
+<section id="s12">
+<h2>12. 🧮 Eigen-calculator</h2>
+<p>Enter a square matrix (n ≤ 5), one row per line. Integers and fractions give an exact characteristic polynomial (Faddeev–LeVerrier method). Roots and eigenvectors are numerical and may be complex. It also checks Σλ = Tr A and Πλ = det A, and whether A is diagonalizable.</p>
+<textarea id="evIn">q p p example with q=3, p=1:
+3 1 1
+1 3 1
+1 1 3</textarea>
+<div class="ctrl"><button id="evGo">Compute</button>
+<button class="alt" data-ev="2 -2 3&#10;2 -1 0&#10;-1 1 1">Ex. 1</button>
+<button class="alt" data-ev="-11 -10 5&#10;5 4 -5&#10;-20 -20 4">Ex. 8</button>
+<button class="alt" data-ev="3 2 2&#10;4 3 -3&#10;0 0 1">Exercise 13</button>
+<button class="alt" data-ev="1 -3 6&#10;1 5 -2&#10;2 2 0">Exercise 19(a) A</button>
+<button class="alt" data-ev="8 -4 -4&#10;-2 -2 4&#10;-3 -9 12">Exercise 19(a) B</button>
+<button class="alt" data-ev="1 1&#10;0 1">defective</button>
+<button class="alt" data-ev="2 1 1 1&#10;1 2 1 1&#10;1 1 2 1&#10;1 1 1 2">Exercise 15(c)</button></div>
+<div class="out" id="evOut"></div>
+</section>
+
+<!-- 13 -->
+<section id="s13">
+<h2>13. Summary sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Fact</th><th>Formula</th></tr>
+<tr><td>Eigen-equation</td><td>Ax = λx, x ≠ 0 ⇔ det(A − λI) = 0</td></tr>
+<tr><td>Number of eigenvalues</td><td>exactly n (with multiplicity)</td></tr>
+<tr><td>Trace / determinant</td><td>Σλᵢ = Tr A, &nbsp;Πλᵢ = det A, &nbsp;Σλᵢᵏ = Tr Aᵏ</td></tr>
+<tr><td>2×2 shortcut</td><td>λ = [Tr ± √(Tr² − 4 det)]/2</td></tr>
+<tr><td>Eigenvectors for λ</td><td>null space of A − λI, with n − rank(A − λI) of them</td></tr>
+<tr><td>Hermitian</td><td>real λ, orthogonal eigenvectors, unitary P</td></tr>
+<tr><td>Unitary</td><td>|λ| = 1, orthogonal eigenvectors (distinct λ)</td></tr>
+<tr><td>Diagonalization</td><td>P = [x₁ … xₙ], P⁻¹AP = diag(λ₁ … λₙ), same order</td></tr>
+<tr><td>Commuting</td><td>[A, B] = 0 ⇒ common eigenvectors / simultaneous diagonalization</td></tr>
+<tr><td>ẏ = Ay</td><td>y = Σ cᵢxᵢe^{λᵢt}</td></tr>
+<tr><td>ÿ = Ay</td><td>ω² = −λ, normal modes = eigenvectors</td></tr>
+</table></div>
+</section>
+
+<!-- 14 -->
+<section id="s14">
+<h2>14. Book's Exercise 9: all 25 problems solved</h2>
+
+<div class="prob"><div class="q">1. Show that the eigenvalues of a triangular matrix are its diagonal elements.</div>
+<details><summary>Show solution</summary><p>T − λI is also triangular, with diagonal entries tᵢᵢ − λ. The determinant of a triangular matrix is the product of its diagonal (expand repeatedly along the first column). So det(T − λI) = (t₁₁ − λ)(t₂₂ − λ)⋯(tₙₙ − λ), whose roots are λ = tᵢᵢ. ∎</p></details></div>
+
+<div class="prob"><div class="q">2. Show that a matrix is singular iff at least one eigenvalue is zero.</div>
+<details><summary>Show solution</summary><p>det A = λ₁λ₂⋯λₙ (Eq. 10b). A product is zero ⇔ some factor is zero. So det A = 0 ⇔ some λᵢ = 0. (Directly: λ = 0 is an eigenvalue ⇔ det(A − 0I) = det A = 0.) ∎</p></details></div>
+
+<div class="prob"><div class="q">3. Prove Example 3 (|λ| = 1 for unitary U) using Example 2 and U⁻¹ = U†.</div>
+<details><summary>Show solution</summary><p>Let Ux = λx. U is nonsingular, so λ ≠ 0. By Example 2, U⁻¹x = (1/λ)x, i.e. U†x = (1/λ)x. Now compute x†U†x in two ways:<br>
+(i) x†(U†x) = (1/λ)x†x.<br>
+(ii) x†U†x = (x†Ux)* = (λx†x)* = λ*x†x, since x†x is real.<br>
+So 1/λ = λ*, i.e. λλ* = |λ|² = 1. ∎</p></details></div>
+
+<div class="prob"><div class="q">4. What are the possible eigenvalues of an orthogonal matrix?</div>
+<details><summary>Show solution</summary><p>A real orthogonal matrix is unitary, so |λ| = 1. It is also real, so complex eigenvalues come in conjugate pairs (Ex. 7). Possible eigenvalues: <b>+1, −1, and pairs e^{±iθ}</b>. Example: the 2D rotation has e^{±iθ} (Ex. 15a). A 3D rotation has 1, e^{iθ}, e^{−iθ}, where the eigenvalue 1 belongs to the rotation axis.</p></details></div>
+
+<div class="prob"><div class="q">5. With H, U as in Exercise 5.18 (U = (H − iI)(H + iI)⁻¹), assume U has no eigenvalue 1. Solve for H: show H = i(I + U)(I − U)⁻¹ (the Cayley transform).</div>
+<details><summary>Show solution</summary><p>U(H + iI) = H − iI ⇒ UH + iU = H − iI ⇒ H − UH = iU + iI ⇒ (I − U)H = i(I + U).<br>
+1 is not an eigenvalue of U, so det(I − U) ≠ 0 and (I − U)⁻¹ exists: H = i(I − U)⁻¹(I + U).<br>
+I − U and I + U commute (both are polynomials in U), hence so do (I − U)⁻¹ and (I + U). So H = i(I + U)(I − U)⁻¹. ∎</p>
+<p class="small">The eigenvalues map as h ↦ u = (h − i)/(h + i): the real line goes onto the unit circle, with h → ∞ corresponding to u → 1. That is why u = 1 must be excluded.</p></details></div>
+
+<div class="prob"><div class="q">6. Prove that a real symmetric matrix is orthogonal iff its eigenvalues are all ±1.</div>
+<details><summary>Show solution</summary><p>(⇒) Real symmetric means hermitian, so the λ are real. Orthogonal means unitary, so |λ| = 1. Real with |λ| = 1 ⇒ λ = ±1.<br>
+(⇐) A real symmetric matrix can be diagonalized by an orthogonal P (its eigenvectors can be chosen orthonormal; proved fully in Section 10): A = PΛPᵀ with Λ = diag(±1). Then Λ² = I, so AᵀA = A² = PΛ²Pᵀ = PPᵀ = I. ∎</p>
+<p class="small">Such a matrix is a reflection through a subspace (+1 on the subspace, −1 on its orthogonal complement), e.g. the Householder matrix of Exercise 5.14.</p></details></div>
+
+<div class="prob"><div class="q">7. Show that the eigenvalues of a real matrix are real or come in conjugate pairs. Deduce that a real matrix of odd order has at least one real eigenvalue.</div>
+<details><summary>Show solution</summary><p>For real A, D(λ) = det(A − λI) has real coefficients. Conjugate D(λ) = 0: D(λ*) = [D(λ)]* = 0. So if λ is a root, so is λ*. Non-real roots therefore pair up. For odd n, pairing cannot use up all n roots, so at least one root equals its own conjugate, i.e. is real. ∎ (Alternatively, a real odd-degree polynomial changes sign between −∞ and +∞.)</p></details></div>
+
+<div class="prob"><div class="q">8. If B = P⁻¹AP, show that A and B have the same characteristic polynomial.</div>
+<details><summary>Show solution</summary><p>B − λI = P⁻¹AP − λP⁻¹P = P⁻¹(A − λI)P. So det(B − λI) = det P⁻¹ · det(A − λI) · det P = det(A − λI). Same polynomial ⇒ same eigenvalues with the same multiplicities, hence the same trace and determinant. ∎ (The eigenvectors transform: if Ax = λx then B(P⁻¹x) = λ(P⁻¹x).)</p></details></div>
+
+<div class="prob"><div class="q">9. Show the eigenvalues of Aᵏ (k a positive integer) are λᵏ. If A is nonsingular, show this holds for negative k too.</div>
+<details><summary>Show solution</summary><p>Ax = λx ⇒ A²x = A(λx) = λ²x, and by induction Aᵏx = λᵏx. If A is nonsingular, A⁻¹x = λ⁻¹x (Example 2), and repeating gives A⁻ᵏx = λ⁻ᵏx. All with the same eigenvector x. ∎</p>
+<p class="small">To get <i>all</i> eigenvalues of Aᵏ with multiplicities (not just "λᵏ is one of them"), diagonalize: Aᵏ = PΛᵏP⁻¹, so the spectrum is exactly {λᵢᵏ}.</p></details></div>
+
+<div class="prob"><div class="q">10. If λ is an eigenvalue of A, show f(λ) = a₀ + a₁λ + … + aₖλᵏ is an eigenvalue of f(A) = a₀I + a₁A + … + aₖAᵏ.</div>
+<details><summary>Show solution</summary><p>f(A)x = a₀x + a₁Ax + … + aₖAᵏx = (a₀ + a₁λ + … + aₖλᵏ)x = f(λ)x, using Ex. 9. ∎</p>
+<p class="small">Corollary (Cayley–Hamilton preview): if f is the characteristic polynomial, then f(λᵢ) = 0 for all i, and for diagonalizable A this gives f(A) = 0.</p></details></div>
+
+<div class="prob"><div class="q">11. Show that any n-vector is an eigenvector of a constant (scalar) matrix cI.</div>
+<details><summary>Show solution</summary><p>(cI)x = cx for every x. So every nonzero x is an eigenvector with eigenvalue c, which has multiplicity n. Conversely, if every vector is an eigenvector of A, then A = cI. (A must send e₁ and e₁ + e₂ to multiples of themselves, which forces equal eigenvalues, and so on.)</p></details></div>
+
+<div class="prob"><div class="q">12. Show a nonzero x with Ax = 0 exists iff A is singular.</div>
+<details><summary>Show solution</summary><p>Ax = 0 is a homogeneous system: it has a nontrivial solution ⇔ det A = 0 (Section 8). In eigen-language, Ax = 0·x, so 0 is an eigenvalue and x an eigenvector (Ex. 2). ∎</p></details></div>
+
+<div class="prob"><div class="q">13. Find the eigenvalues of A = <span class="M" data-m="3 2 2; 4 3 −3; 0 0 1"></span>. Find A⁻¹, its eigenvalues, check they are reciprocals, and show that A and A⁻¹ have the same eigenvalues.</div>
+<details><summary>Show solution</summary><p>Expand along row 3: det(A − λI) = (1 − λ)[(3 − λ)² − 8] = (1 − λ)(λ² − 6λ + 1).<br>
+<b>Eigenvalues of A: 1, 3 + 2√2, 3 − 2√2.</b> (Sum 7 = Tr A ✓. Product 1·(9 − 8) = 1 = det A ✓.)</p>
+<p>det A = 1, so A⁻¹ = adj A = <span class="M" data-m="3 −2 −12; −4 3 17; 0 0 1"></span>. Check the first row: 3·3 + 2·(−4) = 1 ✓.<br>
+det(A⁻¹ − λI) = (1 − λ)[(3 − λ)² − 8], <b>the same polynomial</b>. Eigenvalues 1, 3 ± 2√2.</p>
+<p>Reciprocals: 1/(3 + 2√2) = (3 − 2√2)/(9 − 8) = 3 − 2√2 ✓. So taking reciprocals just swaps 3 + 2√2 and 3 − 2√2, and 1 maps to itself. That is why the spectrum of A⁻¹ equals the spectrum of A here.<br>
+Eigenvectors: A: λ = 1 → (5, −7, 2), λ = 3 + 2√2 → (1, √2, 0), λ = 3 − 2√2 → (1, −√2, 0). For A⁻¹ the same vectors appear with reciprocal eigenvalues: (1, √2, 0) ↦ 3 − 2√2.</p></details></div>
+
+<div class="prob"><div class="q">14. Find the eigenvectors of the matrix of Eq. (11).</div>
+<details><summary>Show solution</summary><p>A = <span class="M" data-m="2 −2 3; 2 −1 0; −1 1 1"></span>, λ = 1, (1 ± i√19)/2.</p>
+<p><b>λ = 1:</b> (A − I)x = 0: x₁ − 2x₂ + 3x₃ = 0 and 2x₁ − 2x₂ = 0 ⇒ x₁ = x₂ ⇒ −x₂ + 3x₃ = 0 ⇒ <b>x = (3, 3, 1)</b>.</p>
+<p><b>λ = (1 ∓ i√19)/2:</b> the second row gives 2x₁ = (1 + λ)x₂. With x₃ = 1, x₂ = −2 and x₁ = −(1 + λ). The third row checks out: −x₁ + x₂ + (1 − λ) = 1 + λ − 2 + 1 − λ = 0 ✓. So</p>
+<div class="eq">λ = (1 − i√19)/2: x = (−3 + i√19, −4, 2) &nbsp;&nbsp; λ = (1 + i√19)/2: x = (−3 − i√19, −4, 2)</div>
+<p class="small">(Each scaled by 2.) The two complex eigenvectors are complex conjugates of each other, as they must be for a real matrix.</p></details></div>
+
+<div class="prob"><div class="q">15. Eigenvalues and eigenvectors of (a) <span class="M" data-m="cos θ|sin θ; −sin θ|cos θ"></span>, (b) <span class="M" data-m="0 1 0; 0 0 1; 1 0 0"></span>, (c) <span class="M" data-m="q p p p; p q p p; p p q p; p p p q"></span> (p ≠ 0).</div>
+<details><summary>Show solution</summary>
+<p><b>(a)</b> λ² − 2cos θ λ + 1 = 0 ⇒ <b>λ = cos θ ± i sin θ = e^{±iθ}</b>, with eigenvectors <b>(1, i)</b> for e^{iθ} and <b>(1, −i)</b> for e^{−iθ}. Check: (c + is, −s + ic) = (c + is)(1, i) ✓. They are independent of θ, so all rotations commute. For θ ≠ 0, π there are no real eigenvectors (no direction is left unrotated). For θ = 0, every vector is an eigenvector with λ = 1. For θ = π, every vector has λ = −1.</p>
+<p><b>(b)</b> This is a cyclic permutation (A³ = I). λ³ − 1 = 0 ⇒ <b>λ = 1, ω, ω²</b> with ω = e^{2πi/3}. Eigenvectors: <b>(1, 1, 1)</b>, <b>(1, ω, ω²)</b>, <b>(1, ω², ω)</b>. Check: A(1, ω, ω²) = (ω, ω², 1) = ω(1, ω, ω²) ✓. These are the discrete Fourier vectors.</p>
+<p><b>(c)</b> Same idea as Example 4 (and Ex. 23 with n = 4): <b>λ = q + 3p</b> with (1, 1, 1, 1), and <b>λ = q − p (3-fold)</b> with (1, −1, 0, 0), (1, 0, −1, 0), (1, 0, 0, −1) — any vector whose components sum to 0. Check trace: (q + 3p) + 3(q − p) = 4q ✓.</p></details></div>
+
+<div class="prob"><div class="q">16. x is an eigenvector of hermitian H. If y ⊥ x, show Hy ⊥ x.</div>
+<details><summary>Show solution</summary><p>x†(Hy) = (H†x)†y = (Hx)†y = (λx)†y = λ*x†y = λx†y = 0, using H† = H and λ real. ∎</p>
+<p class="small">So H maps the subspace orthogonal to an eigenvector into itself. Repeating this argument in that smaller subspace proves that every hermitian matrix has a full orthonormal set of eigenvectors.</p></details></div>
+
+<div class="prob"><div class="q">17. Prove that eigenvectors of a unitary matrix for distinct eigenvalues are orthogonal.</div>
+<details><summary>Show solution</summary><p>Ux₁ = λ₁x₁ and Ux₂ = λ₂x₂, with |λᵢ| = 1. Then x₂†x₁ = x₂†U†Ux₁ = (Ux₂)†(Ux₁) = λ₂*λ₁ x₂†x₁. Since λ₂* = 1/λ₂, this gives (1 − λ₁/λ₂)x₂†x₁ = 0. λ₁ ≠ λ₂ ⇒ x₂†x₁ = 0. ∎</p></details></div>
+
+<div class="prob"><div class="q">18. If P⁻¹AP = Λ is diagonal, prove the columns of P are eigenvectors of A.</div>
+<details><summary>Show solution</summary><p>AP = PΛ. Column i of AP is A pᵢ. Column i of PΛ is λᵢpᵢ, because Λ just scales the columns. So Apᵢ = λᵢpᵢ, and pᵢ ≠ 0 since P is nonsingular. ∎ The diagonal entries of Λ are the eigenvalues, in the order of the columns.</p></details></div>
+
+<div class="prob"><div class="q">19. Find a common set of eigenvectors for the commuting pairs (a) A = <span class="M" data-m="1 −3 6; 1 5 −2; 2 2 0"></span>, B = <span class="M" data-m="8 −4 −4; −2 −2 4; −3 −9 12"></span>; (b) A = <span class="M" data-m="26 −36 0; 18 −25 0; −30 44 3"></span>, B = <span class="M" data-m="1 0 0; 0 1 0; 24 −34 −1"></span>.</div>
+<details><summary>Show solution</summary>
+<p><b>(a)</b> AB = BA ✓. A: det(A − λI) = −(λ − 4)²(λ + 2), so λ = 4 (double) and −2. B: λ = 0, 6, 12, all distinct. Since B has distinct eigenvalues, its eigenvectors are automatically eigenvectors of A (part 1 of the proof, with the roles swapped):</p>
+<div class="tbl-wrap"><table><tr><th>common eigenvector</th><th>A</th><th>B</th></tr>
+<tr><td>(1, 1, 1)</td><td>4</td><td>0</td></tr><tr><td>(2, 0, 1)</td><td>4</td><td>6</td></tr><tr><td>(−3, 1, 2)</td><td>−2</td><td>12</td></tr></table></div>
+<p class="small">Check: A(1,1,1) = (4, 4, 4) ✓; B(2,0,1) = (12, 0, 6) = 6(2,0,1) ✓; A(−3,1,2) = (6, −2, −4) = −2(−3,1,2) ✓. A's degenerate eigenvalue 4 has eigenspace spanned by (1,1,1) and (2,0,1). B picks out exactly those two directions within it.</p>
+<p><b>(b)</b> A: λ = 3, 2, −1, all distinct, with eigenvectors (0, 0, 1), (3, 2, 2) and (−4, −3, 3). B: λ = 1 (double), −1.</p>
+<div class="tbl-wrap"><table><tr><th>common eigenvector</th><th>A</th><th>B</th></tr>
+<tr><td>(0, 0, 1)</td><td>3</td><td>−1</td></tr><tr><td>(3, 2, 2)</td><td>2</td><td>1</td></tr><tr><td>(−4, −3, 3)</td><td>−1</td><td>1</td></tr></table></div>
+<p class="small">Check: B(3,2,2) = (3, 2, 72 − 68 − 2) = (3, 2, 2) ✓; B(−4,−3,3) = (−4, −3, −96 + 102 − 3) = (−4, −3, 3) ✓; A(3,2,2) = (78 − 72, 54 − 50, −90 + 88 + 6) = (6, 4, 4) = 2(3,2,2) ✓.</p></details></div>
+
+<div class="prob"><div class="q">20. Solve dx/dt = <span class="M" data-m="3 2; 2 3"></span>x with x(0) = (1, 1).</div>
+<details><summary>Show solution</summary><p>Eigenvalues: 3 ± 2 = 5, 1, with eigenvectors (1, 1) and (1, −1). The general solution is x = c₁(1, 1)e^{5t} + c₂(1, −1)e^{t}. At t = 0: c₁ + c₂ = 1 and c₁ − c₂ = 1 ⇒ c₁ = 1, c₂ = 0.</p>
+<div class="eq">x(t) = (e^{5t}, e^{5t})</div>
+<p class="small">The initial vector was already an eigenvector, so only that one mode is excited. Check: ẋ₁ = 5e^{5t} = 3e^{5t} + 2e^{5t} ✓.</p></details></div>
+
+<div class="prob"><div class="q">21. Show (A + 3I)(B − 12I) = 0 for the matrices of Eq. (58). Hence (a) if x is not an eigenvector of B with eigenvalue 12, (B − 12I)x is an eigenvector of A; (b) if y is not an eigenvector of A with eigenvalue −3, (A + 3I)y is an eigenvector of B.</div>
+<details><summary>Show solution</summary>
+<p><b>The identity.</b> Every common eigenvector (Example 7) is killed by one of the two factors. x₁ (A: 3, B: 12) is killed by B − 12I. x₂ (A: −3, B: 12) is killed by both. x₃ (A: −3, B: 6) becomes (B − 12I)x₃ = −6x₃, which A + 3I kills. The three vectors form a basis, so the product is the zero matrix. (Multiplying it out directly also gives 0.)</p>
+<p><b>(a)</b> Let z = (B − 12I)x. If x is not an eigenvector of B for 12, then z ≠ 0. Also (A + 3I)z = 0, i.e. Az = −3z. So z is an eigenvector of A with eigenvalue −3.<br>
+<b>(b)</b> A and B commute, so (B − 12I)(A + 3I) = (A + 3I)(B − 12I) = 0. With w = (A + 3I)y ≠ 0, (B − 12I)w = 0, so w is an eigenvector of B with eigenvalue 12. ∎</p>
+<p class="small">This is a quick way to <i>manufacture</i> eigenvectors: such operators project onto eigenspaces.</p></details></div>
+
+<div class="prob"><div class="q">22. Discuss the spring vibrations of Fig. 7 for (a) m₁ = 2, m₂ = 3, k₁ = 8, k₂ = 6, y₂(0) = 7; (b) m₁ = 4, m₂ = 2, k₁ = 36, k₂ = 8, y₂(0) = 11; both released from rest.</div>
+<details><summary>Show solution</summary>
+<p>Use A = [[−(k₁+k₂)/m₁, k₂/m₁],[k₂/m₂, −k₂/m₂]] and y₁(0) = k₂y₂(0)/(k₁ + k₂) (equilibrium of m₁, as in Eq. 84).</p>
+<p><b>(a)</b> A = <span class="M" data-m="−7 3; 2 −2"></span>. λ² + 9λ + 8 = 0 ⇒ w² = −1, −8 ⇒ <b>ω = 1</b> with mode (1, 2) (in step) and <b>ω = 2√2</b> with mode (−3, 1) (opposite). y₁(0) = 6·7/14 = 3.</p>
+<div class="eq">y₁ = (24 cos t − 3 cos 2√2 t)/7, &nbsp;&nbsp; y₂ = (48 cos t + cos 2√2 t)/7</div>
+<p class="small">Check: y(0) = (21/7, 49/7) = (3, 7) ✓. Mostly the slow mode, because the initial shape (3, 7) is close to the slow mode shape (1, 2).</p>
+<p><b>(b)</b> A = <span class="M" data-m="−11 2; 4 −4"></span>. λ² + 15λ + 36 = 0 ⇒ w² = −3, −12 ⇒ <b>ω = √3</b> with mode (1, 4) and <b>ω = 2√3</b> with mode (−2, 1). y₁(0) = 8·11/44 = 2.</p>
+<div class="eq">y₁ = (8 cos √3 t − 2 cos 2√3 t)/3, &nbsp;&nbsp; y₂ = (32 cos √3 t + cos 2√3 t)/3</div>
+<p class="small">Here ω₂/ω₁ = 2 exactly, so the motion <b>is periodic</b>, with period 2π/√3. In the book's example the ratio 3/√2 is irrational and the motion never repeats. Try both in Lab 5.</p></details></div>
+
+<div class="prob"><div class="q">23. Eigenvalues and eigenvectors of the n×n matrix with q on the diagonal and p everywhere else (p ≠ 0).</div>
+<details><summary>Show solution</summary><p>Write A = (q − p)I + pJ, where J is the all-ones matrix. J = uuᵀ with u = (1, …, 1), so Ju = nu, and Jv = 0 for every v ⊥ u (vectors with Σvᵢ = 0).</p>
+<ul><li><b>λ = q + (n − 1)p</b>, eigenvector (1, 1, …, 1), non-degenerate.</li>
+<li><b>λ = q − p</b>, multiplicity n − 1, eigenvectors: all v with v₁ + … + vₙ = 0. A basis is e₁ − e₂, e₁ − e₃, …, e₁ − eₙ.</li></ul>
+<p class="small">Check trace: q + (n−1)p + (n−1)(q − p) = nq ✓. det A = (q − p)ⁿ⁻¹(q + (n − 1)p).</p></details></div>
+
+<div class="prob"><div class="q">24. Show Tr(Aᵏ) = Σᵢ λᵢᵏ.</div>
+<details><summary>Show solution</summary><p>The eigenvalues of Aᵏ are λᵢᵏ (Ex. 9; with multiplicities, via Aᵏ = PΛᵏP⁻¹, or in general via triangularization). The trace is the sum of the eigenvalues (Eq. 10a), so Tr Aᵏ = Σλᵢᵏ. Alternatively, Tr(PΛᵏP⁻¹) = Tr(ΛᵏP⁻¹P) = Tr Λᵏ. ∎</p>
+<p class="small">Use: for 2×2, λ₁² + λ₂² = Tr(A²), giving λ₁λ₂ = [(Tr A)² − Tr(A²)]/2 = det A ✓.</p></details></div>
+
+<div class="prob"><div class="q">25. A 2×2 matrix has trace t and determinant d. Find its eigenvalues.</div>
+<details><summary>Show solution</summary><p>λ₁ + λ₂ = t and λ₁λ₂ = d, so they are the roots of λ² − tλ + d = 0:</p>
+<div class="eq">λ = [t ± √(t² − 4d)]/2</div>
+<p class="small">t² &gt; 4d: two real eigenvalues. t² = 4d: a repeated eigenvalue. t² &lt; 4d: a complex pair. This is the classification used in stability analysis of 2D dynamical systems.</p></details></div>
+</section>
+
+<!-- 15 -->
+<section id="s15">
+<h2>15. Practice set (CSIR-NET / GATE style)</h2>
+
+<div class="prob"><div class="q">P1. Eigenvalues of <span class="M" data-m="0 1; 1 0"></span>, <span class="M" data-m="0 −i; i 0"></span> and <span class="M" data-m="1 0; 0 −1"></span> (Pauli matrices).<span class="tag">NET favourite</span></div>
+<details><summary>Show solution</summary><p>All three: trace 0 and det −1 ⇒ λ = ±1. Eigenvectors: σₓ: (1, ±1); σ_y: (1, ±i); σ_z: (1, 0), (0, 1). They are hermitian and unitary, so λ is real with |λ| = 1, i.e. ±1.</p></details></div>
+
+<div class="prob"><div class="q">P2. A 3×3 matrix has eigenvalues 1, 2, 3. Find det A, Tr A, det(A⁻¹), Tr(A²), and the eigenvalues of A² − 2A + I.</div>
+<details><summary>Show solution</summary><p>det = 6, Tr = 6, det A⁻¹ = 1/6, Tr A² = 1 + 4 + 9 = 14. f(λ) = (λ − 1)² gives 0, 1, 4.</p></details></div>
+
+<div class="prob"><div class="q">P3. Eigenvalues of the n×n all-ones matrix J?</div>
+<details><summary>Show solution</summary><p>n (once, eigenvector (1, …, 1)) and 0 (n − 1 times). This is Ex. 23 with q = p = 1. Check: Tr J = n ✓.</p></details></div>
+
+<div class="prob"><div class="q">P4. A real 3×3 matrix has eigenvalues 2 and 1 + i. What is the third eigenvalue, and what is det A?</div>
+<details><summary>Show solution</summary><p>Conjugate pairs ⇒ 1 − i. det = 2(1 + i)(1 − i) = 2·2 = 4. Tr = 4.</p></details></div>
+
+<div class="prob"><div class="q">P5. A² = A (projector). What can the eigenvalues be? If A is 4×4 with Tr A = 3, what is rank A?</div>
+<details><summary>Show solution</summary><p>λ² = λ ⇒ λ = 0 or 1. The trace counts the 1s: 3. A projector is diagonalizable, so rank = number of nonzero eigenvalues = 3.</p></details></div>
+
+<div class="prob"><div class="q">P6. Eigenvalues of <span class="M" data-m="1 2 3; 0 4 5; 0 0 6"></span> and of its inverse.</div>
+<details><summary>Show solution</summary><p>Triangular ⇒ 1, 4, 6. Inverse ⇒ 1, 1/4, 1/6.</p></details></div>
+
+<div class="prob"><div class="q">P7. Diagonalize A = <span class="M" data-m="4 1; 2 3"></span> and compute A¹⁰.</div>
+<details><summary>Show solution</summary><p>Tr 7, det 10 ⇒ λ = 5, 2. Eigenvectors: λ = 5: (1, 1); λ = 2: (1, −2). P = [[1, 1],[1, −2]], P⁻¹ = (1/3)[[2, 1],[1, −1]].<br>
+A¹⁰ = P diag(5¹⁰, 2¹⁰) P⁻¹ = (1/3)<span class="M" data-m="2·5¹⁰+2¹⁰ 5¹⁰−2¹⁰; 2·5¹⁰−2¹¹ 5¹⁰+2¹¹"></span>.</p></details></div>
+
+<div class="prob"><div class="q">P8. Show that AB and BA have the same eigenvalues (A, B square, A invertible).</div>
+<details><summary>Show solution</summary><p>BA = A⁻¹(AB)A is similar to AB, so they have the same characteristic polynomial (Ex. 8). (This is true even when neither is invertible, but needs a different proof.)</p></details></div>
+
+<div class="prob"><div class="q">P9. Find the eigenvalues of the 3D rotation R about z by angle θ, and relate the trace to θ.</div>
+<details><summary>Show solution</summary><p>R = [[c, −s, 0],[s, c, 0],[0, 0, 1]]: λ = 1 (the axis, ẑ) and e^{±iθ}. Tr R = 1 + 2cos θ. For any 3D rotation, cos θ = (Tr R − 1)/2.</p></details></div>
+
+<div class="prob"><div class="q">P10. Two masses m connected to walls and to each other by three identical springs k. Find the normal-mode frequencies.<span class="tag">physics</span></div>
+<details><summary>Show solution</summary><p>mẍ₁ = −2kx₁ + kx₂ and mẍ₂ = kx₁ − 2kx₂. A = (k/m)[[−2, 1],[1, −2]], with eigenvalues −k/m (mode (1, 1)) and −3k/m (mode (1, −1)). So ω = √(k/m) (in phase) and √(3k/m) (out of phase).</p></details></div>
+
+<div class="prob"><div class="q">P11. Can a nonzero nilpotent matrix be diagonalizable?</div>
+<details><summary>Show solution</summary><p>No. All its eigenvalues are 0, so if P⁻¹AP = Λ then Λ = 0 and A = P·0·P⁻¹ = 0. Contradiction. Example: [[0, 1],[0, 0]] is defective.</p></details></div>
+
+<div class="prob"><div class="q">P12. If A is hermitian with eigenvalues 1, 2, 2, what is the most general form of A's eigenvector for λ = 2, given that (1, 0, 0) belongs to λ = 1?</div>
+<details><summary>Show solution</summary><p>Eigenvectors for distinct eigenvalues are orthogonal, and the λ = 2 eigenspace is 2-dimensional. So it is the plane orthogonal to (1, 0, 0): (0, a, b), any a, b not both 0.</p></details></div>
+
+<div class="prob"><div class="q">P13. Solve ẋ = −x + y, ẏ = x − y with x(0) = 1, y(0) = 0.</div>
+<details><summary>Show solution</summary><p>A = [[−1, 1],[1, −1]], λ = 0 with (1, 1), and λ = −2 with (1, −1). x = ½ + ½e^{−2t}, y = ½ − ½e^{−2t}. As t → ∞ both approach ½: the system equalizes, like heat flowing between two bodies.</p></details></div>
+</section>
+
+<!-- 16 -->
+<section id="s16" class="quiz">
+<h2>16. Self-test quiz</h2>
+<div id="quizBox"></div>
+<button id="quizCheck">Check answers</button> <span id="quizScore" class="readout"></span>
+</section>
+
+<!-- 17 -->
+<section id="s17">
+<h2>17. Interesting facts</h2>
+<div class="box fact"><b class="t">Where "eigen" came from</b> David Hilbert used "Eigenwert" (own value) around 1904 while studying integral equations. The English hybrid "eigenvalue" stuck, although "characteristic value" and "proper value" were also used for decades.</div>
+<div class="box fact"><b class="t">Google's PageRank</b> The original Google ranking of web pages is the eigenvector, with eigenvalue 1, of a gigantic "link matrix" with billions of rows. It is found by the power method: multiply any vector by the matrix again and again, and it turns into the dominant eigenvector.</div>
+<div class="box fact"><b class="t">Quantum mechanics is an eigenvalue problem</b> The time-independent Schrödinger equation Hψ = Eψ is exactly Ax = λx. Allowed energies are eigenvalues and stationary states are eigenvectors. Heisenberg's 1925 matrix mechanics computed atomic spectra literally by diagonalizing infinite matrices.</div>
+<div class="box fact"><b class="t">Bridges and resonance</b> Every structure has normal modes, the eigenvectors of its stiffness and mass matrices. If wind or marching feet push at one of the natural frequencies, the amplitude builds up. Engineers compute these eigenvalues to keep them away from expected forcing frequencies.</div>
+<div class="box fact"><b class="t">No formula for n ≥ 5</b> Abel and Galois proved that polynomials of degree 5 or more have no general formula in radicals. So eigenvalues of 5×5 and larger matrices must in general be found numerically (QR algorithm, 1961), not by a formula.</div>
+</section>
+
+</div>
+
+<script>
+/* ---------- theme ---------- */
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+document.getElementById('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawAll();};})();
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+const $=id=>document.getElementById(id);
+function renderM(){document.querySelectorAll('.M[data-m]').forEach(el=>{const s=el.getAttribute('data-m');
+  const rows=s.split(';').map(r=>{r=r.trim();return r.includes('|')?r.split(/\s*\|\s*/):r.split(/\s+/);});
+  el.innerHTML='<table class="mx'+(el.classList.contains('det')?' det':'')+'">'+rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</table>';});}
+renderM();
+function f(x,d=3){if(Math.abs(x)<1e-9)x=0;return (+x.toFixed(d)).toString();}
+function setupCanvas(c){const dpr=window.devicePixelRatio||1;if(!c._w){c._w=c.width;c._h=c.height;c.width=c._w*dpr;c.height=c._h*dpr;c.style.width='100%';c.style.maxWidth=c._w+'px';}const g=c.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);return [g,c._w,c._h];}
+function arrow(g,x1,y1,x2,y2,col,w=2.5){g.strokeStyle=col;g.fillStyle=col;g.lineWidth=w;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();const a=Math.atan2(y2-y1,x2-x1),L=Math.min(10+w,Math.hypot(x2-x1,y2-y1)*.5);if(L<2)return;g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-L*Math.cos(a-.4),y2-L*Math.sin(a-.4));g.lineTo(x2-L*Math.cos(a+.4),y2-L*Math.sin(a+.4));g.closePath();g.fill();}
+function clear(g,w,h){g.fillStyle=css('--card');g.fillRect(0,0,w,h);}
+function grid2D(g,w,h,S){const ox=w/2,oy=h/2;g.strokeStyle=css('--line');g.lineWidth=1;for(let i=-12;i<=12;i++){g.beginPath();g.moveTo(ox+i*S,0);g.lineTo(ox+i*S,h);g.stroke();g.beginPath();g.moveTo(0,oy-i*S);g.lineTo(w,oy-i*S);g.stroke();}g.strokeStyle=css('--muted');g.lineWidth=1.3;g.beginPath();g.moveTo(0,oy);g.lineTo(w,oy);g.moveTo(ox,0);g.lineTo(ox,h);g.stroke();}
+// 2x2 real eigen
+function eig2(A){const t=A[0][0]+A[1][1],d=A[0][0]*A[1][1]-A[0][1]*A[1][0],D=t*t-4*d;if(D<-1e-12)return {complex:true,re:t/2,im:Math.sqrt(-D)/2,t,d};const s=Math.sqrt(Math.max(0,D));const ls=[(t+s)/2,(t-s)/2];
+ const vec=l=>{const a=A[0][0]-l,b=A[0][1],c=A[1][0],e=A[1][1]-l;let v=Math.abs(b)+Math.abs(a)>Math.abs(c)+Math.abs(e)?[-b,a]:[-e,c];if(Math.hypot(...v)<1e-12)v=[1,0];const n=Math.hypot(...v);return [v[0]/n,v[1]/n];};
+ const vs=ls.map(vec);// detect defective
+ const defective=Math.abs(D)<1e-10&&!(Math.abs(A[0][1])<1e-12&&Math.abs(A[1][0])<1e-12);return {complex:false,ls,vs,t,d,defective};}
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const dot=(a,b)=>a.reduce((s,x,i)=>s+x*b[i],0);
+const nrm=a=>Math.hypot(...a);
+function mv(A,x){return A.map(r=>dot(r,x));}
+
+/* ---------- Lab 1: eigen hunter ---------- */
+const E2P={sym:[[2,1],[1,2]],ex9:[[-8,2],[3,-3]],shear:[[1,1],[0,1]],rot:[[0.5,-0.866],[0.866,0.5]],gen:[[3,1],[2,2]]};
+let E2A=E2P.sym,e2anim=null;
+document.querySelectorAll('[data-e2]').forEach(b=>b.onclick=()=>{E2A=E2P[b.dataset.e2];drawE2();});
+$('e2phi').oninput=drawE2;$('e2circle').onchange=drawE2;
+$('e2sweep').onclick=()=>{if(e2anim){cancelAnimationFrame(e2anim);e2anim=null;$('e2sweep').textContent='▶ Sweep';return;}$('e2sweep').textContent='❚❚ Stop';const step=()=>{$('e2phi').value=(+$('e2phi').value+0.6)%360;drawE2();e2anim=requestAnimationFrame(step);};step();};
+function drawE2(){const A=E2A;const [g,w,h]=setupCanvas($('e2can'));clear(g,w,h);const mx=Math.max(...A.flat().map(Math.abs));const S=Math.min(70,150/Math.max(1.5,mx*1.1));grid2D(g,w,h,S);const ox=w/2,oy=h/2;const P=v=>[ox+v[0]*S,oy-v[1]*S];
+ const E=eig2(A);
+ if(!E.complex){E.vs.forEach((v,i)=>{if(E.defective&&i===1)return;g.strokeStyle=i?css('--acc4'):css('--acc3');g.setLineDash([7,5]);g.lineWidth=1.8;g.beginPath();g.moveTo(...P([-10*v[0],-10*v[1]]));g.lineTo(...P([10*v[0],10*v[1]]));g.stroke();g.setLineDash([]);});}
+ if($('e2circle').checked){g.strokeStyle=css('--muted');g.lineWidth=1;g.beginPath();for(let k=0;k<=120;k++){const a=k/120*2*Math.PI;const p=P([Math.cos(a),Math.sin(a)]);k?g.lineTo(...p):g.moveTo(...p);}g.stroke();
+  g.strokeStyle=css('--acc2');g.globalAlpha=.5;g.beginPath();for(let k=0;k<=120;k++){const a=k/120*2*Math.PI;const p=P(mv(A,[Math.cos(a),Math.sin(a)]));k?g.lineTo(...p):g.moveTo(...p);}g.stroke();g.globalAlpha=1;}
+ const phi=+$('e2phi').value*Math.PI/180;const x=[Math.cos(phi),Math.sin(phi)],Ax=mv(A,x);const o=P([0,0]);
+ arrow(g,o[0],o[1],...P(Ax),css('--acc2'),3.5);arrow(g,o[0],o[1],...P(x),'#1c7ed6',3);
+ g.font='bold 13px sans-serif';g.fillStyle='#1c7ed6';g.fillText('x',...P([x[0]*1.12,x[1]*1.12]));g.fillStyle=css('--acc2');g.fillText('Ax',P(Ax)[0]+6,P(Ax)[1]);
+ const cr=x[0]*Ax[1]-x[1]*Ax[0],lam=dot(x,Ax);const nA=nrm(Ax);const ang=Math.acos(Math.max(-1,Math.min(1,lam/(nA||1))))*180/Math.PI;
+ const aligned=Math.abs(cr)<0.02*Math.max(1,nA);
+ $('e2phiv').textContent=(+$('e2phi').value).toFixed(1);
+ $('e2verdict').innerHTML=aligned?'<span class="ok">Ax ∥ x: an eigenvector! λ ≈ '+f(lam,3)+'</span>':'<span class="bad">Ax is not along x (angle '+f(ang,1)+'°)</span>';
+ let t='A = [['+A[0].map(v=>f(v,3)).join(', ')+'], ['+A[1].map(v=>f(v,3)).join(', ')+']]\nTr A = '+f(E.t)+',  det A = '+f(E.d)+'\n\nx = ('+f(x[0])+', '+f(x[1])+'),  Ax = ('+f(Ax[0])+', '+f(Ax[1])+')\n\n';
+ if(E.complex)t+='Eigenvalues: '+f(E.re)+' ± '+f(E.im)+'i  (complex)\n→ no real eigen-direction; every vector is turned.';
+ else if(E.defective)t+='λ = '+f(E.ls[0])+' (double) but only ONE\neigen-direction ('+f(E.vs[0][0])+', '+f(E.vs[0][1])+') → defective, not diagonalizable.';
+ else t+='Eigenvalues: λ₁ = '+f(E.ls[0])+',  λ₂ = '+f(E.ls[1])+'\nEigen-directions (dashed):\n  ('+f(E.vs[0][0])+', '+f(E.vs[0][1])+')  and  ('+f(E.vs[1][0])+', '+f(E.vs[1][1])+')\n\ncheck: λ₁+λ₂ = '+f(E.ls[0]+E.ls[1])+' = Tr,  λ₁λ₂ = '+f(E.ls[0]*E.ls[1])+' = det';
+ $('e2out').textContent=t;}
+
+/* ---------- complex & polynomial tools ---------- */
+const C={add:(a,b)=>[a[0]+b[0],a[1]+b[1]],sub:(a,b)=>[a[0]-b[0],a[1]-b[1]],mul:(a,b)=>[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]],div:(a,b)=>{const d=b[0]*b[0]+b[1]*b[1];return [(a[0]*b[0]+a[1]*b[1])/d,(a[1]*b[0]-a[0]*b[1])/d];},abs:a=>Math.hypot(a[0],a[1])};
+function cstr(z,d=4){let re=Math.abs(z[0])<1e-8?0:z[0],im=Math.abs(z[1])<1e-8?0:z[1];if(!im)return f(re,d);if(!re)return f(im,d)+'i';return f(re,d)+(im<0?' − ':' + ')+f(Math.abs(im),d)+'i';}
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;}
+class Fr{constructor(n,d=1){if(d<0){n=-n;d=-d;}const g=gcd(n,d);this.n=n/g;this.d=d/g;}add(o){return new Fr(this.n*o.d+o.n*this.d,this.d*o.d)}sub(o){return new Fr(this.n*o.d-o.n*this.d,this.d*o.d)}mul(o){return new Fr(this.n*o.n,this.d*o.d)}div(o){return new Fr(this.n*o.d,this.d*o.n)}isZ(){return this.n===0}val(){return this.n/this.d}toString(){return this.d===1?''+this.n:this.n+'/'+this.d}}
+// Faddeev–LeVerrier: returns coefficients [1, c_{n-1}, ..., c_0] of det(λI − A)
+function charPoly(A,ops){const n=A.length;const {zero,one,add,mul,div,fromInt}=ops;let M=A.map(r=>r.map(()=>zero));const c=[one];
+ for(let k=1;k<=n;k++){// M_k = A M_{k-1} + c_{k-1} I
+  const AM=A.map((r,i)=>M[0].map((_,j)=>r.reduce((s,x,l)=>add(s,mul(x,M[l][j])),zero)));M=AM.map((r,i)=>r.map((x,j)=>i===j?add(x,c[k-1]):x));
+  const AMk=A.map((r,i)=>M[0].map((_,j)=>r.reduce((s,x,l)=>add(s,mul(x,M[l][j])),zero)));let tr=zero;for(let i=0;i<n;i++)tr=add(tr,AMk[i][i]);c.push(mul(div(tr,fromInt(k)),fromInt(-1)));}
+ return c;}
+const FrOps={zero:new Fr(0),one:new Fr(1),add:(a,b)=>a.add(b),mul:(a,b)=>a.mul(b),div:(a,b)=>a.div(b),fromInt:k=>new Fr(k)};
+const NumOps={zero:0,one:1,add:(a,b)=>a+b,mul:(a,b)=>a*b,div:(a,b)=>a/b,fromInt:k=>k};
+// Durand–Kerner roots of monic polynomial (real coeffs array [1,a1..an])
+function polyRoots(c){const n=c.length-1;if(n===1)return [[-c[1],0]];let R=[];for(let i=0;i<n;i++)R.push(C.mul([0.4,0.9],[Math.cos(2*Math.PI*i/n)*1,Math.sin(2*Math.PI*i/n)*1]).map((x,k)=>x*(1+Math.max(...c.slice(1).map(Math.abs)))**(1/n)*0.8));
+ const ev=z=>{let p=[1,0];for(let k=1;k<=n;k++)p=C.add(C.mul(p,z),[c[k],0]);return p;};
+ for(let it=0;it<800;it++){let mx=0;for(let i=0;i<n;i++){let den=[1,0];for(let j=0;j<n;j++)if(j!==i)den=C.mul(den,C.sub(R[i],R[j]));const d=C.div(ev(R[i]),den);R[i]=C.sub(R[i],d);mx=Math.max(mx,C.abs(d));}if(mx<1e-14)break;}
+ // repeated roots converge to a small cluster: replace each cluster by its mean (accurate), then snap tiny imaginary parts
+ const scale=Math.max(1,...R.map(C.abs));const used=Array(n).fill(false);const out=[];
+ for(let i=0;i<n;i++){if(used[i])continue;const cl=[i];for(let j=i+1;j<n;j++)if(!used[j]&&C.abs(C.sub(R[i],R[j]))<2e-4*scale){cl.push(j);used[j]=true;}
+  let m=[0,0];cl.forEach(k=>m=C.add(m,R[k]));m=[m[0]/cl.length,m[1]/cl.length];if(Math.abs(m[1])<1e-8*scale)m=[m[0],0];cl.forEach(()=>out.push(m.slice()));}
+ return out.sort((a,b)=>a[0]-b[0]||a[1]-b[1]);}
+// exact polynomial helpers (arrays of Fr, highest degree first) for square-free decomposition
+function pTrim(p){let i=0;while(i<p.length-1&&p[i].isZ())i++;return p.slice(i);}
+function pDeriv(p){const n=p.length-1;return n===0?[new Fr(0)]:p.slice(0,n).map((c,i)=>c.mul(new Fr(n-i)));}
+function pDivmod(a,b){a=pTrim(a);b=pTrim(b);const q=[];let r=a.slice();while(r.length>=b.length){const k=r[0].div(b[0]);q.push(k);const s=b.map(x=>x.mul(k));r=r.map((x,i)=>i<s.length?x.sub(s[i]):x).slice(1);}if(!r.length)r=[new Fr(0)];return {q:q.length?q:[new Fr(0)],r:pTrim(r)};}
+function pGcd(a,b){a=pTrim(a);b=pTrim(b);while(!(b.length===1&&b[0].isZ())){const r=pDivmod(a,b).r;a=b;b=r;}const lc=a[0];return a.map(x=>x.div(lc));}
+function pEvalC(p,z){let s=[0,0];p.forEach(c=>s=C.add(C.mul(s,z),[c.val(),0]));return s;}
+// roots with exact multiplicities: returns [{z,k}]
+function exactRoots(p){p=pTrim(p);const g=pGcd(p,pDeriv(p));const sq=pDivmod(p,g).q;const lc=sq[0];const sqm=sq.map(x=>x.div(lc).val());
+ const simple=sqm.length>1?polyRoots(sqm):[];const mult=(poly,z)=>{let k=0;let cur=poly;while(cur.length>1){const sc=cur.reduce((s,c)=>s+Math.abs(c.val()),0)*Math.max(1,C.abs(z))**(cur.length-1);if(C.abs(pEvalC(cur,z))>1e-7*sc)break;k++;cur=pGcd(cur,pDeriv(cur));}return k;};
+ return simple.map(z=>({z,k:Math.max(1,mult(p,z))}));}
+// complex null space of (A − λI)
+function nullC(A,lam,tol=1e-6){const n=A.length;const M=A.map((r,i)=>r.map((x,j)=>i===j?C.sub([x,0],lam):[x,0]));const piv=[];let r=0;const scale=Math.max(1,...A.flat().map(Math.abs));
+ for(let c=0;c<n&&r<n;c++){let p=r;for(let i=r+1;i<n;i++)if(C.abs(M[i][c])>C.abs(M[p][c]))p=i;if(C.abs(M[p][c])<tol*scale)continue;[M[p],M[r]]=[M[r],M[p]];const pv=M[r][c];M[r]=M[r].map(x=>C.div(x,pv));for(let i=0;i<n;i++)if(i!==r){const k=M[i][c];M[i]=M[i].map((x,j)=>C.sub(x,C.mul(k,M[r][j])));}piv.push(c);r++;}
+ const free=[...Array(n).keys()].filter(c=>!piv.includes(c));return {rank:r,basis:free.map(fc=>{const v=Array(n).fill(null).map(()=>[0,0]);v[fc]=[1,0];piv.forEach((c,i)=>v[c]=C.sub([0,0],M[i][fc]));
+  // normalise: largest component -> 1
+  let big=v.reduce((b,z)=>C.abs(z)>C.abs(b)?z:b,[0,0]);return v.map(z=>C.div(z,big));})};}
+function parseMat(txt){const rows=txt.split(/[;\n]/).map(r=>r.trim()).filter(r=>r&&/^[-\d\s./]+$/.test(r)).map(r=>r.split(/[\s,]+/).filter(Boolean));const n=rows.length;if(!n)throw 'No matrix found.';if(rows.some(r=>r.length!==n))throw 'Matrix must be square (got '+n+' rows).';if(n>5)throw 'Keep it at most 5×5.';
+ const exact=rows.every(r=>r.every(x=>/^-?\d+(\/\d+)?$/.test(x)));const fr=rows.map(r=>r.map(x=>{if(exact){const [a,b]=x.split('/');return new Fr(+a,b?+b:1);}return null;}));const num=rows.map(r=>r.map(x=>{if(x.includes('/')){const [a,b]=x.split('/');return +a/+b;}return +x;}));if(num.flat().some(isNaN))throw 'Bad number.';return {n,exact,fr,num};}
+function polyStr(c,exact){// c = [1, c1, ..., cn] for λ^n + ...
+ const n=c.length-1;let s='';c.forEach((co,k)=>{const p=n-k;const v=exact?co.val():co;if(Math.abs(v)<1e-12&&k)return;const str=exact?co.toString().replace('-',''):f(Math.abs(v),4);const sign=v<0?' − ':(s?' + ':'');const coef=(str==='1'&&p>0)?'':str;s+=sign+coef+(p>0?'λ'+(p>1?'^'+p:''):'');});return s||'0';}
+
+/* ---------- Lab 2: char poly plot ---------- */
+document.querySelectorAll('[data-cp]').forEach(b=>b.onclick=()=>{$('cpIn').value=b.dataset.cp;drawCP();});
+$('cpGo').onclick=drawCP;
+function drawCP(){let M;try{M=parseMat($('cpIn').value);}catch(e){$('cpout').textContent='Error: '+e;return;}
+ const n=M.n;const c=M.exact?charPoly(M.fr,FrOps):charPoly(M.num,NumOps);const cn=c.map(x=>M.exact?x.val():x);let roots;
+ if(M.exact){roots=[];exactRoots(c).forEach(G=>{for(let i=0;i<G.k;i++)roots.push(G.z);});}else roots=polyRoots(cn);
+ const D=l=>{let p=0;cn.forEach(co=>p=p*l+co);return (n%2?-1:1)*p;};// det(A−λI) = (−1)^n det(λI−A)
+ const re=roots.map(z=>z[0]),ab=roots.map(z=>C.abs(z));const R=Math.max(2,...ab)*1.3;
+ const [g,w,h]=setupCanvas($('cpcan'));clear(g,w,h);const xs=[];for(let k=0;k<=300;k++){const l=-R+2*R*k/300;xs.push([l,D(l)]);}const ymax=Math.max(1,...xs.map(p=>Math.abs(p[1])).sort((a,b)=>a-b).slice(0,240));
+ const X=l=>20+(l+R)/(2*R)*(w-30),Y=v=>h/2-v/ymax*(h/2-20);g.strokeStyle=css('--line');g.beginPath();g.moveTo(10,h/2);g.lineTo(w-5,h/2);g.moveTo(X(0),5);g.lineTo(X(0),h-5);g.stroke();
+ g.strokeStyle=css('--acc');g.lineWidth=2.2;g.beginPath();xs.forEach((p,i)=>{const yy=Math.max(-10,Math.min(h+10,Y(p[1])));i?g.lineTo(X(p[0]),yy):g.moveTo(X(p[0]),yy);});g.stroke();
+ roots.filter(z=>z[1]===0).forEach(z=>{g.fillStyle=css('--acc2');g.beginPath();g.arc(X(z[0]),h/2,6,0,7);g.fill();g.fillStyle=css('--ink');g.font='12px sans-serif';g.fillText(f(z[0],3),X(z[0])-12,h/2+20);});
+ g.fillStyle=css('--muted');g.font='12px sans-serif';g.fillText('D(λ) = det(A − λI)',14,16);g.fillText('λ →',w-34,h/2-6);
+ const [q,w2,h2]=setupCanvas($('cpcplx'));clear(q,w2,h2);const S=Math.min(w2,h2)/2/R;const ox=w2/2,oy=h2/2;q.strokeStyle=css('--line');q.beginPath();q.moveTo(0,oy);q.lineTo(w2,oy);q.moveTo(ox,0);q.lineTo(ox,h2);q.stroke();
+ q.strokeStyle=css('--muted');q.setLineDash([4,4]);q.beginPath();q.arc(ox,oy,S,0,7);q.stroke();q.setLineDash([]);q.fillStyle=css('--muted');q.fillText('Re',w2-20,oy-6);q.fillText('Im',ox+6,12);q.fillText('|λ|=1',ox+S*0.72,oy-S*0.72);
+ roots.forEach(z=>{q.fillStyle=z[1]===0?css('--acc2'):css('--acc4');q.beginPath();q.arc(ox+z[0]*S,oy-z[1]*S,7,0,7);q.fill();q.fillStyle=css('--ink');q.fillText(cstr(z,2),ox+z[0]*S+9,oy-z[1]*S-8);});
+ let tr=0,dt=1;for(let i=0;i<n;i++)tr+=M.num[i][i];let sum=[0,0],prod=[1,0];roots.forEach(z=>{sum=C.add(sum,z);prod=C.mul(prod,z);});
+ $('cpout').textContent='det(λI − A) = '+polyStr(c,M.exact)+'   ('+(M.exact?'exact':'numeric')+')\n\neigenvalues: '+roots.map(z=>cstr(z)).join(',   ')+'\n\nΣλ = '+cstr(sum)+'   Tr A = '+f(tr,4)+'\nΠλ = '+cstr(prod)+'   det A = '+f((n%2?-1:1)*cn[n],4);}
+
+/* ---------- 3D helpers ---------- */
+function make3D(canvas,redraw,init){const v=Object.assign({yaw:-0.75,pitch:0.42,scale:60},init||{});let d=null;
+ canvas.addEventListener('pointerdown',e=>{d=[e.clientX,e.clientY];canvas.setPointerCapture(e.pointerId);});
+ canvas.addEventListener('pointermove',e=>{if(!d)return;v.yaw+=(e.clientX-d[0])*.01;v.pitch=Math.max(-1.5,Math.min(1.5,v.pitch+(e.clientY-d[1])*.01));d=[e.clientX,e.clientY];redraw();});
+ canvas.addEventListener('pointerup',()=>d=null);
+ v.proj=(p,w,h)=>{const cy=Math.cos(v.yaw),sy=Math.sin(v.yaw),cp=Math.cos(v.pitch),sp=Math.sin(v.pitch);const X=cy*p[0]-sy*p[1],Y=sy*p[0]+cy*p[1];return [w/2+v.scale*X,h/2+10-v.scale*(p[2]*cp-Y*sp),Y*cp+p[2]*sp];};return v;}
+
+/* ---------- Lab 3: degeneracy ellipsoid ---------- */
+const v3=make3D($('d3can'),drawD3);
+['d3q','d3p','d3a','d3th','d3ph'].forEach(id=>$(id).oninput=drawD3);
+$('d3snapE').onclick=()=>{$('d3th').value=54.7356;$('d3ph').value=45;drawD3();};
+$('d3snapP').onclick=()=>{// a vector in plane x+y+z=0: (1,-1,0)/√2 rotated by pair angle -> choose (1,1,-2)/√6 : θ = acos(-2/√6)=144.7°, φ=45°
+ $('d3th').value=144.7356;$('d3ph').value=45;drawD3();};
+function drawD3(){const q=+$('d3q').value,p=+$('d3p').value,al=+$('d3a').value*Math.PI/180;const A=[[q,p,p],[p,q,p],[p,p,q]];const [g,w,h]=setupCanvas($('d3can'));clear(g,w,h);
+ const l1=q+2*p,l2=q-p;const big=Math.max(1,Math.abs(l1),Math.abs(l2));v3.scale=120/big;const P=x=>v3.proj(x,w,h);
+ // axes
+ g.globalAlpha=.4;[[1,0,0],[0,1,0],[0,0,1]].forEach((e,i)=>{const o=P([0,0,0]),t=P(e.map(x=>x*big*1.25));arrow(g,o[0],o[1],t[0],t[1],css('--muted'),1);g.fillStyle=css('--muted');g.fillText('xyz'[i],t[0]+3,t[1]);});g.globalAlpha=1;
+ // wireframe ellipsoid = A * sphere
+ g.strokeStyle=css('--muted');g.lineWidth=.7;g.globalAlpha=.55;
+ for(let i=1;i<10;i++){const th=i*Math.PI/10;g.beginPath();for(let k=0;k<=48;k++){const ph=k/48*2*Math.PI;const s=[Math.sin(th)*Math.cos(ph),Math.sin(th)*Math.sin(ph),Math.cos(th)];const pt=P(mv(A,s));k?g.lineTo(pt[0],pt[1]):g.moveTo(pt[0],pt[1]);}g.stroke();}
+ for(let k=0;k<12;k++){const ph=k/12*2*Math.PI;g.beginPath();for(let i=0;i<=30;i++){const th=i/30*Math.PI;const s=[Math.sin(th)*Math.cos(ph),Math.sin(th)*Math.sin(ph),Math.cos(th)];const pt=P(mv(A,s));i?g.lineTo(pt[0],pt[1]):g.moveTo(pt[0],pt[1]);}g.stroke();}
+ g.globalAlpha=1;
+ // degenerate plane disc
+ const u=[1/Math.SQRT2,-1/Math.SQRT2,0],vv=[1/Math.sqrt(6),1/Math.sqrt(6),-2/Math.sqrt(6)];g.fillStyle=css('--acc');g.globalAlpha=.12;g.beginPath();for(let k=0;k<=60;k++){const a=k/60*2*Math.PI;const pt=P(u.map((x,i)=>Math.abs(l2)*1.0*(Math.cos(a)*x+Math.sin(a)*vv[i])));k?g.lineTo(pt[0],pt[1]):g.moveTo(pt[0],pt[1]);}g.fill();g.globalAlpha=1;
+ const o=P([0,0,0]);const e3=[1,1,1].map(x=>x/Math.sqrt(3));const e1=u.map((x,i)=>Math.cos(al)*x+Math.sin(al)*vv[i]),e2=u.map((x,i)=>-Math.sin(al)*x+Math.cos(al)*vv[i]);
+ const drawVec=(v,col,lbl,wd=3.2)=>{const t=P(v);arrow(g,o[0],o[1],t[0],t[1],col,wd);g.fillStyle=col;g.font='bold 12px sans-serif';g.fillText(lbl,t[0]+5,t[1]-3);};
+ drawVec(e3.map(x=>x*l1),'#e03131','λ='+f(l1,2));drawVec(e1.map(x=>x*l2),'#2f9e44','λ='+f(l2,2));drawVec(e2.map(x=>x*l2),'#1c7ed6','');
+ const th=+$('d3th').value*Math.PI/180,ph=+$('d3ph').value*Math.PI/180;const tv=[Math.sin(th)*Math.cos(ph),Math.sin(th)*Math.sin(ph),Math.cos(th)];const Atv=mv(A,tv);
+ drawVec(tv,css('--acc4'),'v',2.5);drawVec(Atv,css('--acc2'),'Av',2.5);
+ const cr=nrm(cross(tv,Atv));const isEig=cr<0.03*Math.max(1,nrm(Atv));
+ ['d3q','d3p','d3a'].forEach(id=>$(id+'v').textContent=$(id).value);
+ $('d3out').textContent='A = [[q,p,p],[p,q,p],[p,p,q]],  q = '+f(q,2)+', p = '+f(p,2)+'\n\nλ₃ = q + 2p = '+f(l1,3)+'   eigenvector (1,1,1)/√3\nλ₁ = λ₂ = q − p = '+f(l2,3)+'   (2-fold)\n  eigenvectors: ANY pair in the plane x+y+z = 0\n  current pair: ('+e1.map(x=>f(x,2)).join(', ')+')\n                ('+e2.map(x=>f(x,2)).join(', ')+')\n\nTr = 3q = '+f(3*q,3)+' = '+f(l1+2*l2,3)+' ✓\ndet = '+f(l1*l2*l2,3)+'\n\ntest v = ('+tv.map(x=>f(x,2)).join(', ')+')\nAv = ('+Atv.map(x=>f(x,2)).join(', ')+')\n'+(isEig?'✓ v is an eigenvector, λ = '+f(dot(tv,Atv),3):'✗ Av not parallel to v')+(Math.abs(p)<0.025?'\n\np ≈ 0: A = qI, ALL vectors are eigenvectors (sphere).':'');}
+
+/* ---------- Lab 4: diagonalization ---------- */
+const DGP={sym:[[2,1],[1,2]],ex9:[[-8/3,2/3],[1,-1]],gen:[[1.5,0.5],[1,1]],ex20:[[1.5,1],[1,1.5]]};let DGA=DGP.sym,dgAnim=null;
+document.querySelectorAll('[data-dg]').forEach(b=>b.onclick=()=>{DGA=DGP[b.dataset.dg];drawDG();});
+$('dgT').oninput=drawDG;$('dgStd').onchange=drawDG;
+$('dgPlay').onclick=()=>{cancelAnimationFrame(dgAnim);let t=0;const step=()=>{t+=0.012;$('dgT').value=Math.min(1,t);drawDG();if(t<1)dgAnim=requestAnimationFrame(step);};step();};
+function drawDG(){const A=DGA,t=+$('dgT').value;const M=[[1+(A[0][0]-1)*t,A[0][1]*t],[A[1][0]*t,1+(A[1][1]-1)*t]];const E=eig2(A);const [g,w,h]=setupCanvas($('dgcan'));clear(g,w,h);const S=34;const ox=w/2,oy=h/2;
+ g.strokeStyle=css('--line');g.lineWidth=1;g.beginPath();g.moveTo(0,oy);g.lineTo(w,oy);g.moveTo(ox,0);g.lineTo(ox,h);g.stroke();
+ const P=v=>[ox+v[0]*S,oy-v[1]*S];const T=v=>mv(M,v);
+ const fam=(a,b,col,n=6)=>{g.strokeStyle=col;g.lineWidth=1.3;for(let i=-n;i<=n;i++){const p1=T([i*a[0]-8*b[0],i*a[1]-8*b[1]]),p2=T([i*a[0]+8*b[0],i*a[1]+8*b[1]]);g.beginPath();g.moveTo(...P(p1));g.lineTo(...P(p2));g.stroke();}};
+ if($('dgStd').checked){g.globalAlpha=.45;fam([1,0],[0,1],css('--muted'));fam([0,1],[1,0],css('--muted'));g.globalAlpha=1;}
+ if(!E.complex){const [v1,v2]=E.vs;g.globalAlpha=.75;fam(v1,v2,'#2f9e44');fam(v2,v1,'#9c36b5');g.globalAlpha=1;
+  const o=P([0,0]);arrow(g,o[0],o[1],...P(T(v1.map(x=>x*1.5))),'#2f9e44',3.5);arrow(g,o[0],o[1],...P(T(v2.map(x=>x*1.5))),'#9c36b5',3.5);
+  const [l1,l2]=E.ls;const Pm=[[v1[0],v2[0]],[v1[1],v2[1]]];const d=Pm[0][0]*Pm[1][1]-Pm[0][1]*Pm[1][0];const Pi=[[Pm[1][1]/d,-Pm[0][1]/d],[-Pm[1][0]/d,Pm[0][0]/d]];
+  const mm=(X,Y)=>X.map(r=>Y[0].map((_,j)=>r[0]*Y[0][j]+r[1]*Y[1][j]));const Lam=mm(mm(Pi,A),Pm);
+  const ms=X=>X.map(r=>'  [ '+r.map(x=>f(x,3).padStart(7)).join(' ')+' ]').join('\n');
+  $('dgout').textContent='A =\n'+ms(A)+'\n\neigenvalues λ₁ = '+f(l1)+' (green),  λ₂ = '+f(l2)+' (purple)\n\nP = [x₁ x₂] (unit eigenvectors) =\n'+ms(Pm)+'\n\nP⁻¹AP =\n'+ms(Lam)+'\n= diag('+f(l1)+', '+f(l2)+')  ✓\n\nt = '+f(t,2)+': green lines scaled by '+f(1+(l1-1)*t,3)+',\n         purple lines by '+f(1+(l2-1)*t,3)+(l1<0||l2<0?'\n(negative λ flips that direction)':'');}
+ else $('dgout').textContent='Complex eigenvalues – no real eigenbasis.';}
+
+/* ---------- Lab 5: springs ---------- */
+let spT=0,spRun=true,spC=[1,0],spLast=null,spHist=[];
+['spm1','spm2','spk1','spk2'].forEach(id=>$(id).oninput=()=>{spT=0;spHist=[];spSetBook();});
+function spSys(){const m1=+$('spm1').value,m2=+$('spm2').value,k1=+$('spk1').value,k2=+$('spk2').value;const A=[[-(k1+k2)/m1,k2/m1],[k2/m2,-k2/m2]];const E=eig2(A);
+ // order: slow mode first (λ closer to 0)
+ let modes=E.ls.map((l,i)=>({l,v:E.vs[i]})).sort((a,b)=>b.l-a.l);modes.forEach(m=>{m.w=Math.sqrt(-m.l);if(m.v[1]<0)m.v=m.v.map(x=>-x);});return {m1,m2,k1,k2,A,modes};}
+function spSetCoeffs(y0){const s=spSys();const [a,b]=s.modes;const d=a.v[0]*b.v[1]-b.v[0]*a.v[1];spC=[(y0[0]*b.v[1]-b.v[0]*y0[1])/d,(a.v[0]*y0[1]-y0[0]*a.v[1])/d];}
+function spSetBook(){const s=spSys();const d=4;spSetCoeffs([s.k2*d/(s.k1+s.k2),d]);spT=0;spHist=[];}
+$('spMode1').onclick=()=>{const s=spSys();const v=s.modes[0].v;const k=3/Math.max(Math.abs(v[0]),Math.abs(v[1]));spSetCoeffs([v[0]*k,v[1]*k]);spT=0;spHist=[];};
+$('spMode2').onclick=()=>{const s=spSys();const v=s.modes[1].v;const k=3/Math.max(Math.abs(v[0]),Math.abs(v[1]));spSetCoeffs([v[0]*k,v[1]*k]);spT=0;spHist=[];};
+$('spBook').onclick=spSetBook;
+$('spPlay').onclick=()=>{spRun=!spRun;$('spPlay').textContent=spRun?'❚❚ Pause':'▶ Play';};
+function spY(s,t){const [a,b]=s.modes;return [0,1].map(i=>spC[0]*a.v[i]*Math.cos(a.w*t)+spC[1]*b.v[i]*Math.cos(b.w*t));}
+function drawSpring(g,x,y1,y2,coils,col){const L=y2-y1;g.strokeStyle=col;g.lineWidth=2;g.beginPath();g.moveTo(x,y1);const seg=coils*2;for(let i=1;i<seg;i++){g.lineTo(x+(i%2?12:-12),y1+L*(i/seg));}g.lineTo(x,y2);g.stroke();}
+function drawSP(){const s=spSys();const [g,w,h]=setupCanvas($('spcan'));clear(g,w,h);const y=spY(s,spT);const sc=9;const base1=150,base2=290;const p1=base1+y[0]*sc,p2=base2+y[1]*sc;const x=w/2;
+ g.fillStyle=css('--muted');g.fillRect(x-60,20,120,6);drawSpring(g,x,26,p1-14,10,css('--acc'));drawSpring(g,x,p1+14,p2-16,10,css('--acc3'));
+ g.setLineDash([4,4]);g.strokeStyle=css('--line');[base1,base2].forEach(b=>{g.beginPath();g.moveTo(x-90,b);g.lineTo(x+90,b);g.stroke();});g.setLineDash([]);
+ g.fillStyle='#e03131';g.beginPath();g.arc(x,p1,12+s.m1*1.2,0,7);g.fill();g.fillStyle='#1c7ed6';g.beginPath();g.arc(x,p2,12+s.m2*1.2,0,7);g.fill();
+ g.fillStyle=css('--ink');g.font='12px sans-serif';g.fillText('k₁',x+18,80);g.fillText('m₁',x+30,p1+4);g.fillText('k₂',x+18,(p1+p2)/2);g.fillText('m₂',x+30,p2+4);g.fillText('y₁ = '+f(y[0],2),8,h-28);g.fillText('y₂ = '+f(y[1],2),8,h-10);
+ // plot
+ spHist.push([spT,y[0],y[1]]);if(spHist.length>600)spHist.shift();const [q,pw,ph]=setupCanvas($('spplot'));clear(q,pw,ph);const t0=spHist[0][0],t1=Math.max(t0+12,spHist[spHist.length-1][0]);const ym=Math.max(1,...spHist.map(r=>Math.max(Math.abs(r[1]),Math.abs(r[2]))));
+ const X=t=>10+(t-t0)/(t1-t0)*(pw-20),Y=v=>ph/2-v/ym*(ph/2-14);q.strokeStyle=css('--line');q.beginPath();q.moveTo(0,ph/2);q.lineTo(pw,ph/2);q.stroke();
+ [[1,'#e03131'],[2,'#1c7ed6']].forEach(([k,col])=>{q.strokeStyle=col;q.lineWidth=2;q.beginPath();spHist.forEach((r,i)=>i?q.lineTo(X(r[0]),Y(r[k])):q.moveTo(X(r[0]),Y(r[k])));q.stroke();});q.fillStyle=css('--muted');q.font='11px sans-serif';q.fillText('y₁(t) red, y₂(t) blue',12,14);
+ const [a,b]=s.modes;['spm1','spm2','spk1','spk2'].forEach(id=>$(id+'v').textContent=$(id).value);
+ const fmtv=v=>'('+f(v[0]/Math.abs(v[1]),3)+', 1)';
+ $('spout').textContent='A = [['+f(s.A[0][0],3)+', '+f(s.A[0][1],3)+'], ['+f(s.A[1][0],3)+', '+f(s.A[1][1],3)+']]\n\nslow mode: ω = '+f(a.w,4)+', shape '+fmtv(a.v)+(a.v[0]*a.v[1]>0?' (in step)':' (opposite)')+'\nfast mode: ω = '+f(b.w,4)+', shape '+fmtv(b.v)+(b.v[0]*b.v[1]>0?' (in step)':' (opposite)')+'\nω_fast/ω_slow = '+f(b.w/a.w,4)+'\n\namplitudes: slow '+f(spC[0],3)+',  fast '+f(spC[1],3)+'\nt = '+f(spT,2);}
+function spLoop(ts){if(spLast===null)spLast=ts;const dt=Math.min(0.05,(ts-spLast)/1000);spLast=ts;if(spRun)spT+=dt;drawSP();requestAnimationFrame(spLoop);}
+
+/* ---------- Calculator ---------- */
+function calcEV(){const out=$('evOut');try{const M=parseMat($('evIn').value);const n=M.n;const c=M.exact?charPoly(M.fr,FrOps):charPoly(M.num,NumOps);const cn=c.map(x=>M.exact?x.val():x);
+ let t='A ('+n+'×'+n+')\n\nCharacteristic polynomial ('+(M.exact?'exact':'numeric')+'):\n  det(λI − A) = '+polyStr(c,M.exact)+'\n  (det(A − λI) = '+(n%2?'−':'+')+'(that))\n';
+ let groups;if(M.exact)groups=exactRoots(c);else{const rr=polyRoots(cn);groups=[];rr.forEach(z=>{const gr=groups.find(G=>C.abs(C.sub(G.z,z))<1e-9);if(gr)gr.k++;else groups.push({z,k:1});});}
+ const roots=[];groups.forEach(G=>{for(let i=0;i<G.k;i++)roots.push(G.z);});
+ let geomTot=0;t+='\nEigenvalues and eigenvectors:\n';
+ groups.forEach(G=>{const ns=nullC(M.num,G.z,G.k>1?1e-5:1e-7);geomTot+=Math.min(ns.basis.length,G.k);t+='\n  λ = '+cstr(G.z)+(G.k>1?'   (algebraic multiplicity '+G.k+', independent eigenvectors '+ns.basis.length+')':'')+'\n';ns.basis.forEach(v=>t+='     x = ('+v.map(z=>cstr(z,4)).join(', ')+')\n');});
+ let tr=0;for(let i=0;i<n;i++)tr+=M.num[i][i];let sum=[0,0],prod=[1,0];roots.forEach(z=>{sum=C.add(sum,z);prod=C.mul(prod,z);});
+ t+='\nChecks:  Σλ = '+cstr(sum)+'  vs  Tr A = '+f(tr,4)+'\n         Πλ = '+cstr(prod)+'  vs  det A = '+f((n%2?-1:1)*cn[n],4)+'\n';
+ const herm=M.num.every((r,i)=>r.every((x,j)=>Math.abs(x-M.num[j][i])<1e-12));
+ t+='\n'+(geomTot===n?'✓ '+n+' independent eigenvectors ⇒ DIAGONALIZABLE: P = [x₁ … x'+n+'], P⁻¹AP = diag(λ…)':'✗ only '+geomTot+' independent eigenvectors ⇒ NOT diagonalizable (defective) – see Section 10')+(herm?'\n(symmetric ⇒ real eigenvalues, orthogonal eigenvectors for distinct λ)':'');
+ out.textContent=t;}catch(e){out.textContent='Error: '+e;}}
+$('evGo').onclick=calcEV;document.querySelectorAll('[data-ev]').forEach(b=>b.onclick=()=>{$('evIn').value=b.dataset.ev;calcEV();});
+
+/* ---------- Quiz ---------- */
+const Q=[
+['The sum of the eigenvalues of a matrix equals',['its determinant','its trace','its rank','the sum of all entries'],1,'Eq. (10a).'],
+['A 3×3 matrix with det A = 0 must have',['all eigenvalues zero','at least one zero eigenvalue','complex eigenvalues','repeated eigenvalues'],1,'Πλ = det A = 0.'],
+['Eigenvalues of a hermitian matrix are',['purely imaginary','real','of modulus 1','always positive'],1,'Example 5.'],
+['Eigenvalues of a unitary matrix satisfy',['λ real','|λ| = 1','λ = 0 or 1','λ = ±i'],1,'Example 3.'],
+['If λ is an eigenvalue of nonsingular A, then for A⁻¹ an eigenvalue is',['−λ','λ*','1/λ','λ²'],2,'Example 2.'],
+['An eigenvalue of multiplicity 3 of a diagonalizable matrix has',['1 eigenvector','3 independent eigenvectors','infinitely many independent eigenvectors','no eigenvector'],1,'Degenerate eigenvectors; any combination is again an eigenvector.'],
+['P⁻¹AP is diagonal. The columns of P are',['rows of A','eigenvectors of A','eigenvalues of A','orthogonal always'],1,'Exercise 18.'],
+['AB = BA implies',['A = B','A and B have the same eigenvalues','A and B can be diagonalized by the same P','AB = 0'],2,'Commuting matrices theorem.'],
+['For ÿ = Ay (springs), the normal-mode frequencies are',['eigenvalues of A','√(eigenvalues)','√(−eigenvalues of A)','trace of A'],2,'w² = λ < 0 ⇒ ω = √(−λ).'],
+['Eigenvalues of [[0,1],[0,0]]',['0, 0 with two eigenvectors','0, 0 with one eigenvector','1, −1','i, −i'],1,'Defective – not diagonalizable.']];
+(function(){$('quizBox').innerHTML=Q.map((q,i)=>'<div class="qq"><b>'+(i+1)+'. '+q[0]+'</b>'+q[1].map((o,j)=>'<label class="opt"><input type="radio" name="q'+i+'" value="'+j+'"> '+o+'</label>').join('')+'<div class="small" id="qf'+i+'"></div></div>').join('');
+$('quizCheck').onclick=()=>{let s=0;Q.forEach((q,i)=>{const c=document.querySelector('input[name=q'+i+']:checked');const ok=c&&+c.value===q[2];if(ok)s++;$('qf'+i).innerHTML=(ok?'<span class="ok">✓ Correct.</span> ':'<span class="bad">✗ Answer: '+q[1][q[2]]+'.</span> ')+q[3];});$('quizScore').textContent='Score: '+s+' / '+Q.length;};})();
+
+function drawAll(){drawE2();drawCP();drawD3();drawDG();drawSP();}
+spSetBook();drawAll();calcEV();requestAnimationFrame(spLoop);
+</script>
+</body>
+</html>

@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Partitioning of Matrices</title>
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8;
+  --b1:#dbe7ff; --b2:#ffe3cc; --b3:#d8f5dd; --b4:#f1dcf7; --b5:#fff3bf; --b6:#d0f0f0;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+    --b1:#22345a; --b2:#4a3220; --b3:#1f3d27; --b4:#3d2547; --b5:#3f3a1c; --b6:#1c3c3c;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39;
+    --b1:#22345a; --b2:#4a3220; --b3:#1f3d27; --b4:#3d2547; --b5:#3f3a1c; --b6:#1c3c3c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:110px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+.ctrl input[type=number]{width:60px}
+textarea{width:100%;min-height:90px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:90px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:collapse;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;margin:3px 4px;width:auto}
+.mx td{border:0;padding:1px 8px;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.mx td.cr{border-right:2px dashed var(--acc2)}
+.mx tr.rr td{border-bottom:2px dashed var(--acc2)}
+/* block-multiplication lab grids */
+.bm{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:center;margin:10px 0}
+.bm .lbl{font-weight:700;text-align:center;margin-bottom:3px}
+.gridm{border-collapse:collapse;width:auto;margin:0}
+.gridm td{width:30px;height:28px;padding:0;text-align:center;font-family:Consolas,monospace;font-size:.82rem;border:1px solid var(--line);cursor:pointer}
+.gridm td.cr{border-right:3px solid var(--ink)}
+.gridm tr.rr td{border-bottom:3px solid var(--ink)}
+.gridm td.hl{outline:2px solid var(--warn);outline-offset:-2px;font-weight:700}
+.bsym{font-size:1.6rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>6. Partitioning of Matrices</h1>
+<p>Blocks · Block addition · Block multiplication · Inverse by partitioning (Schur complement) · Submatrices · Rank &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 62–66</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">Blocks</a><a href="#s2">Addition</a><a href="#s3">Multiplication</a><a href="#s4">Block shapes</a><a href="#s5">Block inverse</a><a href="#s6">Block det</a><a href="#s7">Submatrices &amp; rank</a><a href="#s8">Rank in 3D</a><a href="#s9">Physics</a><a href="#s10">Summary</a><a href="#s11">Exercise 6</a><a href="#s12">Practice</a><a href="#s13">Quiz</a><a href="#s14">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<!-- 0 -->
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>A big matrix can be cut into smaller rectangular pieces called <b>blocks</b>. You can then treat each block as if it were a single number and do algebra with the blocks. The answer is the same as working element by element. It is often much shorter, and it shows the structure.</p>
+<div class="flow"><span>Cut into blocks</span><b>→</b><span>Add block by block</span><b>→</b><span>Multiply block by block (cuts must match)</span><b>→</b><span>Inverse from smaller inverses</span><b>→</b><span>Submatrices</span><b>→</b><span>Rank</span></div>
+<div class="box tip"><b class="t">Key idea in one line</b>
+Block algebra works exactly like ordinary 2×2 algebra, with one warning: <b>blocks are matrices, so they don't commute</b>. Keep the order of every product, and never divide; multiply by an inverse on the correct side instead.</div>
+<div class="box tip"><b class="t">Needed from earlier</b>
+Matrix product (Section 2), inverse and the reverse-order rule (AB)⁻¹ = B⁻¹A⁻¹ (Section 5), determinants and minors (Section 4).</div>
+</section>
+
+<!-- 1 -->
+<section id="s1">
+<h2>1. Partitioning a matrix into blocks (Eqs. 1–3)</h2>
+<p>Take an m×n matrix A. Draw one horizontal line after row k and one vertical line after column l. You get four blocks:</p>
+<div class="eq">A = <span class="M" data-m="A₁ A₂; A₃ A₄" data-r="1" data-c="1"></span>&nbsp;&nbsp;
+A₁: k×l, &nbsp;A₂: k×(n−l), &nbsp;A₃: (m−k)×l, &nbsp;A₄: (m−k)×(n−l)</div>
+<p>Example, a 3×4 matrix cut after row 1 and column 2:</p>
+<div class="eq"><span class="M" data-m="1 2 3 4; 5 6 7 8; 9 10 11 12" data-r="1" data-c="2"></span>
+&nbsp;⇒&nbsp; A₁ = <span class="M" data-m="1 2"></span>, A₂ = <span class="M" data-m="3 4"></span>, A₃ = <span class="M" data-m="5 6; 9 10"></span>, A₄ = <span class="M" data-m="7 8; 11 12"></span></div>
+<ul>
+<li>The cuts can go anywhere (1 ≤ k ≤ m, 1 ≤ l ≤ n), and you can use <b>any number</b> of cuts, not just one each way.</li>
+<li>Blocks in the same <b>block-row</b> have the same number of rows. Blocks in the same <b>block-column</b> have the same number of columns.</li>
+<li>Two matrices of the same size cut at the same places are <b>identically partitioned</b>.</li>
+<li>Extreme cases: no cuts gives one block, A itself. Cutting after every row and column makes every block a 1×1 element, which is ordinary element-wise work. Cutting only into columns gives A = [a₁ a₂ … aₙ] (a list of column vectors). Cutting only into rows gives a stack of row vectors.</li>
+</ul>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+<h2>2. Addition, scalar multiple, transpose and conjugate of blocks</h2>
+<div class="box thm"><b class="t">Addition (Eq. 4)</b>
+If A and B are <b>identically partitioned</b>:
+<div class="eq"><span class="M" data-m="A₁ A₂; A₃ A₄" data-r="1" data-c="1"></span> + <span class="M" data-m="B₁ B₂; B₃ B₄" data-r="1" data-c="1"></span> = <span class="M" data-m="A₁+B₁ A₂+B₂; A₃+B₃ A₄+B₄" data-r="1" data-c="1"></span></div>
+Scalar multiple: λA = [λAᵢ], applied to every block.</div>
+<p>As the book says, partitioning gives no real saving for addition. It is shown so that you can see the rule "treat blocks like numbers".</p>
+<div class="box warnb"><b class="t">Transpose: two things happen (Exercise 4)</b>
+The <b>block pattern is transposed</b>, and <b>each block is transposed</b> too:
+<div class="eq"><span class="M" data-m="A B C; D E F" data-r="1" data-c="1,2"></span><sup>T</sup> = <span class="M" data-m="Aᵀ Dᵀ; Bᵀ Eᵀ; Cᵀ Fᵀ" data-r="1,2" data-c="1"></span>,&nbsp;&nbsp;
+<span class="M" data-m="A B C; D E F" data-r="1" data-c="1,2"></span><sup>†</sup> = <span class="M" data-m="A† D†; B† E†; C† F†" data-r="1,2" data-c="1"></span></div>
+Complex conjugation keeps the pattern: [Aᵢ]* = [Aᵢ*]. A common mistake is to swap the blocks but forget to transpose each one.</div>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+<h2>3. Block multiplication (Eqs. 5–8)</h2>
+<div class="box thm"><b class="t">Rule</b>
+A is m×n and B is n×p. If the <b>column cuts of A are at the same places as the row cuts of B</b> (the partitions are <i>conformable</i>), then
+<div class="eq"><span class="M" data-m="A₁ A₂; A₃ A₄" data-r="1" data-c="1"></span><span class="M" data-m="B₁ B₂; B₃ B₄" data-r="1" data-c="1"></span> = <span class="M" data-m="A₁B₁+A₂B₃ A₁B₂+A₂B₄; A₃B₁+A₄B₃ A₃B₂+A₄B₄" data-r="1" data-c="1"></span></div>
+It is the ordinary 2×2 product formula with the order kept: A₁B₁, never B₁A₁.</div>
+<p><b>Why it works:</b> element (i, j) of AB is ∑ₖ aᵢₖbₖⱼ. Split the sum over k into k ≤ l and k &gt; l. The first part is an element of A₁B₁ (or A₃B₁, …) and the second part is an element of A₂B₃ (or A₄B₃, …). Nothing else is going on.</p>
+<p><b>Which cuts are free?</b> The row cuts of A (giving k, m−k) and the column cuts of B (giving t, p−t) can be anywhere. They just become the row and column cuts of AB. Only the "inner" cut, A's columns against B's rows, must match.</p>
+
+<h3>All the case variations from the book</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Case</th><th>Cut</th><th>Result</th></tr>
+<tr><td>(Eq. 5) 2×2 by 2×2</td><td>A rows k | m−k, A cols = B rows l | n−l, B cols t | p−t</td><td>4 blocks, each a sum of 2 products</td></tr>
+<tr><td>(a) Eq. 6: column of blocks × row of blocks</td><td>A cut only by rows (r, s, t), B only by columns (q, l, i)</td><td>3×3 grid, block (i, j) = AᵢBⱼ. No sums. Like an "outer product".</td></tr>
+<tr><td>(b) Eq. 7</td><td>A rows in 3 parts, B cols in 2 parts</td><td>3×2 grid of AᵢBⱼ</td></tr>
+<tr><td>(c) Eq. 8: row of blocks × column of blocks</td><td>A cut only by columns (r, s, t), B only by rows (the same r, s, t)</td><td>AB = A₁B₁ + A₂B₂ + A₃B₃, a single m×p block. Like an "inner product".</td></tr>
+</table></div>
+<div class="box fact"><b class="t">Two famous special cases</b>
+<ul>
+<li><b>Column view:</b> AB = A[b₁ b₂ … b_p] = [Ab₁ Ab₂ … Ab_p]. Each column of AB is A times a column of B.</li>
+<li><b>Outer-product view:</b> AB = ∑ₖ (column k of A)(row k of B). A sum of n rank-one matrices. This is case (c) with every cut used.</li>
+</ul></div>
+
+<div class="lab"><h4>🔬 Lab 1: block multiplication you can see</h4>
+<div class="ctrl">
+<label>m <input type="number" id="bmM" min="2" max="7" value="4"></label>
+<label>n <input type="number" id="bmN" min="2" max="7" value="5"></label>
+<label>p <input type="number" id="bmP" min="2" max="7" value="4"></label>
+<label>A row cut k <input type="number" id="bmK" min="1" max="6" value="2"></label>
+<label>A column cut l <input type="number" id="bmL" min="1" max="6" value="3"></label>
+<label>B row cut <input type="number" id="bmL2" min="1" max="6" value="3"></label>
+<label>B column cut t <input type="number" id="bmT" min="1" max="6" value="1"></label>
+<button id="bmNew" class="alt">New numbers</button>
+</div>
+<div id="bmBox"></div>
+<div class="readout out" id="bmOut"></div>
+<p class="small">Click any cell of AB. The block it belongs to lights up, along with the blocks of A and B that make it: the block-row of A and the block-column of B. Try making "B row cut" different from "A column cut". The partitions stop being conformable and the block formula no longer makes sense, because the blocks A₁ and B₁ cannot be multiplied.</p></div>
+</section>
+
+<!-- 4 -->
+<section id="s4">
+<h2>4. Useful block shapes</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Shape</th><th>Product</th><th>Inverse</th><th>Determinant</th></tr>
+<tr><td>Block diagonal <span class="M" data-m="A 0; 0 D" data-r="1" data-c="1"></span><br><span class="small">(A, D square, any sizes)</span></td><td>Multiply the diagonal blocks separately: <span class="M" data-m="A 0; 0 D" data-r="1" data-c="1"></span><span class="M" data-m="A′ 0; 0 D′" data-r="1" data-c="1"></span> = <span class="M" data-m="AA′ 0; 0 DD′" data-r="1" data-c="1"></span></td><td><span class="M" data-m="A⁻¹ 0; 0 D⁻¹" data-r="1" data-c="1"></span></td><td>det A · det D</td></tr>
+<tr><td>Block upper triangular <span class="M" data-m="A B; 0 D" data-r="1" data-c="1"></span></td><td>stays block upper triangular</td><td><span class="M" data-m="A⁻¹ −A⁻¹BD⁻¹; 0 D⁻¹" data-r="1" data-c="1"></span></td><td>det A · det D</td></tr>
+<tr><td>Block lower triangular <span class="M" data-m="A 0; C D" data-r="1" data-c="1"></span></td><td>stays block lower triangular</td><td><span class="M" data-m="A⁻¹ 0; −D⁻¹CA⁻¹ D⁻¹" data-r="1" data-c="1"></span></td><td>det A · det D</td></tr>
+<tr><td>Powers of block diagonal</td><td colspan="3">diag(A, D)ⁿ = diag(Aⁿ, Dⁿ), and more generally f(diag(A, D)) = diag(f(A), f(D)) for e^M, polynomials, and so on.</td></tr>
+<tr><td>Block anti-diagonal <span class="M" data-m="0 B; C 0" data-r="1" data-c="1"></span></td><td>square = diag(BC, CB)</td><td><span class="M" data-m="0 C⁻¹; B⁻¹ 0" data-r="1" data-c="1"></span> (B, C square)</td><td>(−1)^{n²}·det B·det C for n×n blocks, i.e. (−1)ⁿ det B det C</td></tr>
+</table></div>
+<p class="small">Check the block-triangular inverse: <span class="M" data-m="A B; 0 D" data-r="1" data-c="1"></span><span class="M" data-m="A⁻¹ −A⁻¹BD⁻¹; 0 D⁻¹" data-r="1" data-c="1"></span> = <span class="M" data-m="I −BD⁻¹+BD⁻¹; 0 I" data-r="1" data-c="1"></span> = I ✓.</p>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+<h2>5. Inverse by partitioning: Book Example 1 (Eqs. 9–14)</h2>
+<p>Let M = <span class="M" data-m="A B; C D" data-r="1" data-c="1"></span> with A: m×m, B: m×n, C: n×m, D: n×n. M is square of order m + n. B and C are rectangular, so <b>B⁻¹ and C⁻¹ do not exist</b>. The answer may use only A⁻¹, D⁻¹ and inverses of square combinations.</p>
+<h3>Derivation, step by step</h3>
+<p>Guess the inverse in the same block shape, Z = <span class="M" data-m="P Q; R S" data-r="1" data-c="1"></span>. Then MZ = I gives:</p>
+<div class="eq"><span class="M" data-m="AP+BR AQ+BS; CP+DR CQ+DS" data-r="1" data-c="1"></span> = <span class="M" data-m="I 0; 0 I" data-r="1" data-c="1"></span></div>
+<div class="eq">(i) AP + BR = I &nbsp; (ii) CP + DR = 0 &nbsp; (iii) AQ + BS = 0 &nbsp; (iv) CQ + DS = I</div>
+<ol>
+<li>From (ii): R = −D⁻¹CP.</li>
+<li>Put it in (i): AP − BD⁻¹CP = I ⇒ (A − BD⁻¹C)P = I ⇒ <b>P = (A − BD⁻¹C)⁻¹</b>.</li>
+<li>So <b>R = −D⁻¹C(A − BD⁻¹C)⁻¹</b>.</li>
+<li>From (iii): Q = −A⁻¹BS. Put it in (iv): (D − CA⁻¹B)S = I ⇒ <b>S = (D − CA⁻¹B)⁻¹</b>, and <b>Q = −A⁻¹B(D − CA⁻¹B)⁻¹</b>.</li>
+</ol>
+<div class="box thm"><b class="t">Result (Eq. 9)</b>
+<div class="eq"><span class="M" data-m="A|B; C|D" data-r="1" data-c="1"></span><sup>−1</sup> = <span class="M" data-m="(A − BD⁻¹C)⁻¹|−A⁻¹B(D − CA⁻¹B)⁻¹; −D⁻¹C(A − BD⁻¹C)⁻¹|(D − CA⁻¹B)⁻¹" data-r="1" data-c="1"></span></div>
+The inverse of a large matrix comes from inverses of smaller ones.</div>
+<div class="box def"><b class="t">Schur complements (modern name)</b>
+<span class="m">M/A = D − CA⁻¹B</span> is the Schur complement of A, and <span class="m">M/D = A − BD⁻¹C</span> is the Schur complement of D. The diagonal blocks of M⁻¹ are just their inverses. Memory aid: "the other diagonal block, minus (off-diagonal)(inverse)(off-diagonal)", with the three factors in the order that makes the sizes fit.</div>
+<h3>Special cases and checks</h3>
+<ul>
+<li><b>1×1 blocks (numbers a, b, c, d):</b> P = 1/(a − bc/d) = d/(ad − bc), Q = −(b/a)·a/(ad − bc) = −b/(ad − bc), and so on. This is exactly the familiar 2×2 inverse. ✓</li>
+<li><b>B = 0 or C = 0</b> gives the block-triangular inverses of Section 4. <b>B = C = 0</b> gives diag(A⁻¹, D⁻¹).</li>
+<li>Version needing only A⁻¹ (use when D is singular): S = (M/A)⁻¹, Q = −A⁻¹BS, R = −SCA⁻¹, P = A⁻¹ + A⁻¹BSCA⁻¹.</li>
+<li>Comparing the two forms of P gives the <b>Woodbury identity</b>: (A − BD⁻¹C)⁻¹ = A⁻¹ + A⁻¹B(D − CA⁻¹B)⁻¹CA⁻¹.</li>
+</ul>
+<div class="box warnb"><b class="t">Careful</b>
+The formula needs the Schur complements (and A, D) to be invertible. M can be invertible even when A or D is singular. Example: M = <span class="M" data-m="0 1; 1 0" data-r="1" data-c="1"></span> has A = D = 0. Then you must use the other version, or reorder the blocks.</div>
+
+<div class="lab"><h4>🔬 Lab 2: block inverse vs direct inverse (exact fractions)</h4>
+<div class="ctrl"><label>Order <select id="biN"><option>3</option><option selected>4</option><option>5</option></select></label>
+<label>Split m = <select id="biS"></select></label>
+<button id="biNew">New random matrix</button><button class="alt" id="biEx1">Use Exercise 6.1 matrix (5×5)</button></div>
+<div class="out" id="biOut"></div>
+<p class="small">The lab picks a random integer matrix, cuts it after row/column m, and computes P, Q, R, S from Eq. 9 using only small inverses. It then puts the blocks together and compares with the inverse found directly by Gauss–Jordan. Change the split: the blocks change, but the final inverse is always the same.</p></div>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+<h2>6. Determinant of a block matrix (a useful extra)</h2>
+<p>Factorise M (block LDU, "block Gaussian elimination"):</p>
+<div class="eq"><span class="M" data-m="A B; C D" data-r="1" data-c="1"></span> = <span class="M" data-m="I 0; CA⁻¹ I" data-r="1" data-c="1"></span><span class="M" data-m="A 0; 0 D−CA⁻¹B" data-r="1" data-c="1"></span><span class="M" data-m="I A⁻¹B; 0 I" data-r="1" data-c="1"></span></div>
+<div class="box thm"><b class="t">Schur determinant formula</b>
+<div class="eq">det M = det A · det(D − CA⁻¹B) = det D · det(A − BD⁻¹C)</div>
+If CD = DC (C, D same size, A, B too): det M = det(AD − BC). Compare with ad − bc, but note the order AD − BC.</div>
+<p class="small">Use: 4×4 determinants become two 2×2 determinants. It also shows M is invertible ⇔ the Schur complement is invertible (when A is).</p>
+<div class="prob"><div class="q">Example: det of <span class="M" data-m="2 0 1 0; 0 2 0 1; 1 0 1 0; 0 1 0 1" data-r="2" data-c="2"></span></div>
+<p>A = 2I, B = I, C = I, D = I (all 2×2). D − CA⁻¹B = I − ½I = ½I. det M = det(2I)·det(½I) = 4 · ¼ = <b>1</b>.<br>
+Or, since C and D commute: det(AD − BC) = det(2I − I) = det I = 1 ✓.</p></div>
+</section>
+
+<!-- 7 -->
+<section id="s7">
+<h2>7. Submatrices and rank (Eq. 15, Example 2)</h2>
+<div class="box def"><b class="t">Submatrix</b>
+Any matrix obtained from A by <b>deleting some rows and/or some columns</b>. Every block of a partition is a submatrix, but submatrices don't need to be made of adjacent rows or columns.</div>
+<p>For A = <span class="M" data-m="3 5 9 1; 2 0 −1 3; −3 −6 1 2"></span> (Eq. 15), some submatrices are <span class="M" data-m="3 5 9; 2 0 −1; −3 −6 1"></span>, <span class="M" data-m="3 9; 2 −1"></span> (rows 1–2, columns 1 and 3), [3 5 1], [9], …</p>
+<p class="small">How many square k×k submatrices does an m×n matrix have? C(m,k)·C(n,k). For a 4×4 matrix: 16 of order 3, 36 of order 2, 16 of order 1.</p>
+<div class="box def"><b class="t">Rank (book's definition)</b>
+A has <b>rank r</b> if it has at least one nonsingular r×r submatrix, but every square submatrix of order greater than r is singular.<br>
+In words: <b>rank = the size of the largest nonzero minor.</b></div>
+<h3>Facts about rank</h3>
+<ol>
+<li>0 ≤ rank A ≤ min(m, n). Only the zero matrix has rank 0.</li>
+<li><b>rank Aᵀ = rank A</b>, because det of a square submatrix is unchanged by transposition. Same for A* and A†.</li>
+<li>Square n×n: <b>nonsingular ⇔ rank = n</b> (full rank). Singular ⇔ rank &lt; n.</li>
+<li>Rank = the maximum number of <b>linearly independent rows</b> = the same for columns (this is proved later in the book, Example 8.7). This gives a much faster method: row-reduce and count the nonzero rows.</li>
+<li>Elementary row and column operations don't change the rank.</li>
+<li>rank(AB) ≤ min(rank A, rank B). Multiplying by a nonsingular matrix doesn't change the rank.</li>
+<li>Rank 1 ⇔ A = (column)(row) = uvᵀ, with u, v nonzero. Every row is a multiple of one row.</li>
+</ol>
+<h3>Book Example 2</h3>
+<div class="prob"><div class="q">Find the rank of <span class="M" data-m="1 0 2 −4; 3 −1 1 2; 5 −1 5 −6; 4 −1 3 −2"></span>.</div>
+<p><b>Book's method:</b> det = 0, so rank &lt; 4. All 16 minors of order 3 are zero, so rank &lt; 3. There is a nonzero minor of order 2, e.g. <span class="M" data-m="1 0; 3 −1"></span> = −1. So <b>rank = 2</b>. (It is long: one 4×4 and sixteen 3×3 determinants.)</p>
+<p><b>Faster (row view):</b> notice R₄ = R₁ + R₂ and R₃ = 2R₁ + R₂. Only R₁ and R₂ are independent, and they are clearly not multiples of each other ⇒ rank 2.</p>
+<p><b>Row reduction:</b> R₂ − 3R₁ = (0, −1, −5, 14), R₃ − 5R₁ = (0, −1, −5, 14), R₄ − 4R₁ = (0, −1, −5, 14). The last three rows are equal, so two of them become 0. Two nonzero rows remain ⇒ rank 2.</p></div>
+
+<div class="lab"><h4>🔬 Lab 3: rank explorer (minors method and row-reduction method)</h4>
+<textarea id="rkIn">1 0 2 -4
+3 -1 1 2
+5 -1 5 -6
+4 -1 3 -2</textarea>
+<div class="ctrl"><button id="rkGo">Find rank</button>
+<button class="alt" data-rk="3 5 9 1&#10;2 0 -1 3&#10;-3 -6 1 2">Eq. (15)</button>
+<button class="alt" data-rk="6 4 2&#10;1 -1 3&#10;8 -8 0&#10;3 -3 2">Ex. 6.6(b)</button>
+<button class="alt" data-rk="3 1 -3 1&#10;5 3 2 -1&#10;9 4 0 1&#10;-1 0 4 -1">Ex. 6.6(c)</button>
+<button class="alt" data-rk="1 2 3&#10;2 4 6&#10;3 6 9">Rank 1</button></div>
+<div class="out" id="rkOut"></div>
+<p class="small">For each order k the lab counts how many k×k minors are nonzero and shows one of them as a witness. Rank is the largest k with a nonzero minor. The row-reduced form beside it gives the same number.</p></div>
+</section>
+
+<!-- 8 -->
+<section id="s8">
+<h2>8. Feel the rank: a 3D picture</h2>
+<p>Think of the three rows of a 3×3 matrix as three arrows in space. They span a box (a parallelepiped). Its volume is |det|.</p>
+<ul>
+<li><b>Rank 3:</b> the box has real volume. The rows point in three independent directions.</li>
+<li><b>Rank 2:</b> the box is flat, because all three arrows lie in one plane. det = 0, but some 2×2 minor is nonzero.</li>
+<li><b>Rank 1:</b> all arrows lie on one line. All 2×2 minors are zero too.</li>
+</ul>
+<div class="lab"><h4>🔬 Lab 4 (3D): squash the box. Drag to rotate.</h4>
+<div class="ctrl">
+<label>flatten r₃ into plane of r₁, r₂: <input type="range" id="r3t" min="0" max="1" step="0.01" value="0"><span id="r3tv"></span></label>
+<label>then collapse r₂ onto r₁: <input type="range" id="r2t" min="0" max="1" step="0.01" value="0"><span id="r2tv"></span></label>
+<button class="alt" id="r3reset">Reset</button>
+</div>
+<div class="grid2"><canvas id="r3can" width="460" height="400"></canvas><div class="readout" id="r3out"></div></div>
+<p class="small">The first slider moves r₃ towards r₁ + r₂. At 1 the box becomes a flat sheet: det = 0, rank 2. The second slider then pushes r₂ onto the line of r₁. The sheet collapses to a stick: rank 1, and every 2×2 minor is 0 too. On the right, watch the number of nonzero minors of each order fall.</p></div>
+</section>
+
+<!-- 9 -->
+<section id="s9">
+<h2>9. Where block matrices appear in physics</h2>
+<ul>
+<li><b>Dirac matrices</b> are written in 2×2 blocks of Pauli matrices: β = <span class="M" data-m="I 0; 0 −I" data-r="1" data-c="1"></span>, αᵢ = <span class="M" data-m="0 σᵢ; σᵢ 0" data-r="1" data-c="1"></span>. Products like αᵢαⱼ are computed block-wise using σᵢσⱼ.</li>
+<li><b>Symmetry ⇒ block diagonal.</b> If a Hamiltonian commutes with a symmetry, then in a symmetry-adapted basis it is block diagonal. Each block can be diagonalised separately (group theory, molecular orbitals).</li>
+<li><b>Coupled systems:</b> two subsystems with coupling B: H = <span class="M" data-m="H₁ B; B† H₂" data-r="1" data-c="1"></span>. The Schur complement H₁ + B(E − H₂)⁻¹B† is the "effective Hamiltonian" (Löwdin partitioning, self-energy).</li>
+<li><b>Hamilton's equations</b> use the block matrix J = <span class="M" data-m="0 I; −I 0" data-r="1" data-c="1"></span> (symplectic form). The Lorentz group, and ABCD transfer matrices in optics, are other block examples.</li>
+<li><b>Numerical computing:</b> fast matrix multiplication on computers works in blocks (tiles) that fit in the cache. Strassen's algorithm is a clever 2×2 block trick: 7 block products instead of 8.</li>
+</ul>
+</section>
+
+<!-- 10 -->
+<section id="s10">
+<h2>10. Summary sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Operation</th><th>Condition on cuts</th><th>Rule</th></tr>
+<tr><td>A + B</td><td>identical partition</td><td>add matching blocks</td></tr>
+<tr><td>AB</td><td>A's column cuts = B's row cuts</td><td>2×2 formula, order kept</td></tr>
+<tr><td>Aᵀ / A†</td><td>none</td><td>transpose the pattern and each block (dagger: also conjugate)</td></tr>
+<tr><td>M⁻¹</td><td>diagonal blocks square, Schur complements invertible</td><td>Eq. 9</td></tr>
+<tr><td>det M</td><td>A (or D) invertible</td><td>det A · det(D − CA⁻¹B)</td></tr>
+<tr><td>rank</td><td>—</td><td>largest nonzero minor = number of independent rows</td></tr>
+</table></div>
+</section>
+
+<!-- 11 -->
+<section id="s11">
+<h2>11. Book's Exercise 6: all problems solved</h2>
+
+<div class="prob"><div class="q">1. Using Eq. (9), find the inverse of the 5×5 matrix <span class="M" data-m="1 0 1 0 1; 0 1 0 1 0; 1 0 0 0 1; 0 1 0 0 1; 1 0 1 1 1" data-r="3" data-c="3"></span>.</div>
+<details><summary>Show solution</summary>
+<p>Blocks: A = <span class="M" data-m="1 0 1; 0 1 0; 1 0 0"></span> (3×3), B = <span class="M" data-m="0 1; 1 0; 0 1"></span>, C = <span class="M" data-m="0 1 0; 1 0 1"></span>, D = <span class="M" data-m="0 1; 1 1"></span>.</p>
+<p><b>Small inverses.</b> det A = −1, so A⁻¹ = <span class="M" data-m="0 0 1; 0 1 0; 1 0 −1"></span>. det D = −1, so D⁻¹ = <span class="M" data-m="−1 1; 1 0"></span>.</p>
+<p><b>S.</b> A⁻¹B = <span class="M" data-m="0 1; 1 0; 0 0"></span>, CA⁻¹B = <span class="M" data-m="1 0; 0 1"></span>, so D − CA⁻¹B = <span class="M" data-m="−1 1; 1 0"></span> and S = (D − CA⁻¹B)⁻¹ = <span class="M" data-m="0 1; 1 1"></span>.</p>
+<p><b>P.</b> D⁻¹C = <span class="M" data-m="1 −1 1; 0 1 0"></span>, BD⁻¹C = <span class="M" data-m="0 1 0; 1 −1 1; 0 1 0"></span>, so A − BD⁻¹C = <span class="M" data-m="1 −1 1; −1 2 −1; 1 −1 0"></span>. Its det is 1(0 − 1) + 1(0 + 1) + 1(1 − 2) = −1, and P = <span class="M" data-m="1 1 1; 1 1 0; 1 0 −1"></span>.</p>
+<p><b>Q</b> = −A⁻¹BS = −<span class="M" data-m="0 1; 1 0; 0 0"></span><span class="M" data-m="0 1; 1 1"></span> = <span class="M" data-m="−1 −1; 0 −1; 0 0"></span>.<br>
+<b>R</b> = −D⁻¹CP = −<span class="M" data-m="1 −1 1; 0 1 0"></span><span class="M" data-m="1 1 1; 1 1 0; 1 0 −1"></span> = <span class="M" data-m="−1 0 0; −1 −1 0"></span>.</p>
+<div class="eq">M⁻¹ = <span class="M" data-m="1 1 1 −1 −1; 1 1 0 0 −1; 1 0 −1 0 0; −1 0 0 0 1; −1 −1 0 1 1" data-r="3" data-c="3"></span></div>
+<p class="small">Check: row 1 of M · column 1 of M⁻¹ = 1 + 1 − 1 = 1 ✓; row 4 · column 4 = 0 + 0 + 0 + 0 + 1·1 = 1 ✓; row 5 · column 1 = 1 + 1 − 1 − 1 = 0 ✓. det M = 1. Lab 2 above confirms the result.</p></details></div>
+
+<div class="prob"><div class="q">2. If A, B, C, D are nonsingular n×n matrices (and M is nonsingular), show <span class="M" data-m="A B; C D" data-r="1" data-c="1"></span><sup>−1</sup> = <span class="M" data-m="(A − BD⁻¹C)⁻¹|(C − DB⁻¹A)⁻¹; (B − AC⁻¹D)⁻¹|(D − CA⁻¹B)⁻¹" data-r="1" data-c="1"></span>.</div>
+<details><summary>Show solution</summary>
+<p>The diagonal blocks are the same as in Eq. (9). Now B and C are square and invertible, so the off-diagonal blocks can be rewritten.</p>
+<p><b>Top right:</b> Q = −A⁻¹B(D − CA⁻¹B)⁻¹. Its inverse is<br>
+Q⁻¹ = −(D − CA⁻¹B)B⁻¹A = −DB⁻¹A + CA⁻¹BB⁻¹A = −DB⁻¹A + C = C − DB⁻¹A.<br>
+So Q = (C − DB⁻¹A)⁻¹ ✓.</p>
+<p><b>Bottom left:</b> R = −D⁻¹C(A − BD⁻¹C)⁻¹. Its inverse is<br>
+R⁻¹ = −(A − BD⁻¹C)C⁻¹D = −AC⁻¹D + BD⁻¹CC⁻¹D = B − AC⁻¹D.<br>
+So R = (B − AC⁻¹D)⁻¹ ✓. ∎</p>
+<p class="small">Memory pattern: each block of M⁻¹ is the inverse of "(the block in the transposed position) − (product through the other blocks)". Check with numbers (1×1): the top-right should be −b/(ad − bc), and 1/(c − da/b) = b/(bc − ad) ✓.</p></details></div>
+
+<div class="prob"><div class="q">3. If U and V are commuting unitary n×n matrices, show W = (1/√2)<span class="M" data-m="U −V; V† U†" data-r="1" data-c="1"></span> is unitary.</div>
+<details><summary>Show solution</summary>
+<p>W† = (1/√2)<span class="M" data-m="U† V; −V† U" data-r="1" data-c="1"></span> (transpose the pattern, dagger each block).</p>
+<p>WW† = ½<span class="M" data-m="UU†+VV† UV−VU; V†U†−U†V† V†V+U†U" data-r="1" data-c="1"></span>.</p>
+<ul><li>Diagonal: UU† + VV† = I + I = 2I, and V†V + U†U = 2I.</li>
+<li>Top right: UV − VU = 0, because they commute.</li>
+<li>Bottom left: V†U† − U†V† = (UV)† − (VU)† = 0.</li></ul>
+<p>So WW† = ½·2I = I, and W is unitary (for a finite square matrix, WW† = I is enough). ∎</p>
+<p class="small">With n = 1, U = e^{ia}, V = e^{ib} gives a 2×2 unitary matrix. The commuting condition is essential: without it the off-diagonal blocks don't vanish.</p></details></div>
+
+<div class="prob"><div class="q">4. For <span class="M" data-m="A B C; D E F" data-r="1" data-c="1,2"></span> write the complex conjugate, the transpose and the hermitian conjugate.</div>
+<details><summary>Show solution</summary>
+<div class="eq">Conjugate: <span class="M" data-m="A* B* C*; D* E* F*" data-r="1" data-c="1,2"></span></div>
+<div class="eq">Transpose: <span class="M" data-m="Aᵀ Dᵀ; Bᵀ Eᵀ; Cᵀ Fᵀ" data-r="1,2" data-c="1"></span> &nbsp;&nbsp; Hermitian conjugate: <span class="M" data-m="A† D†; B† E†; C† F†" data-r="1,2" data-c="1"></span></div>
+<p class="small">Reason: element (i, j) of the transpose is element (j, i) of the original. That moves block (I, J) to position (J, I), and inside the block it swaps rows and columns, so the block is transposed.</p></details></div>
+
+<div class="prob"><div class="q">5. M = <span class="M" data-m="A 0; X B" data-r="1" data-c="1"></span> with A: m×m, B: n×n, X: n×m. If M is unitary, show X = 0 and A, B are unitary.</div>
+<details><summary>Show solution</summary>
+<p>M† = <span class="M" data-m="A† X†; 0 B†" data-r="1" data-c="1"></span>.</p>
+<p><b>MM† = I:</b> <span class="M" data-m="AA† AX†; XA† XX†+BB†" data-r="1" data-c="1"></span> = <span class="M" data-m="I 0; 0 I" data-r="1" data-c="1"></span>. The top-left block gives AA† = I. A is square and finite, so A is unitary and A†A = I too.</p>
+<p><b>M†M = I:</b> <span class="M" data-m="A†A+X†X X†B; B†X B†B" data-r="1" data-c="1"></span> = I. The top-left block gives A†A + X†X = I, and with A†A = I this means <b>X†X = 0</b>.</p>
+<p>Take the trace: tr(X†X) = ∑ᵢⱼ |xᵢⱼ|² = 0, so every xᵢⱼ = 0, i.e. <b>X = 0</b>. Then the bottom-right of MM† gives BB† = I, so <b>B is unitary</b>. ∎</p>
+<p class="small">Generalisation: a block-triangular unitary matrix must be block diagonal. This is the block version of Exercise 5.16 (a triangular unitary matrix is diagonal).</p></details></div>
+
+<div class="prob"><div class="q">6. Find the rank of (a) <span class="M" data-m="1 0 2; 2 0 4; 3 6 −1"></span> (b) <span class="M" data-m="6 4 2; 1 −1 3; 8 −8 0; 3 −3 2"></span> (c) <span class="M" data-m="3 1 −3 1; 5 3 2 −1; 9 4 0 1; −1 0 4 −1"></span></div>
+<details><summary>Show solution</summary>
+<p><b>(a)</b> R₂ = 2R₁, so det = 0 and rank &lt; 3. The minor from rows 1, 3 and columns 1, 2 is <span class="M" data-m="1 0; 3 6"></span> = 6 ≠ 0 ⇒ <b>rank 2</b>.</p>
+<p><b>(b)</b> This is 4×3, so rank ≤ 3. The minor from rows 1, 2, 3 is <span class="M" data-m="6 4 2; 1 −1 3; 8 −8 0"></span> = 6(0 + 24) − 4(0 − 24) + 2(−8 + 8) = 144 + 96 = 240 ≠ 0 ⇒ <b>rank 3</b>.</p>
+<p><b>(c)</b> R₃ = 4R₁ + 3R₄: 4(3, 1, −3, 1) + 3(−1, 0, 4, −1) = (9, 4, 0, 1) ✓. So det = 0 and rank &lt; 4. The minor from rows 1–3 and columns 1–3 is <span class="M" data-m="3 1 −3; 5 3 2; 9 4 0"></span> = 3(0 − 8) − 1(0 − 18) − 3(20 − 27) = −24 + 18 + 21 = 15 ≠ 0 ⇒ <b>rank 3</b>.</p>
+<p class="small">Tip: always look for an obvious row relation first. It saves computing a 4×4 determinant.</p></details></div>
+</section>
+
+<!-- 12 -->
+<section id="s12">
+<h2>12. Practice set (CSIR-NET / GATE style)</h2>
+
+<div class="prob"><div class="q">P1. Compute M² for M = <span class="M" data-m="I B; 0 I" data-r="1" data-c="1"></span> (blocks n×n), and Mᵏ.<span class="tag">basic</span></div>
+<details><summary>Show solution</summary><p>M² = <span class="M" data-m="I 2B; 0 I" data-r="1" data-c="1"></span>, Mᵏ = <span class="M" data-m="I kB; 0 I" data-r="1" data-c="1"></span>, M⁻¹ = <span class="M" data-m="I −B; 0 I" data-r="1" data-c="1"></span>. It behaves like the 2×2 shear [[1, b],[0, 1]].</p></details></div>
+
+<div class="prob"><div class="q">P2. J = <span class="M" data-m="0 I; −I 0" data-r="1" data-c="1"></span> (I is n×n). Find J², J⁻¹ and det J.</div>
+<details><summary>Show solution</summary><p>J² = <span class="M" data-m="−I 0; 0 −I" data-r="1" data-c="1"></span> = −I, so J⁻¹ = −J = Jᵀ. J is orthogonal. det J = 1 for every n (J is a rotation by 90° in each of n planes). Use the anti-diagonal rule: (−1)ⁿ·det(I)·det(−I) = (−1)ⁿ(−1)ⁿ = 1.</p></details></div>
+
+<div class="prob"><div class="q">P3. Find the eigenvalues of <span class="M" data-m="2 1 0 0; 1 2 0 0; 0 0 3 4; 0 0 4 −3" data-r="2" data-c="2"></span>.<span class="tag">block diagonal</span></div>
+<details><summary>Show solution</summary><p>The matrix is block diagonal, so the eigenvalues are those of each block. [[2,1],[1,2]] gives 1 and 3. [[3,4],[4,−3]] gives λ² = 25, so ±5. Answer: 1, 3, 5, −5. det = 3·(−25) = −75.</p></details></div>
+
+<div class="prob"><div class="q">P4. Find det of <span class="M" data-m="1 2 5 6; 3 4 7 8; 0 0 2 1; 0 0 1 2" data-r="2" data-c="2"></span>.</div>
+<details><summary>Show solution</summary><p>Block upper triangular: det = det[[1,2],[3,4]] · det[[2,1],[1,2]] = (−2)(3) = −6. The block B = [[5,6],[7,8]] does not matter.</p></details></div>
+
+<div class="prob"><div class="q">P5. Using partitioning, invert <span class="M" data-m="1 0 0; 0 2 1; 0 1 1" data-r="1" data-c="1"></span>.</div>
+<details><summary>Show solution</summary><p>Block diagonal: diag([1], [[2,1],[1,1]]). Inverse = diag([1], [[1,−1],[−1,2]]) = <span class="M" data-m="1 0 0; 0 1 −1; 0 −1 2"></span>.</p></details></div>
+
+<div class="prob"><div class="q">P6. Show that (Dirac) αᵢ = <span class="M" data-m="0 σᵢ; σᵢ 0" data-r="1" data-c="1"></span> and β = <span class="M" data-m="I 0; 0 −I" data-r="1" data-c="1"></span> anticommute: αᵢβ + βαᵢ = 0.<span class="tag">physics</span></div>
+<details><summary>Show solution</summary><p>αᵢβ = <span class="M" data-m="0 −σᵢ; σᵢ 0" data-r="1" data-c="1"></span> and βαᵢ = <span class="M" data-m="0 σᵢ; −σᵢ 0" data-r="1" data-c="1"></span>. The sum is 0 ✓. Also αᵢ² = <span class="M" data-m="σᵢ² 0; 0 σᵢ²" data-r="1" data-c="1"></span> = I, since σᵢ² = I.</p></details></div>
+
+<div class="prob"><div class="q">P7. The rank of the n×n matrix with all entries equal to 1 is? The rank of uvᵀ for nonzero u, v?</div>
+<details><summary>Show solution</summary><p>Both are 1: every row is the same (or a multiple of vᵀ). All 2×2 minors vanish.</p></details></div>
+
+<div class="prob"><div class="q">P8. Find the values of λ for which <span class="M" data-m="1 1 1; 1 λ 1; 1 1 λ²"></span> has rank 1, 2 or 3.</div>
+<details><summary>Show solution</summary><p>det = 1(λ³ − 1) − 1(λ² − 1) + 1(1 − λ) = (λ − 1)[λ² + λ + 1 − λ − 1 − 1] = (λ − 1)(λ² − 1) = (λ − 1)²(λ + 1).<br>
+λ = 1: all rows are (1, 1, 1) ⇒ rank 1. λ = −1: det = 0 but [[1,1],[1,−1]] = −2 ≠ 0 ⇒ rank 2. Otherwise rank 3.</p></details></div>
+
+<div class="prob"><div class="q">P9. A is m×n and B is n×p. Are partitions "A columns cut 2 | 3" and "B rows cut 3 | 2" conformable?</div>
+<details><summary>Show solution</summary><p>No. The column cut of A must match the row cut of B exactly. A₁ would be ?×2 and B₁ 3×?, so A₁B₁ is undefined. (The ordinary product AB is still fine, of course.)</p></details></div>
+
+<div class="prob"><div class="q">P10. With A invertible, prove det <span class="M" data-m="A B; C D" data-r="1" data-c="1"></span> = det A · det(D − CA⁻¹B).<span class="tag">proof</span></div>
+<details><summary>Show solution</summary><p><span class="M" data-m="I 0; −CA⁻¹ I" data-r="1" data-c="1"></span><span class="M" data-m="A B; C D" data-r="1" data-c="1"></span> = <span class="M" data-m="A B; 0 D−CA⁻¹B" data-r="1" data-c="1"></span>. The first factor is block triangular with det 1. The result is block triangular, so its det = det A · det(D − CA⁻¹B). ∎</p></details></div>
+
+<div class="prob"><div class="q">P11. Evaluate det <span class="M" data-m="a 0 0 b; 0 a b 0; 0 b a 0; b 0 0 a"></span>.</div>
+<details><summary>Show solution</summary><p>Reorder rows and columns to (1, 4, 2, 3). That is the same permutation on both, so det is unchanged. The matrix becomes block diagonal diag([[a,b],[b,a]], [[a,b],[b,a]]). So det = (a² − b²)².</p></details></div>
+
+<div class="prob"><div class="q">P12. If M = <span class="M" data-m="A B; 0 D" data-r="1" data-c="1"></span> is real orthogonal, what can you say about B?</div>
+<details><summary>Show solution</summary><p>B = 0, and A, D are orthogonal. This is the same argument as Exercise 6.5, with the transpose in place of the dagger: MᵀM = I gives AᵀA = I, then MMᵀ gives AAᵀ + BBᵀ = I ⇒ BBᵀ = 0 ⇒ B = 0.</p></details></div>
+
+<div class="prob"><div class="q">P13. Show rank <span class="M" data-m="A 0; 0 D" data-r="1" data-c="1"></span> = rank A + rank D.</div>
+<details><summary>Show solution</summary><p>Independent rows of the block-diagonal matrix come from independent rows of A (padded with zeros) and of D. These live in different coordinates, so they stay independent of each other. The counts simply add. (Using minors: a product of a nonzero r₁-minor of A and a nonzero r₂-minor of D gives a nonzero (r₁+r₂)-minor.)</p></details></div>
+
+<div class="prob"><div class="q">P14. Using the Woodbury/Schur idea, find (I + uvᵀ)⁻¹ for column vectors u, v with vᵀu ≠ −1.<span class="tag">Sherman–Morrison</span></div>
+<details><summary>Show solution</summary><p>(I + uvᵀ)⁻¹ = I − uvᵀ/(1 + vᵀu). Check: (I + uvᵀ)(I − uvᵀ/(1+vᵀu)) = I + uvᵀ − [uvᵀ + u(vᵀu)vᵀ]/(1 + vᵀu) = I + uvᵀ − uvᵀ(1 + vᵀu)/(1 + vᵀu) = I ✓.</p></details></div>
+</section>
+
+<!-- 13 -->
+<section id="s13" class="quiz">
+<h2>13. Self-test quiz</h2>
+<div id="quizBox"></div>
+<button id="quizCheck">Check answers</button> <span id="quizScore" class="readout"></span>
+</section>
+
+<!-- 14 -->
+<section id="s14">
+<h2>14. Interesting facts</h2>
+<div class="box fact"><b class="t">Schur and the Schur complement</b> Issai Schur studied determinants of block matrices in 1917, but the name "Schur complement" was coined only in 1968 by Emilie Haynsworth. Today it appears in statistics (conditional covariance of Gaussians), circuit theory (Kron reduction), and finite-element methods.</div>
+<div class="box fact"><b class="t">Strassen's 7 multiplications</b> Multiplying 2×2 block matrices normally needs 8 block products. In 1969 Strassen found a way with only 7. Applied recursively, this multiplies n×n matrices in about n^2.81 operations instead of n³.</div>
+<div class="box fact"><b class="t">Conditional Gaussians</b> If a Gaussian vector has covariance [[Σ₁₁, Σ₁₂],[Σ₂₁, Σ₂₂]], the covariance of part 1 given part 2 is exactly the Schur complement Σ₁₁ − Σ₁₂Σ₂₂⁻¹Σ₂₁. This is block matrices in statistics.</div>
+<div class="box fact"><b class="t">Rank in data</b> A large data table that is "nearly rank k" can be stored as a product of a tall and a wide matrix. This is the idea behind image compression with the SVD and behind recommendation systems.</div>
+<div class="box fact"><b class="t">Block-diagonal = decoupled</b> Whenever a physics matrix becomes block diagonal, the system has split into independent subsystems that don't talk to each other. Finding that basis is what "using symmetry" really means.</div>
+</section>
+
+</div>
+
+<script>
+/* ---------- theme ---------- */
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+document.getElementById('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawR3();};})();
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+const $=id=>document.getElementById(id);
+
+/* ---------- matrix renderer with partition lines ---------- */
+function renderM(){document.querySelectorAll('.M[data-m]').forEach(el=>{const s=el.getAttribute('data-m');
+  const rows=s.split(';').map(r=>{r=r.trim();return r.includes('|')?r.split(/\s*\|\s*/):r.split(/\s+/);});
+  const rc=(el.dataset.r||'').split(',').filter(Boolean).map(Number), cc=(el.dataset.c||'').split(',').filter(Boolean).map(Number);
+  el.innerHTML='<table class="mx">'+rows.map((r,i)=>'<tr'+(rc.includes(i+1)?' class="rr"':'')+'>'+r.map((c,j)=>'<td'+(cc.includes(j+1)?' class="cr"':'')+'>'+c+'</td>').join('')+'</tr>').join('')+'</table>';});}
+renderM();
+
+/* ---------- fractions ---------- */
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;}
+class Fr{constructor(n,d=1){if(d<0){n=-n;d=-d;}const g=gcd(n,d);this.n=n/g;this.d=d/g;}
+ add(o){return new Fr(this.n*o.d+o.n*this.d,this.d*o.d)}sub(o){return new Fr(this.n*o.d-o.n*this.d,this.d*o.d)}mul(o){return new Fr(this.n*o.n,this.d*o.d)}div(o){return new Fr(this.n*o.d,this.d*o.n)}
+ isZ(){return this.n===0}eq(o){return this.n===o.n&&this.d===o.d}toString(){return this.d===1?''+this.n:this.n+'/'+this.d}}
+const F0=new Fr(0),F1=new Fr(1);
+const fm=A=>A.map(r=>r.map(x=>x instanceof Fr?x:new Fr(x)));
+const mmul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,x,k)=>s.add(x.mul(B[k][j])),F0)));
+const msub=(A,B)=>A.map((r,i)=>r.map((x,j)=>x.sub(B[i][j])));
+const mneg=A=>A.map(r=>r.map(x=>F0.sub(x)));
+function minv(A){const n=A.length;const G=A.map((r,i)=>[...r,...r.map((_,j)=>i===j?F1:F0)]);
+ for(let c=0;c<n;c++){let p=c;while(p<n&&G[p][c].isZ())p++;if(p===n)return null;[G[p],G[c]]=[G[c],G[p]];const pv=G[c][c];G[c]=G[c].map(x=>x.div(pv));
+  for(let r=0;r<n;r++)if(r!==c&&!G[r][c].isZ()){const f=G[r][c];G[r]=G[r].map((x,k)=>x.sub(f.mul(G[c][k])));}}return G.map(r=>r.slice(n));}
+function mdet(A){const n=A.length;if(n===0)return F1;if(n===1)return A[0][0];let s=F0;for(let j=0;j<n;j++){if(A[0][j].isZ())continue;const t=A[0][j].mul(mdet(A.slice(1).map(r=>r.filter((_,k)=>k!==j))));s=j%2?s.sub(t):s.add(t);}return s;}
+function S(A,pad=6){return A.map(r=>'[ '+r.map(x=>x.toString().padStart(pad)).join(' ')+' ]').join('\n');}
+const blk=(A,r0,r1,c0,c1)=>A.slice(r0,r1).map(r=>r.slice(c0,c1));
+
+/* ---------- Lab 1: block multiplication ---------- */
+let bmA=[],bmB=[],bmSel=null;
+function rnd(){return Math.floor(Math.random()*7)-3;}
+function bmNew(){const m=+$('bmM').value,n=+$('bmN').value,p=+$('bmP').value;bmA=Array.from({length:m},()=>Array.from({length:n},rnd));bmB=Array.from({length:n},()=>Array.from({length:p},rnd));bmSel=null;bmDraw();}
+function clampInputs(){const m=+$('bmM').value,n=+$('bmN').value,p=+$('bmP').value;[['bmK',m],['bmL',n],['bmL2',n],['bmT',p]].forEach(([id,mx])=>{const e=$(id);e.max=mx-1;if(+e.value>mx-1)e.value=mx-1;if(+e.value<1)e.value=1;});}
+const blockCols=['--b1','--b2','--b3','--b4','--b5','--b6'];
+function bmDraw(){clampInputs();const m=+$('bmM').value,n=+$('bmN').value,p=+$('bmP').value;if(!bmA.length||bmA.length!==m||bmA[0].length!==n||bmB[0].length!==p){bmA=Array.from({length:m},()=>Array.from({length:n},rnd));bmB=Array.from({length:n},()=>Array.from({length:p},rnd));}
+ const k=+$('bmK').value,l=+$('bmL').value,l2=+$('bmL2').value,t=+$('bmT').value;
+ const AB=bmA.map(r=>bmB[0].map((_,j)=>r.reduce((s,x,q)=>s+x*bmB[q][j],0)));
+ const bi=(i,cut)=>i<cut?0:1;
+ // highlight sets
+ let hA=null,hB=null,hC=null;if(bmSel){const [I,J]=bmSel;hC=[I,J];hA=I;hB=J;}
+ const grid=(M,rcut,ccut,colorOf,isHL,id)=>'<table class="gridm" id="'+id+'">'+M.map((r,i)=>'<tr'+(i===rcut-1?' class="rr"':'')+'>'+r.map((x,j)=>'<td data-i="'+i+'" data-j="'+j+'" class="'+(j===ccut-1?'cr ':'')+(isHL(i,j)?'hl':'')+'" style="background:var('+colorOf(i,j)+')">'+x+'</td>').join('')+'</tr>').join('')+'</table>';
+ const colA=(i,j)=>blockCols[bi(i,k)*2+bi(j,l)], colB=(i,j)=>blockCols[bi(i,l2)*2+bi(j,t)], colC=(i,j)=>blockCols[bi(i,k)*2+bi(j,t)];
+ const hlA=(i,j)=>hA!==null&&bi(i,k)===hA, hlB=(i,j)=>hB!==null&&bi(j,t)===hB, hlC=(i,j)=>hC!==null&&bi(i,k)===hC[0]&&bi(j,t)===hC[1];
+ $('bmBox').innerHTML='<div class="bm"><div><div class="lbl">A ('+m+'×'+n+')</div>'+grid(bmA,k,l,colA,hlA,'gA')+'</div><div class="bsym">×</div><div><div class="lbl">B ('+n+'×'+p+')</div>'+grid(bmB,l2,t,colB,hlB,'gB')+'</div><div class="bsym">=</div><div><div class="lbl">AB ('+m+'×'+p+') – click a cell</div>'+grid(AB,k,t,colC,hlC,'gC')+'</div></div>';
+ $('gC').querySelectorAll('td').forEach(td=>td.onclick=()=>{bmSel=[bi(+td.dataset.i,k),bi(+td.dataset.j,t)];bmDraw();});
+ let txt='A cut: rows '+k+' | '+(m-k)+',  columns '+l+' | '+(n-l)+'\nB cut: rows '+l2+' | '+(n-l2)+',  columns '+t+' | '+(p-t)+'\n\n';
+ if(l!==l2){txt+='✗ NOT CONFORMABLE: A₁ is '+k+'×'+l+' but B₁ is '+l2+'×'+t+'.\n  A₁B₁ is undefined, so the block formula cannot be used.\n  (Set "B row cut" = "A column cut" = '+l+'.)';$('bmOut').textContent=txt;return;}
+ // verify block formula
+ const sub=(M,r0,r1,c0,c1)=>M.slice(r0,r1).map(r=>r.slice(c0,c1));const mul=(X,Y)=>X.map(r=>Y[0].map((_,j)=>r.reduce((s,x,q)=>s+x*Y[q][j],0)));const add=(X,Y)=>X.map((r,i)=>r.map((x,j)=>x+Y[i][j]));
+ const A1=sub(bmA,0,k,0,l),A2=sub(bmA,0,k,l,n),A3=sub(bmA,k,m,0,l),A4=sub(bmA,k,m,l,n),B1=sub(bmB,0,l,0,t),B2=sub(bmB,0,l,t,p),B3=sub(bmB,l,n,0,t),B4=sub(bmB,l,n,t,p);
+ const blocks=[[add(mul(A1,B1),mul(A2,B3)),add(mul(A1,B2),mul(A2,B4))],[add(mul(A3,B1),mul(A4,B3)),add(mul(A3,B2),mul(A4,B4))]];
+ let ok=true;for(let i=0;i<m;i++)for(let j=0;j<p;j++){const v=blocks[bi(i,k)][bi(j,t)][i<k?i:i-k][j<t?j:j-t];if(v!==AB[i][j])ok=false;}
+ txt+='✓ Conformable. Sizes: A₁ '+k+'×'+l+', A₂ '+k+'×'+(n-l)+', B₁ '+l+'×'+t+', B₃ '+(n-l)+'×'+t+'\n';
+ txt+='Block formula result '+(ok?'= ordinary product AB  ✓':'≠ AB ✗')+'\n';
+ if(bmSel){const [I,J]=bmSel;const nm=['₁','₂','₃','₄'];const a1=nm[I*2],a2=nm[I*2+1],b1=nm[J],b2=nm[J+2];
+  txt+='\nSelected block (AB)'+nm[I*2+J]+' = A'+a1+'B'+b1+' + A'+a2+'B'+b2+'\n';const X=I?[A3,A4]:[A1,A2],Y=J?[B2,B4]:[B1,B3];
+  const P1=mul(X[0],Y[0]),P2=mul(X[1],Y[1]);const sh=M=>M.map(r=>'  ['+r.map(x=>String(x).padStart(4)).join('')+' ]').join('\n');
+  txt+='\nA'+a1+'B'+b1+' =\n'+sh(P1)+'\n+ A'+a2+'B'+b2+' =\n'+sh(P2)+'\n= \n'+sh(add(P1,P2));}
+ $('bmOut').textContent=txt;}
+['bmM','bmN','bmP','bmK','bmL','bmL2','bmT'].forEach(id=>$(id).oninput=()=>{bmSel=null;bmDraw();});
+$('bmNew').onclick=bmNew;
+
+/* ---------- Lab 2: block inverse ---------- */
+let biM=null;
+function fillSplit(){const n=+$('biN').value;const sel=$('biS');const cur=+sel.value||Math.floor(n/2);sel.innerHTML='';for(let s=1;s<n;s++)sel.innerHTML+='<option'+(s===Math.min(cur,n-1)?' selected':'')+'>'+s+'</option>';}
+function biRandom(){const n=+$('biN').value;for(let tries=0;tries<500;tries++){const M=fm(Array.from({length:n},()=>Array.from({length:n},()=>Math.floor(Math.random()*7)-3)));
+  let good=!mdet(M).isZ();for(let s=1;s<n&&good;s++){const A=blk(M,0,s,0,s),D=blk(M,s,n,s,n);if(mdet(A).isZ()||mdet(D).isZ())good=false;else{const B=blk(M,0,s,s,n),C=blk(M,s,n,0,s);if(mdet(msub(D,mmul(C,mmul(minv(A),B)))).isZ())good=false;}}
+  if(good){biM=M;return;}}}
+function biRun(){if(!biM)biRandom();const n=biM.length,s=+$('biS').value;const M=biM;
+ const A=blk(M,0,s,0,s),B=blk(M,0,s,s,n),C=blk(M,s,n,0,s),D=blk(M,s,n,s,n);let t='M ('+n+'×'+n+'), cut after row/column '+s+':\n'+S(M)+'\n\nA =\n'+S(A)+'\nB =\n'+S(B)+'\nC =\n'+S(C)+'\nD =\n'+S(D)+'\n';
+ const Ai=minv(A),Di=minv(D);if(!Ai||!Di){t+='\nA or D is singular for this split – Eq. (9) cannot be used. Try another split.';$('biOut').textContent=t;return;}
+ t+='\nA⁻¹ =\n'+S(Ai)+'\nD⁻¹ =\n'+S(Di)+'\n';
+ const SA=msub(D,mmul(C,mmul(Ai,B))),SD=msub(A,mmul(B,mmul(Di,C)));const Sm=minv(SA),P=minv(SD);
+ if(!Sm||!P){t+='\nA Schur complement is singular – choose another split.';$('biOut').textContent=t;return;}
+ const Q=mneg(mmul(Ai,mmul(B,Sm))),R=mneg(mmul(Di,mmul(C,P)));
+ t+='\nA − BD⁻¹C =\n'+S(SD)+'\n→ P = (A − BD⁻¹C)⁻¹ =\n'+S(P)+'\n\nD − CA⁻¹B =\n'+S(SA)+'\n→ S = (D − CA⁻¹B)⁻¹ =\n'+S(Sm)+'\n\nQ = −A⁻¹B S =\n'+S(Q)+'\nR = −D⁻¹C P =\n'+S(R)+'\n';
+ const Z=[...P.map((r,i)=>[...r,...Q[i]]),...R.map((r,i)=>[...r,...Sm[i]])];const Dir=minv(M);
+ const same=Z.every((r,i)=>r.every((x,j)=>x.eq(Dir[i][j])));
+ t+='\nAssembled [P Q; R S] =\n'+S(Z)+'\n\nDirect Gauss–Jordan inverse =\n'+S(Dir)+'\n\n'+(same?'✓ Identical.':'✗ Mismatch')+'   det M = '+mdet(M)+' = det A · det(D − CA⁻¹B) = '+mdet(A)+' · '+mdet(SA);
+ $('biOut').textContent=t;}
+$('biN').onchange=()=>{fillSplit();biM=null;biRun();};$('biS').onchange=biRun;$('biNew').onclick=()=>{biM=null;biRun();};
+$('biEx1').onclick=()=>{$('biN').value='5';fillSplit();$('biS').value='3';biM=fm([[1,0,1,0,1],[0,1,0,1,0],[1,0,0,0,1],[0,1,0,0,1],[1,0,1,1,1]]);biRun();};
+fillSplit();
+
+/* ---------- Lab 3: rank explorer ---------- */
+function combos(n,k){const res=[];const c=[];(function rec(s){if(c.length===k){res.push(c.slice());return;}for(let i=s;i<n;i++){c.push(i);rec(i+1);c.pop();}})(0);return res;}
+function rankRun(){const out=$('rkOut');try{const rows=$('rkIn').value.trim().split('\n').map(r=>r.trim().split(/[\s,]+/).filter(Boolean).map(x=>{if(!/^-?\d+(\/\d+)?$/.test(x))throw 'Use integers or fractions: '+x;const [a,b]=x.split('/');return new Fr(+a,b?+b:1);}));
+ const m=rows.length,n=rows[0].length;if(rows.some(r=>r.length!==n))throw 'All rows must have the same length.';if(m>6||n>6)throw 'Keep it at most 6×6.';
+ let t='Matrix is '+m+'×'+n+'  (rank ≤ '+Math.min(m,n)+')\n\nMinors method:\n';let rank=0;
+ for(let k=Math.min(m,n);k>=1;k--){const rc=combos(m,k),cc=combos(n,k);let nz=0,wit=null;for(const r of rc)for(const c of cc){const d=mdet(r.map(i=>c.map(j=>rows[i][j])));if(!d.isZ()){nz++;if(!wit)wit=[r,c,d];}}
+  t+='  order '+k+': '+(rc.length*cc.length)+' minors, '+nz+' nonzero'+(wit?'   e.g. rows '+wit[0].map(x=>x+1).join(',')+' cols '+wit[1].map(x=>x+1).join(',')+' → det = '+wit[2]:'')+'\n';if(nz&&!rank)rank=k;}
+ t+='  ⇒ rank = '+rank+'  (largest order with a nonzero minor)\n\nRow-reduction method:\n';
+ const G=rows.map(r=>r.slice());let rk=0;for(let c=0;c<n&&rk<m;c++){let p=rk;while(p<m&&G[p][c].isZ())p++;if(p===m)continue;[G[p],G[rk]]=[G[rk],G[p]];const pv=G[rk][c];G[rk]=G[rk].map(x=>x.div(pv));for(let r=0;r<m;r++)if(r!==rk&&!G[r][c].isZ()){const f=G[r][c];G[r]=G[r].map((x,k)=>x.sub(f.mul(G[rk][k])));}rk++;}
+ t+=S(G)+'\n  ⇒ '+rk+' nonzero rows ⇒ rank = '+rk+(rk===rank?'  ✓ agrees':'');out.textContent=t;}catch(e){out.textContent='Error: '+e;}}
+$('rkGo').onclick=rankRun;document.querySelectorAll('[data-rk]').forEach(b=>b.onclick=()=>{$('rkIn').value=b.dataset.rk;rankRun();});
+
+/* ---------- Lab 4: 3D rank ---------- */
+const view={yaw:-0.7,pitch:0.4};
+const R1=[1.6,0.2,0.1],R2=[0.3,1.4,0.2],R30=[0.2,0.3,1.5];
+function setupCanvas(c){const dpr=window.devicePixelRatio||1;if(!c._w){c._w=c.width;c._h=c.height;c.width=c._w*dpr;c.height=c._h*dpr;c.style.width='100%';c.style.maxWidth=c._w+'px';}const g=c.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);return [g,c._w,c._h];}
+function arrow(g,x1,y1,x2,y2,col,w=2.5){g.strokeStyle=col;g.fillStyle=col;g.lineWidth=w;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();const a=Math.atan2(y2-y1,x2-x1),L=Math.min(10,Math.hypot(x2-x1,y2-y1)*.4);if(L<2)return;g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-L*Math.cos(a-.4),y2-L*Math.sin(a-.4));g.lineTo(x2-L*Math.cos(a+.4),y2-L*Math.sin(a+.4));g.closePath();g.fill();}
+const lerp=(a,b,t)=>a.map((x,i)=>x+(b[i]-x)*t);
+// r3 slides into span(r1, r2); then r2 slides onto the line of r1 (r3 follows, since it is a combination)
+function curRows(){const t3=+$('r3t').value,t2=+$('r2t').value;const r2=lerp(R2,R1.map(x=>x*0.7),t2);const target=R1.map((x,i)=>0.6*x+0.8*r2[i]);return [R1,r2,lerp(R30,target,t3)];}
+function drawR3(){const [g,w,h]=setupCanvas($('r3can'));g.fillStyle=css('--card');g.fillRect(0,0,w,h);
+ const [a,b,c]=curRows();const cy=Math.cos(view.yaw),sy=Math.sin(view.yaw),cp=Math.cos(view.pitch),sp=Math.sin(view.pitch);const Sc=95,ox=w/2-30,oy=h/2+70;
+ const P=(v)=>{const X=cy*v[0]-sy*v[1],Y=sy*v[0]+cy*v[1];return [ox+Sc*X,oy-Sc*(v[2]*cp-Y*sp)];};
+ g.globalAlpha=.4;['#e03131','#2f9e44','#1c7ed6'].forEach((col,i)=>{const e=[0,0,0];e[i]=2.2;const p=P(e),o=P([0,0,0]);arrow(g,o[0],o[1],p[0],p[1],css('--muted'),1);g.fillStyle=css('--muted');g.fillText('xyz'[i],p[0]+3,p[1]);});g.globalAlpha=1;
+ const add=(u,v)=>u.map((x,i)=>x+v[i]);const O=[0,0,0];
+ const V=[O,a,b,c,add(a,b),add(a,c),add(b,c),add(add(a,b),c)];
+ const faces=[[0,1,4,2],[0,1,5,3],[0,2,6,3],[1,4,7,5],[2,4,7,6],[3,5,7,6]];
+ g.fillStyle=css('--acc');g.globalAlpha=.10;faces.forEach(f=>{g.beginPath();f.forEach((k,i)=>{const p=P(V[k]);i?g.lineTo(...p):g.moveTo(...p);});g.closePath();g.fill();});g.globalAlpha=1;
+ g.strokeStyle=css('--acc');g.lineWidth=1;[[1,4],[2,4],[1,5],[3,5],[2,6],[3,6],[4,7],[5,7],[6,7]].forEach(([i,j])=>{g.beginPath();g.moveTo(...P(V[i]));g.lineTo(...P(V[j]));g.stroke();});
+ const o=P(O);[[a,'#e03131','r₁'],[b,'#2f9e44','r₂'],[c,'#1c7ed6','r₃']].forEach(([v,col,nm])=>{const p=P(v);arrow(g,o[0],o[1],p[0],p[1],col,3.5);g.fillStyle=col;g.font='bold 14px sans-serif';g.fillText(nm,p[0]+5,p[1]-4);});
+ const M=[a,b,c];const det3=a[0]*(b[1]*c[2]-b[2]*c[1])-a[1]*(b[0]*c[2]-b[2]*c[0])+a[2]*(b[0]*c[1]-b[1]*c[0]);
+ let nz2=0;for(const r of [[0,1],[0,2],[1,2]])for(const cc of [[0,1],[0,2],[1,2]]){const d=M[r[0]][cc[0]]*M[r[1]][cc[1]]-M[r[0]][cc[1]]*M[r[1]][cc[0]];if(Math.abs(d)>1e-6)nz2++;}
+ let nz1=M.flat().filter(x=>Math.abs(x)>1e-9).length;const rank=Math.abs(det3)>1e-6?3:nz2?2:nz1?1:0;
+ const f=x=>(Math.abs(x)<5e-4?0:x).toFixed(3);
+ $('r3tv').textContent=(+$('r3t').value).toFixed(2);$('r2tv').textContent=(+$('r2t').value).toFixed(2);
+ $('r3out').textContent='Rows of the matrix:\n r₁ = ('+a.map(f).join(', ')+')\n r₂ = ('+b.map(f).join(', ')+')\n r₃ = ('+c.map(f).join(', ')+')\n\ndet = box volume = '+f(det3)+'\n\nnonzero minors:\n  order 3: '+(Math.abs(det3)>1e-6?1:0)+' of 1\n  order 2: '+nz2+' of 9\n  order 1: '+nz1+' of 9\n\nRANK = '+rank+'\n'+(rank===3?'(a real box: 3 independent directions)':rank===2?'(flat sheet: rows lie in a plane)':'(a stick: rows lie on one line)');}
+(function(){const c=$('r3can');let d=null;c.addEventListener('pointerdown',e=>{d=[e.clientX,e.clientY];c.setPointerCapture(e.pointerId);});c.addEventListener('pointermove',e=>{if(!d)return;view.yaw+=(e.clientX-d[0])*.01;view.pitch=Math.max(-1.5,Math.min(1.5,view.pitch+(e.clientY-d[1])*.01));d=[e.clientX,e.clientY];drawR3();});c.addEventListener('pointerup',()=>d=null);})();
+$('r3t').oninput=drawR3;$('r2t').oninput=()=>{if(+$('r2t').value>0)$('r3t').value=1;drawR3();};$('r3reset').onclick=()=>{$('r3t').value=0;$('r2t').value=0;drawR3();};
+
+/* ---------- Quiz ---------- */
+const Q=[
+['For block multiplication of A (m×n) and B (n×p), which cuts must match?',['row cuts of A and row cuts of B','column cuts of A and row cuts of B','column cuts of A and column cuts of B','none – any cuts work'],1,'Inner cuts must match so that each AᵢBⱼ is defined.'],
+['The transpose of [A B; C D] is',['[Aᵀ Bᵀ; Cᵀ Dᵀ]','[A C; B D]','[Aᵀ Cᵀ; Bᵀ Dᵀ]','[Dᵀ Cᵀ; Bᵀ Aᵀ]'],2,'Swap the off-diagonal positions AND transpose every block.'],
+['det [A B; 0 D] (A, D square) equals',['det A · det D − det B','det A · det D','det(AD − B)','det(A + D)'],1,'Block triangular.'],
+['The (2,2) block of [A B; C D]⁻¹ is',['D⁻¹','(D − CA⁻¹B)⁻¹','(D − BA⁻¹C)⁻¹','−D⁻¹CA⁻¹'],1,'Schur complement of A, Eq. (14c).'],
+['A 4×4 matrix has det 0, but some 3×3 minor is nonzero. Its rank is',['4','3','2','cannot tell'],1,'Largest nonzero minor has order 3.'],
+['rank of a 3×5 matrix is at most',['3','5','8','15'],0,'rank ≤ min(m, n).'],
+['Which is always true?',['rank Aᵀ = rank A','rank(A + B) = rank A + rank B','rank AB = rank A','rank A² = rank A'],0,'Transposing does not change minors.'],
+['Eigenvalues of diag(A, D) are',['products of eigenvalues of A and D','eigenvalues of A together with those of D','eigenvalues of AD','sums of eigenvalues'],1,'det(M − λI) = det(A − λI)·det(D − λI).'],
+['If M = [A 0; X B] is unitary, then',['X can be anything','X = 0','X = A','X = B†'],1,'Exercise 6.5.']];
+(function(){$('quizBox').innerHTML=Q.map((q,i)=>'<div class="qq"><b>'+(i+1)+'. '+q[0]+'</b>'+q[1].map((o,j)=>'<label class="opt"><input type="radio" name="q'+i+'" value="'+j+'"> '+o+'</label>').join('')+'<div class="small" id="qf'+i+'"></div></div>').join('');
+$('quizCheck').onclick=()=>{let s=0;Q.forEach((q,i)=>{const c=document.querySelector('input[name=q'+i+']:checked');const ok=c&&+c.value===q[2];if(ok)s++;$('qf'+i).innerHTML=(ok?'<span class="ok">✓ Correct.</span> ':'<span class="bad">✗ Answer: '+q[1][q[2]]+'.</span> ')+q[3];});$('quizScore').textContent='Score: '+s+' / '+Q.length;};})();
+
+bmNew();biRun();rankRun();drawR3();
+</script>
+</body>
+</html>

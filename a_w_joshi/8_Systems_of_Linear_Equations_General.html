@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linear Equations: General Case</title>
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6475; --line:#dde2ec;
+  --acc:#2f6fdf; --acc2:#e8590c; --acc3:#2b9348; --acc4:#9c36b5; --warn:#c92a2a;
+  --soft:#eef3ff; --softw:#fff4e6; --softg:#ebfbee; --softr:#fff0f0; --code:#f1f3f8; --hl:#fff3bf;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39; --hl:#4a4215;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11141b; --card:#1a1f2b; --ink:#e6e9f0; --muted:#9aa3b5; --line:#2c3445;
+    --acc:#6ea0ff; --acc2:#ff922b; --acc3:#51cf66; --acc4:#da77f2; --warn:#ff6b6b;
+    --soft:#1d2840; --softw:#2e2416; --softg:#16291b; --softr:#2f1a1a; --code:#232a39; --hl:#4a4215;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:28px 16px 22px}
+header.top h1{margin:0 0 6px;font-size:1.9rem}
+header.top p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:0 auto;padding:0 16px}
+nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.toc a:hover{color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;padding:20px 22px}
+h2{margin-top:0;color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{color:var(--acc4);margin-bottom:6px}
+.m{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.05em;white-space:nowrap}
+.eq{font-family:"Cambria Math","Cambria","Times New Roman",serif;font-size:1.1em;background:var(--code);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;text-align:center}
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;border-left:5px solid}
+.def{background:var(--soft);border-color:var(--acc)}
+.thm{background:var(--softg);border-color:var(--acc3)}
+.warnb{background:var(--softr);border-color:var(--warn)}
+.tip{background:var(--softw);border-color:var(--acc2)}
+.fact{background:var(--soft);border-color:var(--acc4)}
+.box b.t{display:block;margin-bottom:4px}
+table{border-collapse:collapse;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl-wrap{overflow-x:auto}
+details{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 12px;background:var(--bg)}
+details>summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open]>summary{margin-bottom:6px}
+.prob{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.prob .q{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:20px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:middle}
+.lab{border:2px dashed var(--acc);border-radius:12px;padding:12px;margin:14px 0;background:var(--bg)}
+.lab h4{margin:0 0 8px;color:var(--acc)}
+canvas{display:block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;touch-action:none}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.ctrl label{font-size:.9rem;display:flex;align-items:center;gap:6px}
+.ctrl input[type=range]{width:110px}
+.ctrl input[type=text],.ctrl input[type=number],textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit}
+textarea{width:100%;min-height:96px;font-family:Consolas,monospace}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.9rem}
+button.alt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+button:hover{filter:brightness(1.1)}
+button:disabled{opacity:.45;cursor:default}
+.out{font-family:Consolas,monospace;font-size:.88rem;background:var(--code);border-radius:8px;padding:10px;white-space:pre-wrap;overflow-x:auto;margin-top:8px}
+.readout{font-family:Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}.ctrl input[type=range]{width:85px}section{padding:16px 14px}}
+.ok{color:var(--acc3);font-weight:700}.bad{color:var(--warn);font-weight:700}
+.quiz .opt{display:block;margin:3px 0;cursor:pointer}
+.quiz .qq{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+.themebtn{float:right;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4)}
+ol li,ul li{margin:3px 0}
+.small{font-size:.88rem;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.flow b{color:var(--muted)}
+.mx{display:inline-table;vertical-align:middle;border-collapse:collapse;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:7px;margin:3px 4px;width:auto}
+.mx.det{border-radius:0}
+.mx td{border:0;padding:1px 8px;text-align:center;font-family:"Cambria Math",Cambria,"Times New Roman",serif;white-space:nowrap;background:none}
+.mx td.cr{border-right:2px dashed var(--acc2)}
+.sys{font-family:"Cambria Math",Cambria,"Times New Roman",serif;display:inline-block;text-align:left;line-height:1.5}
+.verdict{font-weight:700;font-size:1.05rem;margin:6px 0}
+/* elimination stepper */
+.aug{border-collapse:collapse;width:auto;margin:8px auto;font-family:Consolas,monospace}
+.aug td{border:1px solid var(--line);padding:4px 10px;text-align:right;min-width:46px}
+.aug td.bar{border-left:3px solid var(--acc2)}
+.aug td.piv{background:var(--hl);font-weight:700;outline:2px solid var(--acc2);outline-offset:-2px}
+.aug tr.act td{background:var(--soft)}
+.aug tr.zero td{color:var(--muted)}
+.aug tr.bad td{background:var(--softr)}
+.stepmsg{text-align:center;font-weight:600;color:var(--acc4);min-height:1.5em}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<button class="themebtn" id="themeBtn">◐ Theme</button>
+<h1>8. Systems of Linear Equations: General Case</h1>
+<p>m equations in n unknowns · ranks r and s · m &lt; n, m = n, m &gt; n · homogeneous systems · number of independent vectors · row rank = column rank &nbsp;— A. W. Joshi, <i>Matrices and Tensors in Physics</i>, pp. 79–87</p>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+<a href="#s0">Roadmap</a><a href="#s1">Big picture</a><a href="#s2">r and s</a><a href="#s3">m &lt; n</a><a href="#s4">m = n</a><a href="#s5">m &gt; n</a><a href="#s6">Structure x = xₚ + xₕ</a><a href="#s7">Elimination</a><a href="#s8">Independent vectors</a><a href="#s9">Row = column rank</a><a href="#s10">Summary</a><a href="#s11">Exercise 8</a><a href="#s12">Practice</a><a href="#s13">Quiz</a><a href="#s14">Facts</a>
+</div></nav>
+
+<div class="wrap">
+
+<!-- 0 -->
+<section id="s0">
+<h2>0. Roadmap</h2>
+<p>Section 7 handled small systems by geometry. Here is the <b>complete answer</b> for any number of equations m and unknowns n, using just two numbers:</p>
+<div class="eq">r = rank A (coefficient matrix), &nbsp;&nbsp; s = rank B, &nbsp;B = [A | b] (augmented matrix)</div>
+<div class="flow"><span>Compute r and s</span><b>→</b><span>s &gt; r ⇒ no solution</span><b>→</b><span>s = r ⇒ solutions with n − r free parameters</span><b>→</b><span>Same tool decides if vectors are independent</span><b>→</b><span>row rank = column rank</span></div>
+<div class="box tip"><b class="t">Needed from earlier</b> Rank as the largest nonzero minor (Section 6), linear dependence of vectors (Section 1), inverse (Section 5), and the case analysis of Section 7.</div>
+</section>
+
+<!-- 1 -->
+<section id="s1">
+<h2>1. The big picture: each equation removes one dimension</h2>
+<p>Think of (x₁, …, xₙ) as a point in n-dimensional space.</p>
+<ul>
+<li>One equation a₁₁x₁ + … + a₁ₙxₙ = b₁ leaves an <b>(n − 1)</b>-dimensional set of solutions (a line in 2D, a plane in 3D, a "hyperplane" in general).</li>
+<li>Two (independent) equations leave <b>n − 2</b> dimensions, and so on.</li>
+<li>m independent constraints leave <b>n − m</b> dimensions.</li>
+</ul>
+<div class="tbl-wrap"><table>
+<tr><th>Regime</th><th>"Usual" outcome</th><th>Exceptions</th></tr>
+<tr><td>m &lt; n (fewer equations)</td><td>infinitely many, (n − m)-fold arbitrariness</td><td>no solution if the equations are inconsistent; more freedom if they are dependent</td></tr>
+<tr><td>m = n</td><td>exactly one solution</td><td>det A = 0: none or infinitely many</td></tr>
+<tr><td>m &gt; n (more equations)</td><td>no solution</td><td>solutions exist if the extra equations are combinations of the others</td></tr>
+</table></div>
+<p>The exceptions are exactly where "m" must be replaced by the number of <b>independent</b> equations, and that number is the rank.</p>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+<h2>2. The two ranks r and s (Eqs. 2–3)</h2>
+<div class="eq">A = <span class="M" data-m="a₁₁ ⋯ a₁ₙ; ⋮ ⋱ ⋮; aₘ₁ ⋯ aₘₙ"></span> (m×n), &nbsp;&nbsp; B = <span class="M" data-m="a₁₁ ⋯ a₁ₙ b₁; ⋮ ⋱ ⋮ ⋮; aₘ₁ ⋯ aₘₙ bₘ" data-c="3"></span> (m×(n+1))</div>
+<ul>
+<li><b>s</b> = number of linearly independent equations in the system.</li>
+<li><b>r</b> = number of linearly independent <i>left-hand sides</i>, i.e. independent equations of the associated homogeneous system.</li>
+<li>Always <b>s = r or s = r + 1</b>. Adding one column can raise the rank by at most 1 (and never lowers it).</li>
+<li>r ≤ min(m, n), and s ≤ min(m, n + 1).</li>
+</ul>
+<div class="box thm"><b class="t">The fundamental theorem (stated in the book without proof)</b>
+<ol type="a">
+<li><b>s = r</b> ⇒ the system has solutions, with <b>(n − r)-fold arbitrariness</b>: n − r free parameters. (n − r = 0 means a unique solution.)</li>
+<li><b>s &gt; r</b> (i.e. s = r + 1) ⇒ <b>no solution</b>. The equations are <b>inconsistent</b>.</li>
+</ol></div>
+<p><b>Why (b):</b> s &gt; r means the column b is <i>not</i> a combination of the columns of A. But Ax = x₁(col₁) + … + xₙ(colₙ) is always such a combination, so it can never equal b.<br>
+<b>Why (a):</b> pick r independent equations and the r unknowns whose columns give a nonzero r×r minor. Move the other n − r unknowns to the right side as free parameters. Then solve the r×r system by Cramer. The remaining m − r equations are combinations of these, so they hold automatically.</p>
+<div class="box fact"><b class="t">Homogeneous systems are always consistent</b>
+When b = 0, adding a zero column cannot change the rank, so s = r always and x = 0 is always a solution. The only question is whether there are <i>more</i>: nontrivial solutions ⇔ <b>r &lt; n</b>.</div>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+<h2>3. Fewer equations than unknowns, m &lt; n (Example 1)</h2>
+<p>Here r ≤ m &lt; n, so if the system is consistent there are always <b>at least n − m free parameters</b>. It can never have a unique solution.</p>
+<div class="prob"><div class="q">Example 1(a): solve x + 2y + 2z − 3w = 5, &nbsp;2x − y + z + 2w = 1, &nbsp;3x + y + 3z − w = 6.</div>
+<p>A = <span class="M" data-m="1 2 2 −3; 2 −1 1 2; 3 1 3 −1"></span>, &nbsp;B = <span class="M" data-m="1 2 2 −3 5; 2 −1 1 2 1; 3 1 3 −1 6" data-c="4"></span>.</p>
+<p>Row 3 = row 1 + row 2 in B (check: 1+2 = 3, 2−1 = 1, 2+1 = 3, −3+2 = −1, 5+1 = 6). So <b>r = s = 2</b>. The system is consistent with 4 − 2 = <b>2-fold arbitrariness</b>.</p>
+<p>Solve the first two equations for x, y with z, w free. Adding 2×(eq 2) to eq 1 gives 5x + 4z + w = 7, so x = (7 − 4z − w)/5. Then from eq 2: y = 2x + z + 2w − 1 = (9 − 3z + 8w)/5.</p>
+<div class="eq">x = (7 − 4z − w)/5, &nbsp; y = (9 − 3z + 8w)/5, &nbsp; z, w arbitrary &nbsp;(Eq. 7)</div>
+<p class="small">Check, z = w = 0: x = 7/5, y = 9/5. Equation 1: 7/5 + 18/5 = 5 ✓. Equation 2: 14/5 − 9/5 = 1 ✓.</p></div>
+<div class="prob"><div class="q">Example 1(b): the same, but the right side of eq 3 is 7 instead of 6.</div>
+<p>The left sides still satisfy L₃ = L₁ + L₂, so r = 2. But on the right, 5 + 1 = 6 ≠ 7, so B has 3 independent rows: <b>s = 3 &gt; r</b> ⇒ <b>no solution</b>.</p>
+<p>Explicitly: any solution of the first two equations gives 3x + y + 3z − w = (eq 1) + (eq 2) = 6 ≠ 7 (Eq. 11). The planes are inconsistent.</p>
+<p class="small">Lesson: having fewer equations than unknowns does <b>not</b> guarantee a solution.</p></div>
+</section>
+
+<!-- 4 -->
+<section id="s4">
+<h2>4. As many equations as unknowns, m = n</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Case</th><th>Condition</th><th>Result</th></tr>
+<tr><td>1a</td><td>det A ≠ 0, b = 0</td><td>unique: trivial x = 0</td></tr>
+<tr><td>1b</td><td>det A ≠ 0, b ≠ 0</td><td>unique nontrivial: <b>x = A⁻¹b</b> (Eq. 13)</td></tr>
+<tr><td>2a</td><td>det A = 0 (r &lt; n), b ≠ 0</td><td>s = r: ∞ with (n − r) parameters; &nbsp;s &gt; r: none</td></tr>
+<tr><td>2b</td><td>det A = 0, b = 0</td><td>s = r always: ∞ with (n − r) parameters (includes x = 0)</td></tr>
+</table></div>
+<div class="box thm"><b class="t">Key corollary</b>
+<b>n homogeneous linear equations in n unknowns have a nontrivial solution ⇔ det A = 0.</b><br>
+This single fact powers the eigenvalue problem: (A − λI)x = 0 has nontrivial x ⇔ det(A − λI) = 0.</div>
+
+<div class="prob"><div class="q">Example 2: solve x − y + 2z + w = a, &nbsp;x + z − w = b, &nbsp;−2x + y + z = c, &nbsp;x + w = d.</div>
+<p>A = <span class="M" data-m="1 −1 2 1; 1 0 1 −1; −2 1 1 0; 1 0 0 1"></span>, det A = 8 ≠ 0, so the solution is unique for every a, b, c, d:</p>
+<div class="eq">A⁻¹ = ⅛<span class="M" data-m="−1 3 −1 4; −4 4 4 8; 2 2 2 0; 1 −3 1 4"></span></div>
+<div class="eq">x = (−a + 3b − c + 4d)/8, &nbsp; y = (−a + b + c + 2d)/2, &nbsp; z = (a + b + c)/4, &nbsp; w = (a − 3b + c + 4d)/8</div>
+<p class="small">Check row 1 of A against column 1 of 8A⁻¹: (1)(−1) + (−1)(−4) + 2(2) + 1(1) = −1 + 4 + 4 + 1 = 8 ✓. If a = b = c = d = 0, only the trivial solution remains.</p></div>
+
+<div class="prob"><div class="q">Example 3: for which k does x − y + 2z = 0, 3x + 2y + z = 0, x + 2y + kz = 0 have a nontrivial solution? Find it.</div>
+<p>The system is homogeneous, so we need det A = 0:</p>
+<div class="eq">det A = <span class="M det" data-m="1 −1 2; 3 2 1; 1 2 k"></span> = 1(2k − 2) + 1(3k − 1) + 2(6 − 2) = 5k + 5 = 0 ⇒ <b>k = −1</b></div>
+<p>With k = −1: R₃ = (3/5)R₂ − (4/5)R₁. Check: (9/5 − 4/5, 6/5 + 4/5, 3/5 − 8/5) = (1, 2, −1) ✓. So rank A = 2 and there is 3 − 2 = 1 free parameter. Adding the first two equations' multiples: from x − y + 2z = 0 and 3x + 2y + z = 0, multiply the first by 2 and add: 5x + 5z = 0, so x = −z, and then y = x + 2z = z.</p>
+<div class="eq">x = −z, &nbsp; y = z, &nbsp; z arbitrary &nbsp;⟺&nbsp; x = t(−1, 1, 1)</div></div>
+
+<div class="lab"><h4>🔬 Lab 1 (3D): Example 3, three planes through the origin. Drag to rotate.</h4>
+<div class="ctrl"><label>k <input type="range" id="k3" min="-4" max="2" step="0.05" value="0.5"><span id="k3v"></span></label><button class="alt" id="k3snap">Snap to k = −1</button></div>
+<div class="grid2"><canvas id="k3can" width="460" height="400"></canvas><div><div class="verdict" id="k3verdict"></div><div class="readout" id="k3out"></div><canvas id="k3plot" width="420" height="150"></canvas></div></div>
+<p class="small">All three planes pass through the origin, so x = 0 is always a solution. For most k they meet <b>only</b> there. As k → −1, the third plane (green) swings round until it contains the line where the other two cross. At that moment det A = 5k + 5 = 0 and a whole line of nontrivial solutions appears (black). The small graph plots det A against k.</p></div>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+<h2>5. More equations than unknowns, m &gt; n (Examples 4, 5)</h2>
+<h3>Homogeneous</h3>
+<p>r ≤ n. If r = n: only the trivial solution, however many equations there are. If r &lt; n: infinitely many, with (n − r) parameters.</p>
+<h3>Inhomogeneous</h3>
+<p>s ≤ n + 1. If <b>s = n + 1</b> there are n + 1 independent constraints on n unknowns, which is impossible, so <b>no solution</b>. If s ≤ n, decide by comparing r and s as usual.</p>
+<div class="box tip"><b class="t">Practical method from the book</b>
+Pick any n independent equations, solve them, and substitute the result into the remaining m − n equations. If they are all satisfied, that is the solution. If not, there is no solution.</div>
+<div class="prob"><div class="q">Example 4: 7x + 4y = 3, &nbsp;−2x + 3y = 4, &nbsp;2x + y = −2.</div>
+<p>B = <span class="M" data-m="7 4 3; −2 3 4; 2 1 −2" data-c="2"></span>, det B = 7(−6 − 4) − 4(4 − 8) + 3(−2 − 6) = −70 + 16 − 24 = −78 ≠ 0. So <b>s = 3 = n + 1</b> ⇒ <b>no solution</b>. (Three lines forming a triangle, Fig. 7.4a.)</p></div>
+<div class="prob"><div class="q">Example 5: 2x + y + 3z = 7, &nbsp;3x − 2y + 8z = 7, &nbsp;x − 2y + 4z = 1, &nbsp;−2x + y − 4z = −3.</div>
+<p>The first three equations have rank 2 (det = 2(−8 + 16) − 1(12 − 8) + 3(−6 + 2) = 16 − 4 − 12 = 0). Their solution is <b>x = 3 − 2z, y = z + 1</b>, z arbitrary (Eq. 25).</p>
+<p>Substitute into eq 4: −2(3 − 2z) + (z + 1) − 4z = −6 + 4z + z + 1 − 4z = z − 5 = −3 ⇒ <b>z = 2</b>.</p>
+<div class="eq">x = −1, &nbsp; y = 3, &nbsp; z = 2</div>
+<p class="small">The 4th equation removed the last free parameter. Here r = s = 3 = n, so the solution is unique even though m = 4 &gt; n.</p></div>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+<h2>6. Structure of the solution set: x = xₚ + xₕ <span class="tag">extra, very useful</span></h2>
+<div class="box thm"><b class="t">Theorem</b>
+If xₚ is <i>any one</i> solution of Ax = b, then <b>every</b> solution is x = xₚ + xₕ, where xₕ runs over all solutions of the associated homogeneous system Ax = 0.<br>
+Proof: A(x − xₚ) = b − b = 0, so x − xₚ is a homogeneous solution. Conversely A(xₚ + xₕ) = b + 0 = b.</div>
+<ul>
+<li>The homogeneous solutions form a <b>vector space</b> (the null space, or kernel) of dimension <b>n − r</b>. This is the <b>rank–nullity theorem</b>: rank + nullity = n.</li>
+<li>So the inhomogeneous solution set is the null space <b>shifted</b> by xₚ. It is a line, plane, … parallel to the homogeneous one, but not through the origin.</li>
+<li>Example 1(a): xₚ = (7/5, 9/5, 0, 0), and xₕ = z(−4/5, −3/5, 1, 0) + w(−1/5, 8/5, 0, 1).</li>
+<li>Same idea in physics: the general solution of a linear ODE is (particular integral) + (complementary function).</li>
+</ul>
+<div class="lab"><h4>🔬 Lab 2 (3D): the solution set is a shifted copy of the null space</h4>
+<div class="ctrl">
+<label>System: <select id="xpSys"><option value="1">1 equation: x + y + 2z = b</option><option value="2">2 equations: x + y + 2z = b, x − y = b/2</option></select></label>
+<label>b <input type="range" id="xpB" min="-3" max="3" step="0.05" value="2"><span id="xpBv"></span></label>
+<label>s <input type="range" id="xpS" min="-2" max="2" step="0.05" value="0.6"></label>
+<label>t <input type="range" id="xpT" min="-2" max="2" step="0.05" value="-0.4"></label>
+</div>
+<div class="grid2"><canvas id="xpcan" width="460" height="400"></canvas><div class="readout" id="xpout"></div></div>
+<p class="small">Grey: the solutions of Ax = 0 (through the origin). Orange: the solutions of Ax = b. The purple arrow is a particular solution xₚ, and the green arrow is a homogeneous solution xₕ chosen by the sliders s and t. Their sum (black dot) always lands on the orange set. Slide b to 0 and the two sets merge.</p></div>
+</section>
+
+<!-- 7 -->
+<section id="s7">
+<h2>7. Computing r and s in practice: Gaussian elimination</h2>
+<p>Checking every minor (Section 6) is slow. Elementary row operations do not change the rank:</p>
+<ol><li>swap two rows,</li><li>multiply a row by a nonzero number,</li><li>add a multiple of one row to another.</li></ol>
+<p>They also do not change the solutions of the system. So reduce B = [A | b] to <b>row-echelon form</b> (a staircase of pivots):</p>
+<ul>
+<li><b>r</b> = number of nonzero rows in the A-part, <b>s</b> = number of nonzero rows in the whole of B.</li>
+<li>A row like [0 0 … 0 | c] with c ≠ 0 means "0 = c": <b>inconsistent</b> (s = r + 1).</li>
+<li>Columns without a pivot belong to the <b>free</b> unknowns. There are n − r of them.</li>
+</ul>
+<div class="lab"><h4>🔬 Lab 3: step-by-step elimination on [A | b] (exact fractions)</h4>
+<textarea id="geIn">1 2 2 -3 | 5
+2 -1 1 2 | 1
+3 1 3 -1 | 6</textarea>
+<div class="ctrl">
+<button class="alt" data-ge="1 2 2 -3 | 5&#10;2 -1 1 2 | 1&#10;3 1 3 -1 | 6">Ex. 1(a)</button>
+<button class="alt" data-ge="1 2 2 -3 | 5&#10;2 -1 1 2 | 1&#10;3 1 3 -1 | 7">Ex. 1(b)</button>
+<button class="alt" data-ge="1 -1 2 | 0&#10;3 2 1 | 0&#10;1 2 -1 | 0">Ex. 3 (k = −1)</button>
+<button class="alt" data-ge="7 4 | 3&#10;-2 3 | 4&#10;2 1 | -2">Ex. 4</button>
+<button class="alt" data-ge="2 1 3 | 7&#10;3 -2 8 | 7&#10;1 -2 4 | 1&#10;-2 1 -4 | -3">Ex. 5</button>
+<button class="alt" data-ge="1 1 1 1 | 1&#10;1 1 1 -1 | 2&#10;1 1 -1 -1 | 3&#10;1 -1 -1 -1 | 4">Exercise 8.3</button>
+</div>
+<div class="ctrl"><button id="geLoad">Load</button><button id="gePrev" class="alt">◀ Back</button><button id="geNext">Next step ▶</button><button id="geEnd" class="alt">Jump to end</button><span class="readout" id="geCount"></span></div>
+<div class="stepmsg" id="geMsg"></div>
+<div id="geTable"></div>
+<div class="out" id="geOut"></div>
+<p class="small">The yellow cell is the current pivot and the blue row is the row being used. At the end the lab counts r and s and gives the verdict. If there are solutions, it writes the general solution with the free unknowns as parameters.</p></div>
+</section>
+
+<!-- 8 -->
+<section id="s8">
+<h2>8. How many vectors are independent? (Eq. 27, Example 6)</h2>
+<p>Given n vectors x₁, …, xₙ, each with m components, solve</p>
+<div class="eq">a₁x₁ + a₂x₂ + … + aₙxₙ = 0 &nbsp;&nbsp;(Eq. 27)</div>
+<p>for a₁, …, aₙ. This is a homogeneous system with coefficient matrix P = [x₁ x₂ … xₙ] (the vectors as columns). If its solution has k arbitrary constants, then <b>the number of independent vectors is n − k</b>.</p>
+<div class="box thm"><b class="t">Example 6 (theorem)</b>
+x₁, …, xₙ are linearly independent ⇔ <b>P = [x₁ … xₙ] has rank n</b>.<br>
+Proof: Eq. 27 is P·a = 0 (Eq. 30). Its only solution is a = 0 ⇔ rank P = n (by Section 2), and "only a = 0" is the definition of independence.</div>
+<div class="box thm"><b class="t">Corollary 1</b> If m &lt; n, rank P ≤ m &lt; n, so <b>more than m vectors in m dimensions are always dependent</b>. Example: any 4 vectors in 3D space.</div>
+<div class="box thm"><b class="t">Corollary 2</b> If m = n: n vectors of dimension n are independent ⇔ <b>det[x₁ … xₙ] ≠ 0</b>. The matrix built from n independent n-vectors as columns is nonsingular.</div>
+<div class="lab"><h4>🔬 Lab 4 (3D): how many of these vectors are independent? Drag to rotate.</h4>
+<div class="ctrl">
+<button class="alt" data-vp="ind3">3 independent</button><button class="alt" data-vp="plane">3 in a plane</button><button class="alt" data-vp="line">all on a line</button><button class="alt" data-vp="four">4 vectors in 3D</button>
+<label>squash v₃ into plane of v₁,v₂ <input type="range" id="vpT" min="0" max="1" step="0.01" value="0"></label>
+</div>
+<div class="grid2"><canvas id="vpcan" width="460" height="400"></canvas><div class="readout" id="vpout"></div></div>
+<p class="small">The lab builds P = [v₁ v₂ …] and finds its rank and a nontrivial relation a₁v₁ + a₂v₂ + … = 0 whenever one exists. The shaded region is the span: the whole space (rank 3), a plane (rank 2) or a line (rank 1). With 4 vectors in 3D a relation <i>always</i> exists (Corollary 1).</p></div>
+</section>
+
+<!-- 9 -->
+<section id="s9">
+<h2>9. Row rank = column rank (Example 7)</h2>
+<div class="box thm"><b class="t">Theorem</b> The rank of a matrix equals the maximum number of linearly independent <b>columns</b>, and also the maximum number of linearly independent <b>rows</b>.</div>
+<p><b>Proof idea (book):</b> suppose k of the n columns are independent and the rest depend on them. The m×k matrix of those k columns has rank k (Example 6). Adding the dependent columns back does not raise the rank, so rank A = k = number of independent columns. Since rank Aᵀ = rank A (determinants don't change under transposition) and the columns of Aᵀ are the rows of A, the number of independent rows is also k. ∎</p>
+<div class="prob"><div class="q">Illustration: A = <span class="M" data-m="1 2 3; 2 4 6; 1 1 1"></span></div>
+<p>Rows: R₂ = 2R₁, and R₁, R₃ are independent ⇒ 2 independent rows.<br>Columns: C₃ = 2C₂ − C₁, since 2(2, 4, 1) − (1, 2, 1) = (3, 6, 1) = C₃ ✓. C₁ and C₂ are not parallel ⇒ 2 independent columns.<br>Rank = 2 counted either way.</p></div>
+<div class="box fact"><b class="t">Why this is surprising</b> For a 3×100 matrix the rows are 3 vectors in 100-dimensional space, and the columns are 100 vectors in 3-dimensional space. They look like totally different objects, but the number of independent ones is always the same (here ≤ 3).</div>
+</section>
+
+<!-- 10 -->
+<section id="s10">
+<h2>10. Summary sheet</h2>
+<div class="tbl-wrap"><table>
+<tr><th>Situation</th><th>Condition</th><th>Solutions</th></tr>
+<tr><td>Any m, n, inhomogeneous</td><td>s &gt; r</td><td>none (inconsistent)</td></tr>
+<tr><td></td><td>s = r = n</td><td>exactly one</td></tr>
+<tr><td></td><td>s = r &lt; n</td><td>∞, n − r parameters</td></tr>
+<tr><td>Any m, n, homogeneous</td><td>r = n</td><td>only trivial</td></tr>
+<tr><td></td><td>r &lt; n</td><td>∞ (nontrivial exist), n − r parameters</td></tr>
+<tr><td>Square, n×n</td><td>det A ≠ 0</td><td>unique, x = A⁻¹b</td></tr>
+<tr><td>Square homogeneous</td><td>det A = 0</td><td>nontrivial exist</td></tr>
+<tr><td>m &lt; n homogeneous</td><td>always (r ≤ m &lt; n)</td><td>nontrivial exist</td></tr>
+<tr><td>Vectors x₁…xₙ</td><td>rank [x₁…xₙ] = n</td><td>independent</td></tr>
+<tr><td>n vectors in m &lt; n dims</td><td>always</td><td>dependent</td></tr>
+</table></div>
+<div class="eq">n − r = dimension of the null space = number of free parameters &nbsp;&nbsp;(rank + nullity = n)</div>
+</section>
+
+<!-- 11 -->
+<section id="s11">
+<h2>11. Book's Exercise 8: all problems solved</h2>
+
+<div class="prob"><div class="q">1. For which λ do these homogeneous systems have nontrivial solutions? Find them.<br>
+(a) (2 − λ)x + 4y = 0, &nbsp;x + (3 + λ)y = 0. &nbsp;&nbsp;(b) (1 − λ)x + 2y = 0, &nbsp;2x + (1 − λ)y + z = 0, &nbsp;5y + (1 − λ)z = 0.</div>
+<details><summary>Show solution</summary>
+<p><b>(a)</b> det = (2 − λ)(3 + λ) − 4 = 6 − λ − λ² − 4 = −(λ² + λ − 2) = −(λ − 1)(λ + 2). Nontrivial ⇔ <b>λ = 1 or λ = −2</b>.</p>
+<ul><li>λ = 1: x + 4y = 0 (both equations) ⇒ <b>(x, y) = t(−4, 1)</b>.</li>
+<li>λ = −2: 4x + 4y = 0 and x + y = 0 ⇒ <b>(x, y) = t(1, −1)</b>.</li></ul>
+<p><b>(b)</b> det = <span class="M det" data-m="1−λ 2 0; 2 1−λ 1; 0 5 1−λ"></span> = (1 − λ)[(1 − λ)² − 5] − 2[2(1 − λ)] = (1 − λ)[(1 − λ)² − 9].<br>
+Zero when 1 − λ = 0 or 1 − λ = ±3 ⇒ <b>λ = 1, −2, 4</b>.</p>
+<ul><li>λ = 1: 2y = 0, 2x + z = 0, 5y = 0 ⇒ <b>t(1, 0, −2)</b>.</li>
+<li>λ = 4: −3x + 2y = 0, 2x − 3y + z = 0, 5y − 3z = 0 ⇒ x = 2y/3, z = 5y/3 ⇒ <b>t(2, 3, 5)</b>. Check eq 2: 4 − 9 + 5 = 0 ✓.</li>
+<li>λ = −2: 3x + 2y = 0, 2x + 3y + z = 0, 5y + 3z = 0 ⇒ <b>t(−2, 3, −5)</b>. Check eq 2: −4 + 9 − 5 = 0 ✓.</li></ul>
+<p class="small">These λ are the eigenvalues of [[2, 4],[1, −3]] and of [[1,2,0],[2,1,1],[0,5,1]], and the solutions are the eigenvectors. This is the topic of Section 9.</p></details></div>
+
+<div class="prob"><div class="q">2. Find the ranks (method of Example 7): (a) <span class="M" data-m="2 2 2 3; −2 8 2 −5; 0 10 4 9"></span> &nbsp;(b) <span class="M" data-m="3 5 9 1; 1 3 4 0; −3 2 0 4; 1 −1 1 −1; 0 3 3 1"></span></div>
+<details><summary>Show solution</summary>
+<p><b>(a)</b> R₁ + R₂ = (0, 10, 4, −2), which differs from R₃ = (0, 10, 4, 9). So R₃ is not R₁ + R₂, and we must check further. Row-reduce: R₂ + R₁ → (0, 10, 4, −2). Then R₃ − (new R₂) → (0, 0, 0, 11). Three nonzero rows ⇒ <b>rank 3</b>, all rows independent.<br>
+(Minor check: columns 1, 2, 4 give <span class="M det" data-m="2 2 3; −2 8 −5; 0 10 9"></span> = 2(72 + 50) − 2(−18 − 0) + 3(−20 − 0) = 244 + 36 − 60 = 220 ≠ 0 ✓.)</p>
+<p><b>(b)</b> 5×4, so rank ≤ 4. Row reduction (see Lab 3, or work with R₂ = (1, 3, 4, 0) as the first pivot) leaves four nonzero rows, so the <b>rank is 4</b>: the 4 columns are independent, and only 4 of the 5 rows are independent.<br>
+(Minor check: rows 1–4 give det <span class="M det" data-m="3 5 9 1; 1 3 4 0; −3 2 0 4; 1 −1 1 −1"></span> = −30 ≠ 0.) Since 5 rows in 4 dimensions must be dependent (Corollary 1), there is a relation among the rows: here R₅ is a combination of the first four.</p></details></div>
+
+<div class="prob"><div class="q">3. Solve u + v + w + x = 1, &nbsp;u + v + w − x = 2, &nbsp;u + v − w − x = 3, &nbsp;u − v − w − x = 4.</div>
+<details><summary>Show solution</summary>
+<p>Subtract consecutive equations:<br>
+(1) − (2): 2x = −1 ⇒ <b>x = −1/2</b>.<br>
+(2) − (3): 2w = −1 ⇒ <b>w = −1/2</b>.<br>
+(3) − (4): 2v = −1 ⇒ <b>v = −1/2</b>.<br>
+Then (1): u = 1 − v − w − x = 1 + 3/2 ⇒ <b>u = 5/2</b>.</p>
+<p class="small">det A = 8 ≠ 0, so the solution is unique. Check eq 4: 5/2 + 1/2 + 1/2 + 1/2 = 4 ✓.</p></details></div>
+
+<div class="prob"><div class="q">4. Show that if Ax = 0 for all n-dimensional vectors x, then A = 0.</div>
+<details><summary>Show solution</summary>
+<p>Choose x = eⱼ (1 in place j, 0 elsewhere). Then Aeⱼ = j-th column of A = 0. This holds for every j = 1, …, n, so every column is zero ⇒ A = 0. ∎</p>
+<p class="small">In terms of rank: the null space is all of ℝⁿ, so the nullity is n and rank A = n − n = 0. Only the zero matrix has rank 0.</p></details></div>
+
+<div class="prob"><div class="q">5. (a) Show Ax = 0 with A = <span class="M" data-m="0 c −b; −c 0 a; b −a 0"></span> has solution x = (at, bt, ct). (b) If B = <span class="M" data-m="a² ab ac; ab b² bc; ac bc c²"></span>, show By is a vector of the kind in (a). (c) Hence show AB = 0 without multiplying.</div>
+<details><summary>Show solution</summary>
+<p><b>(a)</b> A(a, b, c)ᵀ = (0·a + cb − bc, −ca + 0 + ac, ba − ab + 0) = (0, 0, 0) ✓, and by linearity A(t·(a,b,c)) = 0 too. Since A ≠ 0 and det A = 0 (it is antisymmetric of odd order), rank A = 2 (for (a, b, c) ≠ 0). So the null space is 3 − 2 = 1-dimensional and <b>x = t(a, b, c) is the complete solution</b>.<br>
+(Physics: Ay = y × n with n = (a, b, c), so Ay = 0 ⇔ y ∥ n.)</p>
+<p><b>(b)</b> B = nnᵀ with n = (a, b, c)ᵀ. Then By = n(nᵀy) = (a·y₁ + b·y₂ + c·y₃)·(a, b, c)ᵀ. This is t(a, b, c) with t = n·y ✓.</p>
+<p><b>(c)</b> For every y, By has the form in (a), so A(By) = 0. Thus (AB)y = 0 for all y, and by Exercise 4, <b>AB = 0</b>. ∎</p></details></div>
+
+<div class="prob"><div class="q">6. Find nontrivial solutions in parametric form:<br>
+(a) 4x + 2y + z + 5t = 0, &nbsp;x − 7y + 4z + 5t = 0, &nbsp;6x + 12y − 3z + 3t = 0, &nbsp;3x + 7y − 2z + t = 0.<br>
+(b) x₁ + x₂ + x₃ + x₄ + x₅ = 0, &nbsp;x₁ + 2x₂ + 3x₃ + 4x₄ + 5x₅ = 0, &nbsp;5x₁ + 4x₂ + 3x₃ + 2x₄ + x₅ = 0, &nbsp;x₁ − x₂ + x₃ − x₄ + x₅ = 0.</div>
+<details><summary>Show solution</summary>
+<p><b>(a)</b> det A = 0 and row reduction gives rank <b>2</b>. The reduced form is<br>
+x + ½z + (3/2)t = 0, &nbsp; y − ½z − ½t = 0.<br>
+With z and t free (n − r = 4 − 2 = 2 parameters):</p>
+<div class="eq">(x, y, z, t) = p(−1, 1, 2, 0) + q(−3, 1, 0, 2)</div>
+<p class="small">Check (−1, 1, 2, 0): −4 + 2 + 2 = 0 ✓; −1 − 7 + 8 = 0 ✓; −6 + 12 − 6 = 0 ✓; −3 + 7 − 4 = 0 ✓. Check (−3, 1, 0, 2): −12 + 2 + 10 = 0 ✓; −3 − 7 + 10 = 0 ✓; −18 + 12 + 6 = 0 ✓; −9 + 7 + 2 = 0 ✓.</p>
+<p><b>(b)</b> 4 equations, 5 unknowns, so nontrivial solutions are guaranteed. Row reduction gives rank <b>3</b> (eq 3 = 6·eq 1 − eq 2), so there are 5 − 3 = 2 parameters:<br>
+x₁ = x₄ + x₅, &nbsp; x₂ = −x₄, &nbsp; x₃ = −x₄ − 2x₅.</p>
+<div class="eq">(x₁, x₂, x₃, x₄, x₅) = p(1, −1, −1, 1, 0) + q(1, 0, −2, 0, 1)</div>
+<p class="small">Check the first vector in eq 2: 1 − 2 − 3 + 4 + 0 = 0 ✓; eq 3: 5 − 4 − 3 + 2 = 0 ✓; eq 4: 1 + 1 − 1 − 1 = 0 ✓. Check the second vector in eq 2: 1 − 6 + 5 = 0 ✓; eq 3: 5 − 6 + 1 = 0 ✓; eq 4: 1 − 2 + 1 = 0 ✓. Indeed 6(eq 1) − (eq 2) = (5, 4, 3, 2, 1) = eq 3.</p></details></div>
+</section>
+
+<!-- 12 -->
+<section id="s12">
+<h2>12. Practice set (CSIR-NET / GATE style)</h2>
+
+<div class="prob"><div class="q">P1. x + 2y + 3z = 6, x + 3y + 5z = 9, 2x + 5y + az = b. Find the conditions for a unique solution, no solution, and infinitely many solutions.<span class="tag">GATE classic</span></div>
+<details><summary>Show solution</summary><p>R₂ − R₁: (0, 1, 2 | 3). R₃ − 2R₁: (0, 1, a − 6 | b − 12). Then R₃ − R₂: (0, 0, a − 8 | b − 15).<br>
+a ≠ 8: r = s = 3, unique.<br>
+a = 8, b ≠ 15: r = 2, s = 3, none.<br>
+a = 8, b = 15: r = s = 2, infinitely many (1 parameter).</p></details></div>
+
+<div class="prob"><div class="q">P2. For which λ is x + y + z = 1, x + 2y + 4z = λ, x + 4y + 10z = λ² consistent? Solve in each case.</div>
+<details><summary>Show solution</summary><p>R₂ − R₁: (0, 1, 3 | λ − 1). R₃ − R₁: (0, 3, 9 | λ² − 1). R₃ − 3R₂: (0, 0, 0 | λ² − 3λ + 2). Consistent ⇔ (λ − 1)(λ − 2) = 0.<br>
+λ = 1: (x, y, z) = (1 + 2t, −3t, t).<br>
+λ = 2: (x, y, z) = (2t, 1 − 3t, t).</p></details></div>
+
+<div class="prob"><div class="q">P3. A is 5×7 with rank 4. What is the dimension of the solution space of Ax = 0? Does Ax = b always have a solution?</div>
+<details><summary>Show solution</summary><p>Nullity = 7 − 4 = 3. No: the column space is 4-dimensional inside ℝ⁵, so some b are not reachable (rank [A|b] = 5). When it is solvable, there are 3 free parameters.</p></details></div>
+
+<div class="prob"><div class="q">P4. Are (1, 2, 3), (4, 5, 6), (7, 8, 9) independent? If not, find a relation.</div>
+<details><summary>Show solution</summary><p>det = 1(45 − 48) − 2(36 − 42) + 3(32 − 35) = −3 + 12 − 9 = 0 ⇒ dependent, rank 2. Relation: v₁ − 2v₂ + v₃ = (1 − 8 + 7, 2 − 10 + 8, 3 − 12 + 9) = 0.</p></details></div>
+
+<div class="prob"><div class="q">P5. For what a are (1, a, 0), (a, 1, 0), (0, 0, 1) dependent?</div>
+<details><summary>Show solution</summary><p>det = 1 − a² = 0 ⇒ a = ±1. For example a = 1 gives v₁ = v₂.</p></details></div>
+
+<div class="prob"><div class="q">P6. How many of (1, 1, 0, 0), (0, 1, 1, 0), (0, 0, 1, 1), (1, 0, 0, 1) are independent?</div>
+<details><summary>Show solution</summary><p>v₁ − v₂ + v₃ = (1, 0, 0, 1) = v₄, so they are dependent. v₁, v₂, v₃ are clearly independent (staircase pattern). Answer: <b>3</b>.</p></details></div>
+
+<div class="prob"><div class="q">P7. x₁ and x₂ both solve Ax = b with b ≠ 0. Which of x₁ − x₂, x₁ + x₂, ½(x₁ + x₂), 3x₁ − 2x₂ also solve Ax = b?</div>
+<details><summary>Show solution</summary><p>A(αx₁ + βx₂) = (α + β)b. It is a solution ⇔ α + β = 1. So ½(x₁ + x₂) and 3x₁ − 2x₂ work. x₁ − x₂ solves Ax = 0 instead, and x₁ + x₂ gives 2b.</p></details></div>
+
+<div class="prob"><div class="q">P8. A homogeneous system has 6 equations, 4 unknowns and rank 4. How many solutions does it have?</div>
+<details><summary>Show solution</summary><p>Only the trivial one: r = n = 4. Having more equations doesn't matter.</p></details></div>
+
+<div class="prob"><div class="q">P9. Prove: a homogeneous system with more unknowns than equations always has a nontrivial solution.</div>
+<details><summary>Show solution</summary><p>r ≤ m &lt; n ⇒ n − r ≥ 1 free parameter.</p></details></div>
+
+<div class="prob"><div class="q">P10. Three vectors in ℝ²: (1, 0), (0, 1), (2, 3). Find a nontrivial relation.</div>
+<details><summary>Show solution</summary><p>2v₁ + 3v₂ − v₃ = 0. By Corollary 1 one must exist, since 3 vectors in 2 dimensions are always dependent.</p></details></div>
+
+<div class="prob"><div class="q">P11. Rank of the n×n matrix with aᵢⱼ = i + j (n ≥ 2)?<span class="tag">tricky</span></div>
+<details><summary>Show solution</summary><p>Row i = i(1, 1, …, 1) + (1, 2, …, n). Every row is a combination of the two vectors u = (1,…,1) and v = (1,2,…,n), which are independent. So the rank is <b>2</b>.</p></details></div>
+
+<div class="prob"><div class="q">P12. If the columns of a square matrix A are linearly independent, what can you say about Ax = b?</div>
+<details><summary>Show solution</summary><p>rank A = n ⇒ det A ≠ 0 ⇒ a unique solution x = A⁻¹b for every b (Corollary 2).</p></details></div>
+
+<div class="prob"><div class="q">P13. Show that rank(AB) ≤ rank A.</div>
+<details><summary>Show solution</summary><p>Each column of AB is A times a column of B, i.e. a combination of the columns of A. So the column space of AB lies inside that of A, and dim ≤ rank A. (Similarly, rank(AB) ≤ rank B using rows.)</p></details></div>
+</section>
+
+<!-- 13 -->
+<section id="s13" class="quiz">
+<h2>13. Self-test quiz</h2>
+<div id="quizBox"></div>
+<button id="quizCheck">Check answers</button> <span id="quizScore" class="readout"></span>
+</section>
+
+<!-- 14 -->
+<section id="s14">
+<h2>14. Interesting facts</h2>
+<div class="box fact"><b class="t">Rouché–Capelli</b> The theorem "consistent ⇔ rank A = rank [A|b]" is named after Eugène Rouché (1875) and Alfredo Capelli (1892). In Russia it is called the Kronecker–Capelli theorem, and in Spain the Rouché–Frobenius theorem. The same result has many names.</div>
+<div class="box fact"><b class="t">"Rank" is everywhere</b> The rank of a matrix tells you how many independent pieces of information it holds. Data compression, recommendation systems and quantum entanglement (the Schmidt rank of a two-particle state) all measure rank.</div>
+<div class="box fact"><b class="t">Least squares</b> When m &gt; n and there is no exact solution (s &gt; r), experimental physicists still want the "best" x. The answer solves AᵀAx = Aᵀb, a square n×n system. This is how straight-line fits through noisy data work.</div>
+<div class="box fact"><b class="t">Underdetermined + sparsity</b> When m &lt; n there are infinitely many solutions. Modern "compressed sensing" (used in MRI scanners) picks the one with the fewest nonzero entries, which lets you reconstruct images from far fewer measurements than unknowns.</div>
+<div class="box fact"><b class="t">Gauss and Ceres</b> Gauss developed elimination and least squares in 1801 to predict where the lost asteroid Ceres would reappear, from only a few observations. It was found exactly where he said.</div>
+</section>
+
+</div>
+
+<script>
+/* ---------- theme ---------- */
+(function(){const r=document.documentElement;let t=null;try{t=localStorage.getItem('jt-theme')}catch(e){}if(t)r.setAttribute('data-theme',t);
+document.getElementById('themeBtn').onclick=()=>{const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('jt-theme',n)}catch(e){}drawAll();};})();
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+const $=id=>document.getElementById(id);
+function renderM(){document.querySelectorAll('.M[data-m]').forEach(el=>{const s=el.getAttribute('data-m');
+  const rows=s.split(';').map(r=>{r=r.trim();return r.includes('|')?r.split(/\s*\|\s*/):r.split(/\s+/);});const cc=(el.dataset.c||'').split(',').filter(Boolean).map(Number);
+  el.innerHTML='<table class="mx'+(el.classList.contains('det')?' det':'')+'">'+rows.map(r=>'<tr>'+r.map((c,j)=>'<td'+(cc.includes(j+1)?' class="cr"':'')+'>'+c+'</td>').join('')+'</tr>').join('')+'</table>';});}
+renderM();
+function f(x,d=3){if(Math.abs(x)<1e-9)x=0;return (+x.toFixed(d)).toString();}
+function setupCanvas(c){const dpr=window.devicePixelRatio||1;if(!c._w){c._w=c.width;c._h=c.height;c.width=c._w*dpr;c.height=c._h*dpr;c.style.width='100%';c.style.maxWidth=c._w+'px';}const g=c.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);return [g,c._w,c._h];}
+function arrow(g,x1,y1,x2,y2,col,w=2.5){g.strokeStyle=col;g.fillStyle=col;g.lineWidth=w;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();const a=Math.atan2(y2-y1,x2-x1),L=Math.min(10+w,Math.hypot(x2-x1,y2-y1)*.5);if(L<2)return;g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-L*Math.cos(a-.4),y2-L*Math.sin(a-.4));g.lineTo(x2-L*Math.cos(a+.4),y2-L*Math.sin(a+.4));g.closePath();g.fill();}
+function clear(g,w,h){g.fillStyle=css('--card');g.fillRect(0,0,w,h);}
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+const nrm=a=>Math.hypot(...a);
+const det3=M=>dot(M[0],cross(M[1],M[2]));
+
+/* ---------- shared 3D view helper ---------- */
+function make3D(canvas,redraw,init){const v=Object.assign({yaw:-0.75,pitch:0.42,scale:62},init||{});let d=null;
+ canvas.addEventListener('pointerdown',e=>{d=[e.clientX,e.clientY];canvas.setPointerCapture(e.pointerId);});
+ canvas.addEventListener('pointermove',e=>{if(!d)return;v.yaw+=(e.clientX-d[0])*.01;v.pitch=Math.max(-1.5,Math.min(1.5,v.pitch+(e.clientY-d[1])*.01));d=[e.clientX,e.clientY];redraw();});
+ canvas.addEventListener('pointerup',()=>d=null);
+ v.proj=(p,w,h)=>{const cy=Math.cos(v.yaw),sy=Math.sin(v.yaw),cp=Math.cos(v.pitch),sp=Math.sin(v.pitch);const X=cy*p[0]-sy*p[1],Y=sy*p[0]+cy*p[1];return [w/2+v.scale*X,h/2+15-v.scale*(p[2]*cp-Y*sp),Y*cp+p[2]*sp];};return v;}
+function axes3D(g,v,w,h,L=2.6){g.globalAlpha=.5;[[1,0,0,'x'],[0,1,0,'y'],[0,0,1,'z']].forEach(a=>{const o=v.proj([0,0,0],w,h),p=v.proj([a[0]*L,a[1]*L,a[2]*L],w,h);arrow(g,o[0],o[1],p[0],p[1],css('--muted'),1.2);g.fillStyle=css('--muted');g.font='12px sans-serif';g.fillText(a[3],p[0]+4,p[1]);});g.globalAlpha=1;}
+// draw a plane n·x=d as tiled quads (pushed into list for depth sort)
+function planeQuads(v,w,h,n,d,col,H=2.3,N=6,center){const nn=nrm(n);if(nn<1e-9)return [];const nh=n.map(x=>x/nn);const p0=center||nh.map(x=>x*d/nn);let t=Math.abs(nh[0])<0.9?[1,0,0]:[0,1,0];let u=cross(nh,t);u=u.map(x=>x/nrm(u));const vv=cross(nh,u);const Q=[];
+ for(let a=0;a<N;a++)for(let b=0;b<N;b++){const s0=-H+2*H*a/N,s1=-H+2*H*(a+1)/N,t0=-H+2*H*b/N,t1=-H+2*H*(b+1)/N;const pts=[[s0,t0],[s1,t0],[s1,t1],[s0,t1]].map(([s,tt])=>v.proj(p0.map((x,k)=>x+s*u[k]+tt*vv[k]),w,h));Q.push({pts,z:pts.reduce((q,p)=>q+p[2],0)/4,col});}return Q;}
+function drawQuads(g,Q,alpha=.28){Q.sort((a,b)=>a.z-b.z).forEach(q=>{g.fillStyle=q.col;g.globalAlpha=alpha;g.beginPath();q.pts.forEach((p,k)=>k?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.closePath();g.fill();g.globalAlpha=.45;g.strokeStyle=q.col;g.lineWidth=.6;g.stroke();});g.globalAlpha=1;}
+
+/* ---------- Lab 1: Example 3 planes ---------- */
+const v1=make3D($('k3can'),drawK3);
+$('k3').oninput=drawK3;$('k3snap').onclick=()=>{$('k3').value=-1;drawK3();};
+function drawK3(){const k=+$('k3').value;const [g,w,h]=setupCanvas($('k3can'));clear(g,w,h);axes3D(g,v1,w,h);
+ const N=[[1,-1,2],[3,2,1],[1,2,k]];const cols=['#1c7ed6','#e8590c','#2f9e44'];let Q=[];N.forEach((n,i)=>Q=Q.concat(planeQuads(v1,w,h,n,0,cols[i])));drawQuads(g,Q);
+ const D=5*k+5;const o=v1.proj([0,0,0],w,h);
+ if(Math.abs(D)<0.03){const dir=cross(N[0],N[1]);const dn=nrm(dir);const a=v1.proj(dir.map(x=>-2.6*x/dn),w,h),b=v1.proj(dir.map(x=>2.6*x/dn),w,h);g.strokeStyle=css('--ink');g.lineWidth=4;g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke();
+  $('k3verdict').innerHTML='<span class="ok">det A = 0 ⇒ nontrivial solutions: a whole line</span>';}
+ else{g.fillStyle=css('--ink');g.beginPath();g.arc(o[0],o[1],6,0,7);g.fill();$('k3verdict').innerHTML='<span class="bad">det A ≠ 0 ⇒ only the trivial solution x = 0</span>';}
+ $('k3v').textContent=k.toFixed(2);
+ const r=Math.abs(D)<0.03?2:3;$('k3out').textContent='x − y + 2z = 0\n3x + 2y + z = 0\nx + 2y + '+k.toFixed(2)+'z = 0\n\ndet A = 5k + 5 = '+f(D)+'\nrank A = '+r+'   free parameters = 3 − '+r+' = '+(3-r)+(r===2?'\n\nsolution: x = t(−1, 1, 1)\n(direction = n₁ × n₂ = ('+cross(N[0],N[1]).join(', ')+'))':'');
+ // det plot
+ const [p,pw,ph]=setupCanvas($('k3plot'));clear(p,pw,ph);const X=x=>20+(x+4)/6*(pw-30),Y=y=>ph/2-y*ph/2/16;p.strokeStyle=css('--line');p.beginPath();p.moveTo(10,ph/2);p.lineTo(pw-5,ph/2);p.moveTo(X(0),5);p.lineTo(X(0),ph-5);p.stroke();
+ p.strokeStyle=css('--acc');p.lineWidth=2;p.beginPath();p.moveTo(X(-4),Y(5*-4+5));p.lineTo(X(2),Y(15));p.stroke();p.fillStyle=css('--acc2');p.beginPath();p.arc(X(k),Y(D),5,0,7);p.fill();p.fillStyle=css('--ink');p.font='11px sans-serif';p.fillText('det A = 5k + 5',X(-3.8),14);p.fillText('k = −1',X(-1)-14,ph/2+14);p.fillStyle=css('--acc3');p.beginPath();p.arc(X(-1),ph/2,3,0,7);p.fill();}
+
+/* ---------- Lab 2: x = xp + xh ---------- */
+const v2=make3D($('xpcan'),drawXP);
+['xpSys','xpB','xpS','xpT'].forEach(id=>$(id).oninput=drawXP);
+function drawXP(){const sys=+$('xpSys').value,b=+$('xpB').value,s=+$('xpS').value,t=+$('xpT').value;const [g,w,h]=setupCanvas($('xpcan'));clear(g,w,h);axes3D(g,v2,w,h);
+ const n1=[1,1,2];let xp,dirs,txt;const P=p=>v2.proj(p,w,h);
+ if(sys===1){xp=n1.map(x=>x*b/dot(n1,n1));dirs=[[1,-1,0],[2,0,-1]];let Q=planeQuads(v2,w,h,n1,0,'#868e96',2.2,6,[0,0,0]).concat(planeQuads(v2,w,h,n1,b,'#e8590c',2.2,6,xp));drawQuads(g,Q,.24);
+  txt='Ax = b:  x + y + 2z = '+f(b,2)+'\nr = 1, n = 3 ⇒ null space is a plane (2 params)\n\n';}
+ else{const n2=[1,-1,0];const dir=cross(n1,n2);dirs=[dir];// particular: solve with z=0: x+y=b, x−y=b/2
+  xp=[(b+b/2)/2,(b-b/2)/2,0];const dn=nrm(dir);const seg=(c,col,wd,dash)=>{const a=P(c.map((x,k)=>x-2.8*dir[k]/dn)),e=P(c.map((x,k)=>x+2.8*dir[k]/dn));g.strokeStyle=col;g.lineWidth=wd;if(dash)g.setLineDash(dash);g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(e[0],e[1]);g.stroke();g.setLineDash([]);};
+  let Q=planeQuads(v2,w,h,n1,b,'#1c7ed6',2,5,xp).concat(planeQuads(v2,w,h,n2,b/2,'#2f9e44',2,5,xp));drawQuads(g,Q,.12);seg([0,0,0],'#868e96',4,[7,5]);seg(xp,'#e8590c',4);
+  txt='Ax = b:  x + y + 2z = '+f(b,2)+',  x − y = '+f(b/2,2)+'\nr = 2, n = 3 ⇒ null space is a line (1 param)\n\n';}
+ const xh=dirs.length===2?dirs[0].map((x,k)=>s*x+t*dirs[1][k]):dirs[0].map(x=>s*x/nrm(dirs[0])*1.2);const x=xp.map((v,k)=>v+xh[k]);
+ const o=P([0,0,0]),pp=P(xp),px=P(x),ph=P(xh);
+ arrow(g,o[0],o[1],pp[0],pp[1],css('--acc4'),3);arrow(g,o[0],o[1],ph[0],ph[1],'#2f9e44',2.5);g.setLineDash([5,4]);g.strokeStyle='#2f9e44';g.lineWidth=1.5;g.beginPath();g.moveTo(pp[0],pp[1]);g.lineTo(px[0],px[1]);g.stroke();g.setLineDash([]);
+ g.fillStyle=css('--ink');g.beginPath();g.arc(px[0],px[1],6,0,7);g.fill();g.font='bold 13px sans-serif';g.fillStyle=css('--acc4');g.fillText('xₚ',pp[0]+6,pp[1]);g.fillStyle='#2f9e44';g.fillText('xₕ',ph[0]+6,ph[1]);
+ const Ax1=dot(n1,x),Ax2=x[0]-x[1];
+ $('xpBv').textContent=f(b,2);
+ $('xpout').textContent=txt+'xₚ = ('+xp.map(v=>f(v,2)).join(', ')+')\nxₕ = ('+xh.map(v=>f(v,2)).join(', ')+')   [A xₕ = 0]\nx = xₚ + xₕ = ('+x.map(v=>f(v,2)).join(', ')+')\n\ncheck: x + y + 2z = '+f(Ax1,3)+(sys===2?'\n       x − y = '+f(Ax2,3):'')+'  ✓\n\n(grey = solutions of Ax = 0,\n orange = solutions of Ax = b)';}
+
+/* ---------- fractions ---------- */
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;}
+class Fr{constructor(n,d=1){if(d<0){n=-n;d=-d;}const g=gcd(n,d);this.n=n/g;this.d=d/g;}add(o){return new Fr(this.n*o.d+o.n*this.d,this.d*o.d)}sub(o){return new Fr(this.n*o.d-o.n*this.d,this.d*o.d)}mul(o){return new Fr(this.n*o.n,this.d*o.d)}div(o){return new Fr(this.n*o.d,this.d*o.n)}isZ(){return this.n===0}isOne(){return this.n===1&&this.d===1}toString(){return this.d===1?''+this.n:this.n+'/'+this.d}}
+const F0=new Fr(0);
+
+/* ---------- Lab 3: elimination stepper ---------- */
+let geSteps=[],geI=0,geN=0;
+function geParse(){const lines=$('geIn').value.trim().split('\n').filter(l=>l.trim());const parse=x=>{if(!/^-?\d+(\/\d+)?$/.test(x))throw 'Use integers or fractions: "'+x+'"';const [a,b]=x.split('/');return new Fr(+a,b?+b:1);};
+ const rows=lines.map(l=>{if(!l.includes('|'))throw 'Put "|" before the right-hand side in every line.';const [L,R]=l.split('|');return [...L.trim().split(/[\s,]+/).map(parse),parse(R.trim())];});
+ const n=rows[0].length-1;if(rows.some(r=>r.length!==n+1))throw 'All equations need the same number of coefficients.';if(rows.length>7||n>7)throw 'Keep it at most 7×7.';return {G:rows,n};}
+function snap(G,msg,pr,pc,act){return {G:G.map(r=>r.slice()),msg,pr,pc,act};}
+function geBuild(){let P;try{P=geParse();}catch(e){$('geOut').textContent='Error: '+e;geSteps=[];$('geTable').innerHTML='';return;}
+ const G=P.G,n=P.n,m=G.length;geN=n;geSteps=[snap(G,'Start: augmented matrix [A | b]',-1,-1,-1)];let r=0;const piv=[];
+ for(let c=0;c<n&&r<m;c++){let p=r;while(p<m&&G[p][c].isZ())p++;if(p===m){geSteps.push(snap(G,'Column '+(c+1)+': no pivot below row '+(r+1)+' → x'+(c+1)+' will be FREE',-1,c,-1));continue;}
+  if(p!==r){[G[p],G[r]]=[G[r],G[p]];geSteps.push(snap(G,'Swap R'+(r+1)+' ↔ R'+(p+1)+' to get a nonzero pivot',r,c,r));}
+  const pv=G[r][c];if(!pv.isOne()){G[r]=G[r].map(x=>x.div(pv));geSteps.push(snap(G,'R'+(r+1)+' → R'+(r+1)+' ÷ ('+pv+')  (make pivot 1)',r,c,r));}
+  for(let i=0;i<m;i++)if(i!==r&&!G[i][c].isZ()){const k=G[i][c];G[i]=G[i].map((x,j)=>x.sub(k.mul(G[r][j])));geSteps.push(snap(G,'R'+(i+1)+' → R'+(i+1)+' − ('+k+')·R'+(r+1)+'  (clear column '+(c+1)+')',r,c,r));}
+  piv.push(c);r++;}
+ const bad=G.findIndex((row,i)=>i>=r&&!row[n].isZ());const s=bad>=0?r+1:r;
+ const names=n<=4?['x','y','z','w']:Array.from({length:n},(_,i)=>'x'+(i+1));
+ let verdict='Finished (reduced row-echelon form).  r = rank A = '+r+',  s = rank [A|b] = '+s+',  n = '+n+'\n';
+ if(s>r)verdict+='\n✗ s > r: row '+(bad+1)+' says 0 = '+G[bad][n]+'.  INCONSISTENT – no solution.';
+ else{const free=[...Array(n).keys()].filter(c=>!piv.includes(c));const homog=G.every(row=>row[n].isZ());
+  if(!free.length)verdict+='\n✓ s = r = n: unique solution\n  '+piv.map((c,i)=>names[c]+' = '+G[i][n]).join(',  ');
+  else{const pn=['p','q','u','v','w','k','l'];verdict+='\n✓ s = r < n: infinitely many, '+(n-r)+'-fold arbitrariness\n  free: '+free.map((c,i)=>names[c]+' = '+pn[i]).join(', ')+'\n';
+   piv.forEach((c,i)=>{let rhs=G[i][n].isZ()?'':G[i][n].toString();free.forEach((fc,k)=>{const co=G[i][fc];if(!co.isZ()){const v=F0.sub(co);const a=new Fr(Math.abs(v.n),v.d);const term=(a.isOne()?'':a.toString()+'·')+pn[k];rhs+=rhs?(v.n<0?' − ':' + ')+term:(v.n<0?'−':'')+term;}});verdict+='  '+names[c]+' = '+(rhs||'0')+'\n';});
+   if(homog)verdict+='  (homogeneous: r < n, so nontrivial solutions exist)';}}
+ geSteps.push(Object.assign(snap(G,'Done',-1,-1,-1),{verdict,badRow:bad,r}));geI=0;geShow();}
+function geShow(){if(!geSteps.length)return;const S=geSteps[geI];const n=geN;
+ $('geTable').innerHTML='<table class="aug">'+S.G.map((row,i)=>{const allZ=row.every(x=>x.isZ());const cls=(S.badRow===i?'bad':i===S.act?'act':allZ?'zero':'');return '<tr class="'+cls+'">'+row.map((x,j)=>'<td class="'+(j===n?'bar ':'')+(i===S.pr&&j===S.pc?'piv':'')+'">'+x+'</td>').join('')+'</tr>';}).join('')+'</table>';
+ $('geMsg').textContent=S.msg;$('geCount').textContent='step '+geI+' / '+(geSteps.length-1);$('gePrev').disabled=geI===0;$('geNext').disabled=geI===geSteps.length-1;
+ $('geOut').textContent=S.verdict||'Press "Next step" to continue.';}
+$('geLoad').onclick=geBuild;$('geNext').onclick=()=>{if(geI<geSteps.length-1){geI++;geShow();}};$('gePrev').onclick=()=>{if(geI>0){geI--;geShow();}};$('geEnd').onclick=()=>{geI=geSteps.length-1;geShow();};
+document.querySelectorAll('[data-ge]').forEach(b=>b.onclick=()=>{$('geIn').value=b.dataset.ge;geBuild();});
+
+/* ---------- Lab 4: independent vectors ---------- */
+const v4=make3D($('vpcan'),drawVP,{scale:70});
+const VP={ind3:[[1.6,0.2,0.1],[0.3,1.5,0.2],[0.2,0.4,1.4]],plane:[[1.6,0.2,0.1],[0.3,1.5,0.2],[1.9,1.7,0.3]],line:[[1,0.5,0.3],[-1.6,-0.8,-0.48],[2,1,0.6]],four:[[1.6,0.2,0.1],[0.3,1.5,0.2],[0.2,0.4,1.4],[1,1,1]]};
+let vpBase=VP.ind3;
+document.querySelectorAll('[data-vp]').forEach(b=>b.onclick=()=>{vpBase=VP[b.dataset.vp];$('vpT').value=0;drawVP();});
+$('vpT').oninput=drawVP;
+function nullVec(V){// V: list of k vectors (3D) -> rank and one null combination (float)
+ const k=V.length;const M=[0,1,2].map(i=>V.map(v=>v[i]));const A=M.map(r=>r.slice());const piv=[];let r=0;
+ for(let c=0;c<k&&r<3;c++){let p=r;for(let i=r+1;i<3;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;if(Math.abs(A[p][c])<1e-6)continue;[A[p],A[r]]=[A[r],A[p]];const pv=A[r][c];A[r]=A[r].map(x=>x/pv);for(let i=0;i<3;i++)if(i!==r){const q=A[i][c];A[i]=A[i].map((x,j)=>x-q*A[r][j]);}piv.push(c);r++;}
+ const free=[...Array(k).keys()].filter(c=>!piv.includes(c));if(!free.length)return {rank:r,rel:null};const fc=free[0];const a=Array(k).fill(0);a[fc]=1;piv.forEach((c,i)=>a[c]=-A[i][fc]);return {rank:r,rel:a};}
+function drawVP(){const t=+$('vpT').value;const V=vpBase.map(v=>v.slice());if(V.length>=3){const tgt=V[0].map((x,i)=>0.7*x+0.6*V[1][i]);V[2]=V[2].map((x,i)=>x+(tgt[i]-x)*t);}
+ const [g,w,h]=setupCanvas($('vpcan'));clear(g,w,h);axes3D(g,v4,w,h,2.4);const P=p=>v4.proj(p,w,h);const res=nullVec(V);
+ // span shading
+ if(res.rank===2){let n=null;for(let i=0;i<V.length&&!n;i++)for(let j=i+1;j<V.length;j++){const c=cross(V[i],V[j]);if(nrm(c)>1e-4){n=c;break;}}drawQuads(g,planeQuads(v4,w,h,n,0,css('--acc4'),2.3,6,[0,0,0]),.16);}
+ else if(res.rank===1){const d=V.find(v=>nrm(v)>1e-6);const dn=nrm(d);const a=P(d.map(x=>-2.6*x/dn)),b=P(d.map(x=>2.6*x/dn));g.strokeStyle=css('--acc4');g.globalAlpha=.4;g.lineWidth=7;g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke();g.globalAlpha=1;}
+ else if(res.rank===3){const [a,b,c]=V;const add=(x,y)=>x.map((v,i)=>v+y[i]);const C=[[0,0,0],a,b,c,add(a,b),add(a,c),add(b,c),add(add(a,b),c)];g.strokeStyle=css('--acc4');g.globalAlpha=.4;g.lineWidth=1;[[0,1],[0,2],[0,3],[1,4],[1,5],[2,4],[2,6],[3,5],[3,6],[4,7],[5,7],[6,7]].forEach(([i,j])=>{const p=P(C[i]),q=P(C[j]);g.beginPath();g.moveTo(p[0],p[1]);g.lineTo(q[0],q[1]);g.stroke();});g.globalAlpha=1;}
+ const cols=['#e03131','#2f9e44','#1c7ed6','#f08c00'];const o=P([0,0,0]);V.forEach((v,i)=>{const p=P(v);arrow(g,o[0],o[1],p[0],p[1],cols[i],3.2);g.fillStyle=cols[i];g.font='bold 13px sans-serif';g.fillText('v'+(i+1),p[0]+5,p[1]-3);});
+ let txt='P = [v₁ … v'+V.length+'] is 3×'+V.length+'\n'+V.map((v,i)=>' v'+(i+1)+' = ('+v.map(x=>f(x,2)).join(', ')+')').join('\n')+'\n\nrank P = '+res.rank+'\nindependent vectors = '+res.rank+' of '+V.length+'\nspan = '+['{0}','a line','a plane','all of 3D space'][res.rank]+'\n\n';
+ if(res.rel){const a=res.rel;txt+='Nontrivial relation (Eq. 27):\n  '+a.map((x,i)=>(x>=0&&i?'+ ':'')+f(x,3)+'·v'+(i+1)).join(' ')+' = 0\ncheck: ('+[0,1,2].map(j=>f(a.reduce((s,x,i)=>s+x*V[i][j],0),4)).join(', ')+')\n\n'+(V.length>3?'Corollary 1: 4 vectors in 3D are always dependent.':'det P = '+f(det3(V))+' = 0 ⇒ dependent (Corollary 2).');}
+ else txt+='Only a = 0 solves Pa = 0 ⇒ linearly independent.\ndet P = '+f(det3(V))+' ≠ 0';
+ $('vpout').textContent=txt;}
+
+/* ---------- Quiz ---------- */
+const Q=[
+['For Ax = b with r = rank A and s = rank [A|b], the system is inconsistent iff',['s = r','s > r','r = n','s < r'],1,'s can only be r or r+1; s = r+1 means b is outside the column space.'],
+['A consistent system of 7 unknowns with rank 4 has',['a unique solution','3-fold arbitrariness','4-fold arbitrariness','no solution'],1,'n − r = 3.'],
+['A homogeneous system of 3 equations in 5 unknowns',['has only the trivial solution','always has nontrivial solutions','may be inconsistent','has exactly 2 solutions'],1,'r ≤ 3 < 5.'],
+['n homogeneous equations in n unknowns have a nontrivial solution iff',['det A ≠ 0','det A = 0','A is symmetric','n is odd'],1,'Key corollary of the m = n case.'],
+['Five vectors in ℝ⁴ are',['always independent','always dependent','independent iff orthogonal','dependent only if one is zero'],1,'Corollary 1: more than m vectors in m dimensions.'],
+['The rank of a matrix equals',['the number of nonzero entries','the number of independent rows only','the number of independent rows = number of independent columns','the number of rows'],2,'Example 7.'],
+['If xₚ solves Ax = b, all solutions are',['xₚ only','xₚ + (any solution of Ax = 0)','k·xₚ','xₚ + b'],1,'Structure theorem.'],
+['Adding the column b to A can change the rank by',['any amount','0 or +1','0 or −1','exactly +1'],1,'One extra column adds at most one independent direction.'],
+['Which row operation can change the rank?',['swapping rows','multiplying a row by 0','adding 3×(row 1) to row 2','multiplying a row by −5'],1,'Multiplying by 0 is NOT an elementary operation – it destroys information.']];
+(function(){$('quizBox').innerHTML=Q.map((q,i)=>'<div class="qq"><b>'+(i+1)+'. '+q[0]+'</b>'+q[1].map((o,j)=>'<label class="opt"><input type="radio" name="q'+i+'" value="'+j+'"> '+o+'</label>').join('')+'<div class="small" id="qf'+i+'"></div></div>').join('');
+$('quizCheck').onclick=()=>{let s=0;Q.forEach((q,i)=>{const c=document.querySelector('input[name=q'+i+']:checked');const ok=c&&+c.value===q[2];if(ok)s++;$('qf'+i).innerHTML=(ok?'<span class="ok">✓ Correct.</span> ':'<span class="bad">✗ Answer: '+q[1][q[2]]+'.</span> ')+q[3];});$('quizScore').textContent='Score: '+s+' / '+Q.length;};})();
+
+function drawAll(){drawK3();drawXP();drawVP();}
+drawAll();geBuild();
+</script>
+</body>
+</html>
