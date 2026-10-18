@@ -117,6 +117,14 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -185,6 +193,67 @@ $$\oint(z-a)^n\,dz=\int_0^{2\pi}\rho^ne^{in\theta}\,i\rho e^{i\theta}\,d\theta=i
 $$\left|\int_Cf(z)\,dz\right|\le M\cdot L,\qquad M=\max_C|f|,\quad L=\text{length of }C .$$
 <p>It is used constantly in 14.7 to show that integrals over big semicircles vanish.</p>
 
+<!-- dass:start 10__def -->
+<h2 id="dass-24-1" class="dass"><span class="dtag">H.K. Dass §24.1</span>Line integrals in practice: Dass's path-by-path examples</h2>
+<p>In real calculus $\int_a^bf(x)\,dx$ always runs along the $x$-axis. In the complex plane $\int_a^bf(z)\,dz$ can run along <b>any</b> curve from $a$ to $b$, and $dz=dx+i\,dy$ points in a different direction on each piece. On the real axis $dz=dx$, and on a vertical line $dz=i\,dy$. So, in general, <b>the value can depend on the path</b>. It does not when $f$ is analytic in a simply connected region containing the paths (§24.3).</p>
+<div class="dcase"><p><b>The working recipe (all of Dass's examples use it).</b></p><ol class="steps">
+<li>Write the integrand in $x,y$ and set $dz=dx+i\,dy$.</li>
+<li>On each piece of the path, express $y$ in terms of $x$ (or both in terms of $t$), and $dy$ in terms of $dx$. For example: on $y=x$, $dz=(1+i)\,dx$; on $y=x^2$, $dz=(1+2ix)\,dx$; on $x=$ const, $dz=i\,dy$; on a circle $z=a+re^{i\theta}$, $dz=ire^{i\theta}d\theta$.</li>
+<li>Integrate the resulting single-variable function. Then add the pieces.</li>
+<li><b>Shortcut:</b> if $f$ is analytic (the integrand contains $z$ only, no $\bar z$, $x$, $y$ or $|z|$ separately), use an antiderivative $F$: the answer is $F(b)-F(a)$ for every path.</li>
+</ol></div>
+
+<div class="widget" id="w-dass-run">
+<div class="wt">Interactive — Dass's examples traced path by path: the running value of $\int f\,dz$</div>
+<div class="wd">Left: Dass's two paths (blue and green) and your own path (purple; drag its control point to bend it). Right: the running value of $\int f\,dz$ as you go along each path, drawn as a curve in the complex plane. Slide $t$ to move along all three paths at once. Analytic integrands give curves that end at the <b>same</b> point. Non-analytic ones do not. Rings mark Dass's printed answers.</div>
+<div class="ctrls"><label>example <select id="drn-e"></select></label>
+<label>$t$ <input type="range" id="drn-t" min="0" max="1" step="0.01" value="1"><output></output></label></div>
+<div class="grid2"><canvas id="cv-dass-runz"></canvas><canvas id="cv-dass-runi"></canvas></div>
+<div class="readout" id="drn-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 1) — a real line integral that depends on the path: $\int(x+y)\,dx+x^2y\,dy$ from $(0,0)$ to $(3,9)$</div><div class="bd"><ol class="steps">
+<li>$P=x+y$ and $Q=x^2y$, so $P_y=1\ne Q_x=2xy$. The form is not exact, so expect path dependence.</li>
+<li>Along $y=x^2$ ($dy=2x\,dx$): $\int_0^3\left(x+x^2+2x^5\right)dx=\frac92+9+243=\boxed{\frac{513}2}$. (The book prints the sum as $256$; the terms add to $256.5$.)</li>
+<li>Along $y=3x$ ($dy=3\,dx$): $\int_0^3\left(4x+9x^3\right)dx=18+\frac{729}4=\boxed{\frac{801}{4}}$.</li>
+<li>The two values differ, so the integral depends on the path.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the test $P_y=Q_x$ for real forms is exactly what Cauchy–Riemann becomes for $f\,dz$ (§24.3). Same idea, two notations.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 2) — $\displaystyle\int_{1-i}^{2+i}(2x+iy+1)\,dz$ along (i) $x=t+1,\ y=2t^2-1$ and (ii) the straight line</div><div class="bd"><ol class="steps">
+<li>(i) $dz=(1+4it)\,dt$ with $t:0\to1$. The integrand becomes $(2t+3)+i(2t^2-1)$. Multiplying out and integrating: $\int_0^1\left[(-8t^3+6t+3)+i(10t^2+12t-1)\right]dt=\boxed{4+\frac{25}{3}i}$.</li>
+<li>(ii) The line is $y=2x-3$, so $dz=(1+2i)\,dx$ with $x:1\to2$. $\int_1^2(-2x+7+i(6x-1))\,dx=\boxed{4+8i}$.</li>
+<li>The answers differ because $2x+iy+1$ is not analytic: $u_x=2\ne v_y=1$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> before doing any integral, check whether the integrand is analytic. If it is not, you <b>must</b> parametrise the stated path.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 3, Ex 4, Ex 5) — broken lines, straight lines and parabolas</div><div class="bd">
+<div class="dcase"><p><b>Ex 3: $\int\bar z^{\,2}dz$ from $0$ to $2$ (real axis), then up to $2+i$.</b> On $OA$: $\int_0^2x^2dx=\frac83$. On $AB$: $z=2+iy$, so $\bar z^{\,2}=(2-iy)^2$ and $dz=i\,dy$, giving $i\int_0^1(4-4iy-y^2)dy=2+\frac{11}3i$. Total $\boxed{\frac{14+11i}{3}}$. Along the straight line $y=\frac x2$ instead (Dass Exercise 24.1 Q5): $\frac53(2-i)$, which is different.</p></div>
+<div class="dcase"><p><b>Ex 4: $\int_0^{1+i}(x-y+ix^2)\,dz$.</b> Along $y=x$: $(1+i)\int_0^1ix^2dx=\boxed{\frac{i-1}{3}}$. Along $0\to1\to1+i$: $\left(\frac12+\frac i3\right)+\left(\frac i2-1\right)=\boxed{-\frac12+\frac56i}$.</p></div>
+<div class="dcase"><p><b>Ex 5: $\int_0^{1+i}(x^2-iy)\,dz$.</b> Along $y=x$: $(1+i)\left(\frac13-\frac i2\right)=\boxed{\frac56-\frac i6}$. Along $y=x^2$: $(1-i)\int_0^1x^2(1+2ix)\,dx=\boxed{\frac56+\frac i6}$.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the three standard path types are a straight line ($dz=(1+im)\,dx$), axis-parallel pieces ($dz=dx$ or $i\,dy$), and a parabola ($dz=(1+2ix)\,dx$). Every "evaluate along the path" question is one of these.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 6, Ex 7) — analytic integrands: the path does not matter</div><div class="bd">
+<div class="dcase"><p><b>Ex 6: $\int z^2dz$ from $0$ to $3+i$.</b> Along $OM$ ($x=3y$): $\int_0^1(8+6i)(3+i)y^2dy=\frac{18+26i}{3}=6+\frac{26}3i$. Along $O\to3\to3+i$: $9+i\left(9-\frac13+3i\right)=6+\frac{26}3i$. They are the same, and both equal $\left[\frac{z^3}{3}\right]_0^{3+i}=\frac{(3+i)^3}{3}=\frac{18+26i}3$.</p></div>
+<div class="dcase"><p><b>Ex 7: $\int(12z^2-4iz)\,dz$ from $1+i$ to $2+3i$.</b> Dass parametrises $y=2x-1$ and grinds through. With the antiderivative it is one line: $\left[4z^3-2iz^2\right]_{1+i}^{2+3i}=\boxed{-156+38i}$.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> an analytic polynomial integrand means "use the antiderivative". Parametrising wastes minutes in a timed exam.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 8, Ex 9, Ex 10) — closed paths, and the one integral that survives</div><div class="bd">
+<div class="dcase"><p><b>Ex 8:</b> $\oint z^2dz$ around the triangle $0,\ 1+i,\ -1+i$ is $0$. Dass checks it side by side, and also with Green's theorem: $\iint\left[2i(x+iy)-2i(x+iy)\right]dx\,dy=0$.</p></div>
+<div class="dcase"><p><b>Ex 9:</b> $\oint(z+1)^2dz$ around the rectangle $\pm a\pm ib$ is $0$. The four sides cancel in pairs, by odd/even symmetry.</p></div>
+<div class="dcase"><p><b>Ex 10, the key integral:</b> on $z=a+re^{i\theta}$, $\oint(z-a)^ndz=ir^{n+1}\int_0^{2\pi}e^{i(n+1)\theta}d\theta$.</p>
+<ul><li>For an integer $n\ne-1$: $\frac{r^{n+1}}{n+1}\left[e^{2\pi i(n+1)}-1\right]=0$. This covers both positive powers and $n=-2,-3,\dots$</li>
+<li>For $n=-1$: $i\int_0^{2\pi}d\theta=\boxed{2\pi i}$, independent of $r$.</li>
+<li>For non-integer $n$, $(z-a)^n$ is multivalued. On a closed loop around $a$ it does not return to its starting value, so you must specify a branch cut, and the answer is in general non-zero.</li></ul></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "$\oint\frac{dz}{z-a}=2\pi i$ and every other integer power gives $0$" is the whole content of the residue theorem in one line.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 11, Ex 12, Ex 13) — $|z|$ and $\log z$: non-analytic and multivalued integrands</div><div class="bd">
+<div class="dcase"><p><b>Ex 11: $\int|z|\,dz$ on the straight line from $-i$ to $i$.</b> $z=iy$, so $|z|=|y|$: $i\int_{-1}^1|y|\,dy=\boxed{i}$.</p></div>
+<div class="dcase"><p><b>Ex 12: the same along the left half of $|z|=1$.</b> There $|z|=1$, so $\int dz=z\Big|_{-i}^{i}=\boxed{2i}$. The right half also gives $2i$: on the unit circle $|z|$ is constant, so <b>any</b> arc of it from $-i$ to $i$ gives $2i$. But the straight line gives $i$, so the integral is path dependent.</p></div>
+<div class="dcase"><p><b>Ex 13: $\oint_{|z|=1}\log z\,dz$.</b> On the circle $\log z=i\theta$, so $\oint=-\int\theta e^{i\theta}d\theta$. The answer depends on <b>where the branch cut crosses the circle</b>:</p>
+<ul><li>$\theta$ from $0$ to $2\pi$ (cut along the positive real axis): $\boxed{2\pi i}$ (Dass's answer);</li>
+<li>principal branch, $\theta$ from $-\pi$ to $\pi$ (cut along the negative real axis): $\boxed{-2\pi i}$;</li>
+<li>in general, if the cut meets the circle at $e^{i\theta_0}$: $2\pi i\,e^{i\theta_0}$. Reason: $\int\log z\,dz=z\log z-z$, and across the cut $\log z$ jumps by $2\pi i$.</li></ul></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $\log z$ is not single-valued on a loop around $0$, so Cauchy's theorem does not apply. Options that say "$0$ by Cauchy" are traps.</p></div></div>
+<!-- dass:end -->
 <h2 id="indep">2. Path independence and antiderivatives</h2>
 <div class="box thm"><span class="tag">When can you just use an antiderivative?</span>
 <p>If $f$ is analytic in a simply connected region containing the path, and $F'=f$ there, then</p>
@@ -215,6 +284,51 @@ $$\oint(u\,dx-v\,dy)=\iint\left(-v_x-u_y\right)dx\,dy=0,\qquad\oint(v\,dx+u\,dy)
 <h3>Deformation of contours</h3>
 <p>A consequence used constantly: you may <b>deform a contour freely</b> as long as you do not pass it across a singular point; the integral does not change. In particular, an integral around a big complicated curve enclosing one singularity equals the integral around a tiny circle about it (Boas eq. 3.6).</p>
 
+<!-- dass:start 10__cauchy -->
+<h2 id="dass-24-2" class="dass"><span class="dtag">H.K. Dass §24.2–24.4</span>Definitions, Cauchy's theorem with poles outside, and multiply connected regions</h2>
+<h3>Vocabulary (§24.2)</h3>
+<table class="t dt">
+<tr><th>Term</th><th>Meaning</th></tr>
+<tr><td>Simply connected region</td><td>Every closed curve drawn in it has its whole interior inside the region: no holes.</td></tr>
+<tr><td>Multiply connected region</td><td>Bounded by more than one curve, i.e. it has holes. One or more <b>cuts</b> make it simply connected.</td></tr>
+<tr><td>Meromorphic function</td><td>Analytic in the region except at a finite number of <b>poles</b>.</td></tr>
+<tr><td>Single- / multivalued</td><td>$z^2$ is single-valued. $\sqrt z$ and $\log z$ are multivalued (Chapter 2).</td></tr>
+<tr><td>Jordan arc</td><td>A continuous arc with no <b>multiple points</b>, i.e. it never crosses itself. It is <b>regular</b> if its derivative is also continuous.</td></tr>
+<tr><td>Contour</td><td>A Jordan curve made of finitely many regular arcs. It is closed if it ends where it starts.</td></tr>
+<tr><td>Zero of $f$</td><td>A point where $f=0$. E.g. $z^2-3z+2$ has zeros $1$ and $2$; $\cos z$ has zeros $\pm(2n-1)\frac\pi2$.</td></tr>
+</table>
+
+<h3>Cauchy's theorem in Dass's form (§24.3)</h3>
+<p>If $f$ is analytic, with $f'$ continuous, at all points inside and on a simple closed curve $C$, then $\oint_Cf\,dz=0$. The proof is the Green's-theorem argument already given above. In practice Dass uses it as a <b>pole test</b>:</p>
+<div class="dcase"><p><b>Method.</b> (1) Find the singularities by setting the denominator to $0$. (2) Check each one: is it inside $C$? (3) If <b>none</b> is inside, the integral is $0$. There is nothing to compute.</p></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 14–17) — all four have no pole inside, so all are $0$</div><div class="bd">
+<table class="t dt">
+<tr><th>Integral</th><th>Singularities</th><th>Contour</th><th>Inside?</th></tr>
+<tr><td>Ex 14: $\oint\frac{3z^2+7z+1}{z+1}dz$</td><td>$-1$</td><td>$|z|=\frac12$</td><td>no: $|-1|=1\gt\frac12$</td></tr>
+<tr><td>Ex 15: $\oint\frac{z+4}{z^2+2z+5}dz$</td><td>$-1\pm2i$</td><td>$|z+1|=1$</td><td>no: distance $2\gt1$</td></tr>
+<tr><td>Ex 16: $\oint\frac{e^{-z}}{z+1}dz$</td><td>$-1$</td><td>$|z|=\frac12$</td><td>no</td></tr>
+<tr><td>Ex 17: $\oint\frac{2z^2+5}{(z+2)^3(z^2+4)}dz$</td><td>$-2$ (order 3), $\pm2i$</td><td>the square $1+i,\ 2+i,\ 2+2i,\ 1+2i$</td><td>no: all have $\operatorname{Re}z\le0$</td></tr>
+</table>
+<p>So each integral is $\boxed{0}$.</p>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> about one MCQ in three on contour integrals is "the pole is outside, so the answer is 0". Always sketch the contour and the poles before calculating anything.</p></div></div>
+
+<h3>Multiply connected regions (§24.4)</h3>
+<div class="box thm"><span class="tag">Theorem</span><p>If $f$ is analytic in the ring-shaped region between two simple closed curves $C_1$ (outer) and $C_2$ (inner), and on them, then $\displaystyle\oint_{C_1}f\,dz=\oint_{C_2}f\,dz$, both taken anticlockwise.</p></div>
+<ol class="steps">
+<li>Join the curves by a cut $AB$. The path "along $AB$, round $C_2$ <b>clockwise</b>, back along $BA$, round $C_1$ anticlockwise" encloses a simply connected region in which $f$ is analytic.</li>
+<li>Cauchy gives $\int_{AB}-\oint_{C_2}+\int_{BA}+\oint_{C_1}=0$. The two passes along the cut cancel, since $\int_{BA}=-\int_{AB}$.</li>
+<li>So $\oint_{C_1}=\oint_{C_2}$. ∎</li></ol>
+<p><b>Corollary.</b> If $C$ encloses several holes (singularities) with small curves $C_2,C_3,\dots$ around them, then $\oint_C=\oint_{C_2}+\oint_{C_3}+\cdots$. This is how every multi-pole example in §24.5 is done.</p>
+
+<div class="widget" id="w-dass-deform">
+<div class="wt">Interactive — deform the contour: only the enclosed singularities matter</div>
+<div class="wd">Drag the eight orange corners to reshape the closed contour $C$ (it is traversed anticlockwise). Black crosses are the singularities of Dass's integrand. The readout gives $\oint_Cf\,dz$, computed numerically along your polygon. It also gives the separate contributions from tiny circles $C_k$ around each enclosed singularity (the corollary above). Reshaping $C$ changes nothing until an edge crosses a cross.</div>
+<div class="ctrls"><label>integrand <select id="ddf-f"></select></label> <button id="ddf-r">reset contour</button></div>
+<canvas id="cv-dass-deform"></canvas>
+<div class="readout" id="ddf-out"></div>
+</div>
+<!-- dass:end -->
 <h2 id="formula">4. Cauchy's integral formula (Theorem VI)</h2>
 <div class="box thm"><span class="tag">Theorem VI</span>
 <p>If $f$ is analytic on and inside a simple closed curve $C$ and $a$ is a point <b>inside</b> $C$, then</p>
@@ -247,6 +361,88 @@ $$\boxed{f^{(n)}(a)=\frac{n!}{2\pi i}\oint_C\frac{f(z)\,dz}{(z-a)^{n+1}}}$$
 <div class="readout" id="cf-out"></div>
 </div>
 
+<!-- dass:start 10__formula -->
+<h2 id="dass-24-5" class="dass"><span class="dtag">H.K. Dass §24.5–24.6</span>Cauchy's integral formula and the derivative formula: Dass's proofs and every type of example</h2>
+<h3>Dass's proof of $f(a)=\frac1{2\pi i}\oint_C\frac{f(z)}{z-a}dz$ (§24.5)</h3>
+<ol class="steps">
+<li>$\frac{f(z)}{z-a}$ is analytic everywhere inside $C$ except at $a$. Draw a small circle $C_1$ of radius $r$ about $a$. By §24.4, $\oint_C\frac{f\,dz}{z-a}=\oint_{C_1}\frac{f\,dz}{z-a}$.</li>
+<li>Add and subtract $f(a)$: $\oint_{C_1}\frac{f(z)}{z-a}dz=\oint_{C_1}\frac{f(z)-f(a)}{z-a}dz+f(a)\oint_{C_1}\frac{dz}{z-a}$.</li>
+<li>On $C_1$, $z=a+re^{i\theta}$. The first integral becomes $i\int_0^{2\pi}\left[f(a+re^{i\theta})-f(a)\right]d\theta\to0$ as $r\to0$, by continuity of $f$.</li>
+<li>The second is $f(a)\cdot2\pi i$ (Dass Ex 10 with $n=-1$). Hence $\oint_C\frac{f(z)}{z-a}dz=2\pi i\,f(a)$. ∎</li></ol>
+
+<h3>Derivatives (§24.6)</h3>
+<p>Differentiate under the integral sign with respect to $a$: $\frac{\partial}{\partial a}\frac1{z-a}=\frac1{(z-a)^2}$, $\frac{\partial^2}{\partial a^2}\frac1{z-a}=\frac{2!}{(z-a)^3}$, and so on. This gives</p>
+$$f'(a)=\frac{1}{2\pi i}\oint_C\frac{f(z)}{(z-a)^2}dz,\qquad f''(a)=\frac{2!}{2\pi i}\oint_C\frac{f(z)}{(z-a)^3}dz,\qquad f^{(n)}(a)=\frac{n!}{2\pi i}\oint_C\frac{f(z)}{(z-a)^{n+1}}dz .$$
+<p>So the derivative of an analytic function is itself analytic, and so are all higher derivatives.</p>
+
+<h3>The examples, sorted by type</h3>
+<div class="dcase"><p><b>Type A — exactly one simple pole inside.</b> Write the integrand as $\frac{g(z)}{z-a}$, where $g$ collects everything else and is analytic inside $C$. The answer is $2\pi i\,g(a)$.</p>
+<table class="t dt">
+<tr><th>Dass</th><th>Integral, contour</th><th>Pole inside, $g$</th><th>Answer</th></tr>
+<tr><td>Ex 20</td><td>$\oint\frac{dz}{z-a}$, $|z-a|=r$</td><td>$a$, $g=1$</td><td>$2\pi i$</td></tr>
+<tr><td>Ex 21</td><td>$\oint\frac{\cos z}{z}dz$, ellipse $9x^2+4y^2=1$</td><td>$0$, $g=\cos z$</td><td>$2\pi i$</td></tr>
+<tr><td>Ex 22</td><td>$\oint\frac{z\,dz}{z^2-3z+2}$, $|z-2|=\frac12$</td><td>$2$, $g=\frac{z}{z-1}$</td><td>$4\pi i$</td></tr>
+<tr><td>Ex 23</td><td>$\oint\frac{2z+1}{z^2+z}dz$, $|z|=\frac12$</td><td>$0$, $g=\frac{2z+1}{z+1}$</td><td>$2\pi i$</td></tr>
+<tr><td>Ex 24</td><td>$\oint\frac{dz}{z(z+\pi i)}$, $|z+3i|=1$</td><td>$-\pi i$, $g=\frac1z$</td><td>$\frac{2\pi i}{-\pi i}=-2$</td></tr>
+<tr><td>Ex 26</td><td>$\oint\frac{e^{-z}}{z+1}dz$, $|z|=2$</td><td>$-1$, $g=e^{-z}$</td><td>$2\pi ie$</td></tr>
+<tr><td>Ex 27</td><td>$\oint\frac{e^z\,dz}{(z-1)(z-4)}$, $|z|=2$</td><td>$1$, $g=\frac{e^z}{z-4}$</td><td>$-\frac{2\pi ie}{3}$</td></tr>
+<tr><td>Ex 35</td><td>$\oint\frac{3z^2+z}{z^2-1}dz$, $|z-1|=1$</td><td>$1$, $g=\frac{3z^2+z}{z+1}$</td><td>$4\pi i$</td></tr>
+</table></div>
+
+<div class="dcase"><p><b>Type B — several simple poles inside.</b> There are two equivalent methods. (i) <b>Split the contour</b> (§24.4 corollary) and apply Type A at each pole. (ii) <b>Partial fractions</b>, e.g. $\frac{1}{z^2+1}=\frac1{2i}\left(\frac1{z-i}-\frac1{z+i}\right)$, then apply Type A to each term.</p>
+<table class="t dt">
+<tr><th>Dass</th><th>Integral, contour</th><th>Contributions</th><th>Answer</th></tr>
+<tr><td>Ex 29</td><td>$\oint\frac{e^z}{z^2+1}dz$, $|z|=2$</td><td>$2\pi i\frac{e^{i}}{2i}+2\pi i\frac{e^{-i}}{-2i}$</td><td>$2\pi i\sin1$</td></tr>
+<tr><td>Ex 30</td><td>$\oint\frac{e^{zt}}{z^2+1}dz$, $|z|=3$</td><td>the same with $e^{\pm it}$</td><td>$2\pi i\sin t$</td></tr>
+<tr><td>Ex 31</td><td>$\oint\frac{dz}{z^2-1}$, $|z|=2$</td><td>$2\pi i\left(\frac12\right)+2\pi i\left(-\frac12\right)$</td><td>$0$</td></tr>
+<tr><td>Ex 32</td><td>$\oint\frac{4-3z}{z(z-1)(z-2)}dz$, $|z|=\frac32$</td><td>$2\pi i(2)+2\pi i(-1)$; the pole at $2$ is outside</td><td>$2\pi i$</td></tr>
+<tr><td>Ex 36</td><td>$\oint\frac{z^2+1}{z^2-1}dz$</td><td>$|z|=\frac32$: both poles, $-2\pi i+2\pi i$. &nbsp; $|z-1|=1$: only $z=1$. &nbsp; $|z|=\frac12$: none.</td><td>$0$; $\ 2\pi i$; $\ 0$</td></tr>
+<tr><td>Ex 37</td><td>$\oint\frac{\sin\pi z^2+\cos\pi z^2}{(z-1)(z-2)}dz$, $|z|=3$</td><td>$2\pi i\frac{-1}{-1}+2\pi i\frac{1}{1}$</td><td>$4\pi i$</td></tr>
+<tr><td>Ex 38</td><td>$\oint\frac{3z^2+z+1}{(z^2-1)(z+3)}dz$, $|z|=2$</td><td>$2\pi i\left(\frac58\right)+2\pi i\left(-\frac34\right)$; $-3$ is outside</td><td>$-\frac{\pi i}{4}$</td></tr>
+</table></div>
+
+<div class="dcase"><p><b>Type C — a repeated pole: use the derivative formula.</b> For $\oint\frac{g(z)}{(z-a)^{n+1}}dz$, the answer is $\frac{2\pi i}{n!}g^{(n)}(a)$.</p>
+<table class="t dt">
+<tr><th>Dass</th><th>Integral, contour</th><th>Working</th><th>Answer</th></tr>
+<tr><td>Ex 33</td><td>$\oint\frac{z^2-2z}{(z+1)^2(z^2+4)}dz$, $|z|=10$</td><td>Double pole at $-1$: $2\pi i\frac{d}{dz}\frac{z^2-2z}{z^2+4}\Big|_{-1}=-\frac{28\pi i}{25}$. Simple poles at $\pm2i$ add $2\pi i\left[\frac{1+i}{4+3i}+\frac{i-1}{3i-4}\right]$.</td><td>$0$ (all three cancel)</td></tr>
+<tr><td>Ex 34</td><td>$\oint\frac{dz}{(z^3-1)^2}$, $|z-1|=1$</td><td>Only $z=1$ is inside, a double pole. $g=(z^2+z+1)^{-2}$, $g'(1)=-\frac{2\cdot3}{27}$</td><td>$-\frac{4\pi i}{9}$</td></tr>
+<tr><td>Ex 39</td><td>$\frac{1}{2\pi i}\oint\frac{ze^z}{(z-a)^3}dz$, $a$ inside</td><td>$\frac1{2!}\frac{d^2}{dz^2}(ze^z)\big|_a=\frac{(a+2)e^a}{2}$</td><td>$\frac{(a+2)e^a}{2}$</td></tr>
+<tr><td>Ex 40</td><td>$\oint\frac{e^{3iz}}{(z+\pi)^3}dz$, $|z-\pi|=3.2$</td><td>The triple pole $-\pi$ is at distance $2\pi\approx6.28\gt3.2$: outside</td><td>$0$</td></tr>
+</table></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 28) — $f(z_1)=\oint_{|z|=2}\frac{3z^2+7z+1}{z-z_1}dz$: find $f(3)$, $f'(1-i)$, $f''(1-i)$</div><div class="bd"><ol class="steps">
+<li>$z_1=3$ is outside $|z|=2$, so the integrand is analytic inside: $f(3)=0$.</li>
+<li>For $z_1$ inside: $f(z_1)=2\pi i\,(3z_1^2+7z_1+1)$. Differentiating, $f'(z_1)=2\pi i(6z_1+7)$, so $f'(1-i)=2\pi i(13-6i)=\boxed{2\pi(6+13i)}$.</li>
+<li>$f''(z_1)=12\pi i$, so $f''(1-i)=\boxed{12\pi i}$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> it shows that the integral defines a function of $z_1$ that is <b>different inside and outside</b> $C$: a polynomial inside and $0$ outside. Questions like "is $f$ continuous across $C$?" come from this.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 25, corrected) — $\oint_{|z|=2}\tan z\,dz$</div><div class="bd"><ol class="steps">
+<li>The poles of $\tan z=\frac{\sin z}{\cos z}$ inside $|z|=2$ are $z=\pm\frac\pi2$, since $\frac\pi2\approx1.57\lt2$ and $\frac{3\pi}2\gt2$.</li>
+<li>Near $z=\frac\pi2$, $\cos z\approx-\left(z-\frac\pi2\right)$. So $\tan z\approx\frac{1}{-(z-\pi/2)}$ and the coefficient of $\frac1{z-\pi/2}$ is $\frac{\sin(\pi/2)}{-\sin(\pi/2)}=-1$. The same happens at $-\frac\pi2$: $\frac{\sin(-\pi/2)}{-\sin(-\pi/2)}=-1$.</li>
+<li>So $\oint\tan z\,dz=2\pi i(-1-1)=\boxed{-4\pi i}$.</li></ol>
+<p><b>Note on the printed solution.</b> Dass writes $2\pi i[\sin z]_{\pi/2}+2\pi i[\sin z]_{-\pi/2}=0$. That treats $\frac{1}{\cos z}$ as if it were $\frac{1}{z\mp\pi/2}$, which it is not. Cauchy's formula needs the integrand in the form $\frac{g(z)}{z-a}$, so here $g(z)=\frac{(z-\pi/2)\sin z}{\cos z}\to-1$. A direct numerical integration around $|z|=2$ confirms $-4\pi i\approx-12.566i$. You can check this in the "deform the contour" widget above.</p>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> for $\frac{p(z)}{q(z)}$ with a simple zero of $q$ at $a$, the coefficient is $\frac{p(a)}{q'(a)}$, not $p(a)$. This is exactly the residue rule of the next chapter.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 41) — verify Cauchy's theorem for $e^{iz}$ on the triangle $1+i,\ -1+i,\ -1-i$</div><div class="bd"><ol class="steps">
+<li>The antiderivative is $\frac{e^{iz}}{i}$. Side by side: $AB$ gives $\frac1i\left(e^{-1-i}-e^{-1+i}\right)$, $BC$ gives $\frac1i\left(e^{1-i}-e^{-1-i}\right)$, and $CA$ gives $\frac1i\left(e^{-1+i}-e^{1-i}\right)$.</li>
+<li>The sum telescopes to $0$, as Cauchy's theorem predicts ($e^{iz}$ is entire).</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> around any closed path, an integrand with an antiderivative gives $F(\text{end})-F(\text{start})=0$. This is the quickest proof of Cauchy's theorem for entire functions.</p></div></div>
+
+<table class="t dt">
+<tr><th colspan="3">Dass Exercise 24.2 — answers (each checked by numerical contour integration)</th></tr>
+<tr><td>$\oint\frac{dz}{z-a}$</td><td>$a$ outside / inside $C$</td><td>$0$ / $2\pi i$</td></tr>
+<tr><td>$\oint\frac{e^{z}}{z-1}dz$</td><td>$|z|=2$</td><td>$2\pi ie$</td></tr>
+<tr><td>$\oint\frac{\cos\pi z}{z-1}dz$</td><td>$|z|=3$</td><td>$-2\pi i$</td></tr>
+<tr><td>$\oint\frac{\cos\pi z^2}{(z-1)(z-2)}dz$</td><td>$|z|=3$</td><td>$4\pi i$</td></tr>
+<tr><td>$\oint\frac{e^{-z}}{(z+2)^5}dz$</td><td>$|z|=3$</td><td>$\frac{2\pi i}{4!}e^{2}=\frac{\pi ie^2}{12}$</td></tr>
+<tr><td>$\oint\frac{e^{2z}}{(z+1)^4}dz$</td><td>$|z|=2$</td><td>$\frac{2\pi i}{3!}\cdot8e^{-2}=\frac{8\pi i}{3e^2}$</td></tr>
+<tr><td>$\oint\frac{2z^2+z}{z^2-1}dz$</td><td>$|z-1|=1$</td><td>$3\pi i$</td></tr>
+<tr><td>$\oint\frac{e^z}{z^2(z+1)^3}dz$</td><td>$|z|=2$</td><td>$2\pi i\left(\frac{11}{2e}-2\right)$</td></tr>
+<tr><td>$\oint\frac{z^2+1}{(z+1)(z+2)}dz$</td><td>$|z|=\frac32$</td><td>$4\pi i$</td></tr>
+<tr><td>$\oint\frac{z^2-z+1}{z-1}dz$</td><td>$|z|=\frac12$</td><td>$0$</td></tr>
+<tr><td>$\oint\frac{z+1}{z-2z^2}dz$</td><td>$|z|=1$</td><td>$2\pi i\left(1-\frac32\right)=-\pi i$</td></tr>
+</table>
+<!-- dass:end -->
 <h2 id="consequences">5. Big consequences (useful for exams)</h2>
 <table class="t">
 <tr><th>Result</th><th>Statement</th><th>Why</th></tr>
@@ -258,6 +454,80 @@ $$\boxed{f^{(n)}(a)=\frac{n!}{2\pi i}\oint_C\frac{f(z)\,dz}{(z-a)^{n+1}}}$$
 </table>
 <p class="small">E.g. $\sin z$ is entire and non-constant, so by Liouville it must be unbounded, as we saw in Chapter 2: $\sin(iy)=i\sinh y$.</p>
 
+<!-- dass:start 10__consequences -->
+<h2 id="dass-24-7" class="dass"><span class="dtag">H.K. Dass §24.7–24.12</span>Morera, Cauchy's inequality, Liouville, the fundamental theorem of algebra, and Poisson's formulas</h2>
+
+<h3>Morera's theorem: the converse of Cauchy (§24.7)</h3>
+<div class="box thm"><span class="tag">Morera</span><p>If $f$ is continuous in a region $D$ and $\oint_Cf\,dz=0$ for every simple closed contour $C$ in $D$, then $f$ is analytic in $D$.</p></div>
+<ol class="steps">
+<li>Since closed integrals vanish, $\phi(z)=\int_{z_0}^zf(z)\,dz$ is independent of the path, so it is a genuine function of $z$. Write $\phi=U+iV$ with $U=\int(u\,dx-v\,dy)$ and $V=\int(v\,dx+u\,dy)$.</li>
+<li>Differentiating the line integrals: $U_x=u$, $U_y=-v$, $V_x=v$, $V_y=u$. So $U_x=V_y$ and $U_y=-V_x$: Cauchy–Riemann holds, with continuous partials.</li>
+<li>So $\phi$ is analytic with $\phi'=U_x+iV_x=u+iv=f$. Since the derivative of an analytic function is analytic (§24.6), $f$ is analytic. ∎</li></ol>
+
+<h3>Cauchy's inequality (§24.8)</h3>
+<p>If $f$ is analytic inside and on $|z-a|=R$, and $|f|\le M$ on that circle, then</p>
+$$|f^{(n)}(a)|\le\frac{n!\,M}{R^n}.$$
+<p><b>Proof.</b> $|f^{(n)}(a)|=\left|\frac{n!}{2\pi i}\oint\frac{f(z)\,dz}{(z-a)^{n+1}}\right|\le\frac{n!}{2\pi}\cdot\frac{M}{R^{n+1}}\cdot2\pi R=\frac{n!M}{R^n}$, using $|dz|=R\,d\theta$. ∎</p>
+
+<h3>Liouville's theorem (§24.9): two proofs</h3>
+<div class="box thm"><span class="tag">Liouville</span><p>If $f$ is analytic for all finite $z$ (it is <b>entire</b>) and bounded, $|f|\le M$, then $f$ is constant.</p></div>
+<div class="dcase"><p><b>Proof 1 (Dass's main proof).</b> Take any two points $z_1,z_2$ and a large circle $|z|=R$ enclosing both. Subtracting the two Cauchy formulas:</p>
+$$f(z_1)-f(z_2)=\frac{z_1-z_2}{2\pi i}\oint\frac{f(z)\,dz}{(z-z_1)(z-z_2)},\qquad|f(z_1)-f(z_2)|\le\frac{|z_1-z_2|\,M\cdot2\pi R}{2\pi(R-|z_1|)(R-|z_2|)}\xrightarrow{R\to\infty}0 .$$
+<p>So $f(z_1)=f(z_2)$ for every pair of points.</p></div>
+<div class="dcase"><p><b>Proof 2 (from the inequality).</b> With $n=1$: $|f'(a)|\le\frac{M}{R}\to0$ as $R\to\infty$, so $f'\equiv0$.</p></div>
+<div class="dcase"><p><b>Generalisation (same proof).</b> If $|f(z)|\le M|z|^k$ for large $|z|$, then $|f^{(n)}(a)|\lesssim\frac{n!\,MR^k}{R^n}\to0$ for $n\gt k$. So $f$ is a polynomial of degree at most $k$.</p></div>
+
+<h3>Fundamental theorem of algebra (§24.10)</h3>
+<p>Every polynomial $p(z)$ of degree $\ge1$ has a root in $\mathbb C$. <b>Proof:</b> if $p(z)\ne0$ everywhere, then $\frac1{p(z)}$ is entire. Since $|p(z)|\to\infty$ as $|z|\to\infty$, $\frac1{p}$ is also bounded. By Liouville $\frac1p$ is constant, so $p$ is constant: a contradiction. ∎ (Applying this repeatedly, a degree-$n$ polynomial has exactly $n$ roots counted with multiplicity.)</p>
+
+<div class="widget" id="w-dass-cineq">
+<div class="wt">Interactive — Cauchy's inequality as $R$ grows: why bounded entire functions are constant</div>
+<div class="wd">For the chosen entire $f$ and order $n$, the curve is $\log_{10}$ of the bound $\frac{n!\,M(R)}{R^n}$, where $M(R)=\max_{|z|=R}|f|$, plotted against the radius $R$. The dashed line is the true value $\log_{10}|f^{(n)}(0)|$. The curve always stays above the line. For a polynomial of degree $d$ and $n\gt d$, the bound goes to $0$ (the curve falls without limit), which forces $f^{(n)}\equiv0$.</div>
+<div class="ctrls"><label>$f$ <select id="dci-f"><option value="exp">e^z</option><option value="sin">sin z</option><option value="p3">z³ − 2z + 1</option><option value="p1">3z + 2</option><option value="cos">cos z</option></select></label>
+<label>$n$ <input type="range" id="dci-n" min="0" max="5" step="1" value="1"><output></output></label></div>
+<canvas id="cv-dass-cineq"></canvas>
+<div class="readout" id="dci-out"></div>
+</div>
+
+<h3>Poisson's integral formula for a circle (§24.11)</h3>
+<p>If $f$ is analytic inside and on $|z|=R$, and $z=re^{i\theta}$ with $r\lt R$, then</p>
+$$f(re^{i\theta})=\frac1{2\pi}\int_0^{2\pi}\frac{(R^2-r^2)\,f(Re^{i\phi})}{R^2-2rR\cos(\theta-\phi)+r^2}\,d\phi .$$
+<ol class="steps">
+<li>By Cauchy's formula, $f(z)=\frac1{2\pi i}\oint\frac{f(w)\,dw}{w-z}$.</li>
+<li>The inverse point $\frac{R^2}{\bar z}$ lies <b>outside</b> the circle, so $0=\frac1{2\pi i}\oint\frac{f(w)\,dw}{w-R^2/\bar z}$ by Cauchy's theorem.</li>
+<li>Subtract, put $w=Re^{i\phi}$, and simplify $\frac1{w-z}-\frac1{w-R^2/\bar z}$. The kernel becomes the real expression $\frac{R^2-r^2}{R^2-2rR\cos(\theta-\phi)+r^2}$.</li>
+<li>Taking real parts: the same formula holds for any <b>harmonic</b> $u$. It gives $u$ inside the disk from its values on the boundary (the Dirichlet problem).</li></ol>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 18, corrected) — $\displaystyle\int_0^{2\pi}\frac{e^{\cos\phi}\cos(\sin\phi)}{5-4\cos(\theta-\phi)}\,d\phi$</div><div class="bd"><ol class="steps">
+<li>$e^{\cos\phi}\cos(\sin\phi)=\operatorname{Re}e^{e^{i\phi}}$, i.e. the values of $u=\operatorname{Re}e^{z}$ on the <b>unit</b> circle.</li>
+<li>Match the kernel with $R=1$ and $r=\frac12$: $R^2-2rR\cos(\cdot)+r^2=\frac54-\cos(\cdot)=\frac{5-4\cos(\cdot)}{4}$ and $R^2-r^2=\frac34$. So Poisson reads $u\left(\tfrac12,\theta\right)=\frac{1}{2\pi}\int\frac{(3/4)\,u(1,\phi)}{(5-4\cos)/4}d\phi=\frac{3}{2\pi}\int\frac{u(1,\phi)}{5-4\cos(\theta-\phi)}d\phi$.</li>
+<li>Hence $\displaystyle\int_0^{2\pi}\frac{e^{\cos\phi}\cos(\sin\phi)}{5-4\cos(\theta-\phi)}d\phi=\frac{2\pi}{3}\,u\!\left(\tfrac12,\theta\right)=\boxed{\frac{2\pi}{3}\,e^{\frac12\cos\theta}\cos\!\left(\tfrac12\sin\theta\right)}$.</li></ol>
+<p><b>Note on the printed result.</b> The book states the right side as $\frac{2\pi}3e^{\cos\theta}\cos(\sin\theta)$. The book matches $R=2$, $r=1$ and treats $e^{\cos\phi}\cos(\sin\phi)$ as the values of $\operatorname{Re}e^z$ on $|z|=2$. But on $|z|=2$, $\operatorname{Re}e^z=e^{2\cos\phi}\cos(2\sin\phi)$, so that matching does not fit the given data. Numerically, at $\theta=0.3$ the integral is $3.3400$, which agrees with $\frac{2\pi}3e^{0.5\cos0.3}\cos(0.5\sin0.3)=3.3400$, while $\frac{2\pi}3e^{\cos0.3}\cos(\sin0.3)=5.2085$.</p>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> spotting "$a-b\cos(\theta-\phi)$ in the denominator means Poisson, with $\frac{R^2+r^2}{2rR}=\frac ab$" turns a nasty real integral into evaluating a known function at a point.</p></div></div>
+
+<h3>Poisson's integral formula for the upper half-plane (§24.12)</h3>
+<p>If $f$ is analytic in $\operatorname{Im}z\ge0$ (and decays suitably at infinity), then at $a=\alpha+i\beta$ with $\beta\gt0$:</p>
+$$f(\alpha+i\beta)=\frac1\pi\int_{-\infty}^{\infty}\frac{\beta\,f(x)}{(x-\alpha)^2+\beta^2}\,dx .$$
+<ol class="steps">
+<li>Close the real segment $[-R,R]$ with the upper semicircle $C_R$. Cauchy's formula gives $f(a)=\frac1{2\pi i}\oint\frac{f\,dz}{z-a}$. The <b>mirror point</b> $\bar a$ is outside, so $0=\frac1{2\pi i}\oint\frac{f\,dz}{z-\bar a}$.</li>
+<li>Subtract: $\frac1{z-a}-\frac1{z-\bar a}=\frac{a-\bar a}{(z-a)(z-\bar a)}=\frac{2i\beta}{(z-\alpha)^2+\beta^2}$. So $f(a)=\frac1\pi\oint\frac{\beta f(z)\,dz}{(z-\alpha)^2+\beta^2}$.</li>
+<li>Let $R\to\infty$: the arc contributes nothing, leaving the real-axis integral. Taking real and imaginary parts gives the same formula for the harmonic functions $u$ and $v$.</li></ol>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 19) — the harmonic function in $y\gt0$ with boundary values $1$ for $x\lt-1$, $0$ for $|x|\lt1$, $-1$ for $x\gt1$</div><div class="bd"><ol class="steps">
+<li>$\phi(x,y)=\frac1\pi\left[\int_{-\infty}^{-1}\frac{y\,dw}{(w-x)^2+y^2}-\int_1^\infty\frac{y\,dw}{(w-x)^2+y^2}\right]$, using $\int\frac{y\,dw}{(w-x)^2+y^2}=\tan^{-1}\frac{w-x}{y}$.</li>
+<li>So $\phi=\frac1\pi\left[\left(\frac\pi2-\tan^{-1}\frac{1+x}{y}\right)-\left(\frac\pi2-\tan^{-1}\frac{1-x}{y}\right)\right]=\boxed{\frac1\pi\left[\tan^{-1}\frac{1-x}{y}-\tan^{-1}\frac{1+x}{y}\right]}$.</li>
+<li>Combining with the subtraction formula gives Dass's form $\frac1\pi\tan^{-1}\frac{2xy}{x^2-y^2-1}$. Take care: this single-arctangent form is only correct with the branch chosen continuously. In the region $x^2-y^2\gt1$ the principal $\tan^{-1}$ is off by $\pm\pi$ (e.g. it gives $\approx0$ instead of $1$ near the boundary at $x=-3$). The two-arctangent form is always right.</li>
+<li>Check: as $y\to0^+$ with $x\lt-1$, both arguments tend to $\pm\infty$ with opposite signs, so $\phi\to\frac1\pi\left(\frac\pi2+\frac\pi2\right)=1$ ✓.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> piecewise-constant boundary data on a line always gives a combination of angles $\frac1\pi\arg(z-x_k)$. Recognising this shortcut answers the "potential above a split plate" questions instantly.</p></div></div>
+
+<div class="widget" id="w-dass-poisson">
+<div class="wt">Interactive — Poisson's formula: boundary values decide everything inside</div>
+<div class="wd">The colour shows the harmonic function $u$ inside the disk (or in the upper half-plane) determined by the chosen boundary data. Drag the green probe. The curve drawn on the boundary is the <b>Poisson kernel</b> for that probe, i.e. the weight each boundary point gets. It peaks at the nearest boundary point and sharpens as the probe approaches the edge. The readout compares the numerical Poisson integral at the probe with the exact formula.</div>
+<div class="ctrls"><label>data <select id="dpo-d"><option value="ex18">disk: Re eᶻ (Ex 18)</option><option value="step">disk: 1 on top, 0 below</option><option value="c3">disk: cos 3φ</option><option value="ex19">half-plane: Dass Ex 19</option><option value="hstep">half-plane: 1 for x &lt; 0</option></select></label></div>
+<canvas id="cv-dass-poisson"></canvas>
+<div class="readout" id="dpo-out"></div>
+</div>
+<!-- dass:end -->
 <h2 id="boas">6. Boas Problems, Section 3 — solutions</h2>
 <p class="small">Every answer below was confirmed by numerical integration along the stated path.</p>
 <details class="sol"><summary>Show solutions 1–12 (direct integration)</summary>
@@ -923,5 +1193,166 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+/* H.K. Dass §24.1 — running value of ∫ f dz along Dass's two paths and a user path */
+onReady(() => {
+  const lin = (a, b) => t => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+  const brk = (a, m, b) => t => t < 0.5 ? lin(a, m)(2 * t) : lin(m, b)(2 * t - 1);
+  const sq = z => Cx.mul(z, z);
+  const E = [
+    { n: 'Ex 2: (2x + iy + 1) dz', f: z => [2 * z[0] + 1, z[1]], A: [1, -1], B: [2, 1], p1: t => [t + 1, 2 * t * t - 1], p2: lin([1, -1], [2, 1]), l1: 'x=t+1, y=2t²−1', l2: 'straight line', e1: [4, 25 / 3], e2: [4, 8], an: 0 },
+    { n: 'Ex 3: z̄² dz', f: z => sq(Cx.conj(z)), A: [0, 0], B: [2, 1], p1: brk([0, 0], [2, 0], [2, 1]), p2: lin([0, 0], [2, 1]), l1: '0 → 2 → 2+i', l2: 'straight (Ex. 24.1 Q5)', e1: [14 / 3, 11 / 3], e2: [10 / 3, -5 / 3], an: 0 },
+    { n: 'Ex 4: (x − y + ix²) dz', f: z => [z[0] - z[1], z[0] * z[0]], A: [0, 0], B: [1, 1], p1: lin([0, 0], [1, 1]), p2: brk([0, 0], [1, 0], [1, 1]), l1: 'straight', l2: '0 → 1 → 1+i', e1: [-1 / 3, 1 / 3], e2: [-1 / 2, 5 / 6], an: 0 },
+    { n: 'Ex 5: (x² − iy) dz', f: z => [z[0] * z[0], -z[1]], A: [0, 0], B: [1, 1], p1: lin([0, 0], [1, 1]), p2: t => [t, t * t], l1: 'y = x', l2: 'y = x²', e1: [5 / 6, -1 / 6], e2: [5 / 6, 1 / 6], an: 0 },
+    { n: 'Ex 6: z² dz (analytic)', f: sq, A: [0, 0], B: [3, 1], p1: lin([0, 0], [3, 1]), p2: brk([0, 0], [3, 0], [3, 1]), l1: 'straight OM', l2: 'O → L → M', e1: [6, 26 / 3], e2: [6, 26 / 3], an: 1 },
+    { n: 'Ex 7: (12z² − 4iz) dz (analytic)', f: z => Cx.sub(Cx.scale(sq(z), 12), Cx.mul([0, 4], z)), A: [1, 1], B: [2, 3], p1: lin([1, 1], [2, 3]), p2: brk([1, 1], [2, 1], [2, 3]), l1: 'straight', l2: '1+i → 2+i → 2+3i', e1: [-156, 38], e2: [-156, 38], an: 1 },
+    { n: 'Ex 11, 12: |z| dz', f: z => [Cx.abs(z), 0], A: [0, -1], B: [0, 1], p1: lin([0, -1], [0, 1]), p2: t => Cx.polar(1, 1.5 * PI - PI * t), l1: 'straight −i → i', l2: 'left half of |z| = 1', e1: [0, 1], e2: [0, 2], an: 0 }
+  ];
+  const sel = $('#drn-e'); E.forEach((e, k) => { const o = document.createElement('option'); o.value = k; o.textContent = e.n; sel.appendChild(o); });
+  let C = E[0], Q = [0, 0];
+  const resetQ = () => { const m = Cx.scale(Cx.add(C.A, C.B), 0.5), d = Cx.sub(C.B, C.A); Q = Cx.add(m, Cx.scale([d[1], -d[0]], 0.55)); };
+  const p3 = t => Cx.add(Cx.add(Cx.scale(C.A, (1 - t) ** 2), Cx.scale(Q, 2 * t * (1 - t))), Cx.scale(C.B, t * t));
+  const NP = 400;
+  const run = p => { const pts = [], acc = [[0, 0]]; for (let k = 0; k <= NP; k++) pts.push(p(k / NP)); for (let k = 0; k < NP; k++) acc.push(Cx.add(acc[k], Cx.mul(C.f(Cx.scale(Cx.add(pts[k], pts[k + 1]), 0.5)), Cx.sub(pts[k + 1], pts[k])))); return [pts, acc]; };
+  let R = [];
+  const compute = () => { R = [run(C.p1), run(C.p2), run(p3)]; };
+  const cols = ['--accent', '--accent3', '--accent4'];
+  const box = (pl, pts, asp) => { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; pts.forEach(w => { x0 = Math.min(x0, w[0]); x1 = Math.max(x1, w[0]); y0 = Math.min(y0, w[1]); y1 = Math.max(y1, w[1]); }); pl.span = Math.max(0.6, 0.6 * Math.max(x1 - x0, (y1 - y0) / asp)); pl.cx = (x0 + x1) / 2; pl.cy = (y0 + y1) / 2; };
+  const kt = () => Math.round(val('drn-t') * NP);
+  const Z = new Plane('#cv-dass-runz', { span: 2, aspect: 0.85, snap: 0.05, axisLabels: ['x', 'y'], draw: p => {
+    if (!R.length) return; const k = kt();
+    R.forEach(([pts], j) => { p.path(pts, { color: cols[j], width: j === 2 ? 2 : 3, dash: j === 2 ? [6, 4] : null }); p.dot(pts[k], { r: 5, color: cols[j] }); });
+    p.line(C.A, Q, { color: '--muted', width: 1, dash: [3, 3] }); p.line(Q, C.B, { color: '--muted', width: 1, dash: [3, 3] });
+    p.dot(Q, { r: 7, color: '--accent4', ring: true, label: 'drag' }); p.dot(C.A, { r: 5, color: '--fg', label: 'A' }); p.dot(C.B, { r: 5, color: '--fg', label: 'B' });
+  }});
+  const I = new Plane('#cv-dass-runi', { span: 2, aspect: 0.85, snap: 0, axisLabels: ['Re ∫', 'Im ∫'], draw: p => {
+    if (!R.length) return; const k = kt();
+    [C.e1, C.e2].forEach((e, j) => p.dot(e, { r: 10, color: cols[j], hollow: true }));
+    R.forEach(([, acc], j) => { p.path(acc.slice(0, k + 1), { color: cols[j], width: j === 2 ? 2 : 3, dash: j === 2 ? [6, 4] : null }); p.dot(acc[k], { r: 5, color: cols[j] }); });
+  }});
+  const fit = () => { box(Z, R.flatMap(r => r[0]).concat([Q]), 0.85); box(I, R.flatMap(r => r[1]).concat([C.e1, C.e2, [0, 0]]), 0.85); };
+  const out = () => { const k = kt(), v = R.map(r => r[1][k]);
+    let s = `At $t=${fnum(val('drn-t'), 2)}$: &nbsp; <span style="color:${cssv('--accent')}">■</span> ${C.l1}: $${Cx.tex(v[0], 4)}$ &nbsp; <span style="color:${cssv('--accent3')}">■</span> ${C.l2}: $${Cx.tex(v[1], 4)}$ &nbsp; <span style="color:${cssv('--accent4')}">■</span> your path: $${Cx.tex(v[2], 4)}$.`;
+    if (k === NP) s += C.an ? '<br>The integrand is <b>analytic</b>, so all three paths give the same value, $F(B)-F(A)$.' : '<br>The integrand is <b>not analytic</b>: the value depends on the path. Rings mark Dass\'s answers for the two printed paths.';
+    texMix('#drn-out', s); };
+  Z.addDrag(() => Q, v => { Q = v; compute(); box(I, R.flatMap(r => r[1]).concat([C.e1, C.e2, [0, 0]]), 0.85); I.redraw(); });
+  Z.onchange = out;
+  const all = () => { C = E[+sel.value]; resetQ(); compute(); fit(); Z.redraw(); I.redraw(); out(); };
+  sel.addEventListener('change', all); watch(['drn-t'], () => { Z.redraw(); I.redraw(); out(); }); all();
+});
+
+/* H.K. Dass §24.3–24.4 — deform the contour: only enclosed singularities matter */
+onReady(() => {
+  const w3 = Cx.polar(1, 2 * PI / 3), w3b = Cx.conj(w3);
+  const P = [
+    { n: 'Ex 15: (z+4)/(z²+2z+5)', f: z => Cx.div(Cx.add(z, [4, 0]), Cx.add(Cx.add(Cx.mul(z, z), Cx.scale(z, 2)), [5, 0])), s: [[-1, 2], [-1, -2]], c: [-1, 0], r: 1 },
+    { n: 'Ex 29: eᶻ/(z²+1)', f: z => Cx.div(Cx.exp(z), Cx.add(Cx.mul(z, z), [1, 0])), s: [[0, 1], [0, -1]], c: [0, 0], r: 2 },
+    { n: 'Ex 25: tan z', f: z => Cx.tan(z), s: [[PI / 2, 0], [-PI / 2, 0], [3 * PI / 2, 0], [-3 * PI / 2, 0]], c: [0, 0], r: 2 },
+    { n: 'Ex 32: (4−3z)/(z(z−1)(z−2))', f: z => Cx.div(Cx.sub([4, 0], Cx.scale(z, 3)), Cx.mul(z, Cx.mul(Cx.sub(z, [1, 0]), Cx.sub(z, [2, 0])))), s: [[0, 0], [1, 0], [2, 0]], c: [0, 0], r: 1.5 },
+    { n: 'Ex 33: (z²−2z)/((z+1)²(z²+4))', f: z => Cx.div(Cx.sub(Cx.mul(z, z), Cx.scale(z, 2)), Cx.mul(Cx.mul(Cx.add(z, [1, 0]), Cx.add(z, [1, 0])), Cx.add(Cx.mul(z, z), [4, 0]))), s: [[-1, 0], [0, 2], [0, -2]], c: [0, 0], r: 2.6 },
+    { n: 'Ex 34: 1/(z³−1)²', f: z => { const q = Cx.sub(Cx.mul(z, Cx.mul(z, z)), [1, 0]); return Cx.div([1, 0], Cx.mul(q, q)); }, s: [[1, 0], w3, w3b], c: [1, 0], r: 1 },
+    { n: 'Ex 36: (z²+1)/(z²−1)', f: z => Cx.div(Cx.add(Cx.mul(z, z), [1, 0]), Cx.sub(Cx.mul(z, z), [1, 0])), s: [[1, 0], [-1, 0]], c: [1, 0], r: 1 },
+    { n: 'Ex 38: (3z²+z+1)/((z²−1)(z+3))', f: z => Cx.div(Cx.add(Cx.add(Cx.scale(Cx.mul(z, z), 3), z), [1, 0]), Cx.mul(Cx.sub(Cx.mul(z, z), [1, 0]), Cx.add(z, [3, 0]))), s: [[1, 0], [-1, 0], [-3, 0]], c: [0, 0], r: 2 }
+  ];
+  const sel = $('#ddf-f'); P.forEach((p, k) => { const o = document.createElement('option'); o.value = k; o.textContent = p.n; sel.appendChild(o); });
+  let C = P[0], V = [];
+  const reset = () => { V = []; for (let k = 0; k < 8; k++) V.push(Cx.add(C.c, Cx.polar(C.r, k * PI / 4 + 0.001))); };
+  const NE = 160;
+  const samples = () => { const o = []; for (let k = 0; k < 8; k++) { const a = V[k], b = V[(k + 1) % 8]; for (let j = 0; j < NE; j++) o.push(Cx.add(a, Cx.scale(Cx.sub(b, a), j / NE))); } o.push(V[0]); return o; };
+  const integral = () => { let s = [0, 0]; const [X, Wt] = [[-0.9061798459, -0.5384693101, 0, 0.5384693101, 0.9061798459], [0.2369268851, 0.4786286705, 0.5688888889, 0.4786286705, 0.2369268851]];
+    for (let k = 0; k < 8; k++) { const a = V[k], b = V[(k + 1) % 8], d = Cx.sub(b, a), n = 60; for (let j = 0; j < n; j++) for (let q = 0; q < 5; q++) { const t = (j + (X[q] + 1) / 2) / n; s = Cx.add(s, Cx.scale(Cx.mul(C.f(Cx.add(a, Cx.scale(d, t))), d), Wt[q] / 2 / n)); } } return s; };
+  const wind = (pts, s) => { let tot = 0; for (let k = 0; k < pts.length - 1; k++) { let d = Cx.arg(Cx.sub(pts[k + 1], s)) - Cx.arg(Cx.sub(pts[k], s)); if (d > PI) d -= TAU; if (d < -PI) d += TAU; tot += d; } return Math.round(tot / TAU); };
+  const Pl = new Plane('#cv-dass-deform', { span: 3.2, aspect: 0.6, snap: 0.05, axisLabels: ['x', 'y'], draw: p => {
+    if (!V.length) return; const pts = samples(), ins = C.s.map(s => wind(pts, s));
+    p.path(V.concat([V[0]]), { color: '--accent', width: 3, fill: '--accent', fillAlpha: 0.08 });
+    for (let k = 0; k < 8; k++) { const a = V[k], b = V[(k + 1) % 8], m = Cx.scale(Cx.add(a, b), 0.5), d = Cx.sub(b, a), L = Cx.abs(d); if (L > 0.2) p.arrow(Cx.sub(m, Cx.scale(d, 0.08 / L)), Cx.add(m, Cx.scale(d, 0.08 / L)), { color: '--accent', width: 2, head: 10 }); }
+    C.s.forEach((s, j) => { const X = p.X(s[0]), Y = p.Y(s[1]), c = p.ctx; c.save(); c.strokeStyle = cssv(ins[j] ? '--accent2' : '--fg'); c.lineWidth = 3; c.beginPath(); c.moveTo(X - 7, Y - 7); c.lineTo(X + 7, Y + 7); c.moveTo(X - 7, Y + 7); c.lineTo(X + 7, Y - 7); c.stroke(); c.restore(); if (ins[j]) p.circle(s, 0.13, { color: '--accent2', width: 1.5, dash: [3, 3] }); });
+    V.forEach(v => p.dot(v, { r: 6, color: '--accent2', ring: true }));
+  }});
+  const out = () => {
+    const pts = samples(), I = integral(), dmin = Math.min(...C.s.map(s => Math.min(...pts.map(q => Cx.abs(Cx.sub(q, s))))));
+    if (dmin < 0.04) { texMix('#ddf-out', '⚠ The contour passes (almost) through a singularity, so the integral is not defined there. Move the corner away.'); return; }
+    let s = `$\\oint_Cf\\,dz\\approx${Cx.tex(I, 4)}$ &nbsp; (numerical, along your polygon).<br>`, sum = [0, 0], any = false;
+    C.s.forEach(z0 => { const w = wind(pts, z0); if (!w) return; any = true; const others = C.s.filter(q => q !== z0).map(q => Cx.abs(Cx.sub(q, z0))), rho = Math.min(0.1, 0.3 * Math.min(...others, 10));
+      const c = Cx.scale(contourInt(C.f, circlePath(z0, rho), 0, TAU, 600), w); sum = Cx.add(sum, c);
+      s += `Around $z=${Cx.tex(z0, 3)}$ (winding ${w}): $\\oint_{C_k}=${Cx.tex(c, 4)}$ $=2\\pi i\\times(${Cx.tex(Cx.div(c, [0, TAU]), 4)})$.<br>`; });
+    s += any ? `Sum of the small-circle integrals $=${Cx.tex(sum, 4)}$ — equal to $\\oint_C$ ✓.` : 'No singularity is inside $C$, so the integral is $0$ by Cauchy\'s theorem ✓.';
+    texMix('#ddf-out', s);
+  };
+  for (let k = 0; k < 8; k++) Pl.addDrag(() => V[k], v => { V[k] = v; });
+  Pl.onchange = out;
+  const all = () => { C = P[+sel.value]; reset(); Pl.cx = C.c[0]; Pl.cy = C.c[1]; Pl.span = Math.max(2.6, C.r * 1.8); Pl.redraw(); out(); };
+  sel.addEventListener('change', all); $('#ddf-r').addEventListener('click', all); all();
+});
+
+/* H.K. Dass §24.8–24.10 — Cauchy's inequality and Liouville */
+onReady(() => {
+  const F = {
+    exp: { f: Cx.exp, d: () => 1, deg: Infinity, t: 'e^z' },
+    sin: { f: Cx.sin, d: n => [0, 1, 0, -1][n % 4], deg: Infinity, t: '\\sin z' },
+    cos: { f: Cx.cos, d: n => [1, 0, -1, 0][n % 4], deg: Infinity, t: '\\cos z' },
+    p3: { f: z => Cx.add(Cx.sub(Cx.mul(z, Cx.mul(z, z)), Cx.scale(z, 2)), [1, 0]), d: n => [1, -2, 0, 6, 0, 0][n], deg: 3, t: 'z^3-2z+1' },
+    p1: { f: z => Cx.add(Cx.scale(z, 3), [2, 0]), d: n => [2, 3, 0, 0, 0, 0][n], deg: 1, t: '3z+2' }
+  };
+  const fact = n => n < 2 ? 1 : n * fact(n - 1);
+  const cache = {};
+  const M = (k, R) => { const key = k + '|' + R.toFixed(3); if (cache[key] !== undefined) return cache[key]; let m = 0; for (let j = 0; j < 360; j++) m = Math.max(m, Cx.abs(F[k].f(Cx.polar(R, j * TAU / 360)))); return (cache[key] = m); };
+  const bound = R => { const k = val('dci-f'), n = val('dci-n'); return R <= 0.02 ? NaN : Math.log10(fact(n) * M(k, R) / R ** n); };
+  const G = new Graph('#cv-dass-cineq', { span: 3.3, cx: 3, cy: 0.5, aspect: 0.7, axisLabels: ['R', 'log₁₀ bound'], draw: g => {
+    const k = val('dci-f'), n = val('dci-n'), tv = Math.abs(F[k].d(n));
+    g.fn(bound, { color: '--accent', width: 3, n: 300 });
+    if (tv > 0) g.line([g.x0, Math.log10(tv)], [g.x1, Math.log10(tv)], { color: '--accent2', width: 2, dash: [7, 5] });
+  }});
+  const out = () => {
+    const k = val('dci-f'), n = val('dci-n'), tv = Math.abs(F[k].d(n)); let best = 1e300, bR = 0;
+    for (let R = 0.05; R <= 6.3; R += 0.05) { const b = fact(n) * M(k, R) / R ** n; if (b < best) { best = b; bR = R; } }
+    let s = `$f=${F[k].t}$, $n=${n}$: &nbsp; true value $|f^{(${n})}(0)|=${fnum(tv, 4)}$. &nbsp; Smallest bound on $0\\lt R\\le6.3$: $\\frac{n!M(R)}{R^n}=${fnum(best, 4)}$ at $R\\approx${fnum(bR, 2)}$ (always $\\ge$ the true value ✓).`;
+    if (F[k].deg < Infinity && n > F[k].deg) s += `<br>Here $n\\gt\\deg f=${F[k].deg}$: the bound behaves like $R^{${F[k].deg}-${n}}\\to0$, so $f^{(${n})}\\equiv0$. This is Liouville's argument.`;
+    else if (F[k].deg === Infinity) s += '<br>$M(R)$ grows exponentially, so the bound eventually rises again. These functions are entire but <b>unbounded</b>, as Liouville requires of any non-constant entire function.';
+    else s += `<br>For $n\\le\\deg f$ the bound does not go to zero, consistent with $f^{(${n})}\\ne0$.`;
+    texMix('#dci-out', s);
+  };
+  $('#dci-f').addEventListener('change', () => { G.redraw(); out(); }); watch(['dci-n'], () => { G.redraw(); out(); }); out();
+});
+
+/* H.K. Dass §24.11–24.12 — Poisson's integral formula (disk and half-plane) */
+onReady(() => {
+  const at = Math.atan;
+  const D = {
+    ex18: { disk: 1, g: p => Math.exp(Math.cos(p)) * Math.cos(Math.sin(p)), u: (x, y) => Math.exp(x) * Math.cos(y), lo: 0.3, hi: 2.72, t: 'u=\\operatorname{Re}e^z=e^x\\cos y' },
+    step: { disk: 1, g: p => (((p % TAU) + TAU) % TAU) < PI ? 1 : 0, u: (x, y) => 0.5 + Math.atan2(2 * y, 1 - x * x - y * y) / PI - (1 - x * x - y * y < 0 ? (y > 0 ? 1 : -1) : 0), lo: 0, hi: 1, t: 'u=\\tfrac12+\\tfrac1\\pi\\tan^{-1}\\frac{2y}{1-r^2}' },
+    c3: { disk: 1, g: p => Math.cos(3 * p), u: (x, y) => x ** 3 - 3 * x * y * y, lo: -1, hi: 1, t: 'u=r^3\\cos3\\theta=\\operatorname{Re}z^3' },
+    ex19: { disk: 0, g: x => x < -1 ? 1 : x > 1 ? -1 : 0, u: (x, y) => (at((1 - x) / y) - at((1 + x) / y)) / PI, lo: -1, hi: 1, t: '\\phi=\\tfrac1\\pi\\left[\\tan^{-1}\\tfrac{1-x}{y}-\\tan^{-1}\\tfrac{1+x}{y}\\right]' },
+    hstep: { disk: 0, g: x => x < 0 ? 1 : 0, u: (x, y) => Math.atan2(y, x) / PI, lo: 0, hi: 1, t: 'u=\\tfrac{\\arg z}{\\pi}' }
+  };
+  let probe = [0.4, 0.35]; const off = document.createElement('canvas'); let offKey = '';
+  const cur = () => D[val('dpo-d')];
+  const kern = (d, q) => d.disk ? (p => { const r2 = Cx.abs2(q), th = Cx.arg(q); return (1 - r2) / (1 - 2 * Math.sqrt(r2) * Math.cos(th - p) + r2) / TAU; }) : (x => q[1] / ((x - q[0]) ** 2 + q[1] ** 2) / PI);
+  const poissonNum = (d, q) => { const N = 4000; let s = 0;
+    if (d.disk) { const K = kern(d, q); for (let j = 0; j < N; j++) { const p = (j + 0.5) * TAU / N; s += K(p) * d.g(p) * TAU / N; } return s; }
+    for (let j = 0; j < N; j++) { const sv = -PI / 2 + (j + 0.5) * PI / N; s += d.g(q[0] + q[1] * Math.tan(sv)) / N; } return s; };
+  const Pl = new Plane('#cv-dass-poisson', { span: 2.1, aspect: 0.62, snap: 0.01, axisLabels: ['x', 'y'], draw: p => {
+    const d = cur(), key = val('dpo-d') + '|' + p.W + 'x' + p.H + '|' + p.span + '|' + p.cy;
+    if (key !== offKey) { off.width = p.W; off.height = p.H; const c = off.getContext('2d'), res = 3;
+      for (let py = 0; py < p.H; py += res) for (let px = 0; px < p.W; px += res) { const x = p.wx(px + res / 2), y = p.wy(py + res / 2); if (d.disk ? x * x + y * y >= 1 : y <= 0) continue;
+        const [r, g, b] = heatRGB((d.u(x, y) - d.lo) / (d.hi - d.lo)); c.fillStyle = `rgb(${r | 0},${g | 0},${b | 0})`; c.fillRect(px, py, res, res); }
+      offKey = key; }
+    p.ctx.drawImage(off, 0, 0, p.W, p.H); if (p.gridOn) p.grid();
+    const K = kern(d, probe), pts = [];
+    if (d.disk) { p.circle([0, 0], 1, { color: '--fg', width: 2 }); let km = 0; for (let j = 0; j <= 360; j++) km = Math.max(km, K(j * TAU / 360)); for (let j = 0; j <= 360; j++) { const ph = j * TAU / 360; pts.push(Cx.polar(1 + 0.28 * K(ph) / km, ph)); } }
+    else { p.line([-50, 0], [50, 0], { color: '--fg', width: 2 }); const km = K(probe[0]); for (let j = 0; j <= 600; j++) { const x = p.x0 + (p.x1 - p.x0) * j / 600; pts.push([x, -0.6 * K(x) / km]); } }
+    p.path(pts, { color: '--accent2', width: 2.5 });
+    p.dot(probe, { r: 7, color: '--accent3', ring: true, label: 'probe' });
+  }});
+  Pl.redraw = function () { if (!this.W) return; const c = this.ctx; c.save(); c.fillStyle = cssv('--canvas'); c.fillRect(0, 0, this.W, this.H); c.restore(); this.draw(this); };
+  const out = () => { const d = cur(), num = poissonNum(d, probe), ex = d.u(probe[0], probe[1]);
+    texMix('#dpo-out', `Exact: $${d.t}$. &nbsp; At the probe $${Cx.tex(probe, 2)}$: Poisson integral $\\approx${fnum(num, 5)}$, exact $=${fnum(ex, 5)}$. &nbsp; The orange curve is the kernel ${d.disk ? '$\\frac{1}{2\\pi}\\frac{1-r^2}{1-2r\\cos(\\theta-\\phi)+r^2}$, drawn outward from the circle' : '$\\frac1\\pi\\frac{\\beta}{(x-\\alpha)^2+\\beta^2}$, drawn below the axis'}.`); };
+  Pl.addDrag(() => probe, v => { const d = cur(); if (d.disk) { const r = Cx.abs(v); probe = r > 0.97 ? Cx.scale(v, 0.97 / r) : v; } else probe = [v[0], Math.max(0.05, v[1])]; });
+  Pl.onchange = out;
+  const all = () => { const d = cur(); if (d.disk) { Pl.span = 2.1; Pl.cx = 0; Pl.cy = 0; if (Cx.abs(probe) > 0.97) probe = [0.4, 0.35]; } else { Pl.span = 4; Pl.cx = 0; Pl.cy = 1.8; probe = [Math.max(-3, Math.min(3, probe[0])), Math.max(0.3, Math.abs(probe[1]))]; } Pl.redraw(); out(); };
+  $('#dpo-d').addEventListener('change', all); all();
+});
+
+/* dass:end */</script>
 </body>
 </html>
