@@ -117,6 +117,23 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -135,6 +152,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="14.9_Mapping.html">14.9 Mapping</option>
 <option value="14.10_Applications_of_Conformal_Mapping.html">14.10 Some Applications of Conformal Mapping</option>
 <option value="14.11_Miscellaneous_Problems.html">14.11 Miscellaneous Problems</option></select>
+  <a class="btn" href="2.0_Complex_Numbers_Index.html" title="Chapter 2 index">Ch. 2 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -175,6 +193,48 @@ $$\frac{(z+\Delta z)^2-z^2}{\Delta z}=\frac{2z\,\Delta z+(\Delta z)^2}{\Delta z}
 <div class="readout" id="dr-out"></div>
 </div>
 
+<!-- dass:start 10__def -->
+<h2 id="dass-22-8" class="dass"><span class="dtag">H.K. Dass §22.8–22.9</span>Differentiability: the same answer from every direction</h2>
+<p>$f$ is differentiable at $z$ if</p>
+$$f'(z)=\lim_{\delta z\to0}\frac{f(z+\delta z)-f(z)}{\delta z}$$
+<p>exists and is the <b>same along every path</b> by which $Q=z+\delta z$ approaches $P=z$.</p>
+
+<div class="widget" id="w-dass-rose">
+<div class="wt">Interactive — the "derivative rosette"</div>
+<div class="wd">Drag the point $z_0$ (left). For each direction $\phi$ of approach, the right panel plots the difference quotient $\frac{f(z_0+he^{i\phi})-f(z_0)}{he^{i\phi}}$ for a tiny $h$. Differentiable means all directions give <b>one point</b>. If the quotients spread into a curve, the derivative does not exist there. Try $|z|^2$: a circle everywhere except at $0$. Try $x^2+iy^2$: a single point only on the line $y=x$.</div>
+<div class="ctrls"><label>$f$ <select id="dro-f"><option value="lin">(4x+y)+i(−x+4y)</option><option value="sq">z²</option><option value="abs2">|z|²</option><option value="conj">z̄</option><option value="x2iy2">x² + i y²</option><option value="inv">1/z</option><option value="sqxy">√|xy|</option></select></label></div>
+<div class="grid2"><canvas id="cv-dass-rose-z"></canvas><canvas id="cv-dass-rose-q"></canvas></div>
+<div class="readout" id="dro-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.8) — $f=(4x+y)+i(-x+4y)$: three paths, one answer</div><div class="bd"><ol class="steps">
+<li>$\frac{\delta f}{\delta z}=\frac{4\delta x+\delta y+i(-\delta x+4\delta y)}{\delta x+i\delta y}$.</li>
+<li>Along the real axis ($\delta y=0$): $4-i$. Along the imaginary axis ($\delta x=0$): $\frac{1+4i}{i}=4-i$. Along $y=x$ ($\delta y=\delta x$): $\frac{5+3i}{1+i}=4-i$.</li>
+<li>All paths agree, and indeed $f=(4-i)(x+iy)=(4-i)z$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> if an expression in $x,y$ secretly equals $cz+d$, it is differentiable everywhere. Spotting this saves the whole Cauchy–Riemann check.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.8) — $f=\dfrac{x^3y(y-ix)}{x^6+y^2}$, $f(0)=0$: straight lines are not enough</div><div class="bd"><ol class="steps">
+<li>$\frac{f(z)-f(0)}{z}=\frac{-ix^3y}{x^6+y^2}$ (because $y-ix=-i(x+iy)$).</li>
+<li>Along $y=mx$: $\frac{-imx^4}{x^6+m^2x^2}=\frac{-imx^2}{x^4+m^2}\to0$ for <b>every</b> line.</li>
+<li>Along the curve $y=x^3$: $\frac{-ix^6}{2x^6}=-\frac i2\ne0$. So $f'(0)$ does not exist.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "the limit is $0$ along every straight line" does <b>not</b> prove differentiability. A parabola- or cubic-type path is the standard counterexample.</p></div></div>
+
+<div class="box thm"><span class="tag">Theorem (§22.8): differentiable ⇒ continuous, but not conversely</span>
+<p><b>Proof.</b> $f(z_0+\delta z)-f(z_0)=\delta z\cdot\frac{f(z_0+\delta z)-f(z_0)}{\delta z}\to0\cdot f'(z_0)=0$, so $f(z)\to f(z_0)$.</p>
+<p><b>The converse fails:</b> $f=|z|^2=x^2+y^2$ is continuous everywhere (it is a polynomial in $x,y$). But</p>
+$$\frac{|z+\delta z|^2-|z|^2}{\delta z}=\bar z+\overline{\delta z}+z\,\frac{\overline{\delta z}}{\delta z},\qquad\frac{\overline{\delta z}}{\delta z}=e^{-2i\theta},$$
+<p>which depends on the direction $\theta$ unless $z=0$. So $|z|^2$ is differentiable <b>only at $z=0$</b>, where $f'(0)=0$.</p></div>
+
+<h3>Analytic, entire, singular (§22.9)</h3>
+<table class="t dt">
+<tr><th>Term</th><th>Meaning</th></tr>
+<tr><td>Analytic at $z_0$ (also called holomorphic, regular, monogenic)</td><td>differentiable at $z_0$ <b>and at every point of some neighbourhood</b> of $z_0$</td></tr>
+<tr><td>Analytic in a domain</td><td>analytic at every point of it</td></tr>
+<tr><td>Entire function</td><td>analytic in the whole finite plane: polynomials, $e^z$, $\sin z$, $\cos z$</td></tr>
+<tr><td>Singular point</td><td>a point where $f$ fails to be analytic</td></tr>
+</table>
+<p>The chain of implications is: entire ⇒ analytic ⇒ differentiable ⇒ continuous, and <b>none</b> of the arrows reverses. Example: $|z|^2$ is differentiable at $0$, but it is <b>not analytic</b> at $0$, because no neighbourhood of $0$ consists of points of differentiability. (H.K. Dass's Example 15 calls $z\bar z$ "analytic at $z=0$". Strictly it is only differentiable there.)</p>
+<!-- dass:end -->
 <h2 id="cr">2. The Cauchy–Riemann equations</h2>
 <div class="box thm"><span class="tag">Theorem I (proved)</span>
 <p>If $f(z)=u(x,y)+iv(x,y)$ is analytic in a region, then in that region</p>
@@ -208,6 +268,62 @@ $$\frac{df}{dz}=\frac{du+i\,dv}{dx+i\,dy}=\frac{u_x+u_ym+i(v_x+v_ym)}{1+im}\ \ov
 <div class="grid2"><canvas id="cv-cr"></canvas><div class="readout" id="cr-out" style="margin:0"></div></div>
 </div>
 
+<!-- dass:start 20__cr -->
+<h2 id="dass-22-10" class="dass"><span class="dtag">H.K. Dass §22.10–22.11</span>Cauchy–Riemann: the necessary condition and the sufficient condition, with proofs</h2>
+<div class="box thm"><span class="tag">§22.10 Necessary condition</span><p>If $f=u+iv$ is analytic in a region $R$, then $u_x$, $u_y$, $v_x$, $v_y$ exist and</p>
+$$\frac{\partial u}{\partial x}=\frac{\partial v}{\partial y},\qquad\frac{\partial u}{\partial y}=-\frac{\partial v}{\partial x}.$$</div>
+<p><b>Proof (two paths).</b> $\frac{\delta f}{\delta z}=\frac{\delta u}{\delta z}+i\frac{\delta v}{\delta z}$, and the limit must be the same along any path.</p>
+<ul>
+<li><b>Along the real axis</b> ($\delta z=\delta x$): $f'(z)=u_x+iv_x$.</li>
+<li><b>Along the imaginary axis</b> ($\delta z=i\delta y$): $f'(z)=\frac{u_y+iv_y}{i}=v_y-iu_y$.</li>
+</ul>
+<p>Equating real and imaginary parts gives $u_x=v_y$ and $v_x=-u_y$. $\blacksquare$</p>
+
+<div class="box thm"><span class="tag">§22.11 Sufficient condition</span><p>If (i) the Cauchy–Riemann equations hold in $R$ <b>and</b> (ii) $u_x$, $u_y$, $v_x$, $v_y$ are continuous in $R$, then $f$ is analytic in $R$.</p></div>
+<p><b>Proof (Taylor's theorem in two variables).</b> Continuity of the partials lets us write, to first order,</p>
+$$f(z+\delta z)-f(z)=(u_x+iv_x)\,\delta x+(u_y+iv_y)\,\delta y .$$
+<p>Replace $u_y$ by $-v_x$ and $v_y$ by $u_x$ (Cauchy–Riemann). The second bracket becomes $-v_x+iu_x=i(u_x+iv_x)$, so</p>
+$$f(z+\delta z)-f(z)=(u_x+iv_x)(\delta x+i\delta y)=(u_x+iv_x)\,\delta z .$$
+<p>Dividing by $\delta z$, the limit is $u_x+iv_x$, independent of the path. So $f'(z)$ exists, and</p>
+$$f'(z)=u_x+iv_x=v_y-iu_y .\qquad\blacksquare$$
+<div class="box warn"><span class="tag">Remember (Dass)</span><ol>
+<li>Analytic ⇒ Cauchy–Riemann holds.</li>
+<li>Cauchy–Riemann alone is <b>not</b> sufficient (examples below).</li>
+<li>Cauchy–Riemann <b>plus continuous partial derivatives</b> is sufficient.</li></ol></div>
+
+<div class="widget" id="w-dass-crt">
+<div class="wt">Interactive — Cauchy–Riemann table at any point</div>
+<div class="wd">Choose $f$ and drag the point. The readout computes $u_x$, $v_y$, $u_y$, $-v_x$ numerically and reports whether the two Cauchy–Riemann equations hold there. The functions marked * satisfy Cauchy–Riemann at $0$ but are <b>not</b> differentiable there. Drag the point exactly to the origin and compare with the rosette above.</div>
+<div class="ctrls"><label>$f$ <select id="dcr-f"><option value="ez">eˣ(cos y + i sin y)</option><option value="sin">sin z</option><option value="log">log z</option><option value="inv">1/z</option><option value="cubic">*(x³(1+i) − y³(1−i))/(x²+y²)</option><option value="sqxy">*√|xy|</option><option value="c1c2">x² − y² − 2xy + i(x² − y² + 2xy)</option></select></label></div>
+<canvas id="cv-dass-crt"></canvas>
+<div class="readout" id="dcr-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.11) — $\sin z$ is analytic and $\frac{d}{dz}\sin z=\cos z$</div><div class="bd"><ol class="steps">
+<li>$\sin z=\sin x\cosh y+i\cos x\sinh y$, so $u=\sin x\cosh y$ and $v=\cos x\sinh y$.</li>
+<li>$u_x=\cos x\cosh y=v_y$ and $u_y=\sin x\sinh y=-v_x$. These are continuous everywhere, so $\sin z$ is entire.</li>
+<li>$f'=u_x+iv_x=\cos x\cosh y-i\sin x\sinh y=\cos(x+iy)=\cos z$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $f'=u_x+iv_x$ turns every Cauchy–Riemann check into a derivative for free. Use it to confirm $(e^z)'=e^z$, $(\log z)'=\frac1z$, $(\frac1z)'=-\frac{1}{z^2}$.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.11) — $\log z$ satisfies Cauchy–Riemann for $z\ne0$, and $(\log z)'=\frac1z$</div><div class="bd"><ol class="steps">
+<li>$u=\frac12\log(x^2+y^2)$ and $v=\tan^{-1}\frac yx$.</li>
+<li>$u_x=\frac{x}{x^2+y^2}=v_y$ and $u_y=\frac{y}{x^2+y^2}=-v_x$, which are continuous except at $0$.</li>
+<li>$f'=u_x+iv_x=\frac{x-iy}{x^2+y^2}=\frac{1}{x+iy}=\frac1z$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $\log z$ is the model "analytic except at a point (and on a cut)" function. Its derivative $\frac1z$ gives the $2\pi i$ in contour integrals.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.11) — Cauchy–Riemann holds at $0$ but $f$ is not differentiable: $f=\dfrac{x^3(1+i)-y^3(1-i)}{x^2+y^2}$, $f(0)=0$</div><div class="bd"><ol class="steps">
+<li>$u=\frac{x^3-y^3}{x^2+y^2}$ and $v=\frac{x^3+y^3}{x^2+y^2}$.</li>
+<li>From first principles at $0$: $u_x=\lim\frac{h^3/h^2}{h}=1$, $u_y=-1$, $v_x=1$, $v_y=1$. So $u_x=v_y$ and $u_y=-v_x$: Cauchy–Riemann holds.</li>
+<li>But $\frac{f(z)}{z}$ along $y=0$ is $1+i$, and along $y=x$ is $\frac{2ix^3/2x^2}{x(1+i)}=\frac{i}{1+i}=\frac{1+i}2$. They differ, so $f'(0)$ does not exist.</li>
+<li>The reason: the partial derivatives are not continuous at $0$, so the sufficient condition fails.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> multiple-select questions like "Cauchy–Riemann is satisfied at $0$, therefore $f$ is analytic at $0$ — true or false?" have answer <b>false</b>. Other standard counterexamples are $\sqrt{|xy|}$, $\frac{x^2y^5(x+iy)}{x^4+y^{10}}$ and $e^{-z^{-4}}$.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.11) — find $C_1,C_2$ so that $f=x^2+C_1y^2-2xy+i(C_2x^2-y^2+2xy)$ is analytic</div><div class="bd"><ol class="steps">
+<li>$u_x=2x-2y$ and $v_y=-2y+2x$: equal for all $C$.</li>
+<li>$u_y=2C_1y-2x$ must equal $-v_x=-2C_2x-2y$ for all $x,y$. So $2C_1=-2$ and $-2=-2C_2$, giving $C_1=-1$ and $C_2=1$.</li>
+<li>$f'=u_x+iv_x=(2x-2y)+i(2x+2y)=2(1+i)z$, so $f=(1+i)z^2$ (+ const).</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "find the constants for which $f$ is analytic" is a staple question. Match the coefficients of $x$ and $y$ in the second Cauchy–Riemann equation.</p></div></div>
+<!-- dass:end -->
 <h2 id="defs">3. Regular and singular points; Theorem III</h2>
 <ul>
 <li>A <b>regular point</b> of $f$ is a point where $f$ is analytic.</li>
@@ -218,6 +334,78 @@ $$\frac{df}{dz}=\frac{du+i\,dv}{dx+i\,dy}=\frac{u_x+u_ym+i(v_x+v_ym)}{1+im}\ \ov
 <p>This is astonishing compared with real functions: $f(x)=x|x|$ has a first derivative but no second. For $f(z)$, one derivative everywhere in a region means infinitely many, and a convergent Taylor series.</p>
 <p>It also explains (Boas eqs. 2.5–2.6) why $\frac1{1+x^2}=1-x^2+x^4-\cdots$ converges only for $|x|\lt1$: the complex function $\frac{1}{1+z^2}$ blows up at $z=\pm i$, at distance 1 from the origin. See Interactive 1 of Chapter 2, §7 for a full visualisation.</p>
 
+<!-- dass:start 50__defs -->
+<h2 id="dass-25-7" class="dass"><span class="dtag">H.K. Dass §25.6–25.7</span>Taylor's theorem: proof, the three ways to get the coefficients, and the circle of convergence</h2>
+<div class="box thm"><span class="tag">Taylor's theorem</span><p>If $f$ is analytic at all points inside a circle $C$ with centre $a$, then at every $z$ inside $C$</p>
+$$f(z)=f(a)+f'(a)(z-a)+\frac{f''(a)}{2!}(z-a)^2+\cdots+\frac{f^{(n)}(a)}{n!}(z-a)^n+\cdots$$
+<p>The series converges in the <b>largest</b> open disk about $a$ in which $f$ is analytic. Its radius is the distance from $a$ to the nearest singularity.</p></div>
+<h3>Dass's proof</h3>
+<ol class="steps">
+<li>Fix $z$ inside $C$. Draw a circle $C_1$ about $a$ that encloses $z$, and let $w$ be on $C_1$. Then $|z-a|\lt|w-a|$.</li>
+<li>Expand the Cauchy kernel as a geometric series:
+$$\frac1{w-z}=\frac{1}{(w-a)-(z-a)}=\frac{1}{w-a}\left(1-\frac{z-a}{w-a}\right)^{-1}=\sum_{n=0}^\infty\frac{(z-a)^n}{(w-a)^{n+1}} .$$
+Since $\left|\frac{z-a}{w-a}\right|\lt1$ is fixed on $C_1$, the convergence is uniform (M-test), so we may integrate term by term.</li>
+<li>Multiply by $\frac{f(w)}{2\pi i}$ and integrate over $C_1$: $f(z)=\sum_n(z-a)^n\cdot\frac1{2\pi i}\oint_{C_1}\frac{f(w)\,dw}{(w-a)^{n+1}}$.</li>
+<li>By the derivative formula (Dass §24.6), the $n$-th integral is $\frac{f^{(n)}(a)}{n!}$. ∎</li></ol>
+<p><b>Corollaries.</b> With $z=a+h$: $f(a+h)=\sum\frac{h^n}{n!}f^{(n)}(a)$. With $a=0$: the <b>Maclaurin series</b> $f(z)=\sum\frac{f^{(n)}(0)}{n!}z^n$.</p>
+
+<div class="dcase"><p><b>Three ways to get the coefficients (§25.6). Use the cheapest.</b></p><ol>
+<li><b>Differentiate:</b> $a_n=\frac{f^{(n)}(a)}{n!}$. Good for $e^z$, $\cosh z$, $\cos z$ and $\log z$ (Dass Ex 5, 7, 9, 16).</li>
+<li><b>Binomial/geometric series</b> after a shift $z=a+t$ and partial fractions. Good for rational functions (Ex 6, 8, 10–15).</li>
+<li><b>Known series:</b> substitute, multiply or divide known expansions, or integrate a known series term by term. Good for $\frac{\sin z}{z-\pi}$, $\sin^{-1}z$ and $\tan^{-1}z$ (Ex 17–19).</li></ol></div>
+
+<div class="widget" id="w-dass-tay">
+<div class="wt">Interactive — Taylor polynomials converge exactly inside the circle that reaches the nearest singularity</div>
+<div class="wd">The colour is $\log_{10}$ of the error $|f(z)-T_N(z)|$, where $T_N$ is the Taylor polynomial of degree $N$ about the centre (white cross). Dark means accurate. Black dots are singularities. The circle through the nearest one is the circle of convergence. Increase $N$: the dark region fills the disk and stops exactly at the circle. Drag the probe for numbers.</div>
+<div class="ctrls"><label>example <select id="dty-f"></select></label>
+<label>$N$ <input type="range" id="dty-n" min="0" max="30" step="1" value="8"><output></output></label></div>
+<canvas id="cv-dass-tay"></canvas>
+<div class="readout" id="dty-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 5–9) — expansions by differentiation and by binomial series</div><div class="bd">
+<div class="dcase"><p><b>Ex 5:</b> $e^z=e^a\left[1+(z-a)+\frac{(z-a)^2}{2!}+\cdots\right]$, valid for all $z$.</p></div>
+<div class="dcase"><p><b>Ex 6: $\frac1z$ about $z=2$.</b> $f^{(n)}(z)=\frac{(-1)^nn!}{z^{n+1}}$, so $\frac1z=\sum_{n\ge0}\frac{(-1)^n}{2^{n+1}}(z-2)^n=\frac12-\frac{z-2}{4}+\frac{(z-2)^2}{8}-\cdots$. Alternatively $\frac{1}{2+(z-2)}=\frac12\left(1+\frac{z-2}2\right)^{-1}$. Both give $R=2$, the distance from $2$ to the pole at $0$.</p></div>
+<div class="dcase"><p><b>Ex 7: $\cosh z$ about $\pi i$.</b> $\cosh\pi i=\cos\pi=-1$ and $\sinh\pi i=i\sin\pi=0$. So $\cosh z=-\left[1+\frac{(z-\pi i)^2}{2!}+\frac{(z-\pi i)^4}{4!}+\cdots\right]=-\cosh(z-\pi i)$, which you can check directly.</p></div>
+<div class="dcase"><p><b>Ex 8: $\frac{a}{bz+c}$ about $z_0$.</b> $\frac{a}{bz_0+c}\sum_n\left(\frac{-b(z-z_0)}{bz_0+c}\right)^n$, with $R=\left|z_0+\frac cb\right|$, the distance to the pole $-\frac cb$.</p></div>
+<div class="dcase"><p><b>Ex 9:</b> $\log z=(z-1)-\frac{(z-1)^2}{2}+\frac{(z-1)^3}{3}-\cdots$ (principal branch, $|z-1|\lt1$). It comes from $f^{(n)}(1)=(-1)^{n-1}(n-1)!$.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "the radius of convergence of the Taylor series of $f$ about $a$" is answered by <b>locating singularities</b>, never by computing coefficients.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 10, 11, 14) — the same function, but which series?</div><div class="bd">
+<div class="dcase"><p><b>Ex 10: $\frac{1}{z^2-3z+2}=\frac1{z-2}-\frac1{z-1}$.</b></p><ul>
+<li>(a) For $|z|\lt1$, both terms are expanded in powers of $z$: $-\frac12\left(1-\frac z2\right)^{-1}+(1-z)^{-1}=\frac12+\frac34z+\frac78z^2+\frac{15}{16}z^3+\cdots$, i.e. $\sum\left(1-\frac1{2^{n+1}}\right)z^n$.</li>
+<li>(b) For $|z|\gt2$, both are expanded in powers of $\frac1z$: $\frac1z\left(1-\frac2z\right)^{-1}-\frac1z\left(1-\frac1z\right)^{-1}=\frac1{z^2}+\frac3{z^3}+\frac7{z^4}+\cdots$. This is a Laurent series, not a Taylor series; see 14.4.</li></ul></div>
+<div class="dcase"><p><b>Ex 11:</b> for $|z+1|\lt1$, $\frac1{z^2}=\left[1-(z+1)\right]^{-2}=\sum_{n\ge0}(n+1)(z+1)^n$.</p></div>
+<div class="dcase"><p><b>Ex 14: "all Taylor series of $\frac{4z-1}{z^4-1}$ about $0$".</b> There is only one Taylor series about a given centre. Quickest route: $\frac{1-4z}{1-z^4}=(1-4z)(1+z^4+z^8+\cdots)=1-4z+z^4-4z^5+z^8-\cdots$, valid for $|z|\lt1$ (the poles $\pm1,\pm i$ are all at distance $1$). For $|z|\gt1$ the expansion is a Laurent series.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "factor out the bigger term" (Dass's phrase) is the whole algorithm. Inside a circle, divide by the constant. Outside it, divide by $z$.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 12, 13, 15) — Taylor series about a point other than $0$, and the region of convergence</div><div class="bd">
+<div class="dcase"><p><b>Ex 12: $\frac{z+1}{(z-3)(z-4)}$ about $z=2$.</b> The singularities $3$ and $4$ are at distances $1$ and $2$, so $R=1$. With $\frac{-4}{z-3}+\frac{5}{z-4}=4\sum(z-2)^n-\frac52\sum\left(\frac{z-2}2\right)^n$:
+$$\frac32+\frac{11}4(z-2)+\frac{27}8(z-2)^2+\frac{59}{16}(z-2)^3+\cdots,\qquad|z-2|\lt1 .$$
+Dass checks it with $f(2)=\frac32$, $f'(2)=\frac{11}4$, $f''(2)=\frac{27}4$, $f'''(2)=\frac{177}8$.</p></div>
+<div class="dcase"><p><b>Ex 13: $\frac1{z^2+4}$ about $z=-i$.</b> The poles $\pm2i$ are at distances $3$ and $1$, so $R=1$. The result is $\frac13+\frac{2i}9(z+i)-\frac{7}{27}(z+i)^2-\frac{20i}{81}(z+i)^3+\cdots$</p></div>
+<div class="dcase"><p><b>Ex 15: $\frac{2z^3+1}{z^2+z}$ about $z=1$.</b> First divide: $\frac{2z^3+1}{z(z+1)}=2z-2+\frac1z+\frac1{z+1}$. The poles $0$ and $-1$ are at distances $1$ and $2$, so $R=1$. Expanding $\frac1{1+(z-1)}$ and $\frac{1}{2+(z-1)}$:
+$$\frac32+\frac34(z-1)+\frac98(z-1)^2-\frac{17}{16}(z-1)^3+\cdots .$$
+The linear coefficient $\frac34=2-1-\frac14$ is easy to slip on: remember to count $2z-2=2(z-1)$ when collecting it.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "the radius of convergence about $z=a$ is the distance to the nearest pole" also works for complex centres such as $-i$. Draw the points.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 16–19) — using known series</div><div class="bd">
+<div class="dcase"><p><b>Ex 16:</b> $\cos z=\frac1{\sqrt2}\left[1-\left(z-\frac\pi4\right)-\frac{(z-\pi/4)^2}{2!}+\frac{(z-\pi/4)^3}{3!}+\cdots\right]$. The signs follow the pattern $+,-,-,+$.</p></div>
+<div class="dcase"><p><b>Ex 17:</b> with $t=z-\pi$, $\frac{\sin z}{z-\pi}=\frac{-\sin t}{t}=-1+\frac{(z-\pi)^2}{3!}-\frac{(z-\pi)^4}{5!}+\cdots$. The point $z=\pi$ is a <b>removable</b> singularity.</p></div>
+<div class="dcase"><p><b>Ex 18:</b> $\frac{d}{dz}\sin^{-1}z=(1-z^2)^{-1/2}=1+\frac{z^2}2+\frac38z^4+\frac5{16}z^6+\cdots$. Integrating, with $\sin^{-1}0=0$: $\sin^{-1}z=z+\frac{z^3}{6}+\frac{3z^5}{40}+\frac{5z^7}{112}+\cdots$, for $|z|\lt1$.</p></div>
+<div class="dcase"><p><b>Ex 19:</b> $\frac{d}{dz}\tan^{-1}z=\frac1{1+z^2}=1-z^2+z^4-\cdots$, so $\tan^{-1}z=z-\frac{z^3}3+\frac{z^5}5-\cdots$, for $|z|\lt1$ (the singularities are $\pm i$).</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "integrate the series of the derivative" is the fastest way to get $\sin^{-1}$, $\tan^{-1}$, $\log(1+z)$ and $\tanh^{-1}$. Each converges for $|z|\lt1$.</p></div></div>
+
+<table class="t dt">
+<tr><th colspan="3">Dass Exercise 25.2 — answers (checked against a computer algebra series)</th></tr>
+<tr><td>$\frac1{z+1}$ about $1$</td><td>$\frac12\left[1-\frac{z-1}{2}+\frac{(z-1)^2}{4}-\cdots\right]$</td><td>$R=2$</td></tr>
+<tr><td>$\frac{z-1}{z+1}$ about $0$ / about $1$</td><td>$-1+2(z-z^2+z^3-\cdots)$ / $\frac{z-1}{2}-\frac{(z-1)^2}{2^2}+\frac{(z-1)^3}{2^3}-\cdots$</td><td>$R=1$ / $R=2$</td></tr>
+<tr><td>$\frac1{4-3z}$ about $1+i$</td><td>$\frac1{1-3i}\sum_n\left(\frac{3}{1-3i}\right)^n(z-1-i)^n$</td><td>$R=\frac{\sqrt{10}}3$</td></tr>
+<tr><td>$\log\frac{1+z}{1-z}$ about $0$</td><td>$2\sum\frac{z^{2n+1}}{2n+1}$</td><td>$R=1$</td></tr>
+<tr><td>$\frac1{(z^2-1)(z^2-2)}$ about $0$</td><td>$\sum\left(1-\frac{1}{2^{n+1}}\right)z^{2n}$</td><td>$R=1$</td></tr>
+<tr><td>$\tan z$, $\ z\cot z$, $\ \frac{e^z}{1+e^z}$</td><td>$z+\frac{z^3}3+\frac{2z^5}{15}$; $\ 1-\frac{z^2}3-\frac{z^4}{45}$; $\ \frac12+\frac z4-\frac{z^3}{48}$</td><td>$\frac\pi2$; $\ \pi$; $\ \pi$</td></tr>
+</table>
+<!-- dass:end -->
 <h2 id="harmonic">4. Harmonic functions (Theorem IV)</h2>
 <div class="box def"><span class="tag">Definition</span><p>$\phi(x,y)$ is <b>harmonic</b> if it satisfies Laplace's equation $\nabla^2\phi=\phi_{xx}+\phi_{yy}=0$.</p></div>
 <div class="box thm"><span class="tag">Theorem IV</span>
@@ -247,11 +435,160 @@ $$\frac{df}{dz}=\frac{du+i\,dv}{dx+i\,dy}=\frac{u_x+u_ym+i(v_x+v_ym)}{1+im}\ \ov
 <div class="small">Each level curve is drawn where the function crosses one of evenly spaced values.</div>
 </div>
 
+<!-- dass:start 40__harmonic -->
+<h2 id="dass-22-14" class="dass"><span class="dtag">H.K. Dass §22.14–22.15</span>Orthogonal curves and harmonic functions</h2>
+<div class="box thm"><span class="tag">§22.14 Orthogonal system</span><p>If $f=u+iv$ is analytic, the two families $u(x,y)=c_1$ and $v(x,y)=c_2$ cut each other at right angles.</p>
+<p><b>Proof.</b> Differentiating $u=c_1$: $u_x\,dx+u_y\,dy=0$, so the slope is $m_1=-\frac{u_x}{u_y}$. Likewise $m_2=-\frac{v_x}{v_y}$. By Cauchy–Riemann ($v_x=-u_y$, $v_y=u_x$):</p>
+$$m_1m_2=\left(-\frac{u_x}{u_y}\right)\left(\frac{u_y}{u_x}\right)=-1 .\qquad\blacksquare$$
+<p>(This holds wherever $f'\ne0$. At a critical point the curves may cross at other angles.)</p></div>
+
+<div class="box thm"><span class="tag">§22.15 Harmonic functions</span><p>A function satisfying Laplace's equation $\phi_{xx}+\phi_{yy}=0$ is <b>harmonic</b>. If $f=u+iv$ is analytic (with continuous second partials), then $u$ and $v$ are both harmonic.</p>
+<p><b>Proof.</b> Differentiate $u_x=v_y$ with respect to $x$, and $u_y=-v_x$ with respect to $y$: $u_{xx}=v_{yx}$ and $u_{yy}=-v_{xy}$. Adding gives $u_{xx}+u_{yy}=0$, since mixed partials are equal. The same argument works for $v$. $\blacksquare$</p>
+<p>If $u+iv$ is analytic, $v$ is called a <b>harmonic conjugate</b> of $u$.</p></div>
+
+<div class="widget" id="w-dass-orth">
+<div class="wt">Interactive — the families $u=c$ and $v=c$ are orthogonal</div>
+<div class="wd">Choose $f$. Blue curves are $u=$ const, green curves are $v=$ const. Drag the point: the arrows $\nabla u$ and $\nabla v$ are always perpendicular and of equal length ($|f'|$), except at critical points where $f'=0$ (for $z^2$, the origin).</div>
+<div class="ctrls"><label>$f$ <select id="dor-f"><option value="sq">z²</option><option value="cube">z³</option><option value="exp">eᶻ</option><option value="inv">1/z</option><option value="log">log z</option></select></label></div>
+<canvas id="cv-dass-orth"></canvas>
+<div class="readout" id="dor-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.15) — harmonic conjugate of $u=2x(1-y)$</div><div class="bd"><ol class="steps">
+<li>$u_{xx}+u_{yy}=0+0=0$, so $u$ is harmonic.</li>
+<li>$dv=v_x\,dx+v_y\,dy=-u_y\,dx+u_x\,dy=2x\,dx+(2-2y)\,dy$.</li>
+<li>$v=x^2+2y-y^2+C$. (Check: $f=u+iv=2z+iz^2+iC$.)</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "the harmonic conjugate of …" is asked almost every year. Writing $dv=-u_y\,dx+u_x\,dy$ and integrating is the safest route.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.15) — $u=\frac12\log(x^2+y^2)$ is harmonic, with conjugate $\tan^{-1}\frac yx$</div><div class="bd"><ol class="steps">
+<li>$u_{xx}=\frac{y^2-x^2}{(x^2+y^2)^2}$ and $u_{yy}=\frac{x^2-y^2}{(x^2+y^2)^2}$. The sum is $0$.</li>
+<li>$dv=-\frac{y}{x^2+y^2}dx+\frac{x}{x^2+y^2}dy=d\left(\tan^{-1}\frac yx\right)$, so $v=\tan^{-1}\frac yx+C$. Together, $f=\log z$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $\log r$ is the 2-D potential of a line charge, and $\theta$ is its flux function. This is the most important harmonic pair in physics.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.15) — both harmonic, but not conjugates: $u=x^2-y^2$, $v=\frac{y}{x^2+y^2}$</div><div class="bd"><ol class="steps">
+<li>$u_{xx}+u_{yy}=2-2=0$ and $v=-\operatorname{Im}\frac1z$ is harmonic too.</li>
+<li>But $u_x=2x\ne v_y=\frac{x^2-y^2}{(x^2+y^2)^2}$, so $u+iv$ is not analytic.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> harmonic is necessary for a conjugate pair, but not sufficient. A pair must also satisfy Cauchy–Riemann. This is a common true/false item.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.15) — $f(x,y)=x^2+Axy+By^2$ is harmonic exactly when $B=-1$ ($A$ arbitrary)</div><div class="bd"><ol class="steps">
+<li>$f_{xx}+f_{yy}=2+2B$, which must be $0$, so $B=-1$.</li>
+<li>Then $x^2-y^2+Axy=\operatorname{Re}\left[\left(1-\frac{iA}2\right)z^2\right]$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "for which constants is $u$ harmonic" needs only the Laplacian, and the $xy$ term never matters.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.15) — if $u$ and $v$ are harmonic, then $F=(u_y-v_x)+i(u_x+v_y)$ is analytic</div><div class="bd"><ol class="steps">
+<li>Let $R=u_y-v_x$ and $S=u_x+v_y$.</li>
+<li>$R_x=u_{xy}-v_{xx}$ and $S_y=u_{xy}+v_{yy}=u_{xy}-v_{xx}$ (using $\nabla^2v=0$). So $R_x=S_y$.</li>
+<li>$R_y=u_{yy}-v_{xy}=-u_{xx}-v_{xy}$ and $S_x=u_{xx}+v_{xy}$ (using $\nabla^2u=0$). So $R_y=-S_x$. Cauchy–Riemann holds. $\blacksquare$</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> it shows how Laplace's equation for two functions combines into a single analytic function. This is the idea behind complex potentials in 2-D electrostatics.</p></div></div>
+
+<h2 id="dass-22-18" class="dass"><span class="dtag">H.K. Dass §22.18–22.20</span>Finding the conjugate: exact differentials, and Milne-Thomson (all four cases)</h2>
+<h3>Method of exact differentials (§22.18)</h3>
+<div class="dcase"><p><b>Case I ($u$ given).</b> By Cauchy–Riemann, $dv=v_x\,dx+v_y\,dy=-u_y\,dx+u_x\,dy=M\,dx+N\,dy$. This is <b>exact</b>, because $M_y=-u_{yy}=u_{xx}=N_x$ by Laplace. So</p>
+$$v=\int M\,dx\ (\text{treat }y\text{ as constant})+\int(\text{terms of }N\text{ free of }x)\,dy .$$</div>
+<div class="dcase"><p><b>Case II ($v$ given).</b> $du=u_x\,dx+u_y\,dy=v_y\,dx-v_x\,dy$, integrated the same way.</p></div>
+
+<h3>Milne-Thomson method (§22.19)</h3>
+<p>Since $x=\frac{z+\bar z}2$ and $y=\frac{z-\bar z}{2i}$, $f(z)=u\left(\frac{z+\bar z}2,\frac{z-\bar z}{2i}\right)+iv(\cdots)$ is a formal identity in $z$ and $\bar z$. Putting $\bar z=z$ (i.e. $x=z$, $y=0$) gives $f(z)=u(z,0)+iv(z,0)$. Applied to $f'=u_x-iu_y$, this gives a working rule that needs <b>no integration of $v$</b>.</p>
+<table class="t dt">
+<tr><th>Case (§22.20)</th><th>Steps</th><th>Formula</th></tr>
+<tr><td>I: $u$ given</td><td>$\phi_1=u_x$, $\phi_2=u_y$; put $x\to z$, $y\to0$</td><td>$f=\int[\phi_1(z,0)-i\phi_2(z,0)]\,dz+C$</td></tr>
+<tr><td>II: $v$ given</td><td>$\psi_1=v_y$, $\psi_2=v_x$; put $x\to z$, $y\to0$</td><td>$f=\int[\psi_1(z,0)+i\psi_2(z,0)]\,dz+C$</td></tr>
+<tr><td>III: $u-v$ given</td><td>$F=(1+i)f=(u-v)+i(u+v)$; find $F$ from $U=u-v$ by Case I</td><td>$f=\frac{F}{1+i}$</td></tr>
+<tr><td>IV: $u+v$ given</td><td>same $F$; find $F$ from $V=u+v$ by Case II</td><td>$f=\frac{F}{1+i}$</td></tr>
+</table>
+<p><b>Polar version</b> (Dass Examples 37–38): with $u(r,\theta)$ given, $dv=-\frac1ru_\theta\,dr+ru_r\,d\theta$, then write the result in terms of $z=re^{i\theta}$.</p>
+
+<div class="widget" id="w-dass-mt">
+<div class="wt">Interactive — the Milne-Thomson machine</div>
+<div class="wd">Choose one of H.K. Dass's problems. The readout runs the working rule step by step, then checks the answer: it compares $\operatorname{Re}f$ (or $\operatorname{Im}f$, or $\operatorname{Re}f-\operatorname{Im}f$) with the given function at random points.</div>
+<div class="ctrls"><label>given <select id="dmt-p"></select></label><button class="pri" id="dmt-go">Re-check at new points</button></div>
+<div class="readout" id="dmt-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.20, Case I) — $u=e^{-2xy}\sin(x^2-y^2)$</div><div class="bd"><ol class="steps">
+<li>$u_x=e^{-2xy}[2x\cos(x^2-y^2)-2y\sin(x^2-y^2)]$, so $\phi_1(z,0)=2z\cos z^2$.</li>
+<li>$u_y=e^{-2xy}[-2y\cos(x^2-y^2)-2x\sin(x^2-y^2)]$, so $\phi_2(z,0)=-2z\sin z^2$.</li>
+<li>$f=\int(2z\cos z^2+2iz\sin z^2)\,dz=\sin z^2-i\cos z^2+C=-ie^{iz^2}+C$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> Milne-Thomson handles exponential and trigonometric $u$ where the exact-differential route gets messy. Put $y=0$ as early as possible.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.20, Case II) — $v=e^x(x\sin y+y\cos y)$</div><div class="bd"><ol class="steps">
+<li>$v_y=e^x(x\cos y+\cos y-y\sin y)$, so $\psi_1(z,0)=e^z(z+1)$.</li>
+<li>$v_x=e^x(x\sin y+y\cos y+\sin y)$, so $\psi_2(z,0)=0$.</li>
+<li>$f=\int(z+1)e^z\,dz=ze^z+C$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> remember the order in Case II: $f'=v_y+iv_x$. Swapping them is the classic error.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.20, Case III) — $u-v=e^x(\cos y-\sin y)$</div><div class="bd"><ol class="steps">
+<li>$U=e^x(\cos y-\sin y)$: $U_x(z,0)=e^z$ and $U_y(z,0)=-e^z$.</li>
+<li>$F'=U_x-iU_y=(1+i)e^z$, so $F=(1+i)e^z+C$.</li>
+<li>$f=\frac{F}{1+i}=e^z+C'$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the trick $(1+i)f=(u-v)+i(u+v)$ turns a strange-looking given into the standard Case I.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.20, Case III with a condition) — $u-v=\dfrac{\cos x+\sin x-e^{-y}}{2\cos x-2\cosh y}$, $f(\pi/2)=0$</div><div class="bd"><ol class="steps">
+<li>Writing $e^{-y}=\cosh y-\sinh y$: $U=\frac12+\frac{\sin x+\sinh y}{2(\cos x-\cosh y)}$.</li>
+<li>$U_x(z,0)=\frac{1}{2(1-\cos z)}$ and $U_y(z,0)=-\frac{1}{2(1-\cos z)}$.</li>
+<li>$F'=\frac{1+i}{2(1-\cos z)}=\frac{1+i}4\operatorname{cosec}^2\frac z2$, so $F=-\frac{1+i}2\cot\frac z2+C$ and $f=-\frac12\cot\frac z2+C'$.</li>
+<li>$f(\pi/2)=0$ gives $C'=\frac12$. So $f=\frac12\left(1-\cot\frac z2\right)$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> a given value such as $f(\pi/2)=0$ fixes the constant. Don't drop $C$ until the condition has been used.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Example 38, polar) — $v=r^2\cos2\theta-r\cos\theta+2$</div><div class="bd"><ol class="steps">
+<li>Polar Cauchy–Riemann: $u_r=\frac1rv_\theta=-2r\sin2\theta+\sin\theta$ and $u_\theta=-rv_r=-2r^2\cos2\theta+r\cos\theta$.</li>
+<li>$du=u_r\,dr+u_\theta\,d\theta=d(-r^2\sin2\theta+r\sin\theta)$, so $u=-r^2\sin2\theta+r\sin\theta+c$.</li>
+<li>$f=u+iv=i(r^2e^{2i\theta}-re^{i\theta})+2i+c=i(z^2-z+2)+c$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> when the data come as $r^n\cos n\theta$ or $r^n\sin n\theta$, the polar Cauchy–Riemann equations are much faster than converting to $x,y$.</p></div></div>
+
+<h2 id="dass-22-21" class="dass"><span class="dtag">H.K. Dass §22.21</span>Partial differentiation with respect to $z$ and $\bar z$</h2>
+<p>Treat $z$ and $\bar z$ as independent variables, with $x=\frac{z+\bar z}2$ and $y=\frac{z-\bar z}{2i}$. The chain rule gives</p>
+$$\frac{\partial}{\partial z}=\frac12\left(\frac{\partial}{\partial x}-i\frac{\partial}{\partial y}\right),\qquad\frac{\partial}{\partial\bar z}=\frac12\left(\frac{\partial}{\partial x}+i\frac{\partial}{\partial y}\right),\qquad\boxed{4\frac{\partial^2}{\partial z\,\partial\bar z}=\frac{\partial^2}{\partial x^2}+\frac{\partial^2}{\partial y^2}}$$
+<p>For analytic $f$: $\frac{\partial f}{\partial\bar z}=0$ (this is Cauchy–Riemann), $\frac{\partial f}{\partial z}=f'$, and $\frac{\partial\bar f}{\partial\bar z}=\overline{f'}$. Then $\nabla^2=4\partial_z\partial_{\bar z}$ makes Laplacian identities one-liners:</p>
+<table class="t dt">
+<tr><th>Result (Dass Examples 48–53)</th><th>One-line reason</th></tr>
+<tr><td>$\nabla^2|f|^2=4|f'|^2$</td><td>$4\partial_z\partial_{\bar z}(f\bar f)=4f'\overline{f'}$</td></tr>
+<tr><td>$\nabla^2(\operatorname{Re}f)^2=2|f'|^2$</td><td>$u^2=\frac14(f+\bar f)^2$, and the cross term gives $\frac12\cdot4f'\overline{f'}$</td></tr>
+<tr><td>$\nabla^2|u|^p=p(p-1)|u|^{p-2}|f'|^2$</td><td>the same with $\left(\frac{f+\bar f}2\right)^p$</td></tr>
+<tr><td>$\nabla^2\log|f'|=0$</td><td>$\log|f'|^2=\log f'+\log\overline{f'}$; $\partial_{\bar z}$ of the first term is $0$ and $\partial_z$ of the second is $0$</td></tr>
+<tr><td>$\left(\frac{\partial|f|}{\partial x}\right)^2+\left(\frac{\partial|f|}{\partial y}\right)^2=|f'|^2$</td><td>the gradient of $|f|$ has length $|f'|$, by Cauchy–Riemann</td></tr>
+<tr><td>$|f|$ constant ⇒ $f$ constant</td><td>$0=\nabla^2|f|^2=4|f'|^2$, so $f'=0$</td></tr>
+</table>
+
+<div class="widget" id="w-dass-lap">
+<div class="wt">Interactive — check the §22.21 identities numerically</div>
+<div class="wd">Choose an analytic $f$ and drag the point. The readout computes the Laplacians with finite differences and compares them with the right-hand sides.</div>
+<div class="ctrls"><label>$f$ <select id="dlp-f"><option value="sq">z²</option><option value="exp">eᶻ</option><option value="sin">sin z</option><option value="cube">z³ + 2z</option></select></label></div>
+<canvas id="cv-dass-lap"></canvas>
+<div class="readout" id="dlp-out"></div>
+</div>
+<!-- dass:end -->
 <h2 id="polar">5. Cauchy–Riemann in polar coordinates (Problems 46–47)</h2>
 <p>With $z=re^{i\theta}$ and $f=u(r,\theta)+iv(r,\theta)$: $\frac{\partial f}{\partial r}=f'(z)e^{i\theta}$ and $\frac{\partial f}{\partial\theta}=f'(z)\,ire^{i\theta}$. So $\frac{\partial f}{\partial\theta}=ir\frac{\partial f}{\partial r}$, i.e. $u_\theta+iv_\theta=ir(u_r+iv_r)$:</p>
 $$\boxed{\frac{\partial u}{\partial r}=\frac1r\frac{\partial v}{\partial\theta},\qquad\frac{\partial v}{\partial r}=-\frac1r\frac{\partial u}{\partial\theta}}$$
 <p>These lead (Problem 47) to Laplace's equation in polar form: $u_{rr}+\frac1ru_r+\frac1{r^2}u_{\theta\theta}=0$.</p>
 
+<!-- dass:start 30__polar -->
+<h2 id="dass-22-12" class="dass"><span class="dtag">H.K. Dass §22.12–22.13</span>Cauchy–Riemann in polar form, and the two polar formulas for $\frac{dw}{dz}$</h2>
+<p><b>Proof of the polar Cauchy–Riemann equations (§22.12).</b> Write $u+iv=f(z)=f(re^{i\theta})$ and differentiate partially:</p>
+$$u_r+iv_r=f'(re^{i\theta})\,e^{i\theta},\qquad u_\theta+iv_\theta=f'(re^{i\theta})\,ire^{i\theta}.$$
+<p>Comparing, the second equals $ir$ times the first: $u_\theta+iv_\theta=ir(u_r+iv_r)=-rv_r+iru_r$. Equating real and imaginary parts:</p>
+$$\boxed{\frac{\partial u}{\partial r}=\frac1r\frac{\partial v}{\partial\theta},\qquad\frac{\partial v}{\partial r}=-\frac1r\frac{\partial u}{\partial\theta}}$$
+
+<h3>Derivative in polar form (§22.13)</h3>
+<p>Use the chain rule $\frac{\partial}{\partial x}=\cos\theta\frac{\partial}{\partial r}-\frac{\sin\theta}{r}\frac{\partial}{\partial\theta}$ on $\frac{dw}{dz}=\frac{\partial w}{\partial x}$. Then replace the $\theta$-derivatives by $r$-derivatives (or the other way round) with the polar Cauchy–Riemann equations. This gives two equivalent forms:</p>
+$$\frac{dw}{dz}=(\cos\theta-i\sin\theta)\frac{\partial w}{\partial r}=e^{-i\theta}\frac{\partial w}{\partial r},\qquad\frac{dw}{dz}=-\frac ir\,e^{-i\theta}\frac{\partial w}{\partial\theta}.$$
+<p>A third, equivalent form (Dass Example 39) is $f'(z)=\frac rz\left(\frac{\partial u}{\partial r}+i\frac{\partial v}{\partial r}\right)$. The polar equations also give Laplace's equation in polar form: $u_{rr}+\frac1ru_r+\frac1{r^2}u_{\theta\theta}=0$.</p>
+
+<div class="widget" id="w-dass-pcr">
+<div class="wt">Interactive — polar Cauchy–Riemann for $w=r^n(\cos n\theta+i\sin n\theta)$</div>
+<div class="wd">Choose any real $n$ (fractional too) and drag the point. The readout checks both polar equations numerically and compares $e^{-i\theta}\,\partial w/\partial r$ with $nr^{n-1}e^{i(n-1)\theta}$.</div>
+<div class="ctrls"><label>$n$ <input type="range" id="dpc-n" min="-3" max="4" step="0.25" value="1.5"><output></output></label></div>
+<canvas id="cv-dass-pcr"></canvas>
+<div class="readout" id="dpc-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §22.13) — $w=r^n(\cos n\theta+i\sin n\theta)$ is analytic for $r\gt0$, with $w'=nr^{n-1}[\cos(n-1)\theta+i\sin(n-1)\theta]$</div><div class="bd"><ol class="steps">
+<li>$u=r^n\cos n\theta$ and $v=r^n\sin n\theta$. Then $u_r=nr^{n-1}\cos n\theta=\frac1r(nr^n\cos n\theta)=\frac1rv_\theta$ ✓, and $v_r=nr^{n-1}\sin n\theta=-\frac1ru_\theta$ ✓.</li>
+<li>$\frac{dw}{dz}=e^{-i\theta}(u_r+iv_r)=e^{-i\theta}nr^{n-1}e^{in\theta}=nr^{n-1}e^{i(n-1)\theta}$.</li>
+<li>This exists for all $r\gt0$. At $r=0$ it also exists when $n\ge1$ is an integer, but not when $n\lt1$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> it proves $\frac{d}{dz}z^n=nz^{n-1}$ for every real $n$ (on a branch), which is needed for $z^{1/2}$ and $z^{p}$ in branch-cut integrals.</p></div></div>
+<!-- dass:end -->
 <h2 id="boas">6. Boas Problems, Section 2 — solutions</h2>
 <details class="sol"><summary>Show solutions 1–24 (analytic or not?)</summary>
 <table class="t">
@@ -357,7 +694,79 @@ $$\boxed{\frac{\partial u}{\partial r}=\frac1r\frac{\partial v}{\partial\theta},
 <div class="mcq" data-ans="0" data-ok="$u=x^2-y^2=\operatorname{Re}z^2$, so $v=2xy$." data-no="Use $v_y=u_x$, $v_x=-u_y$."><p>2. The harmonic conjugate of $u=x^2-y^2$ is</p><div class="opts"><button>$2xy$</button><button>$-2xy$</button><button>$x^2+y^2$</button><button>$xy$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="3" data-ok="The nearest singularity is $\pm i\pi/2$ (zeros of $\cosh z$)." data-no="Where is $\cosh z=0$?"><p>3. The radius of convergence of the Maclaurin series of $\tanh z$ is</p><div class="opts"><button>$1$</button><button>$\pi$</button><button>$\infty$</button><button>$\pi/2$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">9. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">9. Going deeper: Milne-Thomson's shortcut, and "differentiable" vs "analytic"</h2>
+<h3>Finding $f$ from $u$ in two lines (Milne-Thomson)</h3>
+<p>If $f=u+iv$ is analytic, then $f'(z)=u_x+iv_x=u_x-iu_y$ by Cauchy–Riemann. The right side is a function of $z$ alone, so we may evaluate it on the real axis ($x=z$, $y=0$). The identity theorem then guarantees the result holds everywhere:</p>
+$$\boxed{f'(z)=u_x(z,0)-i\,u_y(z,0)}\qquad\text{and similarly}\qquad f'(z)=v_y(z,0)+i\,v_x(z,0).$$
+<p>Integrate once and you have $f$, up to an imaginary constant (or a real one, if you started from $v$). No partial integrations and no "$+g(y)$" bookkeeping.</p>
+<div class="ex"><div class="hd">Example — $u=x^3-3xy^2+3x^2-3y^2$</div><div class="bd"><ol class="steps">
+<li>$u_x=3x^2-3y^2+6x$ and $u_y=-6xy-6y$.</li>
+<li>On the real axis: $u_x(z,0)=3z^2+6z$ and $u_y(z,0)=0$.</li>
+<li>$f'(z)=3z^2+6z$, so $f=z^3+3z^2+iC$.</li></ol></div></div>
+<h3>The trick for $u-v$ or $u+v$</h3>
+<p>If you are given $U=u-v$, look at $F=(1+i)f=(u-v)+i(u+v)$. $F$ is analytic with real part $U$. Find $F$ by Milne-Thomson, then $f=F/(1+i)$.</p>
+<h3>Differentiable at a point ≠ analytic</h3>
+<p><b>Analytic at $z_0$</b> means differentiable at every point of some disk around $z_0$. Cauchy–Riemann can hold on a curve but on no open set:</p>
+<table class="t">
+<tr><th>$f$</th><th>Where CR holds</th><th>Analytic where?</th></tr>
+<tr><td>$|z|^2=x^2+y^2$</td><td>only at $z=0$</td><td>nowhere</td></tr>
+<tr><td>$x^2+iy^2$</td><td>on the line $y=x$</td><td>nowhere (a line contains no disk)</td></tr>
+<tr><td>$\bar z$</td><td>nowhere</td><td>nowhere</td></tr>
+<tr><td>$z\bar z^2$</td><td>only at $z=0$</td><td>nowhere</td></tr>
+</table>
+<p>(For these polynomial examples the partial derivatives are continuous, so CR at a point really does give differentiability there.)</p>
+<h3>The conjugate of the conjugate</h3>
+<p>If $v$ is a harmonic conjugate of $u$ (i.e. $u+iv$ is analytic), then $-u$ is a harmonic conjugate of $v$, because $v-iu=-i(u+iv)$ is analytic. And $u^2-v^2$ and $uv$ are harmonic too, as the real and imaginary parts of $\frac12f^2$.</p>
+
+<h2 id="exampat">10. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Construct $f$</td><td>Given $u$, $v$, or $u\pm v$, find $f$ (MCQ with four $f$'s)</td><td>Milne-Thomson; for $u-v$ use $(1+i)f$</td></tr>
+<tr><td>Harmonic?</td><td>Which of four functions is harmonic, or find the constant that makes $u$ harmonic</td><td>$u_{xx}+u_{yy}=0$</td></tr>
+<tr><td>Where differentiable</td><td>Set where $f$ is differentiable or analytic</td><td>Solve the CR equations; analytic needs an open set</td></tr>
+<tr><td>Rigidity</td><td>Analytic with $\operatorname{Re}f$ constant, or $|f|$ constant, $\Rightarrow f$ constant</td><td>CR forces $f'=0$</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>CR alone is not quite enough. You also need the partial derivatives to be continuous (or $f$ to be real-differentiable).</li>
+<li>Differentiable on a line does not mean analytic anywhere.</li>
+<li>$\ln(x^2+y^2)$ is harmonic only away from the origin.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>Spotting $f$: write $u$ in terms of $r,\theta$. For example $r^n\cos n\theta\to z^n$, and $\ln r\to\operatorname{Ln}z$.</li>
+<li>$u=e^{ax}\cos ay\to e^{az}$, and $u=\frac{x}{x^2+y^2}\to\frac1z$.</li>
+</ul></div>
+
+<h2 id="xprob">11. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> If $u=x^3-3xy^2+3x^2-3y^2$ is the real part of an analytic $f$ with $f(0)=0$, then $f=$ <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $z^3+3z^2$</span><span>(b) $z^3-3z^2$</span><span>(c) $z^3+3iz^2$</span><span>(d) $z^3+3\bar z^2$</span></div>
+<details class="sol"><summary>Show solution</summary><p>By Milne-Thomson (worked above), $f'=3z^2+6z$. Option <b>(a)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> $f(z)=x^2+iy^2$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) analytic everywhere</span><span>(b) differentiable only on $y=x$, analytic nowhere</span><span>(c) analytic on $y=x$</span><span>(d) differentiable nowhere</span></div>
+<details class="sol"><summary>Show solution</summary><p>$u_x=2x$ and $v_y=2y$, so CR needs $x=y$. The other equation, $u_y=0=-v_x$, holds everywhere. A line has no interior, so $f$ is analytic nowhere. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> Find the real constant $a$ for which $u=ax^2-y^2+xy$ is harmonic. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$u_{xx}+u_{yy}=2a-2=0$, so $a=\mathbf1$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> (Multiple correct) Let $f=u+iv$ be analytic in a domain $D$. Then <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $-u$ is a harmonic conjugate of $v$</span><span>(b) $uv$ is harmonic</span><span>(c) $u^2+v^2$ is harmonic</span><span>(d) if $u$ is constant in $D$, then $f$ is constant</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b), (d).</b> $uv=\frac12\operatorname{Im}f^2$. But $\nabla^2|f|^2=4|f'|^2\ne0$ in general, so (c) is false.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> $f=u+iv$ is analytic, $f(0)=0$, and $u-v=(x-y)(x^2+4xy+y^2)$. Find $f$. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><ol class="steps"><li>$F=(1+i)f$ has $\operatorname{Re}F=U=x^3+3x^2y-3xy^2-y^3$.</li><li>$U_x=3x^2+6xy-3y^2$ and $U_y=3x^2-6xy-3y^2$. On the real axis: $U_x=3z^2$ and $U_y=3z^2$.</li><li>$F'=3z^2-3iz^2=3(1-i)z^2$, so $F=(1-i)z^3$.</li><li>$f=\frac{(1-i)}{1+i}z^3=-iz^3$.</li></ol><p>Check: $\operatorname{Re}(-iz^3)=3x^2y-y^3$ and $\operatorname{Im}=3xy^2-x^3$. Their difference expands to $(x-y)(x^2+4xy+y^2)$. ✓</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Which function is <b>not</b> harmonic on $\mathbb R^2\setminus\{0\}$? <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $\ln(x^2+y^2)$</span><span>(b) $e^x\cos y$</span><span>(c) $x^2+y^2$</span><span>(d) $\frac{y}{x^2+y^2}$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\nabla^2(x^2+y^2)=4$. Option <b>(c)</b>. The others are $2\operatorname{Re}\operatorname{Ln}z$, $\operatorname{Re}e^z$ and $-\operatorname{Im}\frac1z$.</p></details></div>
+<div class="mcq" data-ans="1" data-ok="$f'=u_x+iv_x$; for $e^z$ this is $e^z$ again." data-no="On the real axis $f'(x)=u_x(x,0)+iv_x(x,0)$."><p>Rapid fire: if $u=e^x\cos y$ and $v=e^x\sin y$, then $f'(z)=$</p><div class="opts"><button>$e^{\bar z}$</button><button>$e^z$</button><button>$ie^z$</button><button>$0$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">12. Connections</h2>
+<div class="xlinks">
+<a href="14.1_Introduction.html"><b>Builds on</b>14.1 $u+iv$<small>Splitting $f$ into two real functions</small></a>
+<a href="14.3_Contour_Integrals.html"><b>Next</b>14.3 Contour integrals<small>Cauchy's theorem needs analyticity</small></a>
+<a href="2.2_Real_and_Imaginary_Parts.html"><b>Recall</b>2.2 $z$ and $\bar z$<small>CR $\Leftrightarrow\partial f/\partial\bar z=0$</small></a>
+<a href="14.10_Applications_of_Conformal_Mapping.html"><b>Physics</b>14.10 Potentials<small>Harmonic $u$ = temperature or potential; $v$ = stream or flux function</small></a>
+<a href="14.9_Mapping.html"><b>Later</b>14.9 Conformality<small>$f'\ne0$ means angles are preserved</small></a>
+<a href="14.11_Miscellaneous_Problems.html"><b>Review</b>14.11 Problem E7<small>Another harmonic-conjugate problem</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="9. Summary">13. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$f'(z)=\lim\frac{\Delta f}{\Delta z}$ must be the same from every direction. Analytic means differentiable throughout a 2-D region.</li>
 <li>CR: $u_x=v_y$, $u_y=-v_x$ (necessary; with continuity, sufficient). Then $f'=u_x+iv_x$.</li>
@@ -907,5 +1316,199 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* shared numerical helpers for the H.K. Dass Ch. 22 widgets */
+  const FN = {
+    lin: z => [4 * z[0] + z[1], -z[0] + 4 * z[1]], sq: z => Cx.mul(z, z), abs2: z => [Cx.abs2(z), 0], conj: Cx.conj,
+    x2iy2: z => [z[0] * z[0], z[1] * z[1]], inv: z => Cx.div([1, 0], z), sqxy: z => [Math.sqrt(Math.abs(z[0] * z[1])), 0],
+    ez: Cx.exp, sin: Cx.sin, log: z => Cx.log(z), cubic: z => { const d = z[0] ** 2 + z[1] ** 2; return d < 1e-30 ? [0, 0] : [(z[0] ** 3 - z[1] ** 3) / d, (z[0] ** 3 + z[1] ** 3) / d]; },
+    c1c2: z => { const [x, y] = z; return [x * x - y * y - 2 * x * y, x * x - y * y + 2 * x * y]; }
+  };
+  const partials = (f, z, h = 1e-5) => {
+    const fx = Cx.scale(Cx.sub(f([z[0] + h, z[1]]), f([z[0] - h, z[1]])), 1 / (2 * h)), fy = Cx.scale(Cx.sub(f([z[0], z[1] + h]), f([z[0], z[1] - h])), 1 / (2 * h));
+    return { ux: fx[0], vx: fx[1], uy: fy[0], vy: fy[1] };
+  };
+
+  /* H.K. Dass §22.8 — derivative rosette */
+  let z0 = [0.8, 0.5];
+  const quot = (f, phi, h = 1e-4) => { const dz = Cx.polar(h, phi); return Cx.div(Cx.sub(f(Cx.add(z0, dz)), f(z0)), dz); };
+  const Z = new Plane('#cv-dass-rose-z', { span: 2, aspect: 1, snap: 0.05, draw: p => {
+    if (val('dro-f') === 'x2iy2') p.line([-5, -5], [5, 5], { color: '--accent3', dash: [5, 4], width: 1.5 });
+    for (let k = 0; k < 12; k++) p.arrow(Cx.add(z0, Cx.polar(0.45, k * PI / 6)), z0, { color: '--muted', width: 1, head: 6, alpha: 0.6 });
+    p.dot(z0, { r: 7, color: '--accent', label: 'z₀' });
+  }});
+  const Q = new Plane('#cv-dass-rose-q', { span: 2, aspect: 1, snap: 0, axisLabels: ['', ''], draw: p => {
+    const f = FN[val('dro-f')], pts = []; for (let k = 0; k <= 180; k++) pts.push(quot(f, k * TAU / 180));
+    p.path(pts, { color: '--accent2', width: 2.5 });
+    for (let k = 0; k < 12; k++) p.dot(quot(f, k * PI / 6), { r: 4, color: '--accent2' });
+  }});
+  Z.addDrag(() => z0, v => z0 = v);
+  const rout = () => {
+    const f = FN[val('dro-f')]; const qs = []; for (let k = 0; k < 36; k++) qs.push(quot(f, k * TAU / 36));
+    const c = Cx.scale(qs.reduce((a, b) => Cx.add(a, b), [0, 0]), 1 / qs.length), spread = Math.max(...qs.map(q => Cx.abs(Cx.sub(q, c))));
+    const m = Math.max(1.2, ...qs.map(q => Math.max(Math.abs(q[0] - c[0]), Math.abs(q[1] - c[1]))).map(v => 1.4 * v)); Q.cx = c[0]; Q.cy = c[1]; Q.span = Math.min(50, m); Q.redraw();
+    texMix('#dro-out', `$z_0=${Cx.tex(z0, 2)}$. Spread of the quotients over all directions: $${fnum(spread, 4)}$ ⇒ ` + (spread < 1e-3 ? `<b>differentiable</b>, $f'(z_0)\\approx${Cx.tex(c, 4)}$` : `<b>not differentiable</b> here (the value depends on the direction)`));
+  };
+  Z.onchange = rout; $('#dro-f').addEventListener('change', () => { Z.redraw(); rout(); }); rout();
+
+  /* H.K. Dass §22.10–22.11 — Cauchy–Riemann table */
+  let w = [0.6, 0.4];
+  const C = new Plane('#cv-dass-crt', { span: 2, aspect: 0.55, snap: 0.05, draw: p => {
+    const f = FN[val('dcr-f')]; p.domain(z => { const v = f(z); return isFinite(v[0]) ? v : [NaN, NaN]; }, { res: 3, alpha: 0.55 });
+    p.dot(w, { r: 7, color: '--fg', ring: true, label: 'z' });
+  }});
+  C.addDrag(() => w, v => w = v);
+  const cout = () => {
+    const f = FN[val('dcr-f')], d = partials(f, w), e1 = Math.abs(d.ux - d.vy), e2 = Math.abs(d.uy + d.vx), ok = e1 < 1e-4 && e2 < 1e-4;
+    texMix('#dcr-out', `At $z=${Cx.tex(w, 2)}$: &nbsp; $u_x=${fnum(d.ux, 4)}$, $v_y=${fnum(d.vy, 4)}$ &nbsp;|&nbsp; $u_y=${fnum(d.uy, 4)}$, $-v_x=${fnum(-d.vx, 4)}$<br>` +
+      (ok ? `Cauchy–Riemann <b>holds</b> here; $u_x+iv_x=${Cx.tex([d.ux, d.vx], 4)}$` : `Cauchy–Riemann <b>fails</b> here (mismatch $${fnum(Math.max(e1, e2), 4)}$)`) +
+      (Cx.abs(w) < 1e-9 && /cubic|sqxy/.test(val('dcr-f')) ? ' — but this function is <b>not</b> differentiable at $0$: the partial derivatives are not continuous there.' : ''));
+  };
+  C.onchange = cout; $('#dcr-f').addEventListener('change', () => { C.redraw(); cout(); }); cout();
+});
+
+onReady(() => {
+  /* H.K. Dass §22.12–22.13 — polar Cauchy–Riemann */
+  let z = [1, 0.7];
+  const W = (r, t, n) => [r ** n * Math.cos(n * t), r ** n * Math.sin(n * t)];
+  const P = new Plane('#cv-dass-pcr', { span: 2, aspect: 0.55, snap: 0.05, draw: p => {
+    const n = val('dpc-n'); p.domain(q => { const r = Cx.abs(q), t = Cx.arg(q); return r < 1e-9 ? [NaN, NaN] : W(r, t, n); }, { res: 3, alpha: 0.5 });
+    p.line([-9, 0], [0, 0], { color: '--warn', width: 2, dash: [5, 4] });
+    const r = Cx.abs(z), t = Cx.arg(z); p.circle([0, 0], r, { color: '--fg', dash: [3, 4], width: 1 }); p.arrow([0, 0], z, { color: '--fg', width: 1.5 }); p.dot(z, { r: 7, color: '--fg', ring: true, label: 'z' });
+  }});
+  P.addDrag(() => z, v => { if (Math.hypot(v[0], v[1]) > 0.1) z = v; });
+  const out = () => {
+    const n = val('dpc-n'), r = Cx.abs(z), t = Cx.arg(z), h = 1e-5;
+    const Wr = Cx.scale(Cx.sub(W(r + h, t, n), W(r - h, t, n)), 1 / (2 * h)), Wt = Cx.scale(Cx.sub(W(r, t + h, n), W(r, t - h, n)), 1 / (2 * h));
+    const d1 = Cx.mul(Cx.polar(1, -t), Wr), ex = Cx.scale(Cx.polar(1, (n - 1) * t), n * r ** (n - 1));
+    texMix('#dpc-out', `$r=${fnum(r, 3)}$, $\\theta=${fnum(t, 3)}$: &nbsp; $u_r=${fnum(Wr[0], 4)}$ vs $\\frac1r v_\\theta=${fnum(Wt[1] / r, 4)}$; &nbsp; $v_r=${fnum(Wr[1], 4)}$ vs $-\\frac1r u_\\theta=${fnum(-Wt[0] / r, 4)}$<br>` +
+      `$e^{-i\\theta}\\,\\partial w/\\partial r=${Cx.tex(d1, 4)}$, &nbsp; $nr^{n-1}e^{i(n-1)\\theta}=${Cx.tex(ex, 4)}$ ✓ &nbsp; (dashed red line: the branch cut, used when $n$ is not an integer)`);
+  };
+  P.onchange = out; watch(['dpc-n'], () => { P.redraw(); out(); }); out();
+});
+
+onReady(() => {
+  const AF = { sq: z => Cx.mul(z, z), cube: z => Cx.add(Cx.mul(z, Cx.mul(z, z)), Cx.scale(z, 2)), exp: Cx.exp, inv: z => Cx.div([1, 0], z), log: z => Cx.log(z), sin: Cx.sin };
+  const dnum = (f, z, h = 1e-5) => Cx.scale(Cx.sub(f([z[0] + h, z[1]]), f([z[0] - h, z[1]])), 1 / (2 * h));
+
+  /* H.K. Dass §22.14 — orthogonal families */
+  let p0 = [0.9, 0.6]; const cacheO = {};
+  /* cached level curves of Re F and Im F: evaluates F once per grid point, reuses the grid while dragging */
+  function dassContours(p, F, key, levels, cache, res = 3) {
+    const nx = Math.ceil(p.W / res) + 1, ny = Math.ceil(p.H / res) + 1, k = key + '|' + p.W + 'x' + p.H + '|' + p.span + '|' + p.cx + '|' + p.cy;
+    if (cache.k !== k) {
+      const U = new Float64Array(nx * ny), V = new Float64Array(nx * ny);
+      for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const w = F([p.wx(i * res), p.wy(j * res)]); U[j * nx + i] = w[0]; V[j * nx + i] = w[1]; }
+      Object.assign(cache, { k, U, V });
+    }
+    const c = p.ctx;
+    [[cache.U, cssv('--accent'), 1.3], [cache.V, cssv('--accent3'), 1.6]].forEach(([A, col, wd]) => {
+      c.save(); c.fillStyle = col;
+      for (let j = 0; j < ny - 1; j++) for (let i = 0; i < nx - 1; i++) {
+        const a = A[j * nx + i], b = A[j * nx + i + 1], d = A[(j + 1) * nx + i];
+        if (!isFinite(a) || !isFinite(b) || !isFinite(d) || Math.abs(a - b) > 1.5 || Math.abs(a - d) > 1.5) continue;
+        for (const L of levels) if ((a > L) !== (b > L) || (a > L) !== (d > L)) { c.fillRect(i * res - wd / 2 + res / 2, j * res - wd / 2 + res / 2, wd + 0.8, wd + 0.8); break; }
+      }
+      c.restore();
+    });
+  }
+
+  const O = new Plane('#cv-dass-orth', { span: 2.4, aspect: 0.62, snap: 0.02, draw: p => {
+    const f = AF[val('dor-f')];
+    const lev = []; for (let c = -3; c <= 3; c += 0.5) lev.push(c);
+    dassContours(p, f, val('dor-f'), lev, cacheO);
+    const d = dnum(f, p0), s = 0.5 / Math.max(0.3, Cx.abs(d));
+    p.arrow(p0, Cx.add(p0, Cx.scale([d[0], -d[1]], s)), { color: '--accent', width: 3 });
+    p.arrow(p0, Cx.add(p0, Cx.scale([d[1], d[0]], s)), { color: '--accent3', width: 3 });
+    p.dot(p0, { r: 6, color: '--fg', ring: true });
+  }});
+  O.addDrag(() => p0, v => p0 = v);
+  const oout = () => { const d = dnum(AF[val('dor-f')], p0), gu = [d[0], -d[1]], gv = [d[1], d[0]]; texMix('#dor-out', `$\\nabla u=(u_x,u_y)=(${fnum(gu[0], 3)},\\,${fnum(gu[1], 3)})$, $\\ \\nabla v=(${fnum(gv[0], 3)},\\,${fnum(gv[1], 3)})$, &nbsp; $\\nabla u\\cdot\\nabla v=${fnum(gu[0] * gv[0] + gu[1] * gv[1], 6)}$, &nbsp; $|\\nabla u|=|\\nabla v|=|f'|=${fnum(Cx.abs(d), 4)}$`); };
+  O.onchange = oout; $('#dor-f').addEventListener('change', () => { O.redraw(); oout(); }); oout();
+
+  /* H.K. Dass §22.19–22.20 — Milne-Thomson machine */
+  const sh = Math.sinh, ch = Math.cosh, ex = Math.exp, s = Math.sin, c = Math.cos;
+  const MT = [
+    { lab: 'u = x² − y²', type: 'u', g: (x, y) => x * x - y * y, f: z => Cx.mul(z, z), steps: '\\phi_1(z,0)=2z,\\ \\phi_2(z,0)=0', ans: 'z^2+C' },
+    { lab: 'u = 3x − 2xy', type: 'u', g: (x, y) => 3 * x - 2 * x * y, f: z => Cx.add(Cx.scale(z, 3), Cx.mul([0, 1], Cx.mul(z, z))), steps: '\\phi_1=3,\\ \\phi_2=-2z', ans: '3z+iz^2+C' },
+    { lab: 'u = x² − y² − 2xy − 2x + 3y', type: 'u', g: (x, y) => x * x - y * y - 2 * x * y - 2 * x + 3 * y, f: z => Cx.sub(Cx.mul([1, 1], Cx.mul(z, z)), Cx.mul([2, 3], z)), steps: '\\phi_1=2z-2,\\ \\phi_2=-2z+3', ans: '(1+i)z^2-(2+3i)z+C' },
+    { lab: 'u = e^(−2xy) sin(x² − y²)', type: 'u', g: (x, y) => ex(-2 * x * y) * s(x * x - y * y), f: z => Cx.mul([0, -1], Cx.exp(Cx.mul([0, 1], Cx.mul(z, z)))), steps: '\\phi_1=2z\\cos z^2,\\ \\phi_2=-2z\\sin z^2', ans: '-ie^{iz^2}+C' },
+    { lab: 'u = sin 2x / (cosh 2y + cos 2x)', type: 'u', g: (x, y) => s(2 * x) / (ch(2 * y) + c(2 * x)), f: Cx.tan, steps: '\\phi_1=\\frac{2+2\\cos2z}{(1+\\cos2z)^2}=\\sec^2z,\\ \\phi_2=0', ans: '\\tan z+C' },
+    { lab: 'v = eˣ(x sin y + y cos y)', type: 'v', g: (x, y) => ex(x) * (x * s(y) + y * c(y)), f: z => Cx.mul(z, Cx.exp(z)), steps: '\\psi_1=v_y(z,0)=(z+1)e^z,\\ \\psi_2=v_x(z,0)=0', ans: 'ze^z+C' },
+    { lab: 'v = eˣ(x cos y − y sin y)', type: 'v', g: (x, y) => ex(x) * (x * c(y) - y * s(y)), f: z => Cx.mul([0, 1], Cx.mul(z, Cx.exp(z))), steps: '\\psi_1=0,\\ \\psi_2=(z+1)e^z', ans: 'ize^z+C' },
+    { lab: 'u − v = eˣ(cos y − sin y)', type: 'u-v', g: (x, y) => ex(x) * (c(y) - s(y)), f: Cx.exp, steps: 'U_x(z,0)=e^z,\\ U_y(z,0)=-e^z,\\ F\'=(1+i)e^z', ans: 'e^z+C' },
+    { lab: 'u − v = (x − y)(x² + 4xy + y²)', type: 'u-v', g: (x, y) => (x - y) * (x * x + 4 * x * y + y * y), f: z => Cx.mul([0, -1], Cx.mul(z, Cx.mul(z, z))), steps: 'U_x(z,0)=3z^2,\\ U_y(z,0)=3z^2,\\ F\'=3(1-i)z^2', ans: '-iz^3+C' },
+    { lab: 'u − v = (cos x + sin x − e^(−y))/(2cos x − 2cosh y), f(π/2)=0', type: 'u-v', g: (x, y) => (c(x) + s(x) - ex(-y)) / (2 * c(x) - 2 * ch(y)), f: z => Cx.scale(Cx.sub([1, 0], Cx.div(Cx.cos(Cx.scale(z, 0.5)), Cx.sin(Cx.scale(z, 0.5)))), 0.5), steps: 'U_x(z,0)=\\frac{1}{2(1-\\cos z)},\\ U_y(z,0)=-\\frac{1}{2(1-\\cos z)}', ans: '\\tfrac12\\left(1-\\cot\\tfrac z2\\right)' },
+    { lab: 'u = −r³ sin 3θ (polar)', type: 'u', g: (x, y) => { const r = Math.hypot(x, y), t = Math.atan2(y, x); return -(r ** 3) * s(3 * t); }, f: z => Cx.mul([0, 1], Cx.mul(z, Cx.mul(z, z))), steps: 'dv=-\\tfrac1ru_\\theta\\,dr+ru_r\\,d\\theta=d(r^3\\cos3\\theta)', ans: 'iz^3+C' }
+  ];
+  const sel = $('#dmt-p'); MT.forEach((m, i) => { const o = document.createElement('option'); o.value = i; o.textContent = m.lab; sel.appendChild(o); });
+  const run = () => {
+    const m = MT[+sel.value]; let maxe = 0, Cst = null;
+    for (let k = 0; k < 6; k++) {
+      const z = [Math.random() * 1.6 - 0.8 + 0.3, Math.random() * 1.2 - 0.6 + 0.2], fv = m.f(z);
+      const lhs = m.type === 'u' ? fv[0] : m.type === 'v' ? fv[1] : fv[0] - fv[1], d = m.g(z[0], z[1]) - lhs;
+      if (Cst === null) Cst = d; maxe = Math.max(maxe, Math.abs(d - Cst));
+    }
+    const what = m.type === 'u' ? 'u=\\operatorname{Re}f' : m.type === 'v' ? 'v=\\operatorname{Im}f' : 'u-v=\\operatorname{Re}f-\\operatorname{Im}f';
+    texMix('#dmt-out', `Case ${m.type === 'u' ? 'I' : m.type === 'v' ? 'II' : 'III'}: &nbsp; $${m.steps}$<br>⇒ $f(z)=${m.ans}$<br>Check at 6 random points: $${what}$ agrees up to a constant (spread $${fnum(maxe, 8)}$) ${maxe < 1e-6 ? '✓' : '✗'}`);
+  };
+  sel.addEventListener('change', run); $('#dmt-go').onclick = run; run();
+
+  /* H.K. Dass §22.21 — Laplacian identities */
+  let q = [0.7, 0.4];
+  const L = new Plane('#cv-dass-lap', { span: 2, aspect: 0.5, snap: 0.02, draw: p => { p.domain(AF[val('dlp-f')], { res: 3, alpha: 0.55 }); p.dot(q, { r: 7, color: '--fg', ring: true, label: 'z' }); } });
+  L.addDrag(() => q, v => q = v);
+  const lap = (g, z, h = 1e-3) => (g([z[0] + h, z[1]]) + g([z[0] - h, z[1]]) + g([z[0], z[1] + h]) + g([z[0], z[1] - h]) - 4 * g(z)) / (h * h);
+  const lout = () => {
+    const f = AF[val('dlp-f')], fp = dnum(f, q), F2 = Cx.abs2(fp);
+    const r1 = lap(z => Cx.abs2(f(z)), q), r2 = lap(z => f(z)[0] ** 2, q), r3 = lap(z => Math.log(Cx.abs(dnum(f, z, 1e-4))), q);
+    texMix('#dlp-out', `$|f'|^2=${fnum(F2, 4)}$<br>$\\nabla^2|f|^2=${fnum(r1, 3)}$ vs $4|f'|^2=${fnum(4 * F2, 3)}$<br>$\\nabla^2(\\operatorname{Re}f)^2=${fnum(r2, 3)}$ vs $2|f'|^2=${fnum(2 * F2, 3)}$<br>$\\nabla^2\\log|f'|=${fnum(r3, 2)}$ (should be $0$, up to finite-difference error)`);
+  };
+  L.onchange = lout; $('#dlp-f').addEventListener('change', () => { L.redraw(); lout(); }); lout();
+});
+
+/* H.K. Dass §25.7 — Taylor polynomials and the circle of convergence (error heat map) */
+onReady(() => {
+  const C1 = [1, 0], d = (a, b) => Cx.div(a, b), m = Cx.mul;
+  const E = [
+    { n: 'Ex 6: 1/z about 2', f: z => d(C1, z), a: [2, 0], s: [[0, 0]] },
+    { n: 'Ex 12: (z+1)/((z−3)(z−4)) about 2', f: z => d(Cx.add(z, C1), m(Cx.sub(z, [3, 0]), Cx.sub(z, [4, 0]))), a: [2, 0], s: [[3, 0], [4, 0]] },
+    { n: 'Ex 13: 1/(z²+4) about −i', f: z => d(C1, Cx.add(m(z, z), [4, 0])), a: [0, -1], s: [[0, 2], [0, -2]] },
+    { n: 'Ex 9: log z about 1', f: z => Cx.log(z), a: [1, 0], s: [[0, 0]] },
+    { n: 'Ex 15: (2z³+1)/(z²+z) about 1', f: z => d(Cx.add(Cx.scale(m(z, m(z, z)), 2), C1), Cx.add(m(z, z), z)), a: [1, 0], s: [[0, 0], [-1, 0]] },
+    { n: 'Ex 14: (4z−1)/(z⁴−1) about 0', f: z => d(Cx.sub(Cx.scale(z, 4), C1), Cx.sub(m(m(z, z), m(z, z)), C1)), a: [0, 0], s: [[1, 0], [-1, 0], [0, 1], [0, -1]] },
+    { n: 'Ex 18: sin⁻¹z about 0', f: z => Cx.asin(z), a: [0, 0], s: [[1, 0], [-1, 0]] },
+    { n: 'Ex 19: tan⁻¹z about 0', f: z => Cx.atan(z), a: [0, 0], s: [[0, 1], [0, -1]] },
+    { n: 'Ex 17: sin z/(z−π) about π (entire)', f: z => { const t = Cx.sub(z, [PI, 0]); return Cx.abs(t) < 1e-9 ? [-1, 0] : d(Cx.sin(z), t); }, a: [PI, 0], s: [] }
+  ];
+  const sel = $('#dty-f'); E.forEach((e, k) => { const o = document.createElement('option'); o.value = k; o.textContent = e.n; sel.appendChild(o); });
+  let C = E[0], coef = [], R = 1, probe = [0, 0]; const off = document.createElement('canvas'); let offKey = '';
+  const setup = () => { R = C.s.length ? Math.min(...C.s.map(s => Cx.abs(Cx.sub(s, C.a)))) : Infinity; const rho = isFinite(R) ? 0.75 * R : 2.5, M = 512; coef = [];
+    const fv = []; for (let j = 0; j < M; j++) fv.push(C.f(Cx.add(C.a, Cx.polar(rho, TAU * j / M))));
+    for (let n = 0; n <= 30; n++) { let s = [0, 0]; for (let j = 0; j < M; j++) s = Cx.add(s, m(fv[j], Cx.polar(1, -n * TAU * j / M))); coef.push(Cx.scale(s, 1 / (M * rho ** n))); }
+    probe = Cx.add(C.a, Cx.polar(isFinite(R) ? 0.6 * R : 1.5, 0.9)); offKey = ''; };
+  const T = (z, N) => { const t = Cx.sub(z, C.a); let s = [0, 0]; for (let n = N; n >= 0; n--) s = Cx.add(m(s, t), coef[n]); return s; };
+  const P = new Plane('#cv-dass-tay', { span: 3, aspect: 0.62, snap: 0, axisLabels: ['x', 'y'], draw: p => {
+    if (!coef.length) return; const N = val('dty-n'), key = val('dty-f') + '|' + N + '|' + p.W + 'x' + p.H + '|' + p.span;
+    if (key !== offKey) { off.width = p.W; off.height = p.H; const c = off.getContext('2d'), res = 4;
+      for (let py = 0; py < p.H; py += res) for (let px = 0; px < p.W; px += res) { const z = [p.wx(px + res / 2), p.wy(py + res / 2)], e = Cx.abs(Cx.sub(C.f(z), T(z, N)));
+        const u = isFinite(e) ? (Math.log10(e + 1e-12) + 8) / 10 : 1, [r, g, b] = heatRGB(u); c.fillStyle = `rgb(${r | 0},${g | 0},${b | 0})`; c.fillRect(px, py, res, res); }
+      offKey = key; }
+    p.ctx.drawImage(off, 0, 0, p.W, p.H); p.grid();
+    if (isFinite(R)) p.circle(C.a, R, { color: '#ffffff', width: 2.5, dash: [7, 5] });
+    C.s.forEach(s => p.dot(s, { r: 6, color: '#000000', ring: true }));
+    const X = p.X(C.a[0]), Y = p.Y(C.a[1]), c = p.ctx; c.save(); c.strokeStyle = '#fff'; c.lineWidth = 2.5; c.beginPath(); c.moveTo(X - 7, Y); c.lineTo(X + 7, Y); c.moveTo(X, Y - 7); c.lineTo(X, Y + 7); c.stroke(); c.restore();
+    p.dot(probe, { r: 7, color: '--accent3', ring: true, label: 'probe' });
+  }});
+  P.redraw = function () { if (!this.W) return; const c = this.ctx; c.save(); c.fillStyle = cssv('--canvas'); c.fillRect(0, 0, this.W, this.H); c.restore(); this.draw(this); };
+  const out = () => { const N = val('dty-n'), fz = C.f(probe), tz = T(probe, N), e = Cx.abs(Cx.sub(fz, tz)), q = Cx.abs(Cx.sub(probe, C.a)) / R;
+    texMix('#dty-out', `Centre $a=${Cx.tex(C.a, 3)}$, radius of convergence $R=${isFinite(R) ? fnum(R, 4) : '\\infty'}$ (distance to the nearest singularity). First coefficients: $${coef.slice(0, 4).map((c, k) => `a_${k}=${Cx.tex(c, 4)}`).join(',\\ ')}$.<br>Probe: $|z-a|/R=${isFinite(R) ? fnum(q, 3) : '0'}$; &nbsp; $f(z)=${Cx.tex(fz, 5)}$, $T_{${N}}(z)=${Cx.tex(tz, 5)}$, error $=${e < 1e-12 ? '\\lt10^{-12}' : fnum(e, 3)}$ — ${!isFinite(R) || q < 1 ? 'inside: the error shrinks as N grows' : 'outside: the error grows with N'}.`); };
+  P.addDrag(() => probe, v => { probe = v; }); P.onchange = out;
+  const all = () => { C = E[+sel.value]; setup(); P.cx = C.a[0]; P.cy = C.a[1]; P.span = isFinite(R) ? Math.max(1.6, 1.9 * R) : 4; P.redraw(); out(); };
+  sel.addEventListener('change', all); watch(['dty-n'], () => { P.redraw(); out(); }); all();
+});
+
+/* dass:end */</script>
 </body>
 </html>

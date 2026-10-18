@@ -117,6 +117,23 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +158,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -186,6 +204,50 @@ $$x_1+iy_1=x_2+iy_2\iff x_1=x_2\ \text{ and }\ y_1=y_2\qquad(x_1,x_2,y_1,y_2\ \t
 <p><b>Why it is true.</b> Suppose $x_1+iy_1=x_2+iy_2$. Then $x_1-x_2=i(y_2-y_1)$. If $y_2\ne y_1$, dividing gives $i=\dfrac{x_1-x_2}{y_2-y_1}$, a <b>real</b> number. Squaring a real number never gives $-1$, so this is impossible. Hence $y_1=y_2$, and then $x_1=x_2$. $\blacksquare$</p>
 <p>Special case: $x+iy=0\iff x=0$ and $y=0$. This is the rule behind every "find real $x$ and $y$" problem (Section 2.5D).</p>
 
+<!-- dass:start 10__equal -->
+<h2 id="dass-20-5" class="dass"><span class="dtag">H.K. Dass §20.5, 20.6, 20.8, 20.10</span>Equality, addition, subtraction and multiplication by algebra</h2>
+
+<h3>Equal complex numbers (§20.5): Dass's proof</h3>
+<p><b>Claim.</b> If $a+ib=c+id$ with $a,b,c,d$ real, then $a=c$ and $b=d$.</p>
+<ol class="steps">
+<li>Move terms across: $a-c=i(d-b)$.</li>
+<li>Square both sides: $(a-c)^2=i^2(d-b)^2=-(d-b)^2$, so $(a-c)^2+(d-b)^2=0$.</li>
+<li>A sum of two squares of real numbers is zero only if each square is zero. So $a=c$ and $b=d$. $\blacksquare$</li>
+</ol>
+<p>This is why <b>one complex equation always gives two real equations</b>, and why you may "equate real and imaginary parts" (used in almost every Dass example from here on).</p>
+
+<h3>Addition and subtraction (§20.6, §20.8)</h3>
+$$(a+ib)+(c+id)=(a+c)+i(b+d),\qquad(a+ib)-(c+id)=(a-c)+i(b-d).$$
+<p><b>Procedure:</b> combine real parts with real parts and imaginary parts with imaginary parts, exactly as you collect like terms in algebra.</p>
+
+<h3>Multiplication (§20.10)</h3>
+<p>Multiply out as ordinary brackets, then replace $i^2$ by $-1$:</p>
+$$(a+ib)(c+id)=ac+iad+ibc+i^2bd=(ac-bd)+i(ad+bc).$$
+<p>Notice the minus sign in the real part. It comes from $i^2=-1$, and it is the most common slip in quick calculations.</p>
+
+<div class="widget" id="w-dass-arith">
+<div class="wt">Interactive — sum, difference and product, part by part</div>
+<div class="wd">Set $z_1=a+ib$ and $z_2=c+id$. The table shows which parts combine with which. The product row shows the $-bd$ term that comes from $i^2=-1$.</div>
+<div class="ctrls"><label>$a$ <input type="number" id="dar-a" value="3" step="0.5"></label><label>$b$ <input type="number" id="dar-b" value="4" step="0.5"></label><label>$c$ <input type="number" id="dar-c" value="7" step="0.5"></label><label>$d$ <input type="number" id="dar-d" value="-3" step="0.5"></label></div>
+<div class="readout" id="dar-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.6 style) — add $z_1=\frac12+\frac23i$, $z_2=-2+\frac14i$, $z_3=\frac34-i$</div><div class="bd"><ol class="steps">
+<li>Real parts: $\frac12-2+\frac34=\frac{2-8+3}{4}=-\frac34$.</li>
+<li>Imaginary parts: $\frac23+\frac14-1=\frac{8+3-12}{12}=-\frac1{12}$.</li>
+<li>So $z_1+z_2+z_3=-\frac34-\frac1{12}i$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> with fractions, keep the real and imaginary bookkeeping separate. A sign slip in one part changes every option in an MCQ.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.10) — $(3+4i)(7-3i)$ and $(2-5i)(2+5i)$</div><div class="bd"><ol class="steps">
+<li>$(3+4i)(7-3i)=21-9i+28i-12i^2=21+12+19i=33+19i$.</li>
+<li>$(2-5i)(2+5i)=4+10i-10i-25i^2=4+25=29$: the imaginary parts cancel completely.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the second product is $|z|^2$, which is real. This is the step that rationalises denominators in division (§20.13) and normalises wavefunctions in quantum mechanics.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (using §20.5) — find real $x,y$ with $(x+2y)+i(3x-y)=5+i$</div><div class="bd"><ol class="steps">
+<li>Equate real parts: $x+2y=5$. Equate imaginary parts: $3x-y=1$.</li>
+<li>From the second, $y=3x-1$. Substituting: $x+6x-2=5$, so $x=1$ and $y=2$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "find real $x,y$ such that…" is a standard 3.5-mark question, and it is always two linear equations in disguise.</p></div></div>
+<!-- dass:end -->
 <h2 id="pairs">3. A complex number is a pair of real numbers</h2>
 <p>Boas: "we could, if we liked, agree to write $5+3i$ as $(5,3)$." Hamilton (1833) used this to define complex numbers <b>without ever mentioning $\sqrt{-1}$</b>:</p>
 <div class="box def"><span class="tag">Complex numbers as ordered pairs</span>
@@ -381,7 +443,74 @@ $$|\operatorname{Re}z|\le|z|,\qquad|\operatorname{Im}z|\le|z|,\qquad|z|\le|\oper
 <div class="mcq" data-ans="0" data-ok="$\operatorname{Re}(zw)=x_1x_2-y_1y_2=2\cdot1-3\cdot(-1)=5$." data-no="Re of a product is $x_1x_2-y_1y_2$."><p>3. $z=2+3i,\ w=1-i$: $\operatorname{Re}(zw)=$</p><div class="opts"><button>$5$</button><button>$2$</button><button>$-1$</button><button>$-3$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="3" data-ok="Re$(z^2)=x^2-y^2$." data-no="Expand $(x+iy)^2$."><p>4. $\operatorname{Re}(z^2)=$</p><div class="opts"><button>$x^2+y^2$</button><button>$2xy$</button><button>$x^2$</button><button>$x^2-y^2$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">9. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">9. Going deeper: $z$ and $\bar z$ as coordinates, and Re/Im as dot and cross products</h2>
+<h3>Every function of $x,y$ is a function of $z$ and $\bar z$</h3>
+<p>From $z=x+iy$ and $\bar z=x-iy$ we can solve for $x$ and $y$:</p>
+$$x=\frac{z+\bar z}{2},\qquad y=\frac{z-\bar z}{2i}.$$
+<p>So any expression in $x,y$ can be rewritten in $z,\bar z$. For example $x^2+y^2=z\bar z$, $x^2-y^2=\frac{z^2+\bar z^2}{2}$ and $2xy=\frac{z^2-\bar z^2}{2i}$. This substitution sorts expressions into two kinds:</p>
+<ul>
+<li><b>Functions of $z$ alone</b> (no $\bar z$): $x^2-y^2+2ixy=z^2$, $\ e^x(\cos y+i\sin y)=e^z$. These turn out to be the <i>analytic</i> functions of Chapter 14.</li>
+<li><b>Functions that need $\bar z$</b>: $x^2+y^2=z\bar z$ and $x-iy=\bar z$. These are not analytic.</li>
+</ul>
+<p>The test "does $\bar z$ appear?" is the Cauchy–Riemann condition in disguise. Formally $\frac{\partial f}{\partial\bar z}=\frac12\left(\frac{\partial f}{\partial x}+i\frac{\partial f}{\partial y}\right)=0$, and this is equivalent to $u_x=v_y$, $u_y=-v_x$ (see 14.2).</p>
+<h3>Re and Im of $\bar z_1z_2$: geometry in one product</h3>
+<p>Let $z_1=x_1+iy_1$ and $z_2=x_2+iy_2$. Then</p>
+$$\bar z_1z_2=(x_1x_2+y_1y_2)+i(x_1y_2-y_1x_2).$$
+<ul>
+<li>$\operatorname{Re}(\bar z_1z_2)=\vec z_1\cdot\vec z_2=|z_1||z_2|\cos\phi$, the <b>dot product</b>.</li>
+<li>$\operatorname{Im}(\bar z_1z_2)=(\vec z_1\times\vec z_2)_z=|z_1||z_2|\sin\phi$, the <b>cross product</b>. Here $\phi$ is the angle from $z_1$ to $z_2$.</li>
+</ul>
+<p>Consequences you can use straight away:</p>
+$$z_1\perp z_2\iff\operatorname{Re}(\bar z_1z_2)=0,\qquad z_1\parallel z_2\iff\operatorname{Im}(\bar z_1z_2)=0,\qquad\text{Area}(0,z_1,z_2)=\tfrac12\left|\operatorname{Im}(\bar z_1z_2)\right|.$$
+
+<h2 id="exampat">10. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>"Purely real / purely imaginary"</td><td>Find the locus of $z$ for which some expression $w(z)$ is real or imaginary</td><td>Real: $w=\bar w$. Imaginary: $w=-\bar w$. Cross-multiply.</td></tr>
+<tr><td>Mixed equations</td><td>Solve $az+b\bar z=c$, or $|z|+z=c$</td><td>Put $z=x+iy$ and equate the real and imaginary parts</td></tr>
+<tr><td>Analyticity preview</td><td>Which expression is a function of $z$ alone?</td><td>Substitute $x=\frac{z+\bar z}2$, $y=\frac{z-\bar z}{2i}$ and look for $\bar z$</td></tr>
+<tr><td>Geometry</td><td>Area, perpendicularity, collinearity</td><td>Use $\operatorname{Im}(\bar z_1z_2)$ and $\operatorname{Re}(\bar z_1z_2)$</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$\operatorname{Im}z$ is the <b>real</b> number $y$, not $iy$.</li>
+<li>$\operatorname{Re}(zw)\ne\operatorname{Re}z\operatorname{Re}w$. The correct formula is $\operatorname{Re}(zw)=\operatorname{Re}z\operatorname{Re}w-\operatorname{Im}z\operatorname{Im}w$.</li>
+<li>When you cross-multiply a "real" condition, remove points where the denominator is $0$ from the locus.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$\operatorname{Re}\frac1z=\frac{x}{x^2+y^2}$ and $\operatorname{Im}\frac1z=\frac{-y}{x^2+y^2}$. Memorise these two.</li>
+<li>If $|z|=1$ then $\bar z=1/z$, so $z+\frac1z=2\operatorname{Re}z$ is real.</li>
+</ul></div>
+
+<h2 id="xprob">11. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> If $\dfrac{1+iz}{1-iz}$ is real, then $z$ lies on <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) the real axis</span><span>(b) the imaginary axis, except $z=-i$</span><span>(c) the unit circle</span><span>(d) the line $y=x$</span></div>
+<details class="sol"><summary>Show solution</summary><p>Real means $w=\bar w$: $\frac{1+iz}{1-iz}=\frac{1-i\bar z}{1+i\bar z}$. Cross-multiplying gives $1+iz+i\bar z-z\bar z=1-iz-i\bar z-z\bar z$, so $2i(z+\bar z)=0$, i.e. $\operatorname{Re}z=0$. The point $z=-i$ makes the denominator zero and must be removed. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> Solve $|z|+z=2+i$ and give $\operatorname{Re}z$. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>The imaginary part gives $y=1$. The real part gives $\sqrt{x^2+1}+x=2$, so $x^2+1=(2-x)^2$ and $x=\frac34$. So $z=\frac34+i$ and $\operatorname{Re}z=\mathbf{0.75}$.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> Find the area of the triangle with vertices $0$, $3+i$ and $1+4i$. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\bar z_1z_2=(3-i)(1+4i)=7+11i$. The area is $\frac12\cdot11=\mathbf{5.5}$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> Which of the following can be written as a function of $z=x+iy$ alone, with no $\bar z$? <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $x^2-y^2+2ixy$</span><span>(b) $x^2+y^2$</span><span>(c) $x-iy$</span><span>(d) $x+2iy$</span></div>
+<details class="sol"><summary>Show solution</summary><p>(a) $=z^2$. (b) $=z\bar z$. (c) $=\bar z$. (d) $=\frac{z+\bar z}2+(z-\bar z)=\frac32z-\frac12\bar z$. Only <b>(a)</b> has no $\bar z$, and it is the only analytic one.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> (Multiple correct) For all complex $z,w$: <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\operatorname{Re}(z+w)=\operatorname{Re}z+\operatorname{Re}w$</span><span>(b) $\operatorname{Re}(zw)=\operatorname{Re}z\,\operatorname{Re}w$</span><span>(c) $|\operatorname{Re}z|\le|z|$</span><span>(d) $\operatorname{Im}(i\bar z)=\operatorname{Re}z$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (c), (d).</b> For (d): $i\bar z=i(x-iy)=y+ix$, whose imaginary part is $x$. (b) fails for $z=w=i$, where the left side is $-1$ and the right side is $0$.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> How many complex numbers satisfy $\bar z=z^3$? <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>Taking moduli: $|z|=|z|^3$, so $|z|=0$ or $1$. $z=0$ works. If $|z|=1$ then $\bar z=1/z$, and the equation becomes $z^4=1$, which has 4 roots. Total: <b>5</b>.</p></details></div>
+<div class="mcq" data-ans="2" data-ok="$\frac{1}{3-4i}=\frac{3+4i}{25}$." data-no="Use $\operatorname{Re}\frac1z=\frac{x}{x^2+y^2}$."><p>Rapid fire: $\operatorname{Re}\dfrac{1}{3-4i}=$</p><div class="opts"><button>$\frac13$</button><button>$-\frac{4}{25}$</button><button>$\frac{3}{25}$</button><button>$\frac35$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">12. Connections</h2>
+<div class="xlinks">
+<a href="2.1_Introduction.html"><b>Builds on</b>2.1 Introduction<small>What a complex number is</small></a>
+<a href="2.3_The_Complex_Plane.html"><b>Next</b>2.3 The complex plane<small>$(x,y)$ as a point and a vector</small></a>
+<a href="2.4_Terminology_and_Notation.html"><b>Uses</b>2.4 Conjugate<small>$\operatorname{Re}z=\frac{z+\bar z}2$ and $\operatorname{Im}z=\frac{z-\bar z}{2i}$</small></a>
+<a href="2.5_Complex_Algebra.html"><b>Applies</b>2.5 Loci<small>Regions described by Re and Im conditions</small></a>
+<a href="14.1_Introduction.html"><b>Later</b>14.1 $f=u+iv$<small>Every complex function as two real functions</small></a>
+<a href="14.2_Analytic_Functions.html"><b>Later</b>14.2 Cauchy–Riemann<small>"No $\bar z$" is the same as $\partial f/\partial\bar z=0$</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="9. Summary">13. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$z=x+iy$ with $\operatorname{Re}z=x$ and $\operatorname{Im}z=y$, <b>both real</b>.</li>
 <li>Two complex numbers are equal ⇔ their real parts are equal and their imaginary parts are equal.</li>
@@ -960,5 +1089,21 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* H.K. Dass §20.6–20.10 — arithmetic part by part */
+  const out = () => {
+    const a = val('dar-a'), b = val('dar-b'), c = val('dar-c'), d = val('dar-d'), f = v => { const t = fnum(v, 3).replace('−', '-'); return v < 0 ? '(' + t + ')' : t; };
+    const s = (x, y) => Cx.tex([x, y], 3);
+    texMix('#dar-out',
+      `$z_1+z_2=(${f(a)}+${f(c)})+i(${f(b)}+${f(d)})=${s(a + c, b + d)}$<br>` +
+      `$z_1-z_2=(${f(a)}-${f(c)})+i(${f(b)}-${f(d)})=${s(a - c, b - d)}$<br>` +
+      `$z_1z_2=(ac-bd)+i(ad+bc)=(${f(a * c)}-${f(b * d)})+i(${f(a * d)}+${f(b * c)})=${s(a * c - b * d, a * d + b * c)}$`);
+  };
+  ['dar-a', 'dar-b', 'dar-c', 'dar-d'].forEach(id => $('#' + id).addEventListener('input', out));
+  out();
+});
+
+/* dass:end */</script>
 </body>
 </html>

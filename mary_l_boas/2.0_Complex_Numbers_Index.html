@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +150,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -175,6 +185,36 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <p>Every page has a ◐ Theme button (light/dark) and a section menu at the top. Solutions are hidden behind "Show solution": try first, then check.</p></div>
 
 
+<!-- enrich:start -->
+<h2 id="exam">Exam focus: CSIR-NET / GATE</h2>
+<div class="box note"><span class="tag">New on every section page</span>
+<ul class="summary">
+<li><b>Going deeper</b>: derivations and ideas beyond Boas that exam questions rely on (Newton sums, Apollonius circles, Dirichlet's test, the matrix Euler formula, roots-of-unity filters, evanescent waves, two-level systems…).</li>
+<li><b>How CSIR-NET &amp; GATE test this</b>: question patterns, the traps that cost marks, and 30-second shortcuts.</li>
+<li><b>Exam-style problems</b>: original MCQ, multiple-select and numerical-answer questions tagged Part B / Part C / GATE, with full solutions.</li>
+<li><b>Connections</b>: links to prerequisites, later sections, and the matching Chapter 14 pages.</li>
+</ul></div>
+<table class="t">
+<tr><th>Priority</th><th>Sections</th><th>Why</th></tr>
+<tr><td><span class="lvl x">High</span></td><td><a href="2.9_Eulers_Formula.html">2.9</a>, <a href="2.10_Powers_and_Roots_of_Complex_Numbers.html">2.10</a>, <a href="2.14_Complex_Roots_and_Powers.html">2.14</a>, <a href="2.5_Complex_Algebra.html">2.5</a></td><td>Polar powers, roots of unity, principal values, loci: quick single-concept Part B questions</td></tr>
+<tr><td><span class="lvl h">Medium</span></td><td><a href="2.7_Complex_Power_Series_Disk_of_Convergence.html">2.7</a>, <a href="2.11_Exponential_and_Trigonometric_Functions.html">2.11</a>, <a href="2.13_Logarithms.html">2.13</a>, <a href="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15</a>, <a href="2.16_Some_Applications.html">2.16</a></td><td>Radius of convergence, solving $\sin z=w$, branches; resonance and phasors overlap with Electronics and EM</td></tr>
+<tr><td><span class="lvl e">Foundation</span></td><td><a href="2.1_Introduction.html">2.1</a>–<a href="2.4_Terminology_and_Notation.html">2.4</a>, <a href="2.6_Complex_Infinite_Series.html">2.6</a>, <a href="2.8_Elementary_Functions_of_Complex_Numbers.html">2.8</a>, <a href="2.12_Hyperbolic_Functions.html">2.12</a></td><td>Rarely asked alone, but every other question uses them</td></tr>
+</table>
+<p class="small">Finish with the blueprint, the "ten traps" list and the timed mock test in <a href="2.17_Miscellaneous_Problems.html">2.17</a>. Always check the current official exam notification for the pattern and the marking scheme.</p>
+
+<h2 id="xlinks">Chapter 2 → Chapter 14 map</h2>
+<table class="t">
+<tr><th>In Chapter 2 you learn…</th><th>…which Chapter 14 uses for</th></tr>
+<tr><td><a href="2.2_Real_and_Imaginary_Parts.html">2.2</a> $z$ and $\bar z$, Re and Im</td><td><a href="14.1_Introduction.html">14.1</a> $f=u+iv$; <a href="14.2_Analytic_Functions.html">14.2</a> Cauchy–Riemann as $\partial f/\partial\bar z=0$</td></tr>
+<tr><td><a href="2.6_Complex_Infinite_Series.html">2.6</a> geometric series</td><td><a href="14.4_Laurent_Series.html">14.4</a> every Laurent expansion</td></tr>
+<tr><td><a href="2.7_Complex_Power_Series_Disk_of_Convergence.html">2.7</a> disk of convergence</td><td><a href="14.3_Contour_Integrals.html">14.3</a> why $R$ = distance to the nearest singularity</td></tr>
+<tr><td><a href="2.9_Eulers_Formula.html">2.9</a> $z=e^{i\theta}$</td><td><a href="14.7_Evaluation_of_Definite_Integrals_by_Residues.html">14.7</a> Type I integrals $\int_0^{2\pi}R(\cos\theta,\sin\theta)d\theta$</td></tr>
+<tr><td><a href="2.10_Powers_and_Roots_of_Complex_Numbers.html">2.10</a> roots of $z^n=c$</td><td><a href="14.6_Methods_of_Finding_Residues.html">14.6</a> poles of $\frac1{z^n-c}$; <a href="14.8_Point_at_Infinity_Residues_at_Infinity.html">14.8</a> residue at ∞</td></tr>
+<tr><td><a href="2.13_Logarithms.html">2.13</a>, <a href="2.14_Complex_Roots_and_Powers.html">2.14</a> branches</td><td><a href="14.1_Introduction.html">14.1</a> branch points; <a href="14.7_Evaluation_of_Definite_Integrals_by_Residues.html">14.7</a> keyhole contours</td></tr>
+<tr><td><a href="2.11_Exponential_and_Trigonometric_Functions.html">2.11</a> zeros of $\sin z$, $\cos z$</td><td><a href="14.5_The_Residue_Theorem.html">14.5</a> $\oint\tan z\,dz$, $\oint\cot z\,dz$</td></tr>
+</table>
+<p><a href="14.0_Functions_of_a_Complex_Variable_Index.html">Go to the Chapter 14 index →</a></p>
+<!-- enrich:end -->
 <div class="pagenav"><span></span><a href="2.1_Introduction.html" style="text-align:right"><small>Next →</small>2.1 Introduction</a></div>
 </main>
 </div>

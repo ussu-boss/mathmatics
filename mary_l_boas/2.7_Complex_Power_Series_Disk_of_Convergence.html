@@ -117,6 +117,23 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +158,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -183,6 +201,58 @@ $$\frac1R=\limsup_{n\to\infty}|a_n|^{1/n}.$$
 <p>This always gives $R$, even when $|a_{n+1}/a_n|$ has no limit. Example: $\sum(2+(-1)^n)^nz^n$. The ratios jump between large and small values, but $|a_n|^{1/n}=2+(-1)^n$ takes the values $1,3,1,3,\dots$, so $\limsup=3$ and $R=\tfrac13$.</p>
 <p>Series with gaps, like $\sum z^{2n}$ or $\sum z^{n!}$, are handled by treating the whole term: for $\sum z^{2n}$, $\rho=|z|^2\lt1$ gives $|z|\lt1$.</p>
 
+<!-- dass:start 10__disk -->
+<h2 id="dass-25-2" class="dass"><span class="dtag">H.K. Dass §25.1–25.5</span>Convergence of complex series and the two formulas for the radius of convergence</h2>
+<h3>Series of complex terms (§25.2)</h3>
+<ul>
+<li><b>(a) Real and imaginary parts.</b> $\sum(u_n+iv_n)$ converges to $U+iV$ exactly when $\sum u_n\to U$ and $\sum v_n\to V$. A complex series is two real series.</li>
+<li><b>(b) Necessary condition.</b> If the series converges, then $u_n+iv_n\to0$. The converse is false: the terms of $\sum\frac{1+i}{n}$ tend to $0$, yet both real parts are harmonic series and diverge. In practice, test each part.</li>
+<li><b>(c) Absolute convergence.</b> If $\sum|u_n+iv_n|$ converges, so does the series itself. The reason: $|u_n|\le|u_n+iv_n|$ and $|v_n|\le|u_n+iv_n|$, so both real parts converge absolutely.</li>
+<li><b>(d) Uniform convergence in a region</b> means $|S(z)-S_n(z)|\lt\varepsilon$ for all $n\gt N$, with the <b>same</b> $N$ for every $z$ in the region.</li>
+<li><b>(e) Weierstrass M-test.</b> If $|a_n(z)|\le M_n$ throughout the region and $\sum M_n$ converges, the series converges uniformly there. A uniformly convergent series of continuous functions can be <b>integrated term by term</b>. This is the step used in the proofs of Taylor's and Laurent's theorems.</li>
+</ul>
+
+<h3>Region of convergence (§25.3–25.4): only three possibilities</h3>
+<p>A power series $\sum a_n(z-z_0)^n$ (centre $z_0$) converges:</p>
+<div class="dcase"><ol>
+<li>only at $z=z_0$ ($R=0$), e.g. $\sum n!\,z^n$; or</li>
+<li>in the whole plane ($R=\infty$), e.g. $\sum\frac{z^n}{n!}$; or</li>
+<li>inside a circle $|z-z_0|\lt R$, diverging everywhere outside it. On the circle itself anything can happen (see section 3 above).</li></ol></div>
+
+<h3>The two formulas for $R$ (§25.5)</h3>
+$$\text{(i) Cauchy–Hadamard (root):}\ \ \frac1R=\lim_{n\to\infty}|a_n|^{1/n},\qquad\text{(ii) D'Alembert (ratio):}\ \ \frac1R=\lim_{n\to\infty}\left|\frac{a_{n+1}}{a_n}\right| .$$
+<p>When the ratio limit exists, both give the same $R$. The root form also works when the ratio oscillates, e.g. for coefficients that are zero for odd $n$. Strictly, it should then be read as a $\limsup$.</p>
+
+<div class="widget" id="w-dass-roc">
+<div class="wt">Interactive — inside or outside the circle? Watch the partial sums</div>
+<div class="wd">Choose one of Dass's series and drag the point $z$ (left). The circle has the radius $R$ from the formulas. Right: the partial sums $S_0,S_1,\dots,S_N$ at your $z$, drawn as a path. Inside the circle the path spirals into a limit. Outside it runs away.</div>
+<div class="ctrls"><label>series <select id="drc-s"></select></label>
+<label>$N$ <input type="range" id="drc-n" min="5" max="80" step="1" value="40"><output></output></label></div>
+<div class="grid2"><canvas id="cv-dass-rocz"></canvas><canvas id="cv-dass-rocs"></canvas></div>
+<div class="readout" id="drc-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 1–4) — four radii by the ratio test</div><div class="bd">
+<table class="t dt">
+<tr><th>Series</th><th>$\left|\frac{a_{n+1}}{a_n}\right|$</th><th>Limit</th><th>$R$</th></tr>
+<tr><td>Ex 1: $\sum\frac{z^n}{n!}$</td><td>$\frac{1}{n+1}$</td><td>$0$</td><td>$\infty$</td></tr>
+<tr><td>Ex 2: $\sum\frac{z^n}{2^n+3}$</td><td>$\frac{2^n+3}{2^{n+1}+3}=\frac{1+3/2^n}{2+3/2^n}$</td><td>$\frac12$</td><td>$2$</td></tr>
+<tr><td>Ex 3: $\sum\frac{z^n}{n^n}$</td><td>$\frac{n^n}{(n+1)^{n+1}}=\frac{1}{(1+\frac1n)^n(n+1)}$</td><td>$\frac{1}{e\cdot\infty}=0$</td><td>$\infty$</td></tr>
+<tr><td>Ex 4: $\sum\frac{n!}{n^n}z^n$</td><td>$\frac{(n+1)!}{(n+1)^{n+1}}\cdot\frac{n^n}{n!}=\left(\frac{n}{n+1}\right)^n$</td><td>$\frac1e$</td><td>$e$</td></tr>
+</table>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the limits $\left(1+\frac1n\right)^n\to e$ and $\left(\frac n{n+1}\right)^n\to\frac1e$ come up in almost every radius-of-convergence MCQ that involves $n!$ and $n^n$.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Exercise 25.1) — every variation: $p$-series, geometric, root test, complex coefficients</div><div class="bd">
+<table class="t dt">
+<tr><th>Series</th><th>Best test</th><th>$R$</th></tr>
+<tr><td>$\sum\frac{z^n}{n^p}$ (any real $p$)</td><td>ratio: $\left(\frac{n}{n+1}\right)^p\to1$</td><td>$1$ (independent of $p$; only the boundary behaviour depends on $p$)</td></tr>
+<tr><td>$\sum\frac{z^n}{3^{n+1}}$</td><td>geometric in $\frac z3$</td><td>$3$</td></tr>
+<tr><td>$\sum\left(1+\frac1n\right)^{n^2}z^n$</td><td>root: $|a_n|^{1/n}=\left(1+\frac1n\right)^n\to e$</td><td>$\frac1e$</td></tr>
+<tr><td>$\sum(5+12i)^nz^n$</td><td>root: $|a_n|^{1/n}=|5+12i|=13$</td><td>$\frac1{13}$</td></tr>
+<tr><td>$\sum\frac{2n+3}{(2n+5)(n+5)}z^n$</td><td>ratio: rational in $n$, so the limit is $1$</td><td>$1$</td></tr>
+</table>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> two rules of thumb. Polynomial or rational factors in $n$ never change $R$. A factor $c^n$ divides $R$ by $|c|$. Use the root test whenever the exponent involves $n^2$.</p></div></div>
+<!-- dass:end -->
 <h2 id="boundary">3. On the boundary circle: three classic cases</h2>
 <table class="t">
 <tr><th>Series ($R=1$)</th><th>On $|z|=1$</th><th>Reason</th></tr>
@@ -242,6 +312,98 @@ $$\frac{1}{1+x^2}=1-x^2+x^4-x^6+\dots$$
 <div class="readout" id="dk-out"></div>
 </div>
 
+<!-- dass:start 20__why -->
+<h2 id="dass-27-1" class="dass"><span class="dtag">H.K. Dass §27.1–27.6</span>Power-series solutions of ODEs at an ordinary point</h2>
+<p><b>Why it belongs here.</b> Equations with variable coefficients (Legendre, Bessel, Hermite, Laguerre) have solutions that are not elementary functions. They are <b>power series</b>, and the disk-of-convergence ideas of this section tell you where those series are valid. For example, $y''-y=0$ is solved by $e^{\pm x}=\sum\frac{(\pm x)^n}{n!}$, and $y''+y=0$ by $\sin x=x-\frac{x^3}{3!}+\cdots$.</p>
+<div class="dcase"><p><b>Definitions (§27.3–27.4).</b> Write the equation as $y''+P(x)y'+Q(x)y=0$.</p><ul>
+<li>$f$ is <b>analytic</b> at $x_0$ if it equals its Taylor series in some interval around $x_0$.</li>
+<li>$x=a$ is an <b>ordinary point</b> if $P$ and $Q$ are both analytic there; for rational $P,Q$ this means no denominator vanishes at $a$. E.g. $(1+x^2)y''+xy'-y=0$ has $P=\frac{x}{1+x^2}$ and $Q=\frac{-1}{1+x^2}$, so $x=0$ is ordinary. But $x^2y''+(2x^2-x)y'+y=0$ has $P=\frac{2x^2-x}{x^2}$, so $x=0$ is not ordinary.</li>
+<li><b>Radius of validity (the link to this section):</b> about an ordinary point $a$, the series solution converges at least for $|x-a|\lt$ (the distance from $a$ to the nearest singular point of $P$ or $Q$ in the <b>complex</b> plane). For $(1+x^2)y''+\cdots$ that distance is $1$, set by the points $\pm i$ even though they are not real.</li></ul></div>
+<div class="dcase"><p><b>Working rule (§27.5–27.6).</b></p><ol class="steps">
+<li>Assume $y=\sum_{k\ge0}a_kx^k$, so $y'=\sum ka_kx^{k-1}$ and $y''=\sum k(k-1)a_kx^{k-2}$.</li>
+<li>Substitute, and shift the indices so that every sum runs over the same power $x^k$.</li>
+<li>Set the coefficient of $x^k$ to zero. This gives a <b>recurrence relation</b> for $a_{k+2}$ in terms of earlier coefficients.</li>
+<li>Everything is determined by $a_0$ and $a_1$, the two arbitrary constants: $y=a_0y_1(x)+a_1y_2(x)$.</li></ol></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 1) — $y''+x^2y=0$: a three-step recurrence</div><div class="bd"><ol class="steps">
+<li>The coefficient of $x^n$ gives $(n+2)(n+1)a_{n+2}+a_{n-2}=0$, so $a_{n+2}=-\frac{a_{n-2}}{(n+1)(n+2)}$. Also $a_2=a_3=0$.</li>
+<li>Only every fourth coefficient survives: $a_4=-\frac{a_0}{12}$, $a_8=\frac{a_0}{12\cdot56}$, …, and $a_5=-\frac{a_1}{20}$, $a_9=\frac{a_1}{20\cdot72}$, …</li>
+<li>$y=a_0\left(1-\frac{x^4}{12}+\frac{x^8}{672}-\cdots\right)+a_1\left(x-\frac{x^5}{20}+\frac{x^9}{1440}-\cdots\right)$. $P$ and $Q$ are polynomials, so this converges for <b>all</b> $x$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "which coefficients vanish" is decided by the step of the recurrence ($a_{n+2}$ against $a_{n-2}$ here). It is a common MCQ.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 2, Ex 3) — Chebyshev- and Legendre-type equations: one solution is a polynomial</div><div class="bd">
+<div class="dcase"><p><b>Ex 2: $(1-x^2)y''-xy'+4y=0$.</b> The recurrence is $a_{k+2}=\frac{k^2-4}{(k+2)(k+1)}a_k=\frac{k-2}{k+1}a_k$. At $k=2$ the factor vanishes, so the even series <b>stops</b>: $y_1=1-2x^2$ (this is $-T_2(x)$, the Chebyshev polynomial up to sign). The odd series is $y_2=x-\frac{x^3}{2}-\frac{x^5}{8}-\cdots$, valid for $|x|\lt1$ (singular points at $\pm1$).</p></div>
+<div class="dcase"><p><b>Ex 3: $(1-x^2)y''-2xy'+2y=0$</b> (Legendre with $n=1$). Here $a_{k+2}=\frac{k-1}{k+1}a_k$. The odd series stops at once: $y_2=x=P_1(x)$. The even one is $1-x^2-\frac{x^4}{3}-\frac{x^6}{5}-\cdots=1-\frac x2\log\frac{1+x}{1-x}$, the second solution $Q_1$ up to sign.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> when the recurrence factor contains $(k-n)$, the series terminates at degree $n$. That is exactly why Legendre, Chebyshev, Hermite and Laguerre <b>polynomials</b> exist.</p></div></div>
+
+<h2 id="dass-27-7" class="dass"><span class="dtag">H.K. Dass §27.7–27.8</span>Singular points: regular and irregular, and series about $x=a$</h2>
+<div class="dcase"><p><b>Classification.</b> Let $x=a$ be a singular point of $y''+Py'+Qy=0$.</p><ul>
+<li><b>Regular singular point:</b> $(x-a)P$ and $(x-a)^2Q$ are <b>both</b> analytic at $a$.</li>
+<li><b>Irregular singular point:</b> <b>at least one</b> of them fails. (The book's wording, "if $(x-a)P$ and $(x-a)^2Q$ are infinite", reads as if both had to fail; one is enough.) E.g. $x^3y''+y=0$ has $x^2Q=\frac1x$, so $x=0$ is irregular.</li></ul>
+<p>This mirrors Laurent classification (14.4). At a regular singular point $P$ has at most a simple pole and $Q$ at most a double pole. That is exactly what lets a Frobenius series $x^m\sum a_kx^k$ work.</p></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 5, Ex 6) — locating regular singular points</div><div class="bd">
+<div class="dcase"><p><b>Ex 5:</b> $2x^2y''+3xy'+(x^2-4)y=0$. Here $P=\frac{3}{2x}$ and $Q=\frac{x^2-4}{2x^2}$. Then $xP=\frac32$ and $x^2Q=\frac{x^2-4}{2}$ are analytic, so $x=0$ is a <b>regular</b> singular point.</p></div>
+<div class="dcase"><p><b>Ex 6:</b> $x(x-2)^2y''+2(x-2)y'+(x+3)y=0$. Here $P=\frac{2}{x(x-2)}$ and $Q=\frac{x+3}{x(x-2)^2}$. At $x=0$: $xP=\frac2{x-2}$ and $x^2Q=\frac{x(x+3)}{(x-2)^2}$ are analytic, so it is regular. At $x=2$: $(x-2)P=\frac2x$ and $(x-2)^2Q=\frac{x+3}{x}$ are analytic, so it is also regular.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "the nature of $x=0$ and $x=\infty$ for Bessel, Legendre or Hermite" is a classic. Bessel: $0$ regular, $\infty$ irregular. Legendre: $\pm1$ and $\infty$ regular. Hermite: only $\infty$, irregular.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 4) — expand about $x=1$: $y''+(x-1)^2y'-4(x-1)y=0$</div><div class="bd"><ol class="steps">
+<li>Shift with $t=x-1$: $y''+t^2y'-4ty=0$. Then $t=0$ is an <b>ordinary</b> point, since $P$ and $Q$ are polynomials. (The book's closing note calls it a regular singular point; it is ordinary.)</li>
+<li>Recurrence: $(n+2)(n+1)a_{n+2}=-(n-5)a_{n-1}$. This gives $a_2=0$, $a_3=\frac23a_0$, $a_4=\frac{a_1}4$, $a_6=\frac{a_0}{45}$, $a_7=0$, $a_9=-\frac{a_0}{1620}$, …</li>
+<li>The $a_1$ chain stops: $a_7=0$ because of the factor $(n-5)$ at $n=5$. So $y=a_0\left[1+\frac23t^3+\frac1{45}t^6-\frac{1}{1620}t^9+\cdots\right]+a_1\left[t+\frac{t^4}{4}\right]$, where the second bracket is <b>exact</b>. Check: $y=t+\frac{t^4}4$ gives $y''=3t^2$, $t^2y'=t^2+t^5$ and $-4ty=-4t^2-t^5$, which sum to $0$ ✓.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> a factor $(n-c)$ in a recurrence means a polynomial solution. Always look for one: it makes "find a solution" questions trivial.</p></div></div>
+
+<h2 id="dass-27-9" class="dass"><span class="dtag">H.K. Dass §27.9</span>The Frobenius method: indicial equation and all four cases</h2>
+<p>At a regular singular point $x=0$, try $y=x^m\sum_{k\ge0}a_kx^{k}$ with $a_0\ne0$. The lowest power of $x$ gives the <b>indicial equation</b>, a quadratic $F(m)=0$ with roots $m_1,m_2$. Writing the equation as $x^2y''+x\,p(x)y'+q(x)y=0$, it is $F(m)=m(m-1)+p(0)m+q(0)$. The higher powers give a recurrence $F(m+k)a_k=(\text{earlier }a\text{'s})$.</p>
+<table class="t dt">
+<tr><th>Case (Dass)</th><th>Roots</th><th>Two solutions</th><th>Dass examples</th></tr>
+<tr><td>I</td><td>distinct, $m_1-m_2\notin\mathbb Z$</td><td>$y=c_1y_{m_1}+c_2y_{m_2}$, two independent Frobenius series</td><td>Ex 7, 8, 9, 10</td></tr>
+<tr><td>II</td><td>equal, $m_1=m_2$</td><td>$y_1=y_{m_1}$ and $y_2=\left(\frac{\partial y}{\partial m}\right)_{m_1}=y_1\log x+x^{m_1}\sum b_kx^k$</td><td>Ex 11, 12, 13</td></tr>
+<tr><td>III</td><td>differ by an integer, and a coefficient becomes <b>infinite</b> at the smaller root</td><td>Put $a_0=b_0(m-m_1)$; then $y_1=(y)_{m_2}$, $y_2=\left(\frac{\partial y}{\partial m}\right)_{m_1}$, which contains $\log x$</td><td>Ex 14, 15, 16</td></tr>
+<tr><td>IV</td><td>differ by an integer, and a coefficient becomes <b>indeterminate</b> ($0\cdot a_k=0$)</td><td>The smaller root alone gives <b>both</b> solutions; no logarithm</td><td>Ex 17, 18, 19</td></tr>
+</table>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 7, 8, 9, 10) — Case I</div><div class="bd">
+<div class="dcase"><p><b>Ex 7: $3xy''+2y'+y=0$.</b> $F(m)=m(3m-1)$, so $m=0,\frac13$. The recurrence is $a_{k+1}=-\frac{a_k}{(m+k+1)(3m+3k+2)}$. This gives $y=A\left(1-\frac x2+\frac{x^2}{20}-\frac{x^3}{480}+\cdots\right)+Bx^{1/3}\left(1-\frac x4+\frac{x^2}{56}-\frac{x^3}{1680}+\cdots\right)$.</p></div>
+<div class="dcase"><p><b>Ex 8: $9x(1-x)y''-12y'+4y=0$.</b> $F(m)=3m(3m-7)$, so $m=0,\frac73$. The recurrence is $a_{k+1}=\frac{3m+3k+1}{3m+3k+3}a_k$. This gives $y=A\left(1+\frac x3+\frac{2x^2}9+\frac{14x^3}{81}+\cdots\right)+Bx^{7/3}\left(1+\frac{4x}5+\frac{44x^2}{65}+\frac{77x^3}{130}+\cdots\right)$, valid for $|x|\lt1$.</p></div>
+<div class="dcase"><p><b>Ex 9: $2x^2y''+xy'-(x+1)y=0$.</b> $(m-1)(2m+1)=0$. The recurrence is $a_{k+1}=\frac{a_k}{(m+k+1)(2m+2k+1)-1}$. This gives $y=Ax\left(1+\frac x5+\frac{x^2}{70}+\frac{x^3}{1890}+\cdots\right)+Bx^{-1/2}\left(1-x-\frac{x^2}2-\frac{x^3}{18}-\cdots\right)$.</p></div>
+<div class="dcase"><p><b>Ex 10: $2x(1-x)y''+(1-x)y'+3y=0$.</b> $m=0,\frac12$, and $a_{k+1}=\frac{2m+2k-3}{2m+2k+1}a_k$. For $m=0$: $1-3x+x^2+\frac{x^3}5+\frac{3x^4}{35}+\cdots$. For $m=\frac12$ the factor vanishes at $k=1$, so the series <b>terminates</b>: $y_2=\sqrt x\,(1-x)$, an exact solution (check by substitution).</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the exponents $m_1,m_2$ alone answer "how does the solution behave near $x=0$?", e.g. "is it bounded?". No coefficients are needed.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 11, 12, 13) — Case II, equal roots: a $\log x$ appears</div><div class="bd">
+<div class="dcase"><p><b>Ex 11: $x(x-1)y''+(3x-1)y'+y=0$.</b> $F(m)=m^2$. The recurrence is $(m+k)^2a_k=(m+k)^2a_{k-1}$, so $a_k=a_0$ for <b>every</b> $m$. Since $\frac{\partial a_k}{\partial m}=0$, differentiating gives only the $\log x$ factor: $y=\frac{A+B\log x}{1-x}$, in closed form. (Check: both $\frac1{1-x}$ and $\frac{\log x}{1-x}$ satisfy the equation exactly.)</p></div>
+<div class="dcase"><p><b>Ex 12: $xy''+y'+x^2y=0$.</b> $m=0,0$. Then $y_1=1-\frac{x^3}{3^2}+\frac{x^6}{3^2\cdot6^2}-\frac{x^9}{3^2\cdot6^2\cdot9^2}+\cdots$, and $y_2=y_1\log x+(\text{a power series})$. In fact $y_1=J_0\left(\frac23x^{3/2}\right)$.</p></div>
+<div class="dcase"><p><b>Ex 13: $xy''+y'-y=0$.</b> $m=0,0$. Then $y_1=\sum\frac{x^k}{(k!)^2}=I_0(2\sqrt x)$, and $y_2=y_1\log x-2\left[x+\frac{1}{(2!)^2}\left(1+\frac12\right)x^2+\cdots\right]$.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> with equal indicial roots the second solution <b>always</b> contains $\log x$. That is why $Y_0$ and $K_0$ blow up logarithmically at $0$.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 14, 15, 16) — Case III, roots differing by an integer with an infinite coefficient</div><div class="bd">
+<div class="dcase"><p><b>Ex 14: $x^2y''+xy'+(x^2-4)y=0$</b> (Bessel of order 2). $m=\pm2$. For $m=2$: $y_1=x^2\left(1-\frac{x^2}{12}+\frac{x^4}{384}-\cdots\right)\propto J_2(x)$. For $m=-2$ the coefficient of $x^4$ contains $\frac{1}{m+2}$, which is infinite. Putting $a_0=b_0(m+2)$ and taking $\left(\frac{\partial y}{\partial m}\right)_{-2}$ gives the $Y_2$-type solution with a $\log x$ term.</p></div>
+<div class="dcase"><p><b>Ex 15: $x(1-x)y''-(1+3x)y'-y=0$.</b> $m=0,2$. For $m=2$: $y_1=x^2(1+3x+6x^2+10x^3+\cdots)=\frac{x^2}{(1-x)^3}$, an exact closed form. For $m=0$ the coefficients blow up, so the second solution has $\log x$.</p></div>
+<div class="dcase"><p><b>Ex 16: $x^2y''+5xy'+x^2y=0$.</b> $m=0,-4$. Then $y_1=1-\frac{x^2}{12}+\frac{x^4}{384}-\cdots=\frac{8J_2(x)}{x^2}$, and the second solution from $m=-4$ needs $\log x$.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> Bessel's equation of integer order $n$ has roots $\pm n$ differing by $2n$. It is Case III, which is why $J_{-n}=(-1)^nJ_n$ is <b>not</b> independent and $Y_n$ is needed.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 17, 18, 19) — Case IV: an indeterminate coefficient gives both solutions at once</div><div class="bd">
+<div class="dcase"><p><b>Ex 17: $x^2y''+4xy'+(x^2+2)y=0$.</b> $(m+1)(m+2)=0$. At $m=-2$ the equation for $a_1$ reads $0\cdot a_1=0$, so $a_1$ is free. The $m=-2$ series then holds both constants: $y=\frac{a_0\cos x+a_1\sin x}{x^2}$. (Indeed $(x^2y)''+x^2y=0$.)</p></div>
+<div class="dcase"><p><b>Ex 18: $x^2y''+(x^2+x)y'+(x-9)y=0$.</b> $m=\pm3$, and $a_k=-\frac{(m+k)a_{k-1}}{(m+k-3)(m+k+3)}$. For $m=-3$: $a_1=-\frac25a_0$, $a_2=\frac1{20}a_0$, and then $a_3=0$ (the factor $m+k=0$). The chain <b>stops</b>, and $a_6$ is indeterminate. So $y=a_0x^{-3}\left(1-\frac{2x}5+\frac{x^2}{20}\right)+a_6x^3\left(1-\frac{4x}{7}+\frac{5x^2}{28}-\frac{5x^3}{126}+\cdots\right)$. The first part is an exact finite solution, checked symbolically.</p></div>
+<div class="dcase"><p><b>Ex 19: $xy''+2y'+xy=0$.</b> $m(m+1)=0$. At $m=-1$, $a_1$ is free: $y=\frac{a_0\cos x+a_1\sin x}{x}$. (Write $u=xy$; then $u''+u=0$.) Dass's note: problems with an <b>ordinary</b> point can also be done this way; the roots are then $0$ and $1$, which is a Case IV.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> spotting a substitution like $u=xy$ or $u=x^2y$ that removes the first-derivative term turns these into $u''+u=0$. It is a standard shortcut for spherical Bessel functions $j_0(x)=\frac{\sin x}{x}$.</p></div></div>
+
+<div class="widget" id="w-dass-frob">
+<div class="wt">Interactive — the Frobenius machine: indicial roots, the case, and the series against a numerical solution</div>
+<div class="wd">Choose one of Dass's equations and a root $m$. The machine finds the indicial roots, identifies the case, and generates the coefficients $a_k$ from the recurrence. The solid curve is the partial sum $x^m\sum_{k\le N}a_kx^k$. The dashed curve is an independent numerical (Runge–Kutta) solution started from the series' values at a small $x_0$. They agree inside the radius of convergence (shaded, set by the nearest other singular point). Beyond it the partial sums run away; the numerical solution stops just before that singular point.</div>
+<div class="ctrls"><label>equation <select id="dfr-e"></select></label> <label>root <select id="dfr-m"></select></label>
+<label>$N$ <input type="range" id="dfr-n" min="2" max="40" step="1" value="12"><output></output></label></div>
+<canvas id="cv-dass-frob"></canvas>
+<div class="readout" id="dfr-out"></div>
+</div>
+
+<table class="t dt">
+<tr><th colspan="2">Dass Exercise 27.1 — answers (selected, checked by substitution)</th></tr>
+<tr><td>$y''+xy=0$ (Airy type)</td><td>$a_0\left(1-\frac{x^3}{3!}+\frac{4x^6}{6!}-\frac{28x^9}{9!}+\cdots\right)+a_1\left(x-\frac{2x^4}{4!}+\frac{10x^7}{7!}-\cdots\right)$</td></tr>
+<tr><td>Indicial roots: $2x^2y''-xy'+(1-x^2)y=x^2$ (homogeneous part)</td><td>$2m(m-1)-m+1=0$, so $m=1,\frac12$</td></tr>
+<tr><td>$2x(1-x)y''+(5-7x)y'-3y=0$</td><td>$m=0,-\frac32$: $a\left(1+\frac35x+\frac37x^2+\frac39x^3+\cdots\right)+bx^{-3/2}(\cdots)$</td></tr>
+</table>
+<!-- dass:end -->
 <h2 id="boas">6. Boas Problems, Section 7 — solutions</h2>
 <details class="sol"><summary>Show solutions 1–16</summary>
 <table class="t">
@@ -302,7 +464,70 @@ $$\frac{1}{1+x^2}=1-x^2+x^4-x^6+\dots$$
 <div class="mcq" data-ans="0" data-ok="Nearest zero of $\cos z$ is $\pm\pi/2$." data-no="Where is $\cos z=0$?"><p>2. $R$ for the Maclaurin series of $\sec z$:</p><div class="opts"><button>$\pi/2$</button><button>$\pi$</button><button>$1$</button><button>$\infty$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="1" data-ok="$|z^n/n^2|=1/n^2$ on $|z|=1$: absolutely convergent." data-no="Look at $|z^n/n^2|$ when $|z|=1$."><p>3. $\sum\frac{z^n}{n^2}$ on the circle $|z|=1$:</p><div class="opts"><button>diverges everywhere</button><button>converges everywhere</button><button>diverges only at $z=1$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">10. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">10. Going deeper: the radius from the coefficients alone, and the rules that save time</h2>
+<h3>Cauchy–Hadamard, the general formula</h3>
+$$\frac1R=\limsup_{n\to\infty}|a_n|^{1/n}.$$
+<p><b>Why:</b> apply the root test to $\sum a_nz^n$. The terms behave like $\left(|a_n|^{1/n}|z|\right)^n$, so the series converges when $|z|\limsup|a_n|^{1/n}\lt1$ and diverges when it is $\gt1$. The $\limsup$ (the largest limit point) is needed when $|a_n|^{1/n}$ oscillates. An example is $a_n=(2+(-1)^n)^n$, where $|a_n|^{1/n}$ alternates between $1$ and $3$, giving $R=\frac13$. The ratio test cannot handle this case.</p>
+<h3>Rules you can apply without recomputing</h3>
+<table class="t">
+<tr><th>Change to the series</th><th>Effect on $R$</th><th>Reason</th></tr>
+<tr><td>Multiply $a_n$ by $n^p$ (any $p$), or differentiate/integrate term by term</td><td>unchanged</td><td>$n^{p/n}\to1$</td></tr>
+<tr><td>$\sum a_nz^{kn}$ (only every $k$-th power)</td><td>$R^{1/k}$</td><td>substitute $w=z^k$</td></tr>
+<tr><td>$\sum a_n(cz)^n$</td><td>$R/|c|$</td><td>scaling</td></tr>
+<tr><td>Sum of two series with radii $R_1\ne R_2$</td><td>$\min(R_1,R_2)$</td><td>the smaller disk limits it</td></tr>
+<tr><td>Taylor series of $f$ about $z_0$</td><td>distance from $z_0$ to the nearest non-removable singularity</td><td>proved with Cauchy's formula in 14.3</td></tr>
+</table>
+<h3>Removable singularities do not count</h3>
+<p>$\frac{\sin z}{z}$ and $\frac{z}{e^z-1}$ look singular at $0$, but the limits exist. So these are <i>removable</i> singularities. For $\frac{z}{e^z-1}$ the true singularities are $z=2\pi ik$, $k\ne0$. The Maclaurin radius is therefore $2\pi$, not $0$. This is a favourite trap.</p>
+
+<h2 id="exampat">11. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Explicit coefficients</td><td>$R$ for $\sum\frac{n^k}{c^n}z^n$, $\sum\frac{n!}{n^n}z^n$</td><td>Ratio test, or root test for $n$-th powers</td></tr>
+<tr><td>Hidden coefficients</td><td>$R$ of the Taylor series of $\frac{1}{z^2+2z+5}$, $\sec z$, $\frac{z}{e^z-1}$ about some $z_0$</td><td>Distance to the nearest singularity</td></tr>
+<tr><td>Lacunary series</td><td>$\sum z^{3n}/8^n$, $\sum z^{n!}$</td><td>Substitute, or use Cauchy–Hadamard</td></tr>
+<tr><td>Boundary behaviour</td><td>Which boundary points converge (often multiple correct)</td><td>Compare $|a_n|R^n$ with $\frac1n$ and $\frac1{n^2}$; alternating at specific points</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>Removable singularities do not limit $R$.</li>
+<li>For a series in $(z-z_0)$, the disk is centred at $z_0$, not at $0$.</li>
+<li>$R$ never depends on behaviour on the boundary. The boundary has to be checked separately, point by point.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$\left(1+\frac1n\right)^{n^2}$ has $n$-th root $\to e$, so $R=\frac1e$.</li>
+<li>$\frac{n!}{n^n}$: ratio $\to\frac1e$, so $R=e$. $\ \frac{n^n}{n!}$: $R=\frac1e$.</li>
+</ul></div>
+
+<h2 id="xprob">12. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> Find the radius of convergence of $\sum_{n\ge1}\left(1+\frac1n\right)^{n^2}z^n$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$|a_n|^{1/n}=\left(1+\frac1n\right)^n\to e$, so $R=\frac1e=\mathbf{0.368}$.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> The radius of convergence of $\sum n^5\dfrac{z^n}{3^n}$ is <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $1/3$</span><span>(b) $3$</span><span>(c) $3^5$</span><span>(d) $1$</span></div>
+<details class="sol"><summary>Show solution</summary><p>The factor $n^5$ does not change $R$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> Find the radius of convergence of the Maclaurin series of $\dfrac{1}{z^2+2z+5}$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>The poles are at $-1\pm2i$, at distance $\sqrt5$ from the origin. $R=\mathbf{2.236}$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> The radius of convergence of $\sum_{n\ge1}z^{n!}$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $0$</span><span>(b) $1$</span><span>(c) $e$</span><span>(d) $\infty$</span></div>
+<details class="sol"><summary>Show solution</summary><p>The coefficients are $0$ or $1$, with infinitely many $1$s, so $\limsup|a_n|^{1/n}=1$ and $R=1$. Option <b>(b)</b>. (The unit circle is a natural boundary for this series. It cannot be continued beyond it at all.)</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> (Multiple correct) For $\displaystyle\sum_{n\ge1}\frac{(z-2)^n}{n\,3^n}$: <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) it converges at $z=-1$</span><span>(b) it converges at $z=5$</span><span>(c) $R=3$</span><span>(d) it converges absolutely everywhere on $|z-2|=3$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (c).</b> At $z=-1$ the series is $\sum\frac{(-1)^n}{n}$, which converges. At $z=5$ it is $\sum\frac1n$, which diverges. On the boundary $|a_n|R^n=\frac1n$, so absolute convergence fails everywhere there.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Find the radius of convergence of the Taylor series of $\dfrac{z}{e^z-1}$ about $z_0=i\pi$. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>The singularities are at $2\pi ik$. The one at $k=0$ is removable and does not count. The nearest true singularity to $i\pi$ is $2\pi i$, at distance $\pi$ (the next one, $-2\pi i$, is at $3\pi$). So $R=\pi\approx3.14$. If you count $z=0$ you still get $\pi$ here, but about $z_0=1$ you would get $1$ instead of the correct $\sqrt{1+4\pi^2}$.</p></details></div>
+<div class="mcq" data-ans="3" data-ok="$\frac{1/(n+1)!}{1/n!}=\frac{1}{n+1}\to0$, so $R=\infty$." data-no="Ratio of successive coefficients goes to $0$."><p>Rapid fire: $R$ for $\sum\frac{z^n}{n!}$ is</p><div class="opts"><button>$0$</button><button>$1$</button><button>$e$</button><button>$\infty$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">13. Connections</h2>
+<div class="xlinks">
+<a href="2.6_Complex_Infinite_Series.html"><b>Builds on</b>2.6 Complex series<small>Tests for convergence</small></a>
+<a href="2.8_Elementary_Functions_of_Complex_Numbers.html"><b>Next</b>2.8 Elementary functions<small>$e^z$, $\sin z$ defined by series with $R=\infty$</small></a>
+<a href="14.3_Contour_Integrals.html"><b>Proof</b>14.3 Cauchy's formula<small>Why $R$ = distance to the nearest singularity</small></a>
+<a href="14.4_Laurent_Series.html"><b>Later</b>14.4 Laurent series<small>Annuli replace disks when there is a singularity inside</small></a>
+<a href="14.6_Methods_of_Finding_Residues.html"><b>Later</b>14.6 Singularities<small>Removable, poles, essential</small></a>
+<a href="2.17_Miscellaneous_Problems.html"><b>Review</b>2.17 Mixed problems<small>Radius-of-convergence questions in exam form</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="10. Summary">14. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$\sum a_n(z-z_0)^n$ converges absolutely in the disk $|z-z_0|\lt R$ and diverges outside it.</li>
 <li>$R=\lim|a_n/a_{n+1}|$ (ratio), or in general $1/R=\limsup|a_n|^{1/n}$ (root).</li>
@@ -894,5 +1119,102 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+/* H.K. Dass §25.5 — radius of convergence: partial sums inside vs outside */
+onReady(() => {
+  const lf = n => { let s = 0; for (let k = 2; k <= n; k++) s += Math.log(k); return s; };
+  const S = [
+    { n: 'Ex 1: Σ zⁿ/n!', la: n => [-lf(n), 0], R: Infinity, t: '\\sum\\frac{z^n}{n!}' },
+    { n: 'Ex 2: Σ zⁿ/(2ⁿ+3)', la: n => [-Math.log(2 ** n + 3), 0], R: 2, t: '\\sum\\frac{z^n}{2^n+3}' },
+    { n: 'Ex 3: Σ zⁿ/nⁿ', la: n => [n ? -n * Math.log(n) : 0, 0], R: Infinity, t: '\\sum\\frac{z^n}{n^n}' },
+    { n: 'Ex 4: Σ n! zⁿ/nⁿ', la: n => [n ? lf(n) - n * Math.log(n) : 0, 0], R: Math.E, t: '\\sum\\frac{n!}{n^n}z^n' },
+    { n: 'Q1: Σ zⁿ/n²', la: n => [n ? -2 * Math.log(n) : -Infinity, 0], R: 1, t: '\\sum\\frac{z^n}{n^2}' },
+    { n: 'Q2: Σ zⁿ/3ⁿ⁺¹', la: n => [-(n + 1) * Math.log(3), 0], R: 3, t: '\\sum\\frac{z^n}{3^{n+1}}' },
+    { n: 'Q3: Σ (1+1/n)^(n²) zⁿ', la: n => [n ? n * n * Math.log1p(1 / n) : 0, 0], R: 1 / Math.E, t: '\\sum\\left(1+\\frac1n\\right)^{n^2}z^n' },
+    { n: 'Q4: Σ (5+12i)ⁿ zⁿ', la: n => [n * Math.log(13), n * Math.atan2(12, 5)], R: 1 / 13, t: '\\sum(5+12i)^nz^n' },
+    { n: 'Q5: Σ (2n+3)zⁿ/((2n+5)(n+5))', la: n => [Math.log((2 * n + 3) / ((2 * n + 5) * (n + 5))), 0], R: 1, t: '\\sum\\frac{2n+3}{(2n+5)(n+5)}z^n' }
+  ];
+  const sci = x => { if (x === 0) return '0'; if (x >= 1e-3 && x < 1e6) return fnum(x, 4); const e = Math.floor(Math.log10(x)); return `${fnum(x / 10 ** e, 3)}\\times10^{${e}}`; };
+  const sel = $('#drc-s'); S.forEach((s, k) => { const o = document.createElement('option'); o.value = k; o.textContent = s.n; sel.appendChild(o); });
+  let C = S[0], z = [1, 0.6];
+  const sums = () => { const N = val('drc-n'), out = [[0, 0]], lr = Math.log(Cx.abs(z)), th = Cx.arg(z); let s = [0, 0];
+    for (let n = 0; n <= N; n++) { const [l, a] = C.la(n); if (l === -Infinity) { out.push(s.slice()); continue; } const lg = l + (n ? n * lr : 0); const t = lg > 700 ? [NaN, NaN] : Cx.polar(Math.exp(lg), a + n * th); s = Cx.add(s, t); out.push(s.slice()); } return out.slice(1); };
+  const Z = new Plane('#cv-dass-rocz', { span: 3, aspect: 0.9, snap: 0, axisLabels: ['x', 'y'], draw: p => {
+    if (isFinite(C.R)) p.circle([0, 0], C.R, { color: '--accent', width: 3, fill: '--accent', fillAlpha: 0.08 });
+    p.dot(z, { r: 7, color: '--accent3', ring: true, label: 'z' });
+  }});
+  const W = new Plane('#cv-dass-rocs', { span: 3, aspect: 0.9, snap: 0, axisLabels: ['Re S', 'Im S'], draw: p => {
+    const s = sums().filter(q => isFinite(q[0]) && Cx.abs(q) < 1e6); p.path(s, { color: '--accent2', width: 2 }); s.forEach((q, k) => { if (k % 5 === 0 || k === s.length - 1) p.dot(q, { r: k === s.length - 1 ? 6 : 3, color: '--accent2' }); });
+  }});
+  const fitW = () => { const s = sums().filter(q => isFinite(q[0]) && Cx.abs(q) < 1e6); let x0 = 0, x1 = 0, y0 = 0, y1 = 0; s.forEach(q => { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); }); W.span = Math.min(1e5, Math.max(1, 0.6 * Math.max(x1 - x0, (y1 - y0) / 0.9))); W.cx = (x0 + x1) / 2; W.cy = (y0 + y1) / 2; };
+  const out = () => { const N = val('drc-n'), s = sums(), last = s[s.length - 1], prev = s[s.length - 2], [lN] = C.la(N), [lN1] = C.la(N + 1), root = Math.exp(lN / N), ratio = Math.exp(lN1 - lN);
+    const Rt = isFinite(C.R) ? fnum(C.R, 4) : '\\infty', ins = !isFinite(C.R) || Cx.abs(z) < C.R;
+    texMix('#drc-out', `$${C.t}$: &nbsp; $R=${Rt}$. &nbsp; At $n=${N}$: $|a_n|^{1/n}=${fnum(root, 4)}$, $\\left|\\frac{a_{n+1}}{a_n}\\right|=${fnum(ratio, 4)}$ (both tend to $\\frac1R=${isFinite(C.R) ? fnum(1 / C.R, 4) : '0'}$).<br>$|z|=${fnum(Cx.abs(z), 3)}$ is <b>${ins ? 'inside' : 'outside'}</b> the circle. &nbsp; $S_{${N}}=${isFinite(last[0]) && Cx.abs(last) < 1e12 ? Cx.tex(last, 4) : '\\text{(huge)}'}$, last term $|S_N-S_{N-1}|=${isFinite(last[0]) && isFinite(prev[0]) ? sci(Cx.abs(Cx.sub(last, prev))) : '\\infty'}$ — ${ins ? 'the terms shrink geometrically, so the sums converge' : 'the terms grow, so the sums diverge'}.`); };
+  Z.addDrag(() => z, v => { z = v; }); Z.onchange = () => { fitW(); W.redraw(); out(); };
+  const all = () => { C = S[+sel.value]; const R = isFinite(C.R) ? C.R : 2; z = Cx.polar(0.8 * R, 0.6); Z.span = 1.7 * R; Z.snap = R / 200; Z.redraw(); fitW(); W.redraw(); out(); };
+  sel.addEventListener('change', all); watch(['drc-n'], () => { fitW(); W.redraw(); out(); }); all();
+});
+
+/* H.K. Dass §27.9 — the Frobenius machine: A(x) x² y'' + x B(x) y' + C(x) y = 0 */
+onReady(() => {
+  const E = [
+    { n: 'Ex 1: y″ + x²y = 0 (ordinary)', A: [1], B: [0], C: [0, 0, 0, 0, 1], R: Infinity },
+    { n: 'Ex 2: (1−x²)y″ − xy′ + 4y = 0', A: [1, 0, -1], B: [0, 0, -1], C: [0, 0, 4], R: 1 },
+    { n: 'Ex 3: (1−x²)y″ − 2xy′ + 2y = 0', A: [1, 0, -1], B: [0, 0, -2], C: [0, 0, 2], R: 1 },
+    { n: 'Ex 7: 3xy″ + 2y′ + y = 0', A: [1], B: [2 / 3], C: [0, 1 / 3], R: Infinity },
+    { n: 'Ex 8: 9x(1−x)y″ − 12y′ + 4y = 0', A: [1, -1], B: [-4 / 3], C: [0, 4 / 9], R: 1 },
+    { n: 'Ex 9: 2x²y″ + xy′ − (x+1)y = 0', A: [1], B: [1 / 2], C: [-1 / 2, -1 / 2], R: Infinity },
+    { n: 'Ex 10: 2x(1−x)y″ + (1−x)y′ + 3y = 0', A: [1, -1], B: [1 / 2, -1 / 2], C: [0, 3 / 2], R: 1 },
+    { n: 'Ex 11: x(x−1)y″ + (3x−1)y′ + y = 0', A: [1, -1], B: [1, -3], C: [0, -1], R: 1 },
+    { n: 'Ex 12: xy″ + y′ + x²y = 0', A: [1], B: [1], C: [0, 0, 0, 1], R: Infinity },
+    { n: 'Ex 14: x²y″ + xy′ + (x²−4)y = 0', A: [1], B: [1], C: [-4, 0, 1], R: Infinity },
+    { n: 'Ex 15: x(1−x)y″ − (1+3x)y′ − y = 0', A: [1, -1], B: [-1, -3], C: [0, -1], R: 1 },
+    { n: 'Ex 17: x²y″ + 4xy′ + (x²+2)y = 0', A: [1], B: [4], C: [2, 0, 1], R: Infinity },
+    { n: 'Ex 18: x²y″ + (x²+x)y′ + (x−9)y = 0', A: [1], B: [1, 1], C: [-9, 1], R: Infinity },
+    { n: 'Ex 19: xy″ + 2y′ + xy = 0', A: [1], B: [2], C: [0, 0, 1], R: Infinity }
+  ];
+  const se = $('#dfr-e'), sm = $('#dfr-m'); E.forEach((e, k) => { const o = document.createElement('option'); o.value = k; o.textContent = e.n; se.appendChild(o); });
+  const g = (P, j) => P[j] || 0, pv = (P, x) => P.reduce((s, c, j) => s + c * x ** j, 0);
+  let C = E[0], roots = [];
+  const indicial = () => { const a = g(C.A, 0), b = g(C.B, 0) - a, c = g(C.C, 0), D = b * b - 4 * a * c; return D >= 0 ? [(-b + Math.sqrt(D)) / (2 * a), (-b - Math.sqrt(D)) / (2 * a)] : [NaN, NaN]; };
+  const F = s => g(C.A, 0) * s * (s - 1) + g(C.B, 0) * s + g(C.C, 0);
+  const coeffs = (m, N) => { const a = [1], notes = []; let stop = false;
+    for (let k = 1; k <= N; k++) { let rhs = 0; for (let j = 1; j <= k; j++) { const s = m + k - j; rhs += (g(C.A, j) * s * (s - 1) + g(C.B, j) * s + g(C.C, j)) * a[k - j]; }
+      const f = F(m + k); if (Math.abs(f) < 1e-9) { if (Math.abs(rhs) < 1e-9) { a.push(0); notes.push(`$a_{${k}}$ is <b>indeterminate</b> ($0\\cdot a_{${k}}=0$): Case IV, so a second constant enters here (set to $0$ in the plot)`); } else { notes.push(`$a_{${k}}$ would be <b>infinite</b> ($0\\cdot a_{${k}}\\ne0$): Case III, so use the other root, and the second solution needs $\\log x$`); stop = true; break; } }
+      else a.push(-rhs / f); }
+    return { a, notes, stop }; };
+  const ys = (m, a, x) => a.reduce((s, c, k) => s + c * x ** k, 0) * x ** m;
+  const dys = (m, a, x) => a.reduce((s, c, k) => s + c * (m + k) * x ** (m + k - 1), 0);
+  const rk = (x0, y0, v0, x1, n = 2000) => { const out = []; let x = x0, y = y0, v = v0; const h = (x1 - x0) / n;
+    const acc = (x, y, v) => -(x * pv(C.B, x) * v + pv(C.C, x) * y) / (x * x * pv(C.A, x));
+    for (let i = 0; i <= n; i++) { out.push([x, y]); const k1y = v, k1v = acc(x, y, v), k2y = v + h / 2 * k1v, k2v = acc(x + h / 2, y + h / 2 * k1y, v + h / 2 * k1v), k3y = v + h / 2 * k2v, k3v = acc(x + h / 2, y + h / 2 * k2y, v + h / 2 * k2v), k4y = v + h * k3v, k4v = acc(x + h, y + h * k3y, v + h * k3v);
+      y += h / 6 * (k1y + 2 * k2y + 2 * k3y + k4y); v += h / 6 * (k1v + 2 * k2v + 2 * k3v + k4v); x += h; if (!isFinite(y) || Math.abs(y) > 1e6) break; } return out; };
+  const P = new Plane('#cv-dass-frob', { span: 2, aspect: 0.6, snap: 0, grid: false, axisLabels: ['', ''], draw: p => {
+    if (!roots.length) return; const m = roots[+sm.value] ?? roots[0], N = val('dfr-n'), { a } = coeffs(m, N), X1 = isFinite(C.R) ? Math.min(1.6 * C.R, 3) : 6, x0 = Math.max(0.12, m < 0 ? 0.35 : 0.12);
+    const S = [], ctx = p.ctx; for (let j = 0; j <= 400; j++) { const x = x0 + (X1 - x0) * j / 400; S.push([x, ys(m, a, x)]); }
+    const full = coeffs(m, 60).a, XR = isFinite(C.R) ? 0.97 * C.R : X1, R = rk(x0, ys(m, full, x0), dys(m, full, x0), XR);
+    const yv = R.map(q => q[1]).concat(S.filter(q => q[0] <= XR).map(q => q[1])).filter(isFinite); let y0 = Math.min(...yv), y1 = Math.max(...yv); if (y1 - y0 < 1e-6) { y0 -= 1; y1 += 1; } const pad = 0.25 * (y1 - y0); y0 -= pad; y1 += pad;
+    const L = 52, Rm = 14, T = 12, B = 30, W = p.W - L - Rm, H = p.H - T - B, Xp = x => L + x / X1 * W, Yp = y => T + (y1 - y) / (y1 - y0) * H, raw = (y1 - y0) / 6, pw = 10 ** Math.floor(Math.log10(raw)), st = [1, 2, 5, 10].map(k => k * pw).find(k => k >= raw);
+    ctx.save(); ctx.font = '11px system-ui,sans-serif';
+    if (isFinite(C.R)) { ctx.fillStyle = cssv('--accent3'); ctx.globalAlpha = 0.12; ctx.fillRect(L, T, Xp(Math.min(C.R, X1)) - L, H); ctx.globalAlpha = 1; }
+    ctx.strokeStyle = cssv('--grid'); ctx.fillStyle = cssv('--muted'); ctx.lineWidth = 1;
+    const xs = X1 > 3 ? 1 : 0.5; for (let x = 0; x <= X1 + 1e-9; x += xs) { ctx.beginPath(); ctx.moveTo(Xp(x), T); ctx.lineTo(Xp(x), T + H); ctx.stroke(); ctx.textAlign = 'center'; ctx.fillText(fnum(x, 2), Xp(x), T + H + 14); }
+    for (let y = Math.ceil(y0 / st) * st; y <= y1; y += st) { ctx.beginPath(); ctx.moveTo(L, Yp(y)); ctx.lineTo(L + W, Yp(y)); ctx.stroke(); ctx.textAlign = 'right'; ctx.fillText(fnum(y, 3), L - 5, Yp(y) + 4); }
+    ctx.strokeStyle = cssv('--axis'); ctx.beginPath(); ctx.moveTo(L, Yp(0)); ctx.lineTo(L + W, Yp(0)); ctx.stroke(); ctx.fillStyle = cssv('--axis'); ctx.font = '600 12px system-ui,sans-serif'; ctx.textAlign = 'center'; ctx.fillText('x', L + W / 2, p.H - 2);
+    const draw = (pts, col, dash, wd) => { ctx.save(); ctx.strokeStyle = cssv(col); ctx.lineWidth = wd; if (dash) ctx.setLineDash(dash); ctx.beginPath(); let pen = false; pts.forEach(([x, y]) => { if (!isFinite(y) || y < y0 - 10 * (y1 - y0) || y > y1 + 10 * (y1 - y0)) { pen = false; return; } const Y = Math.max(T - 5, Math.min(T + H + 5, Yp(y))); if (pen) ctx.lineTo(Xp(x), Y); else { ctx.moveTo(Xp(x), Y); pen = true; } }); ctx.stroke(); ctx.restore(); };
+    draw(R, '--fg', [7, 5], 2); draw(S, '--accent', null, 3); ctx.restore();
+  }});
+  const out = () => { const [m1, m2] = roots, d = m1 - m2; let cs;
+    if (!isFinite(m1)) cs = 'complex indicial roots'; else if (Math.abs(d) < 1e-9) cs = '<b>Case II</b> (equal roots): the second solution is $y_1\\log x+\\cdots$';
+    else if (Math.abs(d - Math.round(d)) > 1e-9) cs = '<b>Case I</b>: two independent Frobenius series';
+    else cs = coeffs(m2, Math.round(d) + 1).stop ? '<b>Case III</b>: roots differ by an integer, and the smaller root gives an infinite coefficient' : '<b>Case IV</b>: roots differ by an integer, and the smaller root gives an indeterminate coefficient, hence both solutions';
+    const m = roots[+sm.value] ?? m1, N = val('dfr-n'), r = coeffs(m, N);
+    const tm = (c, t, first) => Math.abs(c) < 1e-12 ? '' : (c < 0 ? '-' : first ? '' : '+') + (Math.abs(Math.abs(c) - 1) < 1e-12 && t ? '' : fnum(Math.abs(c), 3)) + t;
+    texMix('#dfr-out', `Indicial equation $${tm(g(C.A, 0), 'm(m-1)', true)}${tm(g(C.B, 0), 'm')}${tm(g(C.C, 0), '')}=0$, so $m=${fnum(m1, 4)},\\ ${fnum(m2, 4)}$: ${cs}.<br>For $m=${fnum(m, 4)}$: ` + r.a.slice(0, 7).map((c, k) => `$a_${k}=${fnum(c, 5)}$`).join(', ') + (r.notes.length ? '<br>' + r.notes[0] + '.' : '') + `<br>Radius of convergence: ${isFinite(C.R) ? '$' + C.R + '$ (the nearest other singular point)' : '$\\infty$'}. Solid curve: the series with $N=${N}$ terms. Dashed: numerical solution.`); };
+  const all = () => { C = E[+se.value]; roots = indicial(); sm.innerHTML = ''; roots.forEach((r, k) => { const o = document.createElement('option'); o.value = k; o.textContent = 'm = ' + fnum(r, 4); sm.appendChild(o); }); P.redraw(); out(); };
+  se.addEventListener('change', all); sm.addEventListener('change', () => { P.redraw(); out(); }); watch(['dfr-n'], () => { P.redraw(); out(); }); all();
+});
+
+/* dass:end */</script>
 </body>
 </html>

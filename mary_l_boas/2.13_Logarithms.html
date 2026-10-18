@@ -117,6 +117,23 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +158,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -176,6 +194,52 @@ $$\ln z=\operatorname{Ln}r+i(\theta+2n\pi),\qquad n=0,\pm1,\pm2,\dots$$
 <div class="box warn"><span class="tag">Notation clash</span>
 <p>Boas writes $\operatorname{Ln}r$ for the real log of a positive number <b>and</b> $\operatorname{Ln}z$ for the principal complex log. They agree for positive real $z$, because the principal $\theta$ of a positive real is $0$ in both conventions.</p></div>
 
+<!-- dass:start 10__many -->
+<h2 id="dass-20-29" class="dass"><span class="dtag">H.K. Dass §20.29</span>Logarithm of a complex variable: general value $\operatorname{Log}$ and principal value $\log$</h2>
+<p><b>Definition.</b> If $z=e^w$ then $w=\log z$. Because $e^{w+2n\pi i}=e^w$, every $z\ne0$ has infinitely many logarithms. H.K. Dass writes the <b>general value</b> with a capital L and the <b>principal value</b> with a small l:</p>
+$$\operatorname{Log}z=\log z+2n\pi i,\qquad n=0,\pm1,\pm2,\dots$$
+<p>(Some books, including Boas above, use the opposite capitalisation: "Ln" for the principal value. Always check which convention a question uses.)</p>
+
+<h3>Separating $\log(x+iy)$ into real and imaginary parts</h3>
+<p>Put $x=r\cos\theta$ and $y=r\sin\theta$, so $r=\sqrt{x^2+y^2}$ and $\theta=\tan^{-1}\frac yx$ (in the correct quadrant, §20.15). Then</p>
+$$\operatorname{Log}(x+iy)=\log\left[r\,e^{i(2n\pi+\theta)}\right]=\log r+i(2n\pi+\theta).$$
+$$\boxed{\operatorname{Log}(x+iy)=\tfrac12\log(x^2+y^2)+i\left(2n\pi+\tan^{-1}\tfrac yx\right),\qquad\log(x+iy)=\tfrac12\log(x^2+y^2)+i\tan^{-1}\tfrac yx}$$
+<p>The real part is the same for every branch. Only the imaginary part changes, in steps of $2\pi$.</p>
+
+<div class="widget" id="w-dass-log">
+<div class="wt">Interactive — all values of $\operatorname{Log}z$ form a vertical ladder</div>
+<div class="wd">Drag $z$ in the left panel. The right panel is the $w$-plane: the values $\operatorname{Log}z=\log r+i(\theta+2n\pi)$ sit on one vertical line, $2\pi$ apart. The ringed one ($n=0$) is the principal value. Drag $z$ once around the origin and watch every value climb one rung.</div>
+<div class="grid2"><canvas id="cv-dass-logz"></canvas><canvas id="cv-dass-logw"></canvas></div>
+<div class="readout" id="dlg-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.29) — general values of $\operatorname{Log}i$ and $\operatorname{Log}(-5)$</div><div class="bd"><ol class="steps">
+<li>$i=e^{i\pi/2}$, so $\operatorname{Log}i=i\left(2n\pi+\frac\pi2\right)=\frac{(4n+1)\pi i}{2}$.</li>
+<li>$-5=5e^{i\pi}$, so $\operatorname{Log}(-5)=\log5+(2n+1)\pi i$. Its principal value is $\log5+i\pi$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "the general value of $\log i$" appears as a direct MCQ. The answer has $(4n+1)$, not $(2n+1)$.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.29) — $\operatorname{Log}(1+i)+\operatorname{Log}(1-i)$</div><div class="bd"><ol class="steps">
+<li>$\operatorname{Log}(1+i)=\log\sqrt2+i\left(2n\pi+\frac\pi4\right)$ and $\operatorname{Log}(1-i)=\log\sqrt2+i\left(2m\pi-\frac\pi4\right)$.</li>
+<li>Sum: $\log2+2(n+m)\pi i=\log2+2k\pi i$, with $k=n+m$ any integer.</li>
+<li>This equals $\operatorname{Log}[(1+i)(1-i)]=\operatorname{Log}2$, as sets. (If you use the <i>same</i> $n$ in both terms, as Dass does, you get $\log2+4n\pi i$. That is a correct value, but it misses the odd multiples of $2\pi i$.)</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $\operatorname{Log}(z_1z_2)=\operatorname{Log}z_1+\operatorname{Log}z_2$ holds for general values (as sets), but can fail for principal values. MCQs test exactly this distinction.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.29) — $\log\dfrac{x+iy}{x-iy}=2i\tan^{-1}\dfrac yx$ (principal values, $x\gt0$)</div><div class="bd"><ol class="steps">
+<li>$\log(x+iy)=\log r+i\theta$ and $\log(x-iy)=\log r-i\theta$, with $\theta=\tan^{-1}\frac yx\in\left(-\frac\pi2,\frac\pi2\right)$.</li>
+<li>Subtract: $\log\frac{x+iy}{x-iy}=2i\theta=2i\tan^{-1}\frac yx$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> read backwards, this gives $\tan^{-1}u=\frac{1}{2i}\log\frac{1+iu}{1-iu}$, the log form of the inverse tangent used in §20.32 and in contour integrals.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.29) — for real $a$ and $b\gt0$, $e^{2ai\cot^{-1}b}\left(\dfrac{bi-1}{bi+1}\right)^{-a}=1$</div><div class="bd"><ol class="steps">
+<li>$\frac{bi-1}{bi+1}=\frac{b+i}{b-i}$ (multiply the top and bottom by $-i$).</li>
+<li>$\log\frac{b+i}{b-i}=2i\tan^{-1}\frac1b=2i\cot^{-1}b$ (previous example with $x=b$, $y=1$).</li>
+<li>So $\left(\frac{bi-1}{bi+1}\right)^{-a}=e^{-a\log\frac{b+i}{b-i}}=e^{-2ai\cot^{-1}b}$ (principal values), and multiplying by $e^{2ai\cot^{-1}b}$ gives $1$. $\blacksquare$</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> complex powers are always handled as $a^b=e^{b\log a}$ (§20.29 feeding into 2.14). That one rule makes such identities routine.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example — $\log\dfrac{1}{1-e^{i\theta}}=\log\left(\frac12\operatorname{cosec}\frac\theta2\right)+i\left(\frac\pi2-\frac\theta2\right)$, $\ 0\lt\theta\lt2\pi$</div><div class="bd"><ol class="steps">
+<li>$1-e^{i\theta}=-2i\sin\frac\theta2\,e^{i\theta/2}=2\sin\frac\theta2\,e^{i(\theta/2-\pi/2)}$.</li>
+<li>Its reciprocal has modulus $\frac12\operatorname{cosec}\frac\theta2$ and argument $\frac\pi2-\frac\theta2$. Take the log.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the real and imaginary parts are $\sum\frac{\cos n\theta}{n}$ and $\sum\frac{\sin n\theta}{n}$, the Fourier series of the log and sawtooth functions.</p></div></div>
+<!-- dass:end -->
 <h2 id="examples">3. Boas's examples, and more</h2>
 <div class="ex"><div class="hd">Example 1 — $\ln(-1)$</div><div class="bd"><ol class="steps">
 <li>$-1$ has $r=1$ and $\theta=\pi,-\pi,3\pi,\dots$ (Fig. 9.2).</li>
@@ -283,7 +347,69 @@ $$\ln z=\operatorname{Ln}r+i(\theta+2n\pi),\qquad n=0,\pm1,\pm2,\dots$$
 <div class="mcq" data-ans="1" data-ok="$\operatorname{Re}\ln z=\operatorname{Ln}|z|=\operatorname{Ln}5$." data-no="$\operatorname{Re}\ln z=\operatorname{Ln}|z|$."><p>2. $\operatorname{Re}\ln(3+4i)=$</p><div class="opts"><button>$\operatorname{Ln}3$</button><button>$\operatorname{Ln}5$</button><button>$\arctan\frac43$</button><button>$\operatorname{Ln}7$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="0" data-ok="The values of $\ln z$ differ by integer multiples of $2\pi i$." data-no="$e^w$ has period $2\pi i$."><p>3. Two values of $\ln z$ always differ by</p><div class="opts"><button>a multiple of $2\pi i$</button><button>a multiple of $2\pi$</button><button>a multiple of $\pi i$</button><button>nothing: $\ln z$ is unique</button></div><div class="fb"></div></div>
 
-<h2 id="summary">10. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">10. Going deeper: $\ln z$ as an integral, and what a branch cut really is</h2>
+<h3>The logarithm is the integral of $1/z$</h3>
+<p>For real $x\gt0$, $\ln x=\int_1^x\frac{dt}{t}$. In the complex plane, integrate along any path $\gamma$ from $1$ to $z$ that avoids $0$. Write $\zeta=re^{i\phi}$, so that</p>
+$$\frac{d\zeta}{\zeta}=\frac{dr}{r}+i\,d\phi\quad\Longrightarrow\quad\int_\gamma\frac{d\zeta}{\zeta}=\ln|z|+i\,\Delta\phi_\gamma .$$
+<p>The real part depends only on the endpoints. The imaginary part is the <b>total angle swept</b> along the path. Two paths that differ by winding $n$ times around the origin give results that differ by $2\pi in$. This is the whole content of "$\ln z$ is multivalued". The extra values are winding numbers, and they become the $2\pi i$ in the residue theorem.</p>
+<h3>Branch cuts: making a single-valued choice</h3>
+<p>To get a single-valued, analytic function we forbid paths that cross some curve from $0$ to $\infty$, called the <b>branch cut</b>. Then the angle $\phi$ can no longer wind. Standard choices:</p>
+<table class="t">
+<tr><th>Branch</th><th>Range of $\arg$</th><th>Cut along</th><th>Used for</th></tr>
+<tr><td>Principal $\operatorname{Ln}$</td><td>$(-\pi,\pi]$</td><td>negative real axis</td><td>calculators, most exam questions</td></tr>
+<tr><td>"Keyhole" branch</td><td>$[0,2\pi)$</td><td>positive real axis</td><td>$\int_0^\infty\frac{x^{p-1}}{1+x}dx$ type integrals (14.7)</td></tr>
+<tr><td>Any ray</td><td>$(\alpha,\alpha+2\pi]$</td><td>the ray $\arg z=\alpha$</td><td>chosen to avoid the poles of the integrand</td></tr>
+</table>
+<p>Across the cut, $\operatorname{Ln}z$ jumps by $2\pi i$. Away from the cut it is analytic, with $\frac{d}{dz}\operatorname{Ln}z=\frac1z$.</p>
+
+<h2 id="exampat">11. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Principal values</td><td>$\operatorname{Ln}(-1-i)$, $\operatorname{Ln}(-e)$, $\operatorname{Ln}(i)$</td><td>$\ln|z|+i\operatorname{Arg}z$; sketch to get the angle</td></tr>
+<tr><td>Laws that fail</td><td>Which identities hold for principal logs (multiple correct)</td><td>$e^{\operatorname{Ln}z}=z$ is always true; anything that adds angles can overflow</td></tr>
+<tr><td>Solving</td><td>$e^{f(z)}=w$, $\ln z=a+ib$</td><td>Exponentiate, or take all logs</td></tr>
+<tr><td>Contour link</td><td>$\int dz/z$ along an arc</td><td>$i\times$(angle swept)</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$\operatorname{Ln}(e^z)=z$ is false when $|\operatorname{Im}z|\gt\pi$. For example $\operatorname{Ln}(e^{3\pi i})=i\pi$.</li>
+<li>$\operatorname{Ln}(z^2)\ne2\operatorname{Ln}z$ in general. Try $z=-1$: $\operatorname{Ln}1=0$, but $2\operatorname{Ln}(-1)=2\pi i$.</li>
+<li>"All values of $\ln z$" includes $2\pi ik$ for <b>every</b> integer $k$, negative ones too.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$\operatorname{Ln}i=\frac{i\pi}2$, $\operatorname{Ln}(-1)=i\pi$, $\operatorname{Ln}(-i)=-\frac{i\pi}2$.</li>
+<li>$\operatorname{Re}\ln z=\ln|z|$ for every branch.</li>
+</ul></div>
+
+<h2 id="xprob">12. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> The principal value $\operatorname{Ln}(-1-i)$ is <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $\ln\sqrt2+\frac{5i\pi}4$</span><span>(b) $\ln\sqrt2-\frac{3i\pi}4$</span><span>(c) $\ln2-\frac{3i\pi}4$</span><span>(d) $\ln\sqrt2+\frac{i\pi}4$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$|z|=\sqrt2$ and $\operatorname{Arg}z=-\frac{3\pi}4$ (quadrant III). Option <b>(b)</b>. Option (a) uses the $[0,2\pi)$ convention.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> Find $\operatorname{Re}\operatorname{Ln}(3+4i)$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\ln|3+4i|=\ln5=\mathbf{1.609}$.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> If $\operatorname{Ln}z=2+\frac{i\pi}3$, find $\operatorname{Re}z$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$z=e^2e^{i\pi/3}$, so $\operatorname{Re}z=\frac{e^2}2=\mathbf{3.695}$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> (Multiple correct) With principal values: <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\operatorname{Ln}(z_1z_2)=\operatorname{Ln}z_1+\operatorname{Ln}z_2$ for all $z_1,z_2\ne0$</span><span>(b) $e^{\operatorname{Ln}z}=z$ for all $z\ne0$</span><span>(c) $\operatorname{Ln}(e^z)=z$ for all $z$</span><span>(d) $\operatorname{Ln}\bar z=\overline{\operatorname{Ln}z}$ for $z$ not on the negative real axis</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(b), (d).</b> (a) fails for $z_1=z_2=-1$. (c) fails for $z=3\pi i$. (d) holds because $\operatorname{Arg}\bar z=-\operatorname{Arg}z$ off the cut.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> $\displaystyle\int_\gamma\frac{dz}{z}$, where $\gamma$ is the upper half of the unit circle from $1$ to $-1$, equals <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $0$</span><span>(b) $i\pi$</span><span>(c) $-i\pi$</span><span>(d) $2\pi i$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\ln|z|$ does not change (it is $0$ at both ends), and the angle sweeps $+\pi$. Option <b>(b)</b>. The lower half gives $-i\pi$. The difference, $2\pi i$, is the full circle.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Solve $e^{2z}+e^z+1=0$. <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$e^z=\omega$ or $\omega^2$, where $\omega=e^{2\pi i/3}$. Both have modulus 1, so $\operatorname{Re}z=0$, and $z=\pm\frac{2\pi i}3+2k\pi i$, $k\in\mathbb Z$.</p></details></div>
+<div class="mcq" data-ans="1" data-ok="$|i|=1$ and $\operatorname{Arg}i=\frac\pi2$." data-no="$\operatorname{Ln}z=\ln|z|+i\operatorname{Arg}z$."><p>Rapid fire: $\operatorname{Ln}i=$</p><div class="opts"><button>$1$</button><button>$\frac{i\pi}2$</button><button>$i$</button><button>$\frac\pi2$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">13. Connections</h2>
+<div class="xlinks">
+<a href="2.8_Elementary_Functions_of_Complex_Numbers.html"><b>Builds on</b>2.8 $e^z$<small>The function being inverted</small></a>
+<a href="2.14_Complex_Roots_and_Powers.html"><b>Next</b>2.14 $a^b=e^{b\ln a}$<small>Every complex power uses the logarithm</small></a>
+<a href="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html"><b>Uses</b>2.15 Inverse trig<small>All six inverses are logarithms</small></a>
+<a href="14.1_Introduction.html"><b>Later</b>14.1 Branches<small>Single-valuedness and branch points</small></a>
+<a href="14.3_Contour_Integrals.html"><b>Later</b>14.3 $\oint dz/z=2\pi i$<small>The winding that makes $\ln$ multivalued</small></a>
+<a href="14.7_Evaluation_of_Definite_Integrals_by_Residues.html"><b>Later</b>14.7 Keyhole contours<small>Branch cuts used on purpose</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="10. Summary">14. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$\ln z=\operatorname{Ln}|z|+i(\theta+2n\pi)$ for $z\ne0$: infinitely many values, $2\pi i$ apart.</li>
 <li>Principal value: $\theta$ in $[0,2\pi)$ (Boas) or $(-\pi,\pi]$. Negative numbers have logs, e.g. $\ln(-1)=i\pi$.</li>
@@ -841,5 +967,38 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* H.K. Dass §20.29 — the Log ladder (tracks winding while dragging) */
+  let z = [1.5, 1], wind = 0, lastArg = Cx.arg(z);
+  const Z = new Plane('#cv-dass-logz', { span: 2.6, aspect: 1, snap: 0.02, draw: p => {
+    p.circle([0, 0], Cx.abs(z), { color: '--grid', dash: [4, 4], width: 1 });
+    p.angleArc(0, Cx.arg(z) + TAU * wind, 22, { color: '--accent2', width: 2 });
+    p.arrow([0, 0], z, { color: '--accent', width: 2.5 }); p.dot(z, { r: 7, color: '--accent', label: 'z' });
+    p.dot([0, 0], { r: 4, color: '--warn' });
+  }});
+  const W = new Plane('#cv-dass-logw', { span: 4, aspect: 1, snap: 0, axisLabels: ['log r', 'arg'], draw: p => {
+    const u = Math.log(Cx.abs(z)), t = Cx.arg(z);
+    for (let n = -3; n <= 3; n++) {
+      const v = [u, t + TAU * n]; p.dot(v, { r: n === 0 ? 7 : 5, color: n === 0 ? '--accent2' : '--accent3', label: 'n=' + n, alpha: n === 0 ? 1 : 0.8 });
+    }
+    p.dot([u, Cx.arg(z) + TAU * wind], { r: 11, color: '--accent4', hollow: true });
+    p.line([u, -50], [u, 50], { color: '--accent3', dash: [3, 5], width: 1 });
+  }});
+  W.cy = 0;
+  Z.addDrag(() => z, v => {
+    if (Math.hypot(v[0], v[1]) < 0.08) return;
+    const a = Math.atan2(v[1], v[0]); let d = a - lastArg; if (d > PI) wind--; else if (d < -PI) wind++; lastArg = a; z = v;
+  });
+  const out = () => {
+    const r = Cx.abs(z), t = Cx.arg(z);
+    W.cy = Math.max(-6, Math.min(6, t + TAU * wind)); W.redraw();
+    texMix('#dlg-out', `$z=${Cx.tex(z, 2)}$, $r=${fnum(r, 3)}$, $\\theta=${fnum(t, 3)}$<br>$\\operatorname{Log}z=${fnum(Math.log(r), 4)}+i(${fnum(t, 4)}+2n\\pi)$. Principal value ($n=0$): $${Cx.tex([Math.log(r), t], 4)}$` +
+      `<br>Following $z$ continuously, you have wound around $0$ <b>${wind}</b> time(s), so the ringed value is now the $n=${wind}$ branch.`);
+  };
+  Z.onchange = out; out();
+});
+
+/* dass:end */</script>
 </body>
 </html>

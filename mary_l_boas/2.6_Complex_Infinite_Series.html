@@ -117,6 +117,23 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +158,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -196,6 +214,66 @@ $$\frac{1-re^{-i\theta}}{(1-re^{i\theta})(1-re^{-i\theta})}=\frac{1-r\cos\theta+
 $$\boxed{\sum_{n=0}^\infty r^n\cos n\theta=\frac{1-r\cos\theta}{1-2r\cos\theta+r^2},\qquad \sum_{n=1}^\infty r^n\sin n\theta=\frac{r\sin\theta}{1-2r\cos\theta+r^2}}$$
 <p>(This is how the Poisson kernel and many Fourier-series sums are found. With $r=\tfrac12$: $\sum\frac{\cos n\theta}{2^n}=\frac{4-2\cos\theta}{5-4\cos\theta}$.)</p>
 
+<!-- dass:start 10__geo -->
+<h2 id="dass-21-3" class="dass"><span class="dtag">H.K. Dass §21.3</span>Summing sine and cosine series: the "$C+iS$" method</h2>
+<p><b>Recipe.</b> Let $C$ be the cosine series you want to sum.</p>
+<ol class="steps">
+<li>Write down the <b>matching sine series</b> $S$, with the same coefficients and the same angles.</li>
+<li>Form $C+iS$. Each pair $\cos\phi+i\sin\phi$ becomes $e^{i\phi}$, so $C+iS$ is a series in powers of something like $e^{i\theta}$.</li>
+<li>Recognise it as one of the standard series below and write down its sum.</li>
+<li>Separate into real and imaginary parts: $C$ is the real part and $S$ the imaginary part.</li>
+</ol>
+<table class="t dt">
+<tr><th>Standard series</th><th>Sum</th><th>Recognise it by</th></tr>
+<tr><td>(a) Geometric</td><td>$a+ar+\cdots+ar^{n-1}=\frac{a(1-r^n)}{1-r}$; $\ a+ar+\cdots=\frac{a}{1-r}$ ($|r|\lt1$)</td><td>constant coefficients, or $c^n$</td></tr>
+<tr><td>(b) Binomial</td><td>$1+nx+\frac{n(n-1)}{2!}x^2+\cdots=(1+x)^n$</td><td>products like $\frac{1\cdot3\cdot5}{2\cdot4\cdot6}$, or $\frac{n(n+1)}{1\cdot2}$</td></tr>
+<tr><td>(c) Exponential</td><td>$1+x+\frac{x^2}{2!}+\cdots=e^x$</td><td>$\frac{1}{n!}$ coefficients</td></tr>
+<tr><td>(d) $\sin$, $\cos$, $\sinh$, $\cosh$</td><td>$x-\frac{x^3}{3!}+\cdots=\sin x$, etc.</td><td>only odd or only even factorials</td></tr>
+<tr><td>(e) Logarithmic</td><td>$x-\frac{x^2}2+\frac{x^3}3-\cdots=\log(1+x)$; $\ -x-\frac{x^2}{2}-\cdots=\log(1-x)$</td><td>$\frac1n$ coefficients</td></tr>
+<tr><td>(f) Gregory</td><td>$x-\frac{x^3}3+\frac{x^5}5-\cdots=\tan^{-1}x$; $\ x+\frac{x^3}3+\cdots=\tanh^{-1}x=\frac12\log\frac{1+x}{1-x}$</td><td>odd powers with $\frac1{2k+1}$</td></tr>
+</table>
+
+<div class="widget" id="w-dass-cis">
+<div class="wt">Interactive — partial sums of $C+iS$ converge to the closed form</div>
+<div class="wd">Choose a series type: exponential $\sum\frac{x^n}{n!}\cos(\alpha+n\beta)$, geometric $\sum c^n\cos n\alpha$, logarithmic $\sum(-1)^{n+1}\frac{c^n}{n}\cos n\theta$, or binomial $\sum\frac{1\cdot3\cdots}{2\cdot4\cdots}\cos2n\theta$. Each dot is a partial sum of $C+iS$ in the complex plane. They spiral into the ringed point, the closed form. Its real part is $C$ and its imaginary part is $S$.</div>
+<div class="ctrls"><label>series <select id="dcs-type"><option value="exp">exponential</option><option value="geo">geometric</option><option value="log">logarithmic</option><option value="bin">binomial</option></select></label>
+<label>$\theta$ or $\beta$ <input type="range" id="dcs-t" min="0.1" max="3.04" step="0.01" value="1"><output></output></label>
+<label>$x$ or $c$ <input type="range" id="dcs-x" min="0.1" max="0.95" step="0.01" value="0.6"><output></output></label>
+<label>terms <input type="range" id="dcs-n" min="1" max="60" step="1" value="8"><output></output></label></div>
+<canvas id="cv-dass-cis"></canvas>
+<div class="readout" id="dcs-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.3, exponential type) — $C=\cos\alpha+x\cos(\alpha+\beta)+\frac{x^2}{2!}\cos(\alpha+2\beta)+\cdots$</div><div class="bd"><ol class="steps">
+<li>$C+iS=e^{i\alpha}\left[1+xe^{i\beta}+\frac{(xe^{i\beta})^2}{2!}+\cdots\right]=e^{i\alpha}\exp\left(xe^{i\beta}\right)$.</li>
+<li>$=e^{i\alpha}e^{x\cos\beta}e^{ix\sin\beta}=e^{x\cos\beta}\left[\cos(\alpha+x\sin\beta)+i\sin(\alpha+x\sin\beta)\right]$.</li>
+<li>So $C=e^{x\cos\beta}\cos(\alpha+x\sin\beta)$ and $S=e^{x\cos\beta}\sin(\alpha+x\sin\beta)$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $\exp(xe^{i\beta})$ is also the generating function behind Bessel-function and coherent-state series. Recognising $\frac{x^n}{n!}$ is the key step.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.3, finite geometric) — $\sin\alpha+\sin(\alpha+\beta)+\cdots+\sin(\alpha+\overline{n-1}\beta)$</div><div class="bd"><ol class="steps">
+<li>$C+iS=e^{i\alpha}\left(1+e^{i\beta}+\cdots+e^{i(n-1)\beta}\right)=e^{i\alpha}\dfrac{1-e^{in\beta}}{1-e^{i\beta}}$.</li>
+<li>Half-angle factoring: $1-e^{in\beta}=-2i\sin\frac{n\beta}2e^{in\beta/2}$ and $1-e^{i\beta}=-2i\sin\frac\beta2e^{i\beta/2}$.</li>
+<li>$C+iS=e^{i\left[\alpha+(n-1)\beta/2\right]}\dfrac{\sin(n\beta/2)}{\sin(\beta/2)}$.</li>
+<li>So $S=\sin\left(\alpha+\frac{(n-1)\beta}2\right)\sin\frac{n\beta}2\operatorname{cosec}\frac\beta2$, and $C$ is the same with $\cos$ in front.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> this is the $N$-slit grating and phased-array formula. Its square gives the intensity pattern.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.3, exponential type) — $S=\frac{\sin\theta}{1!}-\frac{\sin2\theta}{2!}+\frac{\sin3\theta}{3!}-\cdots$</div><div class="bd"><ol class="steps">
+<li>$C+iS=\frac{e^{i\theta}}{1!}-\frac{e^{2i\theta}}{2!}+\cdots=1-\left(1-e^{i\theta}+\frac{e^{2i\theta}}{2!}-\cdots\right)=1-e^{-e^{i\theta}}$.</li>
+<li>$e^{-e^{i\theta}}=e^{-\cos\theta}\left[\cos(\sin\theta)-i\sin(\sin\theta)\right]$.</li>
+<li>So $S=e^{-\cos\theta}\sin(\sin\theta)$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> alternating signs with $\frac1{n!}$ point to $e^{-x}$. Adding and subtracting the missing $n=0$ term is the usual trick.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.3, binomial type) — $C=1+\frac12\cos2\theta+\frac{1\cdot3}{2\cdot4}\cos4\theta+\cdots$, $\ 0\lt\theta\lt\pi$</div><div class="bd"><ol class="steps">
+<li>The coefficients are those of $(1-u)^{-1/2}=1+\frac12u+\frac{1\cdot3}{2\cdot4}u^2+\cdots$, with $u=e^{2i\theta}$.</li>
+<li>$1-e^{2i\theta}=-2i\sin\theta\,e^{i\theta}=2\sin\theta\,e^{i(\theta-\pi/2)}$.</li>
+<li>So $C+iS=(2\sin\theta)^{-1/2}e^{-i(\theta/2-\pi/4)}$, and $C=(2\sin\theta)^{-1/2}\cos\left(\frac\pi4-\frac\theta2\right)$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $\frac{1\cdot3\cdots(2n-1)}{2\cdot4\cdots2n}$ coefficients signal $(1-u)^{-1/2}$. The same coefficients appear in Legendre polynomial generating functions.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.3, geometric and logarithmic types) — $\sum c^n\sin n\alpha$ and $\sum(-1)^{n+1}\frac{c^n}{n}\sin n\theta$, $\ |c|\lt1$</div><div class="bd"><ol class="steps">
+<li>Geometric: $C+iS=\frac{ce^{i\alpha}}{1-ce^{i\alpha}}$. Multiply the top and bottom by $1-ce^{-i\alpha}$: $\frac{ce^{i\alpha}-c^2}{1-2c\cos\alpha+c^2}$. So $S=\frac{c\sin\alpha}{1-2c\cos\alpha+c^2}$.</li>
+<li>Logarithmic: $C+iS=\log(1+ce^{i\theta})$. So $C=\frac12\log(1+2c\cos\theta+c^2)$ and $S=\tan^{-1}\frac{c\sin\theta}{1+c\cos\theta}$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $\frac{1-c^2}{1-2c\cos\alpha+c^2}$ (the Poisson kernel) and these log sums appear in Fourier-series and potential problems.</p></div></div>
+<!-- dass:end -->
 <h2 id="examples">4. Boas's examples</h2>
 <div class="ex"><div class="hd">Example 1 — $1+\frac{1+i}{2}+\frac{(1+i)^2}{4}+\dots=\sum\left(\frac{1+i}{2}\right)^n$</div><div class="bd"><ol class="steps">
 <li>Ratio test: $\rho=\lim\left|\dfrac{(1+i)^{n+1}}{2^{n+1}}\cdot\dfrac{2^n}{(1+i)^n}\right|=\left|\dfrac{1+i}{2}\right|=\dfrac{\sqrt2}{2}\lt1$.</li>
@@ -311,7 +389,67 @@ $$\boxed{\sum_{n=0}^\infty r^n\cos n\theta=\frac{1-r\cos\theta}{1-2r\cos\theta+r
 <div class="mcq" data-ans="0" data-ok="$\rho=|1+i|/2=1/\sqrt2\lt1$." data-no="Compute $\rho=|z_{n+1}/z_n|$."><p>2. $\sum\frac{(1+i)^n}{2^n}$:</p><div class="opts"><button>converges absolutely</button><button>diverges</button><button>test fails</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="2" data-ok="Geometric: $1/(1-z)$ with $z=-1/2$." data-no="$\sum z^n=1/(1-z)$."><p>3. $\sum_{n=0}^\infty(-\tfrac12)^n=$</p><div class="opts"><button>$2$</button><button>$\tfrac12$</button><button>$\tfrac23$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">11. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">11. Going deeper: Dirichlet's test, and summing trigonometric series in one line</h2>
+<h3>When the terms are not absolutely summable</h3>
+<p>$\sum\frac{i^n}{n}$ and $\sum\frac{e^{in\theta}}{n}$ converge, but not absolutely. The ratio test gives $1$ and fails. The tool that settles them is <b>Dirichlet's test</b>:</p>
+<div class="box thm"><span class="tag">Dirichlet's test</span><p>If the partial sums $B_N=\sum_{n=1}^Nb_n$ of the complex numbers $b_n$ stay bounded, $|B_N|\le M$, and the real numbers $a_n$ decrease monotonically to $0$, then $\sum a_nb_n$ converges.</p></div>
+<p><b>Why (summation by parts):</b> $\sum_{n=1}^Na_nb_n=a_NB_N+\sum_{n=1}^{N-1}(a_n-a_{n+1})B_n$. The first term is at most $a_NM\to0$. The second series converges absolutely, because $\sum|a_n-a_{n+1}||B_n|\le M\sum(a_n-a_{n+1})=M(a_1-\lim a_n)$.</p>
+<p>For $b_n=e^{in\theta}$ with $\theta\ne2\pi k$, the geometric sum gives $|B_N|=\left|\frac{e^{i\theta}(1-e^{iN\theta})}{1-e^{i\theta}}\right|\le\frac{2}{|1-e^{i\theta}|}=\frac1{|\sin(\theta/2)|}$, which is bounded. So $\sum\frac{e^{in\theta}}{n^p}$ converges for every $p\gt0$ and $\theta\ne2\pi k$. It converges absolutely only for $p\gt1$.</p>
+<h3>Trigonometric sums from the geometric series</h3>
+<p>For $0\le r\lt1$, take real and imaginary parts of $\sum_{n=0}^\infty(re^{i\theta})^n=\frac1{1-re^{i\theta}}$. Multiply top and bottom by $1-re^{-i\theta}$:</p>
+$$\sum_{n=0}^\infty r^n\cos n\theta=\frac{1-r\cos\theta}{1-2r\cos\theta+r^2},\qquad\sum_{n=1}^\infty r^n\sin n\theta=\frac{r\sin\theta}{1-2r\cos\theta+r^2}.$$
+<p>Twice the first sum minus 1 is the <b>Poisson kernel</b> $\frac{1-r^2}{1-2r\cos\theta+r^2}$. It solves Laplace's equation in a disk, which you meet again in 14.10. Differentiating $\sum z^n$ gives $\sum nz^n=\frac{z}{(1-z)^2}$. This handles sums weighted by $n$.</p>
+
+<h2 id="exampat">12. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Geometric series</td><td>Sum of $\sum w^n$, or whether it converges</td><td>Converges iff $|w|\lt1$, with sum $\frac{1}{1-w}$</td></tr>
+<tr><td>Trig series</td><td>$\sum r^n\cos n\theta$, $\sum\frac{\sin n\theta}{2^n}$</td><td>Real or imaginary part of a geometric sum</td></tr>
+<tr><td>Classification</td><td>Absolutely / conditionally convergent / divergent (often multiple correct)</td><td>Compare $|z_n|$ with $p$-series; Dirichlet for oscillating terms</td></tr>
+<tr><td>Weighted sums</td><td>$\sum nz^n$, $\sum n^2z^n$</td><td>Differentiate the geometric series</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$\sum e^{in\theta}$ never converges for real $\theta$: $|e^{in\theta}|=1$, so the terms do not go to $0$.</li>
+<li>"Converges" is not "converges absolutely". $\sum\frac{i^n}{n}$ converges, but $\sum\frac1n$ diverges.</li>
+<li>The ratio test with limit $1$ tells you nothing. It is not "divergent".</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$|w|$ decides geometric series: $\left|\frac{3+4i}{6}\right|=\frac56\lt1$ converges, and $\left|\frac{2}{1+i}\right|=\sqrt2\gt1$ diverges.</li>
+<li>$\sum\frac{i^n}{n}=-\ln(1-i)=-\tfrac12\ln2+\tfrac{i\pi}4$. That is $\sum\frac{(-1)^k}{2k+1}=\frac\pi4$ (Leibniz) and $\sum\frac{(-1)^{k+1}}{2k}=\frac12\ln2$ together.</li>
+</ul></div>
+
+<h2 id="xprob">13. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> $\displaystyle\sum_{n=0}^\infty\left(\frac i3\right)^n=$ <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $0.9+0.3i$</span><span>(b) $0.9-0.3i$</span><span>(c) $1.5$</span><span>(d) diverges</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{1}{1-i/3}=\frac{3}{3-i}=\frac{3(3+i)}{10}=0.9+0.3i$. Option <b>(a)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> Evaluate $\displaystyle\sum_{n=0}^\infty\frac{\cos(n\pi/2)}{2^n}$. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>This is $\operatorname{Re}\sum(i/2)^n=\operatorname{Re}\frac{2}{2-i}=\operatorname{Re}\frac{2(2+i)}{5}=\mathbf{0.8}$. Check: $1-\frac14+\frac1{16}-\dots=\frac{1}{1+1/4}=0.8$. ✓</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> Evaluate $\displaystyle\sum_{n=1}^\infty\frac{n\cos(n\pi/2)}{2^n}$. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\sum nz^n=\frac{z}{(1-z)^2}$ with $z=\frac i2$: $(1-\frac i2)^2=\frac{3-4i}{4}$, so the sum is $\frac{2i}{3-4i}=\frac{-8+6i}{25}$. The real part is $\mathbf{-0.32}$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> (Multiple correct) Which series converge <i>absolutely</i>? <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\sum\frac{i^n}{n}$</span><span>(b) $\sum\frac{i^n}{n^2}$</span><span>(c) $\sum\left(\frac{1+i}{2}\right)^n$</span><span>(d) $\sum\left(\frac{2}{1+i}\right)^n$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(b), (c).</b> (a) converges only conditionally. (c) is geometric with $|w|=\frac{1}{\sqrt2}\lt1$. (d) has $|w|=\sqrt2$ and diverges.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> For real $\theta$, the series $\sum_{n=0}^\infty e^{in\theta}$ converges <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) for all $\theta$</span><span>(b) only for $\theta=0$</span><span>(c) for no $\theta$</span><span>(d) for $\theta\ne2\pi k$</span></div>
+<details class="sol"><summary>Show solution</summary><p>The terms have modulus 1 and do not tend to 0, so the series diverges for every $\theta$. Option <b>(c)</b>. Option (d) is the answer for $\sum e^{in\theta}/n$.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Evaluate $\displaystyle\sum_{n=1}^\infty\frac{\sin(n\pi/3)}{2^n}$ to three decimal places, using the formula above. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>With $r=\frac12$ and $\theta=\frac\pi3$: $\frac{\frac12\cdot\frac{\sqrt3}2}{1-\frac12+\frac14}=\frac{\sqrt3/4}{3/4}=\frac1{\sqrt3}=\mathbf{0.577}$.</p></details></div>
+<div class="prob"><div class="q"><b>X7.</b> Show that $\displaystyle\sum_{n=1}^\infty\frac{\cos n\theta}{n}=-\ln\left|2\sin\frac\theta2\right|$ for $0\lt\theta\lt2\pi$. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>By Dirichlet's test the series converges, and Abel's theorem lets us use $\sum\frac{z^n}{n}=-\ln(1-z)$ at $z=e^{i\theta}$. The real part is $-\ln|1-e^{i\theta}|$. Since $|1-e^{i\theta}|=2|\sin\frac\theta2|$, the result follows. (The imaginary part gives $\sum\frac{\sin n\theta}{n}=\frac{\pi-\theta}{2}$, the sawtooth Fourier series.)</p></details></div>
+<div class="mcq" data-ans="2" data-ok="Divergence test: if $z_n\not\to0$ the series diverges." data-no="This is necessary for convergence but not sufficient ($\sum\frac1n$)."><p>Rapid fire: if $\sum z_n$ converges, which must hold?</p><div class="opts"><button>$\sum|z_n|$ converges</button><button>$|z_{n+1}/z_n|\to L\lt1$</button><button>$z_n\to0$</button><button>$\operatorname{Re}z_n\gt0$ eventually</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">14. Connections</h2>
+<div class="xlinks">
+<a href="2.5_Complex_Algebra.html"><b>Builds on</b>2.5 Complex algebra<small>Division and modulus</small></a>
+<a href="2.7_Complex_Power_Series_Disk_of_Convergence.html"><b>Next</b>2.7 Power series<small>Series in $z$ and the disk of convergence</small></a>
+<a href="2.16_Some_Applications.html"><b>Physics</b>2.16 Optics<small>Adding $N$ waves is a finite geometric sum</small></a>
+<a href="2.13_Logarithms.html"><b>Uses</b>2.13 Logarithms<small>$-\ln(1-z)=\sum z^n/n$</small></a>
+<a href="14.4_Laurent_Series.html"><b>Later</b>14.4 Laurent series<small>Built from geometric series in annuli</small></a>
+<a href="14.10_Applications_of_Conformal_Mapping.html"><b>Later</b>14.10 Laplace's equation<small>The Poisson kernel for a disk</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="11. Summary">15. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$\sum z_n$ converges ⇔ $\sum\operatorname{Re}z_n$ and $\sum\operatorname{Im}z_n$ converge.</li>
 <li>Absolute convergence ($\sum|z_n|$, which can be tested with all the positive-term tests) implies convergence.</li>
@@ -867,5 +1005,32 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* H.K. Dass §21.3 — C + iS partial sums */
+  const AL = 0.4; // alpha used in the exponential type
+  const types = {
+    exp: { term: (n, t, x) => { let f = 1; for (let j = 2; j <= n; j++) f *= j; return Cx.scale(Cx.polar(1, AL + n * t), x ** n / f); }, n0: 0,
+      closed: (t, x) => Cx.mul(Cx.polar(1, AL), Cx.exp(Cx.polar(x, t))), tex: 'e^{i\\alpha}\\exp(xe^{i\\beta})\\ (\\alpha=0.4)' },
+    geo: { term: (n, t, x) => Cx.polar(x ** n, n * t), n0: 1, closed: (t, x) => { const u = Cx.polar(x, t); return Cx.div(u, Cx.sub([1, 0], u)); }, tex: '\\frac{ce^{i\\alpha}}{1-ce^{i\\alpha}}' },
+    log: { term: (n, t, x) => Cx.scale(Cx.polar(x ** n, n * t), (n % 2 ? 1 : -1) / n), n0: 1, closed: (t, x) => Cx.log(Cx.add([1, 0], Cx.polar(x, t))), tex: '\\log(1+ce^{i\\theta})' },
+    bin: { term: (n, t) => { let c = 1; for (let j = 1; j <= n; j++) c *= (2 * j - 1) / (2 * j); return Cx.polar(c, 2 * n * t); }, n0: 0, closed: t => Cx.pow(Cx.sub([1, 0], Cx.polar(1, 2 * t)), [-0.5, 0]), tex: '(1-e^{2i\\theta})^{-1/2}' }
+  };
+  const partial = () => { const T = types[val('dcs-type')], t = val('dcs-t'), x = val('dcs-x'), N = val('dcs-n'); let s = [0, 0]; const pts = [s]; for (let n = T.n0; n < T.n0 + N; n++) { s = Cx.add(s, T.term(n, t, x)); pts.push(s); } return { pts, s, cl: T.closed(t, x), T }; };
+  const P = new Plane('#cv-dass-cis', { span: 3, aspect: 0.6, snap: 0, draw: p => {
+    const { pts, cl } = partial();
+    p.path(pts, { color: '--accent', width: 1.5, alpha: 0.6 }); pts.forEach((q, j) => j && p.dot(q, { r: 3, color: '--accent' }));
+    p.dot(cl, { r: 10, color: '--accent2', hollow: true, label: 'C + iS' });
+    p.line([cl[0], 0], cl, { color: '--accent3', dash: [3, 4], width: 1.2 }); p.dot([cl[0], 0], { r: 4, color: '--accent3', label: 'C', dy: 16 });
+  }});
+  const out = () => {
+    const { s, cl, T } = partial(), k = val('dcs-type');
+    const lim = Math.max(1.5, 1.3 * Math.max(Math.abs(cl[0]), Math.abs(cl[1]))); P.span = lim; P.cx = cl[0] / 2; P.cy = cl[1] / 2; P.redraw();
+    texMix('#dcs-out', `Closed form $${T.tex}=${Cx.tex(cl, 5)}$, so $C=${fnum(cl[0], 5)}$ and $S=${fnum(cl[1], 5)}$<br>partial sum ($${val('dcs-n')}$ terms) $=${Cx.tex(s, 5)}$, &nbsp; error $${fnum(Cx.abs(Cx.sub(s, cl)), 6)}$` + (k === 'bin' ? ' (this one converges slowly, like $n^{-1/2}$)' : ''));
+  };
+  watch(['dcs-t', 'dcs-x', 'dcs-n'], out); $('#dcs-type').addEventListener('change', out); out();
+});
+
+/* dass:end */</script>
 </body>
 </html>

@@ -117,6 +117,23 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +158,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -189,6 +207,72 @@ $$\cos i=\frac{e^{i\cdot i}+e^{-i\cdot i}}{2}=\frac{e^{-1}+e}{2}=1.543\ldots=\co
 <li>$e^{i\pi/2}=i$, $e^{-i\pi/2}=-i$, $e^{\ln2}=2$, $e^{-\ln2}=\frac12$.</li>
 <li>$=\dfrac{i\cdot\frac12-(-i)\cdot2}{2i}=\dfrac{\frac52i}{2i}=\dfrac54$.</li></ol></div></div>
 
+<!-- dass:start 10__defs -->
+<h2 id="dass-20-23" class="dass"><span class="dtag">H.K. Dass §20.23, 20.27</span>Circular functions of $x+iy$: real and imaginary parts of all six</h2>
+<p>H.K. Dass defines the circular functions of a complex number by Euler's forms (§20.19):</p>
+$$\cos z=\frac{e^{iz}+e^{-iz}}2,\qquad\sin z=\frac{e^{iz}-e^{-iz}}{2i},\qquad\tan z=\frac{\sin z}{\cos z},\ \text{etc.}$$
+<p>To split $f(x+iy)$ into real and imaginary parts he uses two tools: the addition formulas, and the bridges $\cos(iy)=\cosh y$, $\sin(iy)=i\sinh y$ (from §20.25).</p>
+
+<h3>Sine and cosine: addition formula</h3>
+$$\sin(x+iy)=\sin x\cos(iy)+\cos x\sin(iy)=\sin x\cosh y+i\cos x\sinh y$$
+$$\cos(x+iy)=\cos x\cos(iy)-\sin x\sin(iy)=\cos x\cosh y-i\sin x\sinh y$$
+
+<h3>Tangent and cotangent: multiply by a conjugate-type factor</h3>
+<p>For $\tan$, multiply the top and bottom by $2\cos(x-iy)$. Then use $2\sin A\cos B=\sin(A+B)+\sin(A-B)$ and $2\cos A\cos B=\cos(A+B)+\cos(A-B)$:</p>
+$$\tan(x+iy)=\frac{2\sin(x+iy)\cos(x-iy)}{2\cos(x+iy)\cos(x-iy)}=\frac{\sin2x+\sin2iy}{\cos2x+\cos2iy}=\frac{\sin2x+i\sinh2y}{\cos2x+\cosh2y}.$$
+<p>For $\cot$, multiply by $2\sin(x-iy)$ and use $2\sin A\sin B=\cos(A-B)-\cos(A+B)$:</p>
+$$\cot(x+iy)=\frac{\sin2x-i\sinh2y}{\cosh2y-\cos2x}.$$
+
+<h3>Secant and cosecant: reciprocal, then the same trick</h3>
+$$\sec(x+iy)=\frac{2\cos(x-iy)}{2\cos(x+iy)\cos(x-iy)}=\frac{2(\cos x\cosh y+i\sin x\sinh y)}{\cos2x+\cosh2y}$$
+$$\operatorname{cosec}(x+iy)=\frac{2\sin(x-iy)}{2\sin(x+iy)\sin(x-iy)}=\frac{2(\sin x\cosh y-i\cos x\sinh y)}{\cosh2y-\cos2x}$$
+<div class="box fact"><span class="tag">Pattern to remember</span><p>The two denominators $\cos2x+\cosh2y=2|\cos z|^2$ and $\cosh2y-\cos2x=2|\sin z|^2$ appear in everything. The first vanishes only at the zeros of $\cos z$, and the second only at the zeros of $\sin z$.</p></div>
+
+<div class="widget" id="w-dass-circ">
+<div class="wt">Interactive — real / imaginary part of $f(x+iy)$ (toggle)</div>
+<div class="wd">Choose a function and whether to colour its real or imaginary part (orange positive, blue negative; the dark line is where that part is $0$). Drag the point: the readout evaluates the separation formula above and compares it with direct computation.</div>
+<div class="ctrls"><label>$f$ <select id="dci-f"><option>sin</option><option>cos</option><option>tan</option><option>cot</option><option>sec</option><option>cosec</option></select></label>
+<label>show <select id="dci-p"><option value="re">Re f</option><option value="im">Im f</option></select></label></div>
+<canvas id="cv-dass-circ"></canvas>
+<div class="readout" id="dci-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.27) — if $\tan(A+iB)=x+iy$, then $\tan2A=\dfrac{2x}{1-x^2-y^2}$ and $\tanh2B=\dfrac{2y}{1+x^2+y^2}$</div><div class="bd"><ol class="steps">
+<li>Conjugating: $\tan(A-iB)=x-iy$.</li>
+<li>$\tan2A=\tan[(A+iB)+(A-iB)]=\frac{(x+iy)+(x-iy)}{1-(x+iy)(x-iy)}=\frac{2x}{1-x^2-y^2}$.</li>
+<li>$\tan2iB=\tan[(A+iB)-(A-iB)]=\frac{2iy}{1+x^2+y^2}$, and $\tan2iB=i\tanh2B$, so $\tanh2B=\frac{2y}{1+x^2+y^2}$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> pairing an equation with its conjugate and adding or subtracting the angles separates the real and imaginary unknowns cleanly.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.27) — if $\sin(\alpha+i\beta)=x+iy$: an ellipse and a hyperbola</div><div class="bd"><ol class="steps">
+<li>$x=\sin\alpha\cosh\beta$ and $y=\cos\alpha\sinh\beta$.</li>
+<li>Eliminate $\alpha$ with $\sin^2+\cos^2=1$: $\dfrac{x^2}{\cosh^2\beta}+\dfrac{y^2}{\sinh^2\beta}=1$, an <b>ellipse</b>.</li>
+<li>Eliminate $\beta$ with $\cosh^2-\sinh^2=1$: $\dfrac{x^2}{\sin^2\alpha}-\dfrac{y^2}{\cos^2\alpha}=1$, a <b>hyperbola</b>.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> this is the conformal map $w=\sin z$ (Ch. 14). It sends the lines $\beta=$ const to confocal ellipses and $\alpha=$ const to hyperbolas, the field lines of a charged strip.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.27) — if $\tan(x+iy)=\sin(u+iv)$, then $\dfrac{\sin2x}{\sinh2y}=\dfrac{\tan u}{\tanh v}$</div><div class="bd"><ol class="steps">
+<li>Separate both sides: $\frac{\sin2x}{\cos2x+\cosh2y}+i\frac{\sinh2y}{\cos2x+\cosh2y}=\sin u\cosh v+i\cos u\sinh v$.</li>
+<li>Equate real parts and imaginary parts, then divide one equation by the other. The common denominator cancels: $\frac{\sin2x}{\sinh2y}=\frac{\sin u\cosh v}{\cos u\sinh v}=\frac{\tan u}{\tanh v}$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> dividing the two real equations removes the shared denominator, the fastest route in "if $f(z)=g(w)$, prove…" problems.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.27) — if $\sin(\theta+i\phi)=\tan\alpha+i\sec\alpha$, then $\cos2\theta\cosh2\phi=3$</div><div class="bd"><ol class="steps">
+<li>$\sin\theta\cosh\phi=\tan\alpha$ and $\cos\theta\sinh\phi=\sec\alpha$.</li>
+<li>$\sec^2\alpha-\tan^2\alpha=1$ gives $\cos^2\theta\sinh^2\phi-\sin^2\theta\cosh^2\phi=1$.</li>
+<li>Substitute the double-angle forms $\cos^2\theta=\frac{1+\cos2\theta}2$, $\sinh^2\phi=\frac{\cosh2\phi-1}2$, etc. After simplifying: $\frac{-2+2\cos2\theta\cosh2\phi}{4}=1$, so $\cos2\theta\cosh2\phi=3$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> it shows the usual elimination route: match parts, use a Pythagorean identity, convert to double angles.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.26) — if $\tan(x+iy)=i$, then $x$ is indeterminate and $y$ is infinite</div><div class="bd"><ol class="steps">
+<li>The conjugate equation is $\tan(x-iy)=-i$.</li>
+<li>$\tan2x=\frac{i+(-i)}{1-i(-i)}=\frac00$: indeterminate.</li>
+<li>$\tan2iy=\frac{i-(-i)}{1+i(-i)}=i$, so $\tanh2y=1$ and $2y=\tanh^{-1}1=\infty$.</li>
+<li>So $\tan z=i$ has <b>no finite solution</b>, consistent with $\tan z\ne\pm i$ (2.11, "Going deeper").</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "the number of solutions of $\tan z=i$" is a known MCQ trap. The answer is zero.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.28) — if $e^z=\sin(u+iv)$ with $z=x+iy$, then $2e^{2x}=\cosh2v-\cos2u$</div><div class="bd"><ol class="steps">
+<li>$e^x(\cos y+i\sin y)=\sin u\cosh v+i\cos u\sinh v$.</li>
+<li>Squaring and adding the parts: $e^{2x}=\sin^2u\cosh^2v+\cos^2u\sinh^2v=\cosh^2v-\cos^2u$.</li>
+<li>In double angles: $e^{2x}=\frac{1+\cosh2v}{2}-\frac{1+\cos2u}2=\frac{\cosh2v-\cos2u}{2}$. $\blacksquare$</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "square and add" eliminates the angle variable. It is the same move as finding $|\sin z|^2$.</p></div></div>
+<!-- dass:end -->
 <h2 id="same">4. What stays the same, and what changes</h2>
 <table class="t">
 <tr><th>Property</th><th>Real $x$</th><th>Complex $z$</th></tr>
@@ -229,6 +313,44 @@ $$\frac{d}{dz}\frac{e^{iz}-e^{-iz}}{2i}=\frac{1}{2i}\left(ie^{iz}+ie^{-iz}\right
 <div class="readout" id="mp-out"></div>
 </div>
 
+<!-- dass:start 20__same -->
+<h2 id="dass-21-4" class="dass"><span class="dtag">H.K. Dass §21.4</span>Approximation with the sine and cosine series</h2>
+<p>For small $x$ (in radians), cut the series after the first terms that matter:</p>
+$$\sin x=x-\frac{x^3}{6}+\frac{x^5}{120}-\cdots,\qquad\cos x=1-\frac{x^2}{2}+\frac{x^4}{24}-\cdots,\qquad\tan x=x+\frac{x^3}{3}+\frac{2x^5}{15}+\cdots$$
+<p>Three kinds of question use this:</p>
+<div class="dcase"><p><b>(i) Solve for a small angle:</b> replace the function by its first two terms and solve the resulting simple equation.</p></div>
+<div class="dcase"><p><b>(ii) Solve near a known angle:</b> for $\cos\left(\frac\pi3+\theta\right)=0.49$, expand with the addition formula. Keep terms up to first order in $\theta$ and solve the linear equation.</p></div>
+<div class="dcase"><p><b>(iii) Limits:</b> substitute the series into a $\frac00$ form and keep the lowest surviving power.</p></div>
+
+<div class="widget" id="w-dass-approx">
+<div class="wt">Interactive — how good is the truncated series?</div>
+<div class="wd">Move $x$. The curves are $\frac{\sin x}{x}$ (blue) and its approximations $1-\frac{x^2}6$ (orange) and $1-\frac{x^2}6+\frac{x^4}{120}$ (green). The readout shows the error of each. The first approximation is good to about 0.1% up to $x\approx0.6$ ($34^\circ$), and to 1% up to $x\approx1$ rad.</div>
+<div class="ctrls"><label>$x$ <input type="range" id="dap-x" min="0.01" max="3" step="0.01" value="0.4"><output></output></label></div>
+<canvas id="cv-dass-approx"></canvas>
+<div class="readout" id="dap-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.4) — if $\dfrac{\sin x}{x}=\dfrac{2399}{2400}$, find $x$</div><div class="bd"><ol class="steps">
+<li>$\frac{\sin x}{x}\approx1-\frac{x^2}6$, so $\frac{x^2}6=\frac1{2400}$.</li>
+<li>$x^2=\frac1{400}$, so $x=\frac1{20}$ rad $\approx2.86^\circ$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the same move gives the small-amplitude pendulum, the paraxial approximation in optics, and first-order corrections, so the series must be at your fingertips.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.4) — if $\cos x=\dfrac{1681}{1682}$, find $x$</div><div class="bd"><ol class="steps">
+<li>$1-\cos x=2\sin^2\frac x2=\frac1{1682}$, so $\sin\frac x2=\frac1{58}$.</li>
+<li>For a small angle $\sin\frac x2\approx\frac x2$, so $x\approx\frac1{29}$ rad $\approx1^\circ58.5'$.</li>
+<li>(Directly, $1-\frac{x^2}2=1-\frac1{1682}$ gives $x^2=\frac1{841}$, the same answer.)</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $1682=2\cdot29^2$ is chosen so the answer is clean. Look for such squares before reaching for a calculator.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.4) — solve $\cos\left(\frac\pi3+\theta\right)=0.49$</div><div class="bd"><ol class="steps">
+<li>$\frac12\cos\theta-\frac{\sqrt3}2\sin\theta=0.49$. To first order, $\frac12-\frac{\sqrt3}2\theta=0.49$.</li>
+<li>$\theta=\frac{0.02}{\sqrt3}=0.011547$ rad $\approx39.7'$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> linearising about a known point is the same idea as the error-propagation and perturbation estimates asked in experimental-methods questions.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §21.4) — $\displaystyle\lim_{\theta\to0}\frac{\tan\theta-\sin\theta}{\theta^3}$</div><div class="bd"><ol class="steps">
+<li>$\tan\theta-\sin\theta=\left(\theta+\frac{\theta^3}3\right)-\left(\theta-\frac{\theta^3}6\right)+O(\theta^5)=\frac{\theta^3}2+O(\theta^5)$.</li>
+<li>So the limit is $\frac12$. (Similarly, $\lim\frac{\sin x-x\cos x}{x^3}=\frac16+\frac12=\frac13$.)</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> series substitution settles $\frac00$ limits faster than repeated L'Hôpital, and with fewer chances for error.</p></div></div>
+<!-- dass:end -->
 <h2 id="integrals">5. Integrals made easy with exponentials (Boas Problems 11–18)</h2>
 <p><b>Method:</b> replace each $\sin$ and $\cos$ by (11.3), multiply out (exponents add), integrate each $e^{ikx}$ term, and convert back. The key fact is</p>
 $$\int_{-\pi}^{\pi}e^{ikx}\,dx=\begin{cases}2\pi,&k=0\\[2pt] \dfrac{e^{ik\pi}-e^{-ik\pi}}{ik}=\dfrac{2\sin k\pi}{k}=0,&k=\pm1,\pm2,\dots\end{cases}$$
@@ -317,7 +439,70 @@ $$\int_{-\pi}^{\pi}e^{ikx}\,dx=\begin{cases}2\pi,&k=0\\[2pt] \dfrac{e^{ik\pi}-e^
 <div class="mcq" data-ans="0" data-ok="Since $|\sin z|^2=\sin^2x+\sinh^2y$, all zeros are real." data-no="Use $|\sin z|^2=\sin^2x+\sinh^2y$."><p>2. The zeros of $\sin z$ in $\mathbb C$ are</p><div class="opts"><button>only $z=n\pi$</button><button>$n\pi$ and $in\pi$</button><button>none off the real axis but infinitely many on lines $y=c$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="3" data-ok="The constant term of $\sin^2 x$ is $1/2$, so the integral is $\frac12\cdot2\pi$." data-no="Find the constant term in the exponential form."><p>3. $\int_{-\pi}^{\pi}\sin^2x\,dx=$</p><div class="opts"><button>$0$</button><button>$2\pi$</button><button>$\pi/2$</button><button>$\pi$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">10. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">10. Going deeper: why $\sin z$ must be unbounded, and evanescent waves</h2>
+<h3>The modulus formulas</h3>
+<p>From $\sin(x+iy)=\sin x\cosh y+i\cos x\sinh y$:</p>
+$$|\sin z|^2=\sin^2x\cosh^2y+\cos^2x\sinh^2y=\sin^2x+\sinh^2y,$$
+<p>using $\cosh^2y=1+\sinh^2y$. In the same way $|\cos z|^2=\cos^2x+\sinh^2y$. Three facts follow at once:</p>
+<ul>
+<li><b>Zeros.</b> $\sin z=0$ needs $\sin x=0$ <i>and</i> $\sinh y=0$, so $z=n\pi$. There are no new complex zeros.</li>
+<li><b>Unbounded.</b> $|\sin(iy)|=|\sinh y|\to\infty$. On the real line $|\sin x|\le1$, but that bound is lost as soon as you leave the axis.</li>
+<li><b>Lower bound.</b> $|\cos z|\ge|\cos x|$ and $|\cos z|\ge|\sinh y|$.</li>
+</ul>
+<div class="box fact"><span class="tag">Why unboundedness is unavoidable</span><p>Liouville's theorem (14.3) says a bounded function analytic on the whole plane is constant. $\sin z$ is analytic everywhere and not constant, so it <i>must</i> be unbounded somewhere. The same argument applies to $e^z$, $\cos z$ and every non-constant polynomial.</p></div>
+<h3>$\sin z=w$ always has solutions, except that $\tan z$ misses $\pm i$</h3>
+<p>Put $u=e^{iz}$. Then $\sin z=w$ becomes $u^2-2iwu-1=0$. This always has a non-zero root $u$, so $z=-i\ln u$ exists for every $w$: $\sin z$ takes every complex value. But $\tan z=\frac{u^2-1}{i(u^2+1)}=\pm i$ forces $u^2-1=\mp(u^2+1)$, i.e. $u=0$ or $-1=1$, both impossible. So <b>$\tan z\ne\pm i$</b>, and these are exactly the branch points of $\arctan$ in 2.15.</p>
+<h3>Physics: total internal reflection and evanescent waves</h3>
+<p>Snell's law $n_1\sin\theta_1=n_2\sin\theta_2$ with $n_1\sin\theta_1\gt n_2$ asks for $\sin\theta_2\gt1$. No real angle works, but a complex one does: $\cos\theta_2=\pm i\sqrt{\sin^2\theta_2-1}$. The transmitted wave $e^{i(k_xx+k_zz)}$ with $k_z=k_2\cos\theta_2=i\kappa$ becomes $e^{ik_xx}e^{-\kappa z}$. It is an <b>evanescent</b> field that decays over a distance $1/\kappa$ without carrying energy across the boundary. The same mathematics describes quantum tunnelling under a barrier.</p>
+
+<h2 id="exampat">11. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Values</td><td>$\cos i$, $\sin(\frac\pi2+i)$, $|\cos(x+iy)|$</td><td>$\cos(iy)=\cosh y$ and $\sin(iy)=i\sinh y$; the modulus formulas</td></tr>
+<tr><td>Solving</td><td>$\sin z=2$, $\cos z=3$, $\tan z=i$</td><td>Put $u=e^{iz}$ and solve the quadratic</td></tr>
+<tr><td>True/false sets</td><td>Bounded? Periodic? Zeros?</td><td>Modulus formulas and Liouville</td></tr>
+<tr><td>Real integrals</td><td>$\int e^{ax}\cos bx\,dx$</td><td>Real part of $\int e^{(a+ib)x}dx$</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>"$|\sin z|\le1$" is false for complex $z$.</li>
+<li>$\cos(iy)=\cosh y$ is real and $\ge1$. It is not $i\cosh y$.</li>
+<li>$\tan z=i$ has <b>no</b> solution, so do not choose an option giving one.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$\sin(\frac\pi2+iy)=\cosh y$ and $\cos(\pi+iy)=-\cosh y$.</li>
+<li>$\int_0^\infty e^{-ax}e^{ibx}dx=\frac{1}{a-ib}$ for $a\gt0$. Its real part gives $\int_0^\infty e^{-ax}\cos bx\,dx=\frac{a}{a^2+b^2}$.</li>
+</ul></div>
+
+<h2 id="xprob">12. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> Find $\left|\sin\left(\frac\pi2+i\right)\right|$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\sin(\frac\pi2+i)=\cos i=\cosh1=\mathbf{1.543}$.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> All solutions of $\sin z=2$ are <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) none</span><span>(b) $\frac\pi2+2k\pi\pm i\ln(2+\sqrt3)$</span><span>(c) $\frac\pi2+k\pi+i\ln2$</span><span>(d) $2k\pi\pm i\ln(2+\sqrt3)$</span></div>
+<details class="sol"><summary>Show solution</summary><p>We need $\sin x\cosh y=2$ and $\cos x\sinh y=0$. Then $y\ne0$ (else $|\sin x|\le1$), so $\cos x=0$. We need $\sin x=+1$, because $\cosh y\gt0$. So $x=\frac\pi2+2k\pi$, and $\cosh y=2$ gives $y=\pm\ln(2+\sqrt3)$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> The number of solutions of $\tan z=i$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) 0</span><span>(b) 1</span><span>(c) 2</span><span>(d) infinitely many</span></div>
+<details class="sol"><summary>Show solution</summary><p>With $u=e^{iz}$: $u^2-1=-(u^2+1)$, so $u^2=0$. But $e^{iz}\ne0$. Option <b>(a)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> (Multiple correct) For complex $z=x+iy$: <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\sin z$ is bounded on $\mathbb C$</span><span>(b) every zero of $\cos z$ is real</span><span>(c) $|\cos z|\ge|\cos x|$</span><span>(d) $\sin(iz)=i\sinh z$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(b), (c), (d).</b> For (b): $|\cos z|^2=\cos^2x+\sinh^2y=0$ forces $y=0$. For (c): the $\sinh^2y$ term is non-negative. (a) is false by Liouville, or by $\sin(iy)=i\sinh y$.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> Evaluate $\displaystyle\int_0^\infty e^{-2x}\cos3x\,dx$, to four decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\operatorname{Re}\frac{1}{2-3i}=\frac{2}{13}=\mathbf{0.1538}$.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Light in glass ($n=1.5$) hits a glass–air surface at $60^\circ$. Find the $1/e$ penetration depth of the evanescent field into the air, in units of the vacuum wavelength $\lambda$, to two decimal places. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><ol class="steps"><li>$\sin\theta_t=1.5\sin60^\circ=1.299\gt1$.</li><li>$\cos\theta_t=i\sqrt{1.299^2-1}=0.829i$.</li><li>$k_z=k\cos\theta_t=i\kappa$ with $\kappa=0.829k=0.829\cdot\frac{2\pi}{\lambda}$.</li><li>Depth $=\frac1\kappa=\frac{\lambda}{2\pi\cdot0.829}=\mathbf{0.19}\,\lambda$.</li></ol></details></div>
+<div class="mcq" data-ans="3" data-ok="$\cos i=\cosh1\approx1.543$, which is bigger than 1." data-no="$\cos(iy)=\cosh y$."><p>Rapid fire: $\cos i$ is</p><div class="opts"><button>$i\cos1$</button><button>$\cos1$</button><button>$0$</button><button>real and greater than $1$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">13. Connections</h2>
+<div class="xlinks">
+<a href="2.9_Eulers_Formula.html"><b>Builds on</b>2.9 Euler's formula<small>$\cos\theta=\frac{e^{i\theta}+e^{-i\theta}}2$</small></a>
+<a href="2.12_Hyperbolic_Functions.html"><b>Next</b>2.12 Hyperbolic functions<small>$\cosh y=\cos(iy)$</small></a>
+<a href="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html"><b>Inverse</b>2.15 $\arcsin$, $\arctan$<small>Solving $\sin z=w$ in general</small></a>
+<a href="14.3_Contour_Integrals.html"><b>Later</b>14.3 Liouville<small>Why entire, non-constant functions are unbounded</small></a>
+<a href="14.7_Evaluation_of_Definite_Integrals_by_Residues.html"><b>Later</b>14.7 Fourier integrals<small>$\int\frac{\cos mx}{x^2+a^2}$ via $e^{imz}$</small></a>
+<a href="14.5_The_Residue_Theorem.html"><b>Later</b>14.5 $\oint\tan z$<small>Zeros of $\cos z$ are the poles of $\tan z$</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="10. Summary">14. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$e^{x+iy}=e^x(\cos y+i\sin y)$, and $e^{\ln a}=a$.</li>
 <li>$\sin z=\frac{e^{iz}-e^{-iz}}{2i}$, $\cos z=\frac{e^{iz}+e^{-iz}}{2}$, valid for all complex $z$.</li>
@@ -874,5 +1059,57 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* real/imag-part explorer: FN = { name: [direct(z), formula(x,y) -> [re,im], texFormula] } */
+  function dassSepWidget(cv, fSel, pSel, outSel, FN, start) {
+    let z = start.slice();
+    const S = new Plane(cv, { span: 3.4, aspect: 0.62, snap: 0.02, draw: p => {
+      const f = FN[val(fSel)], part = val(pSel) === 're' ? 0 : 1, res = 3, c = p.ctx;
+      for (let py = 0; py < p.H; py += res) for (let px = 0; px < p.W; px += res) {
+        const v = f[1](p.wx(px + res / 2), p.wy(py + res / 2))[part];
+        if (!isFinite(v)) continue;
+        const u = Math.tanh(v / 1.5), col = u >= 0 ? [232, 89, 12] : [47, 107, 255];
+        c.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},${(Math.abs(u) * 0.55).toFixed(3)})`; c.fillRect(px, py, res, res);
+      }
+      p.implicit((x, y) => f[1](x, y)[part], { color: '--fg', width: 1.6, maxJump: 4 }, 3);
+      p.dot(z, { r: 7, color: '--accent4', label: 'z', ring: true });
+    }});
+    S.addDrag(() => z, v => z = v);
+    const out = () => {
+      const k = val(fSel), f = FN[k], a = f[1](z[0], z[1]), d = f[0](z);
+      texMix(outSel, `$z=${Cx.tex(z, 2)}$: &nbsp; formula $${f[2]}$<br>gives $${Cx.tex(a, 4)}$; &nbsp; direct $\\${k === 'cosec' ? 'operatorname{cosec}' : k === 'cosech' ? 'operatorname{cosech}' : k === 'sech' ? 'operatorname{sech}' : k}\\,z=${Cx.tex(d, 4)}$ ${Cx.eq(a, d, 1e-6 * (1 + Cx.abs(d))) ? '✓' : ''}`);
+    };
+    S.onchange = out; [fSel, pSel].forEach(id => $('#' + id).addEventListener('change', () => { S.redraw(); out(); })); out();
+  }
+  /* H.K. Dass §20.27 — the six circular functions */
+  const sh = Math.sinh, ch = Math.cosh, s = Math.sin, c = Math.cos;
+  dassSepWidget('#cv-dass-circ', 'dci-f', 'dci-p', '#dci-out', {
+    sin: [Cx.sin, (x, y) => [s(x) * ch(y), c(x) * sh(y)], '\\sin x\\cosh y+i\\cos x\\sinh y'],
+    cos: [Cx.cos, (x, y) => [c(x) * ch(y), -s(x) * sh(y)], '\\cos x\\cosh y-i\\sin x\\sinh y'],
+    tan: [Cx.tan, (x, y) => { const D = c(2 * x) + ch(2 * y); return [s(2 * x) / D, sh(2 * y) / D]; }, '\\frac{\\sin2x+i\\sinh2y}{\\cos2x+\\cosh2y}'],
+    cot: [z => Cx.div(Cx.cos(z), Cx.sin(z)), (x, y) => { const D = ch(2 * y) - c(2 * x); return [s(2 * x) / D, -sh(2 * y) / D]; }, '\\frac{\\sin2x-i\\sinh2y}{\\cosh2y-\\cos2x}'],
+    sec: [z => Cx.div([1, 0], Cx.cos(z)), (x, y) => { const D = c(2 * x) + ch(2 * y); return [2 * c(x) * ch(y) / D, 2 * s(x) * sh(y) / D]; }, '\\frac{2(\\cos x\\cosh y+i\\sin x\\sinh y)}{\\cos2x+\\cosh2y}'],
+    cosec: [z => Cx.div([1, 0], Cx.sin(z)), (x, y) => { const D = ch(2 * y) - c(2 * x); return [2 * s(x) * ch(y) / D, -2 * c(x) * sh(y) / D]; }, '\\frac{2(\\sin x\\cosh y-i\\cos x\\sinh y)}{\\cosh2y-\\cos2x}']
+  }, [0.9, 0.5]);
+});
+
+onReady(() => {
+  /* H.K. Dass §21.4 — truncated series */
+  const G = new Graph('#cv-dass-approx', { span: 1.8, cx: 1.6, cy: 0.6, aspect: 0.55, draw: p => {
+    const x = val('dap-x');
+    p.fn(t => Math.abs(t) < 1e-9 ? 1 : Math.sin(t) / t, { color: '--accent', width: 2.6 });
+    p.fn(t => 1 - t * t / 6, { color: '--accent2', width: 1.8, dash: [6, 4] });
+    p.fn(t => 1 - t * t / 6 + t ** 4 / 120, { color: '--accent3', width: 1.8, dash: [2, 3] });
+    p.line([x, -1], [x, 2], { color: '--muted', dash: [3, 4], width: 1 }); p.dot([x, Math.sin(x) / x], { r: 6, color: '--accent' });
+  }});
+  const out = () => {
+    const x = val('dap-x'), t = Math.sin(x) / x, a1 = 1 - x * x / 6, a2 = a1 + x ** 4 / 120;
+    texMix('#dap-out', `$x=${fnum(x, 2)}$ rad $=${fnum(x * 180 / PI, 1)}^\\circ$: &nbsp; $\\frac{\\sin x}{x}=${fnum(t, 6)}$<br>$1-\\frac{x^2}6=${fnum(a1, 6)}$ (relative error $${fnum(100 * Math.abs(a1 - t) / t, 3)}\\%$), &nbsp; $1-\\frac{x^2}6+\\frac{x^4}{120}=${fnum(a2, 6)}$ ($${fnum(100 * Math.abs(a2 - t) / t, 4)}\\%$)`);
+  };
+  watch(['dap-x'], () => { G.redraw(); out(); }); out();
+});
+
+/* dass:end */</script>
 </body>
 </html>

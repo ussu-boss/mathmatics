@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -135,6 +144,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="14.9_Mapping.html">14.9 Mapping</option>
 <option value="14.10_Applications_of_Conformal_Mapping.html">14.10 Some Applications of Conformal Mapping</option>
 <option value="14.11_Miscellaneous_Problems.html" selected>14.11 Miscellaneous Problems</option></select>
+  <a class="btn" href="2.0_Complex_Numbers_Index.html" title="Chapter 2 index">Ch. 2 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -294,7 +304,80 @@ $$\int_0^\infty\frac{\cos^2(\alpha\pi/2)}{(1-\alpha^2)^2}d\alpha=\frac{\pi^2}{8}
 <div class="prob"><div class="q"><b>E10.</b> $\oint_{|z|=5}\dfrac{z^9}{z^{10}-1}dz$. <span class="lvl e">Easy</span></div>
 <details class="sol"><summary>Show solution</summary><p>$R(\infty)=-\lim zf=-1$, so the integral is $2\pi i$.</p></details></div>
 
-<h2 id="summary">5. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">5. Going deeper: the logical chain of Chapter 14 on one screen</h2>
+<p>Every big result in this chapter follows from the one before it. If you can rebuild this chain, you can rebuild the chapter.</p>
+<ol class="steps">
+<li><b>Cauchy–Riemann</b> ($u_x=v_y$, $u_y=-v_x$) $\Rightarrow$ $f\,dz$ is a closed form $\Rightarrow$ (Green's theorem) <b>Cauchy's theorem</b>: $\oint f\,dz=0$. <i>(14.2, 14.3)</i></li>
+<li>Cauchy's theorem applied to $\frac{f(z)}{z-a}$ minus a tiny circle $\Rightarrow$ <b>Cauchy's integral formula</b>. Differentiating under the integral sign $\Rightarrow$ analytic functions have derivatives of every order. <i>(14.3)</i></li>
+<li>Expanding $\frac{1}{z-a}$ geometrically inside the formula $\Rightarrow$ <b>Taylor series</b> converging out to the nearest singularity. The ML estimate gives Cauchy's estimates $\Rightarrow$ Liouville $\Rightarrow$ fundamental theorem of algebra. <i>(14.3, 2.7)</i></li>
+<li>The same expansion on two circles $\Rightarrow$ <b>Laurent series</b> in annuli $\Rightarrow$ the classification of singularities. <i>(14.4)</i></li>
+<li>Integrating a Laurent series term by term, only $a_{-1}$ survives $\Rightarrow$ the <b>residue theorem</b>. <i>(14.5, 14.6, 14.8)</i></li>
+<li>Residues plus estimates on arcs $\Rightarrow$ <b>real integrals</b>, the argument principle and Rouché. <i>(14.7, 14.5)</i></li>
+<li>$f'\ne0$ $\Rightarrow$ the map is <b>conformal</b>; real and imaginary parts are harmonic $\Rightarrow$ <b>2-D potential problems</b> are solved by mapping. <i>(14.9, 14.10)</i></li>
+</ol>
+
+<h2 id="exampat">6. How CSIR-NET &amp; GATE test Chapter 14: the blueprint</h2>
+<table class="t pat">
+<tr><th>Skill</th><th>Typical question</th><th>Must-know result</th><th>Page</th></tr>
+<tr><td>Analyticity</td><td>Where is $f$ differentiable or analytic? Find $f$ from $u$</td><td>CR; Milne-Thomson</td><td><a href="14.2_Analytic_Functions.html">14.2</a></td></tr>
+<tr><td>Contour integrals</td><td>$\oint\frac{g}{(z-a)^n}$, $\oint\bar z\,dz$</td><td>Cauchy's formula; $\bar z=r^2/z$ on circles</td><td><a href="14.3_Contour_Integrals.html">14.3</a></td></tr>
+<tr><td>Singularities</td><td>Classify; order of a pole; Laurent coefficient</td><td>Order arithmetic</td><td><a href="14.4_Laurent_Series.html">14.4</a></td></tr>
+<tr><td>Residues</td><td>At simple, multiple and essential points, and at $\infty$</td><td>$g/h'$; derivative formula; $-b_1$</td><td><a href="14.6_Methods_of_Finding_Residues.html">14.6</a></td></tr>
+<tr><td>Real integrals</td><td>$\int_0^{2\pi}$, $\int_{-\infty}^{\infty}$, PV, keyhole</td><td>Type I–V recipes; Jordan's lemma</td><td><a href="14.7_Evaluation_of_Definite_Integrals_by_Residues.html">14.7</a></td></tr>
+<tr><td>Zeros</td><td>How many zeros in a disk or ring?</td><td>Rouché; argument principle</td><td><a href="14.5_The_Residue_Theorem.html">14.5</a></td></tr>
+<tr><td>Mapping</td><td>Image of a region; Möbius maps</td><td>Circles to circles; test one point</td><td><a href="14.9_Mapping.html">14.9</a></td></tr>
+</table>
+<div class="box warn"><span class="tag">The ten traps of Chapter 14</span><ol>
+<li>CR at a point or on a line does not mean analytic.</li>
+<li>$\oint\bar z\,dz\ne0$, because $\bar z$ is not analytic.</li>
+<li>$\frac{2\pi i}{n!}$, not $2\pi i$, in the derivative formula.</li>
+<li>Count only the poles <b>inside</b> the contour.</li>
+<li>$g/h'$ only at <b>simple</b> zeros of $h$.</li>
+<li>Laurent series in an outer annulus do not classify $z_0$.</li>
+<li>$\operatorname{Res}_\infty\frac1z=-1$.</li>
+<li>Use $e^{imz}$, never $\cos mz$, on a big arc; close up for $m\gt0$ and down for $m\lt0$.</li>
+<li>A real-axis pole contributes $\pi i\operatorname{Res}$ to a principal value.</li>
+<li>Under $1/z$, circles through $0$ become lines.</li>
+</ol></div>
+
+<h2 id="xprob">7. Timed mock test (10 questions, about 30 minutes)</h2>
+<p class="small">Original questions in CSIR/GATE format. Time yourself and mark your answers before opening the solutions.</p>
+<div class="prob"><div class="q"><b>T1.</b> $\displaystyle\oint_{|z|=1}\frac{z^2+1}{z(2z-1)}dz=$ <span class="src">MCQ</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $\frac{\pi i}2$</span><span>(b) $2\pi i$</span><span>(c) $-2\pi i$</span><span>(d) $\frac{5\pi i}{2}$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\operatorname{Res}_0=\frac{1}{-1}=-1$ and $\operatorname{Res}_{1/2}=\frac{5/4}{(1/2)\cdot2}=\frac54$. The sum is $\frac14$, so the integral is $\frac{\pi i}2$. Option <b>(a)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>T2.</b> Evaluate $\displaystyle\int_0^{2\pi}\frac{d\theta}{5+3\sin\theta}$, to three decimal places. <span class="src">NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{2\pi}{\sqrt{25-9}}=\frac\pi2=\mathbf{1.571}$.</p></details></div>
+<div class="prob"><div class="q"><b>T3.</b> $\operatorname{Res}_0\dfrac{\cot z}{z^2}=$ <span class="src">MCQ</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\frac13$</span><span>(b) $-\frac13$</span><span>(c) $0$</span><span>(d) $1$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\cot z=\frac1z-\frac z3-\dots$, so $\frac{\cot z}{z^2}=\frac1{z^3}-\frac1{3z}-\dots$ Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>T4.</b> If $u=2x(1-y)$, an analytic $f$ with $\operatorname{Re}f=u$ is <span class="src">MCQ</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $2z+iz^2$</span><span>(b) $2z-iz^2$</span><span>(c) $2z+z^2$</span><span>(d) $2iz+z^2$</span></div>
+<details class="sol"><summary>Show solution</summary><p>Milne-Thomson: $u_x=2-2y$ and $u_y=-2x$, so $f'=2-i(-2z)=2+2iz$, giving $f=2z+iz^2$. Option <b>(a)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>T5.</b> Evaluate $\displaystyle\int_{-\infty}^\infty\frac{x\sin x}{x^2+1}dx$, to three decimal places. <span class="src">NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\operatorname{Im}\left[2\pi i\operatorname{Res}_i\frac{ze^{iz}}{z^2+1}\right]=\operatorname{Im}\left[2\pi i\cdot\frac{ie^{-1}}{2i}\right]=\frac\pi e=\mathbf{1.156}$. Jordan's lemma is needed here, since the degree difference is only 1.</p></details></div>
+<div class="prob"><div class="q"><b>T6.</b> How many zeros does $z^4+6z+1$ have in the ring $1\lt|z|\lt2$? <span class="src">NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>On $|z|=1$: $|6z|=6\gt2\ge|z^4+1|$, so there is 1 zero inside. On $|z|=2$: $|z^4|=16\gt13\ge|6z+1|$, so there are 4 zeros inside. So the ring has $\mathbf3$.</p></details></div>
+<div class="prob"><div class="q"><b>T7.</b> The image of the first quadrant under $w=z^2$ is <span class="src">MCQ</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) the first quadrant</span><span>(b) the upper half-plane</span><span>(c) the right half-plane</span><span>(d) the whole plane</span></div>
+<details class="sol"><summary>Show solution</summary><p>Angles double: $0\lt\theta\lt\frac\pi2$ becomes $0\lt\phi\lt\pi$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>T8.</b> (Multiple correct) At $z=0$: <span class="src">MSQ</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $ze^{1/z}$ has an essential singularity</span><span>(b) $\frac{1-\cos z}{z^2}$ has a removable singularity</span><span>(c) $\frac{1}{z-\sin z}$ has a pole of order 3</span><span>(d) $\frac{e^z}{z^2}$ has residue $0$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b), (c).</b> (d): the residue is $1$.</p></details></div>
+<div class="prob"><div class="q"><b>T9.</b> Find the radius of convergence of the Taylor series of $\tan z$ about $z=\pi/4$, to three decimal places. <span class="src">NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>The nearest pole of $\tan z$ is $\frac\pi2$, at distance $\frac\pi4=\mathbf{0.785}$.</p></details></div>
+<div class="prob"><div class="q"><b>T10.</b> Using a sector contour of angle $\frac{2\pi}{n}$, show that $\displaystyle\int_0^\infty\frac{dx}{1+x^n}=\frac{\pi}{n\sin(\pi/n)}$ ($n\ge2$), and evaluate it for $n=6$. <span class="src">Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><ol class="steps"><li>On the ray $z=re^{2\pi i/n}$, the integrand is unchanged ($z^n=r^n$) and $dz=e^{2\pi i/n}dr$. That side contributes $-e^{2\pi i/n}I$.</li><li>The arc vanishes ($\sim R^{1-n}$). The only pole inside is $a=e^{i\pi/n}$, with residue $\frac{1}{na^{n-1}}=-\frac{a}{n}$.</li><li>$(1-e^{2\pi i/n})I=-\frac{2\pi i}{n}e^{i\pi/n}$, so $I=\frac{2\pi i}{n(e^{i\pi/n}-e^{-i\pi/n})}=\frac{\pi}{n\sin(\pi/n)}$.</li><li>$n=6$: $\frac{\pi}{6\cdot\frac12}=\frac\pi3\approx1.047$.</li></ol></details></div>
+
+<h2 id="xlinks">8. Connections</h2>
+<div class="xlinks">
+<a href="14.0_Functions_of_a_Complex_Variable_Index.html"><b>Index</b>Chapter 14 index<small>All sections and the study path</small></a>
+<a href="2.17_Miscellaneous_Problems.html"><b>Compare</b>2.17 Chapter 2 review<small>Blueprint and mock test for complex numbers</small></a>
+<a href="2.0_Complex_Numbers_Index.html"><b>Prerequisite</b>Chapter 2 index<small>Revise algebra and elementary functions</small></a>
+<a href="14.7_Evaluation_of_Definite_Integrals_by_Residues.html"><b>Most tested</b>14.7 Real integrals<small>The highest-yield section</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="5. Summary">9. Summary</h2>
 <div class="card"><ul class="summary">
 <li>Analytic ⇔ CR. Harmonic parts, orthogonal nets, conformal maps.</li>
 <li>Cauchy's theorem and formula, the residue theorem, residues at infinity.</li>

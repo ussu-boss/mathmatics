@@ -117,6 +117,23 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +158,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -167,6 +185,52 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <div class="box fact"><span class="tag">Picture it as an arrow too</span>
 <p>Often it helps to think of $z$ as the <b>arrow (vector)</b> from the origin to the point $(x,y)$. Then adding complex numbers is exactly adding vectors (Section 6 below).</p></div>
 
+<!-- dass:start 10__argand -->
+<h2 id="dass-20-4" class="dass"><span class="dtag">H.K. Dass §20.4, 20.7, 20.8, 20.10, 20.14</span>Argand diagram: all four operations by geometry</h2>
+<p><b>Argand diagram (§20.4).</b> The number $x+iy$ is the point $P(x,y)$. The $x$-axis is the real axis and the $y$-axis the imaginary axis. The length $OP=r$ is the modulus, and the angle that $OP$ makes with the positive $x$-axis is the argument (amplitude). H.K. Dass then shows that each of $+,-,\times,\div$ has a ruler-and-compass construction.</p>
+
+<h3>Addition (§20.7): the parallelogram law</h3>
+<p>Let $P$ be $z_1=x_1+iy_1$ and $Q$ be $z_2=x_2+iy_2$. Complete the parallelogram $OPRQ$ and drop perpendiculars $PK$, $RM$, $QL$ to the $x$-axis, with $PN\perp RM$.</p>
+<ul>
+<li>$OM=OK+KM=OK+OL=x_1+x_2$, since $KM=OL$ (congruent triangles $OQL$ and $PRN$).</li>
+<li>$RM=MN+NR=KP+LQ=y_1+y_2$.</li>
+</ul>
+<p>So $R$ is the point $(x_1+x_2)+i(y_1+y_2)=z_1+z_2$: <b>the sum is the far corner of the parallelogram</b>, with $|z_1+z_2|=OR$ and $\arg(z_1+z_2)=\angle ROM$.</p>
+
+<h3>Subtraction (§20.8)</h3>
+<p>Write $z_1-z_2=z_1+(-z_2)$. The point $-z_2$ is $Q'$, found by extending $QO$ beyond $O$ to $OQ'=OQ$. Complete the parallelogram $OPRQ'$: then $OR$ represents $z_1-z_2$. It has the same length and direction as the arrow $QP$ from $z_2$ to $z_1$. So $|z_1-z_2|$ is the <b>distance</b> between the two points.</p>
+
+<h3>Multiplication (§20.10): the similar-triangle construction</h3>
+<p>With $z_1=r_1(\cos\theta_1+i\sin\theta_1)$ at $P$ and $z_2=r_2(\cos\theta_2+i\sin\theta_2)$ at $Q$, mark $A$ at $1$ on the real axis. On $OQ$, construct the triangle $OQR$ <b>similar</b> to $OAP$, turned the same way. Then</p>
+$$\frac{OR}{OQ}=\frac{OP}{OA}=\frac{r_1}{1}\Rightarrow OR=r_1r_2,\qquad\angle XOR=\angle XOQ+\angle QOR=\theta_2+\theta_1 .$$
+<p>So $R$ is $z_1z_2$: $|z_1z_2|=|z_1||z_2|$ and $\arg(z_1z_2)=\arg z_1+\arg z_2$. Algebraically this is the polar product</p>
+$$z_1z_2=r_1r_2\left[\cos(\theta_1+\theta_2)+i\sin(\theta_1+\theta_2)\right],$$
+<p>which uses the addition formulas $\cos\theta_1\cos\theta_2-\sin\theta_1\sin\theta_2=\cos(\theta_1+\theta_2)$ and $\sin\theta_1\cos\theta_2+\cos\theta_1\sin\theta_2=\sin(\theta_1+\theta_2)$.</p>
+
+<h3>Division (§20.14)</h3>
+<p>Mark $A$ at $1$ again. On $OA$, construct the triangle $OAR$ similar to $OQP$. Then $\frac{OR}{OA}=\frac{OP}{OQ}$, so $OR=\frac{r_1}{r_2}$, and $\angle AOR=\angle QOP=\theta_1-\theta_2$. Hence $R$ is $\frac{z_1}{z_2}$:</p>
+$$\left|\frac{z_1}{z_2}\right|=\frac{|z_1|}{|z_2|},\qquad\arg\frac{z_1}{z_2}=\arg z_1-\arg z_2 .$$
+
+<div class="widget" id="w-dass-geo">
+<div class="wt">Interactive — the four constructions</div>
+<div class="wd">Drag $z_1$ (blue) and $z_2$ (green), and choose an operation. You see the parallelogram for $+$ and $-$, and the two similar triangles (built on $A=1$) for $\times$ and $\div$. The orange point is the result.</div>
+<div class="ctrls"><label>operation <select id="dgeo-op"><option value="add">z₁ + z₂</option><option value="sub">z₁ − z₂</option><option value="mul">z₁ × z₂</option><option value="div">z₁ ÷ z₂</option></select></label></div>
+<canvas id="cv-dass-geo"></canvas>
+<div class="readout" id="dgeo-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example — the fourth vertex of a parallelogram</div><div class="bd"><p>$ABCD$ is a parallelogram with $A=2+i$, $B=5+2i$, $C=6+5i$. Find $D$.</p><ol class="steps">
+<li>In a parallelogram the diagonals bisect each other, so $A+C=B+D$ (both equal twice the centre).</li>
+<li>$D=A+C-B=(2+6-5)+i(1+5-2)=3+4i$.</li>
+<li>Check with the parallelogram law: $\vec{AD}=D-A=1+3i$ and $\vec{BC}=C-B=1+3i$. They are equal. ✓</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> vector-addition geometry in the Argand plane turns coordinate-geometry questions into one-line additions.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example — the triangle $z$, $iz$, $z+iz$</div><div class="bd"><ol class="steps">
+<li>$iz$ is $z$ turned by $90^\circ$ (§20.11), so $O$, $z$, $z+iz$, $iz$ is a <b>square</b> of side $|z|$ (the parallelogram on two perpendicular sides of equal length).</li>
+<li>The triangle $z$, $iz$, $z+iz$ is half of that square, so its area is $\frac12|z|^2$.</li>
+<li>For $z=3+4i$ the area is $\frac{25}{2}$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> combining the parallelogram law with the $i$-rotation rule gives areas without any coordinates.</p></div></div>
+<!-- dass:end -->
 <h2 id="polar">2. Rectangular form and polar form</h2>
 <p>The point $P=(x,y)$ can also be located by its distance $r$ from the origin and the angle $\theta$ that $OP$ makes with the positive real axis (Boas Fig. 3.2):</p>
 $$x=r\cos\theta,\qquad y=r\sin\theta \qquad\qquad(3.1)$$
@@ -190,6 +254,40 @@ $$r=\sqrt{x^2+y^2}\ (\ge0)$$
 </div>
 <p><b>$r$ is always taken positive</b> (Boas). A "negative $r$" would be the same as adding $\pi$ to $\theta$.</p>
 
+<!-- dass:start 20__polar -->
+<h2 id="dass-20-16" class="dass"><span class="dtag">H.K. Dass §20.16–20.17</span>Polar form and the three types of a complex number</h2>
+<p><b>Procedure for converting $x+iy$ to polar form (§20.16).</b> Put</p>
+$$x=r\cos\theta,\qquad y=r\sin\theta .$$
+<p>Squaring and adding gives $r=\sqrt{x^2+y^2}$. Then pick the angle $\theta$ that satisfies <b>both</b> equations $\cos\theta=x/r$ and $\sin\theta=y/r$. Using $\tan\theta=y/x$ alone can put you in the wrong quadrant.</p>
+
+<div class="box def"><span class="tag">Three types (§20.17)</span>
+<table class="t dt">
+<tr><th>Type</th><th>Form</th><th>Best for</th></tr>
+<tr><td>Cartesian</td><td>$x+iy$</td><td>addition and subtraction</td></tr>
+<tr><td>Polar</td><td>$r(\cos\theta+i\sin\theta)$</td><td>multiplication, division, geometry</td></tr>
+<tr><td>Exponential</td><td>$re^{i\theta}$</td><td>powers, roots, logarithms (uses $e^{i\theta}=\cos\theta+i\sin\theta$)</td></tr>
+</table></div>
+
+<div class="widget" id="w-dass-forms">
+<div class="wt">Interactive — one point, three forms</div>
+<div class="wd">Drag the point. The readout gives the Cartesian, polar and exponential forms. Switch the principal-value range to see when $\theta$ changes between the two conventions: only below the real axis.</div>
+<div class="ctrls"><label>principal range <select id="dfm-conv"><option value="pm">(−π, π]</option><option value="02">[0, 2π)</option></select></label></div>
+<canvas id="cv-dass-forms"></canvas>
+<div class="readout" id="dfm-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.17) — polar form of $(1-\sqrt2)+i$</div><div class="bd"><ol class="steps">
+<li>$r^2=(1-\sqrt2)^2+1=4-2\sqrt2$, so $r=\sqrt{4-2\sqrt2}\approx1.082$.</li>
+<li>$\cos\theta=\frac{1-\sqrt2}{r}\lt0$ and $\sin\theta=\frac1r\gt0$, so $\theta$ is in quadrant II.</li>
+<li>The reference angle is $\alpha=\tan^{-1}\frac{1}{\sqrt2-1}=\tan^{-1}(\sqrt2+1)=\frac{3\pi}8$, so $\theta=\pi-\frac{3\pi}8=\frac{5\pi}8$.</li>
+<li>Hence $(1-\sqrt2)+i=\sqrt{4-2\sqrt2}\left(\cos\frac{5\pi}8+i\sin\frac{5\pi}8\right)=\sqrt{4-2\sqrt2}\,e^{5\pi i/8}$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> recognising $\tan\frac{3\pi}8=\sqrt2+1$ (and $\tan\frac\pi8=\sqrt2-1$) turns an ugly-looking number into an exact angle.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.17) — smallest positive $n$ with $\left(\frac{1+i}{1-i}\right)^n=1$</div><div class="bd"><ol class="steps">
+<li>$\frac{1+i}{1-i}=\frac{(1+i)^2}{2}=\frac{2i}{2}=i$. In exponential form this is $e^{i\pi/2}$.</li>
+<li>$i^n=e^{in\pi/2}=1$ needs $\frac{n\pi}2$ to be a multiple of $2\pi$, so $n$ must be a multiple of 4. The smallest is $n=4$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> converting the base to $e^{i\theta}$ first is the standard way to handle any "find $n$ such that a power equals 1" question.</p></div></div>
+<!-- dass:end -->
 <h2 id="angle">3. Getting the angle right (the arctan trap)</h2>
 <p>Your calculator's $\arctan$ only returns angles between $-\pi/2$ and $\pi/2$ (quadrants I and IV). But $(-1,-1)$ and $(1,1)$ have the same ratio $y/x=1$. So:</p>
 <table class="t">
@@ -380,7 +478,76 @@ $$(z_1+\omega z_2+\omega^2z_3)(z_1+\omega^2z_2+\omega z_3)=z_1^2+z_2^2+z_3^2+(\o
 <div class="mcq" data-ans="3" data-ok="$r=\sqrt{36+64}=10$." data-no="$r=\sqrt{x^2+y^2}$."><p>3. $|-6+8i|=$</p><div class="opts"><button>$2$</button><button>$14$</button><button>$\sqrt{28}$</button><button>$10$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="1" data-ok="Rotation by $90^\circ$ is multiplication by $i$: $i(2+i)=-1+2i$." data-no="Multiplying by $i$ rotates by $+90^\circ$."><p>4. Rotating $2+i$ by $90^\circ$ counter-clockwise about $0$ gives</p><div class="opts"><button>$1-2i$</button><button>$-1+2i$</button><button>$-2-i$</button><button>$2-i$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">9. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">9. Going deeper: one ratio that encodes all plane geometry</h2>
+<p>For three points $z_1,z_2,z_3$, look at the ratio</p>
+$$\frac{z_3-z_1}{z_2-z_1}=\frac{|z_3-z_1|}{|z_2-z_1|}\,e^{i\alpha},$$
+<p>where $\alpha$ is the angle at $z_1$ measured from the segment $z_1z_2$ to the segment $z_1z_3$. <b>Why:</b> division divides the lengths and subtracts the angles (Section 2.9), and $z_k-z_1$ is the arrow from $z_1$ to $z_k$. Almost every geometry question reduces to this one ratio:</p>
+<table class="t">
+<tr><th>Property</th><th>Condition on $\dfrac{z_3-z_1}{z_2-z_1}$</th></tr>
+<tr><td>$z_1,z_2,z_3$ collinear</td><td>real</td></tr>
+<tr><td>Right angle at $z_1$</td><td>purely imaginary</td></tr>
+<tr><td>$z_3$ is $z_2$ rotated by $\alpha$ about $z_1$</td><td>$=e^{i\alpha}$, i.e. $z_3=z_1+(z_2-z_1)e^{i\alpha}$</td></tr>
+<tr><td>Equilateral triangle</td><td>$=e^{\pm i\pi/3}$</td></tr>
+</table>
+<h3>Why multiplying by $e^{i\alpha}$ is a rotation: the matrix view</h3>
+<p>Multiplying $x+iy$ by $\cos\alpha+i\sin\alpha$ gives $(x\cos\alpha-y\sin\alpha)+i(x\sin\alpha+y\cos\alpha)$. As a map on $(x,y)$ that is</p>
+$$\begin{pmatrix}x'\\y'\end{pmatrix}=\begin{pmatrix}\cos\alpha&-\sin\alpha\\\sin\alpha&\cos\alpha\end{pmatrix}\begin{pmatrix}x\\y\end{pmatrix},$$
+<p>the standard rotation matrix. More generally, multiplying by $re^{i\alpha}$ is a rotation followed by a scaling, and these are the only linear maps of the plane that preserve angles. This is why complex numbers represent 2-D rotations and phasors so efficiently.</p>
+<h3>The angle as a single formula</h3>
+<p>For $z=x+iy\ne0$, the principal angle in $(-\pi,\pi]$ is the function programmers call $\operatorname{atan2}(y,x)$:</p>
+$$\operatorname{Arg}z=\begin{cases}\arctan(y/x)&x\gt0\\\arctan(y/x)+\pi&x\lt0,\ y\ge0\\\arctan(y/x)-\pi&x\lt0,\ y\lt0\\\pm\pi/2&x=0,\ y\gtrless0\end{cases}$$
+
+<h2 id="exampat">10. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Polar conversion</td><td>$r$ and principal $\theta$ of a number in quadrant II or III</td><td>Sketch first, then take $\pi-\phi$ or $-(\pi-\phi)$ with $\phi=\arctan|y/x|$</td></tr>
+<tr><td>Rotation</td><td>Image of a point rotated about another point</td><td>$z'=c+(z-c)e^{i\alpha}$</td></tr>
+<tr><td>Loci with arg</td><td>$\arg(z-a)=\alpha$</td><td>A <b>ray</b> from $a$ with $a$ itself excluded, not a full line</td></tr>
+<tr><td>Triangle facts</td><td>Angle, right-angle test, equilateral vertex</td><td>The ratio $\frac{z_3-z_1}{z_2-z_1}$</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$\arctan(y/x)$ cannot tell $(1,1)$ from $(-1,-1)$. Always check the quadrant.</li>
+<li>Know which principal-value convention the question uses, $(-\pi,\pi]$ or $[0,2\pi)$. MCQ distractors are often the other convention's value.</li>
+<li>$\arg(z-a)=\alpha$ is a <b>ray</b>. $\arg(z-a)=\alpha$ or $\alpha+\pi$ together give the line.</li>
+<li>Degrees are fine for $\cos$ and $\sin$ of an angle, but not inside $e^{i\theta}$ when you differentiate or integrate.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>Pythagorean triples hide in exam numbers: $3+4i\to5$, $5+12i\to13$, $8+15i\to17$, $7+24i\to25$.</li>
+<li>Multiplying by $i$ rotates by $+90^\circ$, so $iz\perp z$. Multiplying by $-1$ reflects through the origin.</li>
+</ul></div>
+
+<h2 id="xprob">11. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> The principal argument (in $(-\pi,\pi]$) of $-1-i\sqrt3$ is <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $\pi/3$</span><span>(b) $-\pi/3$</span><span>(c) $-2\pi/3$</span><span>(d) $2\pi/3$</span></div>
+<details class="sol"><summary>Show solution</summary><p>The point is in quadrant III with reference angle $\pi/3$, so $\theta=-(\pi-\pi/3)=-2\pi/3$. Option <b>(c)</b>. The calculator value $\arctan\sqrt3=\pi/3$, option (a), is the trap.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> The point $2+i$ is rotated by $90^\circ$ counter-clockwise about $1$. The new point is <span class="src">GATE MCQ</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $-1+2i$</span><span>(b) $i$</span><span>(c) $2-i$</span><span>(d) $1+i$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$z'=1+i\,(2+i-1)=1+i(1+i)=1+i-1=i$. Option <b>(b)</b>. Option (a) is the rotation about $0$ instead.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> Find, in degrees, the angle between the vectors $1+i$ and $\sqrt3+i$. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\arg\frac{\sqrt3+i}{1+i}=30^\circ-45^\circ=-15^\circ$, so the angle is $\mathbf{15^\circ}$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> The locus $\arg(z-1)=\pi/4$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) the line $y=x-1$</span><span>(b) the ray $y=x-1$, $x\gt1$</span><span>(c) a circle through $1$</span><span>(d) the ray $y=x-1$, $x\lt1$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$z-1=re^{i\pi/4}$ with $r\gt0$, so $x-1=y\gt0$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> Two vertices of an equilateral triangle are $0$ and $2+2i$. Find both possible third vertices. <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$z_3=(2+2i)e^{\pm i\pi/3}$. With $e^{i\pi/3}=\frac12+\frac{\sqrt3}2i$ this is $(1-\sqrt3)+i(1+\sqrt3)$, and with $e^{-i\pi/3}$ it is $(1+\sqrt3)+i(1-\sqrt3)$. Check: both have modulus $\sqrt{(1-\sqrt3)^2+(1+\sqrt3)^2}=\sqrt8$, which equals the side $|2+2i|$. ✓</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Find the principal argument of $-3+4i$ in radians, to two decimal places. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>Quadrant II: $\theta=\pi-\arctan\frac43=3.1416-0.9273=\mathbf{2.21}$ rad.</p></details></div>
+<div class="prob"><div class="q"><b>X7.</b> Show that $z_1=2+i$, $z_2=4+3i$, $z_3=2+5i$ form a right isosceles triangle, and find the right-angle vertex. <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>At $z_2$: $\frac{z_3-z_2}{z_1-z_2}=\frac{-2+2i}{-2-2i}=\frac{(-2+2i)(-2+2i)}{8}=\frac{-8i}{8}=-i=e^{-i\pi/2}$. This has modulus 1 (equal sides) and is purely imaginary (right angle). The right angle is at $z_2=4+3i$.</p></details></div>
+<div class="mcq" data-ans="3" data-ok="$|8-15i|=\sqrt{64+225}=17$." data-no="$8,15,17$ is a Pythagorean triple."><p>Rapid fire: $|8-15i|=$</p><div class="opts"><button>$23$</button><button>$\sqrt{161}$</button><button>$7$</button><button>$17$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">12. Connections</h2>
+<div class="xlinks">
+<a href="2.2_Real_and_Imaginary_Parts.html"><b>Builds on</b>2.2 Re and Im<small>The coordinates of the point</small></a>
+<a href="2.4_Terminology_and_Notation.html"><b>Next</b>2.4 Modulus and argument<small>Principal values and the rules for arg</small></a>
+<a href="2.9_Eulers_Formula.html"><b>Explains</b>2.9 Euler's formula<small>Why $re^{i\theta}$ is the polar form</small></a>
+<a href="2.5_Complex_Algebra.html"><b>Applies</b>2.5 Loci and regions<small>Circles, ellipses and arcs from equations</small></a>
+<a href="14.9_Mapping.html"><b>Later</b>14.9 Mapping<small>$w=az+b$ as a rotation, scaling and shift</small></a>
+<a href="2.16_Some_Applications.html"><b>Physics</b>2.16 Phasors<small>Rotating vectors in a.c. circuits and SHM</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="9. Summary">13. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$z=x+iy$ ↔ point $(x,y)$ ↔ arrow from $0$. Real axis horizontal, imaginary axis vertical.</li>
 <li>$x=r\cos\theta$, $y=r\sin\theta$, $r=\sqrt{x^2+y^2}\ge0$, and $z=r(\cos\theta+i\sin\theta)=re^{i\theta}$.</li>
@@ -990,5 +1157,57 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* H.K. Dass §20.7–20.14 — geometric constructions */
+  let z1 = [1.5, 0.8], z2 = [0.6, 1.2];
+  const G = new Plane('#cv-dass-geo', { span: 4, aspect: 0.7, snap: 0.1, draw: p => {
+    const op = val('dgeo-op'), O = [0, 0], A = [1, 0];
+    if (op === 'add' || op === 'sub') {
+      const w = op === 'add' ? z2 : Cx.neg(z2), R = Cx.add(z1, w);
+      if (op === 'sub') { p.line(z2, w, { color: '--accent3', dash: [3, 4], width: 1.2 }); p.dot(w, { r: 5, color: '--accent3', label: '−z₂', hollow: true }); p.arrow(z2, z1, { color: '--warn', dash: [6, 4], width: 1.6 }); }
+      p.path([O, z1, R, w, O], { color: '--muted', dash: [5, 4], width: 1.2, fill: '--accent2', fillAlpha: 0.07 });
+      p.arrow(O, R, { color: '--accent2', width: 3 }); p.dot(R, { r: 7, color: '--accent2', label: op === 'add' ? 'R = z₁+z₂' : 'R = z₁−z₂' });
+    } else {
+      const R = op === 'mul' ? Cx.mul(z1, z2) : Cx.div(z1, z2);
+      p.dot(A, { r: 5, color: '--muted', label: 'A = 1', dy: 16 });
+      if (op === 'mul') { p.path([O, A, z1, O], { color: '--accent', width: 1.6, fill: '--accent', fillAlpha: 0.1 }); p.path([O, z2, R, O], { color: '--accent2', width: 1.6, fill: '--accent2', fillAlpha: 0.1 }); }
+      else { p.path([O, z2, z1, O], { color: '--accent3', width: 1.6, fill: '--accent3', fillAlpha: 0.1 }); p.path([O, A, R, O], { color: '--accent2', width: 1.6, fill: '--accent2', fillAlpha: 0.1 }); }
+      p.arrow(O, R, { color: '--accent2', width: 3 }); p.dot(R, { r: 7, color: '--accent2', label: op === 'mul' ? 'R = z₁z₂' : 'R = z₁/z₂' });
+    }
+    p.arrow(O, z1, { color: '--accent', width: 2.5 }); p.arrow(O, z2, { color: '--accent3', width: 2.5 });
+    p.dot(z1, { r: 7, color: '--accent', label: 'z₁ (P)' }); p.dot(z2, { r: 7, color: '--accent3', label: 'z₂ (Q)' });
+  }});
+  G.addDrag(() => z1, v => z1 = v); G.addDrag(() => z2, v => { if (Math.hypot(v[0], v[1]) > 0.15) z2 = v; });
+  const gout = () => {
+    const op = val('dgeo-op'), R = { add: Cx.add(z1, z2), sub: Cx.sub(z1, z2), mul: Cx.mul(z1, z2), div: Cx.div(z1, z2) }[op];
+    const deg = t => fnum(t * 180 / PI, 1) + '^\\circ';
+    let extra = '';
+    if (op === 'mul') extra = `<br>$|R|=${fnum(Cx.abs(z1), 3)}\\times${fnum(Cx.abs(z2), 3)}=${fnum(Cx.abs(R), 3)}$, &nbsp; angles add: $${deg(Cx.arg(z1))}+${deg(Cx.arg(z2))}\\equiv${deg(Cx.arg(R))}$`;
+    if (op === 'div') extra = `<br>$|R|=${fnum(Cx.abs(z1), 3)}\\div${fnum(Cx.abs(z2), 3)}=${fnum(Cx.abs(R), 3)}$, &nbsp; angles subtract: $${deg(Cx.arg(z1))}-${deg(Cx.arg(z2))}\\equiv${deg(Cx.arg(R))}$`;
+    if (op === 'sub') extra = `<br>$|z_1-z_2|=${fnum(Cx.abs(R), 3)}$ is the distance $QP$ (red dashed arrow).`;
+    texMix('#dgeo-out', `$z_1=${Cx.tex(z1, 2)}$, $z_2=${Cx.tex(z2, 2)}$ &nbsp;⇒&nbsp; $R=${Cx.tex(R, 3)}$` + extra);
+  };
+  G.onchange = gout; $('#dgeo-op').addEventListener('change', () => { G.redraw(); gout(); }); gout();
+
+  /* H.K. Dass §20.16–20.17 — three forms */
+  let w = [-1.5, -1.2];
+  const F = new Plane('#cv-dass-forms', { span: 3, aspect: 0.6, snap: 0.05, draw: p => {
+    const r = Cx.abs(w); let t = Cx.arg(w); if (val('dfm-conv') === '02' && t < 0) t += TAU;
+    p.circle([0, 0], r, { color: '--grid', dash: [4, 4], width: 1 });
+    p.line([0, 0], [w[0], 0], { color: '--accent', width: 2 }); p.line([w[0], 0], w, { color: '--accent3', width: 2 });
+    p.angleArc(0, t, 26, { color: '--accent2', width: 2 });
+    p.arrow([0, 0], w, { color: '--accent2', width: 3 }); p.dot(w, { r: 7, color: '--accent2', label: 'z' });
+  }});
+  F.addDrag(() => w, v => { if (Math.hypot(v[0], v[1]) > 0.05) w = v; });
+  const fout = () => {
+    const r = Cx.abs(w); let t = Cx.arg(w); if (val('dfm-conv') === '02' && t < 0) t += TAU;
+    const th = piFrac(t, 12);
+    texMix('#dfm-out', `Cartesian: $z=${Cx.tex(w, 3)}$<br>Polar: $z=${fnum(r, 3)}\\,(\\cos ${th}+i\\sin ${th})$ &nbsp; ($\\theta=${fnum(t * 180 / PI, 1)}^\\circ$)<br>Exponential: $z=${fnum(r, 3)}\\,e^{${th.startsWith('\\frac') || th.length > 6 ? '(' + th + ')' : th}\\,i}$`);
+  };
+  F.onchange = fout; $('#dfm-conv').addEventListener('change', () => { F.redraw(); fout(); }); fout();
+});
+
+/* dass:end */</script>
 </body>
 </html>

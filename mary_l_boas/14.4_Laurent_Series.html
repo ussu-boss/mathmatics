@@ -117,6 +117,23 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -135,6 +152,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="14.9_Mapping.html">14.9 Mapping</option>
 <option value="14.10_Applications_of_Conformal_Mapping.html">14.10 Some Applications of Conformal Mapping</option>
 <option value="14.11_Miscellaneous_Problems.html">14.11 Miscellaneous Problems</option></select>
+  <a class="btn" href="2.0_Complex_Numbers_Index.html" title="Chapter 2 index">Ch. 2 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -167,6 +185,65 @@ $$a_n=\frac1{2\pi i}\oint_C\frac{f(z)\,dz}{(z-z_0)^{n+1}},\qquad b_n=\frac1{2\pi
 <div class="box warn"><span class="tag">Warning: several rings, several series</span>
 <p>If $f$ has several isolated singularities, there are several rings $R_1,R_2,\dots$ about $z_0$ (Boas Fig. 4.2), and a <b>different</b> Laurent series in each. The one that matters for the residue at $z_0$ is the series that converges <b>near</b> $z_0$ (the innermost ring).</p></div>
 
+<!-- dass:start 10__thm -->
+<h2 id="dass-25-8" class="dass"><span class="dtag">H.K. Dass §25.8</span>Laurent's theorem: Dass's proof, and expanding one function in every region</h2>
+<p><b>When Laurent instead of Taylor.</b> To expand $f$ about a point where it is <b>not</b> analytic, or in a ring that has singularities inside its inner circle, a Taylor series is impossible. A Laurent series, with negative powers allowed, is what you get.</p>
+<div class="box thm"><span class="tag">Statement (Dass)</span><p>Let $f$ be analytic on two concentric circles $c_1$ (radius $r_1$) and $c_2$ (radius $r_2\lt r_1$) about $a$, and in the ring between them. Then for every $z$ in the ring</p>
+$$f(z)=\sum_{n=0}^\infty a_n(z-a)^n+\sum_{n=1}^\infty\frac{b_n}{(z-a)^n},\qquad a_n=\frac1{2\pi i}\oint_{c_1}\frac{f(w)\,dw}{(w-a)^{n+1}},\quad b_n=\frac1{2\pi i}\oint_{c_2}\frac{f(w)\,dw}{(w-a)^{-n+1}} .$$</div>
+<ol class="steps">
+<li><b>Cut the ring.</b> A cross-cut $AB$ from $c_2$ to $c_1$ makes the ring simply connected. Cauchy's formula on its boundary ($c_1$ anticlockwise, $AB$, $c_2$ clockwise, $BA$) gives, since the two passes along the cut cancel,
+$$f(z)=\frac1{2\pi i}\oint_{c_1}\frac{f(w)\,dw}{w-z}-\frac1{2\pi i}\oint_{c_2}\frac{f(w)\,dw}{w-z}.$$</li>
+<li><b>Outer circle:</b> $|z-a|\lt|w-a|$. Expand exactly as in Taylor's proof, $\frac1{w-z}=\sum\frac{(z-a)^n}{(w-a)^{n+1}}$. This gives $\sum a_n(z-a)^n$.</li>
+<li><b>Inner circle:</b> now $|w-a|\lt|z-a|$, so expand the other way: $-\frac1{w-z}=\frac{1}{(z-a)-(w-a)}=\sum_{n\ge1}\frac{(w-a)^{n-1}}{(z-a)^n}$. Integrating term by term gives $\sum\frac{b_n}{(z-a)^n}$ with $b_n=\frac1{2\pi i}\oint f(w)(w-a)^{n-1}dw$. ∎</li></ol>
+<p><b>Notes.</b> (1) By §24.4 both integrals may be taken over <b>any</b> circle in the ring, so one formula covers both: $c_n=\frac1{2\pi i}\oint\frac{f(w)\,dw}{(w-a)^{n+1}}$ for all integers $n$. (2) Dass's practical advice: "to expand by Laurent's theorem directly is cumbersome". Use partial fractions and geometric/binomial series instead. By uniqueness, you get the same coefficients.</p>
+
+<div class="dcase"><p><b>The algorithm ("take the bigger term common").</b> Split $f$ into partial fractions $\frac{A}{z-p}$. For each term, compare $|z-a|$ with $|p-a|$ in the region:</p><ul>
+<li>$|z-a|\lt|p-a|$ (the pole is <b>outside</b> the region): $\frac{A}{z-p}=\frac{-A}{(p-a)\left(1-\frac{z-a}{p-a}\right)}=-A\sum\frac{(z-a)^n}{(p-a)^{n+1}}$. Positive powers.</li>
+<li>$|z-a|\gt|p-a|$ (the pole is <b>inside</b> the inner circle): $\frac{A}{z-p}=\frac{A}{(z-a)\left(1-\frac{p-a}{z-a}\right)}=A\sum\frac{(p-a)^n}{(z-a)^{n+1}}$. Negative powers.</li>
+<li>$p=a$: the term is already a power of $(z-a)$. Leave it alone.</li></ul></div>
+
+<div class="widget" id="w-dass-lreg">
+<div class="wt">Interactive — one function, every region: which way each partial fraction is expanded</div>
+<div class="wd">Choose one of Dass's functions and a centre. Drag the green point. The region it lies in (a disk, a ring, or the outside) is shaded, and the readout shows <b>how each partial fraction is expanded</b> there: in positive or negative powers, and why. On the right, the bars are the Laurent coefficients $c_n$ for that region, from $n=-8$ to $8$. Moving into another ring changes the series completely.</div>
+<div class="ctrls"><label>function <select id="dlr-f"></select></label></div>
+<div class="grid2"><canvas id="cv-dass-lrz"></canvas><canvas id="cv-dass-lrc"></canvas></div>
+<div class="readout" id="dlr-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 20, 21) — $\frac{1}{(z-1)(z-2)}$ in $1\lt|z|\lt2$, and $\frac{z}{(z-1)(z-2)}$ in $|z-1|\gt1$</div><div class="bd">
+<div class="dcase"><p><b>Ex 20.</b> $\frac1{z-2}-\frac1{z-1}$. In $1\lt|z|\lt2$, $|z|\lt2$ (factor out $2$) and $|z|\gt1$ (factor out $z$):
+$$-\frac12\left(1-\frac z2\right)^{-1}-\frac1z\left(1-\frac1z\right)^{-1}=-\frac12-\frac z4-\frac{z^2}8-\cdots-\frac1z-\frac1{z^2}-\frac1{z^3}-\cdots$$</p></div>
+<div class="dcase"><p><b>Ex 21.</b> About $a=1$: $\frac{z}{(z-1)(z-2)}=-\frac{1}{z-1}+\frac{2}{(z-1)-1}$. For $|z-1|\gt1$, $\frac{2}{(z-1)\left(1-\frac1{z-1}\right)}=\sum\frac{2}{(z-1)^{n+1}}$. Hence
+$$\frac{1}{z-1}+\frac{2}{(z-1)^2}+\frac{2}{(z-1)^3}+\cdots$$</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the coefficient of $\frac1{z-a}$ in these series is what the residue theorem needs. In Ex 21 it is $1$ in the outer region, while the residue at $z=1$ itself is $-1$. Different regions give different "$b_1$".</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 22) — $\frac{1}{(1+z^2)(z+2)}$ in (i) $1\lt|z|\lt2$ and (ii) $|z|\gt2$</div><div class="bd"><ol class="steps">
+<li>Partial fractions: $\frac{1}{(1+z^2)(z+2)}=-\frac15\cdot\frac{z-2}{1+z^2}+\frac15\cdot\frac1{z+2}$.</li>
+<li>(i) $|z|\gt1$, so $\frac{1}{1+z^2}=\frac1{z^2}\left(1+\frac1{z^2}\right)^{-1}$. And $|z|\lt2$, so $\frac1{z+2}=\frac12\left(1+\frac z2\right)^{-1}$. The result is
+$$\cdots-\frac{2}{5z^4}+\frac{1}{5z^3}+\frac{2}{5z^2}-\frac{1}{5z}+\frac1{10}-\frac{z}{20}+\frac{z^2}{40}-\cdots$$
+The coefficients of $z^{-1},z^{-2},z^{-3},z^{-4}$ are $-\frac15,+\frac25,+\frac15,-\frac25$, and then the pattern repeats. (The widget shows the bars.)</li>
+<li>(ii) $|z|\gt2$: now $\frac1{z+2}=\frac1z\left(1+\frac2z\right)^{-1}$ too. The leading terms cancel, leaving $\frac{1}{z^3}-\frac{2}{z^4}+\frac{3}{z^5}-\frac{6}{z^6}+\cdots$. It starts at $z^{-3}$, as it must, since $f\sim\frac1{z^3}$ at infinity.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the outermost Laurent series starts at $z^{-(\deg q-\deg p)}$. That is a quick check on any "$|z|\gt R$" expansion.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 23) — $\frac{1}{(z+1)(z+3)}$ in all four regions</div><div class="bd">
+<p>$f=\frac12\left[\frac1{z+1}-\frac1{z+3}\right]$.</p>
+<table class="t dt">
+<tr><th>Region</th><th>$\frac1{z+1}$ expanded in</th><th>$\frac1{z+3}$ expanded in</th><th>Series</th></tr>
+<tr><td>(iv) $|z|\lt1$</td><td>$z$</td><td>$\frac z3$</td><td>$\frac13-\frac49z+\frac{13}{27}z^2-\frac{40}{81}z^3+\cdots$ (Taylor)</td></tr>
+<tr><td>(i) $1\lt|z|\lt3$</td><td>$\frac1z$</td><td>$\frac z3$</td><td>$\cdots-\frac1{2z^4}+\frac1{2z^3}-\frac1{2z^2}+\frac1{2z}-\frac16+\frac z{18}-\frac{z^2}{54}+\cdots$</td></tr>
+<tr><td>(ii) $|z|\gt3$</td><td>$\frac1z$</td><td>$\frac3z$</td><td>$\frac1{z^2}-\frac4{z^3}+\frac{13}{z^4}-\frac{40}{z^5}+\cdots$</td></tr>
+<tr><td>(iii) $0\lt|z+1|\lt2$</td><td>(already a power of $z+1$)</td><td>$\frac{z+1}2$</td><td>$\frac{1}{2(z+1)}-\frac14+\frac{z+1}8-\frac{(z+1)^2}{16}+\cdots$</td></tr>
+</table>
+<p>In (ii) the general coefficient is $\frac{(-1)^n(1-3^n)}{2}$ for $z^{-n-1}$, so the $z^{-5}$ term is $-\frac{40}{z^5}$. The printed answer has $50$ there, a slip, since $\frac{1-81}{2}=-40$. A numerical Laurent coefficient confirms $-40$.</p>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> a typical MCQ asks "the coefficient of $z^{-2}$ in the expansion valid for $|z|\gt3$". Remember that the regions are bounded by circles <b>through the poles, centred at the expansion point</b>.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 24, 25) — Laurent series from known Taylor series</div><div class="bd">
+<div class="dcase"><p><b>Ex 24:</b> $\frac{1-\cos z}{z^3}=\frac1{z^3}\left(\frac{z^2}{2!}-\frac{z^4}{4!}+\frac{z^6}{6!}-\cdots\right)=\frac1{2z}-\frac z{24}+\frac{z^3}{720}-\cdots=\sum_{n\ge1}\frac{(-1)^{n+1}z^{2n-3}}{(2n)!}$. Simple pole at $0$, residue $\frac12$.</p></div>
+<div class="dcase"><p><b>Ex 25:</b> $\frac{1}{z(e^z-1)}$ in $0\lt|z|\lt2\pi$. Here $\frac{z}{e^z-1}=1-\frac z2+\frac{z^2}{12}-\frac{z^4}{720}+\cdots$ (the Bernoulli-number series), so
+$$\frac1{z(e^z-1)}=\frac1{z^2}-\frac1{2z}+\frac1{12}-\frac{z^2}{720}+\cdots$$
+The outer radius $2\pi$ is the distance to the next zeros of $e^z-1$, at $\pm2\pi i$.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $\frac{z}{e^z-1}$ (and hence $\coth$ and $\cot$) is the series behind many residue and summation questions. Know its first three terms.</p></div></div>
+<!-- dass:end -->
 <h2 id="method">2. The standard method: partial fractions plus geometric series</h2>
 <p>Everything rests on two expansions of $\frac1{z-a}$:</p>
 $$\frac{1}{z-a}=-\frac1a\cdot\frac{1}{1-z/a}=-\sum_{n=0}^\infty\frac{z^n}{a^{n+1}}\quad(|z|\lt|a|),\qquad\frac1{z-a}=\frac1z\cdot\frac{1}{1-a/z}=\sum_{n=0}^\infty\frac{a^n}{z^{n+1}}\quad(|z|>|a|).$$
@@ -185,6 +262,43 @@ $$\frac{1}{z-a}=-\frac1a\cdot\frac{1}{1-z/a}=-\sum_{n=0}^\infty\frac{z^n}{a^{n+1
 <div class="grid2"><canvas id="cv-an"></canvas><div class="readout" id="an-out" style="margin:0;font-size:14.5px"></div></div>
 </div>
 
+<!-- dass:start 10__method -->
+<h2 id="dass-25-8b" class="dass"><span class="dtag">H.K. Dass §25.8 (cont.)</span>Laurent series about a singular point: "all possible" expansions, and Exercise 25.3</h2>
+<p>About a pole $a$ there are always at least two Laurent series: one in the punctured disk $0\lt|z-a|\lt d$, where $d$ is the distance to the next singularity, and one in $|z-a|\gt d$. The first one is the series that tells you the <b>type of singularity</b> and the <b>residue</b>.</p>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 26) — all Laurent series of $\frac{1}{z(z+2)^3}$ about $z=-2$</div><div class="bd"><ol class="steps">
+<li>Put $t=z+2$: $f=\frac{1}{t^3(t-2)}$. The other singularity, $z=0$, is at distance $|t|=2$, so there are <b>two</b> regions.</li>
+<li><b>$0\lt|z+2|\lt2$:</b> $\frac{1}{t-2}=-\frac12\left(1-\frac t2\right)^{-1}$, so
+$$f=-\frac{1}{2(z+2)^3}-\frac{1}{4(z+2)^2}-\frac{1}{8(z+2)}-\frac1{16}-\frac{z+2}{32}-\cdots$$
+This shows a pole of order 3 at $-2$ with residue $-\frac18$.</li>
+<li><b>$|z+2|\gt2$:</b> $\frac1{t-2}=\frac1t\left(1-\frac2t\right)^{-1}$, so
+$$f=\frac{1}{(z+2)^4}+\frac{2}{(z+2)^5}+\frac{4}{(z+2)^6}+\cdots=\sum_{k\ge0}\frac{2^k}{(z+2)^{k+4}} .$$</li></ol>
+<p>(The printed solution gives only the first series and labels its region $0\lt|z-2|\lt1$. The region is $0\lt|z+2|\lt2$, as the step $\left|\frac t2\right|\lt1$ shows.)</p>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "the residue at $z=-2$" must be read from the series valid <b>near</b> $-2$ (the punctured disk). Reading $b_1$ from the outer series gives $0$, which is wrong.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 27) — $\frac{e^z}{(z-1)^2}$ about $z=1$</div><div class="bd">
+<p>With $t=z-1$: $\frac{e\cdot e^t}{t^2}=e\left[\frac1{(z-1)^2}+\frac1{z-1}+\frac1{2!}+\frac{z-1}{3!}+\cdots\right]$, valid for $0\lt|z-1|\lt\infty$. Double pole, residue $e$.</p>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> when the only singularity is the expansion point, the shift-and-substitute method gives the whole Laurent series at once.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 30) — $\frac{7z-2}{z^3-z^2-2z}$ about $z=-1$ in three regions</div><div class="bd">
+<p>Partial fractions: $\frac{7z-2}{z(z+1)(z-2)}=\frac1z-\frac{3}{z+1}+\frac{2}{z-2}$. About $a=-1$, the other poles $0$ and $2$ are at distances $1$ and $3$.</p>
+<table class="t dt">
+<tr><th>Region</th><th>$\frac1z=\frac1{(z+1)-1}$</th><th>$\frac2{z-2}=\frac{2}{(z+1)-3}$</th><th>Leading terms</th></tr>
+<tr><td>(i) $0\lt|z+1|\lt1$</td><td>$-\sum(z+1)^n$</td><td>$-\frac23\sum\left(\frac{z+1}3\right)^n$</td><td>$-\frac{3}{z+1}-\frac53-\frac{11}{9}(z+1)-\cdots$</td></tr>
+<tr><td>(ii) $1\lt|z+1|\lt3$</td><td>$\sum_{n\ge1}(z+1)^{-n}$</td><td>$-\frac23\sum\left(\frac{z+1}3\right)^n$</td><td>$\cdots+\frac1{(z+1)^2}-\frac{2}{z+1}-\frac23-\frac{2}{9}(z+1)-\cdots$</td></tr>
+<tr><td>(iii) $|z+1|\gt3$</td><td>$\sum_{n\ge1}(z+1)^{-n}$</td><td>$2\sum_{n\ge0}\frac{3^n}{(z+1)^{n+1}}$</td><td>$\frac{7}{(z+1)^2}+\frac{19}{(z+1)^3}+\frac{55}{(z+1)^4}+\cdots$</td></tr>
+</table>
+<p>Check: in (iii) the $\frac1{z+1}$ coefficient is $1-3+2=0$. That must be so, because $f\sim\frac{7}{z^2}$ at infinity. Every coefficient above was confirmed by numerical contour integration.</p>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the residue at $-1$ is $-3$ (region (i)), while the "$b_1$" of region (ii) is $-2=-3+1$, which includes the residue at $0$. That is the residue theorem in disguise.</p></div></div>
+
+<table class="t dt">
+<tr><th colspan="2">Dass Exercise 25.3 — selected answers (checked numerically)</th></tr>
+<tr><td>$\frac{z^2-1}{(z+2)(z+3)}$, $|z|\lt2$</td><td>$-\frac16+\frac5{36}z+\frac{17}{216}z^2-\frac{115}{1296}z^3+\cdots$</td></tr>
+<tr><td>$\frac{z^2-1}{(z+2)(z+3)}$, $2\lt|z|\lt3$</td><td>$1+\dfrac3{z+2}-\dfrac8{z+3}=\cdots+\frac{12}{z^3}-\frac6{z^2}+\frac3z-\frac53+\frac{8z}9-\frac{8z^2}{27}+\cdots$</td></tr>
+<tr><td>$\frac{1}{(z-1)^2(z+3)}$ about $1$</td><td>$0\lt|z-1|\lt4$: $\frac14\left[\frac{1}{(z-1)^2}-\frac{1}{4(z-1)}+\frac1{16}-\cdots\right]$; &nbsp; $|z-1|\gt4$: $\frac1{(z-1)^3}-\frac{4}{(z-1)^4}+\frac{16}{(z-1)^5}-\cdots$</td></tr>
+<tr><td>$\frac{4z+3}{z(z-3)(z+2)}$, $|z|\lt2$ part</td><td>contains $-\frac{1}{2z}$, a simple pole at $0$ with residue $-\frac12$</td></tr>
+</table>
+<!-- dass:end -->
 <h2 id="classify">3. Classifying isolated singular points</h2>
 <p>Let $z_0$ be a regular point or an isolated singular point, and expand $f$ in the Laurent series that converges <b>near</b> $z_0$ (in $0\lt|z-z_0|\lt r$).</p>
 <table class="t">
@@ -217,6 +331,93 @@ $$\frac{1}{z-a}=-\frac1a\cdot\frac{1}{1-z/a}=-\sum_{n=0}^\infty\frac{z^n}{a^{n+1
 <div class="small" id="zo-cap"></div>
 </div>
 
+<!-- dass:start 10__classify -->
+<h2 id="dass-25-9" class="dass"><span class="dtag">H.K. Dass §25.9</span>At a pole $|f|\to\infty$; and Laurent coefficients as integrals (Bessel functions appear)</h2>
+<div class="box thm"><span class="tag">Theorem (§25.9)</span><p>If $f$ has a pole of order $m$ at $a$, then $|f(z)|\to\infty$ as $z\to a$.</p></div>
+<ol class="steps">
+<li>Near $a$: $f(z)=\sum_{n\ge0}a_n(z-a)^n+\sum_{n=1}^m\frac{b_n}{(z-a)^n}$, with $b_m\ne0$. The analytic part stays bounded.</li>
+<li>Write the principal part as $\frac{1}{(z-a)^m}\left[b_m+\sum_{n=1}^{m-1}b_n(z-a)^{m-n}\right]$.</li>
+<li>By $|A+B|\ge|A|-|B|$, this is at least $\frac{1}{|z-a|^m}\left[|b_m|-\sum_{n\lt m}|b_n|\,|z-a|^{m-n}\right]$. The bracket tends to $|b_m|\gt0$ while $\frac1{|z-a|^m}\to\infty$. ∎</li></ol>
+<div class="dcase"><p><b>All three cases, side by side.</b> The type of an isolated singularity is decided by the behaviour of $|f|$:</p><ul>
+<li><b>removable:</b> $f$ stays bounded near $a$ (e.g. $\frac{\sin z}{z-\pi}$ at $\pi$, Dass Ex 17);</li>
+<li><b>pole:</b> $|f|\to\infty$ (this theorem). Then $(z-a)^mf$ is bounded and non-zero;</li>
+<li><b>essential:</b> neither. $f$ takes values arbitrarily close to every complex number near $a$ (Casorati–Weierstrass). Examples are $e^{1/z}$ and Dass Ex 28 below.</li></ul></div>
+
+<h3>When the coefficients must come from the integral formula (Dass Ex 28, 29)</h3>
+<p>For $e^{\frac c2(z-\frac1z)}$ or $\sin\left[c\left(z+\frac1z\right)\right]$ there are no partial fractions to use, so take $c_n=\frac1{2\pi i}\oint\frac{f(z)\,dz}{z^{n+1}}$ on $|z|=1$, with $z=e^{i\theta}$ and $dz=ie^{i\theta}d\theta$:</p>
+<div class="ex"><div class="hd">Worked example (Dass Ex 28) — $\sin\left[c\left(z+\frac1z\right)\right]$</div><div class="bd"><ol class="steps">
+<li>On $|z|=1$, $z+\frac1z=2\cos\theta$. So $a_n=\frac1{2\pi}\int_0^{2\pi}\sin(2c\cos\theta)e^{-in\theta}d\theta=\frac1{2\pi}\int_0^{2\pi}\sin(2c\cos\theta)\cos n\theta\,d\theta$. The $\sin n\theta$ part vanishes by the symmetry $\theta\to2\pi-\theta$.</li>
+<li>The function is unchanged when $z$ is replaced by $\frac1z$, so $b_n=a_n$: $\ f=a_0+\sum_{n\ge1}a_n\left(z^n+\frac1{z^n}\right)$.</li>
+<li><b>Going further:</b> $\sin(x\cos\theta)=2\sum_{k\ge0}(-1)^kJ_{2k+1}(x)\cos(2k+1)\theta$. So $a_n=0$ for even $n$ (including $a_0$), and $a_{2k+1}=(-1)^kJ_{2k+1}(2c)$:
+$$\sin\left[c\left(z+\tfrac1z\right)\right]=\sum_{k\ge0}(-1)^kJ_{2k+1}(2c)\left(z^{2k+1}+z^{-(2k+1)}\right),\qquad0\lt|z|\lt\infty .$$
+Infinitely many negative powers: $z=0$ is an <b>essential</b> singularity.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> Fourier coefficients of $\sin(x\cos\theta)$ and $\cos(x\sin\theta)$ are Bessel functions. This links complex analysis to Chapter 12 and the Jacobi–Anger expansion used in scattering problems.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 29) — $e^{\frac c2\left(z-\frac1z\right)}=\sum_{n=-\infty}^{\infty}J_n(c)\,z^n$: the Bessel generating function</div><div class="bd"><ol class="steps">
+<li>On $|z|=1$, $\frac c2\left(z-\frac1z\right)=ic\sin\theta$. So $a_n=\frac1{2\pi}\int_0^{2\pi}e^{i(c\sin\theta-n\theta)}d\theta=\frac1{2\pi}\int_0^{2\pi}\cos(c\sin\theta-n\theta)\,d\theta$, the sine part integrating to $0$.</li>
+<li>That integral is Bessel's integral, so $a_n=J_n(c)$.</li>
+<li>Replacing $z$ by $-\frac1z$ leaves $f$ unchanged, so the coefficient of $z^{-n}$ is $(-1)^nJ_n(c)$. That is, $J_{-n}=(-1)^nJ_n$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "the coefficient of $z^n$ in $e^{\frac x2(z-1/z)}$" is $J_n(x)$. This is one of the most-asked Bessel facts, and here it is just a Laurent coefficient.</p></div></div>
+
+<div class="widget" id="w-dass-bessel">
+<div class="wt">Interactive — Laurent coefficients of $e^{\frac c2(z-1/z)}$ and $\sin[c(z+1/z)]$ are Bessel numbers</div>
+<div class="wd">The bars are the Laurent coefficients $c_n$, $n=-8,\dots,8$, computed by numerically integrating $\frac1{2\pi i}\oint f(z)z^{-n-1}dz$ around $|z|=1$. The dots are the predicted Bessel values: $J_n(c)$ for Ex 29, and $(-1)^kJ_{2k+1}(2c)$ at $n=\pm(2k+1)$ for Ex 28. Move $c$ and watch the bars track the dots. Even with $c$ small, there are infinitely many non-zero negative-index coefficients: the singularity at $0$ is essential.</div>
+<div class="ctrls"><label>function <select id="dbs-f"><option value="gen">Ex 29: e^{(c/2)(z − 1/z)}</option><option value="sin">Ex 28: sin[c(z + 1/z)]</option></select></label>
+<label>$c$ <input type="range" id="dbs-c" min="0.1" max="8" step="0.1" value="2"><output></output></label></div>
+<canvas id="cv-dass-bessel"></canvas>
+<div class="readout" id="dbs-out"></div>
+</div>
+<!-- dass:end -->
+<!-- dass:start 20__classify -->
+<h2 id="dass-26-1" class="dass"><span class="dtag">H.K. Dass §26.1–26.3</span>Zeros and singular points: definitions, Dass's twelve examples, and two corrections</h2>
+<table class="t dt">
+<tr><th>Term (Dass)</th><th>Meaning</th><th>Example</th></tr>
+<tr><td>Zero of order $m$</td><td>$f(a)=f'(a)=\dots=f^{(m-1)}(a)=0\ne f^{(m)}(a)$, i.e. $f=(z-a)^mg(z)$ with $g(a)\ne0$</td><td>$z=2$ is a simple zero of $(z-2)\sin\frac1{z-1}$</td></tr>
+<tr><td>Singular point</td><td>a point where $f$ is not analytic</td><td>$\frac1{z-2}$ at $z=2$</td></tr>
+<tr><td>Isolated singularity</td><td>no other singularity in some small circle around it</td><td>$\frac1{(z-1)(z-3)}$ at $1$ and at $3$</td></tr>
+<tr><td>Non-isolated singularity</td><td>a limit point of singularities</td><td>$\frac{1}{\sin(\pi/z)}$ has poles at $z=\frac1n$, which pile up at $z=0$</td></tr>
+<tr><td>Pole of order $m$</td><td>the Laurent series near $a$ stops at $\frac{b_m}{(z-a)^m}$</td><td>$\frac{e^{z-a}}{(z-a)^2}$: order 2</td></tr>
+<tr><td>Essential singularity</td><td>infinitely many negative powers</td><td>$\sin\frac1{z-a}$, $\ e^{1/z}$</td></tr>
+<tr><td>Removable singularity</td><td>no negative powers at all; $f$ just was not defined there</td><td>$\frac{z-\sin z}{z^3}=\frac1{3!}-\frac{z^2}{5!}+\cdots$</td></tr>
+</table>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 1–12) — classify each singularity</div><div class="bd">
+<table class="t dt">
+<tr><th>Dass</th><th>Function</th><th>Result and reason</th></tr>
+<tr><td>Ex 1</td><td>$\frac{z-2}{z^2}\sin\frac1{z-1}$</td><td>Zeros at $z=2$ (simple) and $z=1+\frac1{n\pi}$. Double pole at $0$. At $z=1$ the zeros pile up, and the Laurent series of $\sin\frac1{z-1}$ never stops: an <b>isolated essential singularity</b>.</td></tr>
+<tr><td>Ex 2</td><td>$\sin\frac1z$; $\ \frac{e^{1/z}}{z^2}$</td><td>Both have an essential singularity at $0$ (infinitely many negative powers)</td></tr>
+<tr><td>Ex 3</td><td>$\frac{e^{z-a}}{(z-a)^2}$</td><td>pole of order 2 at $a$</td></tr>
+<tr><td>Ex 4</td><td>$\sin\frac1{z-a}$</td><td>essential singularity at $a$</td></tr>
+<tr><td>Ex 5</td><td>$\frac{\sin(z-a)}{(z-a)^4}$</td><td>pole of order <b>3</b>, not 4: the numerator has a simple zero</td></tr>
+<tr><td>Ex 6</td><td>$e^{1/(z-a)}$</td><td>$\lim_{z\to a}$ does not exist (it is $\infty$ along one direction and $0$ along the opposite one): essential</td></tr>
+<tr><td>Ex 7</td><td>$\frac{1}{1-e^z}$</td><td>simple poles at $z=2n\pi i$, including $2\pi i$</td></tr>
+<tr><td>Ex 8</td><td>$\frac{\cot\pi z}{(z-a)^2}$</td><td>Double pole at $a$ ($a\notin\mathbb Z$), simple poles at every integer. At $\infty$ the poles $z=n$ accumulate, so it is a <b>non-isolated</b> singularity (Dass calls it essential).</td></tr>
+<tr><td>Ex 9</td><td>$e^{-1/z^2}$</td><td>See the note below: <b>essential singularity at $0$</b></td></tr>
+<tr><td>Ex 10</td><td>$\frac{z-\sin z}{z^3}$</td><td>removable at $0$ (limit $\frac16$)</td></tr>
+<tr><td>Ex 11</td><td>$\frac{1}{z^4+1}$</td><td>simple poles at $e^{i\pi/4},e^{3i\pi/4},e^{5i\pi/4},e^{7i\pi/4}$, i.e. $\frac{\pm1\pm i}{\sqrt2}$</td></tr>
+<tr><td>Ex 12</td><td>$e^z$</td><td>Put $z=\frac1t$: $e^{1/t}$ has an essential singularity at $t=0$. So $e^z$ has an <b>isolated essential singularity at $\infty$</b>.</td></tr>
+</table>
+<p><b>Note on Ex 9.</b> The book argues that $e^{-1/z^2}=\frac{1}{e^{1/z^2}}$ has "no singularities" because the denominator never vanishes. That shows there are no <b>poles</b>. But the function is not even defined at $z=0$, and its Laurent series $\sum_n\frac{(-1)^n}{n!\,z^{2n}}$ has infinitely many negative powers. So $z=0$ is an <b>essential</b> singularity. Along the real axis $e^{-1/x^2}\to0$, while along the imaginary axis $e^{+1/y^2}\to\infty$.</p>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "no zero of the denominator" does not mean "no singularity". Exponentials of $\frac1z$ hide essential singularities. This is a popular trap option.</p></div></div>
+
+<div class="box thm"><span class="tag">Theorem (Dass Ex 13)</span><p>If $f$ has a pole of order $m$ at $a$, then $\frac1f$ has a zero of order $m$ there. The proof: $f=\frac{\phi(z)}{(z-a)^m}$ with $\phi(a)\ne0$, so $\frac1f=\frac{(z-a)^m}{\phi(z)}$. The converse also holds, so <b>the poles of $f$ are exactly the zeros of $\frac1f$, with the same order</b>.</p></div>
+
+<div class="widget" id="w-dass-order">
+<div class="wt">Interactive — read the order of a singularity off a log–log plot</div>
+<div class="wd">For the chosen function and singular point $a$, each curve is $\log_{10}|f(a+re^{i\phi})|$ plotted against $\log_{10}r$, for six directions $\phi$. At a <b>pole of order $m$</b> all curves become parallel straight lines of slope $-m$. At a <b>removable</b> point they level off. At an <b>essential</b> singularity the directions disagree wildly: some shoot up, others plunge.</div>
+<div class="ctrls"><label>function <select id="dor-f"></select></label></div>
+<canvas id="cv-dass-order"></canvas>
+<div class="readout" id="dor-out"></div>
+</div>
+
+<table class="t dt">
+<tr><th colspan="2">Dass Exercise 26.1 — answers</th></tr>
+<tr><td>$\frac{1}{(z-2)(z-3)}$; $\ \frac{1}{(z-2)^3}$</td><td>simple poles at $2$ and $3$; a pole of order 3 at $2$</td></tr>
+<tr><td>$\frac{1}{\sin z-\cos z}$</td><td>simple poles where $\tan z=1$: $z=\frac\pi4+n\pi$</td></tr>
+<tr><td>$\cot\frac1z$</td><td>simple poles at $z=\frac1{n\pi}$; $z=0$ is a non-isolated singularity (a limit of poles)</td></tr>
+<tr><td>$\frac{1}{(z-2)^4(z+3)^6}$</td><td>poles of order $4$ at $2$ and $6$ at $-3$</td></tr>
+</table>
+<!-- dass:end -->
 <h2 id="boas">4. Boas Problems, Section 4 — solutions</h2>
 <details class="sol"><summary>Show solutions 1–2</summary>
 <p><b>1.</b> A power series converging inside $C$ can be differentiated term by term there, and the result converges in the same disk (Chapter 1 §11, Chapter 2 §7). So the sum has a derivative at every point inside $C$: it is analytic.</p>
@@ -298,7 +499,70 @@ $$\frac{1}{z-a}=-\frac1a\cdot\frac{1}{1-z/a}=-\sum_{n=0}^\infty\frac{z^n}{a^{n+1
 <div class="mcq" data-ans="0" data-ok="Infinitely many negative powers." data-no="Look at the Laurent series of $e^{1/z}$."><p>2. $z=0$ for $e^{1/z}$ is</p><div class="opts"><button>an essential singularity</button><button>a simple pole</button><button>a pole of infinite order</button><button>removable</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="3" data-ok="$\sin^2 z\sim z^2$, so $5-2=3$." data-no="Subtract the zero order of the numerator."><p>3. $\frac{\sin^2z}{z^5}$ at $0$ has a pole of order</p><div class="opts"><button>5</button><button>1</button><button>2</button><button>3</button></div><div class="fb"></div></div>
 
-<h2 id="summary">7. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">7. Going deeper: order arithmetic, uniqueness, and how wild essential singularities are</h2>
+<h3>Uniqueness: any method gives the same series</h3>
+<p>In a given annulus the Laurent coefficients are fixed by $a_n=\frac1{2\pi i}\oint\frac{f(z)}{(z-z_0)^{n+1}}dz$. So <b>any</b> legitimate way of getting a series, whether partial fractions, geometric series, or multiplying known series, produces <i>the</i> Laurent series of that annulus. Different annuli give different series. The number of annuli about $z_0$ equals the number of distinct distances from $z_0$ to the singularities, counting the outer region (and the inner punctured disk if $z_0$ is itself singular).</p>
+<h3>Order arithmetic (no series needed)</h3>
+<p>Write $\operatorname{ord}_{z_0}f=m$ if $f=(z-z_0)^mg$ with $g$ analytic and $g(z_0)\ne0$. A zero of order $m$ has $m\gt0$, and a pole of order $k$ has $m=-k$. Then</p>
+$$\operatorname{ord}(fg)=\operatorname{ord}f+\operatorname{ord}g,\qquad\operatorname{ord}(f/g)=\operatorname{ord}f-\operatorname{ord}g,\qquad\operatorname{ord}(f^n)=n\operatorname{ord}f .$$
+<p>Standard orders at $0$: $\sin z$, $\tan z$, $e^z-1$ and $\ln(1+z)$ have order $1$; $1-\cos z$ has order $2$; $z-\sin z$ has order $3$. Example: $\frac{1}{z\sin^2z}$ has order $-1-2=-3$, a pole of order 3.</p>
+<h3>Essential singularities: Casorati–Weierstrass and Picard</h3>
+<table class="t">
+<tr><th>Type</th><th>Principal part</th><th>Behaviour as $z\to z_0$</th></tr>
+<tr><td>Removable</td><td>none</td><td>$f$ has a finite limit</td></tr>
+<tr><td>Pole of order $k$</td><td>finitely many terms, ending at $(z-z_0)^{-k}$</td><td>$|f|\to\infty$</td></tr>
+<tr><td>Essential</td><td>infinitely many terms</td><td>no limit, finite or infinite</td></tr>
+</table>
+<p>Near an essential singularity, $f$ comes arbitrarily close to <b>every</b> complex value (Casorati–Weierstrass). Picard's theorem goes further: $f$ actually takes every value, with at most one exception, infinitely often. Example: $e^{1/z}$ near $0$ takes every value except $0$.</p>
+
+<h2 id="exampat">8. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Classify the singularity</td><td>Removable, pole of what order, or essential (often multiple correct)</td><td>Order arithmetic; look for $e^{1/z}$, $\sin\frac1z$</td></tr>
+<tr><td>A specific coefficient</td><td>Coefficient of $z^{-1}$ or $z^{k}$ in a given annulus</td><td>Multiply the series and collect; often a known sum like $e-1$</td></tr>
+<tr><td>Region of validity</td><td>Which annulus a given series belongs to; how many expansions exist</td><td>Distances to the singularities</td></tr>
+<tr><td>Principal part</td><td>The negative-power terms</td><td>Expand only up to $(z-z_0)^{-1}$</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$\frac{\sin z}{z^4}$ has a pole of order <b>3</b>, not 4, because $\sin z$ has a zero of order 1.</li>
+<li>A Laurent series about $z_0$ in an annulus <i>not</i> touching $z_0$ can have infinitely many negative powers even though $z_0$ is a regular point. This does <b>not</b> make $z_0$ an essential singularity. Only the innermost punctured-disk series classifies $z_0$.</li>
+<li>$e^{1/z^2}$ has an essential singularity, not a pole of order 2.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$\frac{1}{e^z-1}=\frac1z-\frac12+\frac z{12}-\dots$ and $\cot z=\frac1z-\frac z3-\frac{z^3}{45}-\dots$</li>
+<li>For $|z|\gt R$ expansions, factor out the largest power: $\frac{1}{z-a}=\frac1z\sum\left(\frac az\right)^n$.</li>
+</ul></div>
+
+<h2 id="xprob">9. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> In the region $|z|\gt1$, the coefficient of $z^{-1}$ in the Laurent series of $\dfrac{1}{z(z-1)}$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $1$</span><span>(b) $-1$</span><span>(c) $0$</span><span>(d) $2$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac1{z^2}\cdot\frac{1}{1-1/z}=\frac1{z^2}+\frac1{z^3}+\dots$ There is no $z^{-1}$ term. Option <b>(c)</b>. (So $\oint_{|z|=2}$ of this function is $0$, consistent with the residues $-1$ at $0$ and $+1$ at $1$ cancelling.)</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> Find the order of the pole of $\dfrac{1}{(1-\cos z)^2}$ at $z=0$. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$1-\cos z$ has order 2, so $(1-\cos z)^2$ has order 4 and the pole has order $\mathbf4$.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> Find the coefficient of $z^{-1}$ in the Laurent series of $\dfrac{e^{1/z}}{1-z}$ valid in $0\lt|z|\lt1$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>$e^{1/z}=\sum_{m\ge0}\frac{z^{-m}}{m!}$ and $\frac{1}{1-z}=\sum_{k\ge0}z^k$. The $z^{-1}$ terms have $m-k=1$, giving $\sum_{m\ge1}\frac1{m!}=e-1=\mathbf{1.718}$. This is the residue at the essential singularity $0$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> How many different Laurent series about $z_0=1$ does $\dfrac{1}{(z-1)(z-2)(z+3)}$ have? <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) 2</span><span>(b) 3</span><span>(c) 4</span><span>(d) 1</span></div>
+<details class="sol"><summary>Show solution</summary><p>The other singularities are at distances $1$ (from $2$) and $4$ (from $-3$). The regions are $0\lt|z-1|\lt1$, $1\lt|z-1|\lt4$ and $|z-1|\gt4$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> (Multiple correct) At $z=0$: <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\frac{z}{e^z-1}$ has a removable singularity</span><span>(b) $\cot z-\frac1z$ has a removable singularity</span><span>(c) $\frac{\sin z}{z^4}$ has a pole of order 4</span><span>(d) $e^{1/z^2}$ has a pole of order 2</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b).</b> (a) tends to $1$. (b): $\cot z-\frac1z=-\frac z3-\dots\to0$. (c) has order $1-4=-3$. (d) is essential.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Find the principal part of $f(z)=\dfrac{1}{z^2\sin z}$ at $z=0$, and its residue there. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{1}{\sin z}=\frac1z\left(1-\frac{z^2}6+\dots\right)^{-1}=\frac1z+\frac z6+\frac{7z^3}{360}+\dots$ Dividing by $z^2$: $f=\frac1{z^3}+\frac1{6z}+\frac{7z}{360}+\dots$ The principal part is $\frac1{z^3}+\frac{1}{6z}$, and the residue is $\frac16$.</p></details></div>
+<div class="mcq" data-ans="0" data-ok="$\frac{e^z}{z^2}=\frac1{z^2}+\frac1z+\frac12+\dots$" data-no="Expand $e^z=1+z+\dots$ and divide by $z^2$."><p>Rapid fire: the principal part of $\dfrac{e^z}{z^2}$ at $0$ is</p><div class="opts"><button>$\frac1{z^2}+\frac1z$</button><button>$\frac1{z^2}$</button><button>$\frac1z$</button><button>$\frac1{z^2}+\frac1z+\frac12$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">10. Connections</h2>
+<div class="xlinks">
+<a href="14.3_Contour_Integrals.html"><b>Builds on</b>14.3 Cauchy's formula<small>The coefficient formulas</small></a>
+<a href="14.5_The_Residue_Theorem.html"><b>Next</b>14.5 Residue theorem<small>Only $a_{-1}$ survives integration</small></a>
+<a href="14.6_Methods_of_Finding_Residues.html"><b>Uses</b>14.6 Residue methods<small>Shortcuts that avoid the full series</small></a>
+<a href="2.6_Complex_Infinite_Series.html"><b>Recall</b>2.6 Geometric series<small>The engine of every Laurent expansion</small></a>
+<a href="2.7_Complex_Power_Series_Disk_of_Convergence.html"><b>Recall</b>2.7 Disks of convergence<small>Annuli generalise disks</small></a>
+<a href="14.8_Point_at_Infinity_Residues_at_Infinity.html"><b>Later</b>14.8 Behaviour at ∞<small>Laurent series in $1/z$</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="7. Summary">11. Summary</h2>
 <div class="card"><ul class="summary">
 <li>Laurent series $\sum a_n(z-z_0)^n+\sum b_n(z-z_0)^{-n}$ converge in rings. There is one series per ring, and each is unique.</li>
 <li>Method: partial fractions, then expand $\frac1{z-a}$ in $z/a$ (pole outside the ring) or in $a/z$ (pole inside the inner circle).</li>
@@ -853,5 +1117,115 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+/* H.K. Dass §25.8 — one function, every region: how each partial fraction is expanded */
+onReady(() => {
+  const I = [0, 1];
+  const F = [
+    { n: 'Ex 20: 1/((z−1)(z−2)), centre 0', N: z => [1, 0], p: [[1, 0], [2, 0]], a: [0, 0], t: '\\frac{1}{(z-1)(z-2)}' },
+    { n: 'Ex 21: z/((z−1)(z−2)), centre 1', N: z => z, p: [[1, 0], [2, 0]], a: [1, 0], t: '\\frac{z}{(z-1)(z-2)}' },
+    { n: 'Ex 22: 1/((1+z²)(z+2)), centre 0', N: z => [1, 0], p: [I, [0, -1], [-2, 0]], a: [0, 0], t: '\\frac{1}{(1+z^2)(z+2)}' },
+    { n: 'Ex 23: 1/((z+1)(z+3)), centre 0', N: z => [1, 0], p: [[-1, 0], [-3, 0]], a: [0, 0], t: '\\frac{1}{(z+1)(z+3)}' },
+    { n: 'Ex 23(iii): same, centre −1', N: z => [1, 0], p: [[-1, 0], [-3, 0]], a: [-1, 0], t: '\\frac{1}{(z+1)(z+3)}' },
+    { n: 'Ex 30: (7z−2)/(z³−z²−2z), centre −1', N: z => Cx.sub(Cx.scale(z, 7), [2, 0]), p: [[0, 0], [-1, 0], [2, 0]], a: [-1, 0], t: '\\frac{7z-2}{z^3-z^2-2z}' }
+  ];
+  const sel = $('#dlr-f'); F.forEach((f, k) => { const o = document.createElement('option'); o.value = k; o.textContent = f.n; sel.appendChild(o); });
+  let C = F[0], A = [], D = [], z = [1.5, 0.4];
+  const setup = () => { A = C.p.map((pk, k) => { let den = [1, 0]; C.p.forEach((pj, j) => { if (j !== k) den = Cx.mul(den, Cx.sub(pk, pj)); }); return Cx.div(C.N(pk), den); });
+    D = [...new Set(C.p.map(p => +Cx.abs(Cx.sub(p, C.a)).toFixed(9)))].sort((x, y) => x - y); };
+  const region = () => { const r = Cx.abs(Cx.sub(z, C.a)); return D.filter(d => d < r).length; };
+  const bounds = k => [k === 0 ? 0 : D[k - 1], k < D.length ? D[k] : Infinity];
+  const coeffs = () => { const r = Cx.abs(Cx.sub(z, C.a)), c = {}; for (let n = -8; n <= 8; n++) c[n] = [0, 0];
+    C.p.forEach((p, k) => { const q = Cx.sub(p, C.a), dq = Cx.abs(q);
+      if (dq < 1e-12) c[-1] = Cx.add(c[-1], A[k]);
+      else if (dq > r) for (let n = 0; n <= 8; n++) c[n] = Cx.sub(c[n], Cx.div(A[k], Cx.ipow(q, n + 1)));
+      else for (let n = 0; n < 8; n++) c[-n - 1] = Cx.add(c[-n - 1], Cx.mul(A[k], Cx.ipow(q, n))); });
+    return c; };
+  const Z = new Plane('#cv-dass-lrz', { span: 3.2, aspect: 0.9, snap: 0.02, axisLabels: ['x', 'y'], draw: p => {
+    if (!D.length) return; const k = region(), [r0, r1] = bounds(k);
+    p.region((x, y) => { const r = Math.hypot(x - C.a[0], y - C.a[1]); return r > r0 && r < r1; }, '--accent3', 0.18, 4);
+    D.forEach(d => p.circle(C.a, d, { color: '--muted', width: 1.5, dash: [5, 4] }));
+    C.p.forEach(s => p.dot(s, { r: 6, color: '--fg' })); p.dot(C.a, { r: 4, color: '--accent', label: 'centre', dy: 18 });
+    p.dot(z, { r: 7, color: '--accent3', ring: true, label: 'z' });
+  }});
+  const B = new Plane('#cv-dass-lrc', { span: 9, aspect: 0.9, snap: 0, grid: false, axisLabels: ['n', 'cₙ'], draw: p => {
+    if (!D.length) return; const c = coeffs(); let mx = 0; for (let n = -8; n <= 8; n++) mx = Math.max(mx, Cx.abs(c[n])); if (mx === 0) mx = 1;
+    p.line([-8.6, 0], [8.6, 0], { color: '--axis', width: 1.3 }); p.line([0, -8], [0, 8], { color: '--muted', width: 1, dash: [3, 3] });
+    const sc = 6.5 / mx, ctx = p.ctx;
+    for (let n = -8; n <= 8; n++) { const v = c[n]; ctx.save(); ctx.fillStyle = cssv(n < 0 ? '--accent2' : '--accent'); const x0 = p.X(n - 0.32), x1 = p.X(n + 0.32), y0 = p.Y(0), y1 = p.Y(v[0] * sc); ctx.fillRect(x0, Math.min(y0, y1), x1 - x0, Math.abs(y1 - y0)); if (Math.abs(v[1]) > 1e-9 * mx) { ctx.fillStyle = cssv('--accent4'); const y2 = p.Y(v[1] * sc); ctx.fillRect(p.X(n - 0.1), Math.min(y0, y2), p.X(n + 0.1) - p.X(n - 0.1), Math.abs(y2 - y0)); } ctx.restore();
+      if (n % 2 === 0) p.text(p.X(n), p.Y(-7.6), String(n), { align: 'center', color: '--muted', font: '11px system-ui,sans-serif' }); }
+    p.text(8, 16, 'bars scaled to the largest |cₙ| = ' + fnum(mx, 4), { color: '--muted', font: '12px system-ui,sans-serif' });
+  }});
+  const out = () => { const k = region(), [r0, r1] = bounds(k), r = Cx.abs(Cx.sub(z, C.a)), c = coeffs(), at = Cx.tex(C.a, 2), w = `(z-(${at}))`;
+    const reg = `${r0 > 0 ? fnum(r0, 3) + '\\lt' : (D[0] < 1e-9 ? '0\\lt' : '')}|z-(${at})|${isFinite(r1) ? '\\lt' + fnum(r1, 3) : ''}`;
+    let s = `$f=${C.t}=${C.p.map((p, j) => `\\frac{${Cx.tex(A[j], 3)}}{z-(${Cx.tex(p, 2)})}`).join('+')}$. &nbsp; Region: $${reg}$.<br>`;
+    C.p.forEach((p, j) => { const q = Cx.sub(p, C.a), dq = Cx.abs(q);
+      s += `• pole $${Cx.tex(p, 2)}$: ` + (dq < 1e-12 ? 'it is the centre itself, so the term is already a power of $(z-a)$.' : dq > r ? `$|p-a|=${fnum(dq, 3)}\\gt|z-a|$, so factor out $(p-a)$: <b>positive</b> powers.` : `$|p-a|=${fnum(dq, 3)}\\lt|z-a|$, so factor out $(z-a)$: <b>negative</b> powers.`) + '<br>'; });
+    s += 'Coefficients: ' + [-4, -3, -2, -1, 0, 1, 2, 3].map(n => `$c_{${n}}=${Cx.tex(c[n], 4)}$`).join(', ') + '.';
+    texMix('#dlr-out', s); };
+  Z.addDrag(() => z, v => { z = v; }); Z.onchange = () => { B.redraw(); out(); };
+  const all = () => { C = F[+sel.value]; setup(); const dm = D[D.length - 1]; Z.cx = C.a[0]; Z.cy = C.a[1]; Z.span = Math.max(2, 1.25 * dm + 0.8); z = Cx.add(C.a, Cx.polar(D.length > 1 ? (D[0] + D[1]) / 2 : dm * 1.4, 0.5)); Z.redraw(); B.redraw(); out(); };
+  sel.addEventListener('change', all); all();
+});
+
+/* H.K. Dass Ex 28, 29 — Laurent coefficients that are Bessel functions */
+onReady(() => {
+  const J = (n, x) => { const s = n < 0 && n % 2 ? -1 : 1; n = Math.abs(n); let t = Math.pow(x / 2, n); for (let k = 1; k <= n; k++) t /= k; let sum = 0; for (let k = 0; k < 80; k++) { sum += t; t *= -(x * x / 4) / ((k + 1) * (k + 1 + n)); } return s * sum; };
+  const coef = (f, n) => { const M = 512; let s = [0, 0]; for (let j = 0; j < M; j++) { const th = TAU * j / M; s = Cx.add(s, Cx.mul(f(Cx.polar(1, th)), Cx.polar(1, -n * th))); } return Cx.scale(s, 1 / M); };
+  const fun = () => { const c = val('dbs-c'); return val('dbs-f') === 'gen' ? (z => Cx.exp(Cx.scale(Cx.sub(z, Cx.div([1, 0], z)), c / 2))) : (z => Cx.sin(Cx.scale(Cx.add(z, Cx.div([1, 0], z)), c))); };
+  const pred = n => { const c = val('dbs-c'); if (val('dbs-f') === 'gen') return J(n, c); const m = Math.abs(n); return m % 2 ? ((((m - 1) / 2) % 2) ? -1 : 1) * J(m, 2 * c) : 0; };
+  const P = new Plane('#cv-dass-bessel', { span: 9, cy: 0, aspect: 0.45, snap: 0, grid: false, axisLabels: ['n', 'cₙ'], draw: p => {
+    const f = fun(), ctx = p.ctx, sc = 3.6; p.line([-8.8, 0], [8.8, 0], { color: '--axis', width: 1.3 });
+    [-1, -0.5, 0.5, 1].forEach(v => { p.line([-8.8, v * sc], [8.8, v * sc], { color: '--grid', width: 1 }); p.text(p.X(-8.9) + 4, p.Y(v * sc) - 3, fnum(v, 2), { color: '--muted', font: '11px system-ui,sans-serif' }); });
+    for (let n = -8; n <= 8; n++) { const v = coef(f, n)[0] * sc; ctx.save(); ctx.fillStyle = cssv('--accent'); const x0 = p.X(n - 0.3), x1 = p.X(n + 0.3), y0 = p.Y(0), y1 = p.Y(v); ctx.fillRect(x0, Math.min(y0, y1), x1 - x0, Math.abs(y1 - y0)); ctx.restore();
+      p.dot([n, pred(n) * sc], { r: 5, color: '--accent2', ring: true }); p.text(p.X(n), p.Y(-1.12 * sc) + 2, String(n), { align: 'center', color: '--muted', font: '11px system-ui,sans-serif' }); }
+  }});
+  const out = () => { const f = fun(), c = val('dbs-c'); let err = 0; for (let n = -8; n <= 8; n++) err = Math.max(err, Math.abs(coef(f, n)[0] - pred(n)));
+    texMix('#dbs-out', (val('dbs-f') === 'gen' ? `$c_n=J_n(${fnum(c, 2)})$: e.g. $c_0=${fnum(J(0, c), 5)}$, $c_1=${fnum(J(1, c), 5)}$, $c_{-1}=${fnum(J(-1, c), 5)}=-c_1$.` : `$c_{\\pm1}=J_1(${fnum(2 * c, 2)})=${fnum(J(1, 2 * c), 5)}$, $c_{\\pm3}=-J_3(${fnum(2 * c, 2)})=${fnum(-J(3, 2 * c), 5)}$; even-index coefficients vanish.`) + ` &nbsp; Largest mismatch between the bars and the Bessel dots: $${err < 1e-9 ? '\\lt10^{-9}' : fnum(err, 3)}$.`); };
+  const all = () => { P.redraw(); out(); };
+  $('#dbs-f').addEventListener('change', all); watch(['dbs-c'], all); all();
+});
+
+/* H.K. Dass §26.1–26.2 — read the order of a singularity off a log–log plot */
+onReady(() => {
+  const L10 = Math.LN10, la = z => Math.log(Cx.abs(z)) / L10;
+  const lsin = w => { const y = Math.abs(w[1]); if (y > 30) return (y - Math.LN2) / L10; return la(Cx.sin(w)); };
+  const lexp = w => w[0] / L10;
+  const F = [
+    { n: 'Ex 3: e^{z}/z² at 0 (pole, order 2)', a: [0, 0], lf: z => lexp(z) - 2 * la(z) },
+    { n: 'Ex 5: sin z/z⁴ at 0 (order 3)', a: [0, 0], lf: z => la(Cx.sin(z)) - 4 * la(z) },
+    { n: 'Ex 22: 1/(z²+1)³ at i (order 3)', a: [0, 1], lf: z => -3 * la(Cx.add(Cx.mul(z, z), [1, 0])) },
+    { n: 'Ex 7: 1/(1−eᶻ) at 2πi (simple)', a: [0, TAU], lf: z => -la(Cx.sub([1, 0], Cx.exp(z))) },
+    { n: 'Ex 10: (z − sin z)/z³ at 0 (removable)', a: [0, 0], lf: z => { const s = Cx.abs(z) < 1e-2 ? Cx.sub([1 / 6, 0], Cx.scale(Cx.mul(z, z), 1 / 120)) : Cx.div(Cx.sub(z, Cx.sin(z)), Cx.mul(z, Cx.mul(z, z))); return la(s); } },
+    { n: 'Ex 1: (z−2)sin(1/(z−1))/z² at 1 (essential)', a: [1, 0], lf: z => la(Cx.sub(z, [2, 0])) + lsin(Cx.div([1, 0], Cx.sub(z, [1, 0]))) - 2 * la(z) },
+    { n: 'Ex 4: sin(1/z) at 0 (essential)', a: [0, 0], lf: z => lsin(Cx.div([1, 0], z)) },
+    { n: 'Ex 9: e^{−1/z²} at 0 (essential)', a: [0, 0], lf: z => lexp(Cx.neg(Cx.div([1, 0], Cx.mul(z, z)))) }
+  ];
+  const sel = $('#dor-f'); F.forEach((f, k) => { const o = document.createElement('option'); o.value = k; o.textContent = f.n; sel.appendChild(o); });
+  const cols = ['--accent', '--accent2', '--accent3', '--accent4', '--fg', '--muted'], phis = [0.1, 1.15, 2.2, 3.25, 4.3, 5.35];
+  const P = new Plane('#cv-dass-order', { span: 2, aspect: 0.62, snap: 0, grid: false, axisLabels: ['', ''], draw: p => {
+    const C = F[+sel.value], g = p.ctx, L = 52, Rm = 14, T = 12, B = 30, W = p.W - L - Rm, H = p.H - T - B, curves = [];
+    let y0 = 1e9, y1 = -1e9;
+    phis.forEach(ph => { const pts = []; for (let j = 0; j <= 240; j++) { const lr = -3 + 3 * j / 240, v = C.lf(Cx.add(C.a, Cx.polar(10 ** lr, ph))); const y = isFinite(v) ? Math.max(-12, Math.min(14, v)) : NaN; pts.push([lr, y]); if (isFinite(y)) { y0 = Math.min(y0, y); y1 = Math.max(y1, y); } } curves.push(pts); });
+    if (y1 - y0 < 2) { const mid = (y0 + y1) / 2; y0 = mid - 1; y1 = mid + 1; }
+    const pad = 0.05 * (y1 - y0); y0 -= pad; y1 += pad;
+    const X = x => L + (x + 3) / 3 * W, Y = y => T + (y1 - y) / (y1 - y0) * H, raw = (y1 - y0) / 6, pw = 10 ** Math.floor(Math.log10(raw)), st = [1, 2, 5, 10].map(k => k * pw).find(k => k >= raw);
+    g.save(); g.font = '11px system-ui,sans-serif'; g.fillStyle = cssv('--muted'); g.strokeStyle = cssv('--grid'); g.lineWidth = 1;
+    for (let x = -3; x <= 0; x += 0.5) { g.beginPath(); g.moveTo(X(x), T); g.lineTo(X(x), T + H); g.stroke(); g.textAlign = 'center'; g.fillText(fnum(x, 2), X(x), T + H + 14); }
+    for (let y = Math.ceil(y0 / st) * st; y <= y1; y += st) { g.beginPath(); g.moveTo(L, Y(y)); g.lineTo(L + W, Y(y)); g.stroke(); g.textAlign = 'right'; g.fillText(fnum(y, 3), L - 5, Y(y) + 4); }
+    g.fillStyle = cssv('--axis'); g.font = '600 12px system-ui,sans-serif'; g.textAlign = 'center'; g.fillText('log₁₀ r', L + W / 2, p.H - 2); g.save(); g.translate(13, T + H / 2); g.rotate(-Math.PI / 2); g.fillText('log₁₀ |f|', 0, 0); g.restore();
+    curves.forEach((pts, k) => { g.strokeStyle = cssv(cols[k]); g.lineWidth = 2.2; g.beginPath(); let pen = false; pts.forEach(([x, y]) => { if (!isFinite(y)) { pen = false; return; } if (pen) g.lineTo(X(x), Y(y)); else { g.moveTo(X(x), Y(y)); pen = true; } }); g.stroke(); });
+    g.restore();
+  }});
+  const out = () => { const C = F[+sel.value], sl = phis.map(ph => { const z1 = Cx.add(C.a, Cx.polar(1e-3, ph)), z2 = Cx.add(C.a, Cx.polar(10 ** -2.5, ph)); return (C.lf(z2) - C.lf(z1)) / 0.5; });
+    const mn = Math.min(...sl), mx = Math.max(...sl), m = -sl.reduce((s, v) => s + v, 0) / sl.length; let s;
+    if (mx - mn > 1) s = `Slopes near $r=10^{-3}$ range from $${fnum(mn, 1)}$ to $${fnum(mx, 1)}$, so they <b>disagree between directions</b>: an <b>essential singularity</b> (no order).`;
+    else if (Math.abs(m) < 0.3) s = `All slopes $\\approx${fnum(-m, 2)}$: $|f|$ tends to a finite non-zero limit, so the singularity is <b>removable</b>.`;
+    else s = `All six directions have slope $\\approx${fnum(-m, 2)}$: a <b>pole of order ${Math.round(m)}</b> ($|f|\\sim r^{-${Math.round(m)}}$).`;
+    texMix('#dor-out', s); };
+  sel.addEventListener('change', () => { P.redraw(); out(); }); out();
+});
+
+/* dass:end */</script>
 </body>
 </html>

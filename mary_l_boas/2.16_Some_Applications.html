@@ -117,6 +117,15 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +150,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html" selected>2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -297,7 +307,76 @@ $$\frac{1}{|1-r^2e^{i\theta}|^2}=\frac{1}{1-2r^2\cos\theta+r^4}.$$
 <div class="prob"><div class="q"><b>P6.</b> (NET) At resonance in a series LCR circuit, the phase difference between current and voltage is: <span class="lvl e">Easy</span></div>
 <details class="sol"><summary>Show solution</summary><p>Zero: $Z=R$ is real.</p></details></div>
 
-<h2 id="summary">7. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">7. Going deeper: the driven damped oscillator in one complex line</h2>
+<p>Every resonance question in CSIR/GATE — mechanical, electrical or optical — is the same equation:</p>
+$$\ddot x+2\gamma\dot x+\omega_0^2x=\frac{F_0}{m}\cos\omega t .$$
+<p><b>Complex method.</b> Replace $\cos\omega t$ by $e^{i\omega t}$, solve for $\tilde x=Ae^{i\omega t}$, and take the real part at the end. Substituting gives $(-\omega^2+2i\gamma\omega+\omega_0^2)A=\frac{F_0}m$, so</p>
+$$\boxed{A(\omega)=\frac{F_0/m}{\omega_0^2-\omega^2+2i\gamma\omega}}\qquad|A|=\frac{F_0/m}{\sqrt{(\omega_0^2-\omega^2)^2+4\gamma^2\omega^2}},\qquad\tan\delta=\frac{2\gamma\omega}{\omega_0^2-\omega^2},$$
+<p>where $x=|A|\cos(\omega t-\delta)$ lags the force by $\delta$.</p>
+<table class="t">
+<tr><th>Quantity</th><th>Peaks at</th><th>Value / remark</th></tr>
+<tr><td>Displacement amplitude $|A|$</td><td>$\omega_r=\sqrt{\omega_0^2-2\gamma^2}$</td><td>slightly below $\omega_0$; no peak if $\gamma\gt\omega_0/\sqrt2$</td></tr>
+<tr><td>Velocity amplitude $\omega|A|$</td><td>exactly $\omega_0$</td><td>$\frac{F_0}{2m\gamma}$</td></tr>
+<tr><td>Average absorbed power</td><td>exactly $\omega_0$</td><td>a Lorentzian of full width at half maximum $2\gamma$ (for light damping)</td></tr>
+<tr><td>Phase lag $\delta$</td><td>—</td><td>$0$ well below resonance, $\frac\pi2$ at $\omega_0$, $\to\pi$ well above</td></tr>
+</table>
+<p><b>Quality factor:</b> $Q=\frac{\omega_0}{2\gamma}=\frac{\omega_0}{\Delta\omega_{\text{FWHM}}}$. For a series LCR circuit, $2\gamma=\frac RL$, so $Q=\frac{\omega_0L}{R}=\frac1R\sqrt{\frac LC}$.</p>
+<h3>Electrical dictionary</h3>
+<table class="t">
+<tr><th>Mechanical</th><th>$m$</th><th>$b=2m\gamma$</th><th>$k$</th><th>$x$</th><th>$F$</th></tr>
+<tr><th>Series LCR</th><td>$L$</td><td>$R$</td><td>$1/C$</td><td>charge $q$</td><td>voltage $V$</td></tr>
+</table>
+<p>Impedances: $Z_R=R$, $Z_L=i\omega L$, $Z_C=\frac{1}{i\omega C}=-\frac{i}{\omega C}$. They combine like resistors.</p>
+
+<h2 id="exampat">8. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Impedance</td><td>Phase between $I$ and $V$, power factor, $|Z|$</td><td>$Z=R+i(X_L-X_C)$; $I$ lags $V$ by $\arg Z$</td></tr>
+<tr><td>Resonance</td><td>$\omega_0$, $Q$, bandwidth, amplitude at resonance</td><td>Formulas above</td></tr>
+<tr><td>Interference</td><td>$N$-slit intensity, number of minima</td><td>$\left|\sum e^{ik\delta}\right|^2=\frac{\sin^2(N\delta/2)}{\sin^2(\delta/2)}$</td></tr>
+<tr><td>Parallel circuits</td><td>Anti-resonance of a parallel LC</td><td>$Z_\parallel=\frac{Z_1Z_2}{Z_1+Z_2}$</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>The <b>displacement</b> peak is at $\sqrt{\omega_0^2-2\gamma^2}$, not $\omega_0$. Velocity and power do peak at $\omega_0$.</li>
+<li>Know the convention: with $e^{i\omega t}$ the inductor is $+i\omega L$. Engineers' $e^{j\omega t}$ is the same; physicists' $e^{-i\omega t}$ flips the sign.</li>
+<li>Average power is $\frac12\operatorname{Re}(V\bar I)$, not $\frac12\operatorname{Re}(V)\operatorname{Re}(I)$.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$N$ slits: principal maxima have $N^2$ times the single-slit intensity, with $N-1$ zeros and $N-2$ secondary maxima between them.</li>
+<li>Power factor $=\cos\phi=\frac{R}{|Z|}$.</li>
+</ul></div>
+
+<h2 id="xprob">9. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> A series LCR circuit has $R=10\,\Omega$, $L=0.1$ H and $C=10\,\mu$F. Find its quality factor. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\omega_0=\frac{1}{\sqrt{LC}}=10^3$ rad/s, so $Q=\frac{\omega_0L}{R}=\frac{100}{10}=\mathbf{10}$.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> In a series circuit $R=4\,\Omega$ and $X_L-X_C=3\,\Omega$. The current <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) leads $V$ by $36.9^\circ$</span><span>(b) lags $V$ by $36.9^\circ$</span><span>(c) lags $V$ by $53.1^\circ$</span><span>(d) is in phase with $V$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$Z=4+3i$, so $I=V/Z$ has angle $-\arctan\frac34=-36.9^\circ$. It lags (the circuit is inductive). Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> For $\ddot x+2\gamma\dot x+\omega_0^2x=\frac{F_0}m\cos\omega t$, the amplitude at $\omega=\omega_0$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\frac{F_0}{m\omega_0^2}$</span><span>(b) $\frac{F_0}{2m\gamma\omega_0}$</span><span>(c) $\frac{F_0}{2m\gamma}$</span><span>(d) infinite</span></div>
+<details class="sol"><summary>Show solution</summary><p>$|A|=\frac{F_0/m}{2\gamma\omega_0}$. Option <b>(b)</b>. Option (c) is the velocity amplitude.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> (Multiple correct) For a lightly damped driven oscillator: <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) at $\omega=\omega_0$ the displacement lags the force by $\pi/2$</span><span>(b) the displacement amplitude is largest exactly at $\omega_0$</span><span>(c) for $\omega\gg\omega_0$ the displacement is nearly opposite in phase to the force</span><span>(d) the average absorbed power is largest exactly at $\omega_0$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (c), (d).</b> The displacement peak is at $\sqrt{\omega_0^2-2\gamma^2}\lt\omega_0$.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> In a 5-slit pattern, the number of zeros of intensity between two adjacent principal maxima is <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) 3</span><span>(b) 4</span><span>(c) 5</span><span>(d) 6</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\sin(5\delta/2)=0$ with $\sin(\delta/2)\ne0$: $\delta=\frac{2\pi k}{5}$ for $k=1,\dots,4$. That is $N-1=4$, option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> An ideal inductor $L$ and capacitor $C$ are connected in parallel. Find the impedance $Z(\omega)$ and describe what happens at $\omega_0=1/\sqrt{LC}$. <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$Z=\frac{(i\omega L)\frac{1}{i\omega C}}{i\omega L+\frac1{i\omega C}}=\frac{L/C}{i\left(\omega L-\frac1{\omega C}\right)}=\frac{i\omega L}{1-\omega^2LC}$. It is purely reactive, and $|Z|\to\infty$ as $\omega\to\omega_0$. This is anti-resonance: no current is drawn from the source, while a large current circulates inside the LC loop. Below $\omega_0$ it is inductive, above $\omega_0$ capacitive.</p></details></div>
+<div class="mcq" data-ans="3" data-ok="$\frac{1}{i\omega C}=-\frac{i}{\omega C}$." data-no="Multiply top and bottom by $-i$."><p>Rapid fire: the complex impedance of a capacitor (with $e^{i\omega t}$) is</p><div class="opts"><button>$i\omega C$</button><button>$\frac{i}{\omega C}$</button><button>$\omega C$</button><button>$-\frac{i}{\omega C}$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">10. Connections</h2>
+<div class="xlinks">
+<a href="2.9_Eulers_Formula.html"><b>Builds on</b>2.9 Phasors<small>Adding sinusoids by adding complex amplitudes</small></a>
+<a href="2.17_Miscellaneous_Problems.html"><b>Next</b>2.17 Miscellaneous problems<small>Chapter review</small></a>
+<a href="2.10_Powers_and_Roots_of_Complex_Numbers.html"><b>Uses</b>2.10 Roots of unity<small>Zeros of the $N$-slit pattern</small></a>
+<a href="2.12_Hyperbolic_Functions.html"><b>Uses</b>2.12 Overdamping<small>Real exponents and $\sinh$/$\cosh$ solutions</small></a>
+<a href="14.7_Evaluation_of_Definite_Integrals_by_Residues.html"><b>Later</b>14.7 Kramers–Kronig<small>Causality makes the response $A(\omega)$ analytic in the lower half-plane</small></a>
+<a href="14.7_Evaluation_of_Definite_Integrals_by_Residues.html"><b>Later</b>14.7 Bromwich integral<small>Inverse Laplace transforms for transients</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="7. Summary">11. Summary</h2>
 <div class="card"><ul class="summary">
 <li>Motion: $v=|\dot z|$, $a=|\ddot z|$. Multiplying by $i$ turns by $90^\circ$, which gives the centripetal acceleration $v^2/a$.</li>
 <li>a.c.: $I=I_0e^{i\omega t}$, $V=ZI$, $Z=R+i(\omega L-\frac1{\omega C})$. Combine impedances like resistors. Resonance means $Z$ is real.</li>

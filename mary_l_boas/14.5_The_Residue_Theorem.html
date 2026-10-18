@@ -117,6 +117,23 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -135,6 +152,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="14.9_Mapping.html">14.9 Mapping</option>
 <option value="14.10_Applications_of_Conformal_Mapping.html">14.10 Some Applications of Conformal Mapping</option>
 <option value="14.11_Miscellaneous_Problems.html">14.11 Miscellaneous Problems</option></select>
+  <a class="btn" href="2.0_Complex_Numbers_Index.html" title="Chapter 2 index">Ch. 2 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -180,6 +198,51 @@ $$\oint_Cf\,dz=2\pi i\sum_kn(C,z_k)\,\operatorname{Res}(f,z_k),\qquad n(C,a)=\fr
 <div class="readout" id="lb-out"></div>
 </div>
 
+<!-- dass:start 10__theorem -->
+<h2 id="dass-26-12" class="dass"><span class="dtag">H.K. Dass §26.12</span>The residue theorem: Dass's proof and examples (Ex 28–37, Exercise 26.3)</h2>
+<div class="box thm"><span class="tag">Residue theorem (Dass)</span><p>If $f$ is analytic inside and on a closed curve $C$ except at finitely many poles $a_1,\dots,a_n$ inside $C$, then $\oint_Cf\,dz=2\pi i\left[\operatorname{Res}f(a_1)+\cdots+\operatorname{Res}f(a_n)\right]$.</p></div>
+<ol class="steps">
+<li>Draw small non-overlapping circles $C_1,\dots,C_n$ about the poles, all inside $C$. $f$ is analytic in the region between $C$ and these circles.</li>
+<li>By Cauchy's theorem for multiply connected regions (Dass §24.4): $\oint_C=\oint_{C_1}+\cdots+\oint_{C_n}$.</li>
+<li>By the definition of the residue, $\oint_{C_k}f\,dz=2\pi i\operatorname{Res}f(a_k)$. ∎ (The same proof works for isolated <b>essential</b> singularities.)</li></ol>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 28, 29, 30) — which poles are inside?</div><div class="bd">
+<div class="dcase"><p><b>Ex 28:</b> $\oint_{|z|=1}\frac{1+z}{z(2-z)}dz$. Only $z=0$ is inside, with residue $\frac12$. Answer: $\pi i$.</p></div>
+<div class="dcase"><p><b>Ex 29:</b> $\oint_{|z|=3/2}\frac{4-3z}{z(z-1)(z-2)}dz$: residues $2$ (at $0$) and $-1$ (at $1$). Answer: $2\pi i$.</p></div>
+<div class="dcase"><p><b>Ex 30:</b> $\oint\frac{12z-7}{(z-1)^2(2z+3)}dz$. The residue at the double pole $1$ is $\frac{d}{dz}\frac{12z-7}{2z+3}\big|_1=\frac{50}{25}=2$. At $-\frac32$ it is $\frac{12z-7}{2(z-1)^2}\big|_{-3/2}=-2$.</p><ul>
+<li>(i) $|z|=2$ encloses both: $2\pi i(2-2)=0$.</li>
+<li>(ii) $|z+i|=3$: the distance from $-i$ to $1$ is $\sqrt2\lt3$ (inside), and to $-\frac32$ it is $\frac{\sqrt{13}}{2}\approx1.80\lt3$. <b>Both are inside</b>, so the answer is again $0$.</li></ul>
+<p>(The printed solution says the second distance is greater than $3$, keeps only $z=1$, and gets $4\pi i$. But $\left|-\frac32+i\right|=\sqrt{\frac94+1}=\frac{\sqrt{13}}2\approx1.80\lt3$, so $-\frac32$ is inside as well and the integral is $0$. A numerical contour integral confirms $0$.)</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> most wrong answers in residue MCQs come from the "inside or outside" step, not from the residues. Compute every distance $|a_k-\text{centre}|$ and compare it with the radius explicitly.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 32, Ex 33) — a parameter, and transcendental poles</div><div class="bd">
+<div class="dcase"><p><b>Ex 32:</b> $\frac{1}{2\pi i}\oint_{|z|=3}\frac{e^{zt}\,dz}{z^2(z^2+2z+2)}$. Poles: $0$ (double) and $-1\pm i$, all inside.</p><ul>
+<li>$\operatorname{Res}_0=\frac{d}{dz}\frac{e^{zt}}{z^2+2z+2}\Big|_0=\frac{2t-2}{4}=\frac{t-1}{2}$.</li>
+<li>$\operatorname{Res}_{-1\pm i}=\frac{e^{(-1\pm i)t}}{(-1\pm i)^2(\pm2i)}=\frac{e^{(-1\pm i)t}}{4}$.</li>
+<li>Answer: $\frac{t-1}{2}+\frac{e^{-t}}{2}\cos t$. This is the inverse Laplace transform of $\frac{1}{s^2(s^2+2s+2)}$ (see the Bromwich integral in 14.7).</li></ul></div>
+<div class="dcase"><p><b>Ex 33:</b> $\oint_{|z|=4}\frac{dz}{\sinh z}$. The poles are $z=n\pi i$; inside $|z|=4$ are $0$ and $\pm\pi i$. The residues are $\frac{1}{\cosh(n\pi i)}=\frac1{\cos n\pi}$, i.e. $1,-1,-1$. Answer: $2\pi i(-1)=-2\pi i$.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> Ex 32 is exactly how inverse Laplace transforms are evaluated by residues. The $e^{zt}$ factor is the Bromwich kernel.</p></div></div>
+
+<div class="widget" id="w-dass-rthm">
+<div class="wt">Interactive — move the circle, and only the enclosed residues count</div>
+<div class="wd">Drag the centre (orange) and the rim handle (purple) of the circle $C$. Crosses mark the singularities of Dass's integrand. Each enclosed one is labelled with its residue. The readout compares $2\pi i\sum\operatorname{Res}$ with a direct numerical evaluation of $\oint_Cf\,dz$. Try Ex 30 with the two contours in the book.</div>
+<div class="ctrls"><label>integrand <select id="drt-f"></select></label></div>
+<canvas id="cv-dass-rthm"></canvas>
+<div class="readout" id="drt-out"></div>
+</div>
+
+<table class="t dt">
+<tr><th colspan="3">Dass Exercise 26.3 — answers (each confirmed by numerical contour integration)</th></tr>
+<tr><td>$\oint\frac{1-2z}{z(z-1)(z-2)}dz$</td><td>$|z|=1.5$: residues $\frac12$, $1$</td><td>$3\pi i$</td></tr>
+<tr><td>$\oint\frac{z^2e^{zt}}{z^2+1}dz$</td><td>$|z|=2$</td><td>$-2\pi i\sin t$</td></tr>
+<tr><td>$\oint\frac{z-1}{(z+1)^2(z-2)}dz$</td><td>$|z-i|=2$: only $-1$ is inside</td><td>$-\frac{2\pi i}{9}$</td></tr>
+<tr><td>$\oint\frac{2z^2+z}{z^2-1}dz$</td><td>$|z-1|=1$</td><td>$3\pi i$</td></tr>
+<tr><td>$\oint\frac{e^{2z}+z^2}{(z-1)^5}dz$</td><td>$|z|=2$: $\frac{2\pi i}{4!}\cdot16e^2$</td><td>$\frac{4\pi ie^2}{3}$</td></tr>
+<tr><td>$\oint\frac{4z^2-4z+1}{(z-2)(z^2+4)}dz$</td><td>$|z|=1$: no poles inside</td><td>$0$</td></tr>
+<tr><td>$\oint\frac{\sin z}{z^6}dz$</td><td>$|z|=2$: coefficient of $z^5$ in $\sin z$</td><td>$\frac{\pi i}{60}$</td></tr>
+<tr><td>$f=\frac{P}{Q}$, both quadratics, $f(0)=f(-1)=0$, only singularity a double pole at $1$ with residue $-1$</td><td>$f=k\frac{z(z+1)}{(z-1)^2}$, and the residue is $3k$</td><td>$f=-\frac{z(z+1)}{3(z-1)^2}$</td></tr>
+</table>
+<!-- dass:end -->
 <h2 id="cauchy">3. Cauchy's integral formula as a special case (Problem 3)</h2>
 <p>If $f$ is analytic inside $C$ and $a$ is inside, then $\frac{f(z)}{z-a}$ has a simple pole at $a$ with residue $\lim_{z\to a}(z-a)\frac{f(z)}{z-a}=f(a)$. The residue theorem gives</p>
 $$\oint_C\frac{f(z)}{z-a}dz=2\pi if(a),$$
@@ -236,7 +299,70 @@ $$\oint_C\frac{f(z)}{z-a}dz=2\pi if(a),$$
 <div class="mcq" data-ans="1" data-ok="Both $\pm1$ are inside; the residues $\frac12$ and $-\frac12$ cancel." data-no="Find both residues."><p>1. $\oint_{|z|=2}\frac{dz}{z^2-1}=$</p><div class="opts"><button>$2\pi i$</button><button>$0$</button><button>$\pi i$</button><button>$4\pi i$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="2" data-ok="Winding number 2 doubles the contribution." data-no="Count how many times the curve goes around the pole."><p>2. A curve goes twice counter-clockwise around $0$. $\oint\frac{dz}{z}=$</p><div class="opts"><button>$2\pi i$</button><button>$0$</button><button>$4\pi i$</button><button>$\pi i$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">9. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">9. Going deeper: counting zeros with residues — $\oint f'/f$ and Rouché</h2>
+<h3>The logarithmic derivative</h3>
+<p>Suppose $f$ has a zero of order $m$ at $a$: $f=(z-a)^mg$ with $g(a)\ne0$. Then</p>
+$$\frac{f'}{f}=\frac{m}{z-a}+\frac{g'}{g},$$
+<p>so $\frac{f'}{f}$ has a simple pole at $a$ with residue $m$. A pole of order $k$ gives residue $-k$ in the same way. Summing over everything inside $C$:</p>
+$$\boxed{\frac1{2\pi i}\oint_C\frac{f'(z)}{f(z)}dz=Z-P}\qquad\text{(zeros minus poles, counted with multiplicity).}$$
+<p>Weighting with an analytic $h$ gives more: $\frac1{2\pi i}\oint_Ch\frac{f'}{f}dz=\sum_{\text{zeros}}h(a_j)-\sum_{\text{poles}}h(b_j)$. With $h=z$ this is the sum of the zeros inside $C$.</p>
+<h3>Rouché's theorem: count zeros without computing anything</h3>
+<div class="box thm"><span class="tag">Rouché</span><p>If $f$ and $g$ are analytic inside and on a simple closed curve $C$, and $|g|\lt|f|$ on $C$, then $f$ and $f+g$ have the same number of zeros inside $C$.</p></div>
+<p><b>Why:</b> on $C$, $\frac{f+g}{f}=1+\frac gf$ stays inside the disk $|w-1|\lt1$, so it never winds around $0$. Its winding number is $0$. Hence $\oint\frac{(f+g)'}{f+g}=\oint\frac{f'}{f}$.</p>
+<p><b>Recipe:</b> on the circle, pick the term of the polynomial with the largest modulus as $f$. Everything else is $g$. Then the zero count is the power of that dominant term.</p>
+<div class="ex"><div class="hd">Example — zeros of $z^6-5z^2+1$ in $|z|\lt1$</div><div class="bd"><ol class="steps">
+<li>On $|z|=1$: $|{-5z^2}|=5$ and $|z^6+1|\le2$.</li>
+<li>$f=-5z^2$ dominates and has 2 zeros (both at $0$).</li>
+<li>So $z^6-5z^2+1$ has <b>2</b> zeros in the unit disk. On $|z|=2$, $z^6$ dominates ($64\gt21$), so all 6 zeros lie in $|z|\lt2$, and 4 of them are in the ring $1\lt|z|\lt2$.</li></ol></div></div>
+
+<h2 id="exampat">10. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Circle integrals</td><td>$\oint_{|z|=R}$ of a rational or trigonometric function</td><td>List the poles, keep those inside, sum the residues</td></tr>
+<tr><td>Essential singularities</td><td>$\oint z^ke^{1/z}dz$, $\oint\sin\frac1z\,dz$</td><td>Read off $a_{-1}$ from the series</td></tr>
+<tr><td>Logarithmic derivative</td><td>$\oint\frac{p'(z)}{p(z)}dz$, $\oint z\frac{p'}{p}dz$</td><td>$2\pi i\times$(number of zeros), or $2\pi i\times$(their sum)</td></tr>
+<tr><td>Counting zeros</td><td>Number of zeros of a polynomial in a disk or ring</td><td>Rouché with the dominant term</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>A contour traversed twice, or clockwise, multiplies the result by its winding number ($2$ or $-1$).</li>
+<li>Poles <i>on</i> the contour make the integral undefined as an ordinary integral (see principal values in 14.7).</li>
+<li>For Rouché the inequality must be <b>strict</b> on the whole of $C$.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>If $C$ encloses all the poles, compute $-\operatorname{Res}_\infty$ instead (14.8). It is often a single term.</li>
+<li>$\oint_{|z|=1}\frac{g(z)}{z^{n+1}}dz=2\pi i\times$(coefficient of $z^n$ in $g$).</li>
+</ul></div>
+
+<h2 id="xprob">11. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> $\displaystyle\oint_{|z|=2}\frac{3z^2+1}{z^3+z}\,dz=$ <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $2\pi i$</span><span>(b) $4\pi i$</span><span>(c) $6\pi i$</span><span>(d) $0$</span></div>
+<details class="sol"><summary>Show solution</summary><p>The integrand is $\frac{p'}{p}$ with $p=z^3+z$, whose zeros $0,\pm i$ are all inside. So the integral is $2\pi i\cdot3$, option <b>(c)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> How many zeros does $z^6-5z^2+1$ have in $|z|\lt1$? <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>By Rouché with $f=-5z^2$ (worked above): $\mathbf2$.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> $\displaystyle\oint_{|z|=1}z^2e^{1/z}\,dz=$ <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $2\pi i$</span><span>(b) $\frac{\pi i}{3}$</span><span>(c) $\pi i$</span><span>(d) $0$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$z^2\sum\frac{z^{-m}}{m!}$. The $z^{-1}$ term comes from $m=3$, with coefficient $\frac16$. The integral is $\frac{2\pi i}6=\frac{\pi i}3$. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> Let $I=\displaystyle\oint_{|z|=3}\frac{dz}{(z-1)(z-2)(z-4)}$. Find $I/(\pi i)$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>The residues inside are $\frac13$ (at 1) and $-\frac12$ (at 2), which sum to $-\frac16$. So $I=-\frac{\pi i}3$ and $I/(\pi i)=\mathbf{-0.333}$. Check: the residue at the outside pole $4$ is $\frac16$, and all residues (including $\infty$, which is $0$ here) sum to $0$. ✓</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> (Multiple correct) Which equal $2\pi i$? <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\oint_{|z|=1}\frac{e^z}{z}dz$</span><span>(b) $\oint_{|z|=1}\frac{\sin z}{z^2}dz$</span><span>(c) $\oint_{|z|=1}\frac{\cos z}{z^2}dz$</span><span>(d) $\oint_{|z|=1}\frac{dz}{z-2}$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b).</b> The residues are $1$, $1$, $0$, and $0$ (the pole is outside).</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Evaluate $\displaystyle\frac{1}{2\pi i}\oint_{|z|=3}\frac{z(2z-2)}{z^2-2z+5}\,dz$. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>This is $\frac1{2\pi i}\oint z\frac{p'}{p}$ with $p=z^2-2z+5$, whose zeros $1\pm2i$ have modulus $\sqrt5\lt3$ and so are inside. The value is their sum, $\mathbf2$. (Direct check: residues $\frac{z(2z-2)}{2z-2}=z$ at each root.)</p></details></div>
+<div class="mcq" data-ans="2" data-ok="Winding number 2 doubles the result." data-no="Each loop around $0$ contributes $2\pi i$."><p>Rapid fire: $\oint\frac{dz}{z}$ around the unit circle traversed twice counter-clockwise is</p><div class="opts"><button>$0$</button><button>$2\pi i$</button><button>$4\pi i$</button><button>$\pi i$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">12. Connections</h2>
+<div class="xlinks">
+<a href="14.4_Laurent_Series.html"><b>Builds on</b>14.4 Laurent series<small>The residue is $a_{-1}$</small></a>
+<a href="14.6_Methods_of_Finding_Residues.html"><b>Next</b>14.6 Finding residues<small>Fast formulas for simple and multiple poles</small></a>
+<a href="14.7_Evaluation_of_Definite_Integrals_by_Residues.html"><b>Applies</b>14.7 Real integrals<small>Including the argument principle</small></a>
+<a href="14.8_Point_at_Infinity_Residues_at_Infinity.html"><b>Shortcut</b>14.8 Residue at ∞<small>Many poles inside → one residue outside</small></a>
+<a href="2.1_Introduction.html"><b>Recall</b>2.1 Polynomial roots<small>Rouché locates them without solving</small></a>
+<a href="2.13_Logarithms.html"><b>Recall</b>2.13 $\ln f$<small>$f'/f=(\ln f)'$; winding of the argument</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="9. Summary">13. Summary</h2>
 <div class="card"><ul class="summary">
 <li>Only $\frac{b_1}{z-z_0}$ survives a closed integral around $z_0$: $\oint f\,dz=2\pi ib_1$.</li>
 <li>Residue theorem: $\oint_Cf\,dz=2\pi i\sum$ (residues inside $C$), counter-clockwise. More generally, weight each residue by its winding number.</li>
@@ -777,5 +903,38 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+/* H.K. Dass §26.12 — residue theorem: move the circle, only enclosed residues count */
+onReady(() => {
+  const C1 = [1, 0], m = Cx.mul, d = Cx.div;
+  const F = [
+    { n: 'Ex 30: (12z−7)/((z−1)²(2z+3))', f: z => d(Cx.sub(Cx.scale(z, 12), [7, 0]), m(m(Cx.sub(z, C1), Cx.sub(z, C1)), Cx.add(Cx.scale(z, 2), [3, 0]))), s: [[1, 0], [-1.5, 0]], c: [0, 0], r: 2 },
+    { n: 'Ex 28: (1+z)/(z(2−z))', f: z => d(Cx.add(z, C1), m(z, Cx.sub([2, 0], z))), s: [[0, 0], [2, 0]], c: [0, 0], r: 1 },
+    { n: 'Ex 29: (4−3z)/(z(z−1)(z−2))', f: z => d(Cx.sub([4, 0], Cx.scale(z, 3)), m(z, m(Cx.sub(z, C1), Cx.sub(z, [2, 0])))), s: [[0, 0], [1, 0], [2, 0]], c: [0, 0], r: 1.5 },
+    { n: 'Ex 32: e^{z}/(z²(z²+2z+2)) (t = 1)', f: z => d(Cx.exp(z), m(m(z, z), Cx.add(Cx.add(m(z, z), Cx.scale(z, 2)), [2, 0]))), s: [[0, 0], [-1, 1], [-1, -1]], c: [0, 0], r: 3 },
+    { n: 'Ex 33: 1/sinh z', f: z => d(C1, Cx.sinh(z)), s: [-2, -1, 0, 1, 2].map(k => [0, k * PI]), c: [0, 0], r: 4 },
+    { n: 'Ex 34: 1/(z² sinh z)', f: z => d(C1, m(m(z, z), Cx.sinh(z))), s: [-2, -1, 0, 1, 2].map(k => [0, k * PI]), c: [1, 0], r: 2 },
+    { n: 'Ex 36: z e^{1/z} (essential)', f: z => m(z, Cx.exp(d(C1, z))), s: [[0, 0]], c: [0, 0], r: 1 }
+  ];
+  const sel = $('#drt-f'); F.forEach((f, k) => { const o = document.createElement('option'); o.value = k; o.textContent = f.n; sel.appendChild(o); });
+  let C = F[0], c = [0, 0], h = [2, 0];
+  const circ = (cc, r, N = 1024) => { let s = [0, 0]; for (let j = 0; j < N; j++) { const e = Cx.polar(1, TAU * j / N); s = Cx.add(s, m(C.f(Cx.add(cc, Cx.scale(e, r))), m([0, r], e))); } return Cx.scale(s, TAU / N); };
+  const res = s0 => { const others = C.s.filter(q => q !== s0).map(q => Cx.abs(Cx.sub(q, s0))); const rho = Math.min(0.25, 0.3 * Math.min(10, ...others)); return Cx.div(circ(s0, rho, 2048), [0, TAU]); };
+  const P = new Plane('#cv-dass-rthm', { span: 4.5, aspect: 0.62, snap: 0.05, axisLabels: ['x', 'y'], draw: p => {
+    const r = Cx.abs(Cx.sub(h, c)); p.circle(c, r, { color: '--accent', width: 3, fill: '--accent', fillAlpha: 0.07 });
+    C.s.forEach(s0 => { const ins = Cx.abs(Cx.sub(s0, c)) < r, X = p.X(s0[0]), Y = p.Y(s0[1]), g = p.ctx; g.save(); g.strokeStyle = cssv(ins ? '--accent2' : '--fg'); g.lineWidth = 3; g.beginPath(); g.moveTo(X - 6, Y - 6); g.lineTo(X + 6, Y + 6); g.moveTo(X - 6, Y + 6); g.lineTo(X + 6, Y - 6); g.stroke(); g.restore();
+      if (ins) p.label(s0, 'Res ' + Cx.fmt(res(s0), 3), { color: '--accent2', dy: -10 }); });
+    p.dot(c, { r: 7, color: '--accent2', ring: true }); p.dot(h, { r: 7, color: '--accent4', ring: true });
+  }});
+  const out = () => { const r = Cx.abs(Cx.sub(h, c)), dm = Math.min(...C.s.map(s0 => Math.abs(Cx.abs(Cx.sub(s0, c)) - r)));
+    if (dm < 0.04) { texMix('#drt-out', '⚠ The circle passes through a singularity. Move it slightly.'); return; }
+    const ins = C.s.filter(s0 => Cx.abs(Cx.sub(s0, c)) < r); let sum = [0, 0]; const parts = ins.map(s0 => { const v = res(s0); sum = Cx.add(sum, v); return `\\operatorname{Res}_{${Cx.tex(s0, 2)}}=${Cx.tex(v, 4)}`; });
+    texMix('#drt-out', `Circle: centre $${Cx.tex(c, 2)}$, radius $${fnum(r, 3)}$. &nbsp; Inside: ${ins.length ? '$' + parts.join(',\\ ') + '$' : 'none'}.<br>$2\\pi i\\sum\\operatorname{Res}=${Cx.tex(Cx.mul([0, TAU], sum), 4)}$; &nbsp; numerical $\\oint_Cf\\,dz=${Cx.tex(circ(c, r, 4096), 4)}$ ✓.`); };
+  P.addDrag(() => c, v => { const dv = Cx.sub(v, c); c = v; h = Cx.add(h, dv); }); P.addDrag(() => h, v => { h = v; }); P.onchange = out;
+  const all = () => { C = F[+sel.value]; c = C.c.slice(); h = Cx.add(c, [C.r, 0]); P.cx = c[0]; P.cy = c[1]; P.span = Math.max(3, C.r * 1.9); P.redraw(); out(); };
+  sel.addEventListener('change', all); all();
+});
+
+/* dass:end */</script>
 </body>
 </html>

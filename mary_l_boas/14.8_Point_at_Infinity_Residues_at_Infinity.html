@@ -117,6 +117,23 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -135,6 +152,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="14.9_Mapping.html">14.9 Mapping</option>
 <option value="14.10_Applications_of_Conformal_Mapping.html">14.10 Some Applications of Conformal Mapping</option>
 <option value="14.11_Miscellaneous_Problems.html">14.11 Miscellaneous Problems</option></select>
+  <a class="btn" href="2.0_Complex_Numbers_Index.html" title="Chapter 2 index">Ch. 2 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -205,6 +223,26 @@ $$\oint-\frac{1}{z^2}f\!\left(\frac1z\right)dz=2\pi i\cdot R(\infty)\quad\Longri
 </table>
 <p><b>Why 2(b):</b> if $f\to0$, then $f=\frac{b_1}z+\frac{b_2}{z^2}+\cdots$ for large $z$, so $zf\to b_1=-R(\infty)$. <b>Why 2(a):</b> $f=c+\frac{b_1}{z}+\cdots$ gives $f'=-\frac{b_1}{z^2}-\cdots$, so $z^2f'\to-b_1$.</p>
 
+<!-- dass:start 10__res -->
+<h2 id="dass-26-5" class="dass"><span class="dtag">H.K. Dass §26.5, 26.6(d)</span>Residue at infinity: Dass's definition, the limit formula, and the "sum is zero" check</h2>
+<p><b>Definition (§26.5).</b> $\displaystyle\operatorname{Res}_{z=\infty}f=-\frac1{2\pi i}\oint_Cf(z)\,dz$, where $C$ is a large circle, traversed <b>anticlockwise</b>, enclosing all finite singularities. The minus sign appears because, seen from $\infty$, this circle is traversed clockwise.</p>
+<div class="dcase"><p><b>Ways to compute it.</b></p><ul>
+<li><b>Laurent at infinity:</b> expand $f$ in powers of $\frac1z$ for large $|z|$. Then $\operatorname{Res}_\infty f=-(\text{coefficient of }\tfrac1z)$.</li>
+<li><b>Limit formula (§26.6(d)):</b> $\operatorname{Res}_\infty f=\lim_{z\to\infty}\left[-z\,f(z)\right]$. It is valid when $f\to0$ at infinity, i.e. $f$ has a zero at $\infty$. Then the expansion is $\frac{c_1}{z}+\frac{c_2}{z^2}+\cdots$ and $-zf\to-c_1$.</li>
+<li><b>Global check:</b> for a function with finitely many singularities, the sum of all finite residues plus the residue at $\infty$ is $0$.</li></ul></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 15) — $\frac{z^3}{z^2-1}$ at $\infty$</div><div class="bd"><ol class="steps">
+<li>For $|z|\gt1$: $\frac{z^3}{z^2(1-z^{-2})}=z\left(1+\frac1{z^2}+\frac1{z^4}+\cdots\right)=z+\frac1z+\frac1{z^3}+\cdots$</li>
+<li>So $\operatorname{Res}_\infty=-1$. Note that the limit formula does <b>not</b> apply here, because $f\to\infty$. You must use the expansion.</li>
+<li>Check: the finite residues are $\frac12$ at $1$ and $\frac12$ at $-1$. Their sum $1$ plus $(-1)$ gives $0$ ✓.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> a non-zero residue at $\infty$ can occur even when $f$ blows up there. Only the $\frac1z$ coefficient counts.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 20) — residues of $\frac{z^2}{(z-1)(z-2)(z-3)}$ at $1,2,3,\infty$ sum to zero</div><div class="bd"><ol class="steps">
+<li>Finite residues: $\frac{1}{(1-2)(1-3)}=\frac12$, $\ \frac{4}{(2-1)(2-3)}=-4$, $\ \frac{9}{(3-1)(3-2)}=\frac92$.</li>
+<li>At infinity: $-zf=\frac{-z^3}{(z-1)(z-2)(z-3)}\to-1$.</li>
+<li>Sum: $\frac12-4+\frac92-1=0$ ✓.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $\oint_{|z|=R}f\,dz$ for $R$ larger than every pole equals $-2\pi i\operatorname{Res}_\infty f$. For a rational function that is just $2\pi i\times$ (the coefficient of $\frac1z$ at infinity), here $2\pi i$, with no residues computed at all.</p></div></div>
+<!-- dass:end -->
 <h2 id="sum">4. Sum of all residues = 0, and the shortcut for integrals</h2>
 <div class="box thm"><span class="tag">Theorem (Problem 16)</span>
 <p>If $f$ has finitely many singular points, then</p>
@@ -263,7 +301,72 @@ $$\sum_{\text{finite }z_k}\operatorname{Res}(f,z_k)+R(\infty)=0 .$$
 <div class="mcq" data-ans="2" data-ok="$R(\infty)=-b_1$ of the large-$z$ series, $=-1$." data-no="Use $R(\infty)=-\lim zf$."><p>1. $R(\infty)$ for $f=\frac1z$:</p><div class="opts"><button>$0$</button><button>$1$</button><button>$-1$</button><button>undefined</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="0" data-ok="$e^{1/w}$ at $w=0$ is essential." data-no="Look at $f(1/w)$ near $w=0$."><p>2. $z=\infty$ for $e^z$ is</p><div class="opts"><button>essential</button><button>a simple pole</button><button>regular</button></div><div class="fb"></div></div>
 
-<h2 id="summary">8. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">8. Going deeper: classifying functions by what they do at infinity</h2>
+<p>On the Riemann sphere, $\infty$ is an ordinary point, examined through $w=1/z$. That turns "growth at infinity" into singularity type, and gives powerful classification theorems.</p>
+<table class="t">
+<tr><th>Behaviour of $f$ at $\infty$</th><th>And $f$ is entire</th><th>Conclusion</th></tr>
+<tr><td>Analytic (bounded near $\infty$)</td><td>yes</td><td>$f$ is constant (Liouville)</td></tr>
+<tr><td>Pole of order $n$</td><td>yes</td><td>$f$ is a polynomial of degree $n$</td></tr>
+<tr><td>Essential singularity</td><td>yes</td><td>$f$ is "transcendental": $e^z$, $\sin z$, $\cosh z$, …</td></tr>
+<tr><td>At worst poles everywhere, including $\infty$</td><td>—</td><td>$f$ is a <b>rational function</b></td></tr>
+</table>
+<p><b>Why the polynomial statement holds:</b> a pole of order $n$ at $\infty$ means $|f(z)|\le C|z|^n$ for large $|z|$. Cauchy's estimate (14.3) then kills every derivative of order greater than $n$.</p>
+<h3>Residue at infinity: where the minus sign comes from</h3>
+<p>Define $\operatorname{Res}_\infty f=\frac{1}{2\pi i}\oint_{\text{big circle, clockwise}}f\,dz$. "Clockwise" is counter-clockwise <i>as seen from $\infty$</i>: it keeps $\infty$ on the left. If $f=\dots+\frac{b_1}{z}+\frac{b_2}{z^2}+\dots$ for large $|z|$, only the $\frac{b_1}{z}$ term survives, so</p>
+$$\operatorname{Res}_\infty f=-b_1=-\lim_{z\to\infty}zf(z)\quad(\text{when }f\to0),\qquad\operatorname{Res}_\infty f=-\operatorname{Res}_{w=0}\frac{1}{w^2}f\!\left(\frac1w\right).$$
+<p>A big counter-clockwise circle encloses every finite singularity. So:</p>
+$$\sum_{\text{all finite}}\operatorname{Res}+\operatorname{Res}_\infty=0 .$$
+<p><b>The exam payoff:</b> if a circle encloses many poles and excludes a few, compute $\oint=-2\pi i\left[\sum_{\text{outside}}\operatorname{Res}+\operatorname{Res}_\infty\right]$. That is often one or two terms instead of ten.</p>
+
+<h2 id="exampat">9. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Many poles inside</td><td>$\oint_{|z|=R}\frac{z^{n-1}}{z^n+1}dz$ and similar</td><td>$-2\pi i\operatorname{Res}_\infty=2\pi i\lim zf$</td></tr>
+<tr><td>Poles inside and outside</td><td>$\oint\frac{dz}{(z^{10}+1)(z-3)}$ on $|z|=2$</td><td>Use the outside pole plus $\infty$</td></tr>
+<tr><td>Classify $\infty$</td><td>Removable, pole of order $n$, or essential</td><td>Substitute $z=1/w$</td></tr>
+<tr><td>Residue at $\infty$</td><td>$\operatorname{Res}_\infty$ of a rational or exponential function</td><td>$-b_1$ from the large-$z$ expansion</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$\operatorname{Res}_\infty\frac1z=-1$, not $+1$.</li>
+<li>A function analytic at $\infty$ can still have a non-zero residue there. $\frac1z$ is the example.</li>
+<li>A function with a pole at $\infty$ (such as $z^2$) can have residue $0$ there.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>For rational $f=P/Q$ with $\deg Q\ge\deg P+2$: $\operatorname{Res}_\infty=0$, so the finite residues sum to $0$.</li>
+<li>For $\deg Q=\deg P+1$: $\operatorname{Res}_\infty=-\frac{\text{lead}(P)}{\text{lead}(Q)}$.</li>
+</ul></div>
+
+<h2 id="xprob">10. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> $\displaystyle\oint_{|z|=2}\frac{z^7}{z^8+1}dz=$ <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $0$</span><span>(b) $2\pi i$</span><span>(c) $16\pi i$</span><span>(d) $\frac{\pi i}4$</span></div>
+<details class="sol"><summary>Show solution</summary><p>All 8 poles are inside, and $\lim zf=1$. The integral is $2\pi i$, option <b>(b)</b>. (Or: it is $\frac18\oint\frac{p'}{p}$ with 8 zeros inside.)</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> At $z=\infty$, $f(z)=\dfrac{z^2+1}{z-1}$ has <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) a removable singularity</span><span>(b) a simple pole</span><span>(c) a double pole</span><span>(d) an essential singularity</span></div>
+<details class="sol"><summary>Show solution</summary><p>$f\approx z$ for large $z$, so $f(1/w)\approx1/w$: a simple pole. Option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> $\operatorname{Res}_\infty e^{1/z}=$ <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $1$</span><span>(b) $-1$</span><span>(c) $0$</span><span>(d) $e$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$e^{1/z}=1+\frac1z+\dots$, so $b_1=1$ and $\operatorname{Res}_\infty=-1$. Option <b>(b)</b>. This is consistent with $\operatorname{Res}_0e^{1/z}=1$, the only finite singularity.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> Find $\operatorname{Res}_\infty\dfrac{z^3}{z^2+1}$. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{z^3}{z^2+1}=z-\frac{z}{z^2+1}=z-\frac1z+\frac1{z^3}-\dots$ So $b_1=-1$ and $\operatorname{Res}_\infty=\mathbf{+1}$. Check: the finite residues are $-\frac12$ at each of $\pm i$, summing to $-1$. ✓</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> (Multiple correct) <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) an entire function with a double pole at $\infty$ is a quadratic polynomial</span><span>(b) $e^z$ has an essential singularity at $\infty$</span><span>(c) a function analytic everywhere on the Riemann sphere is constant</span><span>(d) $\operatorname{Res}_\infty\frac1z=1$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b), (c).</b> (d): the residue is $-1$.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Evaluate $\displaystyle\oint_{|z|=2}\frac{dz}{(z^{10}+1)(z-3)}$. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p>Ten poles are inside, so sum the residues outside instead. $\operatorname{Res}_\infty=0$ (the degree difference is 11), and $\operatorname{Res}_3=\frac{1}{3^{10}+1}=\frac1{59050}$. The integral is $-2\pi i\cdot\frac1{59050}=-\frac{\pi i}{29525}$.</p></details></div>
+<div class="mcq" data-ans="3" data-ok="$b_1=1$, so $\operatorname{Res}_\infty=-1$." data-no="$\operatorname{Res}_\infty=-b_1$."><p>Rapid fire: $\operatorname{Res}_\infty\dfrac{1}{z}=$</p><div class="opts"><button>$1$</button><button>$0$</button><button>undefined</button><button>$-1$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">11. Connections</h2>
+<div class="xlinks">
+<a href="14.5_The_Residue_Theorem.html"><b>Builds on</b>14.5 Residue theorem<small>Sum of residues inside a contour</small></a>
+<a href="14.9_Mapping.html"><b>Next</b>14.9 Mapping<small>$w=1/z$ and the Riemann sphere</small></a>
+<a href="14.3_Contour_Integrals.html"><b>Recall</b>14.3 Liouville<small>Entire and bounded means constant</small></a>
+<a href="2.10_Powers_and_Roots_of_Complex_Numbers.html"><b>Recall</b>2.10 Roots of $z^n=-1$<small>Many poles on one circle</small></a>
+<a href="14.7_Evaluation_of_Definite_Integrals_by_Residues.html"><b>Uses</b>14.7 Big-arc estimates<small>The same large-$z$ behaviour</small></a>
+<a href="14.11_Miscellaneous_Problems.html"><b>Review</b>14.11 Problem E10<small>Another residue-at-∞ problem</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="8. Summary">12. Summary</h2>
 <div class="card"><ul class="summary">
 <li>$\infty$ is the north pole of the Riemann sphere. Study it through $f(1/w)$ at $w=0$.</li>
 <li>$R(\infty)=-\operatorname{Res}_{0}\frac1{z^2}f(\frac1z)=-b_1$ (large-$z$ series) $=-\lim zf$ (if $f\to0$) $=\lim z^2f'$ (if $f\to$ finite).</li>

@@ -117,6 +117,23 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -141,6 +158,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="2.15_Inverse_Trigonometric_and_Hyperbolic_Functions.html">2.15 Inverse Trigonometric and Hyperbolic Functions</option>
 <option value="2.16_Some_Applications.html">2.16 Some Applications</option>
 <option value="2.17_Miscellaneous_Problems.html">2.17 Miscellaneous Problems</option></select>
+  <a class="btn" href="14.0_Functions_of_a_Complex_Variable_Index.html" title="Chapter 14 index">Ch. 14 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -203,6 +221,65 @@ $$i^0=1,\quad i^1=i,\quad i^2=-1,\quad i^3=i^2\cdot i=-i,\quad i^4=(i^2)^2=1,\qu
 <div class="readout" id="ip-out"></div>
 </div>
 
+<!-- dass:start 10__powers -->
+<h2 id="dass-20-1" class="dass"><span class="dtag">H.K. Dass §20.1–20.3, 20.9, 20.11</span>$i$ as a rotation, and every power of $i$</h2>
+<p>H.K. Dass opens the chapter with three linked ideas: what a complex number is, why the imaginary axis is drawn at right angles, and why the powers of $i$ repeat. Here they are in his order, in plain words.</p>
+
+<h3>Complex number, real part, imaginary part (§20.1–20.2)</h3>
+<p>A number of the form $z=a+ib$, with $a,b$ real and $i=\sqrt{-1}$, is a <b>complex number</b>. $a$ is its real part and $b$ its imaginary part. Two special cases have names:</p>
+<ul>
+<li>$a=0$: the number $ib$ is <b>purely imaginary</b>.</li>
+<li>$b=0$: the number $a$ is <b>real</b>. So every real number is also a complex number.</li>
+</ul>
+
+<h3>Why the imaginary axis is at right angles (§20.3)</h3>
+<p>Mark a positive number $x$ as the arrow $OA$ along the real axis. Then $-x$ is the arrow $OA'$ pointing the other way: multiplying by $-1$ turns the arrow through $180^\circ$. Now write $-x$ as</p>
+$$-x=(i)^2x=i\,(ix).$$
+<p>So multiplying by $i$ <b>twice</b> turns the arrow through two right angles. It is natural to read one multiplication by $i$ as a turn through <b>one</b> right angle. That puts $ix$ on the vertical axis, which is why the $y$-axis is called the <b>imaginary axis</b>.</p>
+
+<h3>Powers of $i$ (§20.9)</h3>
+<p>Start from $i^2=-1$ and keep multiplying by $i$:</p>
+<table class="t dt">
+<tr><th>$n$</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td></tr>
+<tr><th>$i^n$</th><td>$i$</td><td>$-1$</td><td>$-i$</td><td>$1$</td><td>$i$</td><td>$-1$</td><td>$-i$</td><td>$1$</td></tr>
+</table>
+<p>The pattern repeats every 4 steps because $i^4=1$. To find any power, divide the exponent by 4 and keep only the remainder $r$: $i^{4k+r}=(i^4)^k\,i^r=i^r$. All four cases:</p>
+<div class="dcase">
+$$i^{4k}=1,\qquad i^{4k+1}=i,\qquad i^{4k+2}=-1,\qquad i^{4k+3}=-i .$$
+</div>
+<p>The same rule works for negative exponents if you take the remainder in $\{0,1,2,3\}$. For example $-7=4(-2)+1$, so $i^{-7}=i$.</p>
+
+<h3>$i$ as an operator (§20.11)</h3>
+<p>Write $z=r(\cos\theta+i\sin\theta)$ and $i=\cos\frac\pi2+i\sin\frac\pi2$. Multiply, using the product rule for the polar form (multiply the moduli, add the angles):</p>
+$$iz=r(\cos\theta+i\sin\theta)\left(\cos\tfrac\pi2+i\sin\tfrac\pi2\right)=r\left[\cos\left(\theta+\tfrac\pi2\right)+i\sin\left(\theta+\tfrac\pi2\right)\right].$$
+<div class="box thm"><span class="tag">Result</span><p>Multiplying a complex number by $i$ <b>rotates it by $90^\circ$ anticlockwise and does not change its length</b>. All the cases follow:</p>
+<ul>
+<li>$iz$: a quarter turn anticlockwise.</li>
+<li>$i^2z=-z$: a half turn.</li>
+<li>$i^3z=-iz$: three quarter turns anticlockwise, i.e. a quarter turn clockwise.</li>
+<li>$i^4z=z$: a full turn, back to the start.</li>
+</ul></div>
+
+<div class="widget" id="w-dass-iop">
+<div class="wt">Interactive — multiplying by $i$ again and again</div>
+<div class="wd">Drag the point $z$. The slider applies $i$ repeatedly: $z\to iz\to i^2z\to\cdots$. Each step is a quarter turn, the length never changes, and after 4 steps you are back at $z$.</div>
+<div class="ctrls"><label>steps $k$ <input type="range" id="dio-k" min="0" max="8" step="1" value="1"><output></output></label><button class="pri" id="dio-play">▶ Play</button></div>
+<canvas id="cv-dass-iop"></canvas>
+<div class="readout" id="dio-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.9 method) — $i^{77}$ and $i^{-59}$</div><div class="bd"><ol class="steps">
+<li>$77=4\cdot19+1$, so $i^{77}=i^1=i$.</li>
+<li>$-59=4\cdot(-15)+1$, so $i^{-59}=i^1=i$.</li>
+<li>Check the second one the long way: $i^{-59}=\frac{1}{i^{59}}$ and $59=4\cdot14+3$, so $i^{59}=-i$ and $\frac{1}{-i}=\frac{i}{-i\cdot i}=i$. ✓</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> a sum or product of powers of $i$ is a common 3.5-mark Part B warm-up. Reducing the exponent mod 4 answers it in seconds.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.11) — rotate $3+4i$ by $90^\circ$ clockwise</div><div class="bd"><ol class="steps">
+<li>A clockwise quarter turn is multiplication by $i^3=-i$.</li>
+<li>$-i(3+4i)=-3i-4i^2=4-3i$.</li>
+<li>Check: $|4-3i|=5=|3+4i|$, and the dot product $(3)(4)+(4)(-3)=0$, so the two arrows are perpendicular. ✓</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> phasor diagrams in a.c. circuits and the "multiply by $i$ = $90^\circ$ phase lead" rule in wave optics come straight from this.</p></div></div>
+<!-- dass:end -->
 <h2 id="trap">3. The big trap: $\sqrt a\,\sqrt b \ne \sqrt{ab}$ when both are negative</h2>
 <p>For positive reals $\sqrt a\sqrt b=\sqrt{ab}$. This rule <b>fails</b> when $a$ and $b$ are both negative. Boas shows:</p>
 $$\sqrt{-2}\,\sqrt{-8}=(i\sqrt2)(i\sqrt8)=i^2\sqrt{16}=-4,\qquad\text{but}\qquad\sqrt{(-2)(-8)}=\sqrt{16}=+4 .$$
@@ -445,7 +522,84 @@ $$(2+i)^2=4+4i+i^2=3+4i,\qquad (3+4i)(2+i)=6+3i+8i+4i^2=2+11i .$$
 <div class="mcq" data-ans="0" data-ok="Real coefficients give a conjugate pair: sum $4$, product $4+1=5$." data-no="If $2+i$ is a root, so is $2-i$. Use the sum and product of roots."><p>3. A real quadratic with root $2+i$ is</p><div class="opts"><button>$z^2-4z+5$</button><button>$z^2+4z+5$</button><button>$z^2-4z+3$</button><button>$z^2-2z+5$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="3" data-ok="$1/i=-i$, so $1/i^3=1/(-i)=i$." data-no="Use $1/i=-i$."><p>4. $i^{-3}=$</p><div class="opts"><button>$-i$</button><button>$-1$</button><button>$1$</button><button>$i$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">13. One-screen summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">13. Going deeper: Vieta for any degree, and Newton's power sums</h2>
+<p>The quadratic case (sum $=-b/a$, product $=c/a$) is the first rung of a ladder that exam setters climb often. Write a monic polynomial with roots $z_1,\dots,z_n$ (repeated roots listed repeatedly):</p>
+$$z^n+a_{n-1}z^{n-1}+\cdots+a_1z+a_0=(z-z_1)(z-z_2)\cdots(z-z_n).$$
+<p>Multiply out the right side and compare coefficients. The coefficient of $z^{n-k}$ collects every product of $k$ roots, with sign $(-1)^k$:</p>
+$$e_1=\sum z_i=-a_{n-1},\qquad e_2=\sum_{i\lt j}z_iz_j=a_{n-2},\qquad\dots,\qquad e_n=z_1z_2\cdots z_n=(-1)^na_0 .$$
+<p>These hold whether the roots are real or complex, and whether the coefficients are real or complex.</p>
+<h3>Power sums without finding the roots</h3>
+<p>Let $p_k=z_1^k+\cdots+z_n^k$. Two routes:</p>
+<ol class="steps">
+<li><b>Low powers:</b> $p_1=e_1$ and $p_2=e_1^2-2e_2$ (square the sum and remove the cross terms).</li>
+<li><b>Any power, via the equation itself:</b> every root satisfies $z_i^n=-a_{n-1}z_i^{n-1}-\cdots-a_0$. Multiply by $z_i^{m}$ and sum over $i$:
+$$p_{n+m}=-a_{n-1}p_{n+m-1}-a_{n-2}p_{n+m-2}-\cdots-a_0p_m,\qquad p_0=n.$$
+This recursion (Newton's identities) gives $p_3,p_4,\dots$ in a few lines.</li>
+</ol>
+<div class="ex"><div class="hd">Example — roots of $z^3-2z^2+3z-1=0$: find $p_2$ and $p_3$</div><div class="bd"><ol class="steps">
+<li>$e_1=2$, $e_2=3$, $e_3=1$.</li>
+<li>$p_2=e_1^2-2e_2=4-6=-2$. A negative sum of squares already proves that some roots are non-real.</li>
+<li>Each root satisfies $z^3=2z^2-3z+1$, so $p_3=2p_2-3p_1+3=2(-2)-3(2)+3=-7$.</li></ol></div></div>
+<h3>Why the conjugate-pair rule is really a symmetry statement</h3>
+<p>If all $a_k$ are real, conjugating $p(z)=0$ gives $p(\bar z)=\overline{p(z)}=0$. So conjugation permutes the roots. The real roots are fixed points of that permutation, and the rest pair up. Two consequences:</p>
+<ul>
+<li>A real polynomial of <b>odd</b> degree has an <b>odd</b> number of real roots (counted with multiplicity), so at least one.</li>
+<li>Over the reals, every polynomial factors into linear factors and quadratics $z^2-2(\operatorname{Re}z_k)z+|z_k|^2$ with negative discriminant.</li>
+</ul>
+
+<h2 id="exampat">14. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Powers of $i$</td><td>$i^{N}$, $\sum_{k} i^k$, $\prod_k i^k$ for large $N$</td><td>Reduce exponents mod 4; any 4 consecutive powers sum to 0</td></tr>
+<tr><td>Root symmetries</td><td>$\alpha^n+\beta^n$ or $\sum z_i^2$ for roots of a given polynomial</td><td>Polar form for quadratics; Vieta and Newton for higher degree</td></tr>
+<tr><td>Real-coefficient polynomials</td><td>Given one complex root, find the coefficients or the other roots</td><td>Conjugate is also a root; build $z^2-2xz+(x^2+y^2)$</td></tr>
+<tr><td>Square-root trap</td><td>$\sqrt{-a}\sqrt{-b}$ in an MCQ, with $+\sqrt{ab}$ as a distractor</td><td>Convert each factor to $i\sqrt{\cdot}$ first</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$\sqrt{-4}\sqrt{-9}=(2i)(3i)=-6$, not $+6$. The rule $\sqrt a\sqrt b=\sqrt{ab}$ needs $a,b\ge0$.</li>
+<li>Conjugate pairing needs <b>real coefficients</b>. $z^2-iz=0$ has roots $0$ and $i$, and $-i$ is not a root.</li>
+<li>"Number of roots" counts multiplicity unless the question says "distinct".</li>
+<li>$i^{-1}=-i$, not $i$. Write $i^{-n}=i^{4k-n}$ with $4k\ge n$ to stay positive.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>Roots of $z^2-2z+4$ are $1\pm i\sqrt3=2e^{\pm i\pi/3}$. Spotting $\pm60^\circ$, $\pm45^\circ$ or $\pm30^\circ$ roots turns $\alpha^n+\beta^n$ into $2r^n\cos n\theta$.</li>
+<li>$\omega$ (cube root of unity) hides in $z^2+z+1$; $-\omega$ hides in $z^2-z+1$.</li>
+<li>Sum of the roots of $z^n-1$ is $0$ for $n\ge2$ (no $z^{n-1}$ term). The product is $(-1)^{n+1}$.</li>
+</ul></div>
+
+<h2 id="xprob">15. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<p class="small">Try each before opening the solution. Tags show the exam part these resemble: Part B is single concept (3.5 marks), Part C is multi-step (5 marks), NAT is a numerical answer.</p>
+<div class="prob"><div class="q"><b>X1.</b> If $\alpha,\beta$ are the roots of $z^2-2z+4=0$, then $\alpha^6+\beta^6$ equals <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $64$</span><span>(b) $128$</span><span>(c) $-128$</span><span>(d) $0$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\alpha,\beta=1\pm i\sqrt3=2e^{\pm i\pi/3}$. Then $\alpha^6=64e^{2\pi i}=64$, and the same holds for $\beta$. The sum is $128$, option <b>(b)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> Evaluate $\displaystyle\sum_{k=1}^{2026}i^k$. <span class="src">GATE MCQ</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>Any four consecutive powers add to $0$. $2026=4\cdot506+2$, so only the last two terms survive: $i^{2025}+i^{2026}=i+i^2=-1+i$.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> A cubic $z^3+az^2+bz+c$ with real coefficients has roots $2$ and $1+i$. Find $a+b+c$. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>The third root is $1-i$. So $(z-2)(z^2-2z+2)=z^3-4z^2+6z-4$, which gives $a+b+c=-4+6-4=\mathbf{-2}$. Check: $p(1)=1+a+b+c=-1$, and directly $(1-2)(1-2+2)=-1$.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> If $z_1,z_2,z_3$ are the roots of $z^3-z+1=0$, find $z_1^3+z_2^3+z_3^3$ and $z_1^2+z_2^2+z_3^2$. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><ol class="steps"><li>$e_1=0$, $e_2=-1$, $e_3=-1$.</li><li>$p_2=e_1^2-2e_2=2$.</li><li>Each root satisfies $z^3=z-1$, so $p_3=p_1-3=-3$.</li></ol><p>Answers: $p_3=-3$ and $p_2=2$. Both come without solving the cubic.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> For real $k$, the roots of $z^2-2z+k=0$ are non-real and lie on the circle $|z|=2$. Then $k=$ <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>Non-real roots of a real quadratic are conjugates, so their product is $|z|^2=k$, giving $k=4$. Check that they are non-real: the discriminant is $4-16\lt0$. ✓</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Using principal square roots, $\sqrt{-4}\,\sqrt{-9}$ equals <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $6$</span><span>(b) $-6$</span><span>(c) $6i$</span><span>(d) $-6i$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$(2i)(3i)=6i^2=-6$, option <b>(b)</b>. Option (a) is the trap from using $\sqrt{ab}$.</p></details></div>
+<div class="prob"><div class="q"><b>X7.</b> (Multiple correct) Let $p(z)$ be a degree-5 polynomial with real coefficients. Which statements must be true? <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $p$ has at least one real root</span><span>(b) non-real roots occur in conjugate pairs</span><span>(c) the number of real roots, with multiplicity, is odd</span><span>(d) $p$ has at most two non-real roots</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b), (c).</b> Conjugation pairs off the non-real roots, so $5-(\text{even})$ roots are real. (d) is false: $(z-1)(z^2+1)(z^2+4)$ has four non-real roots.</p></details></div>
+<div class="mcq" data-ans="1" data-ok="$\omega^{100}=\omega$ and $\omega^{200}=\omega^2$, so the sum is $1+\omega+\omega^2=0$." data-no="Reduce the exponents mod 3: $100\equiv1$ and $200\equiv2$."><p>Rapid fire: if $\omega^2+\omega+1=0$, then $1+\omega^{100}+\omega^{200}=$</p><div class="opts"><button>$3$</button><button>$0$</button><button>$1$</button><button>$-1$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">16. Connections</h2>
+<div class="xlinks">
+<a href="2.2_Real_and_Imaginary_Parts.html"><b>Next</b>2.2 Real and imaginary parts<small>A complex equation is two real equations</small></a>
+<a href="2.5_Complex_Algebra.html"><b>Extends</b>2.5 Complex algebra<small>Square roots of $a+ib$ and quadratics with complex coefficients</small></a>
+<a href="2.10_Powers_and_Roots_of_Complex_Numbers.html"><b>Extends</b>2.10 Roots of unity<small>$z^n=1$: Vieta gives the sum 0 and the product $(-1)^{n+1}$</small></a>
+<a href="2.16_Some_Applications.html"><b>Physics</b>2.16 Oscillators<small>The characteristic equation $s^2+2\gamma s+\omega_0^2=0$ has complex roots when the oscillator is underdamped</small></a>
+<a href="14.7_Evaluation_of_Definite_Integrals_by_Residues.html"><b>Later</b>14.7 Argument principle<small>Counting a polynomial's roots in a region without solving it</small></a>
+<a href="14.8_Point_at_Infinity_Residues_at_Infinity.html"><b>Later</b>14.8 Sum of residues<small>$\oint z^{n-1}/p(z)$ uses the same sum-of-roots ideas</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="13. One-screen summary">17. One-screen summary</h2>
 <div class="card"><ul class="summary">
 <li>$i^2=-1$, and $\sqrt{-a}=i\sqrt a$ for $a>0$.</li>
 <li>$i^n$ depends only on $n\bmod4$: $1,i,-1,-i$.</li>
@@ -1017,5 +1171,34 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* H.K. Dass §20.11 — i as a rotation operator */
+  let z = [2, 1];
+  const ipow = k => [[1, 0], [0, 1], [-1, 0], [0, -1]][((k % 4) + 4) % 4];
+  const P = new Plane('#cv-dass-iop', { span: 3.4, aspect: 0.62, snap: 0.1, draw: p => {
+    const k = val('dio-k'), r = Cx.abs(z);
+    p.circle([0, 0], r, { color: '--grid', dash: [5, 5], width: 1.2 });
+    for (let j = 0; j <= k; j++) {
+      const w = Cx.mul(ipow(j), z), last = j === k;
+      p.arrow([0, 0], w, { color: last ? '--accent2' : '--accent', width: last ? 3 : 1.6, alpha: last ? 1 : 0.35 });
+      if (j > 0) { const a0 = Cx.arg(Cx.mul(ipow(j - 1), z)); p.angleArc(a0, a0 + PI / 2, 22 + 6 * j, { color: '--accent4', width: 1.4 }); }
+      p.dot(w, { r: last ? 7 : 4, color: last ? '--accent2' : '--accent', label: j === 0 ? 'z' : (j === 1 ? 'iz' : 'i^' + j + 'z'), alpha: last ? 1 : 0.6 });
+    }
+  }});
+  P.addDrag(() => z, v => { if (Math.hypot(v[0], v[1]) > 0.2) z = v; });
+  P.onchange = () => out();
+  const out = () => {
+    const k = val('dio-k'), w = Cx.mul(ipow(k), z);
+    texMix('#dio-out', `$z=${Cx.tex(z, 2)}$, &nbsp; $i^{${k}}=${Cx.tex(ipow(k), 0)}$ (since $${k}=4\\cdot${Math.floor(k / 4)}+${k % 4}$), &nbsp; $i^{${k}}z=${Cx.tex(w, 2)}$<br>` +
+      `$|i^{${k}}z|=${fnum(Cx.abs(w), 3)}=|z|$, &nbsp; turned through $${90 * k}^\\circ$` + (k % 4 === 0 && k > 0 ? ' — a whole number of turns, back to $z$.' : '.'));
+  };
+  watch(['dio-k'], () => { P.redraw(); out(); });
+  let acc = 0; const an = animator(dt => { acc += dt; if (acc > 0.7) { acc = 0; const el = $('#dio-k'); el.value = (+el.value + 1) % 9; el.dispatchEvent(new Event('input')); } });
+  $('#dio-play').onclick = e => { e.currentTarget.textContent = an.toggle() ? '❚❚ Pause' : '▶ Play'; };
+  out();
+});
+
+/* dass:end */</script>
 </body>
 </html>

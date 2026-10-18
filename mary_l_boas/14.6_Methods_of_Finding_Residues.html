@@ -117,6 +117,23 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
+/* enrich */
+.xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
+.xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
+.xlinks a small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.xlinks a b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;background:var(--code);color:var(--muted);vertical-align:middle}
+.ch{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 18px;margin:6px 0 4px}
+table.t.pat{position:relative}
+table.t.pat td:first-child{font-weight:600}
 </style>
 </head>
 <body>
@@ -135,6 +152,7 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <option value="14.9_Mapping.html">14.9 Mapping</option>
 <option value="14.10_Applications_of_Conformal_Mapping.html">14.10 Some Applications of Conformal Mapping</option>
 <option value="14.11_Miscellaneous_Problems.html">14.11 Miscellaneous Problems</option></select>
+  <a class="btn" href="2.0_Complex_Numbers_Index.html" title="Chapter 2 index">Ch. 2 ↗</a>
   <button id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 <div class="layout">
@@ -157,6 +175,30 @@ kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;paddin
 <div class="ex"><div class="hd">Boas example — residue of $\dfrac{e^z}{z-1}$ at $z=1$</div><div class="bd">
 $$\frac{e^z}{z-1}=\frac{e\cdot e^{z-1}}{z-1}=\frac{e}{z-1}\left[1+(z-1)+\frac{(z-1)^2}{2!}+\cdots\right]=\frac{e}{z-1}+e+\cdots\quad\Rightarrow\quad R(1)=e .$$</div></div>
 
+<!-- dass:start 10__A -->
+<h2 id="dass-26-4" class="dass"><span class="dtag">H.K. Dass §26.4, 26.7, 26.11</span>The residue as a Laurent coefficient: definition, the "$z=a+t$" rule, and Dass's examples</h2>
+<p><b>Definition (§26.4).</b> Let $a$ be an isolated singularity, and let $C_1$ be a small circle $|z-a|=r$ containing no other singularity. In the Laurent series $f=\sum a_n(z-a)^n+\sum\frac{b_n}{(z-a)^n}$ valid near $a$,</p>
+$$\operatorname{Res}_{z=a}f=b_1=\frac{1}{2\pi i}\oint_{C_1}f(z)\,dz .$$
+<p>This holds for poles and essential singularities alike. It is the only method that works for essential singularities.</p>
+<div class="dcase"><p><b>Rule (§26.11).</b> Put $z=a+t$, expand $f(a+t)$ in powers of $t$ using known series, and read off the <b>coefficient of $\frac1t$</b>. Use it when the pole order is high (where the derivative formula gets messy) or the singularity is essential.</p></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 14, Ex 36, Ex 37) — essential singularities: only the series works</div><div class="bd">
+<div class="dcase"><p><b>Ex 14:</b> $z\cos\frac1z=z\left(1-\frac{1}{2z^2}+\frac{1}{24z^4}-\cdots\right)=z-\frac{1}{2z}+\frac1{24z^3}-\cdots$. Residue at $0$: $\boxed{-\frac12}$.</p></div>
+<div class="dcase"><p><b>Ex 36:</b> $ze^{1/z}=z+1+\frac{1}{2z}+\frac1{6z^2}+\cdots$. Residue $\frac12$, so $\oint_{|z|=1}ze^{1/z}dz=\pi i$.</p></div>
+<div class="dcase"><p><b>Ex 37:</b> $z^4e^{1/z}=\sum_n\frac{z^{4-n}}{n!}$. The $\frac1z$ term has $n=5$, so the residue is $\frac1{5!}=\frac{1}{120}$ and $\oint_{|z|=1}z^4e^{1/z}dz=\frac{\pi i}{60}$. (The book calls $z=0$ a "simple pole" here. It is an essential singularity: infinitely many negative powers. The residue is still the $\frac1z$ coefficient.)</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $z^ke^{1/z}$ has residue $\frac{1}{(k+1)!}$ at $0$, and $z^k\sin\frac1z$ and $z^k\cos\frac1z$ work similarly. Memorise the pattern: these are the standard essential-singularity MCQs.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 25, Ex 26) — high-order poles via $z=a+t$</div><div class="bd">
+<div class="dcase"><p><b>Ex 25: $\frac{z^3}{(z-1)^4(z-2)(z-3)}$ at its pole of order 4, $z=1$.</b> With $z=1+t$: $\frac{(1+t)^3}{t^4(t-1)(t-2)}=\frac{(1+t)^3}{2t^4}(1-t)^{-1}\left(1-\frac t2\right)^{-1}$. The product of the last two factors is $1+\frac32t+\frac74t^2+\frac{15}8t^3+\cdots$. The $t^3$ coefficient of $(1+3t+3t^2+t^3)\left(1+\frac32t+\frac74t^2+\frac{15}8t^3\right)$ is $\frac{15}8+3\cdot\frac74+3\cdot\frac32+1=\frac{101}8$. So the residue is $\frac12\cdot\frac{101}{8}=\boxed{\frac{101}{16}}$.</p>
+<p><b>Cross-check with no series:</b> the residues at $2$ and $3$ are $-8$ and $\frac{27}{16}$. Since $f\sim\frac{1}{z^3}$ at infinity, the residue at $\infty$ is $0$. All residues sum to $0$, so $\operatorname{Res}_1=8-\frac{27}{16}=\frac{101}{16}$ ✓.</p></div>
+<div class="dcase"><p><b>Ex 26: $\frac{ze^z}{(z-a)^3}$ at $z=a$.</b> With $z=a+t$: $\frac{(a+t)e^ae^t}{t^3}=e^a\left(\frac a{t^3}+\frac1{t^2}\right)\left(1+t+\frac{t^2}2+\cdots\right)$. The $\frac1t$ coefficient is $e^a\left(\frac a2+1\right)$.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "sum of all residues, including $\infty$, is zero" turns a fourth-order-pole residue into two simple-pole residues. Always look for this shortcut first.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 34, Ex 35) — Laurent series of $\frac{1}{z^2\sinh z}$ and $\frac1{z\sin z}$</div><div class="bd">
+<div class="dcase"><p><b>Ex 34:</b> $\frac{1}{z^2\sinh z}=\frac{1}{z^3}\left(1+\frac{z^2}6+\frac{z^4}{120}+\cdots\right)^{-1}=\frac1{z^3}-\frac{1}{6z}+\frac{7z}{360}-\cdots$ The $z$ coefficient is $-\frac1{120}+\frac1{36}=\frac7{360}$; the printed series drops the square term. The residue at $0$ is $-\frac16$. Inside $|z-1|=2$ the only pole is $0$, since $\pm\pi i$ are at distance $\sqrt{1+\pi^2}\gt2$. So $\oint=2\pi i\left(-\frac16\right)=-\frac{\pi i}{3}$.</p></div>
+<div class="dcase"><p><b>Ex 35:</b> $\frac1{z\sin z}=\frac{1}{z^2}+\frac16+\frac{7z^2}{360}+\cdots$ This is a double pole with <b>zero residue</b> (the function is even), so $\oint_{|z|=1}\frac{dz}{z\sin z}=0$.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> an <b>even</b> function has zero residue at $z=0$, whatever the pole order. That is a two-second answer.</p></div></div>
+<!-- dass:end -->
 <h2 id="B">B. Simple poles</h2>
 <div class="box thm"><span class="tag">Rule B</span>
 $$R(z_0)=\lim_{z\to z_0}(z-z_0)f(z)\qquad\text{(simple pole)}\qquad(6.1)$$
@@ -178,6 +220,36 @@ $$R(i)=\frac{\sin z}{-4z^3}\bigg|_{z=i}=\frac{\sin i}{-4i^3}=\frac{\sin i}{4i}=\
 <li>Think of $g$ and $h$ as power series in $(z-z_0)$. If the denominator has one more power of $(z-z_0)$ than the numerator, it is a simple pole. Example: $z\cot^2z=\frac{z\cos^2z}{\sin^2z}=\frac{z(1+\cdots)}{z^2(1+\cdots)}$ has a simple pole at $0$.</li>
 </ul>
 
+<!-- dass:start 10__B -->
+<h2 id="dass-26-8" class="dass"><span class="dtag">H.K. Dass §26.6(a), 26.8, 26.10</span>Simple poles: the two formulas with proofs, and Dass's examples</h2>
+<div class="dcase"><p><b>Formula 1 (§26.8): $\operatorname{Res}_{z=a}f=\lim_{z\to a}(z-a)f(z)$.</b> <i>Proof:</i> near a simple pole $f=\sum a_n(z-a)^n+\frac{b_1}{z-a}$. Multiply by $(z-a)$ and let $z\to a$: every term except $b_1$ vanishes.</p></div>
+<div class="dcase"><p><b>Formula 2 (§26.10): if $f=\frac{\phi}{\psi}$ with $\psi(a)=0\ne\psi'(a)$ and $\phi(a)\ne0$, then $\operatorname{Res}_{z=a}f=\frac{\phi(a)}{\psi'(a)}$.</b> <i>Proof:</i> Taylor-expand both: $(z-a)\frac{\phi(a)+(z-a)\phi'(a)+\cdots}{(z-a)\psi'(a)+\frac{(z-a)^2}{2}\psi''(a)+\cdots}\to\frac{\phi(a)}{\psi'(a)}$. Use it when the denominator does not factor nicely ($\sin z$, $\cos z$, $e^z-1$, $z^n+1$).</p></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 16–20) — the limit formula</div><div class="bd">
+<table class="t dt">
+<tr><th>Dass</th><th>$f$</th><th>Residues</th></tr>
+<tr><td>Ex 16</td><td>$\frac{z}{z-1}$</td><td>at $1$: $1$</td></tr>
+<tr><td>Ex 17</td><td>$\frac{z^2}{(z-1)^2(z+2)}$</td><td>at the simple pole $-2$: $\frac{4}{9}$ (and at the double pole $1$: $\frac59$, from §26.9)</td></tr>
+<tr><td>Ex 18</td><td>$\frac{1-2z}{z(z-1)(z-2)}$</td><td>at $0$: $\frac12$; at $1$: $1$; at $2$: $-\frac32$ (sum $0$: no residue at $\infty$)</td></tr>
+<tr><td>Ex 19</td><td>$\frac{z^3}{(z-1)^4(z-2)(z-3)}$</td><td>at $2$: $-8$; at $3$: $\frac{27}{16}$</td></tr>
+<tr><td>Ex 20</td><td>$\frac{z^2}{(z-1)(z-2)(z-3)}$</td><td>at $1$: $\frac12$; at $2$: $-4$; at $3$: $\frac92$; at $\infty$: $-1$. Sum $=0$ ✓</td></tr>
+</table>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> for a product of distinct linear factors, the residue at $p$ is "cover up $(z-p)$ and substitute $z=p$". This is the same as Heaviside's cover-up rule for partial fractions.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 23, Ex 24, Ex 27) — the $\frac{\phi}{\psi'}$ formula with trigonometric denominators</div><div class="bd">
+<div class="dcase"><p><b>Ex 23:</b> $\cot z=\frac{\cos z}{\sin z}$ has simple poles at $n\pi$, each with residue $\frac{\cos n\pi}{\cos n\pi}=1$. (Hence $\pi\cot\pi z$ has residue $1$ at every integer. This is the basis of summing series by residues.)</p></div>
+<div class="dcase"><p><b>Ex 24:</b> $\frac{z}{\sin z}$: at $n\pi$ with $n\ne0$ the residue is $\frac{n\pi}{\cos n\pi}=(-1)^nn\pi$. At $z=0$ the singularity is removable (residue $0$).</p></div>
+<div class="dcase"><p><b>Ex 27:</b> $\frac{\sin z}{z\cos z}$ inside $|z|=2$: $z=0$ is removable (residue $0$). At $\pm\frac\pi2$: $\frac{\sin z}{(z\cos z)'}=\frac{\sin z}{\cos z-z\sin z}$, which gives $-\frac2\pi$ and $+\frac2\pi$. The sum is $0$, as expected for an even function.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $\operatorname{Res}\frac{1}{\sin z}=(-1)^n$, $\operatorname{Res}\cot z=1$, $\operatorname{Res}\tan z=-1$ and $\operatorname{Res}\frac1{e^z-1}=1$ are four facts that answer a large share of residue MCQs.</p></div></div>
+
+<div class="widget" id="w-dass-res3">
+<div class="wt">Interactive — three ways to the same residue</div>
+<div class="wd">The background is the phase portrait of $f$: colours wind around zeros and poles. Click a black dot (a singularity) to select it, or use the menu. The readout computes the residue three independent ways: (1) the definition, $\frac1{2\pi i}\oint$ over a tiny circle; (2) the formula for the pole's order, $\lim(z-a)f$ or $\frac{1}{(m-1)!}\frac{d^{m-1}}{dz^{m-1}}[(z-a)^mf]$; (3) the $\frac1t$ coefficient of the Laurent series. All three agree, including at an essential singularity, where only (1) and (3) apply.</div>
+<div class="ctrls"><label>$f$ <select id="dr3-f"></select></label> <label>pole <select id="dr3-p"></select></label></div>
+<canvas id="cv-dass-res3"></canvas>
+<div class="readout" id="dr3-out"></div>
+</div>
+<!-- dass:end -->
 <h2 id="C">C. Multiple poles</h2>
 <div class="box thm"><span class="tag">Rule C</span>
 <p>If $f$ has a pole of order $\le m$ at $z_0$:</p>
@@ -191,6 +263,33 @@ $$\boxed{R(z_0)=\frac{1}{(m-1)!}\left.\frac{d^{\,m-1}}{dz^{m-1}}\Big[(z-z_0)^mf(
 <div class="box warn"><span class="tag">Do not use rule C when a series is quicker</span>
 <p>For $\frac{\cosh z-1}{z^7}$ at $0$, rule C needs six derivatives. The series $\cosh z-1=\frac{z^2}{2!}+\frac{z^4}{4!}+\frac{z^6}{6!}+\cdots$ gives the residue $\frac1{720}$ at once.</p></div>
 
+<!-- dass:start 10__C -->
+<h2 id="dass-26-9" class="dass"><span class="dtag">H.K. Dass §26.6(b), 26.9</span>Poles of order $n$: the derivative formula with proof, and Exercise 26.2</h2>
+<div class="box thm"><span class="tag">Formula</span><p>At a pole of order $n$: $\displaystyle\operatorname{Res}_{z=a}f=\frac{1}{(n-1)!}\left[\frac{d^{n-1}}{dz^{n-1}}\Big((z-a)^nf(z)\Big)\right]_{z=a}$.</p></div>
+<ol class="steps">
+<li>Near $a$: $(z-a)^nf=\left[a_0(z-a)^n+a_1(z-a)^{n+1}+\cdots\right]+b_1(z-a)^{n-1}+b_2(z-a)^{n-2}+\cdots+b_n$.</li>
+<li>Differentiate $n-1$ times. Every $b_k$ with $k\ge2$ multiplies a power below $n-1$ and dies. The $a$-terms keep a factor $(z-a)$ and vanish at $z=a$. Only $(n-1)!\,b_1$ survives. ∎</li></ol>
+<p><b>Practical tip.</b> If you overestimate the order $n$, the formula still gives the right answer, at the cost of an extra derivative. If you underestimate it, the answer is wrong.</p>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 21, Ex 22, Ex 31) — double and triple poles</div><div class="bd">
+<div class="dcase"><p><b>Ex 21: $\frac{z^2}{(z+1)^2(z-2)}$ at the double pole $-1$.</b> $\frac{d}{dz}\frac{z^2}{z-2}=\frac{z^2-4z}{(z-2)^2}$. At $z=-1$: $\frac{1+4}{9}=\boxed{\frac59}$.</p></div>
+<div class="dcase"><p><b>Ex 22: $\frac{1}{(z^2+1)^3}$ at $z=i$ (order 3).</b> $\frac{1}{2!}\frac{d^2}{dz^2}(z+i)^{-3}=\frac12\cdot12(z+i)^{-5}$. At $z=i$: $\frac{6}{(2i)^5}=\frac{6}{32i}=\boxed{-\frac{3i}{16}}$.</p></div>
+<div class="dcase"><p><b>Ex 31: $\oint_{|z|=3}\frac{z^2\,dz}{(z-1)^2(z+2)}$.</b> The residue at $1$ is $\frac{d}{dz}\frac{z^2}{z+2}\big|_1=\frac{z^2+4z}{(z+2)^2}\big|_1=\frac59$. At $-2$ it is $\frac49$. So $\oint=2\pi i\cdot1=\boxed{2\pi i}$. That the sum is exactly $1$ is no accident: $f\to\frac1z$ at infinity.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the shortcut "if $f\sim\frac{c}{z}$ at infinity, the residues inside a large circle sum to $c$" gives Ex 31 with no derivatives at all.</p></div></div>
+
+<table class="t dt">
+<tr><th colspan="3">Dass Exercise 26.2 — answers</th></tr>
+<tr><td>$\frac{z-3}{(z-2)^2(z+1)}$</td><td>pole of order 2 at $2$, simple pole at $-1$</td><td></td></tr>
+<tr><td>$\frac{z^3}{(z-2)(z-3)}$</td><td>residues at $3$ and $2$</td><td>$27$, $-8$</td></tr>
+<tr><td>$\frac{1}{(z^2+a^2)^2}$ at $ia$</td><td>$\frac{d}{dz}(z+ia)^{-2}=-2(2ia)^{-3}$</td><td>$-\frac{i}{4a^3}$</td></tr>
+<tr><td>$\tan z$ at $\left(n+\frac12\right)\pi$</td><td>$\frac{\sin}{(\cos)'}=\frac{\sin}{-\sin}$</td><td>$-1$</td></tr>
+<tr><td>$z^2e^{1/z}$, $\ z^2\sin\frac1z$ at $0$</td><td>coefficient of $\frac1z$</td><td>$\frac16$, $\ -\frac16$</td></tr>
+<tr><td>$\frac{1}{z^2(z-i)}$ at $i$</td><td>$\frac{1}{i^2}$</td><td>$-1$</td></tr>
+<tr><td>$\frac{e^{2z}}{1-e^z}$ at $0$</td><td>$\frac{e^0}{-e^0}$</td><td>$-1$</td></tr>
+<tr><td>$\frac{1+e^z}{\sin z+z\cos z}$ at $0$</td><td>$\frac{2}{2\cos0-0}$</td><td>$1$</td></tr>
+<tr><td>$\frac{1}{z(e^z-1)}$</td><td>double pole at $0$; simple poles at $2n\pi i$</td><td>$-\frac12$; $\ \frac{1}{2n\pi i}$</td></tr>
+</table>
+<!-- dass:end -->
 <h2 id="tricks">D. More tricks worth knowing</h2>
 <table class="t">
 <tr><th>Situation</th><th>Residue</th></tr>
@@ -283,7 +382,76 @@ $$\boxed{R(z_0)=\frac{1}{(m-1)!}\left.\frac{d^{\,m-1}}{dz^{m-1}}\Big[(z-z_0)^mf(
 <div class="mcq" data-ans="0" data-ok="Multiply by $(z+\frac12)$: $\frac{1}{2(z-1)}\to-\frac13$." data-no="Multiply by $(z+\frac12)$, not by $(2z+1)$."><p>2. Residue of $\frac{1}{(2z+1)(z-1)}$ at $z=-\frac12$:</p><div class="opts"><button>$-\frac13$</button><button>$-\frac23$</button><button>$\frac23$</button><button>$-1$</button></div><div class="fb"></div></div>
 <div class="mcq" data-ans="3" data-ok="$\frac{\cos z}{z^2}$ is even: no $1/z$ term." data-no="Is the function even?"><p>3. Residue of $\frac{\cos z}{z^2}$ at $0$:</p><div class="opts"><button>$1$</button><button>$-\frac12$</button><button>$\frac12$</button><button>$0$</button></div><div class="fb"></div></div>
 
-<h2 id="summary">H. Summary</h2>
+<!-- enrich:start -->
+<h2 id="deeper">H. Going deeper: where the formulas come from, plus two you will not find in most books</h2>
+<h3>Simple pole: $g/h'$</h3>
+<p>If $h(a)=0$, $h'(a)\ne0$ and $g(a)\ne0$, then near $a$, $h(z)=h'(a)(z-a)+\dots$. So $(z-a)\frac{g}{h}\to\frac{g(a)}{h'(a)}$. That limit is the residue.</p>
+<h3>Pole of order $m$: the derivative formula</h3>
+<p>Write $f=\frac{\phi(z)}{(z-a)^m}$ with $\phi$ analytic. The residue is the coefficient of $(z-a)^{m-1}$ in the Taylor series of $\phi$:</p>
+$$\operatorname{Res}_af=\frac{1}{(m-1)!}\lim_{z\to a}\frac{d^{m-1}}{dz^{m-1}}\left[(z-a)^mf(z)\right].$$
+<p>Using a larger $m$ than the true order still gives the right answer, just with more work. Using a smaller $m$ gives a wrong answer.</p>
+<h3>Denominator with a double zero</h3>
+<p>Let $h(a)=h'(a)=0$ and $h''(a)\ne0$. Expanding $h=\frac{h''}{2}(z-a)^2+\frac{h'''}{6}(z-a)^3+\dots$ and dividing the series gives:</p>
+<table class="t">
+<tr><th>Numerator $g$</th><th>Type of pole</th><th>Residue of $g/h$ at $a$</th></tr>
+<tr><td>$g(a)=0$, $g'(a)\ne0$</td><td>simple</td><td>$\dfrac{2g'(a)}{h''(a)}$</td></tr>
+<tr><td>$g(a)\ne0$</td><td>double</td><td>$\dfrac{6g'(a)h''(a)-2g(a)h'''(a)}{3\,h''(a)^2}$</td></tr>
+</table>
+<p>Check on $\frac{1}{(z-a)^2}$: $g=1$, $h''=2$, $h'''=0$, so the residue is $0$. ✓</p>
+<h3>Symmetry shortcuts</h3>
+<ul>
+<li>If $f$ is <b>even</b> about $0$, its Laurent series has only even powers, so $\operatorname{Res}_0f=0$. Examples: $\cot^2z$, $\frac{1}{z^2\sin^2z}$, $\frac{\cos z}{z^4}$.</li>
+<li>If $f(z)=\frac{1}{z^nQ(z)}$, the residue at $0$ is the coefficient of $z^{n-1}$ in $\frac1{Q(z)}$.</li>
+<li>For a simple zero of $h$ at a root of $z^n=c$: $\frac{1}{nz^{n-1}}=\frac{z}{nz^n}=\frac{z}{nc}$. This avoids computing a power.</li>
+</ul>
+
+<h2 id="exampat">I. How CSIR-NET &amp; GATE test this</h2>
+<table class="t pat">
+<tr><th>Pattern</th><th>What they ask</th><th>Fast route</th></tr>
+<tr><td>Rational functions</td><td>Residue at a given pole</td><td>$g/h'$, or factor and substitute</td></tr>
+<tr><td>Roots of $z^n=c$</td><td>Residue of $\frac1{z^n-c}$ at one root</td><td>$\frac{z_k}{nc}$</td></tr>
+<tr><td>Trig/hyperbolic at 0</td><td>$\operatorname{Res}_0\frac{1}{z^2\sin z}$, $\operatorname{Res}_0\cot z$</td><td>Short Laurent expansion; parity check</td></tr>
+<tr><td>Multiple poles</td><td>$\operatorname{Res}\frac{e^{az}}{(z-b)^m}$</td><td>$\frac{a^{m-1}e^{ab}}{(m-1)!}$</td></tr>
+</table>
+<div class="box warn"><span class="tag">Traps that cost marks</span><ul>
+<li>$g/h'$ needs a <b>simple</b> zero of $h$. Check $h'(a)\ne0$ first.</li>
+<li>$\frac{\sin z}{z^4}$: the pole is of order 3. If you use $m=4$ the formula still works; if you use $m=2$ it does not.</li>
+<li>A zero of the numerator can cancel the pole entirely. The residue is then $0$, as with $\frac{\sin z}{z}$.</li>
+</ul></div>
+<div class="box fact"><span class="tag">30-second shortcuts</span><ul>
+<li>$\operatorname{Res}_{k\pi}\cot z=1$, $\operatorname{Res}_{k\pi}\frac1{\sin z}=(-1)^k$ and $\operatorname{Res}_{(k+\frac12)\pi}\tan z=-1$.</li>
+<li>$\operatorname{Res}_0\frac{1}{z^n}e^{z}=\frac{1}{(n-1)!}$ and $\operatorname{Res}_0z^ne^{1/z}=\frac1{(n+1)!}$.</li>
+</ul></div>
+
+<h2 id="xprob">J. Exam-style problems (original, CSIR/GATE pattern)</h2>
+<div class="prob"><div class="q"><b>X1.</b> The residue of $\dfrac{z}{z^2+4}$ at $z=2i$ is <span class="src">CSIR Part B</span><span class="lvl e">Easy</span></div>
+<div class="ch"><span>(a) $\frac12$</span><span>(b) $\frac i2$</span><span>(c) $-\frac12$</span><span>(d) $\frac{1}{4i}$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{g}{h'}=\frac{2i}{4i}=\frac12$. Option <b>(a)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X2.</b> Find the residue of $\dfrac{e^z}{(z-1)^3}$ at $z=1$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl e">Easy</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{1}{2!}\frac{d^2}{dz^2}e^z\big|_1=\frac e2=\mathbf{1.359}$.</p></details></div>
+<div class="prob"><div class="q"><b>X3.</b> The residue of $\dfrac{1}{z^4+1}$ at $z=e^{i\pi/4}$ is <span class="src">CSIR Part B</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\frac14e^{-3i\pi/4}$</span><span>(b) $-\frac14e^{i\pi/4}$</span><span>(c) both (a) and (b)</span><span>(d) $\frac14e^{i\pi/4}$</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac1{4z^3}=\frac{z}{4z^4}=\frac{z}{4(-1)}=-\frac14e^{i\pi/4}$. And $-e^{i\pi/4}=e^{i\pi/4}e^{-i\pi}=e^{-3i\pi/4}$, so (a) and (b) are the same number. Option <b>(c)</b>.</p></details></div>
+<div class="prob"><div class="q"><b>X4.</b> (Multiple correct) <span class="src">CSIR Part C</span><span class="lvl m">Medium</span></div>
+<div class="ch"><span>(a) $\operatorname{Res}_0\cot^2z=0$</span><span>(b) $\operatorname{Res}_0\frac{\sin z}{z^4}=-\frac16$</span><span>(c) $\operatorname{Res}_\pi\cot z=1$</span><span>(d) $\operatorname{Res}_0\frac{e^z}{z^3}=1$</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>(a), (b), (c).</b> (a) is an even function. (b): $\frac{z-z^3/6+\dots}{z^4}$. (d) equals $\frac1{2!}=\frac12$.</p></details></div>
+<div class="prob"><div class="q"><b>X5.</b> Find $\operatorname{Res}_0\dfrac{1}{z^2\sinh z}$, to three decimal places. <span class="src">GATE NAT</span><span class="lvl m">Medium</span></div>
+<details class="sol"><summary>Show solution</summary><p>$\frac{1}{\sinh z}=\frac1z-\frac z6+\dots$ Divided by $z^2$, the $z^{-1}$ coefficient is $-\frac16=\mathbf{-0.167}$.</p></details></div>
+<div class="prob"><div class="q"><b>X6.</b> Find $\operatorname{Res}_0\dfrac{e^z}{1-\cos z}$ by two methods. <span class="src">CSIR Part C</span><span class="lvl h">Hard</span></div>
+<details class="sol"><summary>Show solution</summary><p><b>Formula:</b> $h=1-\cos z$ has $h''(0)=1$ and $h'''(0)=0$, and $g=e^z$ has $g=g'=1$. The residue is $\frac{6\cdot1\cdot1-0}{3}=2$.</p><p><b>Series:</b> $\frac1{1-\cos z}=\frac{2}{z^2}\left(1-\frac{z^2}{12}+\dots\right)^{-1}=\frac2{z^2}+\frac16+\dots$ Multiply by $1+z+\dots$: the $z^{-1}$ coefficient is $2$. ✓</p></details></div>
+<div class="mcq" data-ans="1" data-ok="$\frac{1}{z}\big|_{z=-1}=-1$." data-no="Cover the factor $(z+1)$ and substitute $z=-1$."><p>Rapid fire: $\operatorname{Res}_{-1}\dfrac{1}{z(z+1)}=$</p><div class="opts"><button>$1$</button><button>$-1$</button><button>$0$</button><button>$\frac12$</button></div><div class="fb"></div></div>
+
+<h2 id="xlinks">K. Connections</h2>
+<div class="xlinks">
+<a href="14.5_The_Residue_Theorem.html"><b>Builds on</b>14.5 Residue theorem<small>Why residues matter</small></a>
+<a href="14.7_Evaluation_of_Definite_Integrals_by_Residues.html"><b>Next</b>14.7 Real integrals<small>Where these residues get used</small></a>
+<a href="14.4_Laurent_Series.html"><b>Recall</b>14.4 Order arithmetic<small>Deciding the order of a pole</small></a>
+<a href="2.10_Powers_and_Roots_of_Complex_Numbers.html"><b>Recall</b>2.10 Roots of $z^n=c$<small>Where the poles of $\frac{1}{z^n-c}$ sit</small></a>
+<a href="14.8_Point_at_Infinity_Residues_at_Infinity.html"><b>Shortcut</b>14.8 Residue at ∞<small>Avoid computing many residues</small></a>
+<a href="14.11_Miscellaneous_Problems.html"><b>Practice</b>14.11 Residue calculator<small>Check your answers</small></a>
+</div>
+<!-- enrich:end -->
+<h2 id="summary" data-orig="H. Summary">L. Summary</h2>
 <div class="card"><ul class="summary">
 <li>Simple pole: $R=\lim(z-z_0)f=\dfrac{g(z_0)}{h'(z_0)}$.</li>
 <li>Pole of order $\le m$: $R=\frac1{(m-1)!}\frac{d^{m-1}}{dz^{m-1}}[(z-z_0)^mf]_{z_0}$.</li>
@@ -834,5 +1002,49 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+/* H.K. Dass §26.6–26.11 — three ways to the same residue */
+onReady(() => {
+  const C1 = [1, 0], m = Cx.mul, d = Cx.div, sb = Cx.sub, ad = Cx.add, sq = z => m(z, z);
+  const F = [
+    { n: 'Ex 18: (1−2z)/(z(z−1)(z−2))', f: z => d(sb(C1, Cx.scale(z, 2)), m(z, m(sb(z, C1), sb(z, [2, 0])))), p: [[[0, 0], 1, '\\frac12'], [[1, 0], 1, '1'], [[2, 0], 1, '-\\frac32']], c: [1, 0], s: 2 },
+    { n: 'Ex 21: z²/((z+1)²(z−2))', f: z => d(sq(z), m(sq(ad(z, C1)), sb(z, [2, 0]))), p: [[[-1, 0], 2, '\\frac59'], [[2, 0], 1, '\\frac49']], c: [0.5, 0], s: 2.4 },
+    { n: 'Ex 22: 1/(z²+1)³', f: z => { const q = ad(sq(z), C1); return d(C1, m(q, sq(q))); }, p: [[[0, 1], 3, '-\\frac{3i}{16}'], [[0, -1], 3, '\\frac{3i}{16}']], c: [0, 0], s: 2 },
+    { n: 'Ex 25: z³/((z−1)⁴(z−2)(z−3))', f: z => d(m(z, sq(z)), m(sq(sq(sb(z, C1))), m(sb(z, [2, 0]), sb(z, [3, 0])))), p: [[[1, 0], 4, '\\frac{101}{16}'], [[2, 0], 1, '-8'], [[3, 0], 1, '\\frac{27}{16}']], c: [2, 0], s: 1.8 },
+    { n: 'Ex 23: cot z', f: z => d(Cx.cos(z), Cx.sin(z)), p: [[[0, 0], 1, '1'], [[PI, 0], 1, '1'], [[-PI, 0], 1, '1']], c: [0, 0], s: 4.5 },
+    { n: 'Ex 14: z cos(1/z) (essential)', f: z => m(z, Cx.cos(d(C1, z))), p: [[[0, 0], 0, '-\\frac12']], c: [0, 0], s: 1.2 },
+    { n: 'Ex 37: z⁴ e^{1/z} (essential)', f: z => m(sq(sq(z)), Cx.exp(d(C1, z))), p: [[[0, 0], 0, '\\frac1{120}']], c: [0, 0], s: 1.2 }
+  ];
+  const sf = $('#dr3-f'), sp = $('#dr3-p'); F.forEach((f, k) => { const o = document.createElement('option'); o.value = k; o.textContent = f.n; sf.appendChild(o); });
+  let C = F[0]; const off = document.createElement('canvas'); let offKey = '';
+  const fillPoles = () => { sp.innerHTML = ''; C.p.forEach((q, k) => { const o = document.createElement('option'); o.value = k; o.textContent = `z = ${Cx.fmt(q[0], 3)}` + (q[1] ? ` (order ${q[1]})` : ' (essential)'); sp.appendChild(o); }); };
+  const rho0 = a => Math.min(0.3, 0.35 * Math.min(10, ...C.p.filter(q => q[0] !== a).map(q => Cx.abs(sb(q[0], a)))));
+  const M1 = a => { const r = rho0(a), N = 2048; let s = [0, 0]; for (let j = 0; j < N; j++) { const e = Cx.polar(1, TAU * j / N); s = ad(s, m(C.f(ad(a, Cx.scale(e, r))), e)); } return Cx.scale(s, r / N); };
+  /* method 3: derivative formula with finite differences of g = (z−a)^n f on a stencil that avoids z = a */
+  const M3 = (a, n) => { const h = 0.02 * rho0(a) / 0.3, K = 8, xs = [], gs = []; for (let j = 0; j < K; j++) { const t = (j - (K - 1) / 2) * h; const z = ad(a, [t, 0]); xs.push(t); gs.push(m(Cx.ipow([t, 0], n), C.f(z))); }
+    /* Newton divided differences, then the (n−1)th derivative at t = 0 by expanding the interpolating polynomial */
+    const c = gs.map(g => g.slice()); for (let k = 1; k < K; k++) for (let j = K - 1; j >= k; j--) c[j] = d(sb(c[j], c[j - 1]), [xs[j] - xs[j - k], 0]);
+    let poly = [[0, 0]]; for (let k = K - 1; k >= 0; k--) { const np = poly.map(() => [0, 0]).concat([[0, 0]]); poly.forEach((q, i) => { np[i + 1] = ad(np[i + 1], q); np[i] = sb(np[i], Cx.scale(q, xs[k])); }); np[0] = ad(np[0], c[k]); poly = np; }
+    return poly[n - 1] || [0, 0]; };
+  const P = new Plane('#cv-dass-res3', { span: 2, aspect: 0.6, snap: 0, axisLabels: ['x', 'y'], draw: p => {
+    const key = sf.value + '|' + p.W + 'x' + p.H + '|' + p.span + '|' + p.cx;
+    if (key !== offKey) { off.width = p.W; off.height = p.H; const g = off.getContext('2d'), res = 3;
+      for (let py = 0; py < p.H; py += res) for (let px = 0; px < p.W; px += res) { const w = C.f([p.wx(px + res / 2), p.wy(py + res / 2)]); if (!isFinite(w[0]) || !isFinite(w[1])) continue; const A = Cx.abs(w), lt = 0.35 + 0.3 * (Math.atan(Math.log(A + 1e-300)) / PI + 0.5) * 0.9; const [r, gg, b] = phaseRGB(Cx.arg(w), Math.min(0.75, lt)); g.fillStyle = `rgb(${r | 0},${gg | 0},${b | 0})`; g.fillRect(px, py, res, res); }
+      offKey = key; }
+    p.ctx.drawImage(off, 0, 0, p.W, p.H); p.grid();
+    const k = +sp.value; C.p.forEach((q, j) => { p.dot(q[0], { r: 6, color: '#000000', ring: true }); if (j === k) p.circle(q[0], rho0(q[0]), { color: '#ffffff', width: 2.5, dash: [5, 4] }); });
+  }});
+  P.redraw = function () { if (!this.W) return; const c = this.ctx; c.save(); c.fillStyle = cssv('--canvas'); c.fillRect(0, 0, this.W, this.H); c.restore(); this.draw(this); };
+  P.onClick = v => { let best = 0, bd = 1e9; C.p.forEach((q, j) => { const dd = Cx.abs(sb(q[0], v)); if (dd < bd) { bd = dd; best = j; } }); sp.value = best; out(); };
+  const out = () => { const [a, n, ex] = C.p[+sp.value], r1 = M1(a); let s = `At $z_0=${Cx.tex(a, 3)}$ (${n ? 'pole of order ' + n : 'essential singularity'}):<br>(1) definition, $\\frac1{2\\pi i}\\oint_{|z-z_0|=${fnum(rho0(a), 3)}}f\\,dz=${Cx.tex(r1, 6)}$<br>`;
+    if (n) { const r3 = M3(a, n); s += `(2) ${n === 1 ? '$\\lim(z-z_0)f$' : `$\\frac{1}{${n - 1}!}\\frac{d^{${n - 1}}}{dz^{${n - 1}}}[(z-z_0)^${n}f]$`}, by finite differences that avoid $z_0$: $${Cx.tex(r3, 6)}$<br>`; }
+    else s += '(2) the order formulas do <b>not</b> apply: there is no finite order<br>';
+    s += `(3) Dass's exact value (from the coefficient of $\\frac1t$ or the formula): $${ex}$.`;
+    texMix('#dr3-out', s); P.redraw(); };
+  const all = () => { C = F[+sf.value]; fillPoles(); P.cx = C.c[0]; P.cy = C.c[1]; P.span = C.s; offKey = ''; out(); };
+  sf.addEventListener('change', all); sp.addEventListener('change', out); all();
+});
+
+/* dass:end */</script>
 </body>
 </html>
