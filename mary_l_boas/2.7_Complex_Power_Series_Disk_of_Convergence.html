@@ -117,6 +117,14 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -193,6 +201,58 @@ $$\frac1R=\limsup_{n\to\infty}|a_n|^{1/n}.$$
 <p>This always gives $R$, even when $|a_{n+1}/a_n|$ has no limit. Example: $\sum(2+(-1)^n)^nz^n$. The ratios jump between large and small values, but $|a_n|^{1/n}=2+(-1)^n$ takes the values $1,3,1,3,\dots$, so $\limsup=3$ and $R=\tfrac13$.</p>
 <p>Series with gaps, like $\sum z^{2n}$ or $\sum z^{n!}$, are handled by treating the whole term: for $\sum z^{2n}$, $\rho=|z|^2\lt1$ gives $|z|\lt1$.</p>
 
+<!-- dass:start 10__disk -->
+<h2 id="dass-25-2" class="dass"><span class="dtag">H.K. Dass §25.1–25.5</span>Convergence of complex series and the two formulas for the radius of convergence</h2>
+<h3>Series of complex terms (§25.2)</h3>
+<ul>
+<li><b>(a) Real and imaginary parts.</b> $\sum(u_n+iv_n)$ converges to $U+iV$ exactly when $\sum u_n\to U$ and $\sum v_n\to V$. A complex series is two real series.</li>
+<li><b>(b) Necessary condition.</b> If the series converges, then $u_n+iv_n\to0$. The converse is false: the terms of $\sum\frac{1+i}{n}$ tend to $0$, yet both real parts are harmonic series and diverge. In practice, test each part.</li>
+<li><b>(c) Absolute convergence.</b> If $\sum|u_n+iv_n|$ converges, so does the series itself. The reason: $|u_n|\le|u_n+iv_n|$ and $|v_n|\le|u_n+iv_n|$, so both real parts converge absolutely.</li>
+<li><b>(d) Uniform convergence in a region</b> means $|S(z)-S_n(z)|\lt\varepsilon$ for all $n\gt N$, with the <b>same</b> $N$ for every $z$ in the region.</li>
+<li><b>(e) Weierstrass M-test.</b> If $|a_n(z)|\le M_n$ throughout the region and $\sum M_n$ converges, the series converges uniformly there. A uniformly convergent series of continuous functions can be <b>integrated term by term</b>. This is the step used in the proofs of Taylor's and Laurent's theorems.</li>
+</ul>
+
+<h3>Region of convergence (§25.3–25.4): only three possibilities</h3>
+<p>A power series $\sum a_n(z-z_0)^n$ (centre $z_0$) converges:</p>
+<div class="dcase"><ol>
+<li>only at $z=z_0$ ($R=0$), e.g. $\sum n!\,z^n$; or</li>
+<li>in the whole plane ($R=\infty$), e.g. $\sum\frac{z^n}{n!}$; or</li>
+<li>inside a circle $|z-z_0|\lt R$, diverging everywhere outside it. On the circle itself anything can happen (see section 3 above).</li></ol></div>
+
+<h3>The two formulas for $R$ (§25.5)</h3>
+$$\text{(i) Cauchy–Hadamard (root):}\ \ \frac1R=\lim_{n\to\infty}|a_n|^{1/n},\qquad\text{(ii) D'Alembert (ratio):}\ \ \frac1R=\lim_{n\to\infty}\left|\frac{a_{n+1}}{a_n}\right| .$$
+<p>When the ratio limit exists, both give the same $R$. The root form also works when the ratio oscillates, e.g. for coefficients that are zero for odd $n$. Strictly, it should then be read as a $\limsup$.</p>
+
+<div class="widget" id="w-dass-roc">
+<div class="wt">Interactive — inside or outside the circle? Watch the partial sums</div>
+<div class="wd">Choose one of Dass's series and drag the point $z$ (left). The circle has the radius $R$ from the formulas. Right: the partial sums $S_0,S_1,\dots,S_N$ at your $z$, drawn as a path. Inside the circle the path spirals into a limit. Outside it runs away.</div>
+<div class="ctrls"><label>series <select id="drc-s"></select></label>
+<label>$N$ <input type="range" id="drc-n" min="5" max="80" step="1" value="40"><output></output></label></div>
+<div class="grid2"><canvas id="cv-dass-rocz"></canvas><canvas id="cv-dass-rocs"></canvas></div>
+<div class="readout" id="drc-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 1–4) — four radii by the ratio test</div><div class="bd">
+<table class="t dt">
+<tr><th>Series</th><th>$\left|\frac{a_{n+1}}{a_n}\right|$</th><th>Limit</th><th>$R$</th></tr>
+<tr><td>Ex 1: $\sum\frac{z^n}{n!}$</td><td>$\frac{1}{n+1}$</td><td>$0$</td><td>$\infty$</td></tr>
+<tr><td>Ex 2: $\sum\frac{z^n}{2^n+3}$</td><td>$\frac{2^n+3}{2^{n+1}+3}=\frac{1+3/2^n}{2+3/2^n}$</td><td>$\frac12$</td><td>$2$</td></tr>
+<tr><td>Ex 3: $\sum\frac{z^n}{n^n}$</td><td>$\frac{n^n}{(n+1)^{n+1}}=\frac{1}{(1+\frac1n)^n(n+1)}$</td><td>$\frac{1}{e\cdot\infty}=0$</td><td>$\infty$</td></tr>
+<tr><td>Ex 4: $\sum\frac{n!}{n^n}z^n$</td><td>$\frac{(n+1)!}{(n+1)^{n+1}}\cdot\frac{n^n}{n!}=\left(\frac{n}{n+1}\right)^n$</td><td>$\frac1e$</td><td>$e$</td></tr>
+</table>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the limits $\left(1+\frac1n\right)^n\to e$ and $\left(\frac n{n+1}\right)^n\to\frac1e$ come up in almost every radius-of-convergence MCQ that involves $n!$ and $n^n$.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Exercise 25.1) — every variation: $p$-series, geometric, root test, complex coefficients</div><div class="bd">
+<table class="t dt">
+<tr><th>Series</th><th>Best test</th><th>$R$</th></tr>
+<tr><td>$\sum\frac{z^n}{n^p}$ (any real $p$)</td><td>ratio: $\left(\frac{n}{n+1}\right)^p\to1$</td><td>$1$ (independent of $p$; only the boundary behaviour depends on $p$)</td></tr>
+<tr><td>$\sum\frac{z^n}{3^{n+1}}$</td><td>geometric in $\frac z3$</td><td>$3$</td></tr>
+<tr><td>$\sum\left(1+\frac1n\right)^{n^2}z^n$</td><td>root: $|a_n|^{1/n}=\left(1+\frac1n\right)^n\to e$</td><td>$\frac1e$</td></tr>
+<tr><td>$\sum(5+12i)^nz^n$</td><td>root: $|a_n|^{1/n}=|5+12i|=13$</td><td>$\frac1{13}$</td></tr>
+<tr><td>$\sum\frac{2n+3}{(2n+5)(n+5)}z^n$</td><td>ratio: rational in $n$, so the limit is $1$</td><td>$1$</td></tr>
+</table>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> two rules of thumb. Polynomial or rational factors in $n$ never change $R$. A factor $c^n$ divides $R$ by $|c|$. Use the root test whenever the exponent involves $n^2$.</p></div></div>
+<!-- dass:end -->
 <h2 id="boundary">3. On the boundary circle: three classic cases</h2>
 <table class="t">
 <tr><th>Series ($R=1$)</th><th>On $|z|=1$</th><th>Reason</th></tr>
@@ -967,5 +1027,42 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+/* H.K. Dass §25.5 — radius of convergence: partial sums inside vs outside */
+onReady(() => {
+  const lf = n => { let s = 0; for (let k = 2; k <= n; k++) s += Math.log(k); return s; };
+  const S = [
+    { n: 'Ex 1: Σ zⁿ/n!', la: n => [-lf(n), 0], R: Infinity, t: '\\sum\\frac{z^n}{n!}' },
+    { n: 'Ex 2: Σ zⁿ/(2ⁿ+3)', la: n => [-Math.log(2 ** n + 3), 0], R: 2, t: '\\sum\\frac{z^n}{2^n+3}' },
+    { n: 'Ex 3: Σ zⁿ/nⁿ', la: n => [n ? -n * Math.log(n) : 0, 0], R: Infinity, t: '\\sum\\frac{z^n}{n^n}' },
+    { n: 'Ex 4: Σ n! zⁿ/nⁿ', la: n => [n ? lf(n) - n * Math.log(n) : 0, 0], R: Math.E, t: '\\sum\\frac{n!}{n^n}z^n' },
+    { n: 'Q1: Σ zⁿ/n²', la: n => [n ? -2 * Math.log(n) : -Infinity, 0], R: 1, t: '\\sum\\frac{z^n}{n^2}' },
+    { n: 'Q2: Σ zⁿ/3ⁿ⁺¹', la: n => [-(n + 1) * Math.log(3), 0], R: 3, t: '\\sum\\frac{z^n}{3^{n+1}}' },
+    { n: 'Q3: Σ (1+1/n)^(n²) zⁿ', la: n => [n ? n * n * Math.log1p(1 / n) : 0, 0], R: 1 / Math.E, t: '\\sum\\left(1+\\frac1n\\right)^{n^2}z^n' },
+    { n: 'Q4: Σ (5+12i)ⁿ zⁿ', la: n => [n * Math.log(13), n * Math.atan2(12, 5)], R: 1 / 13, t: '\\sum(5+12i)^nz^n' },
+    { n: 'Q5: Σ (2n+3)zⁿ/((2n+5)(n+5))', la: n => [Math.log((2 * n + 3) / ((2 * n + 5) * (n + 5))), 0], R: 1, t: '\\sum\\frac{2n+3}{(2n+5)(n+5)}z^n' }
+  ];
+  const sci = x => { if (x === 0) return '0'; if (x >= 1e-3 && x < 1e6) return fnum(x, 4); const e = Math.floor(Math.log10(x)); return `${fnum(x / 10 ** e, 3)}\\times10^{${e}}`; };
+  const sel = $('#drc-s'); S.forEach((s, k) => { const o = document.createElement('option'); o.value = k; o.textContent = s.n; sel.appendChild(o); });
+  let C = S[0], z = [1, 0.6];
+  const sums = () => { const N = val('drc-n'), out = [[0, 0]], lr = Math.log(Cx.abs(z)), th = Cx.arg(z); let s = [0, 0];
+    for (let n = 0; n <= N; n++) { const [l, a] = C.la(n); if (l === -Infinity) { out.push(s.slice()); continue; } const lg = l + (n ? n * lr : 0); const t = lg > 700 ? [NaN, NaN] : Cx.polar(Math.exp(lg), a + n * th); s = Cx.add(s, t); out.push(s.slice()); } return out.slice(1); };
+  const Z = new Plane('#cv-dass-rocz', { span: 3, aspect: 0.9, snap: 0, axisLabels: ['x', 'y'], draw: p => {
+    if (isFinite(C.R)) p.circle([0, 0], C.R, { color: '--accent', width: 3, fill: '--accent', fillAlpha: 0.08 });
+    p.dot(z, { r: 7, color: '--accent3', ring: true, label: 'z' });
+  }});
+  const W = new Plane('#cv-dass-rocs', { span: 3, aspect: 0.9, snap: 0, axisLabels: ['Re S', 'Im S'], draw: p => {
+    const s = sums().filter(q => isFinite(q[0]) && Cx.abs(q) < 1e6); p.path(s, { color: '--accent2', width: 2 }); s.forEach((q, k) => { if (k % 5 === 0 || k === s.length - 1) p.dot(q, { r: k === s.length - 1 ? 6 : 3, color: '--accent2' }); });
+  }});
+  const fitW = () => { const s = sums().filter(q => isFinite(q[0]) && Cx.abs(q) < 1e6); let x0 = 0, x1 = 0, y0 = 0, y1 = 0; s.forEach(q => { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); }); W.span = Math.min(1e5, Math.max(1, 0.6 * Math.max(x1 - x0, (y1 - y0) / 0.9))); W.cx = (x0 + x1) / 2; W.cy = (y0 + y1) / 2; };
+  const out = () => { const N = val('drc-n'), s = sums(), last = s[s.length - 1], prev = s[s.length - 2], [lN] = C.la(N), [lN1] = C.la(N + 1), root = Math.exp(lN / N), ratio = Math.exp(lN1 - lN);
+    const Rt = isFinite(C.R) ? fnum(C.R, 4) : '\\infty', ins = !isFinite(C.R) || Cx.abs(z) < C.R;
+    texMix('#drc-out', `$${C.t}$: &nbsp; $R=${Rt}$. &nbsp; At $n=${N}$: $|a_n|^{1/n}=${fnum(root, 4)}$, $\\left|\\frac{a_{n+1}}{a_n}\\right|=${fnum(ratio, 4)}$ (both tend to $\\frac1R=${isFinite(C.R) ? fnum(1 / C.R, 4) : '0'}$).<br>$|z|=${fnum(Cx.abs(z), 3)}$ is <b>${ins ? 'inside' : 'outside'}</b> the circle. &nbsp; $S_{${N}}=${isFinite(last[0]) && Cx.abs(last) < 1e12 ? Cx.tex(last, 4) : '\\text{(huge)}'}$, last term $|S_N-S_{N-1}|=${isFinite(last[0]) && isFinite(prev[0]) ? sci(Cx.abs(Cx.sub(last, prev))) : '\\infty'}$ — ${ins ? 'the terms shrink geometrically, so the sums converge' : 'the terms grow, so the sums diverge'}.`); };
+  Z.addDrag(() => z, v => { z = v; }); Z.onchange = () => { fitW(); W.redraw(); out(); };
+  const all = () => { C = S[+sel.value]; const R = isFinite(C.R) ? C.R : 2; z = Cx.polar(0.8 * R, 0.6); Z.span = 1.7 * R; Z.snap = R / 200; Z.redraw(); fitW(); W.redraw(); out(); };
+  sel.addEventListener('change', all); watch(['drc-n'], () => { fitW(); W.redraw(); out(); }); all();
+});
+
+/* dass:end */</script>
 </body>
 </html>
