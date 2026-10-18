@@ -117,6 +117,12 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -261,6 +267,51 @@ $$z=\frac{5+i\pm(1+3i)}{2}=3+2i\ \ \text{or}\ \ 2-i .$$
 <div class="readout" id="eq-out"></div>
 </div>
 
+<!-- dass:start 10__D -->
+<h2 id="dass-20-18" class="dass"><span class="dtag">H.K. Dass §20.18</span>Square root of a complex number: the formula and every sign case</h2>
+<p><b>Dass's method.</b> Suppose $\sqrt{a+ib}=x+iy$ with $x,y$ real. Square both sides:</p>
+$$a+ib=(x^2-y^2)+i\,2xy\quad\Longrightarrow\quad x^2-y^2=a,\qquad 2xy=b .$$
+<p>A third equation comes from the identity $(x^2+y^2)^2=(x^2-y^2)^2+4x^2y^2=a^2+b^2$. Since $x^2+y^2\ge0$,</p>
+$$x^2+y^2=\sqrt{a^2+b^2}.$$
+<p>Add and subtract this from $x^2-y^2=a$:</p>
+$$x^2=\frac{\sqrt{a^2+b^2}+a}{2},\qquad y^2=\frac{\sqrt{a^2+b^2}-a}{2}.$$
+<p>That fixes $|x|$ and $|y|$. The signs come from $2xy=b$, and this is where students lose marks. All the cases:</p>
+<table class="t dt">
+<tr><th>Case</th><th>Signs of $x,y$</th><th>The two square roots</th></tr>
+<tr><td>$b\gt0$</td><td>same sign ($xy\gt0$)</td><td>$\pm(|x|+i|y|)$</td></tr>
+<tr><td>$b\lt0$</td><td>opposite signs ($xy\lt0$)</td><td>$\pm(|x|-i|y|)$</td></tr>
+<tr><td>$b=0,\ a\gt0$</td><td>$y=0$</td><td>$\pm\sqrt a$</td></tr>
+<tr><td>$b=0,\ a\lt0$</td><td>$x=0$</td><td>$\pm i\sqrt{|a|}$</td></tr>
+<tr><td>$a=b=0$</td><td>—</td><td>$0$ (a double root)</td></tr>
+</table>
+<p>Compact form: $\sqrt{a+ib}=\pm\left[\sqrt{\dfrac{|w|+a}{2}}+i\,\operatorname{sgn}(b)\sqrt{\dfrac{|w|-a}{2}}\right]$, where $|w|=\sqrt{a^2+b^2}$ (take $\operatorname{sgn}0=+1$).</p>
+
+<div class="widget" id="w-dass-sqrt">
+<div class="wt">Interactive — the two square roots of $w$</div>
+<div class="wd">Drag $w$. The two roots (orange) are always opposite each other. Their modulus is $\sqrt{|w|}$ and their angles are half of $\arg w$ and half plus $180^\circ$. Move $w$ above and below the real axis and watch the sign rule from the table switch.</div>
+<canvas id="cv-dass-sqrt"></canvas>
+<div class="readout" id="dsq-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.18) — $\sqrt{7-24i}$</div><div class="bd"><ol class="steps">
+<li>$x^2-y^2=7$ and $x^2+y^2=\sqrt{49+576}=25$, so $x^2=16$ and $y^2=9$.</li>
+<li>$b=-24\lt0$, so $x$ and $y$ have opposite signs: $\sqrt{7-24i}=\pm(4-3i)$.</li>
+<li>Check: $(4-3i)^2=16-24i-9=7-24i$. ✓</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the integer answer comes from the Pythagorean triple $7,24,25$. Spotting such triples gives exact square roots in seconds.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.18) — $\sqrt{-5+12i}$ and $\sqrt{-9}$</div><div class="bd"><ol class="steps">
+<li>$x^2+y^2=\sqrt{25+144}=13$ and $x^2-y^2=-5$, so $x^2=4$ and $y^2=9$.</li>
+<li>$b=12\gt0$ means the same sign: $\pm(2+3i)$. Check: $4+12i-9=-5+12i$. ✓</li>
+<li>For $\sqrt{-9}$ ($b=0$, $a\lt0$): $x=0$ and $y^2=9$, so the roots are $\pm3i$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> you need these square roots inside the quadratic formula for equations with complex coefficients, a frequent multi-step Part C ingredient.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example — solve $z^2-(3+i)z+(4+3i)=0$</div><div class="bd"><ol class="steps">
+<li>Discriminant: $(3+i)^2-4(4+3i)=8+6i-16-12i=-8-6i$.</li>
+<li>$\sqrt{-8-6i}$: $x^2+y^2=10$ and $x^2-y^2=-8$, so $x^2=1$ and $y^2=9$. Since $b\lt0$, the signs are opposite: $\pm(1-3i)$.</li>
+<li>$z=\frac{(3+i)\pm(1-3i)}{2}$, giving $z=2-i$ or $z=1+2i$.</li>
+<li>Check with Vieta: the sum is $3+i$ ✓ and the product is $(2-i)(1+2i)=4+3i$ ✓.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the complex quadratic formula is the same as the real one, and the only new skill is this square root.</p></div></div>
+<!-- dass:end -->
 <h2 id="E">E. Graphs: equations and inequalities as regions</h2>
 <p>Since $z\leftrightarrow(x,y)$, an equation in $z$ is a <b>curve</b> and an inequality is a <b>region</b>. The key tool is</p>
 <div class="box thm"><span class="tag">Distance (Boas Problem 65)</span>
@@ -1234,5 +1285,28 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* H.K. Dass §20.18 — square roots */
+  let w = [-5, 12].map(v => v / 4);
+  const P = new Plane('#cv-dass-sqrt', { span: 4.2, aspect: 0.6, snap: 0.05, draw: p => {
+    const r = Cx.sqrt(w), m = Cx.neg(r);
+    p.circle([0, 0], Cx.abs(w), { color: '--grid', dash: [4, 4], width: 1 }); p.circle([0, 0], Cx.abs(r), { color: '--accent2', dash: [3, 5], width: 1 });
+    p.angleArc(0, Cx.arg(w), 30, { color: '--accent', width: 1.6 }); p.angleArc(0, Cx.arg(r), 18, { color: '--accent2', width: 2 });
+    p.line(r, m, { color: '--accent2', dash: [4, 4], width: 1 });
+    p.arrow([0, 0], w, { color: '--accent', width: 2.5 }); p.dot(w, { r: 7, color: '--accent', label: 'w' });
+    p.dot(r, { r: 7, color: '--accent2', label: '+√w' }); p.dot(m, { r: 7, color: '--accent2', label: '−√w' });
+  }});
+  P.addDrag(() => w, v => w = v);
+  const out = () => {
+    const [a, b] = w, m = Math.hypot(a, b), X = Math.sqrt((m + a) / 2), Y = Math.sqrt(Math.max(0, (m - a) / 2));
+    const cs = Math.abs(b) < 1e-9 ? (a >= 0 ? '$b=0,\\ a\\ge0$: roots $\\pm\\sqrt a$' : '$b=0,\\ a\\lt0$: roots $\\pm i\\sqrt{|a|}$') : (b > 0 ? '$b\\gt0$: same signs, $\\pm(|x|+i|y|)$' : '$b\\lt0$: opposite signs, $\\pm(|x|-i|y|)$');
+    const root = [X, (b < 0 ? -1 : 1) * Y];
+    texMix('#dsq-out', `$w=a+ib=${Cx.tex(w, 3)}$, &nbsp; $|w|=${fnum(m, 3)}$<br>$x^2=\\frac{|w|+a}2=${fnum(X * X, 3)}$, &nbsp; $y^2=\\frac{|w|-a}2=${fnum(Y * Y, 3)}$<br>${cs} &nbsp; ⇒ &nbsp; $\\sqrt w=\\pm(${Cx.tex(root, 3)})$, and $(${Cx.tex(root, 3)})^2=${Cx.tex(Cx.mul(root, root), 3)}$ ✓`);
+  };
+  P.onchange = out; out();
+});
+
+/* dass:end */</script>
 </body>
 </html>

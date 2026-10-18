@@ -117,6 +117,12 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -235,6 +241,54 @@ $$\arg(z_1z_2)=\arg z_1+\arg z_2,\quad \arg\frac{z_1}{z_2}=\arg z_1-\arg z_2,\qu
 <div class="readout" id="ag-out"></div>
 </div>
 
+<!-- dass:start 20__arg -->
+<h2 id="dass-20-15" class="dass"><span class="dtag">H.K. Dass §20.15</span>Modulus and argument: the principal value in every quadrant</h2>
+<p>Put $x=r\cos\theta$ and $y=r\sin\theta$. The positive root $r=\sqrt{x^2+y^2}=|x+iy|$ is the <b>modulus</b>, and $\theta$, the <b>argument</b> (amplitude), satisfies $\cos\theta=\frac{x}{r}$ and $\sin\theta=\frac{y}{r}$. Because $\theta$ and $\theta+2k\pi$ give the same point, the argument has infinitely many values. The one in $-\pi\lt\theta\le\pi$ is the <b>principal value</b>. Dass writes it "between $0$ and $\pi$" for points above the real axis and "between $0$ and $-\pi$" for points below.</p>
+<p>Let $\alpha=\tan^{-1}\left|\frac yx\right|$ be the acute reference angle. All the cases are:</p>
+<table class="t dt">
+<tr><th>Where $z=x+iy$ lies</th><th>Signs</th><th>Principal argument</th></tr>
+<tr><td>Quadrant I</td><td>$x\gt0,\ y\gt0$</td><td>$\theta=\alpha$</td></tr>
+<tr><td>Quadrant II</td><td>$x\lt0,\ y\gt0$</td><td>$\theta=\pi-\alpha$</td></tr>
+<tr><td>Quadrant III</td><td>$x\lt0,\ y\lt0$</td><td>$\theta=-(\pi-\alpha)$</td></tr>
+<tr><td>Quadrant IV</td><td>$x\gt0,\ y\lt0$</td><td>$\theta=-\alpha$</td></tr>
+<tr><td>Positive / negative real axis</td><td>$y=0$</td><td>$0$ / $\pi$</td></tr>
+<tr><td>Positive / negative imaginary axis</td><td>$x=0$</td><td>$\frac\pi2$ / $-\frac\pi2$</td></tr>
+</table>
+<p>Converting an angle to its principal value: subtract $360^\circ$ until it lies in $(-180^\circ,180^\circ]$. For example $240^\circ\to-120^\circ$ and $330^\circ\to-30^\circ$.</p>
+
+<div class="widget" id="w-dass-arg">
+<div class="wt">Interactive — reference angle $\alpha$ and principal argument $\theta$</div>
+<div class="wd">Drag $z$ into each quadrant. The readout names the case from the table, shows how $\theta$ is built from $\alpha$, and lists a few general values $\theta+2k\pi$.</div>
+<canvas id="cv-dass-arg"></canvas>
+<div class="readout" id="darg-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.15) — modulus and argument of $1+\cos\alpha+i\sin\alpha$, $\ 0\lt\alpha\lt\pi$</div><div class="bd"><ol class="steps">
+<li>Half-angle forms: $1+\cos\alpha=2\cos^2\frac\alpha2$ and $\sin\alpha=2\sin\frac\alpha2\cos\frac\alpha2$.</li>
+<li>So $1+\cos\alpha+i\sin\alpha=2\cos\frac\alpha2\left(\cos\frac\alpha2+i\sin\frac\alpha2\right)$.</li>
+<li>$\cos\frac\alpha2\gt0$, so this is already polar: modulus $2\cos\frac\alpha2$, argument $\frac\alpha2$.</li>
+<li><b>Companion case:</b> $1-\cos\alpha+i\sin\alpha=2\sin\frac\alpha2\left(\sin\frac\alpha2+i\cos\frac\alpha2\right)$, with modulus $2\sin\frac\alpha2$ and argument $\frac{\pi-\alpha}{2}$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $1\pm e^{i\alpha}$ appears in every two-slit, thin-film and Fabry–Pérot amplitude. Its modulus gives the intensity and its argument the phase.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.15) — if $|z_1+z_2|=|z_1-z_2|$, then $\arg z_1-\arg z_2=\pm\frac\pi2$</div><div class="bd"><ol class="steps">
+<li>Square both sides with $z_k=x_k+iy_k$: $(x_1+x_2)^2+(y_1+y_2)^2=(x_1-x_2)^2+(y_1-y_2)^2$, so $x_1x_2+y_1y_2=0$.</li>
+<li>$\tan(\arg z_1-\arg z_2)=\dfrac{\frac{y_1}{x_1}-\frac{y_2}{x_2}}{1+\frac{y_1y_2}{x_1x_2}}=\dfrac{x_2y_1-x_1y_2}{x_1x_2+y_1y_2}$, and the denominator is $0$, so the tangent is infinite.</li>
+<li>Hence $\arg z_1-\arg z_2=\pm\frac\pi2$ (Dass writes $\frac\pi2$; the sign depends on which arrow is ahead). Geometrically, a parallelogram with equal diagonals is a rectangle.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> equal moduli of sum and difference is the quickest test that two phasors or vectors are perpendicular.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.15) — find $z$ with $\arg(z+2)=\frac\pi4$ and $\arg(z-2)=\frac{3\pi}4$</div><div class="bd"><ol class="steps">
+<li>With $z=x+iy$: $\frac{y}{x+2}=\tan\frac\pi4=1$, so $y=x+2$.</li>
+<li>$\frac{y}{x-2}=\tan\frac{3\pi}4=-1$, so $y=2-x$.</li>
+<li>Solving gives $x=0$, $y=2$, so $z=2i$. Check: $2+2i$ has argument $45^\circ$ and $-2+2i$ has $135^\circ$. ✓</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> each condition is a ray, and the answer is where two rays meet. Always check the quadrant, not just the tangent.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.15) — the triangle inequality, by algebra</div><div class="bd"><ol class="steps">
+<li>$|z_1+z_2|^2=(x_1+x_2)^2+(y_1+y_2)^2=|z_1|^2+|z_2|^2+2(x_1x_2+y_1y_2)$.</li>
+<li>Since $(x_1y_2-x_2y_1)^2\ge0$, we have $x_1x_2+y_1y_2\le\sqrt{(x_1^2+y_1^2)(x_2^2+y_2^2)}=|z_1||z_2|$ (Cauchy–Schwarz).</li>
+<li>So $|z_1+z_2|^2\le(|z_1|+|z_2|)^2$, i.e. $|z_1+z_2|\le|z_1|+|z_2|$. Writing $z_1=(z_1-z_2)+z_2$ then gives $|z_1-z_2|\ge|z_1|-|z_2|$.</li>
+<li><b>By geometry</b> (Dass's other proof): in triangle $OPR$, $OR\lt OP+PR$, with equality only when $O,P,R$ are collinear.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> max/min of $|z-a|$ questions, and the ML estimate for contour integrals, are both the triangle inequality.</p></div></div>
+<!-- dass:end -->
 <h2 id="conj">4. The complex conjugate</h2>
 <div class="box def"><span class="tag">Definition</span>
 <p>The conjugate of $z=x+iy$ is $\bar z=x-iy$ (also written $z^*$). <b>Change the sign of the $i$ term only.</b> The conjugate of $7i-5$ is $-7i-5$, not $5-7i$.</p>
@@ -274,6 +328,53 @@ $$\arg(z_1z_2)=\arg z_1+\arg z_2,\quad \arg\frac{z_1}{z_2}=\arg z_1-\arg z_2,\qu
 <div class="readout" id="tr-out"></div>
 </div>
 
+<!-- dass:start 10__conj -->
+<h2 id="dass-20-12" class="dass"><span class="dtag">H.K. Dass §20.12–20.13</span>Conjugate pairs and division, in Cartesian and polar form</h2>
+
+<h3>Conjugates (§20.12)</h3>
+<p>Two complex numbers that differ only in the sign of the imaginary part, $a+ib$ and $a-ib$, are <b>conjugate</b> to each other. The conjugate of $z$ is written $\bar z$.</p>
+<div class="box thm"><span class="tag">Theorem</span><p>The sum and the product of a complex number and its conjugate are both real.</p>
+<p><b>Proof.</b> $(x+iy)+(x-iy)=2x$, which is real. $(x+iy)(x-iy)=x^2-i^2y^2=x^2+y^2$, which is real. $\blacksquare$</p></div>
+<p>The converse is also true (Dass Example 26, §20.18): if $z_1+z_2$ and $z_1z_2$ are both real, then $z_1,z_2$ are either both real or a conjugate pair. They are the two roots of the real quadratic $t^2-(z_1+z_2)t+z_1z_2=0$.</p>
+
+<h3>Division (§20.13): two methods</h3>
+<div class="dcase"><p><b>Cartesian method.</b> Multiply the top and bottom by the conjugate of the denominator:</p>
+$$\frac{a+ib}{c+id}=\frac{(a+ib)(c-id)}{(c+id)(c-id)}=\frac{ac+bd}{c^2+d^2}+i\,\frac{bc-ad}{c^2+d^2}.$$</div>
+<div class="dcase"><p><b>Polar method.</b> With $z_1=r_1(\cos\theta_1+i\sin\theta_1)$ and $z_2=r_2(\cos\theta_2+i\sin\theta_2)$, multiply the top and bottom by $\cos\theta_2-i\sin\theta_2$. The bottom becomes $r_2(\cos^2\theta_2+\sin^2\theta_2)=r_2$, and the top becomes the subtraction formulas:</p>
+$$\frac{z_1}{z_2}=\frac{r_1}{r_2}\left[\cos(\theta_1-\theta_2)+i\sin(\theta_1-\theta_2)\right].$$
+<p>The modulus of a quotient is the quotient of the moduli, and its argument is the difference of the arguments.</p></div>
+
+<div class="widget" id="w-dass-conj">
+<div class="wt">Interactive — $z$, $\bar z$, and why the conjugate makes division work</div>
+<div class="wd">Drag $z$. $\bar z$ is its mirror image in the real axis. Both $z+\bar z$ and $z\bar z$ land <b>on the real axis</b>, which is the theorem above. The point $\frac1z=\frac{\bar z}{|z|^2}$ points the same way as $\bar z$, with length $\frac1{|z|}$.</div>
+<div class="ctrls"><label><input type="checkbox" id="dcj-sum" checked> $z+\bar z$</label><label><input type="checkbox" id="dcj-prod" checked> $z\bar z$</label><label><input type="checkbox" id="dcj-inv"> $1/z$</label></div>
+<canvas id="cv-dass-conj"></canvas>
+<div class="readout" id="dcj-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example — $\dfrac{4+3i}{2-i}$</div><div class="bd"><ol class="steps">
+<li>$\frac{(4+3i)(2+i)}{(2-i)(2+i)}=\frac{8+4i+6i+3i^2}{4+1}=\frac{5+10i}{5}=1+2i$.</li>
+<li>Polar check: $|4+3i|/|2-i|=5/\sqrt5=\sqrt5=|1+2i|$. ✓</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> rationalising with the conjugate is the step that turns an impedance $V/Z$ or a transmission amplitude into real and imaginary parts you can read off.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.13) — when is $\dfrac{3+2i\sin\theta}{1-2i\sin\theta}$ purely imaginary?</div><div class="bd"><ol class="steps">
+<li>Multiply by the conjugate $1+2i\sin\theta$: the result is $\dfrac{(3-4\sin^2\theta)+8i\sin\theta}{1+4\sin^2\theta}$.</li>
+<li>Purely imaginary means the real part is $0$ while the imaginary part is not: $3-4\sin^2\theta=0$ and $\sin\theta\ne0$.</li>
+<li>$\sin^2\theta=\frac34$, so $\theta=n\pi\pm\frac\pi3$, $n\in\mathbb Z$. ($\theta=\frac\pi3$ is the smallest positive solution.)</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "for which parameter is this expression real or purely imaginary?" becomes "set the other part to zero" once the denominator is real.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.13) — if $z=\cos\theta+i\sin\theta$, then $\dfrac{2}{1+z}=1-i\tan\frac\theta2$ and $\dfrac{1+z}{1-z}=i\cot\frac\theta2$</div><div class="bd"><ol class="steps">
+<li>Half-angle factoring: $1+z=e^{i\theta/2}\left(e^{-i\theta/2}+e^{i\theta/2}\right)=2\cos\frac\theta2\,e^{i\theta/2}$ and $1-z=-2i\sin\frac\theta2\,e^{i\theta/2}$.</li>
+<li>$\frac2{1+z}=\frac{e^{-i\theta/2}}{\cos(\theta/2)}=\frac{\cos\frac\theta2-i\sin\frac\theta2}{\cos\frac\theta2}=1-i\tan\frac\theta2$.</li>
+<li>$\frac{1+z}{1-z}=\frac{2\cos(\theta/2)}{-2i\sin(\theta/2)}=i\cot\frac\theta2$.</li>
+<li>(Dass gets the same results by rationalising with $(1+\cos\theta)-i\sin\theta$ and then using the half-angle formulas.)</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $\frac{1+z}{1-z}$ with $|z|=1$ is the Möbius map that sends the unit circle onto the imaginary axis (Ch. 14). The same algebra appears in Fabry–Pérot and transmission-line problems.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.13) — if $x=e^{i\theta}$ and $y=e^{i\phi}$, show $\dfrac{x-y}{x+y}=i\tan\dfrac{\theta-\phi}2$</div><div class="bd"><ol class="steps">
+<li>Factor out the average angle: $x\mp y=e^{i(\theta+\phi)/2}\left(e^{i(\theta-\phi)/2}\mp e^{-i(\theta-\phi)/2}\right)$.</li>
+<li>The brackets are $2i\sin\frac{\theta-\phi}2$ and $2\cos\frac{\theta-\phi}2$, and the common factor cancels. So the ratio is $i\tan\frac{\theta-\phi}{2}$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> factoring out the average phase is the standard trick in two-beam interference and beat problems.</p></div></div>
+<!-- dass:end -->
 <h2 id="boas">5. Boas Problems, Section 4 (all 20 solved)</h2>
 <p>Task: visualize each number, find $x,y,r,\theta$, label it in five ways (as in Fig. 3.3), and give its conjugate. $\theta$ is given as a principal value in $(-\pi,\pi]$; add $2\pi$ for Boas's $[0,2\pi)$ where it differs.</p>
 <details class="sol"><summary>Show all 20 solutions</summary>
@@ -1054,5 +1155,49 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* H.K. Dass §20.12–20.13 — conjugate */
+  let z = [1.5, 1];
+  const C = new Plane('#cv-dass-conj', { span: 3.4, aspect: 0.65, snap: 0.05, draw: p => {
+    const zb = Cx.conj(z), r2 = Cx.abs2(z);
+    p.line(z, zb, { color: '--muted', dash: [4, 4], width: 1 });
+    p.arrow([0, 0], z, { color: '--accent', width: 2.5 }); p.arrow([0, 0], zb, { color: '--accent3', width: 2.5 });
+    p.dot(z, { r: 7, color: '--accent', label: 'z' }); p.dot(zb, { r: 6, color: '--accent3', label: 'z̄', dy: 18 });
+    if (val('dcj-sum')) { p.path([[0, 0], z, [2 * z[0], 0], zb, [0, 0]], { color: '--accent2', dash: [3, 4], width: 1 }); p.dot([2 * z[0], 0], { r: 6, color: '--accent2', label: 'z + z̄', dy: 18 }); }
+    if (val('dcj-prod')) p.dot([r2, 0], { r: 6, color: '--accent4', label: 'z z̄ = |z|²', dy: -10 });
+    if (val('dcj-inv') && r2 > 1e-6) { const iv = Cx.div([1, 0], z); p.circle([0, 0], 1, { color: '--grid', dash: [4, 4], width: 1 }); p.arrow([0, 0], iv, { color: '--warn', width: 2.5 }); p.dot(iv, { r: 6, color: '--warn', label: '1/z', dy: 18 }); }
+  }});
+  C.addDrag(() => z, v => { if (Math.hypot(v[0], v[1]) > 0.1) z = v; });
+  const cout = () => texMix('#dcj-out', `$z=${Cx.tex(z, 2)}$, $\\bar z=${Cx.tex(Cx.conj(z), 2)}$<br>$z+\\bar z=2x=${fnum(2 * z[0], 3)}$ (real), &nbsp; $z\\bar z=x^2+y^2=${fnum(Cx.abs2(z), 3)}$ (real), &nbsp; $\\frac1z=\\frac{\\bar z}{|z|^2}=${Cx.tex(Cx.div([1, 0], z), 3)}$`);
+  C.onchange = cout; ['dcj-sum', 'dcj-prod', 'dcj-inv'].forEach(id => $('#' + id).addEventListener('change', () => C.redraw())); cout();
+
+  /* H.K. Dass §20.15 — principal argument by quadrant */
+  let w = [-1.6, 1.1];
+  const A = new Plane('#cv-dass-arg', { span: 3, aspect: 0.62, snap: 0.05, draw: p => {
+    const t = Cx.arg(w), a = Math.atan(Math.abs(w[1] / w[0]));
+    p.region((x, y) => (x > 0) === (w[0] > 0) && (y > 0) === (w[1] > 0), '--accent4', 0.07, 6);
+    p.angleArc(0, t, 24, { color: '--accent2', width: 2.4 });
+    const base = w[0] >= 0 ? 0 : (w[1] >= 0 ? PI : -PI);
+    if (isFinite(a) && Math.abs(w[0]) > 1e-9 && Math.abs(w[1]) > 1e-9) p.angleArc(base, base + (w[0] >= 0 ? t : (w[1] >= 0 ? -a : a)), 44, { color: '--accent3', width: 1.6 });
+    p.line([0, 0], [w[0], 0], { color: '--muted', dash: [3, 3], width: 1 }); p.line([w[0], 0], w, { color: '--muted', dash: [3, 3], width: 1 });
+    p.arrow([0, 0], w, { color: '--accent', width: 3 }); p.dot(w, { r: 7, color: '--accent', label: 'z' });
+  }});
+  A.addDrag(() => w, v => { if (Math.hypot(v[0], v[1]) > 0.05) w = v; });
+  const aout = () => {
+    const [x, y] = w, t = Cx.arg(w), al = Math.atan(Math.abs(y / x)), d = v => fnum(v * 180 / PI, 1) + '^\\circ';
+    let cs;
+    if (Math.abs(y) < 1e-9) cs = x > 0 ? 'positive real axis: $\\theta=0$' : 'negative real axis: $\\theta=\\pi$';
+    else if (Math.abs(x) < 1e-9) cs = y > 0 ? 'positive imaginary axis: $\\theta=\\frac\\pi2$' : 'negative imaginary axis: $\\theta=-\\frac\\pi2$';
+    else if (x > 0 && y > 0) cs = `Quadrant I: $\\theta=\\alpha=${d(al)}$`;
+    else if (x < 0 && y > 0) cs = `Quadrant II: $\\theta=\\pi-\\alpha=180^\\circ-${d(al)}=${d(t)}$`;
+    else if (x < 0) cs = `Quadrant III: $\\theta=-(\\pi-\\alpha)=-(180^\\circ-${d(al)})=${d(t)}$`;
+    else cs = `Quadrant IV: $\\theta=-\\alpha=${d(t)}$`;
+    texMix('#darg-out', `$z=${Cx.tex(w, 2)}$, $r=|z|=${fnum(Cx.abs(w), 3)}$, &nbsp; $\\alpha=\\tan^{-1}\\left|\\frac yx\\right|=${d(isFinite(al) ? al : PI / 2)}$<br>${cs}<br>General values: $\\theta+2k\\pi=\\ldots,\\ ${d(t - TAU)},\\ ${d(t)},\\ ${d(t + TAU)},\\ldots$`);
+  };
+  A.onchange = aout; aout();
+});
+
+/* dass:end */</script>
 </body>
 </html>

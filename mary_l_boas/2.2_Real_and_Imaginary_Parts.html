@@ -117,6 +117,12 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -196,6 +202,50 @@ $$x_1+iy_1=x_2+iy_2\iff x_1=x_2\ \text{ and }\ y_1=y_2\qquad(x_1,x_2,y_1,y_2\ \t
 <p><b>Why it is true.</b> Suppose $x_1+iy_1=x_2+iy_2$. Then $x_1-x_2=i(y_2-y_1)$. If $y_2\ne y_1$, dividing gives $i=\dfrac{x_1-x_2}{y_2-y_1}$, a <b>real</b> number. Squaring a real number never gives $-1$, so this is impossible. Hence $y_1=y_2$, and then $x_1=x_2$. $\blacksquare$</p>
 <p>Special case: $x+iy=0\iff x=0$ and $y=0$. This is the rule behind every "find real $x$ and $y$" problem (Section 2.5D).</p>
 
+<!-- dass:start 10__equal -->
+<h2 id="dass-20-5" class="dass"><span class="dtag">H.K. Dass §20.5, 20.6, 20.8, 20.10</span>Equality, addition, subtraction and multiplication by algebra</h2>
+
+<h3>Equal complex numbers (§20.5): Dass's proof</h3>
+<p><b>Claim.</b> If $a+ib=c+id$ with $a,b,c,d$ real, then $a=c$ and $b=d$.</p>
+<ol class="steps">
+<li>Move terms across: $a-c=i(d-b)$.</li>
+<li>Square both sides: $(a-c)^2=i^2(d-b)^2=-(d-b)^2$, so $(a-c)^2+(d-b)^2=0$.</li>
+<li>A sum of two squares of real numbers is zero only if each square is zero. So $a=c$ and $b=d$. $\blacksquare$</li>
+</ol>
+<p>This is why <b>one complex equation always gives two real equations</b>, and why you may "equate real and imaginary parts" (used in almost every Dass example from here on).</p>
+
+<h3>Addition and subtraction (§20.6, §20.8)</h3>
+$$(a+ib)+(c+id)=(a+c)+i(b+d),\qquad(a+ib)-(c+id)=(a-c)+i(b-d).$$
+<p><b>Procedure:</b> combine real parts with real parts and imaginary parts with imaginary parts, exactly as you collect like terms in algebra.</p>
+
+<h3>Multiplication (§20.10)</h3>
+<p>Multiply out as ordinary brackets, then replace $i^2$ by $-1$:</p>
+$$(a+ib)(c+id)=ac+iad+ibc+i^2bd=(ac-bd)+i(ad+bc).$$
+<p>Notice the minus sign in the real part. It comes from $i^2=-1$, and it is the most common slip in quick calculations.</p>
+
+<div class="widget" id="w-dass-arith">
+<div class="wt">Interactive — sum, difference and product, part by part</div>
+<div class="wd">Set $z_1=a+ib$ and $z_2=c+id$. The table shows which parts combine with which. The product row shows the $-bd$ term that comes from $i^2=-1$.</div>
+<div class="ctrls"><label>$a$ <input type="number" id="dar-a" value="3" step="0.5"></label><label>$b$ <input type="number" id="dar-b" value="4" step="0.5"></label><label>$c$ <input type="number" id="dar-c" value="7" step="0.5"></label><label>$d$ <input type="number" id="dar-d" value="-3" step="0.5"></label></div>
+<div class="readout" id="dar-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.6 style) — add $z_1=\frac12+\frac23i$, $z_2=-2+\frac14i$, $z_3=\frac34-i$</div><div class="bd"><ol class="steps">
+<li>Real parts: $\frac12-2+\frac34=\frac{2-8+3}{4}=-\frac34$.</li>
+<li>Imaginary parts: $\frac23+\frac14-1=\frac{8+3-12}{12}=-\frac1{12}$.</li>
+<li>So $z_1+z_2+z_3=-\frac34-\frac1{12}i$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> with fractions, keep the real and imaginary bookkeeping separate. A sign slip in one part changes every option in an MCQ.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.10) — $(3+4i)(7-3i)$ and $(2-5i)(2+5i)$</div><div class="bd"><ol class="steps">
+<li>$(3+4i)(7-3i)=21-9i+28i-12i^2=21+12+19i=33+19i$.</li>
+<li>$(2-5i)(2+5i)=4+10i-10i-25i^2=4+25=29$: the imaginary parts cancel completely.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the second product is $|z|^2$, which is real. This is the step that rationalises denominators in division (§20.13) and normalises wavefunctions in quantum mechanics.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (using §20.5) — find real $x,y$ with $(x+2y)+i(3x-y)=5+i$</div><div class="bd"><ol class="steps">
+<li>Equate real parts: $x+2y=5$. Equate imaginary parts: $3x-y=1$.</li>
+<li>From the second, $y=3x-1$. Substituting: $x+6x-2=5$, so $x=1$ and $y=2$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "find real $x,y$ such that…" is a standard 3.5-mark question, and it is always two linear equations in disguise.</p></div></div>
+<!-- dass:end -->
 <h2 id="pairs">3. A complex number is a pair of real numbers</h2>
 <p>Boas: "we could, if we liked, agree to write $5+3i$ as $(5,3)$." Hamilton (1833) used this to define complex numbers <b>without ever mentioning $\sqrt{-1}$</b>:</p>
 <div class="box def"><span class="tag">Complex numbers as ordered pairs</span>
@@ -1037,5 +1087,21 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* H.K. Dass §20.6–20.10 — arithmetic part by part */
+  const out = () => {
+    const a = val('dar-a'), b = val('dar-b'), c = val('dar-c'), d = val('dar-d'), f = v => { const t = fnum(v, 3).replace('−', '-'); return v < 0 ? '(' + t + ')' : t; };
+    const s = (x, y) => Cx.tex([x, y], 3);
+    texMix('#dar-out',
+      `$z_1+z_2=(${f(a)}+${f(c)})+i(${f(b)}+${f(d)})=${s(a + c, b + d)}$<br>` +
+      `$z_1-z_2=(${f(a)}-${f(c)})+i(${f(b)}-${f(d)})=${s(a - c, b - d)}$<br>` +
+      `$z_1z_2=(ac-bd)+i(ad+bc)=(${f(a * c)}-${f(b * d)})+i(${f(a * d)}+${f(b * c)})=${s(a * c - b * d, a * d + b * c)}$`);
+  };
+  ['dar-a', 'dar-b', 'dar-c', 'dar-d'].forEach(id => $('#' + id).addEventListener('input', out));
+  out();
+});
+
+/* dass:end */</script>
 </body>
 </html>

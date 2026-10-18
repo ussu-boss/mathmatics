@@ -117,6 +117,12 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -213,6 +219,65 @@ $$i^0=1,\quad i^1=i,\quad i^2=-1,\quad i^3=i^2\cdot i=-i,\quad i^4=(i^2)^2=1,\qu
 <div class="readout" id="ip-out"></div>
 </div>
 
+<!-- dass:start 10__powers -->
+<h2 id="dass-20-1" class="dass"><span class="dtag">H.K. Dass §20.1–20.3, 20.9, 20.11</span>$i$ as a rotation, and every power of $i$</h2>
+<p>H.K. Dass opens the chapter with three linked ideas: what a complex number is, why the imaginary axis is drawn at right angles, and why the powers of $i$ repeat. Here they are in his order, in plain words.</p>
+
+<h3>Complex number, real part, imaginary part (§20.1–20.2)</h3>
+<p>A number of the form $z=a+ib$, with $a,b$ real and $i=\sqrt{-1}$, is a <b>complex number</b>. $a$ is its real part and $b$ its imaginary part. Two special cases have names:</p>
+<ul>
+<li>$a=0$: the number $ib$ is <b>purely imaginary</b>.</li>
+<li>$b=0$: the number $a$ is <b>real</b>. So every real number is also a complex number.</li>
+</ul>
+
+<h3>Why the imaginary axis is at right angles (§20.3)</h3>
+<p>Mark a positive number $x$ as the arrow $OA$ along the real axis. Then $-x$ is the arrow $OA'$ pointing the other way: multiplying by $-1$ turns the arrow through $180^\circ$. Now write $-x$ as</p>
+$$-x=(i)^2x=i\,(ix).$$
+<p>So multiplying by $i$ <b>twice</b> turns the arrow through two right angles. It is natural to read one multiplication by $i$ as a turn through <b>one</b> right angle. That puts $ix$ on the vertical axis, which is why the $y$-axis is called the <b>imaginary axis</b>.</p>
+
+<h3>Powers of $i$ (§20.9)</h3>
+<p>Start from $i^2=-1$ and keep multiplying by $i$:</p>
+<table class="t dt">
+<tr><th>$n$</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td></tr>
+<tr><th>$i^n$</th><td>$i$</td><td>$-1$</td><td>$-i$</td><td>$1$</td><td>$i$</td><td>$-1$</td><td>$-i$</td><td>$1$</td></tr>
+</table>
+<p>The pattern repeats every 4 steps because $i^4=1$. To find any power, divide the exponent by 4 and keep only the remainder $r$: $i^{4k+r}=(i^4)^k\,i^r=i^r$. All four cases:</p>
+<div class="dcase">
+$$i^{4k}=1,\qquad i^{4k+1}=i,\qquad i^{4k+2}=-1,\qquad i^{4k+3}=-i .$$
+</div>
+<p>The same rule works for negative exponents if you take the remainder in $\{0,1,2,3\}$. For example $-7=4(-2)+1$, so $i^{-7}=i$.</p>
+
+<h3>$i$ as an operator (§20.11)</h3>
+<p>Write $z=r(\cos\theta+i\sin\theta)$ and $i=\cos\frac\pi2+i\sin\frac\pi2$. Multiply, using the product rule for the polar form (multiply the moduli, add the angles):</p>
+$$iz=r(\cos\theta+i\sin\theta)\left(\cos\tfrac\pi2+i\sin\tfrac\pi2\right)=r\left[\cos\left(\theta+\tfrac\pi2\right)+i\sin\left(\theta+\tfrac\pi2\right)\right].$$
+<div class="box thm"><span class="tag">Result</span><p>Multiplying a complex number by $i$ <b>rotates it by $90^\circ$ anticlockwise and does not change its length</b>. All the cases follow:</p>
+<ul>
+<li>$iz$: a quarter turn anticlockwise.</li>
+<li>$i^2z=-z$: a half turn.</li>
+<li>$i^3z=-iz$: three quarter turns anticlockwise, i.e. a quarter turn clockwise.</li>
+<li>$i^4z=z$: a full turn, back to the start.</li>
+</ul></div>
+
+<div class="widget" id="w-dass-iop">
+<div class="wt">Interactive — multiplying by $i$ again and again</div>
+<div class="wd">Drag the point $z$. The slider applies $i$ repeatedly: $z\to iz\to i^2z\to\cdots$. Each step is a quarter turn, the length never changes, and after 4 steps you are back at $z$.</div>
+<div class="ctrls"><label>steps $k$ <input type="range" id="dio-k" min="0" max="8" step="1" value="1"><output></output></label><button class="pri" id="dio-play">▶ Play</button></div>
+<canvas id="cv-dass-iop"></canvas>
+<div class="readout" id="dio-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.9 method) — $i^{77}$ and $i^{-59}$</div><div class="bd"><ol class="steps">
+<li>$77=4\cdot19+1$, so $i^{77}=i^1=i$.</li>
+<li>$-59=4\cdot(-15)+1$, so $i^{-59}=i^1=i$.</li>
+<li>Check the second one the long way: $i^{-59}=\frac{1}{i^{59}}$ and $59=4\cdot14+3$, so $i^{59}=-i$ and $\frac{1}{-i}=\frac{i}{-i\cdot i}=i$. ✓</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> a sum or product of powers of $i$ is a common 3.5-mark Part B warm-up. Reducing the exponent mod 4 answers it in seconds.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.11) — rotate $3+4i$ by $90^\circ$ clockwise</div><div class="bd"><ol class="steps">
+<li>A clockwise quarter turn is multiplication by $i^3=-i$.</li>
+<li>$-i(3+4i)=-3i-4i^2=4-3i$.</li>
+<li>Check: $|4-3i|=5=|3+4i|$, and the dot product $(3)(4)+(4)(-3)=0$, so the two arrows are perpendicular. ✓</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> phasor diagrams in a.c. circuits and the "multiply by $i$ = $90^\circ$ phase lead" rule in wave optics come straight from this.</p></div></div>
+<!-- dass:end -->
 <h2 id="trap">3. The big trap: $\sqrt a\,\sqrt b \ne \sqrt{ab}$ when both are negative</h2>
 <p>For positive reals $\sqrt a\sqrt b=\sqrt{ab}$. This rule <b>fails</b> when $a$ and $b$ are both negative. Boas shows:</p>
 $$\sqrt{-2}\,\sqrt{-8}=(i\sqrt2)(i\sqrt8)=i^2\sqrt{16}=-4,\qquad\text{but}\qquad\sqrt{(-2)(-8)}=\sqrt{16}=+4 .$$
@@ -1104,5 +1169,34 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* H.K. Dass §20.11 — i as a rotation operator */
+  let z = [2, 1];
+  const ipow = k => [[1, 0], [0, 1], [-1, 0], [0, -1]][((k % 4) + 4) % 4];
+  const P = new Plane('#cv-dass-iop', { span: 3.4, aspect: 0.62, snap: 0.1, draw: p => {
+    const k = val('dio-k'), r = Cx.abs(z);
+    p.circle([0, 0], r, { color: '--grid', dash: [5, 5], width: 1.2 });
+    for (let j = 0; j <= k; j++) {
+      const w = Cx.mul(ipow(j), z), last = j === k;
+      p.arrow([0, 0], w, { color: last ? '--accent2' : '--accent', width: last ? 3 : 1.6, alpha: last ? 1 : 0.35 });
+      if (j > 0) { const a0 = Cx.arg(Cx.mul(ipow(j - 1), z)); p.angleArc(a0, a0 + PI / 2, 22 + 6 * j, { color: '--accent4', width: 1.4 }); }
+      p.dot(w, { r: last ? 7 : 4, color: last ? '--accent2' : '--accent', label: j === 0 ? 'z' : (j === 1 ? 'iz' : 'i^' + j + 'z'), alpha: last ? 1 : 0.6 });
+    }
+  }});
+  P.addDrag(() => z, v => { if (Math.hypot(v[0], v[1]) > 0.2) z = v; });
+  P.onchange = () => out();
+  const out = () => {
+    const k = val('dio-k'), w = Cx.mul(ipow(k), z);
+    texMix('#dio-out', `$z=${Cx.tex(z, 2)}$, &nbsp; $i^{${k}}=${Cx.tex(ipow(k), 0)}$ (since $${k}=4\\cdot${Math.floor(k / 4)}+${k % 4}$), &nbsp; $i^{${k}}z=${Cx.tex(w, 2)}$<br>` +
+      `$|i^{${k}}z|=${fnum(Cx.abs(w), 3)}=|z|$, &nbsp; turned through $${90 * k}^\\circ$` + (k % 4 === 0 && k > 0 ? ' — a whole number of turns, back to $z$.' : '.'));
+  };
+  watch(['dio-k'], () => { P.redraw(); out(); });
+  let acc = 0; const an = animator(dt => { acc += dt; if (acc > 0.7) { acc = 0; const el = $('#dio-k'); el.value = (+el.value + 1) % 9; el.dispatchEvent(new Event('input')); } });
+  $('#dio-play').onclick = e => { e.currentTarget.textContent = an.toggle() ? '❚❚ Pause' : '▶ Play'; };
+  out();
+});
+
+/* dass:end */</script>
 </body>
 </html>

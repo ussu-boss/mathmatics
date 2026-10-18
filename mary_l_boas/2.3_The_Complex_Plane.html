@@ -117,6 +117,12 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -177,6 +183,52 @@ table.t.pat td:first-child{font-weight:600}
 <div class="box fact"><span class="tag">Picture it as an arrow too</span>
 <p>Often it helps to think of $z$ as the <b>arrow (vector)</b> from the origin to the point $(x,y)$. Then adding complex numbers is exactly adding vectors (Section 6 below).</p></div>
 
+<!-- dass:start 10__argand -->
+<h2 id="dass-20-4" class="dass"><span class="dtag">H.K. Dass §20.4, 20.7, 20.8, 20.10, 20.14</span>Argand diagram: all four operations by geometry</h2>
+<p><b>Argand diagram (§20.4).</b> The number $x+iy$ is the point $P(x,y)$. The $x$-axis is the real axis and the $y$-axis the imaginary axis. The length $OP=r$ is the modulus, and the angle that $OP$ makes with the positive $x$-axis is the argument (amplitude). H.K. Dass then shows that each of $+,-,\times,\div$ has a ruler-and-compass construction.</p>
+
+<h3>Addition (§20.7): the parallelogram law</h3>
+<p>Let $P$ be $z_1=x_1+iy_1$ and $Q$ be $z_2=x_2+iy_2$. Complete the parallelogram $OPRQ$ and drop perpendiculars $PK$, $RM$, $QL$ to the $x$-axis, with $PN\perp RM$.</p>
+<ul>
+<li>$OM=OK+KM=OK+OL=x_1+x_2$, since $KM=OL$ (congruent triangles $OQL$ and $PRN$).</li>
+<li>$RM=MN+NR=KP+LQ=y_1+y_2$.</li>
+</ul>
+<p>So $R$ is the point $(x_1+x_2)+i(y_1+y_2)=z_1+z_2$: <b>the sum is the far corner of the parallelogram</b>, with $|z_1+z_2|=OR$ and $\arg(z_1+z_2)=\angle ROM$.</p>
+
+<h3>Subtraction (§20.8)</h3>
+<p>Write $z_1-z_2=z_1+(-z_2)$. The point $-z_2$ is $Q'$, found by extending $QO$ beyond $O$ to $OQ'=OQ$. Complete the parallelogram $OPRQ'$: then $OR$ represents $z_1-z_2$. It has the same length and direction as the arrow $QP$ from $z_2$ to $z_1$. So $|z_1-z_2|$ is the <b>distance</b> between the two points.</p>
+
+<h3>Multiplication (§20.10): the similar-triangle construction</h3>
+<p>With $z_1=r_1(\cos\theta_1+i\sin\theta_1)$ at $P$ and $z_2=r_2(\cos\theta_2+i\sin\theta_2)$ at $Q$, mark $A$ at $1$ on the real axis. On $OQ$, construct the triangle $OQR$ <b>similar</b> to $OAP$, turned the same way. Then</p>
+$$\frac{OR}{OQ}=\frac{OP}{OA}=\frac{r_1}{1}\Rightarrow OR=r_1r_2,\qquad\angle XOR=\angle XOQ+\angle QOR=\theta_2+\theta_1 .$$
+<p>So $R$ is $z_1z_2$: $|z_1z_2|=|z_1||z_2|$ and $\arg(z_1z_2)=\arg z_1+\arg z_2$. Algebraically this is the polar product</p>
+$$z_1z_2=r_1r_2\left[\cos(\theta_1+\theta_2)+i\sin(\theta_1+\theta_2)\right],$$
+<p>which uses the addition formulas $\cos\theta_1\cos\theta_2-\sin\theta_1\sin\theta_2=\cos(\theta_1+\theta_2)$ and $\sin\theta_1\cos\theta_2+\cos\theta_1\sin\theta_2=\sin(\theta_1+\theta_2)$.</p>
+
+<h3>Division (§20.14)</h3>
+<p>Mark $A$ at $1$ again. On $OA$, construct the triangle $OAR$ similar to $OQP$. Then $\frac{OR}{OA}=\frac{OP}{OQ}$, so $OR=\frac{r_1}{r_2}$, and $\angle AOR=\angle QOP=\theta_1-\theta_2$. Hence $R$ is $\frac{z_1}{z_2}$:</p>
+$$\left|\frac{z_1}{z_2}\right|=\frac{|z_1|}{|z_2|},\qquad\arg\frac{z_1}{z_2}=\arg z_1-\arg z_2 .$$
+
+<div class="widget" id="w-dass-geo">
+<div class="wt">Interactive — the four constructions</div>
+<div class="wd">Drag $z_1$ (blue) and $z_2$ (green), and choose an operation. You see the parallelogram for $+$ and $-$, and the two similar triangles (built on $A=1$) for $\times$ and $\div$. The orange point is the result.</div>
+<div class="ctrls"><label>operation <select id="dgeo-op"><option value="add">z₁ + z₂</option><option value="sub">z₁ − z₂</option><option value="mul">z₁ × z₂</option><option value="div">z₁ ÷ z₂</option></select></label></div>
+<canvas id="cv-dass-geo"></canvas>
+<div class="readout" id="dgeo-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example — the fourth vertex of a parallelogram</div><div class="bd"><p>$ABCD$ is a parallelogram with $A=2+i$, $B=5+2i$, $C=6+5i$. Find $D$.</p><ol class="steps">
+<li>In a parallelogram the diagonals bisect each other, so $A+C=B+D$ (both equal twice the centre).</li>
+<li>$D=A+C-B=(2+6-5)+i(1+5-2)=3+4i$.</li>
+<li>Check with the parallelogram law: $\vec{AD}=D-A=1+3i$ and $\vec{BC}=C-B=1+3i$. They are equal. ✓</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> vector-addition geometry in the Argand plane turns coordinate-geometry questions into one-line additions.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example — the triangle $z$, $iz$, $z+iz$</div><div class="bd"><ol class="steps">
+<li>$iz$ is $z$ turned by $90^\circ$ (§20.11), so $O$, $z$, $z+iz$, $iz$ is a <b>square</b> of side $|z|$ (the parallelogram on two perpendicular sides of equal length).</li>
+<li>The triangle $z$, $iz$, $z+iz$ is half of that square, so its area is $\frac12|z|^2$.</li>
+<li>For $z=3+4i$ the area is $\frac{25}{2}$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> combining the parallelogram law with the $i$-rotation rule gives areas without any coordinates.</p></div></div>
+<!-- dass:end -->
 <h2 id="polar">2. Rectangular form and polar form</h2>
 <p>The point $P=(x,y)$ can also be located by its distance $r$ from the origin and the angle $\theta$ that $OP$ makes with the positive real axis (Boas Fig. 3.2):</p>
 $$x=r\cos\theta,\qquad y=r\sin\theta \qquad\qquad(3.1)$$
@@ -200,6 +252,40 @@ $$r=\sqrt{x^2+y^2}\ (\ge0)$$
 </div>
 <p><b>$r$ is always taken positive</b> (Boas). A "negative $r$" would be the same as adding $\pi$ to $\theta$.</p>
 
+<!-- dass:start 20__polar -->
+<h2 id="dass-20-16" class="dass"><span class="dtag">H.K. Dass §20.16–20.17</span>Polar form and the three types of a complex number</h2>
+<p><b>Procedure for converting $x+iy$ to polar form (§20.16).</b> Put</p>
+$$x=r\cos\theta,\qquad y=r\sin\theta .$$
+<p>Squaring and adding gives $r=\sqrt{x^2+y^2}$. Then pick the angle $\theta$ that satisfies <b>both</b> equations $\cos\theta=x/r$ and $\sin\theta=y/r$. Using $\tan\theta=y/x$ alone can put you in the wrong quadrant.</p>
+
+<div class="box def"><span class="tag">Three types (§20.17)</span>
+<table class="t dt">
+<tr><th>Type</th><th>Form</th><th>Best for</th></tr>
+<tr><td>Cartesian</td><td>$x+iy$</td><td>addition and subtraction</td></tr>
+<tr><td>Polar</td><td>$r(\cos\theta+i\sin\theta)$</td><td>multiplication, division, geometry</td></tr>
+<tr><td>Exponential</td><td>$re^{i\theta}$</td><td>powers, roots, logarithms (uses $e^{i\theta}=\cos\theta+i\sin\theta$)</td></tr>
+</table></div>
+
+<div class="widget" id="w-dass-forms">
+<div class="wt">Interactive — one point, three forms</div>
+<div class="wd">Drag the point. The readout gives the Cartesian, polar and exponential forms. Switch the principal-value range to see when $\theta$ changes between the two conventions: only below the real axis.</div>
+<div class="ctrls"><label>principal range <select id="dfm-conv"><option value="pm">(−π, π]</option><option value="02">[0, 2π)</option></select></label></div>
+<canvas id="cv-dass-forms"></canvas>
+<div class="readout" id="dfm-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.17) — polar form of $(1-\sqrt2)+i$</div><div class="bd"><ol class="steps">
+<li>$r^2=(1-\sqrt2)^2+1=4-2\sqrt2$, so $r=\sqrt{4-2\sqrt2}\approx1.082$.</li>
+<li>$\cos\theta=\frac{1-\sqrt2}{r}\lt0$ and $\sin\theta=\frac1r\gt0$, so $\theta$ is in quadrant II.</li>
+<li>The reference angle is $\alpha=\tan^{-1}\frac{1}{\sqrt2-1}=\tan^{-1}(\sqrt2+1)=\frac{3\pi}8$, so $\theta=\pi-\frac{3\pi}8=\frac{5\pi}8$.</li>
+<li>Hence $(1-\sqrt2)+i=\sqrt{4-2\sqrt2}\left(\cos\frac{5\pi}8+i\sin\frac{5\pi}8\right)=\sqrt{4-2\sqrt2}\,e^{5\pi i/8}$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> recognising $\tan\frac{3\pi}8=\sqrt2+1$ (and $\tan\frac\pi8=\sqrt2-1$) turns an ugly-looking number into an exact angle.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.17) — smallest positive $n$ with $\left(\frac{1+i}{1-i}\right)^n=1$</div><div class="bd"><ol class="steps">
+<li>$\frac{1+i}{1-i}=\frac{(1+i)^2}{2}=\frac{2i}{2}=i$. In exponential form this is $e^{i\pi/2}$.</li>
+<li>$i^n=e^{in\pi/2}=1$ needs $\frac{n\pi}2$ to be a multiple of $2\pi$, so $n$ must be a multiple of 4. The smallest is $n=4$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> converting the base to $e^{i\theta}$ first is the standard way to handle any "find $n$ such that a power equals 1" question.</p></div></div>
+<!-- dass:end -->
 <h2 id="angle">3. Getting the angle right (the arctan trap)</h2>
 <p>Your calculator's $\arctan$ only returns angles between $-\pi/2$ and $\pi/2$ (quadrants I and IV). But $(-1,-1)$ and $(1,1)$ have the same ratio $y/x=1$. So:</p>
 <table class="t">
@@ -1069,5 +1155,57 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* H.K. Dass §20.7–20.14 — geometric constructions */
+  let z1 = [1.5, 0.8], z2 = [0.6, 1.2];
+  const G = new Plane('#cv-dass-geo', { span: 4, aspect: 0.7, snap: 0.1, draw: p => {
+    const op = val('dgeo-op'), O = [0, 0], A = [1, 0];
+    if (op === 'add' || op === 'sub') {
+      const w = op === 'add' ? z2 : Cx.neg(z2), R = Cx.add(z1, w);
+      if (op === 'sub') { p.line(z2, w, { color: '--accent3', dash: [3, 4], width: 1.2 }); p.dot(w, { r: 5, color: '--accent3', label: '−z₂', hollow: true }); p.arrow(z2, z1, { color: '--warn', dash: [6, 4], width: 1.6 }); }
+      p.path([O, z1, R, w, O], { color: '--muted', dash: [5, 4], width: 1.2, fill: '--accent2', fillAlpha: 0.07 });
+      p.arrow(O, R, { color: '--accent2', width: 3 }); p.dot(R, { r: 7, color: '--accent2', label: op === 'add' ? 'R = z₁+z₂' : 'R = z₁−z₂' });
+    } else {
+      const R = op === 'mul' ? Cx.mul(z1, z2) : Cx.div(z1, z2);
+      p.dot(A, { r: 5, color: '--muted', label: 'A = 1', dy: 16 });
+      if (op === 'mul') { p.path([O, A, z1, O], { color: '--accent', width: 1.6, fill: '--accent', fillAlpha: 0.1 }); p.path([O, z2, R, O], { color: '--accent2', width: 1.6, fill: '--accent2', fillAlpha: 0.1 }); }
+      else { p.path([O, z2, z1, O], { color: '--accent3', width: 1.6, fill: '--accent3', fillAlpha: 0.1 }); p.path([O, A, R, O], { color: '--accent2', width: 1.6, fill: '--accent2', fillAlpha: 0.1 }); }
+      p.arrow(O, R, { color: '--accent2', width: 3 }); p.dot(R, { r: 7, color: '--accent2', label: op === 'mul' ? 'R = z₁z₂' : 'R = z₁/z₂' });
+    }
+    p.arrow(O, z1, { color: '--accent', width: 2.5 }); p.arrow(O, z2, { color: '--accent3', width: 2.5 });
+    p.dot(z1, { r: 7, color: '--accent', label: 'z₁ (P)' }); p.dot(z2, { r: 7, color: '--accent3', label: 'z₂ (Q)' });
+  }});
+  G.addDrag(() => z1, v => z1 = v); G.addDrag(() => z2, v => { if (Math.hypot(v[0], v[1]) > 0.15) z2 = v; });
+  const gout = () => {
+    const op = val('dgeo-op'), R = { add: Cx.add(z1, z2), sub: Cx.sub(z1, z2), mul: Cx.mul(z1, z2), div: Cx.div(z1, z2) }[op];
+    const deg = t => fnum(t * 180 / PI, 1) + '^\\circ';
+    let extra = '';
+    if (op === 'mul') extra = `<br>$|R|=${fnum(Cx.abs(z1), 3)}\\times${fnum(Cx.abs(z2), 3)}=${fnum(Cx.abs(R), 3)}$, &nbsp; angles add: $${deg(Cx.arg(z1))}+${deg(Cx.arg(z2))}\\equiv${deg(Cx.arg(R))}$`;
+    if (op === 'div') extra = `<br>$|R|=${fnum(Cx.abs(z1), 3)}\\div${fnum(Cx.abs(z2), 3)}=${fnum(Cx.abs(R), 3)}$, &nbsp; angles subtract: $${deg(Cx.arg(z1))}-${deg(Cx.arg(z2))}\\equiv${deg(Cx.arg(R))}$`;
+    if (op === 'sub') extra = `<br>$|z_1-z_2|=${fnum(Cx.abs(R), 3)}$ is the distance $QP$ (red dashed arrow).`;
+    texMix('#dgeo-out', `$z_1=${Cx.tex(z1, 2)}$, $z_2=${Cx.tex(z2, 2)}$ &nbsp;⇒&nbsp; $R=${Cx.tex(R, 3)}$` + extra);
+  };
+  G.onchange = gout; $('#dgeo-op').addEventListener('change', () => { G.redraw(); gout(); }); gout();
+
+  /* H.K. Dass §20.16–20.17 — three forms */
+  let w = [-1.5, -1.2];
+  const F = new Plane('#cv-dass-forms', { span: 3, aspect: 0.6, snap: 0.05, draw: p => {
+    const r = Cx.abs(w); let t = Cx.arg(w); if (val('dfm-conv') === '02' && t < 0) t += TAU;
+    p.circle([0, 0], r, { color: '--grid', dash: [4, 4], width: 1 });
+    p.line([0, 0], [w[0], 0], { color: '--accent', width: 2 }); p.line([w[0], 0], w, { color: '--accent3', width: 2 });
+    p.angleArc(0, t, 26, { color: '--accent2', width: 2 });
+    p.arrow([0, 0], w, { color: '--accent2', width: 3 }); p.dot(w, { r: 7, color: '--accent2', label: 'z' });
+  }});
+  F.addDrag(() => w, v => { if (Math.hypot(v[0], v[1]) > 0.05) w = v; });
+  const fout = () => {
+    const r = Cx.abs(w); let t = Cx.arg(w); if (val('dfm-conv') === '02' && t < 0) t += TAU;
+    const th = piFrac(t, 12);
+    texMix('#dfm-out', `Cartesian: $z=${Cx.tex(w, 3)}$<br>Polar: $z=${fnum(r, 3)}\\,(\\cos ${th}+i\\sin ${th})$ &nbsp; ($\\theta=${fnum(t * 180 / PI, 1)}^\\circ$)<br>Exponential: $z=${fnum(r, 3)}\\,e^{${th.startsWith('\\frac') || th.length > 6 ? '(' + th + ')' : th}\\,i}$`);
+  };
+  F.onchange = fout; $('#dfm-conv').addEventListener('change', () => { F.redraw(); fout(); }); fout();
+});
+
+/* dass:end */</script>
 </body>
 </html>

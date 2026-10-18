@@ -117,6 +117,12 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -207,6 +213,32 @@ $$e^{i\theta}=\lim_{n\to\infty}\left(1+\frac{i\theta}{n}\right)^n .$$
 <div class="readout" id="lm-out"></div>
 </div>
 
+<!-- dass:start 10__derive -->
+<h2 id="dass-20-19" class="dass"><span class="dtag">H.K. Dass §20.19</span>Exponential and circular functions of a complex variable</h2>
+<p>The derivation above used a real angle $\theta$. H.K. Dass makes the same argument for a <b>complex</b> $z$. The three defining series converge for every complex $z$:</p>
+$$e^z=1+z+\frac{z^2}{2!}+\frac{z^3}{3!}+\cdots,\qquad\sin z=z-\frac{z^3}{3!}+\frac{z^5}{5!}-\cdots,\qquad\cos z=1-\frac{z^2}{2!}+\frac{z^4}{4!}-\cdots$$
+<p>Multiply the sine series by $i$ and add it to the cosine series term by term. The powers of $i$ cycle, $i^2=-1$, $i^3=-i$, $i^4=1$, so the result is exactly the exponential series with $iz$ in place of $z$:</p>
+$$\cos z+i\sin z=1+\frac{(iz)}{1!}+\frac{(iz)^2}{2!}+\frac{(iz)^3}{3!}+\cdots=e^{iz}.\tag{4}$$
+<p>Replacing $z$ by $-z$ (cosine is even, sine is odd) gives the companion</p>
+$$\cos z-i\sin z=e^{-iz}.\tag{5}$$
+<p>Adding and subtracting (4) and (5) gives <b>Euler's exponential forms</b>, now valid for all complex $z$:</p>
+$$\boxed{\cos z=\frac{e^{iz}+e^{-iz}}{2},\qquad\sin z=\frac{e^{iz}-e^{-iz}}{2i}}$$
+<p>These two formulas are the definition H.K. Dass uses for every result about $\sin z$, $\cos z$ and the hyperbolic functions in §20.23–20.28.</p>
+
+<div class="widget" id="w-dass-euz">
+<div class="wt">Interactive — $\cos z+i\sin z$ and $e^{iz}$ agree for complex $z$</div>
+<div class="wd">Drag $z$ anywhere: off the real axis too. The slider sets how many terms of each series are used. Blue is the partial sum of $\cos z+i\sin z$, orange is the partial sum of $e^{iz}$, and they converge to the same point (ringed). For real $z$ the point lies on the unit circle. For non-real $z$ it leaves the circle, because $|e^{iz}|=e^{-\operatorname{Im}z}$.</div>
+<div class="ctrls"><label>terms $N$ <input type="range" id="deu-n" min="1" max="30" step="1" value="6"><output></output></label></div>
+<canvas id="cv-dass-euz"></canvas>
+<div class="readout" id="deu-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example — check (4) at $z=i$</div><div class="bd"><ol class="steps">
+<li>From the series, $\cos i=1+\frac1{2!}+\frac1{4!}+\cdots=\cosh1$ and $\sin i=i\left(1+\frac1{3!}+\frac1{5!}+\cdots\right)=i\sinh1$.</li>
+<li>So $\cos i+i\sin i=\cosh1-\sinh1=e^{-1}$.</li>
+<li>And $e^{i\cdot i}=e^{-1}$. ✓ The formula holds, but $\cos i\approx1.543$ is bigger than 1: for complex arguments, cosine is no longer bounded by 1.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $\cos z=\frac{e^{iz}+e^{-iz}}2$ is the starting point for every "separate into real and imaginary parts" and "solve $\cos z=k$" question in §20.23–20.32.</p></div></div>
+<!-- dass:end -->
 <h2 id="special">2. Values to see in your head (Boas's examples)</h2>
 <p>$re^{i\theta}$ is the point at distance $r$ and angle $\theta$. Sketch it, and read off $x$ and $y$.</p>
 <table class="t">
@@ -971,5 +1003,36 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* H.K. Dass §20.19 — partial sums for complex z */
+  let z = [1.2, 0.4];
+  const sums = (z, N) => {
+    let c = [0, 0], s = [0, 0], e = [0, 0], t = [1, 0], te = [1, 0];
+    const iz = Cx.mul([0, 1], z), C = [], E = [];
+    for (let k = 0; k < 2 * N; k++) {
+      if (k % 2 === 0) c = Cx.add(c, Cx.scale(t, (k / 2) % 2 ? -1 : 1)); else s = Cx.add(s, Cx.scale(t, ((k - 1) / 2) % 2 ? -1 : 1));
+      e = Cx.add(e, te); C.push(Cx.add(c, Cx.mul([0, 1], s))); E.push(e);
+      t = Cx.scale(Cx.mul(t, z), 1 / (k + 1)); te = Cx.scale(Cx.mul(te, iz), 1 / (k + 1));
+    }
+    return { C, E };
+  };
+  const P = new Plane('#cv-dass-euz', { span: 3.2, aspect: 0.62, snap: 0.05, draw: p => {
+    const N = val('deu-n'), { C, E } = sums(z, N), ex = Cx.exp(Cx.mul([0, 1], z));
+    p.circle([0, 0], 1, { color: '--axis', dash: [5, 5], width: 1 });
+    p.path(C, { color: '--accent', width: 2 }); p.path(E, { color: '--accent2', width: 1.6, dash: [5, 3] });
+    p.dot(ex, { r: 9, color: '--accent4', hollow: true, label: 'e^{iz}', dy: 22 });
+    p.dot(C[C.length - 1], { r: 5, color: '--accent' }); p.dot(E[E.length - 1], { r: 4, color: '--accent2' });
+    p.dot(z, { r: 7, color: '--accent3', label: 'z (drag)' });
+  }});
+  P.addDrag(() => z, v => z = v);
+  const out = () => {
+    const N = val('deu-n'), { C, E } = sums(z, N), ex = Cx.exp(Cx.mul([0, 1], z)), cs = Cx.add(Cx.cos(z), Cx.mul([0, 1], Cx.sin(z)));
+    texMix('#deu-out', `$z=${Cx.tex(z, 2)}$: &nbsp; $\\cos z+i\\sin z=${Cx.tex(cs, 4)}$, &nbsp; $e^{iz}=${Cx.tex(ex, 4)}$<br>With $${2 * N}$ terms: blue $${Cx.tex(C[C.length - 1], 4)}$, orange $${Cx.tex(E[E.length - 1], 4)}$. &nbsp; $|e^{iz}|=e^{-\\operatorname{Im}z}=${fnum(Cx.abs(ex), 4)}$`);
+  };
+  P.onchange = out; watch(['deu-n'], () => { P.redraw(); out(); }); out();
+});
+
+/* dass:end */</script>
 </body>
 </html>

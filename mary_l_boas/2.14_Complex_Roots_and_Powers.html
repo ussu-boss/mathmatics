@@ -117,6 +117,12 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -213,6 +219,37 @@ $$a^b=e^{b\operatorname{Ln}a}\cdot e^{2\pi i\,nb},\qquad n=0,\pm1,\pm2,\dots$$
 <div class="box fact"><span class="tag">The famous one: $i^i$</span>
 <p>$$i^i=e^{i\ln i}=e^{i\cdot i(\pi/2+2n\pi)}=e^{-\pi/2-2n\pi}.$$ The principal value is $e^{-\pi/2}=0.20788\ldots$: an imaginary number raised to an imaginary power gives <b>real</b> numbers. Euler found this in 1746.</p></div>
 
+<!-- dass:start 10__examples -->
+<h2 id="dass-20-29b" class="dass"><span class="dtag">H.K. Dass §20.17, 20.28–20.29 (examples)</span>Complex powers through the general logarithm</h2>
+<p>H.K. Dass handles every complex power with one rule, using the <b>general</b> logarithm of §20.29:</p>
+$$a^b=e^{b\operatorname{Log}a}=e^{b(\log a+2n\pi i)} .$$
+<p>Taking $n=0$ gives the principal value. Keeping $n$ general gives all the values.</p>
+
+<div class="widget" id="w-dass-pow">
+<div class="wt">Interactive — all values of $a^b$</div>
+<div class="wd">Drag $a$, and set $b=p+iq$ with the sliders. The orange points are $e^{b(\log a+2n\pi i)}$ for $n=-3,\dots,3$, and the ringed one is the principal value. With $q=0$ the points lie on a circle. With $q\ne0$ they spread out along a spiral. The view is scaled so that all the points fit.</div>
+<div class="ctrls"><label>$p$ <input type="range" id="dpw-p" min="-2" max="2" step="0.05" value="0"><output></output></label><label>$q$ <input type="range" id="dpw-q" min="-0.6" max="0.6" step="0.01" value="0.1"><output></output></label></div>
+<div class="grid2"><canvas id="cv-dass-powa"></canvas><canvas id="cv-dass-poww"></canvas></div>
+<div class="readout" id="dpw-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.17) — if $i^{\alpha+i\beta}=\alpha+i\beta$, then $\alpha^2+\beta^2=e^{-(4n+1)\pi\beta}$</div><div class="bd"><ol class="steps">
+<li>$\operatorname{Log}i=i\left(2n\pi+\frac\pi2\right)=\frac{(4n+1)\pi i}{2}$.</li>
+<li>$i^{\alpha+i\beta}=e^{(\alpha+i\beta)(4n+1)\pi i/2}=e^{-(4n+1)\pi\beta/2}\,e^{i(4n+1)\pi\alpha/2}$.</li>
+<li>The modulus squared of the right side is $e^{-(4n+1)\pi\beta}$, and it must equal $|\alpha+i\beta|^2=\alpha^2+\beta^2$. $\blacksquare$</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> taking the modulus of $e^{(\cdot)}$ needs only the real part of the exponent. That is a fast way to answer "$|z^w|=$?" questions.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.28) — real and imaginary parts of $\left(\sqrt i\right)^{\sqrt i}$ (principal value)</div><div class="bd"><ol class="steps">
+<li>$\sqrt i=e^{i\pi/4}=\frac{1+i}{\sqrt2}$, so $\log\sqrt i=\frac{i\pi}4$.</li>
+<li>$\left(\sqrt i\right)^{\sqrt i}=e^{\frac{1+i}{\sqrt2}\cdot\frac{i\pi}4}=e^{-\frac{\pi}{4\sqrt2}}\,e^{\frac{i\pi}{4\sqrt2}}$.</li>
+<li>Real part $e^{-\pi/4\sqrt2}\cos\frac{\pi}{4\sqrt2}\approx0.488$, imaginary part $e^{-\pi/4\sqrt2}\sin\frac{\pi}{4\sqrt2}\approx0.303$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> nested powers like $i^{\sqrt i}$ look intimidating but need only polar form and $a^b=e^{b\log a}$.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.29) — general and principal values of $i^i$, and $i^{1+i}$</div><div class="bd"><ol class="steps">
+<li>$i^i=e^{i\cdot(4n+1)\pi i/2}=e^{-(4n+1)\pi/2}$. All values are real. The principal value is $e^{-\pi/2}\approx0.208$.</li>
+<li>$i^{1+i}=i\cdot i^i=i\,e^{-(4n+1)\pi/2}$. All values are purely imaginary, with principal value $ie^{-\pi/2}$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "$i^i$ is real" is one of the most frequently asked one-liners. Remember it has infinitely many real values.</p></div></div>
+<!-- dass:end -->
 <h2 id="laws">4. Which laws of exponents survive?</h2>
 <table class="t">
 <tr><th>Law</th><th>Status for complex powers</th></tr>
@@ -886,5 +923,26 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* H.K. Dass §20.29 — values of a^b */
+  let a = [0, 1];
+  const vals = () => { const b = [val('dpw-p'), val('dpw-q')], L = Cx.log(a); const out = []; for (let n = -3; n <= 3; n++) out.push([n, Cx.exp(Cx.mul(b, [L[0], L[1] + TAU * n]))]); return out; };
+  const A = new Plane('#cv-dass-powa', { span: 2.2, aspect: 1, snap: 0.05, draw: p => { p.arrow([0, 0], a, { color: '--accent', width: 2.5 }); p.dot(a, { r: 7, color: '--accent', label: 'a' }); } });
+  const Wp = new Plane('#cv-dass-poww', { span: 2, aspect: 1, snap: 0, draw: p => {
+    const V = vals(); p.path(V.map(v => v[1]), { color: '--accent2', width: 1, alpha: 0.5 });
+    V.forEach(([n, w]) => p.dot(w, { r: n === 0 ? 7 : 5, color: '--accent2', label: 'n=' + n, alpha: n === 0 ? 1 : 0.8 }));
+    p.dot(V[3][1], { r: 11, color: '--accent4', hollow: true });
+  }});
+  A.addDrag(() => a, v => { if (Math.hypot(v[0], v[1]) > 0.05) a = v; });
+  const out = () => {
+    const V = vals(), m = Math.max(...V.map(v => Math.max(Math.abs(v[1][0]), Math.abs(v[1][1]))).filter(isFinite));
+    Wp.span = Math.min(1e6, Math.max(1.2, 1.2 * m)); Wp.redraw();
+    texMix('#dpw-out', `$a=${Cx.tex(a, 2)}$, $b=${Cx.tex([val('dpw-p'), val('dpw-q')], 2)}$<br>` + V.map(([n, w]) => `$n=${n}$: $${Cx.tex(w, 3)}$ &nbsp;(modulus $${fnum(Cx.abs(w), 3)}$)`).join('<br>'));
+  };
+  A.onchange = out; watch(['dpw-p', 'dpw-q'], out); out();
+});
+
+/* dass:end */</script>
 </body>
 </html>

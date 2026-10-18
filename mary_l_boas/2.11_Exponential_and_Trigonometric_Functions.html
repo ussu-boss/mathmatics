@@ -117,6 +117,12 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -199,6 +205,72 @@ $$\cos i=\frac{e^{i\cdot i}+e^{-i\cdot i}}{2}=\frac{e^{-1}+e}{2}=1.543\ldots=\co
 <li>$e^{i\pi/2}=i$, $e^{-i\pi/2}=-i$, $e^{\ln2}=2$, $e^{-\ln2}=\frac12$.</li>
 <li>$=\dfrac{i\cdot\frac12-(-i)\cdot2}{2i}=\dfrac{\frac52i}{2i}=\dfrac54$.</li></ol></div></div>
 
+<!-- dass:start 10__defs -->
+<h2 id="dass-20-23" class="dass"><span class="dtag">H.K. Dass §20.23, 20.27</span>Circular functions of $x+iy$: real and imaginary parts of all six</h2>
+<p>H.K. Dass defines the circular functions of a complex number by Euler's forms (§20.19):</p>
+$$\cos z=\frac{e^{iz}+e^{-iz}}2,\qquad\sin z=\frac{e^{iz}-e^{-iz}}{2i},\qquad\tan z=\frac{\sin z}{\cos z},\ \text{etc.}$$
+<p>To split $f(x+iy)$ into real and imaginary parts he uses two tools: the addition formulas, and the bridges $\cos(iy)=\cosh y$, $\sin(iy)=i\sinh y$ (from §20.25).</p>
+
+<h3>Sine and cosine: addition formula</h3>
+$$\sin(x+iy)=\sin x\cos(iy)+\cos x\sin(iy)=\sin x\cosh y+i\cos x\sinh y$$
+$$\cos(x+iy)=\cos x\cos(iy)-\sin x\sin(iy)=\cos x\cosh y-i\sin x\sinh y$$
+
+<h3>Tangent and cotangent: multiply by a conjugate-type factor</h3>
+<p>For $\tan$, multiply the top and bottom by $2\cos(x-iy)$. Then use $2\sin A\cos B=\sin(A+B)+\sin(A-B)$ and $2\cos A\cos B=\cos(A+B)+\cos(A-B)$:</p>
+$$\tan(x+iy)=\frac{2\sin(x+iy)\cos(x-iy)}{2\cos(x+iy)\cos(x-iy)}=\frac{\sin2x+\sin2iy}{\cos2x+\cos2iy}=\frac{\sin2x+i\sinh2y}{\cos2x+\cosh2y}.$$
+<p>For $\cot$, multiply by $2\sin(x-iy)$ and use $2\sin A\sin B=\cos(A-B)-\cos(A+B)$:</p>
+$$\cot(x+iy)=\frac{\sin2x-i\sinh2y}{\cosh2y-\cos2x}.$$
+
+<h3>Secant and cosecant: reciprocal, then the same trick</h3>
+$$\sec(x+iy)=\frac{2\cos(x-iy)}{2\cos(x+iy)\cos(x-iy)}=\frac{2(\cos x\cosh y+i\sin x\sinh y)}{\cos2x+\cosh2y}$$
+$$\operatorname{cosec}(x+iy)=\frac{2\sin(x-iy)}{2\sin(x+iy)\sin(x-iy)}=\frac{2(\sin x\cosh y-i\cos x\sinh y)}{\cosh2y-\cos2x}$$
+<div class="box fact"><span class="tag">Pattern to remember</span><p>The two denominators $\cos2x+\cosh2y=2|\cos z|^2$ and $\cosh2y-\cos2x=2|\sin z|^2$ appear in everything. The first vanishes only at the zeros of $\cos z$, and the second only at the zeros of $\sin z$.</p></div>
+
+<div class="widget" id="w-dass-circ">
+<div class="wt">Interactive — real / imaginary part of $f(x+iy)$ (toggle)</div>
+<div class="wd">Choose a function and whether to colour its real or imaginary part (orange positive, blue negative; the dark line is where that part is $0$). Drag the point: the readout evaluates the separation formula above and compares it with direct computation.</div>
+<div class="ctrls"><label>$f$ <select id="dci-f"><option>sin</option><option>cos</option><option>tan</option><option>cot</option><option>sec</option><option>cosec</option></select></label>
+<label>show <select id="dci-p"><option value="re">Re f</option><option value="im">Im f</option></select></label></div>
+<canvas id="cv-dass-circ"></canvas>
+<div class="readout" id="dci-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.27) — if $\tan(A+iB)=x+iy$, then $\tan2A=\dfrac{2x}{1-x^2-y^2}$ and $\tanh2B=\dfrac{2y}{1+x^2+y^2}$</div><div class="bd"><ol class="steps">
+<li>Conjugating: $\tan(A-iB)=x-iy$.</li>
+<li>$\tan2A=\tan[(A+iB)+(A-iB)]=\frac{(x+iy)+(x-iy)}{1-(x+iy)(x-iy)}=\frac{2x}{1-x^2-y^2}$.</li>
+<li>$\tan2iB=\tan[(A+iB)-(A-iB)]=\frac{2iy}{1+x^2+y^2}$, and $\tan2iB=i\tanh2B$, so $\tanh2B=\frac{2y}{1+x^2+y^2}$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> pairing an equation with its conjugate and adding or subtracting the angles separates the real and imaginary unknowns cleanly.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.27) — if $\sin(\alpha+i\beta)=x+iy$: an ellipse and a hyperbola</div><div class="bd"><ol class="steps">
+<li>$x=\sin\alpha\cosh\beta$ and $y=\cos\alpha\sinh\beta$.</li>
+<li>Eliminate $\alpha$ with $\sin^2+\cos^2=1$: $\dfrac{x^2}{\cosh^2\beta}+\dfrac{y^2}{\sinh^2\beta}=1$, an <b>ellipse</b>.</li>
+<li>Eliminate $\beta$ with $\cosh^2-\sinh^2=1$: $\dfrac{x^2}{\sin^2\alpha}-\dfrac{y^2}{\cos^2\alpha}=1$, a <b>hyperbola</b>.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> this is the conformal map $w=\sin z$ (Ch. 14). It sends the lines $\beta=$ const to confocal ellipses and $\alpha=$ const to hyperbolas, the field lines of a charged strip.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.27) — if $\tan(x+iy)=\sin(u+iv)$, then $\dfrac{\sin2x}{\sinh2y}=\dfrac{\tan u}{\tanh v}$</div><div class="bd"><ol class="steps">
+<li>Separate both sides: $\frac{\sin2x}{\cos2x+\cosh2y}+i\frac{\sinh2y}{\cos2x+\cosh2y}=\sin u\cosh v+i\cos u\sinh v$.</li>
+<li>Equate real parts and imaginary parts, then divide one equation by the other. The common denominator cancels: $\frac{\sin2x}{\sinh2y}=\frac{\sin u\cosh v}{\cos u\sinh v}=\frac{\tan u}{\tanh v}$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> dividing the two real equations removes the shared denominator, the fastest route in "if $f(z)=g(w)$, prove…" problems.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.27) — if $\sin(\theta+i\phi)=\tan\alpha+i\sec\alpha$, then $\cos2\theta\cosh2\phi=3$</div><div class="bd"><ol class="steps">
+<li>$\sin\theta\cosh\phi=\tan\alpha$ and $\cos\theta\sinh\phi=\sec\alpha$.</li>
+<li>$\sec^2\alpha-\tan^2\alpha=1$ gives $\cos^2\theta\sinh^2\phi-\sin^2\theta\cosh^2\phi=1$.</li>
+<li>Substitute the double-angle forms $\cos^2\theta=\frac{1+\cos2\theta}2$, $\sinh^2\phi=\frac{\cosh2\phi-1}2$, etc. After simplifying: $\frac{-2+2\cos2\theta\cosh2\phi}{4}=1$, so $\cos2\theta\cosh2\phi=3$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> it shows the usual elimination route: match parts, use a Pythagorean identity, convert to double angles.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.26) — if $\tan(x+iy)=i$, then $x$ is indeterminate and $y$ is infinite</div><div class="bd"><ol class="steps">
+<li>The conjugate equation is $\tan(x-iy)=-i$.</li>
+<li>$\tan2x=\frac{i+(-i)}{1-i(-i)}=\frac00$: indeterminate.</li>
+<li>$\tan2iy=\frac{i-(-i)}{1+i(-i)}=i$, so $\tanh2y=1$ and $2y=\tanh^{-1}1=\infty$.</li>
+<li>So $\tan z=i$ has <b>no finite solution</b>, consistent with $\tan z\ne\pm i$ (2.11, "Going deeper").</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "the number of solutions of $\tan z=i$" is a known MCQ trap. The answer is zero.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.28) — if $e^z=\sin(u+iv)$ with $z=x+iy$, then $2e^{2x}=\cosh2v-\cos2u$</div><div class="bd"><ol class="steps">
+<li>$e^x(\cos y+i\sin y)=\sin u\cosh v+i\cos u\sinh v$.</li>
+<li>Squaring and adding the parts: $e^{2x}=\sin^2u\cosh^2v+\cos^2u\sinh^2v=\cosh^2v-\cos^2u$.</li>
+<li>In double angles: $e^{2x}=\frac{1+\cosh2v}{2}-\frac{1+\cos2u}2=\frac{\cosh2v-\cos2u}{2}$. $\blacksquare$</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "square and add" eliminates the angle variable. It is the same move as finding $|\sin z|^2$.</p></div></div>
+<!-- dass:end -->
 <h2 id="same">4. What stays the same, and what changes</h2>
 <table class="t">
 <tr><th>Property</th><th>Real $x$</th><th>Complex $z$</th></tr>
@@ -947,5 +1019,41 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* real/imag-part explorer: FN = { name: [direct(z), formula(x,y) -> [re,im], texFormula] } */
+  function dassSepWidget(cv, fSel, pSel, outSel, FN, start) {
+    let z = start.slice();
+    const S = new Plane(cv, { span: 3.4, aspect: 0.62, snap: 0.02, draw: p => {
+      const f = FN[val(fSel)], part = val(pSel) === 're' ? 0 : 1, res = 3, c = p.ctx;
+      for (let py = 0; py < p.H; py += res) for (let px = 0; px < p.W; px += res) {
+        const v = f[1](p.wx(px + res / 2), p.wy(py + res / 2))[part];
+        if (!isFinite(v)) continue;
+        const u = Math.tanh(v / 1.5), col = u >= 0 ? [232, 89, 12] : [47, 107, 255];
+        c.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},${(Math.abs(u) * 0.55).toFixed(3)})`; c.fillRect(px, py, res, res);
+      }
+      p.implicit((x, y) => f[1](x, y)[part], { color: '--fg', width: 1.6, maxJump: 4 }, 3);
+      p.dot(z, { r: 7, color: '--accent4', label: 'z', ring: true });
+    }});
+    S.addDrag(() => z, v => z = v);
+    const out = () => {
+      const k = val(fSel), f = FN[k], a = f[1](z[0], z[1]), d = f[0](z);
+      texMix(outSel, `$z=${Cx.tex(z, 2)}$: &nbsp; formula $${f[2]}$<br>gives $${Cx.tex(a, 4)}$; &nbsp; direct $\\${k === 'cosec' ? 'operatorname{cosec}' : k === 'cosech' ? 'operatorname{cosech}' : k === 'sech' ? 'operatorname{sech}' : k}\\,z=${Cx.tex(d, 4)}$ ${Cx.eq(a, d, 1e-6 * (1 + Cx.abs(d))) ? '✓' : ''}`);
+    };
+    S.onchange = out; [fSel, pSel].forEach(id => $('#' + id).addEventListener('change', () => { S.redraw(); out(); })); out();
+  }
+  /* H.K. Dass §20.27 — the six circular functions */
+  const sh = Math.sinh, ch = Math.cosh, s = Math.sin, c = Math.cos;
+  dassSepWidget('#cv-dass-circ', 'dci-f', 'dci-p', '#dci-out', {
+    sin: [Cx.sin, (x, y) => [s(x) * ch(y), c(x) * sh(y)], '\\sin x\\cosh y+i\\cos x\\sinh y'],
+    cos: [Cx.cos, (x, y) => [c(x) * ch(y), -s(x) * sh(y)], '\\cos x\\cosh y-i\\sin x\\sinh y'],
+    tan: [Cx.tan, (x, y) => { const D = c(2 * x) + ch(2 * y); return [s(2 * x) / D, sh(2 * y) / D]; }, '\\frac{\\sin2x+i\\sinh2y}{\\cos2x+\\cosh2y}'],
+    cot: [z => Cx.div(Cx.cos(z), Cx.sin(z)), (x, y) => { const D = ch(2 * y) - c(2 * x); return [s(2 * x) / D, -sh(2 * y) / D]; }, '\\frac{\\sin2x-i\\sinh2y}{\\cosh2y-\\cos2x}'],
+    sec: [z => Cx.div([1, 0], Cx.cos(z)), (x, y) => { const D = c(2 * x) + ch(2 * y); return [2 * c(x) * ch(y) / D, 2 * s(x) * sh(y) / D]; }, '\\frac{2(\\cos x\\cosh y+i\\sin x\\sinh y)}{\\cos2x+\\cosh2y}'],
+    cosec: [z => Cx.div([1, 0], Cx.sin(z)), (x, y) => { const D = ch(2 * y) - c(2 * x); return [2 * s(x) * ch(y) / D, -2 * c(x) * sh(y) / D]; }, '\\frac{2(\\sin x\\cosh y-i\\cos x\\sinh y)}{\\cosh2y-\\cos2x}']
+  }, [0.9, 0.5]);
+});
+
+/* dass:end */</script>
 </body>
 </html>

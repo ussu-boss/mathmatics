@@ -117,6 +117,12 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -191,6 +197,72 @@ $$\left[\cos\frac{\pi}{10}+i\sin\frac{\pi}{10}\right]^{25}=\left(e^{i\pi/10}\rig
 <div class="readout" id="sp-out"></div>
 </div>
 
+<!-- dass:start 10__powers -->
+<h2 id="dass-20-20" class="dass"><span class="dtag">H.K. Dass §20.20–20.21</span>De Moivre's theorem: both proofs, all cases of $n$</h2>
+<div class="box thm"><span class="tag">De Moivre's theorem</span><p>For any rational $n$, $\cos n\theta+i\sin n\theta$ is the value (or <b>one of the values</b>) of $(\cos\theta+i\sin\theta)^n$.</p></div>
+
+<h3>Proof 1 — by the exponential function (§20.20)</h3>
+<p>Since $e^{i\theta}=\cos\theta+i\sin\theta$, raise both sides to the power $n$:</p>
+$$(\cos\theta+i\sin\theta)^n=\left(e^{i\theta}\right)^n=e^{in\theta}=\cos n\theta+i\sin n\theta .$$
+<p>This is one line, but it hides a subtlety: when $n$ is a fraction, $(e^{i\theta})^n$ has several values, and $e^{in\theta}$ is only one of them. Proof 2 shows this carefully.</p>
+
+<h3>Proof 2 — by induction, in three cases (§20.21)</h3>
+<div class="dcase"><p><b>Case I: $n$ a positive integer.</b> First multiply two factors and use the addition formulas:</p>
+$$(\cos\theta_1+i\sin\theta_1)(\cos\theta_2+i\sin\theta_2)=\cos(\theta_1+\theta_2)+i\sin(\theta_1+\theta_2).$$
+<p><i>Induction step.</i> Suppose the product of $k$ factors is $\cos(\theta_1+\cdots+\theta_k)+i\sin(\theta_1+\cdots+\theta_k)$. Multiplying by one more factor and applying the two-factor rule gives the same form with $k+1$ angles. So for every positive integer $n$,</p>
+$$\prod_{j=1}^n(\cos\theta_j+i\sin\theta_j)=\cos(\theta_1+\cdots+\theta_n)+i\sin(\theta_1+\cdots+\theta_n).$$
+<p>Put $\theta_1=\theta_2=\cdots=\theta_n=\theta$ to get $(\cos\theta+i\sin\theta)^n=\cos n\theta+i\sin n\theta$. (For $n=0$ both sides are $1$.)</p></div>
+<div class="dcase"><p><b>Case II: $n$ a negative integer.</b> Write $n=-m$ with $m$ a positive integer. Then</p>
+$$(\cos\theta+i\sin\theta)^{-m}=\frac{1}{\cos m\theta+i\sin m\theta}=\frac{\cos m\theta-i\sin m\theta}{\cos^2m\theta+\sin^2m\theta}=\cos(-m\theta)+i\sin(-m\theta)=\cos n\theta+i\sin n\theta .$$
+<p>The first step uses Case I, and the second multiplies the top and bottom by the conjugate.</p></div>
+<div class="dcase"><p><b>Case III: $n=p/q$ a fraction</b> ($q$ a positive integer, $p$ any integer). By Case I,</p>
+$$\left(\cos\frac\theta q+i\sin\frac\theta q\right)^q=\cos\theta+i\sin\theta .$$
+<p>So $\cos\frac\theta q+i\sin\frac\theta q$ is <b>one of the $q$-th roots</b> of $\cos\theta+i\sin\theta$. Raise it to the power $p$ (Cases I and II):</p>
+$$\left(\cos\frac\theta q+i\sin\frac\theta q\right)^p=\cos\frac{p\theta}q+i\sin\frac{p\theta}q .$$
+<p>Hence $\cos n\theta+i\sin n\theta$ is <b>one of the values</b> of $(\cos\theta+i\sin\theta)^{p/q}$. The others appear in §20.22.</p></div>
+
+<div class="widget" id="w-dass-dm">
+<div class="wt">Interactive — De Moivre as repeated rotation (Cases I–III)</div>
+<div class="wd">For an integer $n$, the arrows show the induction: each factor $e^{i\theta}$ adds another $\theta$ (clockwise when $n\lt0$, Case II). Switch to "fraction" to see all $q$ values of $(e^{i\theta})^{p/q}$. The ringed one is $\cos\frac{p\theta}{q}+i\sin\frac{p\theta}{q}$, the value De Moivre gives (Case III).</div>
+<div class="ctrls"><label>$\theta$ <input type="range" id="ddm-t" min="0" max="3.1416" step="0.01" value="0.6"><output></output></label>
+<label>case <select id="ddm-mode"><option value="int">integer n</option><option value="frac">fraction p/q</option></select></label>
+<label>$n$ or $p$ <input type="range" id="ddm-n" min="-6" max="6" step="1" value="4"><output></output></label>
+<label>$q$ <input type="range" id="ddm-q" min="1" max="8" step="1" value="3"><output></output></label></div>
+<canvas id="cv-dass-dm"></canvas>
+<div class="readout" id="ddm-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.21) — write $\dfrac{(\cos\theta+i\sin\theta)^5}{(\sin\theta+i\cos\theta)^3}$ as $x+iy$</div><div class="bd"><ol class="steps">
+<li>$\sin\theta+i\cos\theta=i(\cos\theta-i\sin\theta)=i\,e^{-i\theta}$.</li>
+<li>The expression is $\frac{e^{5i\theta}}{i^3e^{-3i\theta}}=\frac{e^{8i\theta}}{-i}=i\,e^{8i\theta}$.</li>
+<li>$i(\cos8\theta+i\sin8\theta)=-\sin8\theta+i\cos8\theta$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the trap is $\sin\theta+i\cos\theta$, which is <i>not</i> $e^{i\theta}$. Rewriting it as $ie^{-i\theta}$ first avoids a sign error in the final angle.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.21) — $(1+\cos\theta+i\sin\theta)^n+(1+\cos\theta-i\sin\theta)^n=2^{n+1}\cos^n\frac\theta2\cos\frac{n\theta}2$</div><div class="bd"><ol class="steps">
+<li>Half-angle forms: $1+\cos\theta\pm i\sin\theta=2\cos\frac\theta2\left(\cos\frac\theta2\pm i\sin\frac\theta2\right)$.</li>
+<li>De Moivre: the $n$-th powers are $2^n\cos^n\frac\theta2\left(\cos\frac{n\theta}2\pm i\sin\frac{n\theta}2\right)$.</li>
+<li>Adding, the sine terms cancel: $2^{n+1}\cos^n\frac\theta2\cos\frac{n\theta}2$. $\blacksquare$</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "$z^n+\bar z^n=2\operatorname{Re}z^n$" questions reduce to polar form plus De Moivre in two lines.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.21) — $\left(\dfrac{1+\sin\alpha+i\cos\alpha}{1+\sin\alpha-i\cos\alpha}\right)^n$</div><div class="bd"><ol class="steps">
+<li>Since $1=(\sin\alpha+i\cos\alpha)(\sin\alpha-i\cos\alpha)$, the numerator is $(\sin\alpha+i\cos\alpha)(\sin\alpha-i\cos\alpha+1)$.</li>
+<li>The second factor is the denominator, so the ratio is $\sin\alpha+i\cos\alpha=\cos\left(\frac\pi2-\alpha\right)+i\sin\left(\frac\pi2-\alpha\right)$.</li>
+<li>By De Moivre, the $n$-th power is $\cos n\left(\frac\pi2-\alpha\right)+i\sin n\left(\frac\pi2-\alpha\right)$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> spotting the factorisation of $1$ turns a heavy quotient into a single unit-modulus number.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.21) — if $x+\frac1x=2\cos\theta$ and $y+\frac1y=2\cos\phi$, then $x^py^q+\dfrac1{x^py^q}=2\cos(p\theta+q\phi)$</div><div class="bd"><ol class="steps">
+<li>$x^2-2x\cos\theta+1=0$ gives $x=\cos\theta\pm i\sin\theta$. Taking the $+$ sign, $x=e^{i\theta}$, and similarly $y=e^{i\phi}$.</li>
+<li>$x^py^q=e^{i(p\theta+q\phi)}$ and its reciprocal is $e^{-i(p\theta+q\phi)}$.</li>
+<li>The sum is $2\cos(p\theta+q\phi)$. (With the $-$ sign you get the same answer, since cosine is even.)</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "$x+1/x=2\cos\theta$" is code for "$x$ lies on the unit circle". Reading it that way saves the whole calculation.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.21) — if $\sum\cos\alpha=\sum\sin\alpha=0$ (over $\alpha,\beta,\gamma$), then $\sum\cos2\alpha=0$ and $\sum\cos^2\alpha=\frac32$</div><div class="bd"><ol class="steps">
+<li>Let $a=e^{i\alpha}$, $b=e^{i\beta}$, $c=e^{i\gamma}$. The data say $a+b+c=0$. Taking conjugates, $\frac1a+\frac1b+\frac1c=0$, so $ab+bc+ca=0$.</li>
+<li>$a^2+b^2+c^2=(a+b+c)^2-2(ab+bc+ca)=0$. By De Moivre this is $\sum e^{2i\alpha}=0$, so $\sum\cos2\alpha=0$ and $\sum\sin2\alpha=0$.</li>
+<li>$\sum\cos^2\alpha=\sum\frac{1+\cos2\alpha}{2}=\frac32$, and likewise $\sum\sin^2\alpha=\frac32$.</li>
+<li>From $ab+bc+ca=0$ we also get $\sum\cos(\alpha+\beta)=0=\sum\sin(\alpha+\beta)$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> three unit phasors summing to zero (three-phase supply, or three equal-amplitude interfering waves) must be $120^\circ$ apart. All these identities follow from that.</p></div></div>
+<!-- dass:end -->
 <h2 id="multi">2. Multiple-angle formulas from De Moivre (Boas Problems 27, 28)</h2>
 <p>Expand the left side of (10.2) by the binomial theorem, then equate the real parts and the imaginary parts. This works because a complex equation is two real equations. Write $c=\cos\theta$ and $s=\sin\theta$:</p>
 <p><b>$n=2$:</b> $(c+is)^2=c^2-s^2+2ics$, so $\cos2\theta=\cos^2\theta-\sin^2\theta$ and $\sin2\theta=2\sin\theta\cos\theta$.</p>
@@ -246,6 +318,60 @@ $$\boxed{\sqrt[n]{w}=\sqrt[n]{r}\;e^{i(\theta+2\pi k)/n},\qquad k=0,1,2,\dots,n-
 <div class="readout" id="rt-out"></div>
 </div>
 
+<!-- dass:start 20__roots -->
+<h2 id="dass-20-22" class="dass"><span class="dtag">H.K. Dass §20.22</span>Roots of a complex number: why exactly $n$ values</h2>
+<p>Because $\cos\theta+i\sin\theta=\cos(2m\pi+\theta)+i\sin(2m\pi+\theta)$ for every integer $m$, De Moivre's Case III gives</p>
+$$(\cos\theta+i\sin\theta)^{1/n}=\cos\frac{2m\pi+\theta}{n}+i\sin\frac{2m\pi+\theta}{n}.$$
+<p>H.K. Dass then checks what happens for each $m$:</p>
+<table class="t dt">
+<tr><th>$m$</th><th>root</th></tr>
+<tr><td>$0$</td><td>$\cos\frac\theta n+i\sin\frac\theta n$</td></tr>
+<tr><td>$1$</td><td>$\cos\frac{2\pi+\theta}n+i\sin\frac{2\pi+\theta}n$</td></tr>
+<tr><td>$\vdots$</td><td>$\vdots$</td></tr>
+<tr><td>$n-1$</td><td>$\cos\frac{2(n-1)\pi+\theta}n+i\sin\frac{2(n-1)\pi+\theta}n$</td></tr>
+<tr><td>$n$</td><td>$\cos\left(2\pi+\frac\theta n\right)+i\sin\left(2\pi+\frac\theta n\right)$, the <b>same as $m=0$</b></td></tr>
+</table>
+<p>So $m=n,n+1,\dots$ only repeat the first $n$ values, and the same happens for negative $m$. There are exactly $n$ distinct roots, equally spaced by $\frac{2\pi}n$ on a circle. For a general $w=r(\cos\theta+i\sin\theta)$, multiply each by $r^{1/n}$.</p>
+
+<div class="widget" id="w-dass-roots">
+<div class="wt">Interactive — stepping $m$ past $n-1$ repeats the roots</div>
+<div class="wd">Drag $w$ and choose $n$. Step $m$ from $0$ upwards: the first $n$ values of $m$ mark new roots, and from $m=n$ onwards the marker lands on roots already found. The readout also gives the continued product of all the roots.</div>
+<div class="ctrls"><label>$n$ <input type="range" id="drt-n" min="2" max="9" step="1" value="5"><output></output></label><label>$m$ <input type="range" id="drt-m" min="0" max="17" step="1" value="0"><output></output></label><button class="pri" id="drt-play">▶ Step</button></div>
+<canvas id="cv-dass-roots"></canvas>
+<div class="readout" id="drt-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.22) — solve $x^4+i=0$</div><div class="bd"><ol class="steps">
+<li>$x^4=-i=\cos\left(2n\pi-\frac\pi2\right)+i\sin\left(2n\pi-\frac\pi2\right)$.</li>
+<li>$x=\cos\frac{(4n-1)\pi}{8}+i\sin\frac{(4n-1)\pi}{8}$ for $n=0,1,2,3$.</li>
+<li>The angles are $-\frac\pi8,\ \frac{3\pi}8,\ \frac{7\pi}8,\ \frac{11\pi}8$: four points on the unit circle, $90^\circ$ apart. (Dass writes the same set as $\cos\frac{(4n+1)\pi}8-i\sin\frac{(4n+1)\pi}8$.)</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "how many roots lie in the first quadrant?" is answered by listing these angles. Here exactly one does: $\frac{3\pi}8$.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.22) — solve $x^5=1+i$ and find the continued product of the roots</div><div class="bd"><ol class="steps">
+<li>$1+i=\sqrt2\,e^{i\pi/4}$, so $x=2^{1/10}\left[\cos\frac{(8k+1)\pi}{20}+i\sin\frac{(8k+1)\pi}{20}\right]$ for $k=0,\dots,4$.</li>
+<li>Product: $\left(2^{1/10}\right)^5=\sqrt2$, and the angles add to $\frac{\pi}{20}\sum_{k=0}^4(8k+1)=\frac{85\pi}{20}=4\pi+\frac\pi4$.</li>
+<li>The product is $\sqrt2\,e^{i\pi/4}=1+i$.</li>
+<li><b>Shortcut:</b> by Vieta, the roots of $x^n-w=0$ have product $(-1)^{n+1}w$. For $n=5$ that is $w=1+i$. ✓</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the Vieta shortcut answers "product of the roots" MCQs without computing a single angle.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.22) — if $1,\alpha,\alpha^2,\alpha^3,\alpha^4$ are the fifth roots of unity, then $(1-\alpha)(1-\alpha^2)(1-\alpha^3)(1-\alpha^4)=5$</div><div class="bd"><ol class="steps">
+<li>$x^5-1=(x-1)(x-\alpha)(x-\alpha^2)(x-\alpha^3)(x-\alpha^4)$.</li>
+<li>Divide by $x-1$: $x^4+x^3+x^2+x+1=(x-\alpha)\cdots(x-\alpha^4)$.</li>
+<li>Put $x=1$: the product is $5$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the general result $\prod_{k=1}^{n-1}(1-\omega^k)=n$ is a frequent one-line MCQ.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.22) — $(1-\omega)^6=-27$ for a non-real cube root of unity $\omega$</div><div class="bd"><ol class="steps">
+<li>$1+\omega+\omega^2=0$, so $1+\omega^2=-\omega$.</li>
+<li>$(1-\omega)^2=1-2\omega+\omega^2=-3\omega$.</li>
+<li>$(1-\omega)^6=(-3\omega)^3=-27\omega^3=-27$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> reducing with $1+\omega+\omega^2=0$ before expanding keeps cube-root-of-unity algebra to three lines.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.22) — solve $x^4-x^3+x^2-x+1=0$</div><div class="bd"><ol class="steps">
+<li>Multiply by $x+1$: $(x+1)(x^4-x^3+x^2-x+1)=x^5+1$.</li>
+<li>So the roots are those of $x^5=-1$, namely $x=\cos\frac{(2n+1)\pi}5+i\sin\frac{(2n+1)\pi}5$ for $n=0,\dots,4$, <b>except</b> $x=-1$ ($n=2$), which came from the extra factor.</li>
+<li>Answer: the angles $\frac\pi5,\ \frac{3\pi}5,\ \frac{7\pi}5,\ \frac{9\pi}5$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> recognising a geometric-series polynomial and multiplying by $(x\pm1)$ turns a quartic into roots of unity. Don't forget to discard the extra root.</p></div></div>
+<!-- dass:end -->
 <h2 id="unity">4. Roots of unity</h2>
 <p>The $n$ solutions of $z^n=1$ are</p>
 $$1,\ \omega,\ \omega^2,\ \dots,\ \omega^{n-1},\qquad\omega=e^{2\pi i/n}.$$
@@ -999,5 +1125,57 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* H.K. Dass §20.20–20.21 — De Moivre stepper */
+  const D = new Plane('#cv-dass-dm', { span: 1.6, aspect: 0.72, snap: 0, draw: p => {
+    const th = val('ddm-t'), mode = val('ddm-mode'), n = val('ddm-n'), q = val('ddm-q');
+    p.circle([0, 0], 1, { color: '--axis', dash: [5, 5], width: 1 });
+    p.arrow([0, 0], Cx.polar(1, th), { color: '--accent', width: 2 }); p.dot(Cx.polar(1, th), { r: 5, color: '--accent', label: 'e^{iθ}' });
+    if (mode === 'int') {
+      const s = Math.sign(n) || 1;
+      for (let k = 1; k <= Math.abs(n); k++) { const a0 = s * (k - 1) * th, a1 = s * k * th; p.angleArc(Math.min(a0, a1), Math.max(a0, a1), 20 + 7 * k, { color: k % 2 ? '--accent4' : '--accent3', width: 1.8 }); }
+      const R = Cx.polar(1, n * th); p.arrow([0, 0], R, { color: '--accent2', width: 3 }); p.dot(R, { r: 7, color: '--accent2', label: n === 0 ? '1' : `e^{${n}iθ}` });
+    } else {
+      for (let m = 0; m < q; m++) { const R = Cx.polar(1, n * (th + TAU * m) / q); p.dot(R, { r: 6, color: '--accent3', label: 'm=' + m, alpha: 0.85 }); }
+      const R0 = Cx.polar(1, n * th / q); p.dot(R0, { r: 11, color: '--accent2', hollow: true });
+    }
+  }});
+  const dout = () => {
+    const th = val('ddm-t'), mode = val('ddm-mode'), n = val('ddm-n'), q = val('ddm-q');
+    if (mode === 'int') {
+      const R = Cx.polar(1, n * th), L = Cx.ipow(Cx.polar(1, th), n);
+      texMix('#ddm-out', `${n >= 0 ? 'Case I' : 'Case II'}: $(\\cos\\theta+i\\sin\\theta)^{${n}}=${Cx.tex(L, 4)}$, &nbsp; $\\cos ${n}\\theta+i\\sin ${n}\\theta=${Cx.tex(R, 4)}$ ✓` + (n < 0 ? ' — each factor turns <b>clockwise</b>.' : ''));
+    } else {
+      const g = gcd(Math.abs(n), q) || 1;
+      texMix('#ddm-out', `Case III: $(e^{i\\theta})^{${n}/${q}}$ has $${q / g}$ distinct value(s) ${g > 1 ? `(the fraction reduces to $${n / g}/${q / g}$, so dots coincide)` : ''}. The ringed value is $\\cos\\frac{${n}\\theta}{${q}}+i\\sin\\frac{${n}\\theta}{${q}}=${Cx.tex(Cx.polar(1, n * th / q), 4)}$, the value De Moivre gives.`);
+    }
+  };
+  watch(['ddm-t', 'ddm-n', 'ddm-q'], () => { D.redraw(); dout(); }); $('#ddm-mode').addEventListener('change', () => { D.redraw(); dout(); }); dout();
+
+  /* H.K. Dass §20.22 — roots and their repetition */
+  let w = [1, 1];
+  const R = new Plane('#cv-dass-roots', { span: 2.2, aspect: 0.7, snap: 0.05, draw: p => {
+    const n = val('drt-n'), m = val('drt-m'), r = Math.pow(Cx.abs(w), 1 / n), t = Cx.arg(w);
+    p.circle([0, 0], r, { color: '--grid', dash: [4, 4], width: 1.2 });
+    const pts = []; for (let k = 0; k < n; k++) pts.push(Cx.polar(r, (t + TAU * k) / n));
+    p.path(pts.concat([pts[0]]), { color: '--accent3', width: 1.2, alpha: 0.6 });
+    pts.forEach((z, k) => p.dot(z, { r: 6, color: k <= m ? '--accent3' : '--grid', label: k <= m ? 'm=' + k : '' }));
+    const cur = Cx.polar(r, (t + TAU * m) / n); p.arrow([0, 0], cur, { color: '--accent2', width: 2.5 }); p.dot(cur, { r: 10, color: '--accent2', hollow: true });
+    p.arrow([0, 0], w, { color: '--accent', width: 2 }); p.dot(w, { r: 7, color: '--accent', label: 'w' });
+  }});
+  R.addDrag(() => w, v => { if (Math.hypot(v[0], v[1]) > 0.05) w = v; });
+  const rout = () => {
+    const n = val('drt-n'), m = val('drt-m'), r = Math.pow(Cx.abs(w), 1 / n), t = Cx.arg(w);
+    let prod = [1, 0]; for (let k = 0; k < n; k++) prod = Cx.mul(prod, Cx.polar(r, (t + TAU * k) / n));
+    texMix('#drt-out', `$m=${m}$: root $=${Cx.tex(Cx.polar(r, (t + TAU * m) / n), 3)}$` + (m >= n ? ` &nbsp;<b>repeats $m=${m % n}$</b>` : ' &nbsp;(new root)') +
+      `<br>Continued product of all $${n}$ roots $=${Cx.tex(prod, 3)}$ $=(-1)^{${n + 1}}w$ ✓`);
+  };
+  R.onchange = rout; watch(['drt-n', 'drt-m'], () => { R.redraw(); rout(); });
+  $('#drt-play').onclick = () => { const el = $('#drt-m'); el.value = (+el.value + 1) % 18; el.dispatchEvent(new Event('input')); };
+  rout();
+});
+
+/* dass:end */</script>
 </body>
 </html>

@@ -117,6 +117,12 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -260,6 +266,92 @@ $$|\sin z|^2=\sin^2x+\sinh^2y,\quad|\cos z|^2=\cos^2x+\sinh^2y,\quad|\sinh z|^2=
 <canvas id="cv-land"></canvas>
 </div>
 
+<!-- dass:start 10__identities -->
+<h2 id="dass-20-24" class="dass"><span class="dtag">H.K. Dass §20.24–20.26</span>Hyperbolic functions: definitions, links with circular functions, and the full formula list</h2>
+<h3>The six definitions (§20.24)</h3>
+$$\sinh x=\frac{e^x-e^{-x}}2,\quad\cosh x=\frac{e^x+e^{-x}}2,\quad\tanh x=\frac{e^x-e^{-x}}{e^x+e^{-x}},$$
+$$\coth x=\frac{e^x+e^{-x}}{e^x-e^{-x}},\quad\operatorname{sech}x=\frac{2}{e^x+e^{-x}},\quad\operatorname{cosech}x=\frac{2}{e^x-e^{-x}}.$$
+<p>Adding and subtracting the first two gives the hyperbolic version of Euler's formula, and with it a hyperbolic De Moivre:</p>
+$$\cosh x+\sinh x=e^x,\qquad\cosh x-\sinh x=e^{-x},\qquad(\cosh x\pm\sinh x)^n=\cosh nx\pm\sinh nx .$$
+<p><b>Proof of the last one</b> (Dass Example 39): $(\cosh x-\sinh x)^n=(e^{-x})^n=e^{-nx}=\cosh nx-\sinh nx$, and the same with the $+$ sign.</p>
+
+<h3>Circular ↔ hyperbolic (§20.25)</h3>
+<table class="t dt">
+<tr><th>Circular of $ix$</th><th>Hyperbolic of $ix$</th></tr>
+<tr><td>$\sin ix=i\sinh x$</td><td>$\sinh ix=i\sin x$</td></tr>
+<tr><td>$\cos ix=\cosh x$</td><td>$\cosh ix=\cos x$</td></tr>
+<tr><td>$\tan ix=i\tanh x$</td><td>$\tanh ix=i\tan x$</td></tr>
+<tr><td>$\cot ix=-i\coth x$</td><td>$\coth ix=-i\cot x$</td></tr>
+<tr><td>$\sec ix=\operatorname{sech}x$</td><td>$\operatorname{sech}ix=\sec x$</td></tr>
+<tr><td>$\operatorname{cosec}ix=-i\operatorname{cosech}x$</td><td>$\operatorname{cosech}ix=-i\operatorname{cosec}x$</td></tr>
+</table>
+<p><b>Proof of the first row:</b> $\sin ix=\frac{e^{i(ix)}-e^{-i(ix)}}{2i}=\frac{e^{-x}-e^{x}}{2i}=\frac{i(e^x-e^{-x})}{2}=i\sinh x$. Every other row is proved the same way, or from the first two.</p>
+
+<h3>Formulae (§20.26): every group</h3>
+<p>Each one is proved by substituting the exponential definitions. As a check, each is the circular formula with $\sin^2\to-\sinh^2$ (Osborn's rule, shown above).</p>
+<table class="t dt">
+<tr><th>Group</th><th>Formulae</th></tr>
+<tr><td>A</td><td>$\cosh^2x-\sinh^2x=1$; &nbsp; $\operatorname{sech}^2x=1-\tanh^2x$; &nbsp; $\operatorname{cosech}^2x=\coth^2x-1$</td></tr>
+<tr><td>B</td><td>$\sinh(x\pm y)=\sinh x\cosh y\pm\cosh x\sinh y$; &nbsp; $\cosh(x\pm y)=\cosh x\cosh y\pm\sinh x\sinh y$; &nbsp; $\tanh(x\pm y)=\dfrac{\tanh x\pm\tanh y}{1\pm\tanh x\tanh y}$</td></tr>
+<tr><td>C</td><td>$\sinh2x=2\sinh x\cosh x$; &nbsp; $\cosh2x=\cosh^2x+\sinh^2x=2\cosh^2x-1=1+2\sinh^2x$; &nbsp; $\tanh2x=\dfrac{2\tanh x}{1+\tanh^2x}$</td></tr>
+<tr><td>D</td><td>$\sinh x\pm\sinh y=2\sinh\frac{x\pm y}2\cosh\frac{x\mp y}2$; &nbsp; $\cosh x+\cosh y=2\cosh\frac{x+y}2\cosh\frac{x-y}2$; &nbsp; $\cosh x-\cosh y=2\sinh\frac{x+y}2\sinh\frac{x-y}2$</td></tr>
+</table>
+<p>Note the last one: $\cosh x-\cosh y$ has a <b>plus</b> sign in front, unlike $\cos x-\cos y=-2\sin\frac{x+y}2\sin\frac{x-y}2$.</p>
+
+<div class="widget" id="w-dass-hform">
+<div class="wt">Interactive — check every formula numerically</div>
+<div class="wd">Move $x$ and $y$. Each row computes the left side and the right side of a §20.26 formula separately.</div>
+<div class="ctrls"><label>$x$ <input type="range" id="dhf-x" min="-2" max="2" step="0.01" value="0.7"><output></output></label><label>$y$ <input type="range" id="dhf-y" min="-2" max="2" step="0.01" value="-0.4"><output></output></label></div>
+<div class="readout" id="dhf-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.26) — if $x=2\sin\alpha\cosh\beta$ and $y=2\cos\alpha\sinh\beta$, then $\operatorname{cosec}(\alpha-i\beta)+\operatorname{cosec}(\alpha+i\beta)=\dfrac{4x}{x^2+y^2}$</div><div class="bd"><ol class="steps">
+<li>$\sin(\alpha+i\beta)=\sin\alpha\cosh\beta+i\cos\alpha\sinh\beta=\frac{x+iy}2$, so $\operatorname{cosec}(\alpha+i\beta)=\frac{2}{x+iy}$.</li>
+<li>Likewise $\operatorname{cosec}(\alpha-i\beta)=\frac{2}{x-iy}$.</li>
+<li>Sum: $\frac{2(x-iy)+2(x+iy)}{x^2+y^2}=\frac{4x}{x^2+y^2}$. (The difference gives $\frac{4iy}{x^2+y^2}$.)</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> recognising $\sin(\alpha\pm i\beta)$ from given real expressions avoids all the separation algebra.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.26) — if $u=\log\tan\left(\frac\pi4+\frac\theta2\right)$, then $\tanh\frac u2=\tan\frac\theta2$</div><div class="bd"><ol class="steps">
+<li>$e^u=\tan\left(\frac\pi4+\frac\theta2\right)=\frac{1+\tan(\theta/2)}{1-\tan(\theta/2)}$.</li>
+<li>Componendo–dividendo: $\frac{e^u-1}{e^u+1}=\tan\frac\theta2$.</li>
+<li>And $\tanh\frac u2=\frac{e^{u/2}-e^{-u/2}}{e^{u/2}+e^{-u/2}}=\frac{e^u-1}{e^u+1}$. $\blacksquare$ (Here $u$ is the inverse <b>Gudermannian</b> of $\theta$, used in Mercator maps and relativity.)</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $\frac{e^u-1}{e^u+1}=\tanh\frac u2$ is a pattern that recurs in Fermi–Dirac and spin-$\frac12$ statistics.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.26) — if $\cosh x=\sec\theta$, then $\theta=\frac\pi2-2\tan^{-1}e^{-x}$ and $\tanh\frac x2=\tan\frac\theta2$</div><div class="bd"><ol class="steps">
+<li>Let $\alpha=\tan^{-1}e^{-x}$, so $e^{-x}=\tan\alpha$ and $e^x=\cot\alpha$.</li>
+<li>$\sec\theta=\cosh x=\frac{\cot\alpha+\tan\alpha}2=\frac{1}{\sin2\alpha}$, so $\cos\theta=\sin2\alpha$ and $\theta=\frac\pi2-2\alpha$.</li>
+<li>For the second result, solve $e^{2x}-2e^x\sec\theta+1=0$: $e^x=\sec\theta+\tan\theta$. Then $\tanh\frac x2=\frac{e^x-1}{e^x+1}=\frac{1+\sin\theta-\cos\theta}{1+\sin\theta+\cos\theta}=\tan\frac\theta2$ (half-angle forms).</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the pair $\cosh x=\sec\theta$, $\sinh x=\tan\theta$ links rapidity and angle. It is the substitution behind many standard integrals.</p></div></div>
+
+<h2 id="dass-20-28" class="dass"><span class="dtag">H.K. Dass §20.28</span>Real and imaginary parts of hyperbolic functions of $x+iy$</h2>
+<p>Use the addition formulas (group B) with $\cosh iy=\cos y$ and $\sinh iy=i\sin y$:</p>
+$$\sinh(x+iy)=\sinh x\cos y+i\cosh x\sin y,\qquad\cosh(x+iy)=\cosh x\cos y+i\sinh x\sin y .$$
+<p>(Check the sign in $\cosh$: near $z=0$, $\cosh z\approx1+\frac{z^2}2$, whose imaginary part $xy$ is positive when $x,y\gt0$. So it is $+i\sinh x\sin y$.)</p>
+<p>For $\tanh$, H.K. Dass converts to circular functions, $\tanh z=-i\tan(iz)$, and then uses the $\tan$ result from 2.11. Equivalently, multiply the top and bottom by $2\cosh(x-iy)$:</p>
+$$\tanh(x+iy)=\frac{\sinh2x+i\sin2y}{\cosh2x+\cos2y},\qquad\coth(x+iy)=\frac{\sinh2x-i\sin2y}{\cosh2x-\cos2y},$$
+$$\operatorname{sech}(x+iy)=\frac{2(\cosh x\cos y-i\sinh x\sin y)}{\cosh2x+\cos2y},\qquad\operatorname{cosech}(x+iy)=\frac{2(\sinh x\cos y-i\cosh x\sin y)}{\cosh2x-\cos2y}.$$
+
+<div class="widget" id="w-dass-hyp">
+<div class="wt">Interactive — real / imaginary part of hyperbolic $f(x+iy)$ (toggle)</div>
+<div class="wd">The same explorer as for the circular functions. The pictures are those of 2.11 rotated by $90^\circ$, because $\sinh z=-i\sin(iz)$.</div>
+<div class="ctrls"><label>$f$ <select id="dhy-f"><option>sinh</option><option>cosh</option><option>tanh</option><option>coth</option><option>sech</option><option>cosech</option></select></label>
+<label>show <select id="dhy-p"><option value="re">Re f</option><option value="im">Im f</option></select></label></div>
+<canvas id="cv-dass-hyp"></canvas>
+<div class="readout" id="dhy-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.28) — if $\sinh(\theta+i\phi)=\cos\alpha+i\sin\alpha$, then $\sinh^4\theta=\cos^2\alpha=\cos^4\phi$</div><div class="bd"><ol class="steps">
+<li>$\sinh\theta\cos\phi=\cos\alpha$ and $\cosh\theta\sin\phi=\sin\alpha$.</li>
+<li>Eliminate $\phi$ ($\cos^2\phi+\sin^2\phi=1$): $\frac{\cos^2\alpha}{\sinh^2\theta}+\frac{\sin^2\alpha}{1+\sinh^2\theta}=1$. Clearing denominators gives $\sinh^4\theta=\cos^2\alpha$.</li>
+<li>Eliminate $\theta$ ($\cosh^2\theta-\sinh^2\theta=1$): $\frac{\sin^2\alpha}{\sin^2\phi}-\frac{\cos^2\alpha}{\cos^2\phi}=1$. This simplifies to $\cos^4\phi=\cos^2\alpha$. $\blacksquare$</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> eliminating one variable with the right Pythagorean identity, circular or hyperbolic, is the whole technique of §20.27–20.28.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.28) — if $\operatorname{cosec}\left(\frac\pi4+ix\right)=u+iv$, then $(u^2+v^2)^2=2(u^2-v^2)$</div><div class="bd"><ol class="steps">
+<li>$\sin\left(\frac\pi4+ix\right)=\frac{1}{\sqrt2}(\cosh x+i\sinh x)$, so $u+iv=\frac{\sqrt2(\cosh x-i\sinh x)}{\cosh^2x+\sinh^2x}=\frac{\sqrt2(\cosh x-i\sinh x)}{\cosh2x}$.</li>
+<li>$u^2+v^2=\frac{2\cosh2x}{\cosh^22x}=\frac{2}{\cosh2x}$ and $u^2-v^2=\frac{2(\cosh^2x-\sinh^2x)}{\cosh^22x}=\frac{2}{\cosh^22x}$.</li>
+<li>So $(u^2+v^2)^2=\frac{4}{\cosh^22x}=2(u^2-v^2)$. $\blacksquare$ (The point $u+iv$ traces a lemniscate.)</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> computing $u^2+v^2$ and $u^2-v^2$ separately, then comparing, is the standard way to find a locus.</p></div></div>
+<!-- dass:end -->
 <h2 id="physics">5. Where hyperbolic functions appear in physics</h2>
 <ul>
 <li><b>Hanging chain (catenary):</b> $y=a\cosh(x/a)$. The arc length from $0$ to $x$ is $a\sinh(x/a)$, since $\sqrt{1+\sinh^2}=\cosh$.</li>
@@ -974,5 +1066,59 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* real/imag-part explorer: FN = { name: [direct(z), formula(x,y) -> [re,im], texFormula] } */
+  function dassSepWidget(cv, fSel, pSel, outSel, FN, start) {
+    let z = start.slice();
+    const S = new Plane(cv, { span: 3.4, aspect: 0.62, snap: 0.02, draw: p => {
+      const f = FN[val(fSel)], part = val(pSel) === 're' ? 0 : 1, res = 3, c = p.ctx;
+      for (let py = 0; py < p.H; py += res) for (let px = 0; px < p.W; px += res) {
+        const v = f[1](p.wx(px + res / 2), p.wy(py + res / 2))[part];
+        if (!isFinite(v)) continue;
+        const u = Math.tanh(v / 1.5), col = u >= 0 ? [232, 89, 12] : [47, 107, 255];
+        c.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},${(Math.abs(u) * 0.55).toFixed(3)})`; c.fillRect(px, py, res, res);
+      }
+      p.implicit((x, y) => f[1](x, y)[part], { color: '--fg', width: 1.6, maxJump: 4 }, 3);
+      p.dot(z, { r: 7, color: '--accent4', label: 'z', ring: true });
+    }});
+    S.addDrag(() => z, v => z = v);
+    const out = () => {
+      const k = val(fSel), f = FN[k], a = f[1](z[0], z[1]), d = f[0](z);
+      texMix(outSel, `$z=${Cx.tex(z, 2)}$: &nbsp; formula $${f[2]}$<br>gives $${Cx.tex(a, 4)}$; &nbsp; direct $\\${k === 'cosec' ? 'operatorname{cosec}' : k === 'cosech' ? 'operatorname{cosech}' : k === 'sech' ? 'operatorname{sech}' : k}\\,z=${Cx.tex(d, 4)}$ ${Cx.eq(a, d, 1e-6 * (1 + Cx.abs(d))) ? '✓' : ''}`);
+    };
+    S.onchange = out; [fSel, pSel].forEach(id => $('#' + id).addEventListener('change', () => { S.redraw(); out(); })); out();
+  }
+  /* H.K. Dass §20.28 — the six hyperbolic functions */
+  const sh = Math.sinh, ch = Math.cosh, s = Math.sin, c = Math.cos;
+  dassSepWidget('#cv-dass-hyp', 'dhy-f', 'dhy-p', '#dhy-out', {
+    sinh: [Cx.sinh, (x, y) => [sh(x) * c(y), ch(x) * s(y)], '\\sinh x\\cos y+i\\cosh x\\sin y'],
+    cosh: [Cx.cosh, (x, y) => [ch(x) * c(y), sh(x) * s(y)], '\\cosh x\\cos y+i\\sinh x\\sin y'],
+    tanh: [Cx.tanh, (x, y) => { const D = ch(2 * x) + c(2 * y); return [sh(2 * x) / D, s(2 * y) / D]; }, '\\frac{\\sinh2x+i\\sin2y}{\\cosh2x+\\cos2y}'],
+    coth: [z => Cx.div(Cx.cosh(z), Cx.sinh(z)), (x, y) => { const D = ch(2 * x) - c(2 * y); return [sh(2 * x) / D, -s(2 * y) / D]; }, '\\frac{\\sinh2x-i\\sin2y}{\\cosh2x-\\cos2y}'],
+    sech: [z => Cx.div([1, 0], Cx.cosh(z)), (x, y) => { const D = ch(2 * x) + c(2 * y); return [2 * ch(x) * c(y) / D, -2 * sh(x) * s(y) / D]; }, '\\frac{2(\\cosh x\\cos y-i\\sinh x\\sin y)}{\\cosh2x+\\cos2y}'],
+    cosech: [z => Cx.div([1, 0], Cx.sinh(z)), (x, y) => { const D = ch(2 * x) - c(2 * y); return [2 * sh(x) * c(y) / D, -2 * ch(x) * s(y) / D]; }, '\\frac{2(\\sinh x\\cos y-i\\cosh x\\sin y)}{\\cosh2x-\\cos2y}']
+  }, [0.5, 0.9]);
+
+  /* H.K. Dass §20.26 — formula checker */
+  const out = () => {
+    const x = val('dhf-x'), y = val('dhf-y'), t = Math.tanh, f = v => fnum(v, 5);
+    const rows = [
+      ['A1', '\\cosh^2x-\\sinh^2x', ch(x) ** 2 - sh(x) ** 2, '1', 1],
+      ['A2', '\\operatorname{sech}^2x', 1 / ch(x) ** 2, '1-\\tanh^2x', 1 - t(x) ** 2],
+      ['B1', '\\sinh(x+y)', sh(x + y), '\\sinh x\\cosh y+\\cosh x\\sinh y', sh(x) * ch(y) + ch(x) * sh(y)],
+      ['B2', '\\cosh(x-y)', ch(x - y), '\\cosh x\\cosh y-\\sinh x\\sinh y', ch(x) * ch(y) - sh(x) * sh(y)],
+      ['B3', '\\tanh(x+y)', t(x + y), '\\frac{\\tanh x+\\tanh y}{1+\\tanh x\\tanh y}', (t(x) + t(y)) / (1 + t(x) * t(y))],
+      ['C', '\\cosh2x', ch(2 * x), '1+2\\sinh^2x', 1 + 2 * sh(x) ** 2],
+      ['C', '\\tanh2x', t(2 * x), '\\frac{2\\tanh x}{1+\\tanh^2x}', 2 * t(x) / (1 + t(x) ** 2)],
+      ['D', '\\cosh x-\\cosh y', ch(x) - ch(y), '2\\sinh\\frac{x+y}2\\sinh\\frac{x-y}2', 2 * sh((x + y) / 2) * sh((x - y) / 2)],
+      ['D', '\\sinh x+\\sinh y', sh(x) + sh(y), '2\\sinh\\frac{x+y}2\\cosh\\frac{x-y}2', 2 * sh((x + y) / 2) * ch((x - y) / 2)]
+    ];
+    texMix('#dhf-out', rows.map(r => `${r[0]}: $${r[1]}=${f(r[2])}$, &nbsp; $${r[3]}=${f(r[4])}$ ${Math.abs(r[2] - r[4]) < 1e-9 ? '✓' : '✗'}`).join('<br>'));
+  };
+  watch(['dhf-x', 'dhf-y'], out); out();
+});
+
+/* dass:end */</script>
 </body>
 </html>

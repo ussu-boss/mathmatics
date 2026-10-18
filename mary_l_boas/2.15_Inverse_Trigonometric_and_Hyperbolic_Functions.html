@@ -117,6 +117,12 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -173,6 +179,61 @@ table.t.pat td:first-child{font-weight:600}
 $$z=\arccos w\quad\Longleftrightarrow\quad w=\cos z,$$
 <p>and similarly for the other inverse trigonometric and hyperbolic functions. For real numbers $|\cos x|\le1$, so "$\arccos2$" has no real answer. For complex $z$, however, $\cos z$ takes <b>every</b> complex value, so $\arccos2$ exists. In fact it has infinitely many values.</p>
 
+<!-- dass:start 10__def -->
+<h2 id="dass-20-30" class="dass"><span class="dtag">H.K. Dass §20.30–20.31</span>Inverse hyperbolic functions: all six log formulas, derived</h2>
+<p><b>Definition (§20.30).</b> If $\sin\theta=z$ then $\theta=\sin^{-1}z$, the inverse sine of $z$. In the same way, $\cosh\theta=z$ means $\theta=\cosh^{-1}z$, and so on. Each inverse is found by solving a <b>quadratic in $e^y$</b>.</p>
+
+<div class="dcase"><p><b>(1) $\sinh^{-1}x=\log\left(x+\sqrt{x^2+1}\right)$.</b> Let $x=\sinh y=\frac{e^y-e^{-y}}2$. Then $e^{2y}-2xe^y-1=0$, so $e^y=x\pm\sqrt{x^2+1}$. For real $x$, $x-\sqrt{x^2+1}\lt0$ but $e^y\gt0$, so only the $+$ sign survives.</p></div>
+<div class="dcase"><p><b>(2) $\cosh^{-1}x=\log\left(x+\sqrt{x^2-1}\right)$</b> ($x\ge1$). Here $e^{2y}-2xe^y+1=0$, so $e^y=x\pm\sqrt{x^2-1}$. <b>Both</b> roots are positive and their product is $1$, so they give $\pm y$ ($\cosh$ is even). The principal value takes the $+$ sign, so $y\ge0$.</p></div>
+<div class="dcase"><p><b>(3) $\tanh^{-1}x=\frac12\log\frac{1+x}{1-x}$</b> ($|x|\lt1$). From $x=\frac{e^y-e^{-y}}{e^y+e^{-y}}$, componendo–dividendo gives $\frac{1+x}{1-x}=e^{2y}$. <b>Similarly</b> $\coth^{-1}x=\frac12\log\frac{x+1}{x-1}$ ($|x|\gt1$).</p></div>
+<div class="dcase"><p><b>(4) $\operatorname{sech}^{-1}x=\log\dfrac{1+\sqrt{1-x^2}}{x}$</b> ($0\lt x\le1$). From $x=\frac{2}{e^y+e^{-y}}$: $xe^{2y}-2e^y+x=0$, so $e^y=\frac{1\pm\sqrt{1-x^2}}{x}$. Take the $+$ sign for the principal value. <b>Similarly</b> $\operatorname{cosech}^{-1}x=\log\dfrac{1+\sqrt{1+x^2}}{x}$ ($x\gt0$).</p></div>
+<p>For complex arguments the same formulas hold, with $\log$ and $\sqrt{\ }$ taken as complex (multivalued) functions. That is exactly the "Log formulas" table above.</p>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.31) — if $\cos^{-1}(x+iy)=\alpha+i\beta$, then $\cos^2\alpha$ and $\cosh^2\beta$ are the roots of $\lambda^2-(x^2+y^2+1)\lambda+x^2=0$</div><div class="bd"><ol class="steps">
+<li>$x+iy=\cos(\alpha+i\beta)=\cos\alpha\cosh\beta-i\sin\alpha\sinh\beta$, so $x=\cos\alpha\cosh\beta$ and $y=-\sin\alpha\sinh\beta$.</li>
+<li>$x^2+y^2+1=\cos^2\alpha\cosh^2\beta+(1-\cos^2\alpha)(\cosh^2\beta-1)+1=\cos^2\alpha+\cosh^2\beta$. This is the sum of the claimed roots.</li>
+<li>Their product is $\cos^2\alpha\cosh^2\beta=x^2$. So the quadratic follows from Vieta. $\blacksquare$</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> finding "the equation whose roots are …" by sum and product avoids solving for $\alpha,\beta$ at all.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.31) — separate $\cos^{-1}\frac{3i}{4}$</div><div class="bd"><ol class="steps">
+<li>Let $\cos^{-1}\frac{3i}4=x+iy$. Then $\cos x\cosh y=0$ and $-\sin x\sinh y=\frac34$.</li>
+<li>$\cosh y\ne0$, so $\cos x=0$: take $x=\frac\pi2$ (principal). Then $\sinh y=-\frac34$.</li>
+<li>$y=\sinh^{-1}\left(-\frac34\right)=\log\left(-\frac34+\frac54\right)=\log\frac12=-\log2$.</li>
+<li>So $\cos^{-1}\frac{3i}4=\frac\pi2-i\log2$. Check: $\cos\left(\frac\pi2-i\log2\right)=\sin(i\log2)=i\sinh(\log2)=\frac{3i}4$. ✓</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> inverse trig of a purely imaginary number always has real part $\frac\pi2$ (for $\cos^{-1}$) or $0$ (for $\sin^{-1}$). Spotting this halves the work.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.32) — $\cosh^{-1}\sqrt{1+x^2}=\sinh^{-1}x=\tanh^{-1}\dfrac{x}{\sqrt{1+x^2}}$ ($x\gt0$)</div><div class="bd"><ol class="steps">
+<li>Let $\cosh y=\sqrt{1+x^2}$. Then $\sinh^2y=\cosh^2y-1=x^2$, so $\sinh y=x$ and $y=\sinh^{-1}x$.</li>
+<li>Dividing, $\tanh y=\frac{x}{\sqrt{1+x^2}}$, so $y=\tanh^{-1}\frac{x}{\sqrt{1+x^2}}$. $\blacksquare$</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> in relativity this says that $\gamma=\cosh\phi$, $\gamma\beta=\sinh\phi$ and $\beta=\tanh\phi$ all describe the same rapidity $\phi$.</p></div></div>
+
+<h2 id="dass-20-32" class="dass"><span class="dtag">H.K. Dass §20.32</span>Other inverse functions: separating $\sin^{-1}$, $\tan^{-1}$ of $a+ib$</h2>
+<div class="dcase"><p><b>$\tan^{-1}(a+ib)$.</b> Let $\tan(x+iy)=a+ib$, so that $\tan(x-iy)=a-ib$. Adding and subtracting the angles (as in 2.11):</p>
+$$\tan2x=\frac{2a}{1-a^2-b^2},\qquad\tanh2y=\frac{2b}{1+a^2+b^2},$$
+$$\tan^{-1}(a+ib)=\frac12\tan^{-1}\frac{2a}{1-a^2-b^2}+\frac i2\tanh^{-1}\frac{2b}{1+a^2+b^2}.$$
+<p><b>Special case</b> $a+ib=\cos\theta+i\sin\theta$: then $1-a^2-b^2=0$, so $\tan2x=\infty$ and $x=\frac{n\pi}2+\frac\pi4$, while $\tanh2y=\sin\theta$ gives $y=\frac12\log\tan\left(\frac\pi4+\frac\theta2\right)$.</p></div>
+<div class="dcase"><p><b>$\sin^{-1}(\alpha+i\beta)$.</b> Let $\sin(x+iy)=\alpha+i\beta$, so $\alpha=\sin x\cosh y$ and $\beta=\cos x\sinh y$.</p>
+<ul>
+<li>Eliminate $y$ with $\cosh^2y-\sinh^2y=1$: $\sin^4x-(\alpha^2+\beta^2+1)\sin^2x+\alpha^2=0$, a quadratic in $\sin^2x$.</li>
+<li>Eliminate $x$ with $\sin^2x+\cos^2x=1$: $\sinh^4y-(\alpha^2+\beta^2-1)\sinh^2y-\beta^2=0$, a quadratic in $\sinh^2y$.</li>
+</ul>
+$$\sin^2x=\tfrac12\left[(\alpha^2+\beta^2+1)-\sqrt{(\alpha^2+\beta^2+1)^2-4\alpha^2}\right],\qquad\sinh^2y=\tfrac12\left[(\alpha^2+\beta^2-1)+\sqrt{(\alpha^2+\beta^2-1)^2+4\beta^2}\right].$$
+<p>Dass writes $\pm$ for both roots. For the <b>principal</b> value, take the smaller root for $\sin^2x$ (it must be $\le1$) and the positive root for $\sinh^2y$ (it must be $\ge0$). Then give $x$ the sign of $\alpha$ and $y$ the sign of $\beta$. $\cos^{-1}w=\frac\pi2-\sin^{-1}w$.</p></div>
+
+<div class="widget" id="w-dass-inv">
+<div class="wt">Interactive — Dass's separation formulas against direct computation</div>
+<div class="wd">Drag $w$. The readout evaluates the formulas above for the chosen inverse function and compares them with the principal value computed from the log form.</div>
+<div class="ctrls"><label>function <select id="div-f"><option value="asin">sin⁻¹ w</option><option value="acos">cos⁻¹ w</option><option value="atan">tan⁻¹ w</option></select></label></div>
+<canvas id="cv-dass-inv"></canvas>
+<div class="readout" id="div-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §20.32) — $\tan^{-1}\left(i\,\dfrac{x-a}{x+a}\right)=\dfrac i2\log\dfrac xa$ ($x,a\gt0$)</div><div class="bd"><ol class="steps">
+<li>Let the left side be $u+iv$. Then $\tan(u+iv)=i\frac{x-a}{x+a}$ and $\tan(u-iv)=-i\frac{x-a}{x+a}$.</li>
+<li>$\tan2u=\frac{\text{sum}}{1-\text{product}}=0$, so $u=0$.</li>
+<li>$\tan(iv)=i\tanh v=i\frac{x-a}{x+a}$, so $\tanh v=\frac{x-a}{x+a}$. Componendo–dividendo gives $e^{2v}=\frac xa$, i.e. $v=\frac12\log\frac xa$. $\blacksquare$</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> an inverse tangent of a purely imaginary number is purely imaginary, and equals $i\tanh^{-1}$. That converts it into a logarithm immediately.</p></div></div>
+<!-- dass:end -->
 <h2 id="method">2. The method: put $u=e^{iz}$ and get a quadratic</h2>
 <div class="ex"><div class="hd">Boas Example 1 — find $\arccos2$</div><div class="bd"><ol class="steps">
 <li>We want $z$ with $\cos z=2$, i.e. $\dfrac{e^{iz}+e^{-iz}}{2}=2$.</li>
@@ -951,5 +1012,36 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+onReady(() => {
+  /* H.K. Dass §20.32 — separation formulas for inverse functions */
+  let w = [0.6, 0.8];
+  const sgn = v => (v < 0 ? -1 : 1);
+  const asinD = ([a, b]) => {
+    const s = a * a + b * b, x = Math.asin(Math.sqrt(Math.max(0, 0.5 * ((s + 1) - Math.sqrt((s + 1) ** 2 - 4 * a * a))))) * sgn(a);
+    const y = Math.asinh(Math.sqrt(Math.max(0, 0.5 * ((s - 1) + Math.sqrt((s - 1) ** 2 + 4 * b * b))))) * sgn(b);
+    return [x, y];
+  };
+  const F = {
+    asin: [asinD, Cx.asin, '\\sin^{-1}'],
+    acos: [v => { const r = asinD(v); return [PI / 2 - r[0], -r[1]]; }, Cx.acos, '\\cos^{-1}'],
+    atan: [([a, b]) => [0.5 * Math.atan2(2 * a, 1 - a * a - b * b), 0.5 * Math.atanh(2 * b / (1 + a * a + b * b))], Cx.atan, '\\tan^{-1}']
+  };
+  const P = new Plane('#cv-dass-inv', { span: 2.6, aspect: 0.62, snap: 0.02, draw: p => {
+    const f = F[val('div-f')], r = f[0](w);
+    p.line([-1, 0], [1, 0], { color: '--accent3', width: 3, alpha: 0.5 });
+    if (val('div-f') === 'atan') { p.dot([0, 1], { r: 6, color: '--warn', hollow: true, label: 'i (excluded)' }); p.dot([0, -1], { r: 6, color: '--warn', hollow: true, label: '−i' }); }
+    p.arrow([0, 0], w, { color: '--accent', width: 2.5 }); p.dot(w, { r: 7, color: '--accent', label: 'w' });
+    p.dot(r, { r: 7, color: '--accent2', label: 'f(w)' });
+  }});
+  P.addDrag(() => w, v => w = v);
+  const out = () => {
+    const k = val('div-f'), f = F[k], a = f[0](w), d = f[1](w);
+    texMix('#div-out', `$w=${Cx.tex(w, 2)}$: &nbsp; Dass's separation gives $${f[2]}w=${Cx.tex(a, 4)}$<br>principal value from the log form: $${Cx.tex(d, 4)}$ ${Cx.eq(a, d, 1e-6) ? '✓' : '(differs: on or near a branch cut)'}`);
+  };
+  P.onchange = out; $('#div-f').addEventListener('change', () => { P.redraw(); out(); }); out();
+});
+
+/* dass:end */</script>
 </body>
 </html>
