@@ -368,6 +368,56 @@ Infinitely many negative powers: $z=0$ is an <b>essential</b> singularity.</li><
 <div class="readout" id="dbs-out"></div>
 </div>
 <!-- dass:end -->
+<!-- dass:start 20__classify -->
+<h2 id="dass-26-1" class="dass"><span class="dtag">H.K. Dass §26.1–26.3</span>Zeros and singular points: definitions, Dass's twelve examples, and two corrections</h2>
+<table class="t dt">
+<tr><th>Term (Dass)</th><th>Meaning</th><th>Example</th></tr>
+<tr><td>Zero of order $m$</td><td>$f(a)=f'(a)=\dots=f^{(m-1)}(a)=0\ne f^{(m)}(a)$, i.e. $f=(z-a)^mg(z)$ with $g(a)\ne0$</td><td>$z=2$ is a simple zero of $(z-2)\sin\frac1{z-1}$</td></tr>
+<tr><td>Singular point</td><td>a point where $f$ is not analytic</td><td>$\frac1{z-2}$ at $z=2$</td></tr>
+<tr><td>Isolated singularity</td><td>no other singularity in some small circle around it</td><td>$\frac1{(z-1)(z-3)}$ at $1$ and at $3$</td></tr>
+<tr><td>Non-isolated singularity</td><td>a limit point of singularities</td><td>$\frac{1}{\sin(\pi/z)}$ has poles at $z=\frac1n$, which pile up at $z=0$</td></tr>
+<tr><td>Pole of order $m$</td><td>the Laurent series near $a$ stops at $\frac{b_m}{(z-a)^m}$</td><td>$\frac{e^{z-a}}{(z-a)^2}$: order 2</td></tr>
+<tr><td>Essential singularity</td><td>infinitely many negative powers</td><td>$\sin\frac1{z-a}$, $\ e^{1/z}$</td></tr>
+<tr><td>Removable singularity</td><td>no negative powers at all; $f$ just was not defined there</td><td>$\frac{z-\sin z}{z^3}=\frac1{3!}-\frac{z^2}{5!}+\cdots$</td></tr>
+</table>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 1–12) — classify each singularity</div><div class="bd">
+<table class="t dt">
+<tr><th>Dass</th><th>Function</th><th>Result and reason</th></tr>
+<tr><td>Ex 1</td><td>$\frac{z-2}{z^2}\sin\frac1{z-1}$</td><td>Zeros at $z=2$ (simple) and $z=1+\frac1{n\pi}$. Double pole at $0$. At $z=1$ the zeros pile up, and the Laurent series of $\sin\frac1{z-1}$ never stops: an <b>isolated essential singularity</b>.</td></tr>
+<tr><td>Ex 2</td><td>$\sin\frac1z$; $\ \frac{e^{1/z}}{z^2}$</td><td>Both have an essential singularity at $0$ (infinitely many negative powers)</td></tr>
+<tr><td>Ex 3</td><td>$\frac{e^{z-a}}{(z-a)^2}$</td><td>pole of order 2 at $a$</td></tr>
+<tr><td>Ex 4</td><td>$\sin\frac1{z-a}$</td><td>essential singularity at $a$</td></tr>
+<tr><td>Ex 5</td><td>$\frac{\sin(z-a)}{(z-a)^4}$</td><td>pole of order <b>3</b>, not 4: the numerator has a simple zero</td></tr>
+<tr><td>Ex 6</td><td>$e^{1/(z-a)}$</td><td>$\lim_{z\to a}$ does not exist (it is $\infty$ along one direction and $0$ along the opposite one): essential</td></tr>
+<tr><td>Ex 7</td><td>$\frac{1}{1-e^z}$</td><td>simple poles at $z=2n\pi i$, including $2\pi i$</td></tr>
+<tr><td>Ex 8</td><td>$\frac{\cot\pi z}{(z-a)^2}$</td><td>Double pole at $a$ ($a\notin\mathbb Z$), simple poles at every integer. At $\infty$ the poles $z=n$ accumulate, so it is a <b>non-isolated</b> singularity (Dass calls it essential).</td></tr>
+<tr><td>Ex 9</td><td>$e^{-1/z^2}$</td><td>See the note below: <b>essential singularity at $0$</b></td></tr>
+<tr><td>Ex 10</td><td>$\frac{z-\sin z}{z^3}$</td><td>removable at $0$ (limit $\frac16$)</td></tr>
+<tr><td>Ex 11</td><td>$\frac{1}{z^4+1}$</td><td>simple poles at $e^{i\pi/4},e^{3i\pi/4},e^{5i\pi/4},e^{7i\pi/4}$, i.e. $\frac{\pm1\pm i}{\sqrt2}$</td></tr>
+<tr><td>Ex 12</td><td>$e^z$</td><td>Put $z=\frac1t$: $e^{1/t}$ has an essential singularity at $t=0$. So $e^z$ has an <b>isolated essential singularity at $\infty$</b>.</td></tr>
+</table>
+<p><b>Note on Ex 9.</b> The book argues that $e^{-1/z^2}=\frac{1}{e^{1/z^2}}$ has "no singularities" because the denominator never vanishes. That shows there are no <b>poles</b>. But the function is not even defined at $z=0$, and its Laurent series $\sum_n\frac{(-1)^n}{n!\,z^{2n}}$ has infinitely many negative powers. So $z=0$ is an <b>essential</b> singularity. Along the real axis $e^{-1/x^2}\to0$, while along the imaginary axis $e^{+1/y^2}\to\infty$.</p>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "no zero of the denominator" does not mean "no singularity". Exponentials of $\frac1z$ hide essential singularities. This is a popular trap option.</p></div></div>
+
+<div class="box thm"><span class="tag">Theorem (Dass Ex 13)</span><p>If $f$ has a pole of order $m$ at $a$, then $\frac1f$ has a zero of order $m$ there. The proof: $f=\frac{\phi(z)}{(z-a)^m}$ with $\phi(a)\ne0$, so $\frac1f=\frac{(z-a)^m}{\phi(z)}$. The converse also holds, so <b>the poles of $f$ are exactly the zeros of $\frac1f$, with the same order</b>.</p></div>
+
+<div class="widget" id="w-dass-order">
+<div class="wt">Interactive — read the order of a singularity off a log–log plot</div>
+<div class="wd">For the chosen function and singular point $a$, each curve is $\log_{10}|f(a+re^{i\phi})|$ plotted against $\log_{10}r$, for six directions $\phi$. At a <b>pole of order $m$</b> all curves become parallel straight lines of slope $-m$. At a <b>removable</b> point they level off. At an <b>essential</b> singularity the directions disagree wildly: some shoot up, others plunge.</div>
+<div class="ctrls"><label>function <select id="dor-f"></select></label></div>
+<canvas id="cv-dass-order"></canvas>
+<div class="readout" id="dor-out"></div>
+</div>
+
+<table class="t dt">
+<tr><th colspan="2">Dass Exercise 26.1 — answers</th></tr>
+<tr><td>$\frac{1}{(z-2)(z-3)}$; $\ \frac{1}{(z-2)^3}$</td><td>simple poles at $2$ and $3$; a pole of order 3 at $2$</td></tr>
+<tr><td>$\frac{1}{\sin z-\cos z}$</td><td>simple poles where $\tan z=1$: $z=\frac\pi4+n\pi$</td></tr>
+<tr><td>$\cot\frac1z$</td><td>simple poles at $z=\frac1{n\pi}$; $z=0$ is a non-isolated singularity (a limit of poles)</td></tr>
+<tr><td>$\frac{1}{(z-2)^4(z+3)^6}$</td><td>poles of order $4$ at $2$ and $6$ at $-3$</td></tr>
+</table>
+<!-- dass:end -->
 <h2 id="boas">4. Boas Problems, Section 4 — solutions</h2>
 <details class="sol"><summary>Show solutions 1–2</summary>
 <p><b>1.</b> A power series converging inside $C$ can be differentiated term by term there, and the result converges in the same disk (Chapter 1 §11, Chapter 2 §7). So the sum has a derivative at every point inside $C$: it is analytic.</p>
@@ -1134,6 +1184,46 @@ onReady(() => {
     texMix('#dbs-out', (val('dbs-f') === 'gen' ? `$c_n=J_n(${fnum(c, 2)})$: e.g. $c_0=${fnum(J(0, c), 5)}$, $c_1=${fnum(J(1, c), 5)}$, $c_{-1}=${fnum(J(-1, c), 5)}=-c_1$.` : `$c_{\\pm1}=J_1(${fnum(2 * c, 2)})=${fnum(J(1, 2 * c), 5)}$, $c_{\\pm3}=-J_3(${fnum(2 * c, 2)})=${fnum(-J(3, 2 * c), 5)}$; even-index coefficients vanish.`) + ` &nbsp; Largest mismatch between the bars and the Bessel dots: $${err < 1e-9 ? '\\lt10^{-9}' : fnum(err, 3)}$.`); };
   const all = () => { P.redraw(); out(); };
   $('#dbs-f').addEventListener('change', all); watch(['dbs-c'], all); all();
+});
+
+/* H.K. Dass §26.1–26.2 — read the order of a singularity off a log–log plot */
+onReady(() => {
+  const L10 = Math.LN10, la = z => Math.log(Cx.abs(z)) / L10;
+  const lsin = w => { const y = Math.abs(w[1]); if (y > 30) return (y - Math.LN2) / L10; return la(Cx.sin(w)); };
+  const lexp = w => w[0] / L10;
+  const F = [
+    { n: 'Ex 3: e^{z}/z² at 0 (pole, order 2)', a: [0, 0], lf: z => lexp(z) - 2 * la(z) },
+    { n: 'Ex 5: sin z/z⁴ at 0 (order 3)', a: [0, 0], lf: z => la(Cx.sin(z)) - 4 * la(z) },
+    { n: 'Ex 22: 1/(z²+1)³ at i (order 3)', a: [0, 1], lf: z => -3 * la(Cx.add(Cx.mul(z, z), [1, 0])) },
+    { n: 'Ex 7: 1/(1−eᶻ) at 2πi (simple)', a: [0, TAU], lf: z => -la(Cx.sub([1, 0], Cx.exp(z))) },
+    { n: 'Ex 10: (z − sin z)/z³ at 0 (removable)', a: [0, 0], lf: z => { const s = Cx.abs(z) < 1e-2 ? Cx.sub([1 / 6, 0], Cx.scale(Cx.mul(z, z), 1 / 120)) : Cx.div(Cx.sub(z, Cx.sin(z)), Cx.mul(z, Cx.mul(z, z))); return la(s); } },
+    { n: 'Ex 1: (z−2)sin(1/(z−1))/z² at 1 (essential)', a: [1, 0], lf: z => la(Cx.sub(z, [2, 0])) + lsin(Cx.div([1, 0], Cx.sub(z, [1, 0]))) - 2 * la(z) },
+    { n: 'Ex 4: sin(1/z) at 0 (essential)', a: [0, 0], lf: z => lsin(Cx.div([1, 0], z)) },
+    { n: 'Ex 9: e^{−1/z²} at 0 (essential)', a: [0, 0], lf: z => lexp(Cx.neg(Cx.div([1, 0], Cx.mul(z, z)))) }
+  ];
+  const sel = $('#dor-f'); F.forEach((f, k) => { const o = document.createElement('option'); o.value = k; o.textContent = f.n; sel.appendChild(o); });
+  const cols = ['--accent', '--accent2', '--accent3', '--accent4', '--fg', '--muted'], phis = [0.1, 1.15, 2.2, 3.25, 4.3, 5.35];
+  const P = new Plane('#cv-dass-order', { span: 2, aspect: 0.62, snap: 0, grid: false, axisLabels: ['', ''], draw: p => {
+    const C = F[+sel.value], g = p.ctx, L = 52, Rm = 14, T = 12, B = 30, W = p.W - L - Rm, H = p.H - T - B, curves = [];
+    let y0 = 1e9, y1 = -1e9;
+    phis.forEach(ph => { const pts = []; for (let j = 0; j <= 240; j++) { const lr = -3 + 3 * j / 240, v = C.lf(Cx.add(C.a, Cx.polar(10 ** lr, ph))); const y = isFinite(v) ? Math.max(-12, Math.min(14, v)) : NaN; pts.push([lr, y]); if (isFinite(y)) { y0 = Math.min(y0, y); y1 = Math.max(y1, y); } } curves.push(pts); });
+    if (y1 - y0 < 2) { const mid = (y0 + y1) / 2; y0 = mid - 1; y1 = mid + 1; }
+    const pad = 0.05 * (y1 - y0); y0 -= pad; y1 += pad;
+    const X = x => L + (x + 3) / 3 * W, Y = y => T + (y1 - y) / (y1 - y0) * H, raw = (y1 - y0) / 6, pw = 10 ** Math.floor(Math.log10(raw)), st = [1, 2, 5, 10].map(k => k * pw).find(k => k >= raw);
+    g.save(); g.font = '11px system-ui,sans-serif'; g.fillStyle = cssv('--muted'); g.strokeStyle = cssv('--grid'); g.lineWidth = 1;
+    for (let x = -3; x <= 0; x += 0.5) { g.beginPath(); g.moveTo(X(x), T); g.lineTo(X(x), T + H); g.stroke(); g.textAlign = 'center'; g.fillText(fnum(x, 2), X(x), T + H + 14); }
+    for (let y = Math.ceil(y0 / st) * st; y <= y1; y += st) { g.beginPath(); g.moveTo(L, Y(y)); g.lineTo(L + W, Y(y)); g.stroke(); g.textAlign = 'right'; g.fillText(fnum(y, 3), L - 5, Y(y) + 4); }
+    g.fillStyle = cssv('--axis'); g.font = '600 12px system-ui,sans-serif'; g.textAlign = 'center'; g.fillText('log₁₀ r', L + W / 2, p.H - 2); g.save(); g.translate(13, T + H / 2); g.rotate(-Math.PI / 2); g.fillText('log₁₀ |f|', 0, 0); g.restore();
+    curves.forEach((pts, k) => { g.strokeStyle = cssv(cols[k]); g.lineWidth = 2.2; g.beginPath(); let pen = false; pts.forEach(([x, y]) => { if (!isFinite(y)) { pen = false; return; } if (pen) g.lineTo(X(x), Y(y)); else { g.moveTo(X(x), Y(y)); pen = true; } }); g.stroke(); });
+    g.restore();
+  }});
+  const out = () => { const C = F[+sel.value], sl = phis.map(ph => { const z1 = Cx.add(C.a, Cx.polar(1e-3, ph)), z2 = Cx.add(C.a, Cx.polar(10 ** -2.5, ph)); return (C.lf(z2) - C.lf(z1)) / 0.5; });
+    const mn = Math.min(...sl), mx = Math.max(...sl), m = -sl.reduce((s, v) => s + v, 0) / sl.length; let s;
+    if (mx - mn > 1) s = `Slopes near $r=10^{-3}$ range from $${fnum(mn, 1)}$ to $${fnum(mx, 1)}$, so they <b>disagree between directions</b>: an <b>essential singularity</b> (no order).`;
+    else if (Math.abs(m) < 0.3) s = `All slopes $\\approx${fnum(-m, 2)}$: $|f|$ tends to a finite non-zero limit, so the singularity is <b>removable</b>.`;
+    else s = `All six directions have slope $\\approx${fnum(-m, 2)}$: a <b>pole of order ${Math.round(m)}</b> ($|f|\\sim r^{-${Math.round(m)}}$).`;
+    texMix('#dor-out', s); };
+  sel.addEventListener('change', () => { P.redraw(); out(); }); out();
 });
 
 /* dass:end */</script>

@@ -117,6 +117,14 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -188,6 +196,52 @@ $$d\theta=\frac{dz}{iz},\qquad\cos\theta=\frac12\left(z+\frac1z\right),\qquad\si
 <div class="box thm"><span class="tag">Useful general results (derived the same way)</span>
 $$\int_0^{2\pi}\frac{d\theta}{a+b\cos\theta}=\int_0^{2\pi}\frac{d\theta}{a+b\sin\theta}=\frac{2\pi}{\sqrt{a^2-b^2}},\qquad\int_0^{2\pi}\frac{\sin^2\theta\,d\theta}{a+b\cos\theta}=\frac{2\pi}{b^2}\left(a-\sqrt{a^2-b^2}\right)\qquad(a>|b|)$$</div>
 
+<!-- dass:start 10__type1 -->
+<h2 id="dass-26-14" class="dass"><span class="dtag">H.K. Dass §26.13–26.14</span>Integrals round the unit circle: Dass's fourteen examples, sorted by trick</h2>
+<p><b>Substitution.</b> $z=e^{i\theta}$, so $d\theta=\frac{dz}{iz}$, $\cos\theta=\frac12\left(z+\frac1z\right)$, $\sin\theta=\frac1{2i}\left(z-\frac1z\right)$, and $\cos n\theta=\operatorname{Re}z^n$. The integral over $[0,2\pi]$ becomes $\oint_{|z|=1}$, and only poles <b>inside</b> the unit circle count.</p>
+
+<div class="dcase"><p><b>Trick 1 — denominators $a+b\cos\theta$ or $a+b\sin\theta$, with $a\gt|b|$ (Ex 38, 39, 40, 41, 44).</b> The denominator becomes a quadratic $bz^2+2az+b$ (for $\cos$) or $bz^2+2iaz-b$ (for $\sin$). Its two roots have product of modulus $1$, so <b>exactly one</b> lies inside the unit circle. The result is always</p>
+$$\int_0^{2\pi}\frac{d\theta}{a+b\cos\theta}=\int_0^{2\pi}\frac{d\theta}{a+b\sin\theta}=\frac{2\pi}{\sqrt{a^2-b^2}} .$$
+<p>Ex 38 ($5-3\cos\theta$): $\frac{2\pi}{4}=\frac\pi2$. Ex 39 ($5-4\sin\theta$): $\frac{2\pi}3$. Ex 41 ($2+\cos\theta$): $\frac{2\pi}{\sqrt3}$. Ex 44: $1-2p\sin\theta+p^2$ is the case $a=1+p^2$, $b=-2p$, giving $\frac{2\pi}{1-p^2}$ for $p^2\lt1$.</p></div>
+
+<div class="dcase"><p><b>Trick 2 — a numerator $\cos n\theta$: use $e^{in\theta}=z^n$ and take the real part (Ex 45, 47, 48).</b> With $r=\frac{a-\sqrt{a^2-b^2}}{b}$ (the root inside the circle):</p>
+$$\int_0^{2\pi}\frac{\cos n\theta\,d\theta}{a-b\cos\theta}=\frac{2\pi\,r^n}{\sqrt{a^2-b^2}},\qquad\int_0^{2\pi}\frac{\cos n\theta\,d\theta}{1-2a\cos\theta+a^2}=\frac{2\pi a^n}{1-a^2}\ (|a|\lt1).$$
+<ul>
+<li>Ex 45 ($n=2$): $\frac{2\pi a^2}{1-a^2}$.</li>
+<li>Ex 48 ($\frac{\cos3\theta}{5-4\cos\theta}$, $r=\frac12$): $\frac{2\pi}{3}\cdot\frac18=\frac{\pi}{12}$. With $5+4\cos\theta$ instead (Dass's "Question"), $r=-\frac12$, giving $-\frac{\pi}{12}$.</li>
+<li>Ex 47 ($\frac{\cos2\theta}{5+4\cos\theta}$): $\frac{2\pi}{3}\cdot\frac14=\frac\pi6$.</li></ul>
+<p><b>Why not $\cos n\theta=\frac{z^n+z^{-n}}{2}$?</b> That works too, but the $z^{-n}$ term creates a pole of order $n$ at $0$. The real-part trick avoids it.</p></div>
+
+<div class="dcase"><p><b>Trick 3 — simplify first (Ex 42, 43, 46).</b></p><ul>
+<li>Ex 42: $\int_0^{2\pi}\frac{\sin^2\theta}{5-4\cos\theta}d\theta$. Write $\sin^2\theta=\frac{1-\cos2\theta}{2}$ and use trick 2: $\frac12\left[\frac{2\pi}{3}-\frac{2\pi}{3}\cdot\frac14\right]=\frac\pi4$.</li>
+<li>Ex 43: $\int_0^\pi\frac{1+2\cos\theta}{5+4\cos\theta}d\theta=0$. Since $1+2\cos\theta=\frac12(5+4\cos\theta)-\frac32$, the integral is $\frac\pi2-\frac32\cdot\frac{\pi}{3}=0$. In $z$ form the integrand is $\frac{1}{i(z+2)}$, whose only pole $-2$ is outside, so the answer is $0$.</li>
+<li>Ex 46: $\int_0^{2\pi}\frac{\sin^2\theta-2\cos\theta}{2+\cos\theta}d\theta$. Polynomial division gives $\frac{1-\cos^2\theta-2\cos\theta}{2+\cos\theta}=-\cos\theta+\frac{1}{2+\cos\theta}$, so the answer is $0+\frac{2\pi}{\sqrt3}$.</li></ul></div>
+
+<div class="dcase"><p><b>Trick 4 — differentiate with respect to a parameter, or rescale (Ex 49, 50, 51).</b></p><ul>
+<li>Ex 49: differentiating $\int\frac{d\theta}{a+b\cos\theta}=\frac{2\pi}{\sqrt{a^2-b^2}}$ with respect to $a$ gives $\int_0^{2\pi}\frac{d\theta}{(a+b\cos\theta)^2}=\frac{2\pi a}{(a^2-b^2)^{3/2}}$. Dass does it with a double pole; this route is faster.</li>
+<li>Ex 50: $\sin^2\theta=\frac{1-\cos2\theta}2$, then $\phi=2\theta$ gives $\int_0^\pi\frac{a\,d\theta}{a^2+\sin^2\theta}=\frac{\pi}{\sqrt{1+a^2}}$.</li>
+<li>Ex 51: $e^{\cos\theta}\cos(\sin\theta-n\theta)=\operatorname{Re}\left[e^{e^{i\theta}}e^{-in\theta}\right]$, so the integral is $\operatorname{Re}\oint\frac{e^z}{z^{n+1}}\frac{dz}{i}=\frac{2\pi}{n!}$.</li></ul></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $\int_0^{2\pi}\frac{d\theta}{a+b\cos\theta}=\frac{2\pi}{\sqrt{a^2-b^2}}$ and its $a$-derivative answer most "evaluate using residues" MCQs on this type in under a minute.</p>
+
+<div class="widget" id="w-dass-uc">
+<div class="wt">Interactive — the unit-circle machine: which root is inside, and the answer</div>
+<div class="wd">Choose the integrand family and set $a$ and $b$. Left: the $z$-plane, with the unit circle and the poles of the transformed integrand. The one inside (orange) is the only one that counts. The readout compares the residue sum, a direct numerical integration over $\theta$, and the closed form. Push $|b|$ towards $a$: the poles approach the circle and the integral blows up.</div>
+<div class="ctrls"><label>integrand <select id="duc-f"><option value="c">1/(a + b cos θ)</option><option value="s">1/(a + b sin θ)</option><option value="n">cos nθ/(a − b cos θ)</option><option value="q">1/(a + b cos θ)²</option></select></label>
+<label>$a$ <input type="range" id="duc-a" min="1" max="6" step="0.25" value="5"><output></output></label>
+<label>$b$ <input type="range" id="duc-b" min="-5.75" max="5.75" step="0.25" value="4"><output></output></label>
+<label>$n$ <input type="range" id="duc-n" min="0" max="5" step="1" value="3"><output></output></label></div>
+<canvas id="cv-dass-uc"></canvas>
+<div class="readout" id="duc-out"></div>
+</div>
+
+<table class="t dt">
+<tr><th colspan="2">Dass Exercise 26.4 — answers (checked numerically)</th></tr>
+<tr><td>$\int_0^{2\pi}\frac{\sin^2\theta}{a+b\cos\theta}d\theta$, $a\gt b\gt0$</td><td>$\frac{2\pi}{b^2}\left(a-\sqrt{a^2-b^2}\right)$</td></tr>
+<tr><td>$\int_0^{2\pi}\frac{(1+2\cos\theta)^n\cos n\theta}{3+2\cos\theta}d\theta$</td><td>$\frac{2\pi}{\sqrt5}\left(3-\sqrt5\right)^n$</td></tr>
+<tr><td>$\int_0^{2\pi}\frac{4\,d\theta}{5+4\sin\theta}$; $\ \int_0^\pi\frac{d\theta}{17-8\cos\theta}$</td><td>$\frac{8\pi}{3}$; $\ \frac{\pi}{15}$</td></tr>
+<tr><td>$\int_0^\pi\frac{d\theta}{a+b\cos\theta}$; $\ \int_0^{2\pi}\frac{d\theta}{2-\cos\theta}$</td><td>$\frac{\pi}{\sqrt{a^2-b^2}}$; $\ \frac{2\pi}{\sqrt3}$</td></tr>
+</table>
+<!-- dass:end -->
 <h2 id="type2">3. Type II — $\int_{-\infty}^\infty\frac{P(x)}{Q(x)}dx$</h2>
 <div class="ex"><div class="hd">Boas Example 2 — $\displaystyle\int_{-\infty}^\infty\frac{dx}{1+x^2}=\pi$</div><div class="bd"><ol class="steps">
 <li>Close the real segment $[-\rho,\rho]$ with the upper semicircle $|z|=\rho$ (Fig. 7.2). For $\rho>1$ it encloses only $z=i$, with residue $\frac{1}{2i}$, so the contour integral is $2\pi i\cdot\frac1{2i}=\pi$ for every $\rho>1$.</li>
@@ -197,6 +251,61 @@ $$\int_0^{2\pi}\frac{d\theta}{a+b\cos\theta}=\int_0^{2\pi}\frac{d\theta}{a+b\sin
 <p>If $P$ and $Q$ are polynomials, $\deg Q\ge\deg P+2$, and $Q$ has no real zeros, then</p>
 $$\int_{-\infty}^\infty\frac{P(x)}{Q(x)}dx=2\pi i\sum\text{(residues of }P/Q\text{ in the upper half-plane)}.$$</div>
 
+<!-- dass:start 10__type2 -->
+<h2 id="dass-26-15" class="dass"><span class="dtag">H.K. Dass §26.15</span>$\int_{-\infty}^\infty\frac{f_1(x)}{f_2(x)}dx$ and its Fourier cousins: Dass's examples and an important correction</h2>
+<p><b>Conditions (Dass).</b> (i) $f_2$ has no real zeros. (ii) $\deg f_2\ge\deg f_1+2$. Close $[-R,R]$ with the upper semicircle $C_R$. On $C_R$, $|f|\lesssim\frac{K}{R^2}$ while its length is $\pi R$, so $\int_{C_R}\to0$. Hence</p>
+$$\int_{-\infty}^\infty f(x)\,dx=2\pi i\sum_{\operatorname{Im}a\gt0}\operatorname{Res}_af .$$
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 55–59) — rational integrands</div><div class="bd">
+<table class="t dt">
+<tr><th>Dass</th><th>Integral</th><th>Poles used</th><th>Value</th></tr>
+<tr><td>Ex 55</td><td>$\int_0^\infty\frac{dx}{(1+x^2)^3}$</td><td>$i$ (order 3): $\frac{1}{2}\frac{d^2}{dz^2}(z+i)^{-3}\big|_i=\frac{6}{(2i)^5}=-\frac{3i}{16}$</td><td>$\frac12\cdot2\pi i\cdot\left(-\frac{3i}{16}\right)=\frac{3\pi}{16}$</td></tr>
+<tr><td>Ex 56</td><td>$\int_{-\infty}^\infty\frac{x^2}{(1+x^2)^3}dx$</td><td>$i$ (order 3)</td><td>$\frac\pi8$</td></tr>
+<tr><td>Ex 57</td><td>$\int_{-\infty}^\infty\frac{x^2\,dx}{(x^2+1)(x^2+4)}$</td><td>$i$: $-\frac{1}{6i}$; $\ 2i$: $\frac{4}{12i}$</td><td>$\frac\pi3$</td></tr>
+<tr><td>Ex 58</td><td>$\int_{-\infty}^\infty\frac{dx}{x^4+1}$</td><td>$e^{i\pi/4}$, $e^{3i\pi/4}$; residues $\frac{1}{4z^3}$</td><td>$\frac{\pi}{\sqrt2}$</td></tr>
+<tr><td>Ex 59</td><td>$\int_0^\infty\frac{dx}{1+x^6}$</td><td>$e^{i\pi/6}$, $i$, $e^{5i\pi/6}$</td><td>$\frac\pi3$</td></tr>
+</table>
+<p><b>General formula (variation):</b> $\int_0^\infty\frac{dx}{1+x^n}=\frac{\pi/n}{\sin(\pi/n)}$. It gives $\frac\pi2$, $\frac{\pi}{2\sqrt2}$ and $\frac\pi3$ for $n=2,4,6$, matching Ex 58 (halved) and Ex 59.</p>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> for a simple pole of $\frac{1}{Q(z)}$, the residue is $\frac{1}{Q'(a)}$. With $Q=z^n+1$ this is $\frac{1}{na^{n-1}}=-\frac{a}{n}$, which makes the sums geometric.</p></div></div>
+
+<h3>Fourier-type integrals: use $e^{imz}$, never $\cos mz$ or $\sin mz$</h3>
+<div class="box warn"><span class="tag">The trap (read this before Ex 52–54)</span>
+<p>On the upper semicircle $z=Re^{i\theta}$, $|e^{imz}|=e^{-mR\sin\theta}\le1$ for $m\gt0$, so Jordan's lemma kills the arc. But $\sin mz=\frac{e^{imz}-e^{-imz}}{2i}$ contains $e^{-imz}$, which <b>grows</b> like $e^{mR\sin\theta}$ there. So $\oint\frac{\sin mz}{Q(z)}dz$ over the semicircle does <b>not</b> reduce to the real integral. The correct method is $\int\frac{\sin mx}{Q}dx=\operatorname{Im}\left[2\pi i\sum\operatorname{Res}_{\operatorname{Im}a\gt0}\frac{e^{imz}}{Q}\right]$, and similarly $\operatorname{Re}$ for $\cos$.</p></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 52, 53, 54, corrected) — $\cos$ and $\sin$ numerators</div><div class="bd">
+<div class="dcase"><p><b>Ex 52:</b> $\int_0^\infty\frac{\cos mx}{x^2+1}dx$ ($m\gt0$). $\operatorname{Res}_i\frac{e^{imz}}{z^2+1}=\frac{e^{-m}}{2i}$, so $\int_{-\infty}^\infty=\pi e^{-m}$ and $\int_0^\infty=\boxed{\frac\pi2e^{-m}}$.</p></div>
+<div class="dcase"><p><b>Ex 53:</b> $\int_{-\infty}^\infty\frac{x\sin\pi x}{x^2+2x+5}dx$. The upper pole is $a=-1+2i$, and $\operatorname{Res}_a\frac{ze^{i\pi z}}{z^2+2z+5}=\frac{ae^{i\pi a}}{4i}=\frac{(-1+2i)(-1)e^{-2\pi}}{4i}$. Then $2\pi i\cdot\operatorname{Res}=\frac\pi2(1-2i)e^{-2\pi}$. Taking the imaginary part: $\boxed{-\pi e^{-2\pi}}\approx-0.00587$.</p>
+<p>The book integrates $\frac{z\sin\pi z}{z^2+2z+5}$ itself around the semicircle and gets $\pi\sinh2\pi\approx841$. That is the trap above: the arc does not vanish for $\sin\pi z$. Numerical quadrature of the real integral gives $-0.0058667$, which matches $-\pi e^{-2\pi}$.</p></div>
+<div class="dcase"><p><b>Ex 54:</b> $\int_{-\infty}^\infty\frac{\sin x}{x^2+4x+5}dx$. The upper pole is $-2+i$, and $2\pi i\frac{e^{i(-2+i)}}{2i}=\pi e^{-1}(\cos2-i\sin2)$. Imaginary part: $\boxed{-\frac{\pi\sin2}{e}}\approx-1.0509$. The book's $-2\pi\sin2\cosh1\approx-8.82$ again comes from integrating $\sin z$ directly. Numerical quadrature gives $-1.05090$.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> options are often built from exactly this mistake ($\sinh$ and $\cosh$ factors appear). If your answer grows with the frequency $m$, you have integrated $\sin$ instead of $e^{imz}$.</p></div></div>
+
+<div class="widget" id="w-dass-arc">
+<div class="wt">Interactive — does the big arc vanish? $e^{imz}$ versus $\sin mz$</div>
+<div class="wd">Left: the contour, with $[-R,R]$ and the upper semicircle $C_R$, and the poles. Right: $\log_{10}\left|\int_{C_R}f\,dz\right|$ plotted against $R$, computed numerically. With $e^{imz}$ (or a rational $f$) the arc integral dies away. With $\sin mz$ it explodes exponentially, which is why Ex 53 and 54 must use $e^{imz}$. The readout checks: real-line part $+$ arc $=2\pi i\sum\operatorname{Res}$.</div>
+<div class="ctrls"><label>integrand <select id="dac-f"><option value="e53">z e^{iπz}/(z²+2z+5) ✓</option><option value="s53">z sin(πz)/(z²+2z+5) ✗</option><option value="e52">e^{iz}/(z²+1) ✓</option><option value="c52">cos z/(z²+1) ✗</option><option value="r58">1/(z⁴+1)</option></select></label>
+<label>$R$ <input type="range" id="dac-r" min="3" max="20" step="0.5" value="6"><output></output></label></div>
+<div class="grid2"><canvas id="cv-dass-arcz"></canvas><canvas id="cv-dass-arcg"></canvas></div>
+<div class="readout" id="dac-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 60, 61, 62) — several poles, a double pole, and a mixed case</div><div class="bd">
+<div class="dcase"><p><b>Ex 60:</b> $\int_0^\infty\frac{\cos3x\,dx}{(x^2+1)(x^2+4)}$. The residues of $\frac{e^{3iz}}{(z^2+1)(z^2+4)}$ are $\frac{e^{-3}}{6i}$ at $i$ and $-\frac{e^{-6}}{12i}$ at $2i$. So the answer is $\frac\pi2\left(\frac{e^{-3}}{3}-\frac{e^{-6}}{6}\right)\approx0.02542$.</p></div>
+<div class="dcase"><p><b>Ex 61:</b> $\int_0^\infty\frac{\cos ax}{(x^2+b^2)^2}dx$. There is a double pole at $ib$: $\frac{d}{dz}\frac{e^{iaz}}{(z+ib)^2}\Big|_{ib}=\frac{e^{-ab}(ab+1)}{4ib^3}$, giving $\frac{\pi(ab+1)e^{-ab}}{4b^3}$.</p></div>
+<div class="dcase"><p><b>Ex 62:</b> $\int_0^\infty\frac{\cos2x\,dx}{(x^2+9)^2(x^2+16)}$. There is a double pole at $3i$ and a simple pole at $4i$. The exact value is $\frac{\pi e^{-8}\left(27+62e^2\right)}{10584}\approx4.8305\times10^{-5}$, computed by symbolic residues and confirmed by quadrature.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $\int_0^\infty\frac{\cos mx}{x^2+a^2}dx=\frac{\pi}{2a}e^{-ma}$ is the single most-used result here. Ex 61 is its derivative with respect to $a^2$.</p></div></div>
+
+<table class="t dt">
+<tr><th colspan="2">Dass Exercise 26.5 — answers (checked numerically)</th></tr>
+<tr><td>$\int_0^\infty\frac{dx}{1+x^2}$; $\ \int_{-\infty}^\infty\frac{dx}{(x^2+1)^2}$</td><td>$\frac\pi2$; $\ \frac\pi2$</td></tr>
+<tr><td>$\int_0^\infty\frac{x^3\sin x\,dx}{(x^2+a^2)(x^2+b^2)}$</td><td>$\frac{\pi\left(a^2e^{-a}-b^2e^{-b}\right)}{2(a^2-b^2)}$</td></tr>
+<tr><td>$\int_{-\infty}^\infty\frac{\cos x\,dx}{(x^2+a^2)(x^2+b^2)}$, $a\gt b\gt0$</td><td>$\frac{\pi}{a^2-b^2}\left(\frac{e^{-b}}{b}-\frac{e^{-a}}{a}\right)$</td></tr>
+<tr><td>$\int_0^\infty\frac{\cos x}{x^2+a^2}dx$; $\ \int_0^\infty\frac{x^3\sin x}{(x^2+a^2)^2}dx$</td><td>$\frac{\pi e^{-a}}{2a}$; $\ \frac\pi4(2-a)e^{-a}$</td></tr>
+<tr><td>$\int_{-\infty}^\infty\frac{\sin mx}{x(x^2+a^2)}dx$</td><td>$\frac{\pi}{a^2}\left(1-e^{-ma}\right)$</td></tr>
+<tr><td>$\int_0^\infty\frac{x^2}{x^6+1}dx$; $\ \int_0^\infty\frac{x\sin ax}{x^4+a^4}dx$</td><td>$\frac\pi6$; $\ \frac{\pi}{2a^2}e^{-a^2/\sqrt2}\sin\frac{a^2}{\sqrt2}$</td></tr>
+<tr><td>$\int_0^\infty\frac{x^6}{(a^4+x^4)^2}dx$; $\ \int_0^\infty\frac{\cos x^2+\sin x^2-1}{x^2}dx$</td><td>$\frac{3\sqrt2\,\pi}{16a}$; $\ 0$ (integrate by parts: $2\int_0^\infty(\cos x^2-\sin x^2)\,dx=0$)</td></tr>
+<tr><td>$\int_0^\infty\frac{\cos mx}{x^4+x^2+1}dx$; $\ \int_0^\infty\frac{\log(1+x^2)}{1+x^2}dx$</td><td>$\frac{\pi}{\sqrt3}e^{-\frac{\sqrt3m}{2}}\sin\left(\frac m2+\frac\pi6\right)$; $\ \pi\log2$</td></tr>
+</table>
+<!-- dass:end -->
 <h2 id="type3">4. Type III — Fourier-type integrals ($\cos mx$, $\sin mx$)</h2>
 <div class="ex"><div class="hd">Boas Example 3 — $\displaystyle\int_0^\infty\frac{\cos x}{1+x^2}dx=\frac{\pi}{2e}$</div><div class="bd"><ol class="steps">
 <li>Use $\oint\frac{e^{iz}}{1+z^2}dz$, <b>not</b> $\cos z$: $\cos z$ blows up like $e^{|y|}$ in the upper half-plane, but $|e^{iz}|=e^{-y}\le1$ there.</li>
@@ -232,6 +341,50 @@ $$\mathrm{PV}\oint=2\pi i\left(\sum\text{Res inside}+\frac12\sum\text{Res at sim
 <div class="box def"><span class="tag">Principal value</span>
 <p>$\int_0^\infty\frac{\cos x}{x}dx$ diverges (the integrand $\approx\frac1x$ near $0$). The "$0$" found above is a <b>Cauchy principal value</b>: cut out a symmetric interval $(-r,r)$ about the singular point and let $r\to0$. Example: $\int_0^5\frac{dx}{x-3}$. Here $\int_0^{3-r}+\int_{3+r}^5=(\ln r-\ln3)+(\ln2-\ln r)=\ln\frac23$, so $\mathrm{PV}\int_0^5\frac{dx}{x-3}=\ln\frac23$. The infinite areas on the two sides cancel.</p></div>
 
+<!-- dass:start 10__type4 -->
+<h2 id="dass-26-17" class="dass"><span class="dtag">H.K. Dass §26.17</span>Indented semicircles: poles on the real axis (Ex 65–67, Exercise 26.7)</h2>
+<p>When the integrand has a <b>simple pole on the real axis</b>, Dass removes it from the region with a small semicircle $\gamma_\varepsilon$ of radius $\varepsilon$ in the upper half-plane. The key lemma: going over the pole <b>clockwise</b> on a small semicircle gives</p>
+$$\lim_{\varepsilon\to0}\int_{\gamma_\varepsilon}f\,dz=-\pi i\operatorname{Res}_{x_0}f\qquad\text{(half of a full turn, with the sign of a clockwise turn).}$$
+<p>So the contour (big arc, real axis with the dent, small arc) gives</p>
+$$\text{PV}\int_{-\infty}^\infty f\,dx=2\pi i\sum_{\operatorname{Im}a\gt0}\operatorname{Res}+\pi i\sum_{\text{real }x_0}\operatorname{Res} .$$
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 65) — $\int_0^\infty\frac{\sin mx}{x}dx=\frac\pi2$ ($m\gt0$)</div><div class="bd"><ol class="steps">
+<li>Take $f=\frac{e^{imz}}{z}$. It has no poles in the upper half-plane and a simple pole at $0$ with residue $1$.</li>
+<li>The big arc vanishes by Jordan's lemma. The small arc gives $-\pi i$. So $\text{PV}\int_{-\infty}^\infty\frac{e^{imx}}{x}dx-\pi i=0$, i.e. $\text{PV}\int\frac{e^{imx}}{x}dx=\pi i$.</li>
+<li>Imaginary part: $\int_{-\infty}^\infty\frac{\sin mx}{x}dx=\pi$, so $\int_0^\infty=\frac\pi2$. The real part gives $\text{PV}\int\frac{\cos mx}{x}dx=0$ (Exercise 26.7 Q1).</li>
+<li><b>Variations:</b> for $m\lt0$ the answer is $-\frac\pi2$, and for $m=0$ it is $0$. In short, $\int_0^\infty\frac{\sin mx}{x}dx=\frac\pi2\operatorname{sgn}m$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> this is the Dirichlet integral. It appears directly, and also inside Fourier transforms of the step and box functions.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 66) — $\int_0^\infty\frac{\cos2ax-\cos2bx}{x^2}dx=\pi(b-a)$ ($a\ge b\ge0$)</div><div class="bd"><ol class="steps">
+<li>Take $f=\frac{e^{2iaz}-e^{2ibz}}{z^2}$. Near $0$: $\frac{(1+2iaz)-(1+2ibz)+O(z^2)}{z^2}$, so the pole is <b>simple</b> (the numerator vanishes at $0$), with residue $2i(a-b)$.</li>
+<li>$\text{PV}\int_{-\infty}^\infty f\,dx=\pi i\cdot2i(a-b)=-2\pi(a-b)$. The integrand's real part is even, so $\int_0^\infty=\frac12(-2\pi)(a-b)=\pi(b-a)$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> pairing two oscillating terms so that the $\frac1{z^2}$ parts cancel leaves only a simple pole. This idea also gives $\int_0^\infty\frac{\sin^2x}{x^2}dx=\frac\pi2$.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 67) — $\int_0^\infty\frac{x^{a-1}}{1+x}dx=\frac{\pi}{\sin\pi a}$ and $\text{PV}\int_0^\infty\frac{x^{a-1}}{1-x}dx=\pi\cot\pi a$ ($0\lt a\lt1$)</div><div class="bd"><ol class="steps">
+<li>$z^{a-1}$ is multivalued, so cut along the positive real axis and use the keyhole contour (section 6 above). The two edges of the cut differ by the factor $e^{2\pi i(a-1)}$.</li>
+<li>(i) The pole at $-1=e^{i\pi}$ has residue $e^{i\pi(a-1)}$. So $\left(1-e^{2\pi ia}\right)I=2\pi ie^{i\pi(a-1)}$, which gives $I=\frac{\pi}{\sin\pi a}$.</li>
+<li>(ii) For $\frac{1}{1-x}$ the pole sits <b>on</b> the cut at $x=1$. Indenting on both edges and taking the real part gives $\pi\cot\pi a$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> (i) is the reflection formula $\Gamma(a)\Gamma(1-a)=\frac{\pi}{\sin\pi a}$ in disguise, via the Beta function. It is a very frequent question.</p></div></div>
+
+<div class="widget" id="w-dass-indent">
+<div class="wt">Interactive — the small semicircle contributes exactly $-\pi i\operatorname{Res}$</div>
+<div class="wd">The contour runs along $[-R,-\varepsilon]$, over the dent $\gamma_\varepsilon$, along $[\varepsilon,R]$, and back over the big arc $C_R$. Shrink $\varepsilon$ and grow $R$. The readout shows each piece, computed numerically: the dent tends to $-\pi i\operatorname{Res}_0f$, the big arc tends to $0$, and the total is $2\pi i\times$ (residues strictly inside): $0$ for the first two, and $2\pi i\operatorname{Res}_i$ for the third.</div>
+<div class="ctrls"><label>$f$ <select id="din-f"><option value="65">e^{iz}/z (Ex 65)</option><option value="66">(e^{2iaz} − e^{2ibz})/z², a=1, b=½ (Ex 66)</option><option value="s">e^{iz}/(z(z²+1)) (Ex. 26.5 Q7)</option></select></label>
+<label>$\varepsilon$ <input type="range" id="din-e" min="0.02" max="0.8" step="0.02" value="0.3"><output></output></label>
+<label>$R$ <input type="range" id="din-r" min="2" max="40" step="1" value="8"><output></output></label></div>
+<canvas id="cv-dass-indent"></canvas>
+<div class="readout" id="din-out"></div>
+</div>
+
+<table class="t dt">
+<tr><th colspan="2">Dass Exercise 26.7 — answers (checked numerically)</th></tr>
+<tr><td>$\text{PV}\int_{-\infty}^\infty\frac{\cos x}{x}dx$</td><td>$0$ (odd integrand; the real part of Ex 65)</td></tr>
+<tr><td>$\int_0^\infty\frac{\log x}{(1+x)^3}dx$</td><td>$-\frac12$</td></tr>
+<tr><td>$\text{PV}\int_{-\infty}^\infty\frac{dx}{x^3+1}$</td><td>$2\pi i\operatorname{Res}_{e^{i\pi/3}}+\pi i\operatorname{Res}_{-1}=\frac{\pi}{\sqrt3}$</td></tr>
+<tr><td>$\int_{-\infty}^\infty\frac{x^2}{(x^2+1)^2}dx$</td><td>$\frac\pi2$</td></tr>
+<tr><td>$\int_0^\infty\frac{(\log x)^2}{1+x^2}dx$; $\ \int_0^\infty\frac{\sin x}{x}dx$</td><td>$\frac{\pi^3}{8}$; $\ \frac\pi2$</td></tr>
+</table>
+<!-- dass:end -->
 <h2 id="type5">6. Type V — branch points: the keyhole contour</h2>
 <div class="ex"><div class="hd">Boas Example 5 — $\displaystyle\int_0^\infty\frac{r^{p-1}}{1+r}dr=\frac{\pi}{\sin\pi p}$, $\ 0\lt p\lt1$</div><div class="bd"><ol class="steps">
 <li>$z^{p-1}$ is multivalued. Choose the branch $0\le\theta\lt2\pi$, with the branch cut along the positive real axis and the branch point at $0$.</li>
@@ -242,6 +395,43 @@ $$\mathrm{PV}\oint=2\pi i\left(\sum\text{Res inside}+\frac12\sum\text{Res at sim
 <li>$(1-e^{2\pi ip})\int_0^\infty=-2\pi ie^{i\pi p}$, so $\int_0^\infty=\frac{-2\pi ie^{i\pi p}}{1-e^{2\pi ip}}=\frac{2\pi i}{e^{i\pi p}-e^{-i\pi p}}=\frac{\pi}{\sin\pi p}$.</li></ol>
 <p>Bonus: with $B(p,1-p)=\int_0^\infty\frac{y^{p-1}}{1+y}dy=\Gamma(p)\Gamma(1-p)$ this proves the reflection formula $\Gamma(p)\Gamma(1-p)=\frac{\pi}{\sin\pi p}$.</p></div></div>
 
+<!-- dass:start 10__type5 -->
+<h2 id="dass-26-16" class="dass"><span class="dtag">H.K. Dass §26.16</span>Rectangular contours: $\int\frac{e^{ax}}{1+e^x}dx$ and the Gaussian (Ex 63, 64, Exercise 26.6)</h2>
+<p>Use a rectangle when the integrand is <b>periodic in the imaginary direction</b> ($e^z$ has period $2\pi i$), or when shifting the line of integration up by $ia$ turns the integral into a known one ($e^{-z^2}$). The top side then reproduces the bottom side up to a constant factor. The two short sides vanish as $R\to\infty$.</p>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 63) — $\int_{-\infty}^\infty\frac{e^{ax}}{e^x+1}dx=\frac{\pi}{\sin a\pi}$ ($0\lt a\lt1$)</div><div class="bd"><ol class="steps">
+<li>Take $f=\frac{e^{az}}{1+e^z}$ around the rectangle $-R\to R\to R+2\pi i\to-R+2\pi i$. Inside it, $1+e^z=0$ only at $z=\pi i$.</li>
+<li>$\operatorname{Res}_{\pi i}=\frac{e^{a\pi i}}{e^{\pi i}}=-e^{i\pi a}$, by $\frac{\phi}{\psi'}$.</li>
+<li>Top side: $z=x+2\pi i$ gives $f=e^{2\pi ia}\frac{e^{ax}}{1+e^x}$, traversed right to left. So bottom plus top gives $\left(1-e^{2\pi ia}\right)I$.</li>
+<li>Short sides: $|f|\le\frac{e^{aR}}{e^R-1}\to0$ on the right (since $a\lt1$) and $\le e^{-aR}\cdot\text{const}\to0$ on the left (since $a\gt0$).</li>
+<li>$\left(1-e^{2\pi ia}\right)I=-2\pi ie^{i\pi a}$, so $I=\frac{-2\pi ie^{i\pi a}}{-e^{i\pi a}\cdot2i\sin\pi a}=\frac{\pi}{\sin\pi a}$.</li></ol>
+<p><b>Same answer, other method:</b> putting $t=e^x$ turns this into $\int_0^\infty\frac{t^{a-1}}{1+t}dt=\frac{\pi}{\sin\pi a}$ (Dass Ex 67 above).</p>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> Fermi–Dirac-type integrals $\frac{1}{e^x+1}$ in statistical mechanics are done exactly this way.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 64) — $e^{-z^2}$ round the rectangle $0,\ R,\ R+ia,\ ia$</div><div class="bd"><ol class="steps">
+<li>$e^{-z^2}$ is entire, so the total integral is $0$.</li>
+<li>Bottom: $\int_0^Re^{-x^2}dx\to\frac{\sqrt\pi}2$. Top (backwards): $-\int_0^Re^{-(x+ia)^2}dx=-e^{a^2}\int_0^Re^{-x^2}\left(\cos2ax-i\sin2ax\right)dx$.</li>
+<li>Right side: $|e^{-(R+iy)^2}|=e^{-R^2+y^2}\to0$. Left side: $\int_a^0e^{y^2}\,i\,dy=-i\int_0^ae^{y^2}dy$.</li>
+<li>Real part: $\int_0^\infty e^{-x^2}\cos2ax\,dx=\frac{\sqrt\pi}{2}e^{-a^2}$. Imaginary part: $\int_0^\infty e^{-x^2}\sin2ax\,dx=e^{-a^2}\int_0^ae^{y^2}dy$ (Dawson's function).</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the first result is the Fourier transform of a Gaussian (again a Gaussian), which is behind wave packets and the uncertainty relation.</p></div></div>
+
+<div class="widget" id="w-dass-rect">
+<div class="wt">Interactive — Ex 63 on the rectangle: four sides, one residue</div>
+<div class="wd">The rectangle has height $2\pi$, with the pole at $\pi i$ (cross). Change $a$ and the half-width $R$. The readout lists the four side integrals of $\frac{e^{az}}{1+e^z}$, computed numerically. The short sides vanish as $R$ grows, top $=-e^{2\pi ia}\times$ bottom, and the sum is $2\pi i\operatorname{Res}_{\pi i}=-2\pi ie^{i\pi a}$.</div>
+<div class="ctrls"><label>$a$ <input type="range" id="drc2-a" min="0.05" max="0.95" step="0.05" value="0.3"><output></output></label>
+<label>$R$ <input type="range" id="drc2-r" min="1" max="15" step="0.5" value="4"><output></output></label></div>
+<canvas id="cv-dass-rect"></canvas>
+<div class="readout" id="drc2-out"></div>
+</div>
+
+<table class="t dt">
+<tr><th colspan="2">Dass Exercise 26.6 — answers (checked numerically)</th></tr>
+<tr><td>$\int_0^\infty\frac{x^6dx}{(a^4+x^4)^2}$</td><td>$\frac{3\sqrt2\,\pi}{16a}$</td></tr>
+<tr><td>$\int_0^\infty\frac{x\sin ax}{x^4+4}dx$</td><td>$\frac\pi4e^{-a}\sin a$. The residues at $1+i$ and $-1+i$ give $\frac{e^{-a}\sin a}{4}$, so the whole line gives $\frac\pi2e^{-a}\sin a$; halve it. The printed $\frac\pi8$ is half this; numerically, $a=1.3$ gives $0.20625$, which matches $\frac\pi4$.</td></tr>
+<tr><td>$\frac{e^{iz}}{z+a}$ round the square $[0,R]^2$</td><td>$\int_0^\infty\frac{\cos x}{x+a}dx=\int_0^\infty\frac{xe^{-ax}}{1+x^2}dx$ and $\int_0^\infty\frac{\sin x}{x+a}dx=\int_0^\infty\frac{e^{-ax}}{1+x^2}dx$</td></tr>
+<tr><td>$\oint\frac{\cos\pi z}{z^2-1}dz$</td><td>rectangle $\pm2\pm i$: both poles inside, residues $\mp\frac12$, total $0$. Rectangle $-i,\ 2-i,\ 2+i,\ i$: only $z=1$ is inside, giving $-\pi i$.</td></tr>
+</table>
+<!-- dass:end -->
 <h2 id="argument">7. The argument principle</h2>
 <div class="box thm"><span class="tag">Argument principle (7.8)</span>
 <p>If $f$ is analytic on and inside a simple closed curve $C$ except for finitely many poles, and $f\ne0$ on $C$, then</p>
@@ -1079,5 +1269,97 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+/* H.K. Dass §26.14 — the unit-circle machine */
+onReady(() => {
+  const m = Cx.mul, ad = Cx.add, sb = Cx.sub, d = Cx.div;
+  const quad = (A, B, Cc) => { const D = Cx.sqrt(sb(m(B, B), Cx.scale(m(A, Cc), 4))); return [d(ad(Cx.neg(B), D), Cx.scale(A, 2)), d(sb(Cx.neg(B), D), Cx.scale(A, 2))]; };
+  const cfg = () => { let a = val('duc-a'), b = val('duc-b'), n = val('duc-n'), k = val('duc-f'), ok = Math.abs(b) < a - 1e-9;
+    const th = { c: t => 1 / (a + b * Math.cos(t)), s: t => 1 / (a + b * Math.sin(t)), n: t => Math.cos(n * t) / (a - b * Math.cos(t)), q: t => 1 / (a + b * Math.cos(t)) ** 2 }[k];
+    /* integrand in z: f(θ) dθ with z = e^{iθ}; for "n" use Re of z^n/(a − b cos θ) */
+    const F = { c: z => d([2, 0], m([0, 1], ad(ad(Cx.scale(m(z, z), b), Cx.scale(z, 2 * a)), [b, 0]))),
+      s: z => d([2, 0], ad(sb(Cx.scale(m(z, z), b), [b, 0]), Cx.scale(m([0, 1], z), 2 * a))),
+      n: z => d(Cx.scale(Cx.ipow(z, n), 2), m([0, 1], sb(sb(Cx.scale(z, 2 * a), Cx.scale(m(z, z), b)), [b, 0]))),
+      q: z => { const q = ad(ad(Cx.scale(m(z, z), b), Cx.scale(z, 2 * a)), [b, 0]); return d(Cx.scale(z, 4), m([0, 1], m(q, q))); } }[k];
+    const poles = b === 0 ? [] : k === 's' ? quad([b, 0], [0, 2 * a], [-b, 0]) : k === 'n' ? quad([-b, 0], [2 * a, 0], [-b, 0]) : quad([b, 0], [2 * a, 0], [b, 0]);
+    const sr = Math.sqrt(Math.max(0, a * a - b * b)), r = b ? (a - sr) / b : 0;
+    const exact = { c: 2 * PI / sr, s: 2 * PI / sr, n: 2 * PI * r ** n / sr, q: 2 * PI * a / sr ** 3 }[k];
+    return { a, b, n, k, ok, th, F, poles, exact }; };
+  const P = new Plane('#cv-dass-uc', { span: 2.2, aspect: 0.62, snap: 0, axisLabels: ['x', 'y'], draw: p => {
+    const c = cfg(); p.circle([0, 0], 1, { color: '--accent', width: 3, fill: '--accent', fillAlpha: 0.07 });
+    c.poles.forEach(z => { if (Cx.abs(z) > 50) return; const ins = Cx.abs(z) < 1; p.dot(z, { r: 7, color: ins ? '--accent2' : '--fg', ring: true, label: (ins ? 'inside ' : 'outside ') + Cx.fmt(z, 3) }); });
+  }});
+  const out = () => { const c = cfg(); if (!c.ok) { texMix('#duc-out', '⚠ Need $|b|\\lt a$: otherwise the denominator vanishes for some real $\\theta$, the poles lie on the unit circle, and the integral diverges.'); return; }
+    let num = 0; const N = 4096; for (let j = 0; j < N; j++) num += c.th(TAU * j / N) * TAU / N;
+    let rs = [0, 0]; const ins = c.poles.filter(z => Cx.abs(z) < 1); ins.forEach(z0 => { const N2 = 1024, rr = 0.25 * Math.min(Cx.abs(sb(z0, c.poles.find(q => q !== z0) || [99, 0])), 1 - Cx.abs(z0) + 0.5); let s = [0, 0]; for (let j = 0; j < N2; j++) { const e = Cx.polar(1, TAU * j / N2); s = ad(s, m(c.F(ad(z0, Cx.scale(e, rr))), Cx.scale(e, rr))); } rs = ad(rs, Cx.scale(s, 1 / N2)); });
+    const viaRes = c.k === 'n' ? m([0, TAU], rs)[0] : m([0, TAU], rs)[0];
+    texMix('#duc-out', `Pole inside the unit circle: $${ins.map(z => Cx.tex(z, 4)).join(',\\ ') || '\\text{none}'}$ (the two roots multiply to $1$, so exactly one is inside). &nbsp; $2\\pi i\\sum\\operatorname{Res}${c.k === 'n' ? '\\ (\\text{real part})' : ''}=${fnum(viaRes, 6)}$, &nbsp; direct $\\int_0^{2\\pi}=${fnum(num, 6)}$, &nbsp; formula $=${fnum(c.exact, 6)}$ ✓.`); };
+  watch(['duc-a', 'duc-b', 'duc-n'], () => { P.redraw(); out(); }); $('#duc-f').addEventListener('change', () => { P.redraw(); out(); }); out();
+});
+
+/* H.K. Dass §26.15 — does the big arc vanish? e^{imz} versus sin mz */
+onReady(() => {
+  const m = Cx.mul, ad = Cx.add, d = Cx.div;
+  const F = {
+    e53: { f: z => d(m(z, Cx.exp(m([0, PI], z))), ad(ad(m(z, z), Cx.scale(z, 2)), [5, 0])), p: [[-1, 2], [-1, -2]], res: () => { const a = [-1, 2]; return d(m(a, Cx.exp(m([0, PI], a))), [0, 4]); }, part: 'Im', ans: -PI * Math.exp(-2 * PI), t: '-\\pi e^{-2\\pi}' },
+    s53: { f: z => d(m(z, Cx.sin(Cx.scale(z, PI))), ad(ad(m(z, z), Cx.scale(z, 2)), [5, 0])), p: [[-1, 2], [-1, -2]], res: () => { const a = [-1, 2]; return d(m(a, Cx.sin(Cx.scale(a, PI))), [0, 4]); }, part: 'Re', ans: -PI * Math.exp(-2 * PI), t: '-\\pi e^{-2\\pi}' },
+    e52: { f: z => d(Cx.exp(m([0, 1], z)), ad(m(z, z), [1, 0])), p: [[0, 1], [0, -1]], res: () => [0, -Math.exp(-1) / 2], part: 'Re', ans: PI / Math.E, t: '\\pi e^{-1}' },
+    c52: { f: z => d(Cx.cos(z), ad(m(z, z), [1, 0])), p: [[0, 1], [0, -1]], res: () => d(Cx.cos([0, 1]), [0, 2]), part: 'Re', ans: PI / Math.E, t: '\\pi e^{-1}' },
+    r58: { f: z => d([1, 0], ad(m(m(z, z), m(z, z)), [1, 0])), p: [1, 3, 5, 7].map(k => Cx.polar(1, k * PI / 4)), res: () => [Cx.polar(1, PI / 4), Cx.polar(1, 3 * PI / 4)].reduce((s, a) => ad(s, d([1, 0], Cx.scale(m(a, m(a, a)), 4))), [0, 0]), part: 'Re', ans: PI / Math.SQRT2, t: '\\frac{\\pi}{\\sqrt2}' }
+  };
+  const arc = (f, R, N = 2000) => { let s = [0, 0]; for (let j = 0; j < N; j++) { const t = PI * (j + 0.5) / N, e = Cx.polar(1, t); s = ad(s, m(f(Cx.scale(e, R)), m([0, R], e))); } return Cx.scale(s, PI / N); };
+  const line = (f, R, N = 6000) => { let s = [0, 0]; for (let j = 0; j < N; j++) { const x = -R + 2 * R * (j + 0.5) / N; s = ad(s, f([x, 0])); } return Cx.scale(s, 2 * R / N); };
+  const Z = new Plane('#cv-dass-arcz', { span: 4, cy: 1.6, aspect: 0.9, snap: 0, axisLabels: ['x', 'y'], draw: p => {
+    const c = F[val('dac-f')], R = val('dac-r'), pts = []; for (let j = 0; j <= 200; j++) pts.push(Cx.polar(R, PI * j / 200));
+    p.path(pts, { color: '--accent2', width: 3 }); p.line([-R, 0], [R, 0], { color: '--accent', width: 3 });
+    c.p.forEach(q => p.dot(q, { r: 6, color: q[1] > 0 ? '--accent3' : '--muted', ring: true }));
+  }});
+  const G = new Plane('#cv-dass-arcg', { span: 9, cx: 11.5, cy: 2, aspect: 0.9, snap: 0, axisLabels: ['R', 'log₁₀|∫arc|'], draw: p => {
+    const c = F[val('dac-f')], pts = []; for (let R = 3; R <= 20; R += 0.25) { const v = Cx.abs(arc(c.f, R, 600)); pts.push([R, Math.max(-6, Math.min(9, Math.log10(v + 1e-300)))]); }
+    p.path(pts, { color: '--accent2', width: 3 }); const R = val('dac-r'), v = Cx.abs(arc(c.f, R, 600)); p.dot([R, Math.max(-6, Math.min(9, Math.log10(v + 1e-300)))], { r: 6, color: '--accent2' });
+  }});
+  const out = () => { const c = F[val('dac-f')], R = val('dac-r'), L = line(c.f, R), A = arc(c.f, R), RS = m([0, TAU], c.res());
+    const bad = val('dac-f')[0] === 's' || val('dac-f')[0] === 'c';
+    texMix('#dac-out', `$\\int_{-R}^{R}f\\,dx=${Cx.tex(L, 5)}$, &nbsp; $\\int_{C_R}f\\,dz=${Cx.tex(A, 5)}$, &nbsp; sum $=${Cx.tex(ad(L, A), 5)}$ $=2\\pi i\\operatorname{Res}=${Cx.tex(RS, 5)}$ ✓ (the residue theorem always holds).<br>` + (bad ? `<b>But the arc does not vanish</b> ($|\\int_{C_R}|$ grows with $R$), so $2\\pi i\\operatorname{Res}=${Cx.tex(RS, 4)}$ is <b>not</b> the real integral. The true value is $${c.t}=${fnum(c.ans, 5)}$.` : `The arc $\\to0$, so the real integral is the ${c.part === 'Im' ? 'imaginary' : 'real'} part of $2\\pi i\\operatorname{Res}$: $${c.t}=${fnum(c.ans, 5)}$.`)); };
+  $('#dac-f').addEventListener('change', () => { Z.redraw(); G.redraw(); out(); }); watch(['dac-r'], () => { Z.span = Math.max(4, val('dac-r') * 0.72); Z.cy = val('dac-r') * 0.45; Z.redraw(); G.redraw(); out(); }); Z.span = Math.max(4, 6 * 0.72); Z.cy = 2.7; Z.redraw(); out();
+});
+
+/* H.K. Dass §26.17 — indented semicircle */
+onReady(() => {
+  const m = Cx.mul, ad = Cx.add, d = Cx.div, I = [0, 1];
+  const F = {
+    '65': { f: z => d(Cx.exp(m(I, z)), z), res0: [1, 0], inside: () => [0, 0], t: '\\int_0^\\infty\\frac{\\sin x}{x}dx=\\frac\\pi2' },
+    '66': { f: z => d(Cx.sub(Cx.exp(Cx.scale(m(I, z), 2)), Cx.exp(m(I, z))), m(z, z)), res0: [0, 1], inside: () => [0, 0], t: '\\int_0^\\infty\\frac{\\cos2x-\\cos x}{x^2}dx=-\\frac{\\pi}{2}' },
+    s: { f: z => d(Cx.exp(m(I, z)), m(z, ad(m(z, z), [1, 0]))), res0: [1, 0], inside: () => m([0, TAU], [-1 / (2 * Math.E), 0]), t: '\\int_{-\\infty}^{\\infty}\\frac{\\sin x}{x(x^2+1)}dx=\\pi\\left(1-e^{-1}\\right)' }
+  };
+  const seg = (f, A, B, N = 4000) => { let s = [0, 0]; const dz = Cx.scale(Cx.sub(B, A), 1 / N); for (let j = 0; j < N; j++) s = ad(s, m(f(ad(A, Cx.scale(dz, j + 0.5))), dz)); return s; };
+  const arc = (f, r, t0, t1, N = 2000) => { let s = [0, 0]; for (let j = 0; j < N; j++) { const t = t0 + (t1 - t0) * (j + 0.5) / N, e = Cx.polar(1, t); s = ad(s, m(f(Cx.scale(e, r)), Cx.scale(m([0, r], e), (t1 - t0) / N))); } return s; };
+  const P = new Plane('#cv-dass-indent', { span: 3, cy: 1.2, aspect: 0.5, snap: 0, axisLabels: ['x', 'y'], draw: p => {
+    const e = val('din-e'), R = Math.min(val('din-r'), p.span * 0.95), big = [], sm = []; for (let j = 0; j <= 120; j++) { big.push(Cx.polar(R, PI * j / 120)); sm.push(Cx.polar(e, PI - PI * j / 120)); }
+    p.path(big, { color: '--accent2', width: 3 }); p.path(sm, { color: '--accent3', width: 3 }); p.line([-R, 0], [-e, 0], { color: '--accent', width: 3 }); p.line([e, 0], [R, 0], { color: '--accent', width: 3 });
+    p.dot([0, 0], { r: 5, color: '--fg', label: 'pole' }); if (val('din-f') === 's') p.dot([0, 1], { r: 5, color: '--fg', label: 'i' });
+  }});
+  const out = () => { const c = F[val('din-f')], e = val('din-e'), R = val('din-r');
+    const L = ad(seg(c.f, [-R, 0], [-e, 0]), seg(c.f, [e, 0], [R, 0])), S = arc(c.f, e, PI, 0), B = arc(c.f, R, 0, PI), tot = ad(ad(L, S), B);
+    texMix('#din-out', `Real-axis parts $=${Cx.tex(L, 4)}$; &nbsp; dent $\\int_{\\gamma_\\varepsilon}=${Cx.tex(S, 4)}$ (limit $-\\pi i\\operatorname{Res}_0=${Cx.tex(m([0, -PI], c.res0), 4)}$); &nbsp; big arc $=${Cx.tex(B, 4)}$; &nbsp; total $=${Cx.tex(tot, 4)}$ vs $2\\pi i\\sum_{\\text{inside}}\\operatorname{Res}=${Cx.tex(c.inside(), 4)}$.<br>As $\\varepsilon\\to0$ and $R\\to\\infty$: $${c.t}$.`); };
+  watch(['din-e', 'din-r'], () => { P.span = Math.max(3, Math.min(val('din-r'), 12) * 1.05); P.cy = P.span * 0.45; P.redraw(); out(); }); $('#din-f').addEventListener('change', () => { P.redraw(); out(); }); P.span = 8.4; P.cy = 3.8; P.redraw(); out();
+});
+
+/* H.K. Dass §26.16 — rectangle contour for e^{az}/(1+e^z) */
+onReady(() => {
+  const m = Cx.mul, ad = Cx.add;
+  const f = z => Cx.div(Cx.exp(Cx.scale(z, val('drc2-a'))), ad([1, 0], Cx.exp(z)));
+  const seg = (A, B, N = 6000) => { let s = [0, 0]; const dz = Cx.scale(Cx.sub(B, A), 1 / N); for (let j = 0; j < N; j++) s = ad(s, m(f(ad(A, Cx.scale(dz, j + 0.5))), dz)); return s; };
+  const P = new Plane('#cv-dass-rect', { span: 6, cy: PI, aspect: 0.62, snap: 0, axisLabels: ['x', 'y'], draw: p => {
+    const R = val('drc2-r'), V = [[-R, 0], [R, 0], [R, TAU], [-R, TAU]], cols = ['--accent', '--accent4', '--accent2', '--accent4'];
+    for (let k = 0; k < 4; k++) p.arrow(V[k], Cx.add(V[k], Cx.scale(Cx.sub(V[(k + 1) % 4], V[k]), 0.97)), { color: cols[k], width: 3, head: 12 });
+    const X = p.X(0), Y = p.Y(PI), g = p.ctx; g.save(); g.strokeStyle = cssv('--fg'); g.lineWidth = 3; g.beginPath(); g.moveTo(X - 7, Y - 7); g.lineTo(X + 7, Y + 7); g.moveTo(X - 7, Y + 7); g.lineTo(X + 7, Y - 7); g.stroke(); g.restore(); p.label([0, PI], 'πi', { dx: 10 });
+  }});
+  const out = () => { const R = val('drc2-r'), a = val('drc2-a'), b = seg([-R, 0], [R, 0]), r = seg([R, 0], [R, TAU]), t = seg([R, TAU], [-R, TAU]), l = seg([-R, TAU], [-R, 0]), tot = ad(ad(b, r), ad(t, l)), res = m([0, TAU], Cx.neg(Cx.polar(1, PI * a)));
+    texMix('#drc2-out', `bottom $=${Cx.tex(b, 5)}$, right $=${Cx.tex(r, 5)}$, top $=${Cx.tex(t, 5)}$ $\\big(-e^{2\\pi ia}\\times\\text{bottom}=${Cx.tex(m(Cx.neg(Cx.polar(1, TAU * a)), b), 5)}\\big)$, left $=${Cx.tex(l, 5)}$.<br>Sum $=${Cx.tex(tot, 5)}$ $=2\\pi i\\operatorname{Res}_{\\pi i}=-2\\pi ie^{i\\pi a}=${Cx.tex(res, 5)}$ ✓. &nbsp; Hence $I=\\frac{\\pi}{\\sin\\pi a}=${fnum(PI / Math.sin(PI * a), 5)}$ (bottom side now: $${fnum(b[0], 5)}$).`); };
+  watch(['drc2-a', 'drc2-r'], () => { P.span = val('drc2-r') * 1.15 + 0.9; P.redraw(); out(); }); P.span = 5.5; P.redraw(); out();
+});
+
+/* dass:end */</script>
 </body>
 </html>
