@@ -117,6 +117,14 @@ details.sol[open]{background:var(--card)}
 .summary li{margin:4px 0}
 kbd{background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
 
+/* dass */
+h2.dass .dtag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent4);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:middle;white-space:nowrap}
+p.why{margin:10px 0 4px;padding:7px 11px;border-radius:8px;background:var(--factbg);font-size:14.5px}
+p.why b:first-child{color:var(--accent4)}
+.dcase{border-left:3px solid var(--accent4);padding:2px 0 2px 12px;margin:10px 0}
+table.t.dt{position:relative}
+[id^=w-dass] .ctrls label{max-width:100%;min-width:0}
+[id^=w-dass] .ctrls select{max-width:min(78vw,520px);min-width:0;text-overflow:ellipsis}
 /* enrich */
 .xlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:12px 0}
 .xlinks a{display:block;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;text-decoration:none;line-height:1.4}
@@ -185,6 +193,29 @@ table.t.pat td:first-child{font-weight:600}
 <div class="readout" id="mp-out"></div>
 </div>
 
+<!-- dass:start 10__idea -->
+<h2 id="dass-23-1" class="dass"><span class="dtag">H.K. Dass §23.1–23.2</span>Two planes, and how to "transform" a curve</h2>
+<p><b>Why two planes (§23.1).</b> One Argand diagram is enough to plot $z=x+iy$. But $w=f(z)$, that is $u+iv=f(x+iy)$, involves four real variables $x,y,u,v$, and we cannot draw a 4-D graph. So we keep two separate planes: the <b>$z$-plane</b> for the input and the <b>$w$-plane</b> for the output.</p>
+<p><b>Transformation (§23.2).</b> Each point $(x,y)$ gets an image $(u,v)$, where $u=u(x,y)$ and $v=v(x,y)$ are the real and imaginary parts of $f$. As $P(x,y)$ moves along a curve $C$, its image $P'(u,v)$ moves along a curve $C'$. We say $C$ is <b>mapped</b> onto $C'$.</p>
+<div class="dcase"><p><b>Recipe for the image of a curve.</b> There are two equivalent routes. Use whichever is less algebra.</p>
+<ol class="steps">
+<li><b>Forward (parametric):</b> parametrise $C$ as $x(t),y(t)$, then plot $u(x(t),y(t))$ and $v(x(t),y(t))$.</li>
+<li><b>Backward (eliminate):</b> solve $w=f(z)$ for $z$, i.e. $x=x(u,v)$ and $y=y(u,v)$. Substitute into the equation of $C$. The result is the equation of $C'$ in $u,v$.</li>
+<li><b>Regions:</b> map the boundary curves, then test <b>one interior point</b> to decide which side is the image.</li>
+</ol></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 1) — the rectangle $1\le x\le3$, $0\le y\le3$ under $w=z+(2+i)$</div><div class="bd"><ol class="steps">
+<li>$u+iv=(x+2)+i(y+1)$, so $u=x+2$ and $v=y+1$.</li>
+<li>The lines $x=1$ and $x=3$ go to $u=3$ and $u=5$. The lines $y=0$ and $y=3$ go to $v=1$ and $v=4$.</li>
+<li>The image is the rectangle $3\le u\le5$, $1\le v\le4$: the same shape, just shifted by the vector $(2,1)$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> adding a constant is the simplest mapping there is. Spotting it inside a bigger map (like $az+b$) saves a lot of algebra.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 2) — the hyperbola $x^2-y^2=4$ under $w=z^2$</div><div class="bd"><ol class="steps">
+<li>$u+iv=(x+iy)^2=(x^2-y^2)+i\,2xy$.</li>
+<li>On the curve, $u=x^2-y^2=4$ at <b>every</b> point. Meanwhile $v=2xy$ runs over all real values: e.g. $x=2.5,\ y=\pm1.5$ gives $v=\pm7.5$.</li>
+<li>So the whole hyperbola maps onto the vertical line $u=4$. The right branch alone already covers the line once, and the left branch ($x\lt0$) covers it a second time, because $z$ and $-z$ have the same square.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the level curves of $\operatorname{Re}z^2$ and $\operatorname{Im}z^2$ are the hyperbolas $x^2-y^2=c$ and $xy=c$. They straighten into grid lines under $z^2$, which is the key to the "flow in a corner" problems.</p></div></div>
+<!-- dass:end -->
 <h2 id="conformal">2. Conformal mapping</h2>
 <p>Write $dz=dx+i\,dy$, $dw=du+i\,dv$, so $|dz|^2=dx^2+dy^2$ and $|dw|^2=du^2+dv^2$ (9.5). For analytic $w(z)$, $dw=\frac{dw}{dz}dz$, so (9.6)</p>
 $$ds^2=dx^2+dy^2=|dz|^2=\left|\frac{dz}{dw}\right|^2(du^2+dv^2).$$
@@ -199,6 +230,126 @@ $$\frac{A'B'}{AB}=\frac{B'C'}{BC}=\cdots=\frac{dS}{ds}=\left|\frac{dw}{dz}\right
 <li>Jacobian (Problem 12): $\dfrac{\partial(u,v)}{\partial(x,y)}=u_xv_y-u_yv_x=u_x^2+v_x^2=|f'(z)|^2$. So areas scale by $|f'|^2$.</li>
 </ul>
 
+<!-- dass:start 10__conformal -->
+<h2 id="dass-23-3" class="dass"><span class="dtag">H.K. Dass §23.3–23.5</span>Conformal vs isogonal, the proof, and what goes wrong where $f'=0$</h2>
+<p><b>Definitions (§23.3).</b> Let two curves meet at $P$ in the $z$-plane, and let their images meet at $P'$ in the $w$-plane.</p>
+<table class="t dt">
+<tr><th>Name</th><th>Angle at $P'$ compared with the angle at $P$</th><th>Typical example</th></tr>
+<tr><td><b>Conformal</b></td><td>same <b>size</b> and same <b>sense</b> (anticlockwise stays anticlockwise)</td><td>any analytic $f$ with $f'\ne0$</td></tr>
+<tr><td><b>Isogonal</b></td><td>same size, but the sense is <b>reversed</b></td><td>$w=\bar z$ (a reflection)</td></tr>
+<tr><td>neither</td><td>size changes</td><td>$w=z^2$ at $z=0$; Dass Ex 3 below</td></tr>
+</table>
+
+<div class="box thm"><span class="tag">Theorem (§23.4)</span><p>If $f$ is analytic at $z_0$ and $f'(z_0)\ne0$, then $w=f(z)$ is conformal at $z_0$. Every curve through $z_0$ has its tangent turned by the same angle $\lambda=\arg f'(z_0)$. Tiny lengths are stretched by $|f'(z_0)|$.</p></div>
+<ol class="steps">
+<li>Let curves $C_1$ and $C_2$ leave $z_0$ with tangent angles $\alpha_1$ and $\alpha_2$. Take nearby points $z_1-z_0=re^{i\theta_1}$ on $C_1$, so $\theta_1\to\alpha_1$ as $r\to0$. Similarly $z_2-z_0=re^{i\theta_2}$ on $C_2$.</li>
+<li>Write the images as $w_1-w_0=\rho_1e^{i\phi_1}$ and $f'(z_0)=Re^{i\lambda}$, with $R\ne0$.</li>
+<li>$f'(z_0)=\lim\frac{w_1-w_0}{z_1-z_0}$ gives $Re^{i\lambda}=\lim\frac{\rho_1}{r}e^{i(\phi_1-\theta_1)}$. Hence $\lim\frac{\rho_1}{r}=R$ and $\lim\phi_1=\alpha_1+\lambda$.</li>
+<li>The image curve $C_1'$ therefore has a tangent at angle $\beta_1=\alpha_1+\lambda$. In the same way, $C_2'$ has $\beta_2=\alpha_2+\lambda$.</li>
+<li>So $\beta_1-\beta_2=\alpha_1-\alpha_2$: the angle between the curves is unchanged in size <b>and</b> sense. ∎</li>
+</ol>
+<div class="dcase"><p><b>Consequences (Dass's notes).</b></p><ul>
+<li><b>Rotation</b> of every tangent: $\arg f'(z_0)=\tan^{-1}\frac{v_x}{u_x}$ (taking the quadrant of $(u_x,v_x)$). <b>Coefficient of magnification</b>: $|f'(z_0)|$.</li>
+<li><b>Areas</b> scale by the Jacobian $J=\dfrac{\partial(u,v)}{\partial(x,y)}=u_xv_y-u_yv_x=u_x^2+v_x^2=|f'(z)|^2$, using Cauchy–Riemann.</li>
+<li>Points with $f'(z)=0$ are <b>critical points</b>. All other points are <b>ordinary points</b>.</li>
+<li>Harmonic functions stay harmonic, and conjugate pairs stay conjugate, after a conformal change of variables. This is why the method solves Laplace problems (14.10).</li></ul></div>
+
+<div class="box thm"><span class="tag">Theorem (§23.5) — critical points</span><p>If $f'$ has a zero of order $n-1$ at $z_0$ (so $f'(z_0)=\dots=f^{(n-1)}(z_0)=0$ but $f^{(n)}(z_0)\ne0$), then angles at $z_0$ are <b>multiplied by $n$</b> and the local magnification is $0$.</p></div>
+<ol class="steps">
+<li>Taylor: $f(z)-f(z_0)=a_n(z-z_0)^n+\cdots$ with $a_n=\frac{f^{(n)}(z_0)}{n!}\ne0$. Let $\lambda=\arg a_n$.</li>
+<li>Then $\rho_1e^{i\phi_1}\approx|a_n|r^ne^{i(n\theta_1+\lambda)}$, so $\lim\phi_1=n\alpha_1+\lambda$, and likewise $\lim\phi_2=n\alpha_2+\lambda$.</li>
+<li>So the angle between the images is $n(\alpha_2-\alpha_1)$, which is not preserved. Also $\rho_1/r\approx|a_n|r^{n-1}\to0$. ∎</li></ol>
+
+<div class="widget" id="w-dass-angle">
+<div class="wt">Interactive — conformal, isogonal, or neither? Watch the angle between two curves</div>
+<div class="wd">Two short straight segments leave the green point $z_0$ in the $z$-plane (left) at an angle $\alpha$. On the right are their images under the chosen map. Drag $z_0$, and drag it onto a critical point (e.g. $z_0=0$ for $z^2$ or $z^3$). The readout compares the two angles and their sense.</div>
+<div class="ctrls"><label>map <select id="dag-f"><option value="sq">w = z²</option><option value="cu">w = z³</option><option value="ez">w = eᶻ</option><option value="inv">w = 1/z</option><option value="bar">w = z̄ (isogonal)</option><option value="ex3">Dass Ex 3</option></select></label>
+<label>$\alpha$ <input type="range" id="dag-a" min="10" max="170" step="5" value="50"><output></output></label>
+<label>turn <input type="range" id="dag-t" min="0" max="180" step="5" value="20"><output></output></label></div>
+<div class="grid2"><canvas id="cv-dass-angz"></canvas><canvas id="cv-dass-angw"></canvas></div>
+<div class="readout" id="dag-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 3) — $u=2x^2+y^2$ and $v=\dfrac{y^2}{x}$: the level curves are orthogonal, yet $w=u+iv$ is not conformal</div><div class="bd"><ol class="steps">
+<li>On $u=k_1$: $4x+2yy'=0$, so the slope is $m_1=-\frac{2x}{y}$.</li>
+<li>On $v=k_2$, i.e. $y^2=k_2x$: $2yy'=k_2=\frac{y^2}{x}$, so the slope is $m_2=\frac{y}{2x}$.</li>
+<li>$m_1m_2=-1$, so the two families cut <b>orthogonally</b> everywhere.</li>
+<li>But Cauchy–Riemann fails: $u_x=4x$ while $v_y=\frac{2y}{x}$. So $u+iv$ is not analytic, and angles between <i>other</i> pairs of curves are not preserved. In the widget ("Dass Ex 3"), choose $\alpha\ne90^\circ$ and the image angle changes.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "the level curves are orthogonal" is <b>necessary but not sufficient</b> for conformality. This is a favourite trap among the options.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 4) — $w=z^2$: rotation and magnification at $z=2+i$ and at $z=1+i$</div><div class="bd"><ol class="steps">
+<li>$f'(z)=2z$.</li>
+<li>At $z=2+i$: $f'=4+2i$. Magnification $|f'|=\sqrt{20}=2\sqrt5\approx4.47$. Rotation $\arg f'=\tan^{-1}\frac12\approx26.6^\circ$.</li>
+<li>At $z=1+i$: $f'=2+2i$. Magnification $2\sqrt2$. Rotation $\frac\pi4$.</li>
+<li>At $z=0$: $f'=0$, a critical point. Here $n=2$, so angles double: a right angle becomes a straight angle.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "magnification and angle of rotation at $z_0$" is simply $|f'(z_0)|$ and $\arg f'(z_0)$. That is a 20-second MCQ once you know it.</p></div></div>
+<!-- dass:end -->
+<!-- dass:start 20__conformal -->
+<h2 id="dass-23-6" class="dass"><span class="dtag">H.K. Dass §23.6–23.10</span>The building blocks: translation, rotation, magnification, $w=cz$, and inversion $w=1/z$</h2>
+<p>Every bilinear map in §23.11 is built from these five pieces, so learn each one's geometry.</p>
+<table class="t dt">
+<tr><th>Map</th><th>In coordinates</th><th>Inverse (for eliminating)</th><th>Geometry</th></tr>
+<tr><td>Translation $w=z+C$, $C=a+ib$ (§23.6)</td><td>$u=x+a$, $v=y+b$</td><td>$x=u-a$, $y=v-b$</td><td>shift by the vector $C$; shapes unchanged</td></tr>
+<tr><td>Rotation $w=ze^{i\theta}$ (§23.7)</td><td>$R=r$, $\phi=\theta_z+\theta$</td><td>$z=we^{-i\theta}$</td><td>turn anticlockwise by $\theta$ about $0$</td></tr>
+<tr><td>Magnification $w=cz$, $c\gt0$ real (§23.8)</td><td>$u=cx$, $v=cy$</td><td>$x=u/c$, $y=v/c$</td><td>enlarge by $c$ from $0$; the image is a similar figure</td></tr>
+<tr><td>Rotation + magnification $w=cz$, $c=ae^{i\alpha}$ complex (§23.9)</td><td>$R=ar$, $\phi=\theta_z+\alpha$. With $c=a+ib$: $u=ax-by$, $v=bx+ay$</td><td>$x=\frac{au+bv}{a^2+b^2}$, $y=\frac{-bu+av}{a^2+b^2}$</td><td>a "spiral similarity"; add $+b$ for the general linear map</td></tr>
+<tr><td>Inversion $w=\frac1z$ (§23.10)</td><td>$R=\frac1r$, $\phi=-\theta_z$</td><td>$x=\frac{u}{u^2+v^2}$, $y=\frac{-v}{u^2+v^2}$</td><td>invert in the unit circle, then reflect in the real axis</td></tr>
+</table>
+
+<h3>Inversion sends circles to circles (Dass §23.10 proof)</h3>
+<p>Take a general circle (or line) in the $z$-plane: $A(x^2+y^2)+2gx+2fy+c=0$. Here $A=1$ for a circle and $A=0$ for a line. Substitute $x=\frac{u}{u^2+v^2}$ and $y=\frac{-v}{u^2+v^2}$, then multiply by $u^2+v^2$:</p>
+$$c\,(u^2+v^2)+2gu-2fv+A=0 .$$
+<div class="dcase"><p><b>All four cases.</b> They follow from which of $A$ and $c$ vanish:</p><ul>
+<li>circle <b>not</b> through $0$ ($A=1$, $c\ne0$) → circle not through $0$;</li>
+<li>circle <b>through</b> $0$ ($A=1$, $c=0$) → straight line $2gu-2fv+1=0$, not through $0$;</li>
+<li>line <b>not</b> through $0$ ($A=0$, $c\ne0$) → circle through $0$;</li>
+<li>line <b>through</b> $0$ ($A=0$, $c=0$) → line through $0$ (reflected: $\phi=-\theta$).</li></ul>
+<p>Inside the unit circle maps to outside it, and vice versa. The unit circle itself maps to itself, reflected: $e^{i\theta}\to e^{-i\theta}$.</p></div>
+
+<div class="widget" id="w-dass-elem">
+<div class="wt">Interactive — the five building blocks acting on Dass's figures</div>
+<div class="wd">Choose a figure from Dass's examples and a map. The figure is drawn in blue and its image in orange, on the same axes, as Dass draws them. For translation and the linear map, drag the purple handle to set $b$. The sliders set the angle and the scale factor. Labelled vertices let you check the tables in the examples below.</div>
+<div class="ctrls"><label>figure <select id="del-s"><option value="tri">triangle i, 1+i, 1−i (Ex 7)</option><option value="tri5">triangle x=0, y=0, x+y=1 (Ex 5)</option><option value="rect">square x,y ∈ [1,2] (Ex 6)</option><option value="c3i">circle |z−3i|=3 (Ex 8)</option><option value="cm1">circle |z+1|=1 (Ex 9)</option><option value="hyp">hyperbola x²−y²=1 (Ex 10)</option><option value="c2">circle |z−2|=1</option></select></label>
+<label>map <select id="del-m"><option value="tr">z + b</option><option value="rot">e^(iθ)·z</option><option value="mag">k·z</option><option value="lin" selected>k·e^(iθ)·z + b</option><option value="inv">1/z</option></select></label>
+<label>$\theta$° <input type="range" id="del-t" min="0" max="360" step="15" value="300"><output></output></label>
+<label>$k$ <input type="range" id="del-k" min="0.25" max="3" step="0.25" value="1"><output></output></label></div>
+<canvas id="cv-dass-elem"></canvas>
+<div class="readout" id="del-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 5) — the triangle $x=0$, $y=0$, $x+y=1$ under $w=ze^{i\pi/4}$</div><div class="bd"><ol class="steps">
+<li>$u+iv=(x+iy)\frac{1+i}{\sqrt2}$, so $u=\frac{x-y}{\sqrt2}$ and $v=\frac{x+y}{\sqrt2}$.</li>
+<li>$x=0$ gives $u=-\frac{y}{\sqrt2}$, $v=\frac{y}{\sqrt2}$, i.e. the line $v=-u$. And $y=0$ gives $v=u$.</li>
+<li>$x+y=1$ gives $v=\frac1{\sqrt2}$, a horizontal line.</li>
+<li>So the image is the triangle bounded by $v=u$, $v=-u$ and $v=\frac1{\sqrt2}$: the same triangle turned by $45^\circ$. As a check, $f'(z)=e^{i\pi/4}$ has argument $\frac\pi4$ everywhere.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> for a pure rotation you can map the vertices and join them. No equations are needed.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 6) — the square $1\le x,y\le2$ under $w=3z$</div><div class="bd"><ol class="steps">
+<li>$u=3x$ and $v=3y$. The lines $x=1,2$ go to $u=3,6$, and $y=1,2$ go to $v=3,6$.</li>
+<li>The image is the square $3\le u,v\le6$. The sides are 3 times longer and the area is $9=|f'|^2$ times larger.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> it is the simplest check of "areas scale by $|f'|^2$". Here the Jacobian is constant.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 7) — the triangle $i,\ 1+i,\ 1-i$ under (i) $w=3z+4-2i$ and (ii) $w=e^{5\pi i/3}z-2+4i$</div><div class="bd">
+<div class="dcase"><p><b>(i)</b> $u=3x+4$ and $v=3y-2$. The vertices go to $A'=4+i$, $B'=7+i$ and $C'=7-5i$. The image is the triangle scaled by 3 and shifted.</p></div>
+<div class="dcase"><p><b>(ii)</b> $e^{5\pi i/3}=\frac12-\frac{\sqrt3}2i$. So $u=\frac x2+\frac{\sqrt3}2y-2$ and $v=-\frac{\sqrt3}2x+\frac y2+4$.</p>
+<table class="t dt"><tr><th>$z$</th><th>$u$</th><th>$v$</th></tr>
+<tr><td>$i$</td><td>$\frac{\sqrt3}2-2\approx-1.13$</td><td>$4.5$</td></tr>
+<tr><td>$1+i$</td><td>$\frac{1+\sqrt3}2-2\approx-0.63$</td><td>$\frac{1-\sqrt3}2+4\approx3.63$</td></tr>
+<tr><td>$1-i$</td><td>$\frac{1-\sqrt3}2-2\approx-2.37$</td><td>$\frac{-1-\sqrt3}2+4\approx2.63$</td></tr></table>
+<p>This is a rotation by $300^\circ$ (equivalently $-60^\circ$) with no scaling, followed by a shift of $-2+4i$. The widget's default ($k=1$, $\theta=300^\circ$, $b=-2+4i$, map "k·e^(iθ)·z + b") reproduces it.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $w=az+b$ preserves shape, so the image of a polygon is the polygon through the images of its vertices.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 8, 9) — circles through the origin under $w=1/z$ become lines</div><div class="bd">
+<div class="dcase"><p><b>Ex 8: $|z-3i|=3$.</b> This is $x^2+y^2-6y=0$, so $g=0$, $f=-3$, $c=0$. The image is $2(0)u-2(-3)v+1=0$, i.e. $\boxed{6v+1=0}$: the horizontal line $v=-\frac16$. Check: the top point $6i$ maps to $\frac1{6i}=-\frac i6$. ✓</p></div>
+<div class="dcase"><p><b>Ex 9: $|z+1|=1$.</b> This is $x^2+y^2+2x=0$, so $g=1$, $f=c=0$. The image is $\boxed{2u+1=0}$, the line $u=-\frac12$. Check: $z=-2$ maps to $-\frac12$. ✓</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "a circle through the origin goes to a line under $1/z$" is the fastest route. The line is perpendicular to the diameter through $0$, at distance $\frac1{\text{diameter}}$ from the origin.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 10) — the hyperbola $x^2-y^2=1$ under $w=1/z$ becomes the lemniscate $R^2=\cos2\phi$</div><div class="bd"><ol class="steps">
+<li>In polar form the hyperbola is $r^2(\cos^2\theta-\sin^2\theta)=1$, i.e. $r^2\cos2\theta=1$.</li>
+<li>Under $w=1/z$: $r=\frac1R$ and $\theta=-\phi$. So $\frac{\cos(-2\phi)}{R^2}=1$, which gives $\boxed{R^2=\cos2\phi}$, the lemniscate of Bernoulli.</li>
+<li>In Cartesian form: $(u^2+v^2)^2=u^2-v^2$. The asymptotes $\theta=\pm\frac\pi4$ shrink to the double point at $w=0$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> for inversion, work in polar coordinates ($r\to\frac1r$, $\theta\to-\theta$). It turns a page of algebra into two lines.</p></div></div>
+<!-- dass:end -->
 <h2 id="catalog">3. The standard maps (worth memorising)</h2>
 <table class="t">
 <tr><th>Map</th><th>What it does</th><th>Typical use</th></tr>
@@ -212,6 +363,197 @@ $$\frac{A'B'}{AB}=\frac{B'C'}{BC}=\cdots=\frac{dS}{ds}=\left|\frac{dw}{dz}\right
 <tr><td>$w=z+\frac1z$ (Joukowski)</td><td>the circle $|z|=1$ → the segment $[-2,2]$; outside of the circle → the whole plane minus the segment</td><td>flow past a cylinder (Problem 10.9), airfoils</td></tr>
 </table>
 
+<!-- dass:start 30__catalog -->
+<h2 id="dass-23-11" class="dass"><span class="dtag">H.K. Dass §23.11–23.17</span>Bilinear (Möbius) transformations: fixed points, cross-ratio, three-point method, inverse points</h2>
+<p><b>Definition (§23.11).</b> $w=\dfrac{az+b}{cz+d}$ with $ad-bc\ne0$. The name comes from the equivalent form $cwz+dw-az-b=0$, which is linear in $w$ and linear in $z$. If $ad-bc=0$ the map is a constant, which is useless.</p>
+<ul>
+<li><b>Inverse:</b> $z=\dfrac{-dw+b}{cw-a}$, again bilinear. This is the form you substitute when finding the image of a curve.</li>
+<li><b>Derivative:</b> $\dfrac{dw}{dz}=\dfrac{ad-bc}{(cz+d)^2}\ne0$. So the map is conformal everywhere except at the pole $z=-d/c$, which goes to $w=\infty$. Also $z=\infty$ goes to $w=a/c$.</li>
+<li><b>Decomposition</b> ($c\ne0$): $w=\dfrac ac+\dfrac{bc-ad}{c}\cdot\dfrac{1}{cz+d}$. Read it as: $z\to cz+d$ (rotate, magnify, translate), then $\to\frac1{(\cdot)}$ (inversion), then $\to\times\frac{bc-ad}{c}$, then $\to+\frac ac$. Every step maps circles and lines to circles and lines (§23.10), so <b>a bilinear map sends circles to circles</b>, with lines counted as circles through $\infty$.</li>
+</ul>
+
+<h3>Invariant (fixed) points (§23.12)</h3>
+<p>Put $w=z$: $z(cz+d)=az+b$, i.e. $\boxed{cz^2+(d-a)z-b=0}$. The cases are:</p>
+<table class="t dt">
+<tr><th>Case</th><th>Fixed points</th><th>Normal form</th><th>Type</th></tr>
+<tr><td>$c\ne0$, $(a-d)^2+4bc\ne0$</td><td>two distinct finite $\alpha,\beta$</td><td>$\dfrac{w-\alpha}{w-\beta}=K\dfrac{z-\alpha}{z-\beta}$, with $K=\dfrac{a-c\alpha}{a-c\beta}$</td><td>$K\gt0$ real: <b>hyperbolic</b>. $|K|=1$: <b>elliptic</b>. Otherwise: <b>loxodromic</b>.</td></tr>
+<tr><td>$c\ne0$, $(a-d)^2+4bc=0$</td><td>one double point $\alpha=\frac{a-d}{2c}$</td><td>$\dfrac1{w-\alpha}=\dfrac1{z-\alpha}+k$, with $k=\dfrac{2c}{a+d}$</td><td><b>parabolic</b></td></tr>
+<tr><td>$c=0$, $a\ne d$</td><td>$\alpha=\frac{b}{d-a}$ and $\infty$</td><td>$w-\alpha=\frac ad(z-\alpha)$</td><td>a spiral similarity about $\alpha$</td></tr>
+<tr><td>$c=0$, $a=d$, $b\ne0$</td><td>only $\infty$ (double)</td><td>$w=z+\frac bd$</td><td>translation (parabolic)</td></tr>
+</table>
+
+<h3>Cross-ratio (§23.13–23.14)</h3>
+<p>Dass defines the cross-ratio of four points as $(z_1,z_2,z_3,z_4)=\dfrac{(z_1-z_2)(z_3-z_4)}{(z_2-z_3)(z_4-z_1)}$.</p>
+<div class="box thm"><span class="tag">Theorem (§23.14)</span><p>A bilinear transformation preserves the cross-ratio: $(w_1,w_2,w_3,w_4)=(z_1,z_2,z_3,z_4)$.</p></div>
+<ol class="steps">
+<li>$w_i-w_j=\dfrac{az_i+b}{cz_i+d}-\dfrac{az_j+b}{cz_j+d}=\dfrac{(ad-bc)(z_i-z_j)}{(cz_i+d)(cz_j+d)}$.</li>
+<li>In $\frac{(w_1-w_2)(w_3-w_4)}{(w_2-w_3)(w_4-w_1)}$, the factor $(ad-bc)^2$ cancels. Each of $(cz_1+d),\dots,(cz_4+d)$ appears exactly once on top and once below, so they cancel too. What remains is $(z_1,z_2,z_3,z_4)$. ∎</li></ol>
+
+<h3>Properties (§23.15) and the method (§23.16)</h3>
+<ul>
+<li>Circles and lines go to circles and lines. Whether you get a line depends only on whether the curve passes through the pole $-d/c$.</li>
+<li>The composition of two bilinear maps is bilinear, and so is the inverse. They form a group.</li>
+<li>There is exactly <b>one</b> bilinear map sending three distinct points $z_1,z_2,z_3$ to three distinct points $w_1,w_2,w_3$.</li>
+<li>Pairs of <b>inverse points</b> with respect to a circle go to pairs of inverse points with respect to the image circle (the symmetry principle, used in Dass Ex 21).</li>
+</ul>
+<div class="dcase"><p><b>Method (§23.16).</b> Write the cross-ratio equation with the unknown $w$ (and $z$) as the 4th point, then solve for $w$:</p>
+$$\frac{(w-w_1)(w_2-w_3)}{(w_1-w_2)(w_3-w)}=\frac{(z-z_1)(z_2-z_3)}{(z_1-z_2)(z_3-z)}.$$
+<p><b>If one given point is $\infty$:</b> drop every factor that contains it. For example, with $w_3=\infty$, $\frac{w_2-w_3}{w_3-w}\to-1$.</p>
+<p><b>Alternative:</b> put $w=\frac{az+b}{cz+d}$, substitute the three pairs, and solve for the ratios $a:b:c:d$ (Dass uses this in Ex 21).</p></div>
+
+<div class="widget" id="w-dass-mob">
+<div class="wt">Interactive — the bilinear map through three points: images, fixed points and the cross-ratio</div>
+<div class="wd">Pick one of Dass's maps. The three orange points $z_1,z_2,z_3$ (left) go to $w_1,w_2,w_3$ (right). <b>Drag any of them</b>, and the unique bilinear map through the new points is rebuilt. The thick curve is the boundary from the example, and its inside is shaded on both sides. A polar grid shows how circles go to circles. Stars mark the fixed points. Drag the green probe: the cross-ratio $(z,z_1,z_2,z_3)$ always equals $(w,w_1,w_2,w_3)$.</div>
+<div class="ctrls"><label>example <select id="dmb-p"></select></label></div>
+<div class="grid2"><canvas id="cv-dass-mobz"></canvas><canvas id="cv-dass-mobw"></canvas></div>
+<div class="readout" id="dmb-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 11) — send $z=1,\,i,\,-1$ to $w=i,\,0,\,-i$; then where does $|z|\lt1$ go?</div><div class="bd"><ol class="steps">
+<li>The cross-ratio equation is $\dfrac{(w-i)(0+i)}{(i-0)(-i-w)}=\dfrac{(z-1)(i+1)}{(1-i)(-1-z)}$.</li>
+<li>The left side simplifies to $\frac{w-i}{-(w+i)}$, and the right side to $\frac{(z-1)\,i}{-(z+1)}$, since $\frac{1+i}{1-i}=i$. So $\frac{w-i}{w+i}=\frac{i(z-1)}{z+1}$.</li>
+<li>Solving for $w$: $\boxed{w=\dfrac{iz+1}{-iz+1}}$. Check: $z=1$ gives $\frac{1+i}{1-i}=i$ ✓, $z=i$ gives $0$ ✓, $z=-1$ gives $\frac{1-i}{1+i}=-i$ ✓.</li>
+<li>The circle $|z|=1$ passes through all three points, so its image is the circle (here a line) through $i,0,-i$: the imaginary axis. The test point $z=0$ goes to $w=1$, so $|z|\lt1$ maps onto the <b>right half-plane</b> $u\gt0$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "three points to three points, then which side goes where" is the standard bilinear question. A single test point decides the region.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 12, 13, 14) — the three-point method when $\infty$ is involved</div><div class="bd">
+<div class="dcase"><p><b>Ex 12: $i,\,-i,\,1\ \to\ 0,\,1,\,\infty$.</b> Since $w_3=\infty$, the left side becomes $-\frac{w-0}{0-1}=w$. Hence $w=\frac{(z-i)(-i-1)}{(i+i)(1-z)}$, i.e. $\boxed{w=\dfrac{(1-i)(z-i)}{2(z-1)}}$. Check: $z=-i$ gives $\frac{(1-i)(-2i)}{2(-i-1)}=1$ ✓.</p></div>
+<div class="dcase"><p><b>Ex 13: $1,\,-i,\,-1\ \to\ i,\,0,\,-i$.</b> The same algebra gives $\boxed{w=\dfrac{iz-1}{iz+1}}$. Check: $z=1$ gives $\frac{i-1}{i+1}=i$ ✓.</p></div>
+<div class="dcase"><p><b>Ex 14: $0,\,-1,\,i\ \to\ i,\,0,\,\infty$.</b> The image $w=\infty$ at $z=i$ forces the factor $(z-i)$ in the denominator. The image $w=0$ at $z=-1$ forces $(z+1)$ on top. So $w=k\frac{z+1}{z-i}$, and $z=0\mapsto i$ gives $k\cdot\frac{1}{-i}=i$, so $k=1$: $\boxed{w=\dfrac{z+1}{z-i}}$.</p>
+<p>The unit circle passes through the pole $z=i$, so its image is a line through $w(1)=\frac{2}{1-i}=1+i$ and $w(-1)=0$: the line $\boxed{v=u}$.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> reading off "zero → factor on top, pole → factor below" is much faster than the full cross-ratio when $0$ or $\infty$ is among the images.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 15, 16, Exercise 23.2 Q15) — fixed points and normal forms: all three types</div><div class="bd">
+<div class="dcase"><p><b>Parabolic: $w=\frac{3z-4}{z-1}$.</b> $z^2-z=3z-4$ gives $(z-2)^2=0$, a double fixed point at $z=2$. With $k=\frac{2c}{a+d}=\frac{2}{3-1}=1$, the normal form is $\boxed{\dfrac1{w-2}=\dfrac1{z-2}+1}$. Check at $z=0$: $w=4$, so $\frac12=-\frac12+1$ ✓.</p></div>
+<div class="dcase"><p><b>Elliptic: $w=\frac{z-1}{z+1}$.</b> $z^2+z=z-1$ gives $z=\pm i$. Then $K=\frac{a-c\alpha}{a-c\beta}=\frac{1-i}{1+i}=-i$, so $\boxed{\dfrac{w-i}{w+i}=-i\,\dfrac{z-i}{z+i}}$. Since $|K|=1$, the map is elliptic: points rotate around the fixed points. (Also $w=\frac{2z-5}{z+4}$ has fixed points $-1\pm2i$ and $|K|=1$, so it too is elliptic.)</p></div>
+<div class="dcase"><p><b>Hyperbolic: $w=\frac{5z+4}{z+5}$.</b> $z^2+5z=5z+4$ gives $z=\pm2$. Then $K=\frac{5-2}{5+2}=\frac37$, which is real and positive. Points flow along circles from the repelling fixed point $-2$ toward the attracting fixed point $2$.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "the fixed points of $\frac{az+b}{cz+d}$" means solving one quadratic, $cz^2+(d-a)z-b=0$. A repeated root (discriminant $(a-d)^2+4bc=0$) is the parabolic case, often asked as "the map has only one fixed point".</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 17, 18, 19) — which region goes where</div><div class="bd">
+<div class="dcase"><p><b>Ex 17: $w=i\frac{1-z}{1+z}$.</b> Expanding, $u=\frac{2y}{(1+x)^2+y^2}$ and $v=\frac{1-x^2-y^2}{(1+x)^2+y^2}$. On $|z|=1$, $v=0$: the <b>real axis</b>. Inside, $x^2+y^2\lt1$ gives $v\gt0$: the <b>upper half-plane</b>. Test point: $z=0\mapsto i$ ✓.</p></div>
+<div class="dcase"><p><b>Ex 18: $w=\frac{i-z}{i+z}$.</b> $|w|^2=\frac{x^2+(1-y)^2}{x^2+(1+y)^2}$. On $y=0$ this is $1$, and it is $\lt1$ exactly when $y\gt0$. So the real axis maps to $|w|=1$, and the upper half-plane to the <b>inside of the unit disk</b>. (It is just $-1$ times the Cayley map $\frac{z-i}{z+i}$.)</p></div>
+<div class="dcase"><p><b>Ex 19: $w=\frac{3-z}{z-2}$ and the circle centre $\frac52$, radius $\frac12$.</b> Dass eliminates $x,y$ to get $u\left[(u+1)^2+v^2\right]=0$, i.e. $u=0$. <b>Shortcut:</b> the circle passes through the pole $z=2$, so its image is a line. It passes through $w(3)=0$ and $w\left(\frac52+\frac i2\right)=\frac{1-i}{1+i}=-i$, so it is the imaginary axis. The centre $z=\frac52$ maps to $w=1$, so the inside goes to $u\gt0$, the <b>right half-plane</b>.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> it shows both routes, full elimination and the "pole on the circle, two image points, one test point" shortcut. Use the shortcut in the exam.</p></div></div>
+
+<h3>Inverse points (§23.17)</h3>
+<p>$P$ and $Q$ are <b>inverse points</b> with respect to a circle with centre $C$ and radius $r$ if $C,P,Q$ lie on one ray from $C$ (same side) and $CP\cdot CQ=r^2$. Every circle through $P$ and $Q$ cuts the given circle at right angles. That is why bilinear maps, which preserve circles and angles, carry inverse points to inverse points.</p>
+
+<div class="widget" id="w-dass-invpt">
+<div class="wt">Interactive — inverse points: $b=c+R^2/\,\overline{(a-c)}$</div>
+<div class="wd">Drag the point $a$ and the centre $c$, and set the radius with the slider. The orange point is the inverse $b$. The thin circles all pass through $a$ and $b$, and each one meets the blue circle at $90^\circ$ (see the readout). Move $a$ onto the circle: then $b=a$.</div>
+<div class="ctrls"><label>$R$ <input type="range" id="dip-r" min="0.4" max="2" step="0.1" value="1.2"><output></output></label></div>
+<canvas id="cv-dass-invpt"></canvas>
+<div class="readout" id="dip-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 20) — the inverse of $a$ in the circle $|z-c|=R$ is $c+\dfrac{R^2}{\overline{a-c}}$</div><div class="bd"><ol class="steps">
+<li>Let $b$ be the inverse. <b>Collinear, same side:</b> $\arg(b-c)=\arg(a-c)=-\arg\overline{(a-c)}$. So $(b-c)\overline{(a-c)}$ has argument $0$: it is real and positive.</li>
+<li><b>Distance condition:</b> $|b-c|\,|a-c|=R^2$, so $|(b-c)\overline{(a-c)}|=R^2$.</li>
+<li>A positive real number with modulus $R^2$ is $R^2$ itself. So $(b-c)\overline{(a-c)}=R^2$, i.e. $\boxed{b=c+\dfrac{R^2}{\overline{a-c}}}$. ∎</li></ol>
+<p>Special cases: for the unit circle, $b=\frac1{\bar a}$. The centre's inverse is $\infty$.</p>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> this formula plus the symmetry principle gives "the disk-to-disk" and "half-plane-to-disk" maps $e^{i\lambda}\frac{z-z_0}{z-\bar z_0}$ without any three-point algebra.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 21) — a map from the disk $|w|\le1$ onto $|z-1|\lt1$ with $w=0\mapsto z=\frac12$ and $w=1\mapsto z=0$</div><div class="bd"><ol class="steps">
+<li>Take $w=\frac{az+b}{cz+d}$. Then $w=0$ at $z=\frac12$ gives $\frac a2+b=0$, and $w=1$ at $z=0$ gives $b=d$.</li>
+<li>Symmetry: $w=0$ and $w=\infty$ are inverse points of $|w|=1$. So their $z$-images, $\frac12$ and $1+\frac{1^2}{\overline{(1/2-1)}}=-1$, are inverse points of $|z-1|=1$. Hence $w=\infty$ at $z=-1$: $-c+d=0$.</li>
+<li>So $a=-2b$ and $c=d=b$, giving $\boxed{w=\dfrac{-2z+1}{z+1}}$. Check: $z=2$ (on the circle) gives $w=-1$, and $|w|=1$ ✓.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> when the problem gives only two point-pairs plus "circle to circle", the third condition comes from inverse points.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 22) — two bilinear maps with fixed points $1$ and $2$</div><div class="bd"><ol class="steps">
+<li>The fixed-point equation $cz^2-(a-d)z-b=0$ must be a multiple of $(z-1)(z-2)=z^2-3z+2$. So $\frac{a-d}{c}=3$ and $-\frac bc=2$, i.e. $b=-2c$ and $d=a-3c$.</li>
+<li>So $w=\dfrac{az-2c}{cz+a-3c}$. The choices $(a,c)=(1,-1)$ and $(2,-1)$ give $\boxed{w=\dfrac{z+2}{4-z}}$ and $\boxed{w=\dfrac{2(z+1)}{5-z}}$. Check: $\frac{1+2}{4-1}=1$ ✓ and $\frac{2+2}{4-2}=2$ ✓.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> two fixed points leave a one-parameter family of maps (the multiplier $K$), so the answer is never unique. Expect "which of these has fixed points …" instead.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 23, 24, 25) — the image of a circle by substituting the inverse map</div><div class="bd">
+<div class="dcase"><p><b>Ex 23: $w=\frac{2z+3}{z-4}$, circle $x^2+y^2-4x=0$.</b> Write the circle as $z\bar z-2(z+\bar z)=0$ and substitute $z=\frac{4w+3}{w-2}$. After clearing denominators, $22(w+\bar w)+33=0$, i.e. $\boxed{4u+3=0}$. It is a line because the circle passes through the pole $z=4$.</p></div>
+<div class="dcase"><p><b>Ex 24: $w=\frac{5-4z}{4z-2}$, circle $|z|=1$.</b> $z=\frac{2w+5}{4w+4}$, so $|z|=1$ becomes $|2w+5|=|4w+4|$. Squaring: $12(u^2+v^2)+12u-9=0$, i.e. $u^2+v^2+u-\frac34=0$. This is the circle with <b>centre $-\frac12$ and radius $1$</b>. Check: $z=\pm1$ go to $\frac12$ and $-\frac32$ ✓.</p></div>
+<div class="dcase"><p><b>Ex 25: $w=\frac{z-i}{iz-1}$, circle $x^2+y^2-4y+2=0$</b> (centre $2i$, radius $\sqrt2$). From $z=\frac{w-i}{iw-1}$: $x^2+y^2=\frac{u^2+(v-1)^2}{u^2+(v+1)^2}$ and $y=-\frac{u^2+v^2-1}{u^2+(v+1)^2}$. Substituting gives $\boxed{7(u^2+v^2)+2v-1=0}$: the circle with centre $-\frac i7$ and radius $\frac{2\sqrt2}{7}$.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the $z\bar z$ form of a circle, $z\bar z+\bar\beta z+\beta\bar z+\gamma=0$, makes these substitutions mechanical.</p></div></div>
+
+<table class="t dt">
+<tr><th colspan="2">Dass Exercise 23.2 — selected answers (checked numerically)</th></tr>
+<tr><td>$2,\,i,\,-2\to1,\,i,\,-1$</td><td>$w=\dfrac{3z+2i}{iz+6}$</td></tr>
+<tr><td>$0,\,1,\,\infty\to i,\,-1,\,-i$</td><td>$w=\dfrac{z-i}{iz-1}$</td></tr>
+<tr><td>$1,\,i,\,-1\to2,\,i,\,-2$</td><td>$w=\dfrac{6z-2i}{3-iz}$; fixed points $i$ and $2i$</td></tr>
+<tr><td>$w=\frac{iz+2}{4z+i}$, image of the real axis</td><td>a circle with diameter from $w(0)=-2i$ to $w(\infty)=\frac i4$: centre $-\frac78i$, radius $\frac98$</td></tr>
+<tr><td>$w=\frac1{z+i}$, image of the real axis</td><td>centre $-\frac i2$, radius $\frac12$</td></tr>
+<tr><td>$w=-\frac{2z+4i}{iz+1}$</td><td>fixed points $4i$ and $-i$</td></tr>
+<tr><td>$w=\frac{5z+4}{z+5}$</td><td>fixed points $\pm2$</td></tr>
+<tr><td>$w=e^{i\alpha}\frac{z-z_0}{z-\bar z_0}$, $\operatorname{Im}z_0\gt0$</td><td>upper half-plane → unit disk (since $z_0\mapsto0$)</td></tr>
+</table>
+<!-- dass:end -->
+<!-- dass:start 40__catalog -->
+<h2 id="dass-23-18" class="dass"><span class="dtag">H.K. Dass §23.18–23.22</span>Special maps: $z^2$, $z^n$, $z+\frac1z$, $e^z$, $\sin z$, $\cosh z$ — what happens to grid lines</h2>
+<p>For each map, Dass asks one question: <b>what happens to the two natural families of lines</b>? These are $x=$ const and $y=$ const, or for the power maps, $r=$ const and $\theta=$ const. The table collects all the answers.</p>
+<table class="t dt">
+<tr><th>Map and its parts</th><th>Family 1 ↦</th><th>Family 2 ↦</th><th>Not conformal at</th></tr>
+<tr><td>$w=z^2$: $u=x^2-y^2$, $v=2xy$</td><td>$x=b$ ↦ parabola $v^2=-4b^2(u-b^2)$ (opens left)</td><td>$y=c$ ↦ parabola $v^2=4c^2(u+c^2)$ (opens right)</td><td>$z=0$ (angles double)</td></tr>
+<tr><td>$w=z^2$ in polar form: $R=r^2$, $\phi=2\theta$</td><td>circle $r=a$ ↦ circle $R=a^2$</td><td>ray $\theta=\theta_0$ ↦ ray $\phi=2\theta_0$; first quadrant ↦ upper half-plane</td><td>$z=0$</td></tr>
+<tr><td>$w=z^n$ ($n\in\mathbb N$): $R=r^n$, $\phi=n\theta$</td><td>$r=a$ ↦ $R=a^n$</td><td>$\theta=\theta_0$ ↦ $\phi=n\theta_0$; a sector of angle $\frac\pi n$ ↦ half-plane</td><td>$z=0$ (angles × $n$)</td></tr>
+<tr><td>$w=z+\frac1z$: $u=\left(r+\frac1r\right)\cos\theta$, $v=\left(r-\frac1r\right)\sin\theta$</td><td>$r=a\ne1$ ↦ ellipse $\dfrac{u^2}{(a+\frac1a)^2}+\dfrac{v^2}{(a-\frac1a)^2}=1$; $r=1$ ↦ the segment $[-2,2]$</td><td>$\theta=\theta_0$ ↦ hyperbola $\dfrac{u^2}{4\cos^2\theta_0}-\dfrac{v^2}{4\sin^2\theta_0}=1$</td><td>$z=\pm1$</td></tr>
+<tr><td>$w=e^z$: $R=e^x$, $\phi=y$</td><td>$x=c$ ↦ circle $R=e^c$ ($x=0$ ↦ unit circle)</td><td>$y=c$ ↦ ray $\phi=c$. The strip $0\lt y\lt\pi$ ↦ upper half-plane, $-\pi\lt y\lt0$ ↦ lower half-plane, any strip of height $2\pi$ ↦ the whole plane minus $0$</td><td>nowhere ($e^z\ne0$), but it is periodic</td></tr>
+<tr><td>$w=\sin z$: $u=\sin x\cosh y$, $v=\cos x\sinh y$</td><td>$x=c$ ↦ hyperbola $\dfrac{u^2}{\sin^2c}-\dfrac{v^2}{\cos^2c}=1$</td><td>$y=c$ ↦ ellipse $\dfrac{u^2}{\cosh^2c}+\dfrac{v^2}{\sinh^2c}=1$</td><td>$z=\pm\frac\pi2+k\pi$</td></tr>
+<tr><td>$w=\cosh z$: $u=\cosh x\cos y$, $v=\sinh x\sin y$</td><td>$x=b$ ↦ ellipse $\dfrac{u^2}{\cosh^2b}+\dfrac{v^2}{\sinh^2b}=1$</td><td>$y=a$ ↦ hyperbola $\dfrac{u^2}{\cos^2a}-\dfrac{v^2}{\sin^2a}=1$</td><td>$z=ik\pi$</td></tr>
+</table>
+<p>In the last three rows all the ellipses and hyperbolas share the foci $w=\pm1$ (for $z+\frac1z$, the foci are $\pm2$). They are <b>confocal conics</b>, and they cut at right angles, as conformality demands.</p>
+<div class="dcase"><p><b>How each row is derived.</b> There are two patterns, the same two as in Dass:</p><ul>
+<li><b>Cartesian families</b> ($z^2$, $\sin z$, $\cosh z$): fix $x$ (or $y$) in $u(x,y)$ and $v(x,y)$, then eliminate the other variable. For $z^2$ with $y=c$: $u=x^2-c^2$ and $v=2cx$, so $x=\frac{v}{2c}$, which gives $v^2=4c^2(u+c^2)$. For $\sin z$, use $\sin^2x+\cos^2x=1$ or $\cosh^2y-\sinh^2y=1$.</li>
+<li><b>Polar families</b> ($z^n$, $z+\frac1z$, $e^z$): write $z=re^{i\theta}$ and $w=Re^{i\phi}$, or split into $u,v$. Then use $\cos^2\theta+\sin^2\theta=1$ to remove $\theta$, or divide to remove $r$.</li></ul></div>
+
+<div class="widget" id="w-dass-fam">
+<div class="wt">Interactive — drag the crossing point of two grid lines and watch their images</div>
+<div class="wd">Choose a map (or one of Dass's regions). In the $z$-plane (left), drag the purple point $P$: the two coordinate lines through it are drawn in blue and green. On the right are their images, drawn solid by mapping the points. The dashed curves come straight from the formula in the table. They coincide, and they cross at $90^\circ$ unless you are on a critical point.</div>
+<div class="ctrls"><label>case <select id="dfm-c"></select></label></div>
+<div class="grid2"><canvas id="cv-dass-famz"></canvas><canvas id="cv-dass-famw"></canvas></div>
+<div class="readout" id="dfm-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass §23.18) — the square $1\le x\le2$, $1\le y\le2$ under $w=z^2$</div><div class="bd"><ol class="steps">
+<li>$x=1$ ↦ $v^2=-4(u-1)$ and $x=2$ ↦ $v^2=-16(u-4)$.</li>
+<li>$y=1$ ↦ $v^2=4(u+1)$ and $y=2$ ↦ $v^2=16(u+4)$.</li>
+<li>The image is the curvilinear quadrilateral bounded by these four parabolas, with corners $w(1+i)=2i$, $w(2+i)=3+4i$, $w(2+2i)=8i$ and $w(1+2i)=-3+4i$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> "lines parallel to the axes become parabolas under $z^2$" is a one-line recall question. Remember the signs: $x=b$ opens left and $y=c$ opens right.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 27) — the circle $|z-1|=1$ under $w=z^2$ becomes the cardioid $R=2(1+\cos\phi)$</div><div class="bd"><ol class="steps">
+<li>Put the pole at the circle's centre: $z=1+e^{i\theta}$.</li>
+<li>$1+e^{i\theta}=e^{i\theta/2}\left(e^{-i\theta/2}+e^{i\theta/2}\right)=2\cos\frac\theta2\,e^{i\theta/2}$.</li>
+<li>So $w=z^2=4\cos^2\frac\theta2\,e^{i\theta}$. That is, $R=4\cos^2\frac\theta2=2(1+\cos\theta)$ and $\phi=\theta$. Hence $\boxed{R=2(1+\cos\phi)}$.</li></ol>
+<p>(Choose "z², circle |z−1|=1" in the widget to see it.) The cusp at $w=0$ is the image of $z=0$, where $f'=0$ doubles the angle. The circle's tangent there, the imaginary axis, at $90^\circ$ to the real axis, opens up into the $180^\circ$ cusp.</p>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the half-angle trick $1+e^{i\theta}=2\cos\frac\theta2e^{i\theta/2}$ is the key step for every "circle through the origin under $z^n$" question.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Exercise 23.3, Q1) — the triangle bounded by $x=1$, $y=1$, $x+y=1$ under $w=z^2$</div><div class="bd"><ol class="steps">
+<li>$x=1$ ↦ $v^2=-4(u-1)$, i.e. $4u+v^2=4$.</li>
+<li>$y=1$ ↦ $v^2=4(u+1)$, i.e. $4u-v^2=-4$.</li>
+<li>$x+y=1$: $u=(x-y)(x+y)=x-y=2x-1$ and $v=2x(1-x)$. Eliminating $x=\frac{u+1}2$ gives $v=\frac{1-u^2}{2}$, i.e. $\boxed{u^2+2v=1}$. The printed answer reads $u^2-2v=1$, but the midpoint $z=\frac{1+i}2\mapsto\frac i2$ satisfies $u^2+2v=1$, so the sign must be $+$.</li>
+<li>The vertices $1$, $i$ and $1+i$ go to $1$, $-1$ and $2i$.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> slanted lines are handled with the factorisation $u=(x-y)(x+y)$. Always check one point, because printed answers do contain sign slips.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass §23.20, Exercises 23.3 Q6–Q8) — the Joukowski map $w=z+\frac1z$ (or $z+\frac{a^2}{z}$)</div><div class="bd"><ol class="steps">
+<li>$\frac{dw}{dz}=1-\frac1{z^2}$ vanishes at $z=\pm1$, the critical points. These are exactly where the circle $|z|=1$ folds flat onto $[-2,2]$.</li>
+<li>For $|z|=c$: $u=(c+\frac1c)\cos\theta$ and $v=(c-\frac1c)\sin\theta$, an ellipse. Its foci are at $\pm\sqrt{(c+\frac1c)^2-(c-\frac1c)^2}=\pm2$ for <b>every</b> $c$: the ellipses are confocal.</li>
+<li>For a ray $\arg z=\alpha$: $\frac{u^2}{4\cos^2\alpha}-\frac{v^2}{4\sin^2\alpha}=1$. Its eccentricity is $\sqrt{1+\tan^2\alpha}=\sec\alpha$ (Q7).</li>
+<li>For $w=z+\frac{a^2}{z}$ (Q8): the circle $|z|=a$ ↦ the segment from $-2a$ to $2a$, of length $4a$. The circle $|z|=b\gt a$ ↦ an ellipse with semi-axes $b\pm\frac{a^2}{b}$ and foci $\pm2a$, the ends of that segment.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> this is flow past a cylinder (14.10) and the aerofoil map. "The circle maps to a segment of length $4a$" is a frequent one-liner.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 28) — the rectangle $1\le x\le2$, $2\le y\le3$ under $w=e^z$</div><div class="bd"><ol class="steps">
+<li>$Re^{i\phi}=e^xe^{iy}$, so $R=e^x$ and $\phi=y$.</li>
+<li>$x=1$ ↦ circle $R=e\approx2.72$; $x=2$ ↦ circle $R=e^2\approx7.39$.</li>
+<li>$y=2$ ↦ ray $\phi=2$ rad ($\approx114.6^\circ$); $y=3$ ↦ ray $\phi=3$ rad ($\approx171.9^\circ$).</li>
+<li>The image is the piece of the annulus $e\le R\le e^2$ between these two rays: an annular sector in the second quadrant.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> $e^z$ turns rectangles into annular sectors, and its inverse $\log z$ turns annular sectors into rectangles. This is the standard trick for problems between two circles or two rays.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 29) — the strip $-\frac\pi2\lt x\lt\frac\pi2$, $1\lt y\lt2$ under $w=\sin z$</div><div class="bd"><ol class="steps">
+<li>$u=\sin x\cosh y$ and $v=\cos x\sinh y$. So $\frac{u^2}{\cosh^2y}+\frac{v^2}{\sinh^2y}=1$.</li>
+<li>$y=1$ ↦ the ellipse with semi-axes $\cosh1\approx1.543$ and $\sinh1\approx1.175$. $y=2$ ↦ the ellipse with semi-axes $\cosh2\approx3.762$ and $\sinh2\approx3.627$, i.e. $\frac{u^2}{14.15}+\frac{v^2}{13.15}=1$.</li>
+<li>$x=\pm\frac\pi2$ give $v=0$ and $u=\pm\cosh y$: the segments from $\pm\cosh1$ to $\pm\cosh2$ on the real axis. Inside the strip, $\cos x\gt0$, so $v\gt0$.</li>
+<li>The image is the <b>upper half</b> of the region between the two confocal ellipses (foci $\pm1$), cut off by the $u$-axis.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> it is the standard "elliptic coordinates" map. The images of $y=$ const (ellipses) and $x=$ const (hyperbolas) are the level curves for problems with an elliptic boundary.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Exercises 23.3 Q3, Q11) — two quick ones</div><div class="bd">
+<div class="dcase"><p><b>Q3.</b> Under $w=z^2$, $|w-1|=|z^2-1|=|z-1|\,|z+1|$. So the circles $|w-1|=c$ correspond to the <b>lemniscates (Cassini ovals)</b> $|z-1|\,|z+1|=c$. The value $c=1$ gives Bernoulli's lemniscate.</p></div>
+<div class="dcase"><p><b>Q11.</b> $w=iz^2=e^{i\pi/2}r^2e^{2i\theta}$. So the ray $\theta=$ const goes to the ray $\phi=2\theta+\frac\pi2$.</p></div>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> a composite like $iz^2$ means doubling the angle, then turning by $90^\circ$. Read maps as compositions.</p></div></div>
+<!-- dass:end -->
 <h2 id="riemann">4. Riemann surfaces (Problems 9–11)</h2>
 <p>When the <b>inverse</b> of a map is multivalued, the plane holding its values must be replaced by several sheets glued along a branch cut:</p>
 <ul>
@@ -896,5 +1238,317 @@ onReady(() => {
 });
 
 </script>
+<script>/* dass:start */
+/* H.K. Dass §23.3–23.5 — angle between two curves: conformal / isogonal / neither */
+onReady(() => {
+  const F = {
+    sq: z => Cx.mul(z, z),
+    cu: z => Cx.mul(z, Cx.mul(z, z)),
+    ez: z => Cx.exp(z),
+    inv: z => Cx.div([1, 0], z),
+    bar: z => Cx.conj(z),
+    ex3: z => [2 * z[0] * z[0] + z[1] * z[1], z[1] * z[1] / z[0]]
+  };
+  const analytic = { sq: 1, cu: 1, ez: 1, inv: 1 };
+  let z0 = [0.8, 0.5];
+  const L = 0.6, dirs = () => { const t = val('dag-t') * PI / 180; return [t, t + val('dag-a') * PI / 180]; };
+  const seg = t => { const pts = []; for (let j = 0; j <= 80; j++) pts.push(Cx.add(z0, Cx.polar(L * j / 80, t))); return pts; };
+  const ok = w => isFinite(w[0]) && isFinite(w[1]);
+  const imgDirs = () => {
+    const f = F[val('dag-f')], [t1, t2] = dirs(), w0 = f(z0), h = 1e-4;
+    const d1 = Cx.sub(f(Cx.add(z0, Cx.polar(h, t1))), w0), d2 = Cx.sub(f(Cx.add(z0, Cx.polar(h, t2))), w0);
+    if (!ok(d1) || !ok(d2) || Cx.abs(d1) === 0 || Cx.abs(d2) === 0) return null;
+    let x = Cx.arg(d2) - Cx.arg(d1); x = ((x % TAU) + TAU) % TAU; return [Cx.arg(d1), Cx.arg(d2), x];
+  };
+  const Z = new Plane('#cv-dass-angz', { span: 1.6, cx: 0.4, cy: 0.3, aspect: 0.9, snap: 0.05, axisLabels: ['x', 'y'], draw: p => {
+    const [t1, t2] = dirs();
+    p.path(seg(t1), { color: '--accent', width: 3 }); p.path(seg(t2), { color: '--accent3', width: 3 });
+    p.angleArc(t1, t2, 26, { color: '--accent4', width: 2 }, z0);
+    p.dot(z0, { r: 7, color: '--accent3', ring: true, label: 'z₀' });
+  }});
+  const W = new Plane('#cv-dass-angw', { span: 2, aspect: 0.9, snap: 0, axisLabels: ['u', 'v'], draw: p => {
+    const f = F[val('dag-f')], [t1, t2] = dirs(), w0 = f(z0); if (!ok(w0)) return;
+    const s1 = seg(t1).map(f), s2 = seg(t2).map(f);
+    p.path(s1, { color: '--accent', width: 3 }); p.path(s2, { color: '--accent3', width: 3 });
+    const a = imgDirs(); if (a) p.angleArc(a[0], a[0] + a[2], 26, { color: '--accent4', width: 2 }, w0);
+    p.dot(w0, { r: 7, color: '--accent3', ring: true, label: 'w₀' });
+  }});
+  const fit = () => {
+    const f = F[val('dag-f')], [t1, t2] = dirs(), pts = seg(t1).concat(seg(t2)).map(f).filter(ok);
+    if (!pts.length) return; let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+    pts.forEach(w => { x0 = Math.min(x0, w[0]); x1 = Math.max(x1, w[0]); y0 = Math.min(y0, w[1]); y1 = Math.max(y1, w[1]); });
+    const sp = Math.min(30, Math.max(0.5, 0.62 * Math.max(x1 - x0, (y1 - y0) / 0.9))); W.span = sp; W.cx = (x0 + x1) / 2; W.cy = (y0 + y1) / 2;
+  };
+  const out = () => {
+    const k = val('dag-f'), f = F[k], w0 = f(z0), al = val('dag-a');
+    if (!ok(w0) || (k === 'ex3' && Math.abs(z0[0]) < 1e-9)) { texMix('#dag-out', `The map is not defined at $z_0=${Cx.tex(z0, 2)}$. Move the point.`); return; }
+    const a = imgDirs(); if (!a) { texMix('#dag-out', 'Undefined here.'); return; }
+    const X = a[2] * 180 / PI; let verdict;
+    if (Math.abs(X - al) < 0.5) verdict = '<b>same size and same sense → conformal here</b>';
+    else if (Math.abs(X - (360 - al)) < 0.5) verdict = '<b>same size, opposite sense → isogonal (not conformal)</b>';
+    else verdict = `<b>the angle has changed</b> (ratio ${fnum(X / al, 3)}) → <b>not conformal here</b>`;
+    let s = `Angle at $z_0$: $\\alpha=${al}^\\circ$ (anticlockwise). Angle between the image curves at $w_0$: $${fnum(X, 2)}^\\circ$ anticlockwise. ⇒ ${verdict}.`;
+    if (analytic[k]) {
+      const h = 1e-6, D = Cx.scale(Cx.sub(f(Cx.add(z0, [h, 0])), f(Cx.sub(z0, [h, 0]))), 1 / (2 * h));
+      s += Cx.abs(D) < 1e-6 ? ` &nbsp; $f'(z_0)=0$: a <b>critical point</b>, so angles are multiplied by the order of the zero plus one (§23.5).` : ` &nbsp; $f'(z_0)=${Cx.tex(D, 3)}$: magnification $|f'|=${fnum(Cx.abs(D), 3)}$, rotation $\\arg f'=${fnum(Cx.arg(D) * 180 / PI, 1)}^\\circ$.`;
+    } else if (k === 'ex3') s += ' &nbsp; The level curves $u=$ const and $v=$ const still cross at $90^\\circ$, but other angles change: try $\\alpha\\ne90^\\circ$.';
+    texMix('#dag-out', s);
+  };
+  const all = () => { fit(); Z.redraw(); W.redraw(); out(); };
+  Z.addDrag(() => z0, v => { z0 = v; }); Z.onchange = all;
+  $('#dag-f').addEventListener('change', all); watch(['dag-a', 'dag-t'], all); all();
+});
+
+/* H.K. Dass §23.6–23.10 — translation, rotation, magnification, cz + b, inversion */
+onReady(() => {
+  const edge = (a, b, n = 80) => { const o = []; for (let j = 0; j <= n; j++) o.push(Cx.add(a, Cx.scale(Cx.sub(b, a), j / n))); return o; };
+  const poly = V => { let o = []; for (let k = 0; k < V.length; k++) o = o.concat(edge(V[k], V[(k + 1) % V.length])); return o; };
+  const circ = (c, r) => { const o = []; for (let j = 0; j <= 480; j++) o.push(Cx.add(c, Cx.polar(r, (j + 0.5) * TAU / 480))); return o; };
+  const hyp = () => { const o = []; for (const s of [1, -1]) { for (let j = 0; j <= 200; j++) { const t = -2.6 + 5.2 * j / 200; o.push([s * Math.cosh(t), Math.sinh(t)]); } o.push(null); } return o; };
+  const FIG = {
+    tri: { V: [[0, 1], [1, 1], [1, -1]], lab: ['A', 'B', 'C'] },
+    tri5: { V: [[0, 0], [1, 0], [0, 1]], lab: ['O', 'A', 'B'] },
+    rect: { V: [[1, 1], [2, 1], [2, 2], [1, 2]], lab: ['A', 'B', 'C', 'D'] },
+    c3i: { C: [[0, 3], 3] }, cm1: { C: [[-1, 0], 1] }, c2: { C: [[2, 0], 1] }, hyp: { H: true }
+  };
+  let b = [-2, 4];
+  const map = () => {
+    const m = val('del-m'), k = val('del-k'), e = Cx.polar(1, val('del-t') * PI / 180);
+    return { tr: z => Cx.add(z, b), rot: z => Cx.mul(e, z), mag: z => Cx.scale(z, k), lin: z => Cx.add(Cx.scale(Cx.mul(e, z), k), b), inv: z => Cx.div([1, 0], z) }[m];
+  };
+  const figPts = () => { const F = FIG[val('del-s')]; return F.V ? poly(F.V) : F.C ? circ(F.C[0], F.C[1]) : hyp(); };
+  const cut = (pts, f, lim) => { const o = []; let pr = null; pts.forEach(q => { if (!q) { o.push(null); pr = null; return; } const w = f(q); if (pr && Cx.abs(Cx.sub(w, pr)) > lim) o.push(null); o.push(w); pr = w; }); return o; };
+  const P = new Plane('#cv-dass-elem', { span: 4, aspect: 0.72, snap: 0.25, axisLabels: ['x, u', 'y, v'], draw: p => {
+    const F = FIG[val('del-s')], f = map(), pts = figPts(), closed = !F.H;
+    p.path(pts, { color: '--accent', width: 2.5, close: closed && !!F.V, fill: closed ? '--accent' : undefined, fillAlpha: 0.12 });
+    p.path(cut(pts, f, p.span * 0.5), { color: '--accent2', width: 2.5, fill: closed && val('del-m') !== 'inv' ? '--accent2' : undefined, fillAlpha: 0.12 });
+    if (F.V) F.V.forEach((v, i) => { p.dot(v, { r: 4, color: '--accent', label: F.lab[i] }); const w = f(v); if (isFinite(w[0])) p.dot(w, { r: 4, color: '--accent2', label: F.lab[i] + '′' }); });
+    if (val('del-m') === 'inv') p.circle([0, 0], 1, { color: '--muted', width: 1.2, dash: [5, 4] });
+    if (/tr|lin/.test(val('del-m'))) { p.arrow([0, 0], b, { color: '--accent4', width: 1.5, dash: [4, 4] }); p.dot(b, { r: 7, color: '--accent4', ring: true, label: 'b' }); }
+  }});
+  const fit = () => {
+    const f = map(), pts = figPts().filter(Boolean); let all = pts.concat(pts.map(f)).filter(w => isFinite(w[0]) && Cx.abs(w) < 12);
+    if (/tr|lin/.test(val('del-m'))) all.push(b); all.push([0, 0]);
+    let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; all.forEach(w => { x0 = Math.min(x0, w[0]); x1 = Math.max(x1, w[0]); y0 = Math.min(y0, w[1]); y1 = Math.max(y1, w[1]); });
+    P.span = Math.min(12, Math.max(1.5, 0.58 * Math.max(x1 - x0, (y1 - y0) / 0.72))); P.cx = (x0 + x1) / 2; P.cy = (y0 + y1) / 2;
+  };
+  const circ3 = (a, c, d) => {
+    const D = 2 * (a[0] * (c[1] - d[1]) + c[0] * (d[1] - a[1]) + d[0] * (a[1] - c[1]));
+    if (Math.abs(D) < 1e-9) return null; const A = Cx.abs2(a), C = Cx.abs2(c), E = Cx.abs2(d);
+    const o = [(A * (c[1] - d[1]) + C * (d[1] - a[1]) + E * (a[1] - c[1])) / D, (A * (d[0] - c[0]) + C * (a[0] - d[0]) + E * (c[0] - a[0])) / D];
+    return [o, Cx.abs(Cx.sub(a, o))];
+  };
+  const lineTex = (p1, p2) => {
+    const A = p2[1] - p1[1], B = -(p2[0] - p1[0]), C = A * p1[0] + B * p1[1];
+    if (Math.abs(A) < 1e-7 * Math.abs(B)) return `the line $v=${fnum(C / B, 4)}$`;
+    if (Math.abs(B) < 1e-7 * Math.abs(A)) return `the line $u=${fnum(C / A, 4)}$`;
+    return `the line $v=${fnum(-A / B, 4)}\\,u${C / B >= 0 ? '+' : ''}${fnum(C / B, 4)}$`;
+  };
+  const out = () => {
+    const F = FIG[val('del-s')], f = map(), m = val('del-m'); let s = '';
+    if (F.V) s = 'Vertices: ' + F.V.map((v, i) => `$${F.lab[i]}=${Cx.tex(v, 2)}\\mapsto ${Cx.tex(f(v), 3)}$`).join(', &nbsp; ') + '.';
+    else if (F.C) {
+      const [c, r] = F.C, q = [0.3, 2.2, 4.1].map(t => f(Cx.add(c, Cx.polar(r, t)))), cc = circ3(q[0], q[1], q[2]);
+      const thru0 = Math.abs(Cx.abs(c) - r) < 1e-9;
+      s = `Circle $|z-(${Cx.tex(c, 2)})|=${fnum(r, 3)}$ ${thru0 ? '(passes through $0$)' : ''} &nbsp;↦&nbsp; ` + (cc && cc[1] < 1e4 ? `the circle with centre $${Cx.tex(cc[0], 4)}$ and radius $${fnum(cc[1], 4)}$.` : lineTex(q[0], q[1]) + '.');
+      if (m === 'inv' && thru0) s += ' A circle through the pole $z=0$ of $1/z$ becomes a straight line (§23.10).';
+    } else s = m === 'inv' ? 'Hyperbola $x^2-y^2=1$ ↦ the lemniscate $R^2=\\cos2\\phi$, i.e. $(u^2+v^2)^2=u^2-v^2$ (Dass Ex 10).' : 'Hyperbola $x^2-y^2=1$ ↦ a congruent or similar hyperbola: linear maps preserve shape.';
+    const k = val('del-k'), th = val('del-t'), mm = { tr: `w=z+(${Cx.tex(b, 2)})`, rot: `w=e^{i\\,${th}^\\circ}z`, mag: `w=${fnum(k, 3)}z`, lin: `w=${k === 1 ? '' : fnum(k, 3)}e^{i\\,${th}^\\circ}z+(${Cx.tex(b, 2)})`, inv: 'w=1/z' }[m];
+    texMix('#del-out', `$${mm}$. &nbsp; ` + s);
+  };
+  const all = () => { fit(); P.redraw(); out(); };
+  P.addDrag(() => b, v => { b = v; }); P.onchange = out;
+  ['del-s', 'del-m'].forEach(id => $('#' + id).addEventListener('change', all)); watch(['del-t', 'del-k'], all); all();
+});
+
+/* H.K. Dass §23.11–23.16 — bilinear map through three points, fixed points, cross-ratio */
+onReady(() => {
+  const C0 = [0, 0], C1 = [1, 0], mul = Cx.mul, sub = Cx.sub;
+  const H = z => z ? [z, C1] : [C1, C0];
+  const det = (A, B) => sub(mul(A[0], B[1]), mul(A[1], B[0]));
+  const toStd = P => { const h = P.map(H), d23 = det(h[1], h[2]), d21 = det(h[1], h[0]); return [[mul(h[0][1], d23), Cx.neg(mul(h[0][0], d23))], [mul(h[2][1], d21), Cx.neg(mul(h[2][0], d21))]]; };
+  const adj = M => [[M[1][1], Cx.neg(M[0][1])], [Cx.neg(M[1][0]), M[0][0]]];
+  const mm = (A, B) => [[Cx.add(mul(A[0][0], B[0][0]), mul(A[0][1], B[1][0])), Cx.add(mul(A[0][0], B[0][1]), mul(A[0][1], B[1][1]))], [Cx.add(mul(A[1][0], B[0][0]), mul(A[1][1], B[1][0])), Cx.add(mul(A[1][0], B[0][1]), mul(A[1][1], B[1][1]))]];
+  const norm = M => { let m = 0; M.flat().forEach(c => { m = Math.max(m, Cx.abs(c)); }); return M.map(r => r.map(c => Cx.scale(c, 1 / m))); };
+  const ap = (M, z) => { const p = z ? Cx.add(mul(M[0][0], z), M[0][1]) : M[0][0], q = z ? Cx.add(mul(M[1][0], z), M[1][1]) : M[1][0]; return Cx.abs(q) < 1e-12 * (Cx.abs(p) + 1e-300) || Cx.abs(q) === 0 ? null : Cx.div(p, q); };
+  const cr = (A, B, C, D) => { const [a, b, c, d] = [A, B, C, D].map(H); const den = mul(det(b, c), det(d, a)); return Cx.abs(den) < 1e-14 ? null : Cx.div(mul(det(a, b), det(c, d)), den); };
+  const i = [0, 1], m1 = [-1, 0];
+  const PRE = [
+    { n: 'Ex 11: 1, i, −1 → i, 0, −i', M: [[i, C1], [[0, -1], C1]], z: [C1, i, m1], reg: { d: [C0, 1] }, t: 'w=\\dfrac{iz+1}{-iz+1}' },
+    { n: 'Ex 12: i, −i, 1 → 0, 1, ∞', M: [[[1, -1], [-1, -1]], [[2, 0], [-2, 0]]], z: [i, [0, -1], C1], reg: { d: [C0, 1] }, t: 'w=\\dfrac{(1-i)(z-i)}{2(z-1)}' },
+    { n: 'Ex 13: 1, −i, −1 → i, 0, −i', M: [[i, m1], [i, C1]], z: [C1, [0, -1], m1], reg: { d: [C0, 1] }, t: 'w=\\dfrac{iz-1}{iz+1}' },
+    { n: 'Ex 14: 0, −1, i → i, 0, ∞', M: [[C1, C1], [C1, [0, -1]]], z: [C0, m1, i], reg: { d: [C0, 1] }, t: 'w=\\dfrac{z+1}{z-i}' },
+    { n: 'Ex 17: i(1−z)/(1+z)', M: [[[0, -1], i], [C1, C1]], z: [C1, i, m1], reg: { d: [C0, 1] }, t: 'w=i\\,\\dfrac{1-z}{1+z}' },
+    { n: 'Ex 18: (i−z)/(i+z)', M: [[m1, i], [C1, i]], z: [C0, C1, m1], reg: { h: 1 }, t: 'w=\\dfrac{i-z}{i+z}' },
+    { n: 'Ex 19: (3−z)/(z−2)', M: [[m1, [3, 0]], [C1, [-2, 0]]], z: [[3, 0], [2.5, 0.5], [2, 0]], reg: { d: [[2.5, 0], 0.5] }, zc: [1.6, 0], t: 'w=\\dfrac{3-z}{z-2}' },
+    { n: 'Ex 21: (1−2z)/(z+1)', M: [[[-2, 0], C1], [C1, C1]], z: [[0.5, 0], C0, [2, 0]], reg: { d: [C1, 1] }, zc: [0.9, 0], t: 'w=\\dfrac{1-2z}{z+1}' },
+    { n: 'Ex 15: (3z−4)/(z−1) — parabolic', M: [[[3, 0], [-4, 0]], [C1, m1]], z: [C0, i, m1], reg: { d: [C0, 1] }, t: 'w=\\dfrac{3z-4}{z-1}' },
+    { n: 'Ex 16: (z−1)/(z+1) — elliptic', M: [[C1, m1], [C1, C1]], z: [C0, i, [0.5, 0]], reg: { d: [C0, 1] }, t: 'w=\\dfrac{z-1}{z+1}' },
+    { n: 'Q15: (5z+4)/(z+5) — hyperbolic', M: [[[5, 0], [4, 0]], [C1, [5, 0]]], z: [C0, i, m1], reg: { d: [C0, 1] }, t: 'w=\\dfrac{5z+4}{z+5}' },
+    { n: 'Cayley: (z−i)/(z+i)', M: [[C1, [0, -1]], [C1, i]], z: [C0, C1, m1], reg: { h: 1 }, t: 'w=\\dfrac{z-i}{z+i}' }
+  ];
+  const sel = $('#dmb-p'); PRE.forEach((p, k) => { const o = document.createElement('option'); o.value = k; o.textContent = p.n; sel.appendChild(o); });
+  let M, zs, ws, probe = [0.3, 0.45], edited = false, cur;
+  const load = () => { cur = PRE[+sel.value]; M = norm(cur.M); zs = cur.z.map(z => z.slice()); ws = zs.map(z => ap(M, z)); edited = false; };
+  const rebuild = () => { M = norm(mm(adj(toStd(ws)), toStd(zs))); edited = true; };
+  const inReg = z => cur.reg.h ? z[1] > 0 : Cx.abs(sub(z, cur.reg.d[0])) < cur.reg.d[1];
+  const bndZ = () => { const o = []; if (cur.reg.h) { for (let j = 1; j < 600; j++) o.push([Math.tan(-PI / 2 + PI * j / 600), 0]); } else { const [c, r] = cur.reg.d; for (let j = 0; j <= 600; j++) o.push(Cx.add(c, Cx.polar(r, (j + 0.5) * TAU / 600))); } return o; };
+  const grid = () => { const L = []; [0.5, 1.5, 2.25].forEach(r => { const a = []; for (let j = 0; j <= 720; j++) a.push(Cx.polar(r, (j + 0.5) * TAU / 720)); L.push(a); });
+    for (let k = 0; k < 12; k++) { const a = []; for (let j = 0; j <= 300; j++) a.push(Cx.polar(3 * j / 300, k * PI / 6 + 0.001)); L.push(a); }
+    const ax = []; for (let j = -300; j <= 300; j++) ax.push([j / 50, 0]); L.push(ax); return L; };
+  const cut = (pts, lim) => { const o = []; let pr = null; pts.forEach(q => { const w = ap(M, q); if (!w) { o.push(null); pr = null; return; } if (pr && Cx.abs(sub(w, pr)) > lim) o.push(null); o.push(w); pr = w; }); return o; };
+  const fixed = () => {
+    const [[a, b], [c, d]] = M, dm = sub(d, a), eps = 1e-9;
+    if (Cx.abs(c) < eps) { if (Cx.abs(dm) < eps) return { pts: [], inf: true, type: Cx.abs(b) < eps ? 'identity' : 'parabolic (translation)', K: null }; const al = Cx.div(b, dm), K = Cx.div(a, d); return { pts: [al], inf: true, K, type: kind(K) }; }
+    const disc = Cx.add(mul(dm, dm), Cx.scale(mul(b, c), 4));
+    if (Cx.abs(disc) < 1e-9) return { pts: [Cx.div(Cx.neg(dm), Cx.scale(c, 2))], type: 'parabolic', K: null };
+    const s = Cx.sqrt(disc), al = Cx.div(Cx.add(Cx.neg(dm), s), Cx.scale(c, 2)), be = Cx.div(sub(Cx.neg(dm), s), Cx.scale(c, 2));
+    const K = Cx.div(sub(a, mul(c, al)), sub(a, mul(c, be))); return { pts: [al, be], K, type: kind(K) };
+  };
+  const kind = K => Math.abs(K[1]) < 1e-7 && K[0] > 0 ? (Math.abs(K[0] - 1) < 1e-9 ? 'identity' : 'hyperbolic') : Math.abs(Cx.abs(K) - 1) < 1e-7 ? 'elliptic' : 'loxodromic';
+  const star = (p, z) => { if (!z) return; p.dot(z, { r: 9, color: '--accent4', hollow: true }); p.dot(z, { r: 3, color: '--accent4' }); };
+  load();
+  const lbl = ['z₁', 'z₂', 'z₃'], wl = ['w₁', 'w₂', 'w₃'];
+  const Z = new Plane('#cv-dass-mobz', { span: 2.4, aspect: 0.95, snap: 0.05, axisLabels: ['x', 'y'], draw: p => {
+    p.region((x, y) => inReg([x, y]), '--accent3', 0.13, 4);
+    grid().forEach((g, k) => p.path(g, { color: '--muted', width: 1, alpha: k === 15 ? 0.9 : 0.55 }));
+    p.path(bndZ(), { color: '--accent3', width: 3 });
+    fixed().pts.forEach(z => star(p, z));
+    zs.forEach((z, k) => p.dot(z, { r: 7, color: '--accent2', ring: true, label: lbl[k] }));
+    p.dot(probe, { r: 6, color: '--accent', ring: true, label: 'z' });
+  }});
+  const W = new Plane('#cv-dass-mobw', { span: 3, aspect: 0.95, snap: 0.05, axisLabels: ['u', 'v'], draw: p => {
+    const Mi = adj(M); p.region((x, y) => { const z = ap(Mi, [x, y]); return z ? inReg(z) : false; }, '--accent3', 0.13, 4);
+    grid().forEach((g, k) => p.path(cut(g, p.span * 0.6), { color: '--muted', width: 1, alpha: k === 15 ? 0.9 : 0.55 }));
+    p.path(cut(bndZ(), p.span * 0.6), { color: '--accent3', width: 3 });
+    fixed().pts.forEach(z => star(p, z));
+    ws.forEach((w, k) => { if (w) p.dot(w, { r: 7, color: '--accent2', ring: true, label: wl[k] }); else p.text(8, 18 + 16 * k, wl[k] + ' = ∞', { color: '--accent2' }); });
+    const pw = ap(M, probe); if (pw) p.dot(pw, { r: 6, color: '--accent', ring: true, label: 'w' });
+  }});
+  const T = z => z ? Cx.tex(z, 3) : '\\infty';
+  const out = () => {
+    const [[a, b], [c, d]] = M, fx = fixed(), pw = ap(M, probe), r1 = cr(probe, ...zs), r2 = cr(pw, ...ws);
+    const map = edited ? `w=\\dfrac{(${Cx.tex(a, 3)})z+(${Cx.tex(b, 3)})}{(${Cx.tex(c, 3)})z+(${Cx.tex(d, 3)})}` : cur.t;
+    let s = `$${map}$ &nbsp; sends $${zs.map(T).join(',\\ ')}\\ \\mapsto\\ ${ws.map(T).join(',\\ ')}$.<br>`;
+    s += `Fixed points: $${fx.pts.map(T).concat(fx.inf ? ['\\infty'] : []).join(',\\ ') || '\\text{none}'}$ — <b>${fx.type}</b>` + (fx.K ? ` (multiplier $K=${Cx.tex(fx.K, 3)}$, $|K|=${fnum(Cx.abs(fx.K), 3)}$)` : '') + '.<br>';
+    s += `Cross-ratio check: $(z,z_1,z_2,z_3)=${r1 ? Cx.tex(r1, 4) : '\\infty'}$ and $(w,w_1,w_2,w_3)=${r2 ? Cx.tex(r2, 4) : '\\infty'}$.`;
+    texMix('#dmb-out', s);
+  };
+  const near = (arr, k, v) => arr.some((u, j) => j !== k && u && Cx.abs(sub(u, v)) < 0.1);
+  [0, 1, 2].forEach(k => {
+    Z.addDrag(() => zs[k], v => { if (near(zs, k, v)) return; zs[k] = v; rebuild(); });
+    W.addDrag(() => ws[k] || [1e9, 1e9], v => { if (!ws[k] || near(ws, k, v)) return; ws[k] = v; rebuild(); });
+  });
+  Z.addDrag(() => probe, v => { probe = v; });
+  Z.onchange = () => { W.redraw(); out(); }; W.onchange = () => { Z.redraw(); out(); };
+  const all = () => { load(); [Z.cx, Z.cy] = cur.zc || C0; Z.redraw(); W.redraw(); out(); };
+  sel.addEventListener('change', all); all();
+});
+
+/* H.K. Dass §23.17, Ex 20 — inverse points */
+onReady(() => {
+  let c = [0, 0], a = [0.6, 0.35];
+  const inv = () => { const d = Cx.sub(a, c); return Cx.abs(d) < 1e-9 ? null : Cx.add(c, Cx.div([val('dip-r') ** 2, 0], Cx.conj(d))); };
+  const fam = () => {
+    const b = inv(); if (!b || Cx.abs(Cx.sub(a, b)) < 1e-6) return [];
+    const m = Cx.scale(Cx.add(a, b), 0.5), dd = Cx.sub(b, a), n = Cx.scale([-dd[1], dd[0]], 1 / Cx.abs(dd)), L = Math.max(0.6, Cx.abs(dd));
+    return [-1.4, -0.5, 0.5, 1.4].map(t => { const o = Cx.add(m, Cx.scale(n, t * L)); return [o, Cx.abs(Cx.sub(o, a))]; });
+  };
+  const P = new Plane('#cv-dass-invpt', { span: 3, aspect: 0.72, snap: 0.05, axisLabels: ['x', 'y'], draw: p => {
+    const R = val('dip-r'), b = inv();
+    fam().forEach(([o, r]) => p.circle(o, r, { color: '--accent3', width: 1.3 }));
+    p.circle(c, R, { color: '--accent', width: 3, fill: '--accent', fillAlpha: 0.07 });
+    if (b) { const d = Cx.sub(b, c), far = Cx.add(c, Cx.scale(d, Math.max(1.3, (Cx.abs(d) + 0.6) / Cx.abs(d)))); p.line(c, far, { color: '--muted', width: 1.2, dash: [5, 4] }); p.dot(b, { r: 7, color: '--accent2', ring: true, label: 'b (inverse)' }); }
+    p.dot(c, { r: 7, color: '--accent', ring: true, label: 'c' }); p.dot(a, { r: 7, color: '--accent3', ring: true, label: 'a' });
+  }});
+  const out = () => {
+    const R = val('dip-r'), b = inv();
+    if (!b) { texMix('#dip-out', 'With $a=c$ (the centre), the inverse point is $\\infty$.'); return; }
+    const ca = Cx.abs(Cx.sub(a, c)), cb = Cx.abs(Cx.sub(b, c)); let s = `$b=c+\\dfrac{R^2}{\\overline{a-c}}=${Cx.tex(b, 3)}$. &nbsp; $CA\\cdot CB=${fnum(ca, 3)}\\times${fnum(cb, 3)}=${fnum(ca * cb, 4)}=R^2=${fnum(R * R, 4)}$ ✓.`;
+    const F = fam(); if (F.length) { const [o, r] = F[0], d2 = Cx.abs2(Cx.sub(o, c)); s += ` &nbsp; Orthogonality of the first thin circle (centre $O'$, radius $\\rho$): $|O'c|^2=${fnum(d2, 4)}$ and $R^2+\\rho^2=${fnum(R * R + r * r, 4)}$ — equal, so they cross at $90^\\circ$.`; }
+    else s += ' &nbsp; $a$ lies on the circle, so it is its own inverse.';
+    texMix('#dip-out', s);
+  };
+  P.addDrag(() => c, v => { c = v; }); P.addDrag(() => a, v => { a = v; }); P.onchange = out;
+  watch(['dip-r'], () => { P.redraw(); out(); }); out();
+});
+
+/* H.K. Dass §23.18–23.22 — images of coordinate lines under z², zⁿ, z+1/z, eᶻ, sin z, cosh z */
+onReady(() => {
+  const ch = Math.cosh, sh = Math.sinh, rng = (a, b, n, f) => { const o = []; for (let j = 0; j <= n; j++) o.push(f(a + (b - a) * j / n)); return o; };
+  const sq = z => Cx.mul(z, z), cu = z => Cx.mul(z, sq(z)), jk = z => Cx.add(z, Cx.div([1, 0], z));
+  const sqF = (b, c) => [Math.abs(b) < 0.04 ? null : rng(-12, 12, 200, t => [b * b - t * t / (4 * b * b), t]), Math.abs(c) < 0.04 ? null : rng(-12, 12, 200, t => [t * t / (4 * c * c) - c * c, t])];
+  const sqE = (b, c) => [Math.abs(b) < 0.04 ? 'x=0\\mapsto\\text{the ray }u\\le0' : `x=${fnum(b, 2)}\\ \\mapsto\\ v^2=-${fnum(4 * b * b, 3)}\\,(u-${fnum(b * b, 3)})`, Math.abs(c) < 0.04 ? 'y=0\\mapsto\\text{the ray }u\\ge0' : `y=${fnum(c, 2)}\\ \\mapsto\\ v^2=${fnum(4 * c * c, 3)}\\,(u+${fnum(c * c, 3)})`];
+  const sqr = (x0, x1, y0, y1) => [[x0, y0], [x1, y0], [x1, y1], [x0, y1]];
+  const CASES = [
+    { n: 'z² — lines x = b, y = c (§23.18)', f: sq, cart: 1, P: [1, 0.7], box: [-2, 2, -2, 2], zs: 2.2, ws: 5, F: sqF, E: sqE },
+    { n: 'z² — square 1 ≤ x, y ≤ 2 (§23.18)', f: sq, cart: 1, P: [1.5, 1.5], box: [0.5, 2.2, 0.5, 2.2], zs: 2.2, zc: [1, 1], ws: 6, wc: [0, 4], F: sqF, E: sqE, R: sqr(1, 2, 1, 2), RT: 'Image: bounded by the four parabolas $v^2=-4(u-1)$, $v^2=-16(u-4)$, $v^2=4(u+1)$, $v^2=16(u+4)$.' },
+    { n: 'z² — circle |z−1| = 1 → cardioid (Ex 27)', f: sq, cart: 1, P: [1, 0.7], box: [-2, 2, -2, 2], zs: 2.2, zc: [0.6, 0], ws: 4.5, wc: [1.4, 0], F: sqF, E: sqE, RC: [[1, 0], 1], RT: 'Image of the circle: the cardioid $R=2(1+\\cos\\phi)$, with its cusp at $w=0$ (the image of the critical point $z=0$).' },
+    { n: 'z² — triangle x=1, y=1, x+y=1 (Ex. 23.3 Q1)', f: sq, cart: 1, P: [0.8, 0.8], box: [-1.5, 2, -1.5, 2], zs: 1.8, zc: [0.5, 0.5], ws: 2.8, wc: [0, 0.8], F: sqF, E: sqE, R: [[1, 0], [1, 1], [0, 1]], RT: 'Image: bounded by $4u+v^2=4$, $4u-v^2=-4$ and $u^2+2v=1$.' },
+    { n: 'z² — circles r = a, rays θ = θ₀ (polar)', f: sq, pol: 1, n2: 2, P: [0.9, 0.6], box: [-1.6, 1.6, -1.6, 1.6], zs: 1.8, ws: 2.8 },
+    { n: 'z³ — circles r = a, rays θ = θ₀ (§23.19)', f: cu, pol: 1, n2: 3, P: [0.8, 0.5], box: [-1.3, 1.3, -1.3, 1.3], zs: 1.5, ws: 2.4 },
+    { n: 'z + 1/z — circles and rays (§23.20)', f: jk, pol: 1, J: 1, P: [1.6, 0.9], box: [-2.6, 2.6, -2.6, 2.6], zs: 2.8, ws: 4 },
+    { n: 'eᶻ — lines x = c, y = c (§23.21)', f: Cx.exp, cart: 1, P: [0.5, 1], box: [-1.5, 1.6, -3.1, 3.1], zs: 3.3, ws: 5.5, X: 1 },
+    { n: 'eᶻ — rectangle 1≤x≤2, 2≤y≤3 (Ex 28)', f: Cx.exp, cart: 1, P: [1.5, 2.5], box: [0.5, 2.1, 1.5, 3.4], zs: 2.4, zc: [0.5, 1.6], ws: 8, wc: [-1.5, 1.5], X: 1, R: sqr(1, 2, 2, 3), RT: 'Image: the annular sector $e\\le R\\le e^2$, $2\\le\\phi\\le3$ rad.' },
+    { n: 'sin z — lines x = c, y = c', f: Cx.sin, cart: 1, P: [0.6, 0.8], box: [-1.55, 1.55, -2.2, 2.2], zs: 2.4, ws: 4.2, S: 1 },
+    { n: 'sin z — strip |x| < π/2, 1 < y < 2 (Ex 29)', f: Cx.sin, cart: 1, P: [0.5, 1.5], box: [-1.55, 1.55, 0.3, 2.2], zs: 2.2, zc: [0, 1.2], ws: 4.5, wc: [0, 1.6], S: 1, R: sqr(-PI / 2, PI / 2, 1, 2), RT: 'Image: the upper half of the region between the ellipses $\\frac{u^2}{\\cosh^2 1}+\\frac{v^2}{\\sinh^2 1}=1$ and $\\frac{u^2}{14.15}+\\frac{v^2}{13.15}=1$.' },
+    { n: 'cosh z — lines x = b, y = a (§23.22)', f: Cx.cosh, cart: 1, P: [0.8, 0.6], box: [-2, 2, -3.1, 3.1], zs: 3.3, ws: 4, CH: 1 }
+  ];
+  const sel = $('#dfm-c'); CASES.forEach((c, k) => { const o = document.createElement('option'); o.value = k; o.textContent = c.n; sel.appendChild(o); });
+  let C = CASES[0], P = C.P.slice();
+  const s12 = () => C.pol ? [Cx.abs(P), Cx.arg(P)] : P;
+  const lines = () => {
+    const [s1, s2] = s12();
+    if (C.pol) return [rng(0, TAU, 400, t => Cx.polar(s1, t + 0.0005)), C.J ? rng(-4, 4, 300, t => Cx.polar(Math.exp(t), s2)) : rng(0, 3, 200, r => Cx.polar(r, s2))];
+    const yr = C.X ? [-PI, PI] : C.CH ? [-PI, PI] : C.S ? [-3, 3] : [-4, 4], xr = C.X ? [-3, 2.3] : C.S ? [-PI, PI] : [-4, 4];
+    return [rng(yr[0], yr[1], 400, y => [s1, y]), rng(xr[0], xr[1], 400, x => [x, s2])];
+  };
+  const formula = () => {
+    const [s1, s2] = s12(), el = (A, B) => rng(0, TAU, 300, t => [A * Math.cos(t), B * Math.sin(t)]);
+    if (C.pol && !C.J) return [rng(0, TAU, 300, t => Cx.polar(s1 ** C.n2, t)), [[0, 0], Cx.polar(20, C.n2 * s2)]];
+    if (C.J) return [el(s1 + 1 / s1, Math.abs(s1 - 1 / s1)), rng(-4, 4, 300, t => [2 * Math.cos(s2) * ch(t), 2 * Math.sin(s2) * sh(t)])];
+    if (C.X) return [rng(0, TAU, 300, t => Cx.polar(Math.exp(s1), t)), [[0, 0], Cx.polar(40, s2)]];
+    if (C.S) return [rng(-3, 3, 300, t => [Math.sin(s1) * ch(t), Math.cos(s1) * sh(t)]), el(ch(s2), Math.abs(sh(s2)))];
+    if (C.CH) return [el(ch(s1), Math.abs(sh(s1))), rng(-2.5, 2.5, 300, t => [Math.cos(s2) * ch(t), Math.sin(s2) * sh(t)])];
+    return C.F(s1, s2);
+  };
+  const eqs = () => {
+    const [s1, s2] = s12(), d = x => fnum(x, 3), dg = x => fnum(x * 180 / PI, 1);
+    if (C.pol && !C.J) return [`r=${d(s1)}\\ \\mapsto\\ R=${d(s1)}^{${C.n2}}=${d(s1 ** C.n2)}`, `\\theta=${dg(s2)}^\\circ\\ \\mapsto\\ \\phi=${C.n2}\\theta=${dg(C.n2 * s2)}^\\circ`];
+    if (C.J) return [Math.abs(s1 - 1) < 0.03 ? 'r=1\\ \\mapsto\\ \\text{the segment }[-2,2]' : `r=${d(s1)}\\ \\mapsto\\ \\dfrac{u^2}{${d((s1 + 1 / s1) ** 2)}}+\\dfrac{v^2}{${d((s1 - 1 / s1) ** 2)}}=1`, `\\theta=${dg(s2)}^\\circ\\ \\mapsto\\ \\dfrac{u^2}{${d(4 * Math.cos(s2) ** 2)}}-\\dfrac{v^2}{${d(4 * Math.sin(s2) ** 2)}}=1\\ (e=\\sec\\theta=${d(1 / Math.abs(Math.cos(s2)))})`];
+    if (C.X) return [`x=${d(s1)}\\ \\mapsto\\ R=e^{${d(s1)}}=${d(Math.exp(s1))}`, `y=${d(s2)}\\ \\mapsto\\ \\phi=${d(s2)}\\text{ rad}`];
+    if (C.S) return [`x=${d(s1)}\\ \\mapsto\\ \\dfrac{u^2}{${d(Math.sin(s1) ** 2)}}-\\dfrac{v^2}{${d(Math.cos(s1) ** 2)}}=1`, `y=${d(s2)}\\ \\mapsto\\ \\dfrac{u^2}{${d(ch(s2) ** 2)}}+\\dfrac{v^2}{${d(sh(s2) ** 2)}}=1`];
+    if (C.CH) return [`x=${d(s1)}\\ \\mapsto\\ \\dfrac{u^2}{${d(ch(s1) ** 2)}}+\\dfrac{v^2}{${d(sh(s1) ** 2)}}=1`, `y=${d(s2)}\\ \\mapsto\\ \\dfrac{u^2}{${d(Math.cos(s2) ** 2)}}-\\dfrac{v^2}{${d(Math.sin(s2) ** 2)}}=1`];
+    return C.E(s1, s2);
+  };
+  const regPts = () => { if (C.RC) return rng(0, TAU, 600, t => Cx.add(C.RC[0], Cx.polar(C.RC[1], t + 0.0007))); if (!C.R) return null; let o = []; C.R.forEach((v, k) => { o = o.concat(rng(0, 1, 120, s => Cx.add(v, Cx.scale(Cx.sub(C.R[(k + 1) % C.R.length], v), s)))); }); return o; };
+  const cut = (pts, lim) => { const o = []; let pr = null; pts.forEach(q => { const w = C.f(q); if (pr && Cx.abs(Cx.sub(w, pr)) > lim) o.push(null); o.push(w); pr = w; }); return o; };
+  const Z = new Plane('#cv-dass-famz', { span: 2.2, aspect: 0.95, snap: 0.05, axisLabels: ['x', 'y'], draw: p => {
+    const r = regPts(); if (r) p.path(r, { color: '--accent2', width: 2, close: true, fill: '--accent2', fillAlpha: 0.15 });
+    const [l1, l2] = lines(); p.path(l1, { color: '--accent', width: 2.5 }); p.path(l2, { color: '--accent3', width: 2.5 });
+    p.dot(P, { r: 7, color: '--accent4', ring: true, label: 'P' });
+  }});
+  const W = new Plane('#cv-dass-famw', { span: 4, aspect: 0.95, snap: 0, axisLabels: ['u', 'v'], draw: p => {
+    const r = regPts(); if (r) p.path(cut(r, p.span), { color: '--accent2', width: 2, fill: '--accent2', fillAlpha: 0.15 });
+    const [l1, l2] = lines(), [f1, f2] = formula();
+    p.path(cut(l1, p.span * 0.7), { color: '--accent', width: 3 }); p.path(cut(l2, p.span * 0.7), { color: '--accent3', width: 3 });
+    if (f1) p.path(f1, { color: '--fg', width: 1.5, dash: [6, 5] }); if (f2) p.path(f2, { color: '--fg', width: 1.5, dash: [6, 5] });
+    p.dot(C.f(P), { r: 7, color: '--accent4', ring: true, label: 'f(P)' });
+  }});
+  const out = () => {
+    const [e1, e2] = eqs(), h = 1e-6, f = C.f, D = Cx.scale(Cx.sub(f(Cx.add(P, [h, 0])), f(Cx.sub(P, [h, 0]))), 1 / (2 * h));
+    let s = `Blue: $${e1}$ &nbsp;&nbsp; Green: $${e2}$<br>`;
+    s += Cx.abs(D) < 1e-5 ? `$f'(P)=0$: <b>critical point</b>, so the image curves do not cross at $90^\\circ$ here.` : `$f'(P)=${Cx.tex(D, 3)}$, so the image curves cross at $90^\\circ$ (conformal). Local magnification $|f'|=${fnum(Cx.abs(D), 3)}$.`;
+    if (C.RT) s += '<br>' + C.RT;
+    texMix('#dfm-out', s);
+  };
+  const clamp = v => [Math.min(C.box[1], Math.max(C.box[0], v[0])), Math.min(C.box[3], Math.max(C.box[2], v[1]))];
+  Z.addDrag(() => P, v => { let q = clamp(v); if (C.pol && Cx.abs(q) < 0.1) return; if (C.S && Math.abs(q[0]) < 0.02) q = [0.05, q[1]]; P = q; });
+  Z.onchange = () => { W.redraw(); out(); };
+  const all = () => { C = CASES[+sel.value]; P = C.P.slice(); Z.span = C.zs; [Z.cx, Z.cy] = C.zc || [0, 0]; W.span = C.ws; [W.cx, W.cy] = C.wc || [0, 0]; Z.redraw(); W.redraw(); out(); };
+  sel.addEventListener('change', all); all();
+});
+
+/* dass:end */</script>
 </body>
 </html>

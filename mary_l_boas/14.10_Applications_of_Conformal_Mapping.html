@@ -272,6 +272,60 @@ $$V=\frac{100}{\pi}\theta=\frac{100}{\pi}\arctan\frac yx .$$
 </ul>
 <p><b>Flow:</b> water comes down the channel from $x=-\infty$, leaves at $x=-1$, and spreads over the whole plane, even back along the outsides of the walls. <b>Capacitor:</b> with the plates at different potentials, $v=$const are the equipotentials and $u=$const the field lines, which bulge out at the ends. This is <b>fringing</b> (Fig. 10.5). The lab above draws it (choose "Ex. 5").</p>
 
+<!-- dass:start 20__fringe -->
+<h2 id="dass-23-23" class="dass"><span class="dtag">H.K. Dass §23.23</span>The Schwarz–Christoffel transformation: the upper half-plane onto a polygon</h2>
+<p><b>The problem.</b> Laplace problems are easy in the upper half-plane. Real boundaries, however, are polygons: channels, steps, slots, the inside of a triangle. The Schwarz–Christoffel (SC) formula builds the conformal map from the <b>upper half $z$-plane</b> onto the <b>interior of a polygon</b> in the $w$-plane. The real axis goes to the sides of the polygon.</p>
+<div class="box thm"><span class="tag">Schwarz–Christoffel formula</span>
+<p>Let the polygon have vertices $w_1,\dots,w_n$ with <b>interior angles</b> $\alpha_1,\dots,\alpha_n$. Let these vertices be the images of real points $x_1\lt x_2\lt\dots\lt x_n$. Then</p>
+$$\frac{dw}{dz}=A\,(z-x_1)^{\frac{\alpha_1}{\pi}-1}(z-x_2)^{\frac{\alpha_2}{\pi}-1}\cdots(z-x_n)^{\frac{\alpha_n}{\pi}-1},\qquad w=A\int(z-x_1)^{\frac{\alpha_1}{\pi}-1}\cdots(z-x_n)^{\frac{\alpha_n}{\pi}-1}\,dz+B.$$
+<p>$A$ (complex) fixes the size and orientation, and $B$ the position. Any three of the $x_k$ may be chosen freely. A vertex sent to $z=\infty$ is simply left out of the product.</p></div>
+
+<h3>Why it works (Dass's proof)</h3>
+<ol class="steps">
+<li>Take arguments: $\arg dw=\arg dz+\arg A+\sum_k\left(\frac{\alpha_k}{\pi}-1\right)\arg(z-x_k)$.</li>
+<li>Let $z$ move along the real axis from left to right, so $dz\gt0$ and $\arg dz=0$. Between two consecutive $x_k$, every $\arg(z-x_k)$ is constant: it is $\pi$ for the points still ahead of $z$ and $0$ for those already passed. So $\arg dw$ is constant and $w$ moves along a <b>straight line</b>, one side of the polygon.</li>
+<li>When $z$ passes $x_k$, only $\arg(z-x_k)$ changes, from $\pi$ to $0$. So $\arg dw$ changes by $-\left(\frac{\alpha_k}{\pi}-1\right)\pi=\pi-\alpha_k$: the direction of travel turns anticlockwise by $\pi-\alpha_k$, the <b>exterior angle</b> at $w_k$. The next side starts there.</li>
+<li>So the real axis is traced as the closed polygon. The exterior angles add up to $\sum(\pi-\alpha_k)=2\pi$, as they must. One can also show that the upper half-plane goes to the interior.</li>
+</ol>
+<div class="dcase"><p><b>All the cases you will meet.</b></p><ul>
+<li><b>Finite vertex, convex corner</b> ($0\lt\alpha_k\lt\pi$): the exponent lies in $(-1,0)$, so the integrand has a mild singularity at $x_k$.</li>
+<li><b>Re-entrant corner</b> ($\pi\lt\alpha_k\le2\pi$): the exponent is positive. $\alpha_k=2\pi$ is the tip of a slit or a thin plate: the factor is $(z-x_k)^{+1}$.</li>
+<li><b>Vertex at $w=\infty$</b> (a semi-infinite strip or channel): the "interior angle" is $0$, the exponent is $-1$, and the factor $(z-x_k)^{-1}$ integrates to a <b>logarithm</b>.</li>
+<li><b>Vertex sent to $z=\infty$</b>: drop its factor. This is how Dass handles the third vertex in Ex 30 and Ex 31.</li></ul></div>
+
+<div class="widget" id="w-dass-sc">
+<div class="wt">Interactive — Schwarz–Christoffel: the upper half-plane folded onto a triangle (or a strip)</div>
+<div class="wd">Left: the upper half $z$-plane, with horizontal lines $y=$ const in purple and vertical lines in grey. Its real axis is coloured in three pieces. Right: the image under the SC map, computed by numerically integrating $dw/dz$. Each piece of the real axis becomes the side of the same colour. Set the angles $\alpha$ and $\beta$ (the third angle is $\pi-\alpha-\beta$). Drag the green probe and watch its image stay inside the polygon.</div>
+<div class="ctrls"><label>map <select id="dsc-m"><option value="tri">triangle (Dass Ex 31)</option><option value="strip">half-strip: cosh⁻¹z (Ex 30)</option><option value="log">strip: log z (Ex. 23.4 Q1)</option></select></label>
+<label>$\alpha/\pi$ <input type="range" id="dsc-a" min="0.1" max="0.8" step="0.05" value="0.35"><output></output></label>
+<label>$\beta/\pi$ <input type="range" id="dsc-b" min="0.1" max="0.8" step="0.05" value="0.4"><output></output></label></div>
+<div class="grid2"><canvas id="cv-dass-scz"></canvas><canvas id="cv-dass-scw"></canvas></div>
+<div class="readout" id="dsc-out"></div>
+</div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 30) — the semi-infinite strip $u\gt0$, $0\lt v\lt\pi$ onto the upper half $z$-plane</div><div class="bd"><ol class="steps">
+<li>Treat the strip as a "triangle" with vertices $Q=\pi i$ and $R=0$, each with interior angle $\frac\pi2$, and the third vertex at $w=\infty$ (angle $0$) sent to $z=\infty$. Put $Q\leftrightarrow z=-1$ and $R\leftrightarrow z=1$.</li>
+<li>SC: $\dfrac{dw}{dz}=A(z+1)^{\frac12-1}(z-1)^{\frac12-1}=\dfrac{A}{\sqrt{z^2-1}}$. So $w=A\cosh^{-1}z+B$.</li>
+<li>$R$: $w=0$ at $z=1$ gives $0=A\cosh^{-1}1+B=B$, so $B=0$.</li>
+<li>$Q$: $w=\pi i$ at $z=-1$, and $\cosh^{-1}(-1)=\pi i$, so $A=1$.</li>
+<li>Result: $\boxed{w=\cosh^{-1}z}$, i.e. $z=\cosh w$. This agrees with §23.22: $\cosh$ sends the half-strip onto the upper half-plane.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> the potential in a semi-infinite slot comes straight from this map, with no Fourier series. It is also the cleanest check that SC reproduces a map you already know.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Ex 31) — the interior of a triangle with angles $\alpha$ at $A$ and $\beta$ at $B$</div><div class="bd"><ol class="steps">
+<li>Send $A\to z=0$, $B\to z=1$ and $C\to z=\infty$ (so $C$'s factor is dropped). Put $A$ at $w=0$ and $B$ at $w=1$.</li>
+<li>SC: $\dfrac{dw}{dz}=K\,z^{\frac\alpha\pi-1}(z-1)^{\frac\beta\pi-1}$. Integrating from $0$ (so $w(0)=0$ and the constant is $0$): $w=K\displaystyle\int_0^z t^{\frac\alpha\pi-1}(1-t)^{\frac\beta\pi-1}dt$. The $(-1)$ factor from $(z-1)$ versus $(1-z)$ is absorbed into $K$.</li>
+<li>Fix $K$ with $w(1)=1$: $1=K\displaystyle\int_0^1t^{\frac\alpha\pi-1}(1-t)^{\frac\beta\pi-1}dt=K\,B\!\left(\tfrac\alpha\pi,\tfrac\beta\pi\right)=K\,\dfrac{\Gamma(\frac\alpha\pi)\Gamma(\frac\beta\pi)}{\Gamma(\frac{\alpha+\beta}\pi)}$.</li>
+<li>So $\boxed{w=\dfrac{\Gamma\!\left(\frac{\alpha+\beta}{\pi}\right)}{\Gamma\!\left(\frac\alpha\pi\right)\Gamma\!\left(\frac\beta\pi\right)}\displaystyle\int_0^z t^{\frac\alpha\pi-1}(1-t)^{\frac\beta\pi-1}dt}$: an incomplete Beta function.</li>
+<li>Check: the third vertex is $w(\infty)=\frac{\sin\beta}{\sin(\alpha+\beta)}e^{i\alpha}$, by the sine rule on the triangle with base $[0,1]$. The widget's readout compares this with the numerical integral at a far-away point.</li></ol>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> it links conformal maps with the Beta and Gamma functions (Chapter 11). Expect "the exponent of $(z-x_k)$ for an interior angle $\alpha_k$ is $\frac{\alpha_k}{\pi}-1$" as a direct question.</p></div></div>
+
+<div class="ex"><div class="hd">Worked example (Dass Exercise 23.4) — three quick SC maps</div><div class="bd">
+<div class="dcase"><p><b>Q1: the infinite strip $0\lt v\lt\pi$.</b> It has a single "vertex" at $w=\infty$ with angle $0$. Send it to $z=0$: $\frac{dw}{dz}=Az^{-1}$, so $w=A\log z+B$. Choosing $A=1$, $B=0$ gives $\boxed{w=\log z}$: the positive real axis goes to $v=0$ and the negative real axis to $v=\pi$.</p></div>
+<div class="dcase"><p><b>Q2: the half-strip bounded by $v=-b$, $u=0$, $v=b$.</b> Scale and shift Ex 30: $w=\frac{2b}{\pi}\cosh^{-1}z-bi$. The factor $\frac{2b}{\pi}$ turns height $\pi$ into $2b$, and $-bi$ moves it down.</p></div>
+<div class="dcase"><p><b>Q3: the half-strip $-b\lt u\lt b$, $v\gt0$.</b> This is the $\sin$ half-strip of §23.21, rescaled: $\boxed{z=\sin\dfrac{\pi w}{2b}}$.</p></div>
+<p><b>Link to Boas Example 5 above.</b> There, $z=w+e^w$. With $\zeta=e^w$ (the upper half $0\lt v\lt\pi$ of the strip → the upper half-plane), $z=\zeta+\log\zeta$ and $\frac{dz}{d\zeta}=\frac{\zeta+1}{\zeta}$. That is an SC derivative: a factor $(\zeta+1)^{+1}$ (angle $2\pi$, the plate tips) and $\zeta^{-1}$ (the vertex at infinity inside the channel).</p>
+<p class="why"><b>Why this matters for CSIR-NET / GATE:</b> strip ↔ half-plane via $\log$ or $e^{(\cdot)}$, and half-strip ↔ half-plane via $\sin$ or $\cosh$, cover almost every SC question that is actually asked.</p></div></div>
+<!-- dass:end -->
 <h2 id="boas">6. Boas Problems, Section 10 — solutions</h2>
 <details class="sol"><summary>Show solutions 1–3 (theory)</summary>
 <p><b>1.</b> See the key theorem: $g(w)=\phi+i\psi$ is analytic; $h(z)=g(f(z))$ has $h'=g'(f)f'$, so it is analytic. Hence $\operatorname{Re}h=\phi(u(x,y),v(x,y))$ is harmonic.</p>
@@ -981,6 +1035,60 @@ onReady(() => {
   P.addDrag(() => p0, v => { if (Math.hypot(v[0], v[1]) > 0.05) p0 = v; });
   const out = () => { const f = WF[val('dfl-w')], w = f(p0), v = Cx.conj(dW(f, p0)); texMix('#dfl-out', `At $z=${Cx.tex(p0, 2)}$: $\\phi=${fnum(w[0], 3)}$, $\\psi=${fnum(w[1], 3)}$; &nbsp; $v_x+iv_y=\\overline{w'(z)}=${Cx.tex(v, 3)}$, speed $|w'|=${fnum(Cx.abs(v), 3)}$`); };
   P.onchange = out; $('#dfl-w').addEventListener('change', () => { P.redraw(); out(); }); out();
+});
+
+/* H.K. Dass §23.23 — Schwarz–Christoffel: upper half-plane → triangle / half-strip / strip */
+onReady(() => {
+  const lgam = x => { const c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+    if (x < 0.5) return Math.log(PI / Math.sin(PI * x)) - lgam(1 - x); x -= 1; let a = c[0]; const t = x + 7.5; for (let i = 1; i < 9; i++) a += c[i] / (x + i); return 0.5 * Math.log(TAU) + (x + 0.5) * Math.log(t) - t + Math.log(a); };
+  const gl = n => { const X = [], Wt = []; for (let i = 1; i <= n; i++) { let z = Math.cos(PI * (i - 0.25) / (n + 0.5)), pp = 1; for (let it = 0; it < 100; it++) { let p1 = 1, p2 = 0; for (let j = 1; j <= n; j++) { const p3 = p2; p2 = p1; p1 = ((2 * j - 1) * z * p2 - (j - 1) * p3) / j; } pp = n * (z * p1 - p2) / (z * z - 1); const z1 = z; z = z1 - p1 / pp; if (Math.abs(z - z1) < 1e-15) break; } X.push(z); Wt.push(2 / ((1 - z * z) * pp * pp)); } return [X, Wt]; };
+  const [GX, GW] = gl(8), [HX, HW] = gl(16);
+  const cpow = (z, p) => Cx.exp(Cx.scale(Cx.log(z), p));
+  let a = 0.35, b = 0.4, K = 1, wref = [0, 0];
+  const zref = [0.5, 0.5];
+  const dwdz = t => Cx.scale(Cx.mul(cpow(t, a - 1), cpow([1 - t[0], -t[1]], b - 1)), K);
+  const integ = (z0, z1) => { const n = Math.max(1, Math.ceil(Cx.abs(Cx.sub(z1, z0)) / 0.05)), d = Cx.scale(Cx.sub(z1, z0), 1 / n); let s = [0, 0];
+    for (let k = 0; k < n; k++) for (let i = 0; i < 8; i++) { const v = dwdz(Cx.add(z0, Cx.scale(d, k + (GX[i] + 1) / 2))); s[0] += GW[i] / 2 * v[0]; s[1] += GW[i] / 2 * v[1]; } return Cx.mul(s, d); };
+  /* w(z_ref) from w = K z^a/a ∫_0^1 (1 - z u^{1/a})^{b-1} du (substituting t = z u^{1/a}), composite Gauss–Legendre */
+  const setup = () => { a = val('dsc-a'); b = Math.min(val('dsc-b'), 0.95 - a); K = Math.exp(lgam(a + b) - lgam(a) - lgam(b)); let s = [0, 0]; const NS = 64;
+    for (let k = 0; k < NS; k++) for (let i = 0; i < 16; i++) { const u = (k + (HX[i] + 1) / 2) / NS, t = Math.pow(u, 1 / a), q = cpow([1 - zref[0] * t, -zref[1] * t], b - 1); s[0] += HW[i] / 2 / NS * q[0]; s[1] += HW[i] / 2 / NS * q[1]; }
+    wref = Cx.scale(Cx.mul(cpow(zref, a), s), K / a); cache = { k: null }; };
+  const mode = () => val('dsc-m');
+  const W1 = z => mode() === 'strip' ? Cx.acosh(z) : mode() === 'log' ? Cx.log(z) : Cx.add(wref, integ(zref, z));
+  const geo = (lo, hi, n) => { const o = []; for (let j = 0; j <= n; j++) o.push(lo * Math.pow(hi / lo, j / n)); return o; };
+  const HL = [0.15, 0.35, 0.7, 1.4, 3], VL = [-4, -1.5, -0.5, 0.25, 0.5, 0.75, 1.5, 2.5, 5];
+  const zLines = () => HL.map(y => { const o = []; for (let j = 0; j <= 400; j++) o.push([8 * Math.sinh(-2.7 + 5.4 * j / 400), y]); return o; }).concat(VL.map(x => geo(0.15, 60, 200).map(y => [x, y])));
+  let cache = { k: null };
+  const wLines = () => { const key = mode() + '|' + a + '|' + b; if (cache.k === key) return cache.L;
+    const L = zLines().map(pts => { if (mode() !== 'tri') return pts.map(W1); const o = [W1(pts[0])]; for (let j = 1; j < pts.length; j++) o.push(Cx.add(o[j - 1], integ(pts[j - 1], pts[j]))); return o; });
+    cache = { k: key, L }; return L; };
+  const apex = () => Cx.polar(Math.sin(b * PI) / Math.sin((a + b) * PI), a * PI);
+  const pieces = () => mode() === 'tri' ? [[-1e3, 0, '--accent'], [0, 1, '--accent3'], [1, 1e3, '--accent2']] : mode() === 'strip' ? [[-1e3, -1, '--accent'], [-1, 1, '--accent3'], [1, 1e3, '--accent2']] : [[-1e3, 0, '--accent'], [0, 1e3, '--accent2']];
+  let probe = [0.6, 0.8];
+  const Z = new Plane('#cv-dass-scz', { span: 3, cy: 1.8, aspect: 0.8, snap: 0.05, axisLabels: ['x', 'y'], draw: p => {
+    p.region((x, y) => y > 0, '--accent3', 0.07, 6);
+    zLines().forEach((l, k) => p.path(l, { color: k < HL.length ? '--accent4' : '--muted', width: k < HL.length ? 1.6 : 1.1, alpha: 0.85 }));
+    pieces().forEach(([x0, x1, c]) => p.line([Math.max(x0, -50), 0], [Math.min(x1, 50), 0], { color: c, width: 4 }));
+    (mode() === 'tri' ? [[0, 'A'], [1, 'B']] : mode() === 'strip' ? [[-1, 'Q'], [1, 'R']] : [[0, '']]).forEach(([x, s]) => p.dot([x, 0], { r: 5, color: '--fg', label: s }));
+    p.dot(probe, { r: 7, color: '--accent3', ring: true, label: 'z' });
+  }});
+  const Wp = new Plane('#cv-dass-scw', { span: 1, aspect: 0.8, snap: 0, axisLabels: ['u', 'v'], draw: p => {
+    const m = mode(), cut = l => { const o = []; let pr = null; l.forEach(w => { if (pr && Cx.abs(Cx.sub(w, pr)) > p.span * 0.5) o.push(null); o.push(w); pr = w; }); return o; };
+    if (m === 'tri') { const C = apex(); p.path([[0, 0], [1, 0], C], { color: 'none', close: true, fill: '--accent3', fillAlpha: 0.07 }); p.line(C, [0, 0], { color: '--accent', width: 4 }); p.line([0, 0], [1, 0], { color: '--accent3', width: 4 }); p.line([1, 0], C, { color: '--accent2', width: 4 }); p.dot([0, 0], { r: 5, color: '--fg', label: 'A' }); p.dot([1, 0], { r: 5, color: '--fg', label: 'B' }); p.dot(C, { r: 5, color: '--fg', label: 'C (z=∞)' }); }
+    else { const top = m === 'strip' ? 0 : -50; p.line([top, PI], [50, PI], { color: '--accent', width: 4 }); p.line([top, 0], [50, 0], { color: '--accent2', width: 4 }); if (m === 'strip') { p.line([0, 0], [0, PI], { color: '--accent3', width: 4 }); p.dot([0, PI], { r: 5, color: '--fg', label: 'Q' }); p.dot([0, 0], { r: 5, color: '--fg', label: 'R' }); } }
+    wLines().forEach((l, k) => p.path(cut(l), { color: k < HL.length ? '--accent4' : '--muted', width: k < HL.length ? 1.6 : 1.1, alpha: 0.85 }));
+    p.dot(W1(probe), { r: 7, color: '--accent3', ring: true, label: 'w' });
+  }});
+  const view = () => { const m = mode(); if (m === 'tri') { const C = apex(), x0 = Math.min(0, C[0]), x1 = Math.max(1, C[0]); Wp.span = Math.max(0.75, 0.62 * Math.max(x1 - x0, C[1] / 0.8)); Wp.cx = (x0 + x1) / 2; Wp.cy = C[1] / 2; } else if (m === 'strip') { Wp.span = 3.2; Wp.cx = 2.2; Wp.cy = PI / 2; } else { Wp.span = 3.2; Wp.cx = 0.2; Wp.cy = PI / 2; } };
+  const out = () => { const m = mode(), w = W1(probe); let s;
+    if (m === 'tri') { const far = Cx.add(wref, integ(zref, [0, 400])), C = apex();
+      s = `$\\dfrac{dw}{dz}=K\\,z^{${fnum(a, 2)}-1}(z-1)^{${fnum(b, 2)}-1}$, &nbsp; $K=\\dfrac{\\Gamma(${fnum(a + b, 2)})}{\\Gamma(${fnum(a, 2)})\\Gamma(${fnum(b, 2)})}=${fnum(K, 4)}$. &nbsp; Angles: $\\alpha=${fnum(a * 180, 1)}^\\circ$, $\\beta=${fnum(b * 180, 1)}^\\circ$, $\\gamma=${fnum((1 - a - b) * 180, 1)}^\\circ$ (sum $180^\\circ$).<br>Vertex $C=\\frac{\\sin\\beta}{\\sin(\\alpha+\\beta)}e^{i\\alpha}=${Cx.tex(C, 4)}$; &nbsp; numerically $w(400i)=${Cx.tex(far, 4)}$ (it approaches $C$ slowly, like $|z|^{-\\gamma/\\pi}$).`;
+      if (val('dsc-b') > 0.95 - a + 1e-9) s += ' &nbsp; ($\\beta$ was capped so that $\\alpha+\\beta\\lt\\pi$.)'; }
+    else s = m === 'strip' ? `$w=\\cosh^{-1}z$: the real axis pieces $(-\\infty,-1)$, $(-1,1)$, $(1,\\infty)$ go to $v=\\pi$, the segment $u=0$, and $v=0$.` : '$w=\\log z$: the negative real axis goes to $v=\\pi$ and the positive real axis to $v=0$, so the upper half-plane becomes the strip $0\\lt v\\lt\\pi$.';
+    texMix('#dsc-out', s + `<br>Probe: $z=${Cx.tex(probe, 2)}\\ \\mapsto\\ w=${Cx.tex(w, 4)}$.`); };
+  Z.addDrag(() => probe, v => { probe = [v[0], Math.max(0.05, v[1])]; }); Z.onchange = () => { Wp.redraw(); out(); };
+  const all = () => { setup(); view(); Z.redraw(); Wp.redraw(); out(); };
+  $('#dsc-m').addEventListener('change', all); watch(['dsc-a', 'dsc-b'], all); all();
 });
 
 /* dass:end */</script>
